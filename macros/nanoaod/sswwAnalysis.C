@@ -20,7 +20,6 @@ const int nPlotCategories = 1;
 void sswwAnalysis(
 int year = 2016
 ){
-
   TString filesPath;
   vector<TString> infileName_;
   vector<int> infileCat_;  
