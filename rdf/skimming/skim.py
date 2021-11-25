@@ -81,7 +81,7 @@ if __name__ == "__main__":
     inputFolders.append(dirT2+"TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2+MINIAODSIM")
 
     for inp in range(0, len(inputFolders)):
-        if(inp != 21): continue
+        #if(inp != 21): continue
         files =findDIR(inputFolders[inp])
         basenameInput = os.path.basename(inputFolders[inp])
         finalOutputDir = os.path.join(fOutDir, basenameInput)
