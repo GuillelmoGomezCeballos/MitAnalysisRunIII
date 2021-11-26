@@ -1,9 +1,13 @@
 import ROOT
-import os
-import json
+import os,json, sys
 from subprocess import call,check_output
 import fnmatch
 import math
+
+ROOT.ROOT.EnableImplicitMT(5)
+
+if "/functions_skim.so" not in ROOT.gSystem.GetLibraries():
+    ROOT.gSystem.CompileMacro("functions_skim.cc","k")
 
 TRIGGERMUEG = "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)"
 TRIGGERDMU  = "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8)"
@@ -30,22 +34,13 @@ def findDIR(directory):
 
 def groupFiles(fIns, group):
 
-    #filesPerGroup = math.ceil(len(fIns)/group)
-    #ret = []
-    #for i in range(0, group):
-
-    #    a = i*filesPerGroup
-    #    b = (i+1)*filesPerGroup
-    #    subFiles = fIns[a:b]
-    #    ret.append(subFiles)
-
     ret = [fIns[x:x+group] for x in range(0, len(fIns), group)]
 
     return ret
 
 if __name__ == "__main__":
 
-    group = 20
+    group = 50
     fOutDir = "/work/submit/ceballos/skims/dil"
     dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
 
@@ -91,22 +86,42 @@ if __name__ == "__main__":
             try:
                 os.makedirs(finalOutputDir)
             except Exception as e:
-                printf(e)
+                print(e)
 
-        theGroup = group
-        if("MINIAODSIM" not in inputFolders): theGroup = 1
-        groupedFiles = groupFiles(files, theGroup)
+        groupedFiles = groupFiles(files, group)
 
         for i, groupedFile in enumerate(groupedFiles):
-            fOutName = "%s/output_%d.root" % (finalOutputDir,i)
+            try:
+                fOutNameTEMP = "%s/temp_output_%d.root" % (finalOutputDir,i)
+                fOutName     = "%s/output_%d.root"      % (finalOutputDir,i)
 
-            print("Create {0}".format(fOutName))
-            rdf = ROOT.RDataFrame("Events", groupedFile)\
-                        .Define("trigger","{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG))\
-                        .Filter("trigger > 0","Passed trigger")\
-                        .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true")\
-                        .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 1")\
-                        .Filter("Sum(loose_mu)+Sum(loose_el) >= 2","At least two loose leptons")\
-                        .Snapshot("Events", fOutName)
+                msg = "python haddnanoaod.py %s" % (fOutNameTEMP)
+                for f in range(len(groupedFile)):
+                    msg = msg + " " + groupedFile[f]
+                os.system(msg)
 
-            del rdf
+                print("Create {0}".format(fOutName))
+                rdf = ROOT.RDataFrame("Events", fOutNameTEMP)\
+                            .Define("trigger","{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG))\
+                            .Filter("trigger > 0","Passed trigger")\
+                            .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true")\
+                            .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 1")\
+                            .Filter("Sum(loose_mu)+Sum(loose_el) >= 2","At least two loose leptons")\
+                            .Define("goodmu_pt",    "Muon_pt[loose_mu]")\
+                            .Define("goodmu_eta",   "Muon_eta[loose_mu]")\
+                            .Define("goodmu_phi",   "Muon_phi[loose_mu]")\
+                            .Define("goodmu_mass",  "Muon_mass[loose_mu]")\
+                            .Define("goodel_pt",    "Electron_pt[loose_el]")\
+                            .Define("goodel_eta",   "Electron_eta[loose_el]")\
+                            .Define("goodel_phi",   "Electron_phi[loose_el]")\
+                            .Define("goodel_mass",  "Electron_mass[loose_el]")\
+                            .Define("skim",    "applySkim(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass)")\
+                            .Filter("skim > 0","mll > 10 GeV or at least three loose leptons")\
+                            .Snapshot("Events", fOutName)
+
+                os.remove(fOutNameTEMP)
+
+                del rdf
+
+            except Exception as e:
+                print("PROBLEM {0} / {1} / {2}".format(finalOutputDir,i,e))
