@@ -1,12 +1,12 @@
 import ROOT
 import os, sys, getopt
 
-ROOT.ROOT.EnableImplicitMT()
+ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample
 
-lumi = 60.
+lumi = [36.1, 41.5, 60.0]
 
 BARRELphotons = "Photon_pt>20 and Photon_isScEtaEB and (Photon_cutBased & 2) and Photon_electronVeto"
 ENDCAPphotons = "Photon_pt>20 and Photon_isScEtaEE and (Photon_cutBased & 2) and Photon_electronVeto"
@@ -154,11 +154,10 @@ def readMCSample(sampleNOW, year, PDType):
     df = ROOT.RDataFrame("Events", files)
 
     nevents = df.Count().GetValue()  ## later with negative weights
-    weight = (SwitchSample(sampleNOW)[1] / nevents)
+    weight = (SwitchSample(sampleNOW)[1] / nevents)*lumi[year-2016]
 
-    lumiEq = (nevents / SwitchSample(sampleNOW)[1])
-    print("%s entries in the dataset" %nevents)
-    print("lumi equivalent fb %s" %lumiEq)
+    print("%f entries in the dataset" %nevents)
+    print("Weight %f / Cross section: %f" %(weight,SwitchSample(sampleNOW)[1]))
     analysis(df, sampleNOW, SwitchSample(sampleNOW)[2], weight, year, PDType, "false")
 
 def readDataSample(sampleNOW, year, PDType):
@@ -200,7 +199,7 @@ if __name__ == "__main__":
 
     if(test == 1):
         #readMCSample(10,2018,"All")
-        readMCSample(3,2018,"All")
+        readMCSample(2,2018,"All")
         #readDataSample(103,2018,"Egamma")
         sys.exit(0)
     elif(test > 100):
