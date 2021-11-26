@@ -81,11 +81,21 @@ def findDIR(directory):
         for f in filenames:
 
             counter+=1
+            isBadFile = False
             filePath = os.path.join(os.path.abspath(root), f)
             if "failed/" in filePath: continue
             if "log/" in filePath: continue
+            if(("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" in filePath) or
+	       
+               ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" in filePath)
+	       ): isBadFile = True
+
+            if(isBadFile == True):
+                print("Bad file: {0}".format(filePath))
+                counter-=1
+                continue
             rootFiles.push_back(filePath)
-#            if counter>100: break
+#            if counter>3000: break
 #            if counter>50: break
 #            if counter>5: break
 
@@ -118,7 +128,7 @@ def getMClist(sampleNOW):
     files = findDIR("{}".format(SwitchSample(sampleNOW)[0]))
     return files
 
-def getDATAlist(year, PDType):
+def getDATAlist(type, year, PDType):
 
     loadJSON("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/13TeV/Legacy_2018/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
     files1 = []
@@ -135,16 +145,19 @@ def getDATAlist(year, PDType):
         files2 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
         files3 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
         files4 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
-    elif(year == 2018 and PDType == "Egamma"):
-        files1 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
-        files2 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
-        files3 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
-        files4 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD")
     elif(year == 2018 and PDType == "MuonEG"):
         files1 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
         files2 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
         files3 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
         files4 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
+    elif(year == 2018 and PDType == "Egamma" and type == 104):
+        files1 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
+    elif(year == 2018 and PDType == "Egamma" and type == 105):
+        files2 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
+    elif(year == 2018 and PDType == "Egamma" and type == 106):
+        files3 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
+    elif(year == 2018 and PDType == "Egamma" and type == 107):
+        files4 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD")
 
     files = ROOT.vector('string')()
     concatenate(files, files1)

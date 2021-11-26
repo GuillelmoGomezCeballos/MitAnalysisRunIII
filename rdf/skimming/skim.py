@@ -38,14 +38,14 @@ def groupFiles(fIns, group):
     #    b = (i+1)*filesPerGroup
     #    subFiles = fIns[a:b]
     #    ret.append(subFiles)
-   
+
     ret = [fIns[x:x+group] for x in range(0, len(fIns), group)]
 
     return ret
 
 if __name__ == "__main__":
 
-    group = 10
+    group = 20
     fOutDir = "/work/submit/ceballos/skims/dil"
     dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
 
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     inputFolders.append(dirT2+"TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2+MINIAODSIM")
 
     for inp in range(0, len(inputFolders)):
-        #if(inp != 21): continue
+        if(inp == 999): continue
         files =findDIR(inputFolders[inp])
         basenameInput = os.path.basename(inputFolders[inp])
         finalOutputDir = os.path.join(fOutDir, basenameInput)
@@ -92,20 +92,20 @@ if __name__ == "__main__":
                 os.makedirs(finalOutputDir)
             except Exception as e:
                 printf(e)
-        
-        groupedFiles = groupFiles(files, group)
 
-        for i, group in enumerate(groupedFiles):
+        theGroup = group
+        if("MINIAODSIM" not in inputFolders): theGroup = 1
+        groupedFiles = groupFiles(files, theGroup)
+
+        for i, groupedFile in enumerate(groupedFiles):
             fOutName = "%s/output_%d.root" % (finalOutputDir,i)
 
             print("Create {0}".format(fOutName))
-            rdf = ROOT.RDataFrame("Events", group)\
-	                .Define("trigger","{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG))\
-		        .Filter("trigger > 0","Passed trigger")\
+            rdf = ROOT.RDataFrame("Events", groupedFile)\
+                        .Define("trigger","{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG))\
+                        .Filter("trigger > 0","Passed trigger")\
                         .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true")\
-                        .Define("loosemu_charge","Muon_charge[loose_mu]")\
                         .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 1")\
-                        .Define("looseel_charge","Electron_charge[loose_el]")\
                         .Filter("Sum(loose_mu)+Sum(loose_el) >= 2","At least two loose leptons")\
                         .Snapshot("Events", fOutName)
 

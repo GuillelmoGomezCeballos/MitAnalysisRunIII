@@ -163,7 +163,7 @@ def readMCSample(sampleNOW, year, PDType):
 
 def readDataSample(sampleNOW, year, PDType):
 
-    files = getDATAlist(year, PDType)
+    files = getDATAlist(sampleNOW, year, PDType)
     print(len(files))
 
     df = ROOT.RDataFrame("Events", files)
@@ -203,12 +203,18 @@ if __name__ == "__main__":
         readMCSample(3,2018,"All")
         #readDataSample(103,2018,"Egamma")
         sys.exit(0)
+    elif(test > 100):
+        readDataSample(test,2018,"Egamma")
+        sys.exit(0)
 
     anaNamesDict = dict()
-    anaNamesDict.update({"0":[101,2018,"SingleMuon"]})
-    anaNamesDict.update({"1":[102,2018,"DoubleMuon"]})
-    anaNamesDict.update({"2":[103,2018,"Egamma"]})
-    anaNamesDict.update({"3":[104,2018,"MuonEG"]})
+    anaNamesDict.update({"1":[101,2018,"SingleMuon"]})
+    anaNamesDict.update({"2":[102,2018,"DoubleMuon"]})
+    anaNamesDict.update({"3":[103,2018,"MuonEG"]})
+    anaNamesDict.update({"4":[104,2018,"Egamma"]})
+    anaNamesDict.update({"5":[105,2018,"Egamma"]})
+    anaNamesDict.update({"6":[106,2018,"Egamma"]})
+    anaNamesDict.update({"7":[107,2018,"Egamma"]})
     for key in anaNamesDict:
         try:
             readDataSample(anaNamesDict[key][0],anaNamesDict[key][1],anaNamesDict[key][2])
