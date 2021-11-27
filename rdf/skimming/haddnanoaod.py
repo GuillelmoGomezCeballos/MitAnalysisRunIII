@@ -32,7 +32,7 @@ def zeroFill(tree, brName, brObj, allowNonBool=False):
 fileHandles = []
 goFast = True
 for fn in files:
-    print("Adding file" + str(fn))
+    print("Adding file " + str(fn))
     fileHandles.append(ROOT.TFile.Open(fn))
     if fileHandles[-1].GetCompressionSettings() != fileHandles[0].GetCompressionSettings():
         goFast = False
