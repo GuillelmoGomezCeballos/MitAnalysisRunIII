@@ -1,7 +1,7 @@
 import ROOT
 import os, sys, getopt
 
-ROOT.ROOT.EnableImplicitMT(3)
+ROOT.ROOT.EnableImplicitMT(5)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample

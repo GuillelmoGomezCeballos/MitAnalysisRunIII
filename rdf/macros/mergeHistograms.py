@@ -52,7 +52,7 @@ for nh in range(nHisto):
 	        histo[nc].Add(myfile[nf].Get("histo_{0}_{1}".format(nh,nc)))
 
     if(histo[0]):
-        outputFileName = "{0}/{1}_{2}_year{3}.root".format(output,path,nh,year)
+        outputFileName = "{0}/{1}_{2}_{3}.root".format(output,os.path.basename(path),year,nh)
         print("Making {0}".format(outputFileName))
         outputFile = TFile(outputFileName, "RECREATE")
 	outputFile.cd()
