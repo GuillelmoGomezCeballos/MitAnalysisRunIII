@@ -21,69 +21,90 @@ JSON = "isGoodRunLS(isData, run, luminosityBlock)"
 
 def selectionLL(df,weight,year,PDType,isData):
 
-    dftag = df.Define("isData","{}".format(isData))\
-              .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")\
-              .Define("weight","{}".format(weight))
+    TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
     if(year == 2018 and PDType == "MuonEG"):
-        dftag = dftag.Define("trigger","{0}".format(TRIGGERMUEG))
+        TRIGGERLEP = "{0}".format(TRIGGERMUEG)
     elif(year == 2018 and PDType == "DoubleMuon"):
-        dftag = dftag.Define("trigger","{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG))
-    if(year == 2018 and PDType == "SingleMuon"):
-        dftag = dftag.Define("trigger","{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG))
+        TRIGGERLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
+    elif(year == 2018 and PDType == "SingleMuon"):
+        TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
     elif(year == 2018 and PDType == "Egamma"):
-        dftag = dftag.Define("trigger","({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG))
+        TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
     elif(year == 2018 and PDType == "All"):
-        dftag = dftag.Define("trigger","{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG))
+        TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    else:
+        print("PROBLEM with triggers!!!")
 
-    dftag = dftag.Filter("trigger > 0","Passed trigger")\
-                 .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
-                 .Define("loose_highpt_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true")\
-                 .Define("good_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 2")\
-                 .Define("goodmu_pt",    "Muon_pt[good_mu]")\
-                 .Define("goodmu_eta",   "Muon_eta[good_mu]")\
-                 .Define("goodmu_phi",   "Muon_phi[good_mu]")\
-                 .Define("goodmu_mass",  "Muon_mass[good_mu]")\
-                 .Define("goodmu_charge","Muon_charge[good_mu]")\
-                 .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
-                 .Define("loose_highpt_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 1")\
-                 .Define("good_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 1 && Electron_mvaFall17V2Iso_WP90 == 1")\
-                 .Define("goodel_pt",    "Electron_pt[good_el]")\
-                 .Define("goodel_eta",   "Electron_eta[good_el]")\
-                 .Define("goodel_phi",   "Electron_phi[good_el]")\
-                 .Define("goodel_mass",  "Electron_mass[good_el]")\
-                 .Define("goodel_charge","Electron_charge[good_el]")\
-                 .Filter("Sum(loose_mu)+Sum(loose_el) >= 2","At least two loose leptons")\
-                 .Filter("Sum(loose_mu)+Sum(loose_el) == 2","Only two loose leptons")\
-                 .Filter("Sum(loose_highpt_mu)+Sum(loose_highpt_el) == 2","Only two loose high pt leptons")\
-                 .Filter("Sum(good_mu)+Sum(good_el) == 2 && Sum(goodmu_charge)+Sum(goodel_charge) == 0","Two opposite-sign good leptons")\
-                 .Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && ((Tau_idDeepTau2017v2p1VSe & 8) != 0) && ((Tau_idDeepTau2017v2p1VSjet & 16) != 0) && ((Tau_idDeepTau2017v2p1VSmu & 8) != 0)")\
-                 .Filter("Sum(good_tau) == 0","No selected hadronic taus")\
-                 .Define("jet_mask1", "cleaningMask(Muon_jetIdx[good_mu],nJet)")\
-                 .Define("jet_mask2", "cleaningMask(Electron_jetIdx[good_el],nJet)")\
-                 .Define("good_jet", "abs(Jet_eta) < 4.7 && Jet_pt > 30 && jet_mask1 && jet_mask2")\
-                 .Define("ngood_jets", "Sum(good_jet)")\
-                 .Define("goodjet_pt",    "Jet_pt[good_jet]")\
-                 .Define("goodjet_eta",   "Jet_eta[good_jet]")\
-                 .Define("goodjet_phi",   "Jet_phi[good_jet]")\
-                 .Define("goodjet_mass",  "Jet_mass[good_jet]")\
-                 .Define("goodjet_btagCSVV2",     "Jet_btagCSVV2[good_jet]")\
-                 .Define("goodjet_btagDeepB",     "Jet_btagDeepB[good_jet]")\
-                 .Define("goodjet_btagDeepFlavB", "Jet_btagDeepFlavB[good_jet]")\
-                 .Define("mjj",    "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 0)")\
-                 .Define("ptjj",   "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 1)")\
-                 .Define("detajj", "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 2)")\
-                 .Define("dphijj", "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 3)")\
-                 .Define("mll",    "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,0)")\
-                 .Define("ptll",   "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,1)")\
-                 .Define("drll",   "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,2)")\
-                 .Define("dphill", "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,3)")\
-                 .Define("ptl1",   "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,4)")\
-                 .Define("ptl2",   "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,5)")\
-                 .Define("etal1",  "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,6)")\
-                 .Define("etal2",  "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,7)")\
-                 .Define("DiLepton_flavor", "Sum(good_mu)+2*Sum(good_el)-2")\
-                 .Filter("mll > 50","mll > 50 GeV")
+    print("TRIGGERLEP: {0}".format(TRIGGERLEP))
+
+    dftag = df.Define("isData","{}".format(isData))\
+              .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")\
+              .Define("trigger","{0}".format(TRIGGERLEP))\
+              .Filter("trigger > 0","Passed trigger")\
+              .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
+              .Define("loose_highpt_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true")\
+              .Define("good_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true && Muon_mvaId >= 1 && Muon_miniIsoId >= 1")\
+              .Define("goodmu_pt",    "Muon_pt[good_mu]")\
+              .Define("goodmu_eta",   "Muon_eta[good_mu]")\
+              .Define("goodmu_phi",   "Muon_phi[good_mu]")\
+              .Define("goodmu_mass",  "Muon_mass[good_mu]")\
+              .Define("goodmu_charge","Muon_charge[good_mu]")\
+              .Define("goodmu_mediumId","Muon_mediumId[good_mu]")\
+              .Define("goodmu_tightId","Muon_tightId[good_mu]")\
+              .Define("goodmu_pfIsoId","Muon_pfIsoId[good_mu]")\
+              .Define("goodmu_mvaId","Muon_mvaId[good_mu]")\
+              .Define("goodmu_miniIsoId","Muon_miniIsoId[good_mu]")\
+              .Define("goodmu_mvaTTH","Muon_mvaTTH[good_mu]")\
+              .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
+              .Define("loose_highpt_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 1")\
+              .Define("good_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 2")\
+              .Define("goodel_pt",    "Electron_pt[good_el]")\
+              .Define("goodel_eta",   "Electron_eta[good_el]")\
+              .Define("goodel_phi",   "Electron_phi[good_el]")\
+              .Define("goodel_mass",  "Electron_mass[good_el]")\
+              .Define("goodel_charge","Electron_charge[good_el]")\
+              .Define("goodel_cutBased","Electron_cutBased[good_el]")\
+              .Define("goodel_mvaFall17V2Iso_WP90","Electron_mvaFall17V2Iso_WP90[good_el]")\
+              .Define("goodel_mvaFall17V2Iso_WP80","Electron_mvaFall17V2Iso_WP80[good_el]")\
+              .Define("goodel_tightCharge","Electron_tightCharge[good_el]")\
+              .Define("goodel_mvaTTH","Electron_mvaTTH[good_el]")\
+              .Filter("Sum(loose_mu)+Sum(loose_el) >= 2","At least two loose leptons")\
+              .Filter("Sum(loose_mu)+Sum(loose_el) == 2","Only two loose leptons")\
+              .Filter("Sum(loose_highpt_mu)+Sum(loose_highpt_el) == 2","Only two loose high pt leptons")\
+              .Filter("Sum(good_mu)+Sum(good_el) == 2","Two good leptons")\
+              .Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && ((Tau_idDeepTau2017v2p1VSe & 8) != 0) && ((Tau_idDeepTau2017v2p1VSjet & 16) != 0) && ((Tau_idDeepTau2017v2p1VSmu & 8) != 0)")\
+              .Filter("Sum(good_tau) == 0","No selected hadronic taus")\
+              .Define("mll",    "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,0)")\
+              .Define("DiLepton_flavor", "Sum(good_mu)+2*Sum(good_el)-2")\
+              .Filter("mll > 30 && (DiLepton_flavor == 1 || abs(mll-91.1876) < 15)","mll > 30 GeV && (emu ||abd (mll-mZ)<15)")\
+              .Define("ptll",   "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,1)")\
+              .Define("drll",   "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,2)")\
+              .Define("dphill", "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,3)")\
+              .Define("ptl1",   "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,4)")\
+              .Define("ptl2",   "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,5)")\
+              .Define("etal1",  "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,6)")\
+              .Define("etal2",  "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,7)")\
+              .Define("jet_mask1", "cleaningMask(Muon_jetIdx[good_mu],nJet)")\
+              .Define("jet_mask2", "cleaningMask(Electron_jetIdx[good_el],nJet)")\
+              .Define("good_jet", "abs(Jet_eta) < 4.7 && Jet_pt > 30 && jet_mask1 && jet_mask2")\
+              .Define("ngood_jets", "Sum(good_jet)")\
+              .Define("goodjet_pt",    "Jet_pt[good_jet]")\
+              .Define("goodjet_eta",   "Jet_eta[good_jet]")\
+              .Define("goodjet_phi",   "Jet_phi[good_jet]")\
+              .Define("goodjet_mass",  "Jet_mass[good_jet]")\
+              .Define("goodjet_btagCSVV2",     "Jet_btagCSVV2[good_jet]")\
+              .Define("goodjet_btagDeepB",     "Jet_btagDeepB[good_jet]")\
+              .Define("goodjet_btagDeepFlavB", "Jet_btagDeepFlavB[good_jet]")\
+              .Define("weight","compute_weights({0},genWeight)".format(weight))\
+              .Define("mjj",    "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 0)")\
+              .Define("ptjj",   "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 1)")\
+              .Define("detajj", "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 2)")\
+              .Define("dphijj", "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 3)")\
+	      .Define("muid1",  "compute_muid_var(goodmu_mediumId, goodmu_tightId, goodmu_pfIsoId, goodmu_mvaId, goodmu_miniIsoId, goodmu_mvaTTH, 0)")\
+	      .Define("muid2",  "compute_muid_var(goodmu_mediumId, goodmu_tightId, goodmu_pfIsoId, goodmu_mvaId, goodmu_miniIsoId, goodmu_mvaTTH, 1)")\
+	      .Define("elid1",  "compute_elid_var(goodel_cutBased, goodel_mvaFall17V2Iso_WP90, goodel_mvaFall17V2Iso_WP80, goodel_tightCharge, goodel_mvaTTH, 0)")\
+	      .Define("elid2",  "compute_elid_var(goodel_cutBased, goodel_mvaFall17V2Iso_WP90, goodel_mvaFall17V2Iso_WP80, goodel_tightCharge, goodel_mvaTTH, 1)")
 
     return dftag
 
@@ -95,7 +116,7 @@ def analysis(df,count,category,weight,year,PDType,isData):
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 48
+    nCat, nHisto = plotCategory("kPlotCategories"), 200
     histo = [[0 for x in range(nCat)] for y in range(nHisto)]
 
     dftag = selectionLL(df,weight,year,PDType,isData)
@@ -107,21 +128,27 @@ def analysis(df,count,category,weight,year,PDType,isData):
           )
 
     dfcat = []
+    dfzllcat = []
     dfjetcat = []
     for x in range(nCat):
         for ltype in range(3):
             dfcat.append(dfbase.Filter("DiLepton_flavor=={0}".format(ltype), "flavor type == {0}".format(ltype))
                                .Define("theCat{0}".format(x), "compute_category({0})".format(theCat))
                                .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
-            histo[ltype+ 0][x] = dfcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 50, 50, 150), "mll","weight")
-            histo[ltype+ 3][x] = dfcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 50,  0, 200), "ptll","weight")
-            histo[ltype+ 6][x] = dfcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 6,x), "histo_{0}_{1}".format(ltype+ 6,x), 50,  0, 5),   "drll","weight")
-            histo[ltype+ 9][x] = dfcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 9,x), "histo_{0}_{1}".format(ltype+ 9,x), 50,  0, 3.1416), "dphill","weight")
-            histo[ltype+12][x] = dfcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x), 40,  0, 200), "ptl1","weight")
-            histo[ltype+15][x] = dfcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+15,x), "histo_{0}_{1}".format(ltype+15,x), 40,  0, 200), "ptl2","weight")
-            histo[ltype+18][x] = dfcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+18,x), "histo_{0}_{1}".format(ltype+18,x), 40,-2.5,2.5), "etal1","weight")
-            histo[ltype+21][x] = dfcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+21,x), "histo_{0}_{1}".format(ltype+21,x), 40,-2.5,2.5), "etal2","weight")
-            histo[ltype+24][x] = dfcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+24,x), "histo_{0}_{1}".format(ltype+24,x), 10,-0.5, 9.5), "ngood_jets","weight")
+
+            dfzllcat.append(dfcat[3*x+ltype].Filter("Sum(goodmu_charge)+Sum(goodel_charge) == 0", "Opposite-sign leptons"))
+            if(ltype == 1):
+                 histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 30, 330), "mll","weight")
+            else:
+                 histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
+            histo[ltype+ 3][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 50,  0, 200), "ptll","weight")
+            histo[ltype+ 6][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 6,x), "histo_{0}_{1}".format(ltype+ 6,x), 50,  0, 5),   "drll","weight")
+            histo[ltype+ 9][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 9,x), "histo_{0}_{1}".format(ltype+ 9,x), 50,  0, 3.1416), "dphill","weight")
+            histo[ltype+12][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x), 40,  0, 200), "ptl1","weight")
+            histo[ltype+15][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+15,x), "histo_{0}_{1}".format(ltype+15,x), 40,  0, 200), "ptl2","weight")
+            histo[ltype+18][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+18,x), "histo_{0}_{1}".format(ltype+18,x), 40,-2.5,2.5), "etal1","weight")
+            histo[ltype+21][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+21,x), "histo_{0}_{1}".format(ltype+21,x), 40,-2.5,2.5), "etal2","weight")
+            histo[ltype+24][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+24,x), "histo_{0}_{1}".format(ltype+24,x), 10,-0.5, 9.5), "ngood_jets","weight")
 
             dfjetcat.append(dfcat[3*x+ltype].Filter("ngood_jets >= 2", "At least two jets"))
             histo[ltype+27][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 50,0,2000), "mjj","weight")
@@ -131,6 +158,34 @@ def analysis(df,count,category,weight,year,PDType,isData):
             histo[ltype+39][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 50,0,1), "goodjet_btagCSVV2","weight")
             histo[ltype+42][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 50,0,1), "goodjet_btagDeepB","weight")
             histo[ltype+45][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 50,0,1), "goodjet_btagDeepFlavB","weight")
+
+            if(ltype == 2):
+                histo[48][x] = dfcat[3*x+ltype].Filter("Sum(goodmu_charge)+Sum(goodel_charge) == 0&&DiLepton_flavor==2")\
+                 .Histo1D(("histo_{0}_{1}".format(48,x), "histo_{0}_{1}".format(48,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
+                histo[49][x] = dfcat[3*x+ltype].Filter("Sum(goodmu_charge)+Sum(goodel_charge) != 0&&DiLepton_flavor==2")\
+                 .Histo1D(("histo_{0}_{1}".format(48,x), "histo_{0}_{1}".format(48,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
+                coutWSStudy = 0
+                for j1 in (0.0, 0.5, 1.0, 1.5, 2.0):
+                    for j2 in (0.0, 0.5, 1.0, 1.5, 2.0):
+                        histo[50+coutWSStudy][x] = dfcat[3*x+ltype].Filter("Sum(goodmu_charge)+Sum(goodel_charge) == 0&&DiLepton_flavor==2")\
+                         .Filter("abs(etal1)>=0.0+{0}&&abs(etal1)<0.5+{0}&&abs(etal2)>=0.0+{1}&&abs(etal2)<0.5+{1}".format(j1,j2))\
+                         .Histo1D(("histo_{0}_{1}".format(50+coutWSStudy,x), "histo_{0}_{1}".format(50+coutWSStudy,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
+                        histo[51+coutWSStudy][x] = dfcat[3*x+ltype].Filter("Sum(goodmu_charge)+Sum(goodel_charge) != 0&&DiLepton_flavor==2")\
+                         .Filter("abs(etal1)>=0.0+{0}&&abs(etal1)<0.5+{0}&&abs(etal2)>=0.0+{1}&&abs(etal2)<0.5+{1}".format(j1,j2))\
+                         .Histo1D(("histo_{0}_{1}".format(51+coutWSStudy,x), "histo_{0}_{1}".format(51+coutWSStudy,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
+                        coutWSStudy = coutWSStudy + 2
+
+            histo[ltype+100][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+100,x), "histo_{0}_{1}".format(ltype+100,x), 256, -0.5, 255.5), "muid1","weight")
+            histo[ltype+103][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+103,x), "histo_{0}_{1}".format(ltype+103,x), 256, -0.5, 255.5), "muid1","weight")
+            histo[ltype+106][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+106,x), "histo_{0}_{1}".format(ltype+106,x), 256, -0.5, 255.5), "muid2","weight")
+            histo[ltype+109][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+109,x), "histo_{0}_{1}".format(ltype+109,x), 256, -0.5, 255.5), "muid2","weight")
+            histo[ltype+112][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+112,x), "histo_{0}_{1}".format(ltype+112,x), 256, -0.5, 255.5), "elid1","weight")
+            histo[ltype+115][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+115,x), "histo_{0}_{1}".format(ltype+115,x), 256, -0.5, 255.5), "elid1","weight")
+            histo[ltype+118][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+118,x), "histo_{0}_{1}".format(ltype+118,x), 256, -0.5, 255.5), "elid2","weight")
+            histo[ltype+121][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+121,x), "histo_{0}_{1}".format(ltype+121,x), 256, -0.5, 255.5), "elid2","weight")
+
+            histo[ltype+124][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+124,x), "histo_{0}_{1}".format(ltype+124,x), 100, 0, 200), "MET_pt","weight")
+            histo[ltype+127][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+127,x), "histo_{0}_{1}".format(ltype+127,x), 100, 0, 200), "PuppiMET_pt","weight")
 
     report = []
     for x in range(nCat):
@@ -143,6 +198,7 @@ def analysis(df,count,category,weight,year,PDType,isData):
     myfile = ROOT.TFile("fillhistoZAna_sample{0}_year{1}.root".format(count,year),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
+	    if(histo[j][i] == 0): continue
             histo[j][i].Write()
     myfile.Close()
 
@@ -153,11 +209,32 @@ def readMCSample(sampleNOW, year, PDType):
     print(len(files))
     df = ROOT.RDataFrame("Events", files)
 
-    nevents = df.Count().GetValue()  ## later with negative weights
-    weight = (SwitchSample(sampleNOW)[1] / nevents)*lumi[year-2016]
+    runTree = ROOT.TChain("Runs")
+    for f in range(len(files)):
+        runTree.AddFile(files[f])
 
-    print("%f entries in the dataset" %nevents)
+    genEventSum = 0
+    for i in range(runTree.GetEntries()):
+        runTree.GetEntry(i)
+        genEventSum += runTree.genEventSumw
+
+    weight = (SwitchSample(sampleNOW)[1] / genEventSum)*lumi[year-2016]
+
+    nevents = df.Count().GetValue()
+
+    print("genEventSum({0}): {1} / Events: {2}".format(runTree.GetEntries(),genEventSum,nevents))
     print("Weight %f / Cross section: %f" %(weight,SwitchSample(sampleNOW)[1]))
+
+    #puPath = "../datapuWeights_UL_{0}.root".format(year)
+    #fPUFile = ROOT.TFile(puPath)
+    #fhDPU     = fPUFile.Get("puWeights")
+    #fhDPUUp   = fPUFile.Get("puWeightsUp")
+    #fhDPUDown = fPUFile.Get("puWeightsDown")
+    #fhDPU    .SetDirectory(0);
+    #fhDPUUp  .SetDirectory(0);
+    #fhDPUDown.SetDirectory(0);
+    #fPUFile.Close()
+
     analysis(df, sampleNOW, SwitchSample(sampleNOW)[2], weight, year, PDType, "false")
 
 def readDataSample(sampleNOW, year, PDType):
@@ -199,7 +276,7 @@ if __name__ == "__main__":
 
     if(test == 1):
         #readMCSample(10,2018,"All")
-        readMCSample(2,2018,"All")
+        readMCSample(0,2018,"All")
         #readDataSample(103,2018,"Egamma")
         sys.exit(0)
     elif(test > 100):

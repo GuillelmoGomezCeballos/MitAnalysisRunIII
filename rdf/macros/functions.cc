@@ -94,8 +94,46 @@ bool hasTriggerMatch(const float& eta, const float& phi, const Vec_f& TrigObj_et
   return false;
 }
 
+// Muon Id variables
+int compute_muid_var(const Vec_b& mu_mediumId, const Vec_b& mu_tightId, const Vec_i& mu_pfIsoId,
+		     const Vec_i& mu_mvaId,  const Vec_i& mu_miniIsoId, const Vec_f& mu_mvaTTH, 
+		     unsigned int nsel)
+{
+  if(mu_mediumId.size() < nsel+1) return -1;
+
+  int var = 0;
+  if(mu_mediumId[nsel] == true && mu_pfIsoId[nsel] >= 4) var = var + 1;
+  if(mu_tightId[nsel] == true && mu_pfIsoId[nsel] >= 4) var = var + 2;
+  if(mu_mvaId[nsel] >= 2 && mu_miniIsoId[nsel] >= 2) var = var + 4;
+  if(mu_mvaId[nsel] >= 3 && mu_miniIsoId[nsel] >= 3) var = var + 8;
+  if(mu_mvaId[nsel] >= 2 && mu_miniIsoId[nsel] >= 3) var = var + 16;
+  if(mu_mvaId[nsel] >= 3 && mu_pfIsoId[nsel] >= 4) var = var + 32;
+  if(mu_tightId[nsel] == true && mu_mvaTTH[nsel] > 0.7) var = var + 64;
+  if(mu_mvaId[nsel] >= 4 && mu_miniIsoId[nsel] >= 4) var = var + 128;
+
+  return var;
+}
+// Electron Id variables
+int compute_elid_var(const Vec_i& el_cutBased, const Vec_b& el_mvaFall17V2Iso_WP90, const Vec_b& el_mvaFall17V2Iso_WP80,
+                     const Vec_i& el_tightCharge, const Vec_f& el_mvaTTH, unsigned int nsel)
+{
+  if(el_cutBased.size() < nsel+1) return -1;
+
+  int var = 0;
+  if(el_cutBased[nsel] >= 3) var = var + 1;
+  if(el_cutBased[nsel] >= 4) var = var + 2;
+  if(el_mvaFall17V2Iso_WP90[nsel] == true) var = var + 4;
+  if(el_mvaFall17V2Iso_WP80[nsel] == true) var = var + 8;
+  if(el_mvaTTH[nsel] > 0.7) var = var + 16;
+  if(el_cutBased[nsel] >= 4 && el_tightCharge[nsel] == 2) var = var + 32;
+  if(el_mvaFall17V2Iso_WP80[nsel] == true && el_tightCharge[nsel] == 2) var = var + 64;
+  if(el_mvaTTH[nsel] > 0.7 && el_tightCharge[nsel] == 2) var = var + 128;
+
+  return var;
+}
+
 // Jet variables
-float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, int var)
+float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, unsigned int var)
 {
   if(pt.size() < 2) return -1;
   PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
@@ -126,7 +164,7 @@ float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, int var)
 // Dilepton variables
 float compute_ll_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
                      const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
-		     int var)
+		     unsigned int var)
 {
    float pt[2], eta[2], phi[2], mass[2];
    if(mu_pt.size() == 2){
@@ -214,6 +252,11 @@ int applySkim(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, cons
 // compute category
 int compute_category(const int mc){
   return mc;
+}
+
+// compute category
+float compute_weights(const float weight, const float genWeight){
+  return weight*genWeight;
 }
 
 #endif

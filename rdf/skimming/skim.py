@@ -1,5 +1,4 @@
 import ROOT
-from ROOT import TFile
 import os, sys, getopt, json
 from subprocess import call,check_output
 import fnmatch
@@ -19,7 +18,7 @@ TRIGGERSEL  = "(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_
 TRIGGERFAKEMU = "(HLT_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL)"
 TRIGGERFAKEEL = "(HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele15_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)"
 
-JSON = "isGoodRunLS(isData, run, luminosityBlock)"
+JSON = "isGoodRunLS(isSkimData, run, luminosityBlock)"
 
 def loadJSON(fIn):
 
@@ -72,12 +71,12 @@ if __name__ == "__main__":
     fOutDir2 = "/work/submit/ceballos/skims/onel"
     dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
 
-    year   = 2018
-    isData = 1
+    year       = 2018
+    isSkimData = 1
 
-    valid = ['year=', "isData=", 'help']
+    valid = ['year=', "isSkimData=", 'help']
     usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
-    usage +=  "              --isData=<{0}>".format(isData)
+    usage +=  "              --isSkimData=<{0}>".format(isSkimData)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -91,38 +90,34 @@ if __name__ == "__main__":
             sys.exit(1)
         if opt == "--year":
             year = int(arg)
-        if opt == "--isData":
-            isData = int(arg)
+        if opt == "--isSkimData":
+            isSkimData = int(arg)
 
     inputFolders = []
-    if(year == 2018 and isData == 1):
+    if(year == 2018 and isSkimData == 1):
         loadJSON("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/13TeV/Legacy_2018/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
-        inputFolders.append(dirT2+"SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD")
-        inputFolders.append(dirT2+"SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD")
-        inputFolders.append(dirT2+"SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD")
-        inputFolders.append(dirT2+"SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD")
+
+        inputFolders.append(dirT2+"MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
+        inputFolders.append(dirT2+"MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
+        inputFolders.append(dirT2+"MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
+        inputFolders.append(dirT2+"MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
 
         inputFolders.append(dirT2+"DoubleMuon+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
         inputFolders.append(dirT2+"DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
         inputFolders.append(dirT2+"DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
         inputFolders.append(dirT2+"DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
 
+        inputFolders.append(dirT2+"SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD")
+        inputFolders.append(dirT2+"SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD")
+        inputFolders.append(dirT2+"SingleMuon+Run2018C-UL2018_MiniAODv2-v3+MINIAOD")
+        inputFolders.append(dirT2+"SingleMuon+Run2018D-UL2018_MiniAODv2-v2+MINIAOD")
+
         inputFolders.append(dirT2+"EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
         inputFolders.append(dirT2+"EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
         inputFolders.append(dirT2+"EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
         inputFolders.append(dirT2+"EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD")
 
-        inputFolders.append(dirT2+"MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
-
-        inputFolders.append(dirT2+"MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
-
-    elif(year == 2018 and isData == 0):
+    elif(year == 2018 and isSkimData == 0):
         inputFolders.append(dirT2+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1_ext1-v1+MINIAODSIM")
         inputFolders.append(dirT2+"WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM")
         inputFolders.append(dirT2+"TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM")
@@ -130,12 +125,49 @@ if __name__ == "__main__":
 
     for inp in range(0, len(inputFolders)):
         if(inp == 999): continue
-        files =findDIR(inputFolders[inp])
+        files = findDIR(inputFolders[inp])
         basenameInput = os.path.basename(inputFolders[inp])
         finalOutputDir0 = os.path.join(fOutDir0, basenameInput)
         finalOutputDir1 = os.path.join(fOutDir1, basenameInput)
         finalOutputDir2 = os.path.join(fOutDir2, basenameInput)
-        print("Files to skim: {0} / input: {1} / output0: {2} / output1: {3} / output2: {4}".format(len(files),inputFolders[inp],finalOutputDir0,finalOutputDir1,finalOutputDir2))
+
+        groupedFiles = groupFiles(files, group)
+
+        print("Files to skim/jobs: {0}/{1} / input: {2} / output0: {3} / output1: {4} / output2: {5}".format(len(files),len(groupedFiles),inputFolders[inp],finalOutputDir0,finalOutputDir1,finalOutputDir2))
+
+        TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+        if("MuonEG+Run" in inputFolders[inp]):
+            TRIGGERLEP = "{0}".format(TRIGGERMUEG)
+
+        elif("DoubleMuon+Run" in inputFolders[inp]):
+            TRIGGERLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
+
+        elif("SingleMuon+Run" in inputFolders[inp]):
+            TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+        elif("EGamma+Run" in inputFolders[inp]):
+            TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+        elif("DoubleEG+Run" in inputFolders[inp]):
+            TRIGGERLEP = "{0} and not {1} and not {2} and not {3}".format(TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+        elif("SingleElectron+Run" in inputFolders[inp]):
+            TRIGGERLEP = "{0} and not {1} and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+        elif("+Run20" in inputFolders[inp]):
+            print("PROBLEM with triggers!!!")
+
+        print("TRIGGERLEP: {0}".format(TRIGGERLEP))
+
+        TRIGGERFAKE0 = TRIGGERFAKEMU
+        TRIGGERFAKE1 = TRIGGERFAKEEL
+        if(("SingleMuon+Run" in inputFolders[inp]) or ("DoubleMuon+Run" in inputFolders[inp]) or ("MuonEG+Run" in inputFolders[inp])):
+            TRIGGERFAKE1 = TRIGGERFAKEMU
+        elif(("EGamma+Run" in inputFolders[inp]) or ("DoubleEG+Run" in inputFolders[inp]) or ("SingleElectron+Run" in inputFolders[inp])):
+            TRIGGERFAKE0 = TRIGGERFAKEEL
+
+        print("TRIGGERFAKE: {0} / {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))
 
         if not os.path.exists(finalOutputDir0):
             try:
@@ -155,8 +187,6 @@ if __name__ == "__main__":
             except Exception as e:
                 print(e)
 
-        groupedFiles = groupFiles(files, group)
-
         for i, groupedFile in enumerate(groupedFiles):
             if(i == 999): continue;
             try:
@@ -165,33 +195,38 @@ if __name__ == "__main__":
                 fOutName1    = "%s/output_%d.root"      % (finalOutputDir1,i)
                 fOutName2    = "%s/output_%d.root"      % (finalOutputDir2,i)
 
-                msg = "python haddnanoaod.py %s" % (fOutNameTEMP)
-                for f in range(len(groupedFile)):
-                    msg = msg + " " + groupedFile[f]
-                os.system(msg)
-
                 print("Create {0} / {1} / {2}".format(fOutName0,fOutName1,fOutName2))
-                rdf = ROOT.RDataFrame("Events", fOutNameTEMP)\
-                            .Define("isData","{}".format(isData))\
-                            .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
 
-                rdf_ll = rdf.Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true")\
-                            .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 1")\
-                            .Define("trigger2l","{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG))\
+                if(isSkimData == 1):
+                    msg = "python haddnanoaod.py %s" % (fOutNameTEMP)
+                    for f in range(len(groupedFile)):
+                        msg = msg + " " + groupedFile[f]
+                    os.system(msg)
+
+                    rdf = ROOT.RDataFrame("Events", fOutNameTEMP)\
+                                .Define("isSkimData","{}".format(isSkimData))\
+                                .Define("applyDataJson","{}".format(JSON)).Filter("applyDataJson","pass JSON")
+
+                else:
+                    rdf = ROOT.RDataFrame("Events", groupedFile)
+
+                rdf_ll = rdf.Define("skim_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
+                            .Define("skim_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
+                            .Define("trigger2l","{0}".format(TRIGGERLEP))\
                             .Filter("trigger2l > 0","Passed trigger2l")\
-                            .Filter("Sum(loose_mu)+Sum(loose_el) >= 2","At least two loose leptons")\
-                            .Define("goodmu_pt",    "Muon_pt[loose_mu]")\
-                            .Define("goodmu_eta",   "Muon_eta[loose_mu]")\
-                            .Define("goodmu_phi",   "Muon_phi[loose_mu]")\
-                            .Define("goodmu_mass",  "Muon_mass[loose_mu]")\
-                            .Define("goodmu_charge","Muon_charge[loose_mu]")\
-                            .Define("goodel_pt",    "Electron_pt[loose_el]")\
-                            .Define("goodel_eta",   "Electron_eta[loose_el]")\
-                            .Define("goodel_phi",   "Electron_phi[loose_el]")\
-                            .Define("goodel_mass",  "Electron_mass[loose_el]")\
-                            .Define("goodel_charge","Electron_charge[loose_el]")\
-                            .Define("good_lep_charge","Sum(goodmu_charge)+Sum(goodel_charge)")\
-                            .Define("skim","applySkim(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass, good_lep_charge, MET_pt)")
+                            .Filter("Sum(skim_mu)+Sum(skim_el) >= 2","At least two loose leptons")\
+                            .Define("skimmu_pt",    "Muon_pt[skim_mu]")\
+                            .Define("skimmu_eta",   "Muon_eta[skim_mu]")\
+                            .Define("skimmu_phi",   "Muon_phi[skim_mu]")\
+                            .Define("skimmu_mass",  "Muon_mass[skim_mu]")\
+                            .Define("skimmu_charge","Muon_charge[skim_mu]")\
+                            .Define("skimel_pt",    "Electron_pt[skim_el]")\
+                            .Define("skimel_eta",   "Electron_eta[skim_el]")\
+                            .Define("skimel_phi",   "Electron_phi[skim_el]")\
+                            .Define("skimel_mass",  "Electron_mass[skim_el]")\
+                            .Define("skimel_charge","Electron_charge[skim_el]")\
+                            .Define("skim_lep_charge","Sum(skimmu_charge)+Sum(skimel_charge)")\
+                            .Define("skim","applySkim(skimmu_pt, skimmu_eta, skimmu_phi, skimmu_mass, skimel_pt, skimel_eta, skimel_phi, skimel_mass, skim_lep_charge, MET_pt)")
 
                 rdf_dil = rdf_ll.Filter("skim >= 2","Two loose leptons with mll > 10 GeV")\
                                 .Snapshot("Events", fOutName0)
@@ -199,45 +234,38 @@ if __name__ == "__main__":
                 rdf_ss_3l = rdf_ll.Filter("skim == 1 || skim == 2 || skim == 3",">=3, q(l1+l2)!=0, met>50/ptll>50")\
                                   .Snapshot("Events", fOutName1)
 
-                TRIGGERFAKE0 = TRIGGERFAKEMU
-                TRIGGERFAKE1 = TRIGGERFAKEEL
-                if(("SingleMuon+Run" in inputFolders[inp]) or ("DoubleMuon+Run" in inputFolders[inp]) or ("MuonEG+Run" in inputFolders[inp])):
-                    TRIGGERFAKE1 = TRIGGERFAKEMU
-                elif(("EGamma+Run" in inputFolders[inp]) or ("SingleElectron+Run" in inputFolders[inp]) or ("DoubleEG+Run" in inputFolders[inp])):
-                    TRIGGERFAKE0 = TRIGGERFAKEEL
-
-                print("triggerFake: {0} / {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))
                 rdf_onel = rdf.Define("trigger1l","{0} or {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))\
                               .Filter("trigger1l > 0","Passed trigger1l")\
-                              .Define("fake_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
-                              .Define("fake_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
-                              .Filter("Sum(fake_mu)+Sum(fake_el) == 1","One fake leptons")\
+                              .Define("skim_fake_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
+                              .Define("skim_fake_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
+                              .Filter("Sum(skim_fake_mu)+Sum(skim_fake_el) == 1","One fake lepton")\
                               .Snapshot("Events", fOutName2)
 
                 del rdf, rdf_ll, rdf_dil, rdf_ss_3l, rdf_onel
+                if os.path.exists(fOutNameTEMP):
+                    os.remove(fOutNameTEMP)
 
-                fOutTEMP = TFile(fOutNameTEMP)
-                runTree = fOutTEMP.Get("Runs")
+                runTree = ROOT.TChain("Runs")
+                for f in range(len(groupedFile)):
+                    runTree.AddFile(groupedFile[f])
 
-                fOut0 = TFile(fOutName0,"UPDATE")
+                fOut0 = ROOT.TFile(fOutName0,"UPDATE")
                 fOut0.cd()
                 runTreeCopy0 = runTree.CopyTree("");
                 runTreeCopy0.Write()
                 fOut0.Close()
 
-                fOut1 = TFile(fOutName1,"UPDATE")
+                fOut1 = ROOT.TFile(fOutName1,"UPDATE")
                 fOut1.cd()
                 runTreeCopy1 = runTree.CopyTree("");
                 runTreeCopy1.Write()
                 fOut1.Close()
 
-                fOut2 = TFile(fOutName2,"UPDATE")
+                fOut2 = ROOT.TFile(fOutName2,"UPDATE")
                 fOut2.cd()
                 runTreeCopy2 = runTree.CopyTree("");
                 runTreeCopy2.Write()
                 fOut2.Close()
-
-                os.remove(fOutNameTEMP)
 
             except Exception as e:
                 print("PROBLEM {0} / {1} / {2} / {3} / {4}".format(finalOutputDir0,finalOutputDir1,finalOutputDir2,i,e))

@@ -170,6 +170,7 @@ def getDATAlist(type, year, PDType):
 def SwitchSample(argument):
 
     dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
+    #dirT2 = "/work/submit/ceballos/skims/dil/"
     dirLocal = "/work/submit/mariadlf/Hrare/OCT14/"
 
     switch = {
