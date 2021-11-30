@@ -109,8 +109,8 @@ if __name__ == "__main__":
 
         inputFolders.append(dirT2+"SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD")
         inputFolders.append(dirT2+"SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD")
-        inputFolders.append(dirT2+"SingleMuon+Run2018C-UL2018_MiniAODv2-v3+MINIAOD")
-        inputFolders.append(dirT2+"SingleMuon+Run2018D-UL2018_MiniAODv2-v2+MINIAOD")
+        inputFolders.append(dirT2+"SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD")
+        inputFolders.append(dirT2+"SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD")
 
         inputFolders.append(dirT2+"EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
         inputFolders.append(dirT2+"EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")

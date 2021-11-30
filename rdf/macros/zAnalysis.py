@@ -19,7 +19,7 @@ TRIGGERSEL  = "(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_
 
 JSON = "isGoodRunLS(isData, run, luminosityBlock)"
 
-def selectionLL(df,weight,year,PDType,isData):
+def selectionLL(df,year,PDType,isData):
 
     TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
@@ -96,7 +96,6 @@ def selectionLL(df,weight,year,PDType,isData):
               .Define("goodjet_btagCSVV2",     "Jet_btagCSVV2[good_jet]")\
               .Define("goodjet_btagDeepB",     "Jet_btagDeepB[good_jet]")\
               .Define("goodjet_btagDeepFlavB", "Jet_btagDeepFlavB[good_jet]")\
-              .Define("weight","compute_weights({0},genWeight)".format(weight))\
               .Define("mjj",    "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 0)")\
               .Define("ptjj",   "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 1)")\
               .Define("detajj", "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 2)")\
@@ -119,13 +118,18 @@ def analysis(df,count,category,weight,year,PDType,isData):
     nCat, nHisto = plotCategory("kPlotCategories"), 200
     histo = [[0 for x in range(nCat)] for y in range(nHisto)]
 
-    dftag = selectionLL(df,weight,year,PDType,isData)
+    dftag = selectionLL(df,year,PDType,isData)
 
     dfbase = (dftag.Define("goodPhotons", "{}".format(BARRELphotons)+" or {}".format(ENDCAPphotons) )
               .Define("goodPhotons_pt", "Photon_pt[goodPhotons]")
               .Define("goodPhotons_eta", "Photon_eta[goodPhotons]")
               .Define("goodPhotons_phi", "Photon_phi[goodPhotons]")
           )
+
+    if(theCat == plotCategory("kPlotData")):
+        dfbase = dfbase.Define("weight","1.0")
+    else:
+        dfbase = dfbase.Define("weight","compute_weights({0},genWeight)".format(weight))
 
     dfcat = []
     dfzllcat = []
