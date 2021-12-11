@@ -53,9 +53,9 @@ def groupFiles(fIns, group):
 
 if __name__ == "__main__":
 
-    copyFilesToFS = False
+    copyFilesToFS = True
 
-    outputDir = "root://t3serv017.mit.edu//scratch/ceballos/nanoaod/Skims"
+    outputDir = "root://t3serv017.mit.edu//scratch/ceballos/nanoaod/skims_submit"
     inputSamplesCfg = "skim_input_samples.cfg"
     inputFilesCfg = "skim_input_files.cfg"
     whichSample = 1
@@ -97,13 +97,13 @@ if __name__ == "__main__":
     msgCPInput  = "xrdcp --force"
     msgCPOutput = "xrdcp --force"
     isLocal = False
-    if(("t3desk" in theHost) or ("t3btch" in theHost)):
+    if(("t3deskxxx" in theHost) or ("t3btchxxx" in theHost)):
         outputDir = outputDir.replace("root://t3serv017.mit.edu/","/mnt/hadoop")
         msgCPOutput = "cp"
         isLocal = True
         print("T3 node ({0}), outputDir = {1} / msgCPOutput = {2}".format(theHost,outputDir,msgCPOutput))
 
-    elif(("submit1" in theHost) or ("t3btch" in theHost)):
+    elif("submitxxx" in theHost):
         outputDir = outputDir.replace("root://t3serv017.mit.edu/","/mnt/T3_US_MIT/hadoop")
         msgCPOutput = "cp"
         isLocal = True

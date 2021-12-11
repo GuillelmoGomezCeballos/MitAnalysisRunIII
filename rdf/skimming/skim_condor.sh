@@ -4,6 +4,8 @@ USERPROXY=`id -u`
 echo ${USERPROXY}
 
 #condor_q 1769874.0 -analyze
+#transfer_input_files = ""
+#transfer_output_remaps = "output_1l_${whichSample}_${whichJob}.root = /work/submit/ceballos/skims/1l/${sampleName}/output_1l_${whichSample}_${whichJob}.root; output_2l_${whichSample}_${whichJob}.root = /work/submit/ceballos/skims/2l/${sampleName}/output_2l_${whichSample}_${whichJob}.root; output_3l_${whichSample}_${whichJob}.root = /work/submit/ceballos/skims/3l/${sampleName}/output_3l_${whichSample}_${whichJob}.root"
 
 voms-proxy-init --voms cms --valid 168:00
 
@@ -31,7 +33,7 @@ RequestCpus = 1
 RequestDisk = DiskUsage
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
-transfer_output_remaps = "output_1l_${whichJob}.root = /work/submit/ceballos/skims/1l/${sampleName}/output_1l_${whichJob}.root; output_2l_${whichJob}.root = /work/submit/ceballos/skims/2l/${sampleName}/output_2l_${whichJob}.root; output_3l_${whichJob}.root = /work/submit/ceballos/skims/3l/${sampleName}/output_3l_${whichJob}.root"
+transfer_input_files = ""
 Log    = logs/simple_skim_${whichSample}_${whichJob}.log
 Output = logs/simple_skim_${whichSample}_${whichJob}.out
 Error  = logs/simple_skim_${whichSample}_${whichJob}.error
