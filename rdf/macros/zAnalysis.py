@@ -6,7 +6,8 @@ from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample
 
-lumi = [36.1, 41.5, 60.0]
+#lumi = [36.1, 41.5, 60.0]
+lumi = [36.1, 41.5, 40.0]
 
 BARRELphotons = "Photon_pt>20 and Photon_isScEtaEB and (Photon_cutBased & 2) and Photon_electronVeto"
 ENDCAPphotons = "Photon_pt>20 and Photon_isScEtaEE and (Photon_cutBased & 2) and Photon_electronVeto"
@@ -288,13 +289,13 @@ if __name__ == "__main__":
         sys.exit(0)
 
     anaNamesDict = dict()
-    anaNamesDict.update({"1":[101,2018,"SingleMuon"]})
-    anaNamesDict.update({"2":[102,2018,"DoubleMuon"]})
-    anaNamesDict.update({"3":[103,2018,"MuonEG"]})
+    ##anaNamesDict.update({"1":[101,2018,"SingleMuon"]})
+    ##anaNamesDict.update({"2":[102,2018,"DoubleMuon"]})
+    ##anaNamesDict.update({"3":[103,2018,"MuonEG"]})
     anaNamesDict.update({"4":[104,2018,"Egamma"]})
-    anaNamesDict.update({"5":[105,2018,"Egamma"]})
-    anaNamesDict.update({"6":[106,2018,"Egamma"]})
-    anaNamesDict.update({"7":[107,2018,"Egamma"]})
+    #anaNamesDict.update({"5":[105,2018,"Egamma"]})
+    #anaNamesDict.update({"6":[106,2018,"Egamma"]})
+    #anaNamesDict.update({"7":[107,2018,"Egamma"]})
     for key in anaNamesDict:
         try:
             readDataSample(anaNamesDict[key][0],anaNamesDict[key][1],anaNamesDict[key][2])

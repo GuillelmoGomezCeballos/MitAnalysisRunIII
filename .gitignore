@@ -2,4 +2,5 @@
 *_C*
 *.pyc
 log*
+.root_hist
 fillhisto*.root

@@ -130,34 +130,35 @@ def getMClist(sampleNOW):
 
 def getDATAlist(type, year, PDType):
 
+    #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
+    dirT2 = "/work/submit/ceballos/skims/dil/"
+    #dirT2 = "/work/submit/ceballos/skims/onel/"
+
     loadJSON("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/13TeV/Legacy_2018/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
     files1 = []
     files2 = []
     files3 = []
     files4 = []
     if(year == 2018 and PDType == "SingleMuon"):
-        files1 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD")
-        files2 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD")
-        files3 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD")
-        files4 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD")
+        #files1 = findDIR("{0}/SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+        files2 = findDIR("{0}/SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+        files3 = findDIR("{0}/SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD".format(dirT2))
+        files4 = findDIR("{0}/SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
     elif(year == 2018 and PDType == "DoubleMuon"):
-        files1 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/DoubleMuon+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
-        files2 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
-        files3 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
-        files4 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
+        #files1 = findDIR("{0}/DoubleMuon+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files2 = findDIR("{0}/DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files3 = findDIR("{0}/DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files4 = findDIR("{0}/DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
     elif(year == 2018 and PDType == "MuonEG"):
-        files1 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
-        files2 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
-        files3 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
-        files4 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
+        #files1 = findDIR("{0}/MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files2 = findDIR("{0}/MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files3 = findDIR("{0}/MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files4 = findDIR("{0}/MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
     elif(year == 2018 and PDType == "Egamma" and type == 104):
-        files1 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
-    elif(year == 2018 and PDType == "Egamma" and type == 105):
-        files2 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
-    elif(year == 2018 and PDType == "Egamma" and type == 106):
-        files3 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
-    elif(year == 2018 and PDType == "Egamma" and type == 107):
-        files4 = findDIR("/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD")
+        #files1 = findDIR("{0}/EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files2 = findDIR("{0}/EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files3 = findDIR("{0}/EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files4 = findDIR("{0}/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
 
     files = ROOT.vector('string')()
     concatenate(files, files1)
@@ -169,8 +170,9 @@ def getDATAlist(type, year, PDType):
 
 def SwitchSample(argument):
 
-    dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
-    #dirT2 = "/work/submit/ceballos/skims/dil/"
+    #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
+    dirT2 = "/work/submit/ceballos/skims/dil/"
+    #dirT2 = "/work/submit/ceballos/skims/onel/"
     dirLocal = "/work/submit/mariadlf/Hrare/OCT14/"
 
     switch = {

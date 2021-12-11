@@ -53,9 +53,14 @@ for e in fileHandles[0].GetListOfKeys():
         obj = obj.CloneTree(-1, "fast" if goFast else "")
         branchNames = set([x.GetName() for x in obj.GetListOfBranches()])
     for fh in fileHandles[1:]:
-        otherObj = fh.GetListOfKeys().FindObject(name).ReadObj()
-        inputs.Add(otherObj)
-        if isTree and obj.GetName() == 'Events':
+        rightTree = True
+        try:
+            otherObj = fh.GetListOfKeys().FindObject(name).ReadObj()
+            inputs.Add(otherObj)
+        except Exception as e:
+            rightTree = False
+            print(e)
+        if rightTree == True and isTree and obj.GetName() == 'Events':
             otherObj.SetAutoFlush(0)
             otherBranches = set([x.GetName()
                                  for x in otherObj.GetListOfBranches()])

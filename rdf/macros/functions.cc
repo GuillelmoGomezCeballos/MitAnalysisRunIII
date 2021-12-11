@@ -34,9 +34,7 @@
 #include <map>
 
 #include <ROOT/RVec.hxx>
-#include <ROOT/RVec.hxx>
 #include <ROOT/RDataFrame.hxx>
-//#include <ROOT/RDF/RInterface.hxx>
 
 using Vec_b = ROOT::VecOps::RVec<bool>;
 using Vec_d = ROOT::VecOps::RVec<double>;
@@ -159,6 +157,30 @@ float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, unsigned int v
   else if(var == 6) theVar = p1.Eta();
   else if(var == 7) theVar = p2.Eta();
   return theVar;
+}
+
+// lepton+met variables
+float compute_lmet_var(const Vec_f& mu_pt, const Vec_f& mu_phi,
+                       const Vec_f& el_pt, const Vec_f& el_phi,
+		       const float met_pt, const float met_phi,
+		       unsigned int var)
+{
+   float ptl, phil;
+   if(mu_pt.size() == 1){
+       ptl = mu_pt[0]; phil = mu_phi[0];
+   }
+   else if(el_pt.size() == 1){
+       ptl = el_pt[0]; phil = el_phi[0];
+   }
+   else {
+      return 0;
+   }
+
+   double theVar = 0;
+   if     (var == 0) theVar = std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi)));
+   else if(var == 1) theVar = std::abs(deltaPhi(phil,met_phi));
+   else if(var == 2) theVar = std::sqrt(2*35.0*met_pt*(1-std::cos(phil-met_phi)));
+   return theVar;
 }
 
 // Dilepton variables

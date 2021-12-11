@@ -1,13 +1,12 @@
 import ROOT
-import os, sys, getopt, json
-from subprocess import call,check_output
+import os, sys, getopt, json, time, subprocess, socket
 import fnmatch
 import math
 
-ROOT.ROOT.EnableImplicitMT(5)
+ROOT.ROOT.EnableImplicitMT(2)
 
-if "../macros/functions.so" not in ROOT.gSystem.GetLibraries():
-    ROOT.gSystem.CompileMacro("../macros/functions.cc","k")
+if "./functions.so" not in ROOT.gSystem.GetLibraries():
+    ROOT.gSystem.CompileMacro("./functions.cc","k")
 
 TRIGGERMUEG = "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)"
 TRIGGERDMU  = "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8)"
@@ -19,6 +18,12 @@ TRIGGERFAKEMU = "(HLT_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL)"
 TRIGGERFAKEEL = "(HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele15_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)"
 
 JSON = "isGoodRunLS(isSkimData, run, luminosityBlock)"
+
+def buildcommand(command):
+    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, error = p.communicate()
+    print("command {0}, out {1}, error{2}, returncode {3}".format(command,out,error,p.returncode))
+    return p.returncode
 
 def loadJSON(fIn):
 
@@ -40,23 +45,6 @@ def loadJSON(fIn):
             vec.push_back(pair)
             ROOT.jsonMap[int(k)] = vec
 
-def findDIR(directory):
-
-    print(directory)
-
-    counter = 0
-    rootFiles = ROOT.vector('string')()
-    for root, directories, filenames in os.walk(directory):
-        for f in filenames:
-
-            counter+=1
-            filePath = os.path.join(os.path.abspath(root), f)
-            if "failed/" in filePath: continue
-            if "log/" in filePath: continue
-            rootFiles.push_back(filePath)
-
-    return rootFiles
-
 def groupFiles(fIns, group):
 
     ret = [fIns[x:x+group] for x in range(0, len(fIns), group)]
@@ -65,18 +53,22 @@ def groupFiles(fIns, group):
 
 if __name__ == "__main__":
 
-    group = 50
-    fOutDir0 = "/work/submit/ceballos/skims/dil"
-    fOutDir1 = "/work/submit/ceballos/skims/ss_3l"
-    fOutDir2 = "/work/submit/ceballos/skims/onel"
-    dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
+    copyFilesToFS = False
 
-    year       = 2018
-    isSkimData = 1
+    outputDir = "root://t3serv017.mit.edu//scratch/ceballos/nanoaod/Skims"
+    inputSamplesCfg = "skim_input_samples.cfg"
+    inputFilesCfg = "skim_input_files.cfg"
+    whichSample = 1
+    whichJob = -1
+    group = 10
 
-    valid = ['year=', "isSkimData=", 'help']
-    usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
-    usage +=  "              --isSkimData=<{0}>".format(isSkimData)
+    valid = ['outputDir=', "inputSamplesCfg=", "inputFilesCfg=", "whichSample=", "whichJob=", "group=", 'help']
+    usage  =  "Usage: ana.py --outputDir=<{0}>\n".format(outputDir)
+    usage +=  "              --inputSamplesCfg=<{0}>\n".format(inputSamplesCfg)
+    usage +=  "              --inputFilesCfg=<{0}>\n".format(inputFilesCfg)
+    usage +=  "              --whichSample=<{0}>\n".format(whichSample)
+    usage +=  "              --whichJob=<{0}>".format(whichJob)
+    usage +=  "              --group=<{0}>".format(group)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -88,184 +80,337 @@ if __name__ == "__main__":
         if opt == "--help":
             print(usage)
             sys.exit(1)
-        if opt == "--year":
-            year = int(arg)
-        if opt == "--isSkimData":
-            isSkimData = int(arg)
+        if opt == "--outputDir":
+            outputDir = str(arg)
+        if opt == "--inputSamplesCfg":
+            inputSamplesCfg = str(arg)
+        if opt == "--inputFilesCfg":
+            inputFilesCfg = str(arg)
+        if opt == "--whichSample":
+            whichSample = int(arg)
+        if opt == "--whichJob":
+            whichJob = int(arg)
+        if opt == "--group":
+            group = int(arg)
 
-    inputFolders = []
-    if(year == 2018 and isSkimData == 1):
-        loadJSON("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/13TeV/Legacy_2018/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
+    theHost = socket.gethostname()
+    msgCPInput  = "xrdcp --force"
+    msgCPOutput = "xrdcp --force"
+    isLocal = False
+    if(("t3desk" in theHost) or ("t3btch" in theHost)):
+        outputDir = outputDir.replace("root://t3serv017.mit.edu/","/mnt/hadoop")
+        msgCPOutput = "cp"
+        isLocal = True
+        print("T3 node ({0}), outputDir = {1} / msgCPOutput = {2}".format(theHost,outputDir,msgCPOutput))
 
-        inputFolders.append(dirT2+"MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
+    elif(("submit1" in theHost) or ("t3btch" in theHost)):
+        outputDir = outputDir.replace("root://t3serv017.mit.edu/","/mnt/T3_US_MIT/hadoop")
+        msgCPOutput = "cp"
+        isLocal = True
+        print("submit node ({0}), outputDir = {1} / msgCPOutput = {2}".format(theHost,outputDir,msgCPOutput))
 
-        inputFolders.append(dirT2+"DoubleMuon+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD")
+    # Reading which sample we want to skim
+    inputSamplesFile = open(inputSamplesCfg, 'r')
+    linesSamplesFile = inputSamplesFile.readlines()
+    if(whichSample < 0 or whichSample >= len(linesSamplesFile)):
+        print("Incorrect whichSample: {0}".format(whichSample))
+        sys.exit(1)
+    sampleToSkim = linesSamplesFile[whichSample].strip()
+    print("Sample to skim: {0}".format(sampleToSkim))
 
-        inputFolders.append(dirT2+"SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD")
-        inputFolders.append(dirT2+"SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD")
-        inputFolders.append(dirT2+"SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD")
-        inputFolders.append(dirT2+"SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD")
+    year = -1
+    isSkimData = -1
+    if("Run2018" in sampleToSkim):
+        year = 2018
+        isSkimData = 1
+    elif("RunIISummer20UL18" in sampleToSkim):
+        year = 2018
+        isSkimData = 0
 
-        inputFolders.append(dirT2+"EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD")
-        inputFolders.append(dirT2+"EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD")
+    if(year == -1 or isSkimData == -1):
+        print("Incorrect year/isSkimData: {0} / {1}".format(year, isSkimData))
+        sys.exit(1)
 
-    elif(year == 2018 and isSkimData == 0):
-        inputFolders.append(dirT2+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1_ext1-v1+MINIAODSIM")
-        inputFolders.append(dirT2+"WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM")
-        inputFolders.append(dirT2+"TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM")
-        inputFolders.append(dirT2+"TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2+MINIAODSIM")
+    if(year == 2018):
+        jsnName = "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
+        if os.path.exists(os.path.join("jsns",jsnName)):
+            loadJSON(os.path.join("jsns",jsnName))
+        else:
+            loadJSON(jsnName)
 
-    for inp in range(0, len(inputFolders)):
-        if(inp == 999): continue
-        files = findDIR(inputFolders[inp])
-        basenameInput = os.path.basename(inputFolders[inp])
-        finalOutputDir0 = os.path.join(fOutDir0, basenameInput)
-        finalOutputDir1 = os.path.join(fOutDir1, basenameInput)
-        finalOutputDir2 = os.path.join(fOutDir2, basenameInput)
+    rootFiles = ROOT.vector('string')()
+    inputFilesFile = open(inputFilesCfg, 'r')
+    while True:
+        line = inputFilesFile.readline().strip()
+        if not line:
+            break
+        if(sampleToSkim not in line):
+            continue
+        rootFiles.push_back(line)
 
-        groupedFiles = groupFiles(files, group)
+    groupedFiles = groupFiles(rootFiles, group)
+    finalOutputDir1 = os.path.join(outputDir, "1l", sampleToSkim)
+    finalOutputDir2 = os.path.join(outputDir, "2l", sampleToSkim)
+    finalOutputDir3 = os.path.join(outputDir, "3l", sampleToSkim)
+    print("Files to skim/jobs: {0}/{1} / outputDir: {2}".format(len(rootFiles),len(groupedFiles),outputDir))
 
-        print("Files to skim/jobs: {0}/{1} / input: {2} / output0: {3} / output1: {4} / output2: {5}".format(len(files),len(groupedFiles),inputFolders[inp],finalOutputDir0,finalOutputDir1,finalOutputDir2))
+    TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-        TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    if("MuonEG+Run" in sampleToSkim):
+        TRIGGERLEP = "{0}".format(TRIGGERMUEG)
 
-        if("MuonEG+Run" in inputFolders[inp]):
-            TRIGGERLEP = "{0}".format(TRIGGERMUEG)
+    elif("DoubleMuon+Run" in sampleToSkim):
+        TRIGGERLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
 
-        elif("DoubleMuon+Run" in inputFolders[inp]):
-            TRIGGERLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
+    elif("SingleMuon+Run" in sampleToSkim):
+        TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-        elif("SingleMuon+Run" in inputFolders[inp]):
-            TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    elif("EGamma+Run" in sampleToSkim):
+        TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-        elif("EGamma+Run" in inputFolders[inp]):
-            TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    elif("DoubleEG+Run" in sampleToSkim):
+        TRIGGERLEP = "{0} and not {1} and not {2} and not {3}".format(TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-        elif("DoubleEG+Run" in inputFolders[inp]):
-            TRIGGERLEP = "{0} and not {1} and not {2} and not {3}".format(TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    elif("SingleElectron+Run" in sampleToSkim):
+        TRIGGERLEP = "{0} and not {1} and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-        elif("SingleElectron+Run" in inputFolders[inp]):
-            TRIGGERLEP = "{0} and not {1} and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    elif("+Run20" in sampleToSkim):
+        print("PROBLEM with triggers!!!")
 
-        elif("+Run20" in inputFolders[inp]):
-            print("PROBLEM with triggers!!!")
+    print("TRIGGERLEP: {0}".format(TRIGGERLEP))
 
-        print("TRIGGERLEP: {0}".format(TRIGGERLEP))
+    TRIGGERFAKE0 = TRIGGERFAKEMU
+    TRIGGERFAKE1 = TRIGGERFAKEEL
+    if(("SingleMuon+Run" in sampleToSkim) or ("DoubleMuon+Run" in sampleToSkim) or ("MuonEG+Run" in sampleToSkim)):
+        TRIGGERFAKE1 = TRIGGERFAKEMU
+    elif(("EGamma+Run" in sampleToSkim) or ("DoubleEG+Run" in sampleToSkim) or ("SingleElectron+Run" in sampleToSkim)):
+        TRIGGERFAKE0 = TRIGGERFAKEEL
 
-        TRIGGERFAKE0 = TRIGGERFAKEMU
-        TRIGGERFAKE1 = TRIGGERFAKEEL
-        if(("SingleMuon+Run" in inputFolders[inp]) or ("DoubleMuon+Run" in inputFolders[inp]) or ("MuonEG+Run" in inputFolders[inp])):
-            TRIGGERFAKE1 = TRIGGERFAKEMU
-        elif(("EGamma+Run" in inputFolders[inp]) or ("DoubleEG+Run" in inputFolders[inp]) or ("SingleElectron+Run" in inputFolders[inp])):
-            TRIGGERFAKE0 = TRIGGERFAKEEL
+    print("TRIGGERFAKE: {0} / {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))
 
-        print("TRIGGERFAKE: {0} / {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))
+    for i, groupedFile in enumerate(groupedFiles):
+        passJob = whichJob == -1 or whichJob == i
+        if(passJob == False): continue
+        try:
+            fOutName1 = "output_1l_%d_%d.root" % (whichSample,i)
+            fOutName2 = "output_2l_%d_%d.root" % (whichSample,i)
+            fOutName3 = "output_3l_%d_%d.root" % (whichSample,i)
 
-        if not os.path.exists(finalOutputDir0):
-            try:
-                os.makedirs(finalOutputDir0)
-            except Exception as e:
-                print(e)
+            print("Create {0} / {1} / {2}".format(fOutName1,fOutName2,fOutName3))
 
-        if not os.path.exists(finalOutputDir1):
-            try:
-                os.makedirs(finalOutputDir1)
-            except Exception as e:
-                print(e)
+            msgMerge1 = "python haddnanoaod.py %s" % (fOutName1)
+            msgMerge2 = "python haddnanoaod.py %s" % (fOutName2)
+            msgMerge3 = "python haddnanoaod.py %s" % (fOutName3)
+            msgRm = "rm -f"
 
-        if not os.path.exists(finalOutputDir2):
-            try:
-                os.makedirs(finalOutputDir2)
-            except Exception as e:
-                print(e)
+            isJobFailure = False
 
-        for i, groupedFile in enumerate(groupedFiles):
-            if(i == 999): continue;
-            try:
-                fOutNameTEMP = "%s/temp_output_%d.root" % (finalOutputDir0,i)
-                fOutName0    = "%s/output_%d.root"      % (finalOutputDir0,i)
-                fOutName1    = "%s/output_%d.root"      % (finalOutputDir1,i)
-                fOutName2    = "%s/output_%d.root"      % (finalOutputDir2,i)
+            for nf in range(len(groupedFile)):
+                fOutIndivName1 = "output_1l_{0}_{1}_{2}.root".format(whichSample,i,nf)
+                fOutIndivName2 = "output_2l_{0}_{1}_{2}.root".format(whichSample,i,nf)
+                fOutIndivName3 = "output_3l_{0}_{1}_{2}.root".format(whichSample,i,nf)
 
-                print("Create {0} / {1} / {2}".format(fOutName0,fOutName1,fOutName2))
+                msgMerge1 = msgMerge1 + " " + fOutIndivName1
+                msgMerge2 = msgMerge2 + " " + fOutIndivName2
+                msgMerge3 = msgMerge3 + " " + fOutIndivName3
+                msgRm = msgRm + " " + fOutIndivName1
+                msgRm = msgRm + " " + fOutIndivName2
+                msgRm = msgRm + " " + fOutIndivName3
 
-                if(isSkimData == 1):
-                    msg = "python haddnanoaod.py %s" % (fOutNameTEMP)
-                    for f in range(len(groupedFile)):
-                        msg = msg + " " + groupedFile[f]
-                    os.system(msg)
+                inputSingleFile = groupedFile[nf]
+                inputSingleFileBase = os.path.basename(inputSingleFile)
+                copycommand = "%s %s %s" % (msgCPInput,inputSingleFile, inputSingleFileBase)
 
-                    rdf = ROOT.RDataFrame("Events", fOutNameTEMP)\
-                                .Define("isSkimData","{}".format(isSkimData))\
-                                .Define("applyDataJson","{}".format(JSON)).Filter("applyDataJson","pass JSON")
+                copy_result = False
+                n_retries = 0
+                while n_retries < 5 and copy_result is False:
+                    returncode = buildcommand(copycommand)
+                    if os.path.exists(inputSingleFileBase) and returncode == 0:
+                        copy_result = True
+                    else:
+                        print("Copying file {0} failed ({1}), retrying".format(inputSingleFileBase,returncode))
+                        n_retries+=1
+                        time.sleep(15)
 
-                else:
-                    rdf = ROOT.RDataFrame("Events", groupedFile)
+                if(copy_result == False):
+                    print("Copying file {0} failed completely, exiting the loop".format(inputSingleFileBase))
+                    isJobFailure = True
+                    break
+
+                print("Processing({0}): {1}".format(nf,inputSingleFile))
+                rdf = ROOT.RDataFrame("Events", inputSingleFileBase)\
+                            .Define("isSkimData","{}".format(isSkimData))\
+                            .Define("applyDataJson","{}".format(JSON)).Filter("applyDataJson","pass JSON")
 
                 rdf_ll = rdf.Define("skim_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
                             .Define("skim_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
                             .Define("trigger2l","{0}".format(TRIGGERLEP))\
                             .Filter("trigger2l > 0","Passed trigger2l")\
                             .Filter("Sum(skim_mu)+Sum(skim_el) >= 2","At least two loose leptons")\
-                            .Define("skimmu_pt",    "Muon_pt[skim_mu]")\
-                            .Define("skimmu_eta",   "Muon_eta[skim_mu]")\
-                            .Define("skimmu_phi",   "Muon_phi[skim_mu]")\
+                            .Define("skimmu_pt",        "Muon_pt[skim_mu]")\
+                            .Define("skimmu_eta",       "Muon_eta[skim_mu]")\
+                            .Define("skimmu_phi",       "Muon_phi[skim_mu]")\
                             .Define("skimmu_mass",  "Muon_mass[skim_mu]")\
                             .Define("skimmu_charge","Muon_charge[skim_mu]")\
-                            .Define("skimel_pt",    "Electron_pt[skim_el]")\
-                            .Define("skimel_eta",   "Electron_eta[skim_el]")\
-                            .Define("skimel_phi",   "Electron_phi[skim_el]")\
+                            .Define("skimel_pt",        "Electron_pt[skim_el]")\
+                            .Define("skimel_eta",       "Electron_eta[skim_el]")\
+                            .Define("skimel_phi",       "Electron_phi[skim_el]")\
                             .Define("skimel_mass",  "Electron_mass[skim_el]")\
                             .Define("skimel_charge","Electron_charge[skim_el]")\
                             .Define("skim_lep_charge","Sum(skimmu_charge)+Sum(skimel_charge)")\
                             .Define("skim","applySkim(skimmu_pt, skimmu_eta, skimmu_phi, skimmu_mass, skimel_pt, skimel_eta, skimel_phi, skimel_mass, skim_lep_charge, MET_pt)")
 
-                rdf_dil = rdf_ll.Filter("skim >= 2","Two loose leptons with mll > 10 GeV")\
-                                .Snapshot("Events", fOutName0)
+                rdf_2l = rdf_ll.Filter("skim >= 2","Two loose leptons with mll > 10 GeV")\
+                               .Snapshot("Events", fOutIndivName2)
 
-                rdf_ss_3l = rdf_ll.Filter("skim == 1 || skim == 2 || skim == 3",">=3, q(l1+l2)!=0, met>50/ptll>50")\
-                                  .Snapshot("Events", fOutName1)
+                rdf_3l = rdf_ll.Filter("skim == 1 || skim == 2 || skim == 3",">=3, q(l1+l2)!=0, met>50/ptll>50")\
+                               .Snapshot("Events", fOutIndivName3)
 
-                rdf_onel = rdf.Define("trigger1l","{0} or {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))\
-                              .Filter("trigger1l > 0","Passed trigger1l")\
-                              .Define("skim_fake_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
-                              .Define("skim_fake_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
-                              .Filter("Sum(skim_fake_mu)+Sum(skim_fake_el) == 1","One fake lepton")\
-                              .Snapshot("Events", fOutName2)
+                rdf_1l = rdf.Define("trigger1l","{0} or {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))\
+                            .Filter("trigger1l > 0","Passed trigger1l")\
+                            .Define("skim_fake_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
+                            .Define("skim_fake_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
+                            .Filter("Sum(skim_fake_mu)+Sum(skim_fake_el) == 1","One fake lepton")\
+                            .Snapshot("Events", fOutIndivName1)
 
-                del rdf, rdf_ll, rdf_dil, rdf_ss_3l, rdf_onel
-                if os.path.exists(fOutNameTEMP):
-                    os.remove(fOutNameTEMP)
+                del rdf, rdf_ll, rdf_2l, rdf_3l, rdf_1l
 
                 runTree = ROOT.TChain("Runs")
-                for f in range(len(groupedFile)):
-                    runTree.AddFile(groupedFile[f])
+                runTree.AddFile(inputSingleFileBase)
 
-                fOut0 = ROOT.TFile(fOutName0,"UPDATE")
-                fOut0.cd()
-                runTreeCopy0 = runTree.CopyTree("");
-                runTreeCopy0.Write()
-                fOut0.Close()
-
-                fOut1 = ROOT.TFile(fOutName1,"UPDATE")
+                fOut1 = ROOT.TFile(fOutIndivName1,"UPDATE")
                 fOut1.cd()
                 runTreeCopy1 = runTree.CopyTree("");
                 runTreeCopy1.Write()
                 fOut1.Close()
 
-                fOut2 = ROOT.TFile(fOutName2,"UPDATE")
+                fOut2 = ROOT.TFile(fOutIndivName2,"UPDATE")
                 fOut2.cd()
                 runTreeCopy2 = runTree.CopyTree("");
                 runTreeCopy2.Write()
                 fOut2.Close()
 
-            except Exception as e:
-                print("PROBLEM {0} / {1} / {2} / {3} / {4}".format(finalOutputDir0,finalOutputDir1,finalOutputDir2,i,e))
+                fOut3 = ROOT.TFile(fOutIndivName3,"UPDATE")
+                fOut3.cd()
+                runTreeCopy3 = runTree.CopyTree("");
+                runTreeCopy3.Write()
+                fOut3.Close()
+
+                os.remove(inputSingleFileBase)
+
+            if(isJobFailure == True):
+                print("Job ({0}/{1}) failed completely".format(outputDir,i))
+                continue
+
+            # haddnanoaod1
+            copy_result = False
+            n_retries = 0
+            while n_retries < 5 and copy_result is False:
+                returncode = buildcommand(msgMerge1)
+                if returncode == 0:
+                    copy_result = True
+                else:
+                    print("haddnanoaod output file1 {0} failed ({1}), retrying".format(fOutName1,returncode))
+                    n_retries+=1
+                    time.sleep(15)
+            if(copy_result == False):
+                print("haddnanoaod output file1 {0} failed completely, exiting the loop".format(fOutName1))
+                os.remove(fOutName1)
+
+            # haddnanoaod2
+            copy_result = False
+            n_retries = 0
+            while n_retries < 5 and copy_result is False:
+                returncode = buildcommand(msgMerge2)
+                if returncode == 0:
+                    copy_result = True
+                else:
+                    print("haddnanoaod output file2 {0} failed ({1}), retrying".format(fOutName2,returncode))
+                    n_retries+=1
+                    time.sleep(15)
+            if(copy_result == False):
+                print("haddnanoaod output file2 {0} failed completely, exiting the loop".format(fOutName2))
+                os.remove(fOutName2)
+
+            # haddnanoaod3
+            copy_result = False
+            n_retries = 0
+            while n_retries < 5 and copy_result is False:
+                returncode = buildcommand(msgMerge3)
+                if returncode == 0:
+                    copy_result = True
+                else:
+                    print("haddnanoaod output file3 {0} failed ({1}), retrying".format(fOutName3,returncode))
+                    n_retries+=1
+                    time.sleep(15)
+            if(copy_result == False):
+                print("haddnanoaod output file3 {0} failed completely, exiting the loop".format(fOutName3))
+                os.remove(fOutName3)
+
+            if(copyFilesToFS == True):
+                # copying output file1
+                copycommand = "%s %s %s/%s" % (msgCPOutput,fOutName1,finalOutputDir1,fOutName1)
+                if(isLocal == True and (not os.path.exists(finalOutputDir1))):
+                    os.makedirs(finalOutputDir1)
+
+                copy_result = False
+                n_retries = 0
+                while n_retries < 5 and copy_result is False:
+                    returncode = buildcommand(copycommand)
+                    if returncode == 0:
+                        copy_result = True
+                    else:
+                        print("Copying output file1 {0} failed ({1}), retrying".format(fOutName1,returncode))
+                        n_retries+=1
+                        time.sleep(15)
+                if(copy_result == False):
+                    print("Copying output file1 {0} failed completely, exiting the loop".format(fOutName1))
+
+                os.remove(fOutName1)
+
+                # copying output file2
+                copycommand = "%s %s %s/%s" % (msgCPOutput,fOutName2,finalOutputDir2,fOutName2)
+                if(isLocal == True and (not os.path.exists(finalOutputDir2))):
+                    os.makedirs(finalOutputDir2)
+
+                copy_result = False
+                n_retries = 0
+                while n_retries < 5 and copy_result is False:
+                    returncode = buildcommand(copycommand)
+                    if returncode == 0:
+                        copy_result = True
+                    else:
+                        print("Copying output file2 {0} failed ({1}), retrying".format(fOutName2,returncode))
+                        n_retries+=1
+                        time.sleep(15)
+                if(copy_result == False):
+                    print("Copying output file2 {0} failed completely, exiting the loop".format(fOutName2))
+
+                os.remove(fOutName2)
+
+                # copying output file3
+                copycommand = "%s %s %s/%s" % (msgCPOutput,fOutName3,finalOutputDir3,fOutName3)
+                if(isLocal == True and (not os.path.exists(finalOutputDir3))):
+                    os.makedirs(finalOutputDir3)
+
+                copy_result = False
+                n_retries = 0
+                while n_retries < 5 and copy_result is False:
+                    returncode = buildcommand(copycommand)
+                    if returncode == 0:
+                        copy_result = True
+                    else:
+                        print("Copying output file3 {0} failed ({1}), retrying".format(fOutName3,returncode))
+                        n_retries+=1
+                        time.sleep(15)
+                if(copy_result == False):
+                    print("Copying output file3 {0} failed completely, exiting the loop".format(fOutName3))
+
+                os.remove(fOutName3)
+
+            # Delete used files
+            print(msgRm)
+            os.system(msgRm)
+
+        except Exception as e:
+            print("PROBLEM {0} / {1} / {2}".format(outputDir,i,e))
