@@ -192,6 +192,8 @@ if __name__ == "__main__":
         passJob = whichJob == -1 or whichJob == i
         if(passJob == False): continue
         try:
+            atLeastOneFile = [False, False, False]
+
             fOutName1 = "output_1l_%d_%d.root" % (whichSample,i)
             fOutName2 = "output_2l_%d_%d.root" % (whichSample,i)
             fOutName3 = "output_3l_%d_%d.root" % (whichSample,i)
@@ -210,9 +212,6 @@ if __name__ == "__main__":
                 fOutIndivName2 = "output_2l_{0}_{1}_{2}.root".format(whichSample,i,nf)
                 fOutIndivName3 = "output_3l_{0}_{1}_{2}.root".format(whichSample,i,nf)
 
-                msgMerge1 = msgMerge1 + " " + fOutIndivName1
-                msgMerge2 = msgMerge2 + " " + fOutIndivName2
-                msgMerge3 = msgMerge3 + " " + fOutIndivName3
                 msgRm = msgRm + " " + fOutIndivName1
                 msgRm = msgRm + " " + fOutIndivName2
                 msgRm = msgRm + " " + fOutIndivName3
@@ -273,28 +272,51 @@ if __name__ == "__main__":
                             .Filter("Sum(skim_fake_mu)+Sum(skim_fake_el) == 1","One fake lepton")\
                             .Snapshot("Events", fOutIndivName1)
 
+                eventCounts = [0, 0, 0]
+                try:
+                    eventCounts[0] = rdf_1l.Count().GetValue()
+                except Exception as e:
+                    print("No selected events in {0}".format(fOutIndivName1))
+                try:
+                    eventCounts[1] = rdf_2l.Count().GetValue()
+                except Exception as e:
+                    print("No selected events in {0}".format(fOutIndivName2))
+                try:
+                    eventCounts[2] = rdf_3l.Count().GetValue()
+                except Exception as e:
+                    print("No selected events in {0}".format(fOutIndivName3))
+
                 del rdf, rdf_ll, rdf_2l, rdf_3l, rdf_1l
 
                 runTree = ROOT.TChain("Runs")
                 runTree.AddFile(inputSingleFileBase)
 
-                fOut1 = ROOT.TFile(fOutIndivName1,"UPDATE")
-                fOut1.cd()
-                runTreeCopy1 = runTree.CopyTree("");
-                runTreeCopy1.Write()
-                fOut1.Close()
+                if(isSkimData == 0 or eventCounts[0] > 0):
+                    fOut1 = ROOT.TFile(fOutIndivName1,"UPDATE")
+                    fOut1.cd()
+                    runTreeCopy1 = runTree.CopyTree("");
+                    runTreeCopy1.Write()
+                    fOut1.Close()
+                    atLeastOneFile[0] = True
+                    msgMerge1 = msgMerge1 + " " + fOutIndivName1
 
-                fOut2 = ROOT.TFile(fOutIndivName2,"UPDATE")
-                fOut2.cd()
-                runTreeCopy2 = runTree.CopyTree("");
-                runTreeCopy2.Write()
-                fOut2.Close()
+                if(isSkimData == 0 or eventCounts[1] > 0):
+                    fOut2 = ROOT.TFile(fOutIndivName2,"UPDATE")
+                    fOut2.cd()
+                    runTreeCopy2 = runTree.CopyTree("");
+                    runTreeCopy2.Write()
+                    fOut2.Close()
+                    atLeastOneFile[1] = True
+                    msgMerge2 = msgMerge2 + " " + fOutIndivName2
 
-                fOut3 = ROOT.TFile(fOutIndivName3,"UPDATE")
-                fOut3.cd()
-                runTreeCopy3 = runTree.CopyTree("");
-                runTreeCopy3.Write()
-                fOut3.Close()
+                if(isSkimData == 0 or eventCounts[2] > 0):
+                    fOut3 = ROOT.TFile(fOutIndivName3,"UPDATE")
+                    fOut3.cd()
+                    runTreeCopy3 = runTree.CopyTree("");
+                    runTreeCopy3.Write()
+                    fOut3.Close()
+                    atLeastOneFile[2] = True
+                    msgMerge3 = msgMerge3 + " " + fOutIndivName3
 
                 os.remove(inputSingleFileBase)
 
@@ -306,9 +328,20 @@ if __name__ == "__main__":
             copy_result = False
             n_retries = 0
             while n_retries < 5 and copy_result is False:
-                returncode = buildcommand(msgMerge1)
+                returncode = 0
+                if(atLeastOneFile[0] == True):
+                    returncode = buildcommand(msgMerge1)
                 if returncode == 0:
                     copy_result = True
+                    if(isSkimData == 1):
+                        try:
+                            dftest = ROOT.RDataFrame("Events", fOutName1)
+                            nevents = dftest.Count().GetValue()
+                            del dftest
+                        except Exception as e:
+                            os.remove(fOutName1)
+                            fOutName1 = "output_1l_%d_%d.txt" % (whichSample,i)
+                            returntestcode = buildcommand("touch {0}".format(fOutName1))
                 else:
                     print("haddnanoaod output file1 {0} failed ({1}), retrying".format(fOutName1,returncode))
                     n_retries+=1
@@ -321,9 +354,20 @@ if __name__ == "__main__":
             copy_result = False
             n_retries = 0
             while n_retries < 5 and copy_result is False:
-                returncode = buildcommand(msgMerge2)
+                returncode = 0
+                if(atLeastOneFile[1] == True):
+                    returncode = buildcommand(msgMerge2)
                 if returncode == 0:
                     copy_result = True
+                    if(isSkimData == 1):
+                        try:
+                            dftest = ROOT.RDataFrame("Events", fOutName2)
+                            nevents = dftest.Count().GetValue()
+                            del dftest
+                        except Exception as e:
+                            os.remove(fOutName2)
+                            fOutName2 = "output_2l_%d_%d.txt" % (whichSample,i)
+                            returntestcode = buildcommand("touch {0}".format(fOutName2))
                 else:
                     print("haddnanoaod output file2 {0} failed ({1}), retrying".format(fOutName2,returncode))
                     n_retries+=1
@@ -336,9 +380,20 @@ if __name__ == "__main__":
             copy_result = False
             n_retries = 0
             while n_retries < 5 and copy_result is False:
-                returncode = buildcommand(msgMerge3)
+                returncode = 0
+                if(atLeastOneFile[2] == True):
+                    returncode = buildcommand(msgMerge3)
                 if returncode == 0:
                     copy_result = True
+                    if(isSkimData == 1):
+                        try:
+                            dftest = ROOT.RDataFrame("Events", fOutName3)
+                            nevents = dftest.Count().GetValue()
+                            del dftest
+                        except Exception as e:
+                            os.remove(fOutName3)
+                            fOutName3 = "output_3l_%d_%d.txt" % (whichSample,i)
+                            returntestcode = buildcommand("touch {0}".format(fOutName3))
                 else:
                     print("haddnanoaod output file3 {0} failed ({1}), retrying".format(fOutName3,returncode))
                     n_retries+=1

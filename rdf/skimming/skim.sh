@@ -18,4 +18,6 @@ echo $PWD
 
 python skim.py --whichSample=$1 --whichJob=$2 --group=$3
 
+rm -f functions_cc*
+
 ls -l

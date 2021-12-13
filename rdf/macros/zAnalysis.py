@@ -208,9 +208,9 @@ def analysis(df,count,category,weight,year,PDType,isData):
     myfile.Close()
 
 
-def readMCSample(sampleNOW, year, PDType):
+def readMCSample(sampleNOW, year, PDType, skimType):
 
-    files = getMClist(sampleNOW)
+    files = getMClist(sampleNOW, skimType)
     print(len(files))
     df = ROOT.RDataFrame("Events", files)
 
@@ -223,12 +223,12 @@ def readMCSample(sampleNOW, year, PDType):
         runTree.GetEntry(i)
         genEventSum += runTree.genEventSumw
 
-    weight = (SwitchSample(sampleNOW)[1] / genEventSum)*lumi[year-2016]
+    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSum)*lumi[year-2016]
 
     nevents = df.Count().GetValue()
 
     print("genEventSum({0}): {1} / Events: {2}".format(runTree.GetEntries(),genEventSum,nevents))
-    print("Weight %f / Cross section: %f" %(weight,SwitchSample(sampleNOW)[1]))
+    print("Weight %f / Cross section: %f" %(weight,SwitchSample(sampleNOW, skimType)[1]))
 
     #puPath = "../datapuWeights_UL_{0}.root".format(year)
     #fPUFile = ROOT.TFile(puPath)
@@ -240,11 +240,11 @@ def readMCSample(sampleNOW, year, PDType):
     #fhDPUDown.SetDirectory(0);
     #fPUFile.Close()
 
-    analysis(df, sampleNOW, SwitchSample(sampleNOW)[2], weight, year, PDType, "false")
+    analysis(df, sampleNOW, SwitchSample(sampleNOW, skimType)[2], weight, year, PDType, "false")
 
-def readDataSample(sampleNOW, year, PDType):
+def readDataSample(sampleNOW, year, PDType, skimType):
 
-    files = getDATAlist(sampleNOW, year, PDType)
+    files = getDATAlist(sampleNOW, year, PDType, skimType)
     print(len(files))
 
     df = ROOT.RDataFrame("Events", files)
@@ -257,6 +257,7 @@ def readDataSample(sampleNOW, year, PDType):
 
 if __name__ == "__main__":
 
+    skimType = "2l"
     year = 2018
     test = 0
 
@@ -280,30 +281,27 @@ if __name__ == "__main__":
             test = int(arg)
 
     if(test == 1):
-        #readMCSample(10,2018,"All")
-        readMCSample(0,2018,"All")
-        #readDataSample(103,2018,"Egamma")
+        #readMCSample(10,2018,"All", skimType)
+        readMCSample(0,2018,"All", skimType)
+        #readDataSample(103,2018,"Egamma", skimType)
         sys.exit(0)
     elif(test > 100):
-        readDataSample(test,2018,"Egamma")
+        readDataSample(test,2018,"Egamma", skimType)
         sys.exit(0)
 
     anaNamesDict = dict()
-    ##anaNamesDict.update({"1":[101,2018,"SingleMuon"]})
-    ##anaNamesDict.update({"2":[102,2018,"DoubleMuon"]})
-    ##anaNamesDict.update({"3":[103,2018,"MuonEG"]})
+    anaNamesDict.update({"1":[101,2018,"SingleMuon"]})
+    anaNamesDict.update({"2":[102,2018,"DoubleMuon"]})
+    anaNamesDict.update({"3":[103,2018,"MuonEG"]})
     anaNamesDict.update({"4":[104,2018,"Egamma"]})
-    #anaNamesDict.update({"5":[105,2018,"Egamma"]})
-    #anaNamesDict.update({"6":[106,2018,"Egamma"]})
-    #anaNamesDict.update({"7":[107,2018,"Egamma"]})
     for key in anaNamesDict:
         try:
-            readDataSample(anaNamesDict[key][0],anaNamesDict[key][1],anaNamesDict[key][2])
+            readDataSample(anaNamesDict[key][0],anaNamesDict[key][1],anaNamesDict[key][2], skimType)
         except Exception as e:
             print("Error sampleDA({0}): {1}".format(key,e))
 
     for i in range(4):
         try:
-            readMCSample(i,2018,"All")
+            readMCSample(i,2018,"All", skimType)
         except Exception as e:
             print("Error sampleMC({0}): {1}".format(i,e))

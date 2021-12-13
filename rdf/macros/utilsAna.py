@@ -85,6 +85,7 @@ def findDIR(directory):
             filePath = os.path.join(os.path.abspath(root), f)
             if "failed/" in filePath: continue
             if "log/" in filePath: continue
+            if ".txt" in filePath: continue
             if(("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" in filePath) or
 	       
                ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" in filePath)
@@ -94,6 +95,7 @@ def findDIR(directory):
                 print("Bad file: {0}".format(filePath))
                 counter-=1
                 continue
+            filePath = filePath.replace("/mnt/T3_US_MIT/hadoop","root://t3serv017.mit.edu/")
             rootFiles.push_back(filePath)
 #            if counter>3000: break
 #            if counter>50: break
@@ -123,39 +125,38 @@ def concatenate(result, tmp1):
         result.push_back(f)
 
 
-def getMClist(sampleNOW):
+def getMClist(sampleNOW, skimType):
 
-    files = findDIR("{}".format(SwitchSample(sampleNOW)[0]))
+    files = findDIR("{}".format(SwitchSample(sampleNOW, skimType)[0]))
     return files
 
-def getDATAlist(type, year, PDType):
+def getDATAlist(type, year, PDType, skimType):
 
     #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
-    dirT2 = "/work/submit/ceballos/skims/dil/"
-    #dirT2 = "/work/submit/ceballos/skims/onel/"
+    dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType
 
-    loadJSON("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/13TeV/Legacy_2018/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
+    loadJSON("../skimming/jsns/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
     files1 = []
     files2 = []
     files3 = []
     files4 = []
     if(year == 2018 and PDType == "SingleMuon"):
-        #files1 = findDIR("{0}/SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+        files1 = findDIR("{0}/SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
         files2 = findDIR("{0}/SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
         files3 = findDIR("{0}/SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD".format(dirT2))
         files4 = findDIR("{0}/SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
     elif(year == 2018 and PDType == "DoubleMuon"):
-        #files1 = findDIR("{0}/DoubleMuon+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files1 = findDIR("{0}/DoubleMuon+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
         files2 = findDIR("{0}/DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
         files3 = findDIR("{0}/DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
         files4 = findDIR("{0}/DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
     elif(year == 2018 and PDType == "MuonEG"):
-        #files1 = findDIR("{0}/MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        files1 = findDIR("{0}/MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
         files2 = findDIR("{0}/MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
         files3 = findDIR("{0}/MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
         files4 = findDIR("{0}/MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and PDType == "Egamma" and type == 104):
-        #files1 = findDIR("{0}/EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+    elif(year == 2018 and PDType == "Egamma"):
+        files1 = findDIR("{0}/EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
         files2 = findDIR("{0}/EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
         files3 = findDIR("{0}/EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
         files4 = findDIR("{0}/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
@@ -168,19 +169,18 @@ def getDATAlist(type, year, PDType):
 
     return files
 
-def SwitchSample(argument):
+def SwitchSample(argument, skimType):
 
     #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
-    dirT2 = "/work/submit/ceballos/skims/dil/"
-    #dirT2 = "/work/submit/ceballos/skims/onel/"
-    dirLocal = "/work/submit/mariadlf/Hrare/OCT14/"
+    dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType
+    dirLocal = "/work/submit/mariadlf/Hrare/OCT14"
 
     switch = {
-        0: (dirT2+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1_ext1-v1+MINIAODSIM",2008.4*3*1000,plotCategory("kPlotDY")),
-        1: (dirT2+"WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM",20508.9*3*1000,plotCategory("kPlotOther")),
-        2: (dirT2+"TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM",831.76*0.1086*0.1086*9*1000,plotCategory("kPlotTop")),
-        3: (dirT2+"TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2+MINIAODSIM",831.76*0.1086*3*(1-0.1086*3)*2*1000,plotCategory("kPlotTop")),
-        10:(dirLocal+"ZLLphigamma_pythia8_genFix",0.10*1000,plotCategory("kPlotBSM"))
+        0: (dirT2+"/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1_ext1-v1+MINIAODSIM",2008.4*3*1000,plotCategory("kPlotDY")),
+        1: (dirT2+"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM",20508.9*3*1000,plotCategory("kPlotOther")),
+        2: (dirT2+"/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM",831.76*0.1086*0.1086*9*1000,plotCategory("kPlotTop")),
+        3: (dirT2+"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2+MINIAODSIM",831.76*0.1086*3*(1-0.1086*3)*2*1000,plotCategory("kPlotTop")),
+        10:(dirLocal+"/ZLLphigamma_pythia8_genFix",0.10*1000,plotCategory("kPlotBSM"))
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")

@@ -82,7 +82,7 @@ def analysis(df,count,category,weight,year,PDType,isData):
         dfbase = dfbase.Define("weight","1.0")
     else:
         dfbase = dfbase.Define("weight","compute_weights({0},genWeight)".format(weight))
-    histo[0][0] = dfbase.Histo1D(("histo_{0}_{1}".format(0+ 0,0), "histo_{0}_{1}".format(0+ 0,0),100,  0, 100), "MET_pt","weight")
+
     dfcat = []
     for x in range(nCat):
         for ltype in range(2):
@@ -99,12 +99,16 @@ def analysis(df,count,category,weight,year,PDType,isData):
                 histo[ltype+10][x] = dfcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+10,x), "histo_{0}_{1}".format(ltype+10,x),100,-2.5,2.5), "fakemu_eta","weight")
                 histo[ltype+12][x] = dfcat[2*x+ltype].Filter("Sum(tight_mu)==1", "tight_mu==1").Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x),100,  0, 100), "fakemu_pt","weight")
                 histo[ltype+14][x] = dfcat[2*x+ltype].Filter("Sum(tight_mu)==1", "tight_mu==1").Histo1D(("histo_{0}_{1}".format(ltype+14,x), "histo_{0}_{1}".format(ltype+14,x),100,-2.5,2.5), "fakemu_eta","weight")
+                histo[ltype+16][x] = dfcat[2*x+ltype].Filter("Sum(tight_mu)==1 && MET_pt > 30 && mtfix > 50 && mtfix < 120", "tight_mu==1 && MET requirements")\
+		     .Histo1D(("histo_{0}_{1}".format(ltype+16,x), "histo_{0}_{1}".format(ltype+16,x),100,  0, 100), "fakemu_pt","weight")
                 
             else:
                 histo[ltype+ 8][x] = dfcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 8,x), "histo_{0}_{1}".format(ltype+ 8,x),100,  0, 100), "fakeel_pt","weight")
                 histo[ltype+10][x] = dfcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+10,x), "histo_{0}_{1}".format(ltype+10,x),100,-2.5,2.5), "fakeel_eta","weight")
                 histo[ltype+12][x] = dfcat[2*x+ltype].Filter("Sum(tight_el)==1", "tight_el==1").Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x),100,  0, 100), "fakeel_pt","weight")
                 histo[ltype+14][x] = dfcat[2*x+ltype].Filter("Sum(tight_el)==1", "tight_el==1").Histo1D(("histo_{0}_{1}".format(ltype+14,x), "histo_{0}_{1}".format(ltype+14,x),100,-2.5,2.5), "fakeel_eta","weight")
+                histo[ltype+16][x] = dfcat[2*x+ltype].Filter("Sum(tight_el)==1 && MET_pt > 30 &&  mtfix > 50 && mtfix < 120", "tight_el==1 && MET requirements")\
+		     .Histo1D(("histo_{0}_{1}".format(ltype+16,x), "histo_{0}_{1}".format(ltype+16,x),100,  0, 100), "fakeel_pt","weight")
 
     report = []
     for x in range(nCat):
@@ -123,9 +127,9 @@ def analysis(df,count,category,weight,year,PDType,isData):
     myfile.Close()
 
 
-def readMCSample(sampleNOW, year, PDType):
+def readMCSample(sampleNOW, year, PDType, skimType):
 
-    files = getMClist(sampleNOW)
+    files = getMClist(sampleNOW, skimType)
     print(len(files))
     df = ROOT.RDataFrame("Events", files)
 
@@ -133,17 +137,19 @@ def readMCSample(sampleNOW, year, PDType):
     for f in range(len(files)):
         runTree.AddFile(files[f])
 
-    genEventSum = 0
+    genEventSumWeight = 0
+    genEventSumNoWeight = 0
     for i in range(runTree.GetEntries()):
         runTree.GetEntry(i)
-        genEventSum += runTree.genEventSumw
+        genEventSumWeight += runTree.genEventSumw
+        genEventSumNoWeight += runTree.genEventCount
 
-    weight = (SwitchSample(sampleNOW)[1] / genEventSum)*lumi[year-2016]
+    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*lumi[year-2016]
 
     nevents = df.Count().GetValue()
 
-    print("genEventSum({0}): {1} / Events: {2}".format(runTree.GetEntries(),genEventSum,nevents))
-    print("Weight %f / Cross section: %f" %(weight,SwitchSample(sampleNOW)[1]))
+    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
+    print("Weight %f / Cross section: %f" %(weight,SwitchSample(sampleNOW, skimType)[1]))
 
     #puPath = "../datapuWeights_UL_{0}.root".format(year)
     #fPUFile = ROOT.TFile(puPath)
@@ -155,11 +161,11 @@ def readMCSample(sampleNOW, year, PDType):
     #fhDPUDown.SetDirectory(0);
     #fPUFile.Close()
 
-    analysis(df, sampleNOW, SwitchSample(sampleNOW)[2], weight, year, PDType, "false")
+    analysis(df, sampleNOW, SwitchSample(sampleNOW, skimType)[2], weight, year, PDType, "false")
 
-def readDataSample(sampleNOW, year, PDType):
+def readDataSample(sampleNOW, year, PDType, skimType):
 
-    files = getDATAlist(sampleNOW, year, PDType)
+    files = getDATAlist(sampleNOW, year, PDType, skimType)
     print(len(files))
 
     df = ROOT.RDataFrame("Events", files)
@@ -172,6 +178,7 @@ def readDataSample(sampleNOW, year, PDType):
 
 if __name__ == "__main__":
 
+    skimType = "1l"
     year = 2018
     test = 0
 
@@ -196,27 +203,32 @@ if __name__ == "__main__":
 
     if(test == 1):
         #readMCSample(10,2018,"All")
-        readMCSample(1,2018,"All")
-        #readDataSample(103,2018,"Egamma")
+        readMCSample(1,2018,"All",skimType)
         sys.exit(0)
-    elif(test > 100):
-        readDataSample(test,2018,"Egamma")
+    elif(test == 101):
+        readDataSample(test,2018,"SingleMuon",skimType)
+        sys.exit(0)
+    elif(test == 102):
+        readDataSample(test,2018,"DoubleMuon",skimType)
+        sys.exit(0)
+    elif(test == 102):
+        readDataSample(test,2018,"MuonEG",skimType)
+        sys.exit(0)
+    elif(test == 104):
+        readDataSample(test,2018,"Egamma",skimType)
         sys.exit(0)
 
     anaNamesDict = dict()
     anaNamesDict.update({"2":[102,2018,"DoubleMuon"]})
     anaNamesDict.update({"4":[104,2018,"Egamma"]})
-    #anaNamesDict.update({"5":[105,2018,"Egamma"]})
-    #anaNamesDict.update({"6":[106,2018,"Egamma"]})
-    #anaNamesDict.update({"7":[107,2018,"Egamma"]})
     for key in anaNamesDict:
         try:
-            readDataSample(anaNamesDict[key][0],anaNamesDict[key][1],anaNamesDict[key][2])
+            readDataSample(anaNamesDict[key][0],anaNamesDict[key][1],anaNamesDict[key][2],skimType)
         except Exception as e:
             print("Error sampleDA({0}): {1}".format(key,e))
 
     for i in range(4):
         try:
-            readMCSample(i,2018,"All")
+            readMCSample(i,2018,"All",skimType)
         except Exception as e:
             print("Error sampleMC({0}): {1}".format(i,e))
