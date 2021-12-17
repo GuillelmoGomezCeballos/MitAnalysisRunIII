@@ -23,7 +23,7 @@ def readDataSample(sampleNOW, year, PDType, skimType):
 
     files = getDATAlist(sampleNOW, year, PDType, skimType)
     print(len(files))
- 
+
     for f in range(len(files)):
         try:
             df = ROOT.RDataFrame("Events", files[f])

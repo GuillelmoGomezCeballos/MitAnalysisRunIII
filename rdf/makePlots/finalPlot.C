@@ -190,7 +190,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
       }
     } // mltFit result
 
-    if(ic == kPlotDY) _hist[ic]->Scale(lumi);
+    if(ic != kPlotData) _hist[ic]->Scale(lumi);
 
     if(printYieldsBinByBin && _hist[ic]->GetSumOfWeights() > 0){
       printf("Yields(%s) = %.3f\n",plotBaseNames[ic].Data(),_hist[ic]->GetSumOfWeights());

@@ -1,13 +1,12 @@
 import ROOT
 import os, sys, getopt
 
-ROOT.ROOT.EnableImplicitMT(5)
+ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample
+from utilsAna import SwitchSample, groupFiles
 
-#lumi = [36.1, 41.5, 60.0]
-lumi = [36.1, 41.5, 40.0]
+lumi = [36.1, 41.5, 60.0]
 
 BARRELphotons = "Photon_pt>20 and Photon_isScEtaEB and (Photon_cutBased & 2) and Photon_electronVeto"
 ENDCAPphotons = "Photon_pt>20 and Photon_isScEtaEE and (Photon_cutBased & 2) and Photon_electronVeto"
@@ -30,9 +29,9 @@ def selectionLL(df,year,PDType,isData):
         TRIGGERLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
     elif(year == 2018 and PDType == "SingleMuon"):
         TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-    elif(year == 2018 and PDType == "Egamma"):
+    elif(year == 2018 and PDType == "EGamma"):
         TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-    elif(year == 2018 and PDType == "All"):
+    elif(year == 2018):
         TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
     else:
         print("PROBLEM with triggers!!!")
@@ -101,17 +100,17 @@ def selectionLL(df,year,PDType,isData):
               .Define("ptjj",   "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 1)")\
               .Define("detajj", "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 2)")\
               .Define("dphijj", "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 3)")\
-	      .Define("muid1",  "compute_muid_var(goodmu_mediumId, goodmu_tightId, goodmu_pfIsoId, goodmu_mvaId, goodmu_miniIsoId, goodmu_mvaTTH, 0)")\
-	      .Define("muid2",  "compute_muid_var(goodmu_mediumId, goodmu_tightId, goodmu_pfIsoId, goodmu_mvaId, goodmu_miniIsoId, goodmu_mvaTTH, 1)")\
-	      .Define("elid1",  "compute_elid_var(goodel_cutBased, goodel_mvaFall17V2Iso_WP90, goodel_mvaFall17V2Iso_WP80, goodel_tightCharge, goodel_mvaTTH, 0)")\
-	      .Define("elid2",  "compute_elid_var(goodel_cutBased, goodel_mvaFall17V2Iso_WP90, goodel_mvaFall17V2Iso_WP80, goodel_tightCharge, goodel_mvaTTH, 1)")
+              .Define("muid1",  "compute_muid_var(goodmu_mediumId, goodmu_tightId, goodmu_pfIsoId, goodmu_mvaId, goodmu_miniIsoId, goodmu_mvaTTH, 0)")\
+              .Define("muid2",  "compute_muid_var(goodmu_mediumId, goodmu_tightId, goodmu_pfIsoId, goodmu_mvaId, goodmu_miniIsoId, goodmu_mvaTTH, 1)")\
+              .Define("elid1",  "compute_elid_var(goodel_cutBased, goodel_mvaFall17V2Iso_WP90, goodel_mvaFall17V2Iso_WP80, goodel_tightCharge, goodel_mvaTTH, 0)")\
+              .Define("elid2",  "compute_elid_var(goodel_cutBased, goodel_mvaFall17V2Iso_WP90, goodel_mvaFall17V2Iso_WP80, goodel_tightCharge, goodel_mvaTTH, 1)")
 
     return dftag
 
 
-def analysis(df,count,category,weight,year,PDType,isData):
+def analysis(df,count,category,weight,year,PDType,isData,whichJob):
 
-    print("starting {0} / {1} / {2} / {3} / {4} / {5}".format(count,category,weight,year,PDType,isData))
+    print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
@@ -130,7 +129,8 @@ def analysis(df,count,category,weight,year,PDType,isData):
     if(theCat == plotCategory("kPlotData")):
         dfbase = dfbase.Define("weight","1.0")
     else:
-        dfbase = dfbase.Define("weight","compute_weights({0},genWeight)".format(weight))
+        dfbase = dfbase.Define("PDType","\"{0}\"".format(PDType))\
+                       .Define("weight","compute_weights({0},genWeight,PDType)".format(weight))
 
     dfcat = []
     dfzllcat = []
@@ -143,9 +143,9 @@ def analysis(df,count,category,weight,year,PDType,isData):
 
             dfzllcat.append(dfcat[3*x+ltype].Filter("Sum(goodmu_charge)+Sum(goodel_charge) == 0", "Opposite-sign leptons"))
             if(ltype == 1):
-                 histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 30, 330), "mll","weight")
+                histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 30, 330), "mll","weight")
             else:
-                 histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
+                histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
             histo[ltype+ 3][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 50,  0, 200), "ptll","weight")
             histo[ltype+ 6][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 6,x), "histo_{0}_{1}".format(ltype+ 6,x), 50,  0, 5),   "drll","weight")
             histo[ltype+ 9][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 9,x), "histo_{0}_{1}".format(ltype+ 9,x), 50,  0, 3.1416), "dphill","weight")
@@ -182,12 +182,12 @@ def analysis(df,count,category,weight,year,PDType,isData):
 
             histo[ltype+100][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+100,x), "histo_{0}_{1}".format(ltype+100,x), 256, -0.5, 255.5), "muid1","weight")
             histo[ltype+103][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+103,x), "histo_{0}_{1}".format(ltype+103,x), 256, -0.5, 255.5), "muid1","weight")
-            histo[ltype+106][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+106,x), "histo_{0}_{1}".format(ltype+106,x), 256, -0.5, 255.5), "muid2","weight")
-            histo[ltype+109][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+109,x), "histo_{0}_{1}".format(ltype+109,x), 256, -0.5, 255.5), "muid2","weight")
+            histo[ltype+106][x] = dfzllcat[3*x+ltype].Filter("abs(etal2)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+106,x), "histo_{0}_{1}".format(ltype+106,x), 256, -0.5, 255.5), "muid2","weight")
+            histo[ltype+109][x] = dfzllcat[3*x+ltype].Filter("abs(etal2)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+109,x), "histo_{0}_{1}".format(ltype+109,x), 256, -0.5, 255.5), "muid2","weight")
             histo[ltype+112][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+112,x), "histo_{0}_{1}".format(ltype+112,x), 256, -0.5, 255.5), "elid1","weight")
             histo[ltype+115][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+115,x), "histo_{0}_{1}".format(ltype+115,x), 256, -0.5, 255.5), "elid1","weight")
-            histo[ltype+118][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+118,x), "histo_{0}_{1}".format(ltype+118,x), 256, -0.5, 255.5), "elid2","weight")
-            histo[ltype+121][x] = dfzllcat[3*x+ltype].Filter("abs(etal1)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+121,x), "histo_{0}_{1}".format(ltype+121,x), 256, -0.5, 255.5), "elid2","weight")
+            histo[ltype+118][x] = dfzllcat[3*x+ltype].Filter("abs(etal2)<1.5").Histo1D(("histo_{0}_{1}".format(ltype+118,x), "histo_{0}_{1}".format(ltype+118,x), 256, -0.5, 255.5), "elid2","weight")
+            histo[ltype+121][x] = dfzllcat[3*x+ltype].Filter("abs(etal2)>1.5").Histo1D(("histo_{0}_{1}".format(ltype+121,x), "histo_{0}_{1}".format(ltype+121,x), 256, -0.5, 255.5), "elid2","weight")
 
             histo[ltype+124][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+124,x), "histo_{0}_{1}".format(ltype+124,x), 100, 0, 200), "MET_pt","weight")
             histo[ltype+127][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+127,x), "histo_{0}_{1}".format(ltype+127,x), 100, 0, 200), "PuppiMET_pt","weight")
@@ -200,52 +200,68 @@ def analysis(df,count,category,weight,year,PDType,isData):
             print("---------------- SUMMARY 3*{0}+{1} = {2} -------------".format(x,ltype,3*x+ltype))
             report[3*x+ltype].Print()
 
-    myfile = ROOT.TFile("fillhistoZAna_sample{0}_year{1}.root".format(count,year),'RECREATE')
+    myfile = ROOT.TFile("fillhistoZAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
-	    if(histo[j][i] == 0): continue
+            if(histo[j][i] == 0): continue
             histo[j][i].Write()
     myfile.Close()
 
-
-def readMCSample(sampleNOW, year, PDType, skimType):
+def readMCSample(sampleNOW, year, skimType, whichJob, group):
 
     files = getMClist(sampleNOW, skimType)
-    print(len(files))
-    df = ROOT.RDataFrame("Events", files)
+    print("Total files: {0}".format(len(files)))
 
     runTree = ROOT.TChain("Runs")
     for f in range(len(files)):
         runTree.AddFile(files[f])
 
-    genEventSum = 0
+    genEventSumWeight = 0
+    genEventSumNoWeight = 0
     for i in range(runTree.GetEntries()):
         runTree.GetEntry(i)
-        genEventSum += runTree.genEventSumw
+        genEventSumWeight += runTree.genEventSumw
+        genEventSumNoWeight += runTree.genEventCount
 
-    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSum)*lumi[year-2016]
+    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*lumi[year-2016]
+    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*lumi[year-2016]
 
+    if(whichJob != -1):
+        groupedFile = groupFiles(files, group)
+        files = groupedFile[whichJob]
+        if(len(files) == 0):
+            print("no files in job/group: {0} / {1}".format(whichJob, group))
+            return 0
+        print("Used files: {0}".format(len(files)))
+
+    df = ROOT.RDataFrame("Events", files)
     nevents = df.Count().GetValue()
 
-    print("genEventSum({0}): {1} / Events: {2}".format(runTree.GetEntries(),genEventSum,nevents))
-    print("Weight %f / Cross section: %f" %(weight,SwitchSample(sampleNOW, skimType)[1]))
+    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
+    print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
-    #puPath = "../datapuWeights_UL_{0}.root".format(year)
-    #fPUFile = ROOT.TFile(puPath)
-    #fhDPU     = fPUFile.Get("puWeights")
-    #fhDPUUp   = fPUFile.Get("puWeightsUp")
-    #fhDPUDown = fPUFile.Get("puWeightsDown")
-    #fhDPU    .SetDirectory(0);
-    #fhDPUUp  .SetDirectory(0);
-    #fhDPUDown.SetDirectory(0);
-    #fPUFile.Close()
+    PDType = os.path.basename(SwitchSample(sampleNOW, skimType)[0]).split('+')[0]
 
-    analysis(df, sampleNOW, SwitchSample(sampleNOW, skimType)[2], weight, year, PDType, "false")
+    analysis(df, sampleNOW, SwitchSample(sampleNOW, skimType)[2], weight, year, PDType, "false", whichJob)
 
-def readDataSample(sampleNOW, year, PDType, skimType):
+def readDataSample(sampleNOW, year, skimType, whichJob, group):
 
-    files = getDATAlist(sampleNOW, year, PDType, skimType)
-    print(len(files))
+    PDType = "0"
+    if  (sampleNOW >= 101 and sampleNOW <= 104): PDType = "SingleMuon"
+    elif(sampleNOW >= 105 and sampleNOW <= 108): PDType = "DoubleMuon"
+    elif(sampleNOW >= 109 and sampleNOW <= 112): PDType = "MuonEG"
+    elif(sampleNOW >= 112 and sampleNOW <= 116): PDType = "EGamma"
+
+    files = getDATAlist(sampleNOW, year, skimType)
+    print("Total files: {0}".format(len(files)))
+
+    if(whichJob != -1):
+        groupedFile = groupFiles(files, group)
+        files = groupedFile[whichJob]
+        if(len(files) == 0):
+            print("no files in job/group: {0} / {1}".format(whichJob, group))
+            return 0
+        print("Used files: {0}".format(len(files)))
 
     df = ROOT.RDataFrame("Events", files)
 
@@ -253,17 +269,21 @@ def readDataSample(sampleNOW, year, PDType, skimType):
     nevents = df.Count().GetValue()
     print("%s entries in the dataset" %nevents)
 
-    analysis(df, sampleNOW, sampleNOW, weight, year, PDType, "true")
+    analysis(df, sampleNOW, sampleNOW, weight, year, PDType, "true", whichJob)
 
 if __name__ == "__main__":
 
+    group = 20
+
     skimType = "2l"
     year = 2018
-    test = 0
+    process = -1
+    whichJob = -1
 
-    valid = ['year=', "test=", 'help']
+    valid = ['year=', "process=", 'whichJob=', 'help']
     usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
-    usage +=  "              --test=<{0}>".format(test)
+    usage +=  "              --process=<{0}>\n".format(process)
+    usage +=  "              --whichJob=<{0}>".format(whichJob)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -277,31 +297,29 @@ if __name__ == "__main__":
             sys.exit(1)
         if opt == "--year":
             year = int(arg)
-        if opt == "--test":
-            test = int(arg)
+        if opt == "--process":
+            process = int(arg)
+        if opt == "--whichJob":
+            whichJob = int(arg)
 
-    if(test == 1):
-        #readMCSample(10,2018,"All", skimType)
-        readMCSample(0,2018,"All", skimType)
-        #readDataSample(103,2018,"Egamma", skimType)
-        sys.exit(0)
-    elif(test > 100):
-        readDataSample(test,2018,"Egamma", skimType)
-        sys.exit(0)
+    try:
+        if(process >= 0 and process < 100):
+            readMCSample(process,year,skimType,whichJob,group)
+            sys.exit(0)
+        elif(process > 100):
+            readDataSample(process,year,skimType,whichJob,group)
+            sys.exit(0)
+    except Exception as e:
+        print("Error sample: {0}".format(e))
 
-    anaNamesDict = dict()
-    anaNamesDict.update({"1":[101,2018,"SingleMuon"]})
-    anaNamesDict.update({"2":[102,2018,"DoubleMuon"]})
-    anaNamesDict.update({"3":[103,2018,"MuonEG"]})
-    anaNamesDict.update({"4":[104,2018,"Egamma"]})
-    for key in anaNamesDict:
+    for i in 101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116:
         try:
-            readDataSample(anaNamesDict[key][0],anaNamesDict[key][1],anaNamesDict[key][2], skimType)
+            readDataSample(i,year,skimType,whichJob,group)
         except Exception as e:
-            print("Error sampleDA({0}): {1}".format(key,e))
+            print("Error sampleDA({0}): {1}".format(i,e))
 
     for i in range(4):
         try:
-            readMCSample(i,2018,"All", skimType)
+            readMCSample(i,year,skimType,whichJob,group)
         except Exception as e:
             print("Error sampleMC({0}): {1}".format(i,e))

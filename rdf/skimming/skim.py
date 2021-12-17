@@ -45,6 +45,7 @@ def loadJSON(fIn):
             vec.push_back(pair)
             ROOT.jsonMap[int(k)] = vec
 
+# split fIns files in groups of group files 
 def groupFiles(fIns, group):
 
     ret = [fIns[x:x+group] for x in range(0, len(fIns), group)]

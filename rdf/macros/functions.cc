@@ -6,7 +6,7 @@
 #include "TH2.h"
 #include "TH3.h"
 #include "TF1.h"
-#include "TH2Poly.h"
+#include "TString.h"
 #include "TRandom.h"
 #include "TRandom3.h"
 #include "TSpline.h"
@@ -179,7 +179,12 @@ float compute_lmet_var(const Vec_f& mu_pt, const Vec_f& mu_phi,
    double theVar = 0;
    if     (var == 0) theVar = std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi)));
    else if(var == 1) theVar = std::abs(deltaPhi(phil,met_phi));
-   else if(var == 2) theVar = std::sqrt(2*35.0*met_pt*(1-std::cos(phil-met_phi)));
+   else if(var == 2) theVar = std::sqrt(2*30.0*met_pt*(1-std::cos(phil-met_phi)));
+   else if(var == 3) theVar = std::max(std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi))),met_pt);
+   else if(var == 4) theVar = std::min(std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi))),met_pt);
+
+   theVar = std::min(theVar, 199.999);
+   
    return theVar;
 }
 
@@ -277,7 +282,11 @@ int compute_category(const int mc){
 }
 
 // compute category
-float compute_weights(const float weight, const float genWeight){
+float compute_weights(const float weight, const float genWeight, const TString theCat){
+  if(theCat.Contains("WJetsToLNu") && genWeight > 10000) {
+    printf("Huge genWeight: %f\n",genWeight);
+    return 0.0;
+  }
   return weight*genWeight;
 }
 

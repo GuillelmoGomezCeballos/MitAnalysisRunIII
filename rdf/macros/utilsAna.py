@@ -1,6 +1,9 @@
 import ROOT
 import os, json
 from subprocess import call,check_output
+from XRootD import client
+
+lumi = [36.1, 41.5, 60.0]
 
 def plotCategory(key):
     plotCategoryDict = dict()
@@ -75,31 +78,46 @@ def findDIR(directory):
 
     print(directory)
 
+    maxFiles = 1000000000
+    if("TTToSemiLeptonic" in directory):
+        maxFiles = 300
+
     counter = 0
     rootFiles = ROOT.vector('string')()
-    for root, directories, filenames in os.walk(directory):
-        for f in filenames:
 
-            counter+=1
-            isBadFile = False
-            filePath = os.path.join(os.path.abspath(root), f)
+    if("/mnt/T3_US_MIT/hadoop" in directory):
+        fs = client.FileSystem('root://t3serv017.mit.edu/')
+        lsst = fs.dirlist(directory.replace("/mnt/T3_US_MIT/hadoop",""))
+        for e in lsst[1]:
+            filePath = directory.replace("/mnt/T3_US_MIT/hadoop","root://t3serv017.mit.edu/") + e.name
             if "failed/" in filePath: continue
             if "log/" in filePath: continue
             if ".txt" in filePath: continue
-            if(("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" in filePath) or
-	       
-               ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" in filePath)
-	       ): isBadFile = True
-
-            if(isBadFile == True):
-                print("Bad file: {0}".format(filePath))
-                counter-=1
-                continue
-            filePath = filePath.replace("/mnt/T3_US_MIT/hadoop","root://t3serv017.mit.edu/")
+            counter+=1
+            if(counter > maxFiles): break
             rootFiles.push_back(filePath)
-#            if counter>3000: break
-#            if counter>50: break
-#            if counter>5: break
+
+    else:
+        for root, directories, filenames in os.walk(directory):
+            for f in filenames:
+
+                isBadFile = False
+                filePath = os.path.join(os.path.abspath(root), f)
+                filePath = filePath.replace("/mnt/T3_US_MIT/hadoop","root://t3serv017.mit.edu/")
+                if "failed/" in filePath: continue
+                if "log/" in filePath: continue
+                if ".txt" in filePath: continue
+                if(("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" in filePath) or
+
+                   ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" in filePath)
+                   ): isBadFile = True
+
+                if(isBadFile == True):
+                    print("Bad file: {0}".format(filePath))
+                    continue
+                counter+=1
+                if(counter > maxFiles): break
+                rootFiles.push_back(filePath)
 
     return rootFiles
 
@@ -120,52 +138,73 @@ def findMany(basedir, regex):
 
     return rootFiles
 
+# split fIns files in group files
+def groupFiles(fIns, group):
+
+    ret =  [fIns[i::group] for i in range(group)]
+
+    return ret
+
 def concatenate(result, tmp1):
     for f in tmp1:
         result.push_back(f)
-
 
 def getMClist(sampleNOW, skimType):
 
     files = findDIR("{}".format(SwitchSample(sampleNOW, skimType)[0]))
     return files
 
-def getDATAlist(type, year, PDType, skimType):
+def getDATAlist(type, year, skimType):
 
     #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
     dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType
 
-    loadJSON("../skimming/jsns/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
+    if(year == 2018):
+        jsnName = "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
+        if os.path.exists(os.path.join("../skimming/jsns/",jsnName)):
+            loadJSON(os.path.join("../skimming/jsns",jsnName))
+        else:
+            loadJSON(jsnName)
+
     files1 = []
-    files2 = []
-    files3 = []
-    files4 = []
-    if(year == 2018 and PDType == "SingleMuon"):
+    if(year == 2018 and type == 101):
+        files1 = findDIR("{0}/SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 102):
         files1 = findDIR("{0}/SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
-        files2 = findDIR("{0}/SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
-        files3 = findDIR("{0}/SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD".format(dirT2))
-        files4 = findDIR("{0}/SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
-    elif(year == 2018 and PDType == "DoubleMuon"):
+    elif(year == 2018 and type == 103):
+        files1 = findDIR("{0}/SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 104):
+        files1 = findDIR("{0}/SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD".format(dirT2))
+
+    elif(year == 2018 and type == 105):
         files1 = findDIR("{0}/DoubleMuon+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-        files2 = findDIR("{0}/DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-        files3 = findDIR("{0}/DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-        files4 = findDIR("{0}/DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and PDType == "MuonEG"):
+    elif(year == 2018 and type == 106):
+        files1 = findDIR("{0}/DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 107):
+        files1 = findDIR("{0}/DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 108):
+        files1 = findDIR("{0}/DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+
+    elif(year == 2018 and type == 109):
         files1 = findDIR("{0}/MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-        files2 = findDIR("{0}/MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-        files3 = findDIR("{0}/MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-        files4 = findDIR("{0}/MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and PDType == "Egamma"):
+    elif(year == 2018 and type == 110):
+        files1 = findDIR("{0}/MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 111):
+        files1 = findDIR("{0}/MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 112):
+        files1 = findDIR("{0}/MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+
+    elif(year == 2018 and type == 113):
         files1 = findDIR("{0}/EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-        files2 = findDIR("{0}/EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-        files3 = findDIR("{0}/EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-        files4 = findDIR("{0}/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 114):
+        files1 = findDIR("{0}/EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 115):
+        files1 = findDIR("{0}/EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 116):
+        files1 = findDIR("{0}/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
 
     files = ROOT.vector('string')()
     concatenate(files, files1)
-    concatenate(files, files2)
-    concatenate(files, files3)
-    concatenate(files, files4)
 
     return files
 
