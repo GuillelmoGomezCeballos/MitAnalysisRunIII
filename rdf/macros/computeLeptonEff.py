@@ -41,7 +41,8 @@ if __name__ == "__main__":
     fileLep = [TFile("{0}/{1}_{2}_muB.root".format(output,path,year)),
                TFile("{0}/{1}_{2}_muE.root".format(output,path,year)),
                TFile("{0}/{1}_{2}_elB.root".format(output,path,year)),
-               TFile("{0}/{1}_{2}_elE.root".format(output,path,year))]
+               TFile("{0}/{1}_{2}_elE.root".format(output,path,year))
+	      ]
 
     for thePlot in range(4):
         sumBits = [[0 for x in range(numberOfBits)] for y in range(2)]

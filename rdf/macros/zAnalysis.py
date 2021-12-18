@@ -116,7 +116,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
     nCat, nHisto = plotCategory("kPlotCategories"), 200
-    histo = [[0 for x in range(nCat)] for y in range(nHisto)]
+    histo = [[0 for y in range(nCat)] for x in range(nHisto)]
 
     dftag = selectionLL(df,year,PDType,isData)
 

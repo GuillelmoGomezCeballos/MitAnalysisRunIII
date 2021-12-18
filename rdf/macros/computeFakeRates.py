@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     nCat = plotCategory("kPlotCategories")
 
-    prescale = [[0 for x in range(len(xPtbins)-1)] for y in range(2)]
+    prescale = [[0 for y in range(len(xPtbins)-1)] for x in range(2)]
     print(prescale)
 
     fileWLName = [0 for x in range(2)]
@@ -59,51 +59,58 @@ if __name__ == "__main__":
 
     print("Prescales: ",prescale)
 
-    fileLoose = [TFile("{0}/{1}_{2}_0_2d.root".format(output,path,year)),
-                 TFile("{0}/{1}_{2}_1_2d.root".format(output,path,year))]
-    fileTight = [TFile("{0}/{1}_{2}_2_2d.root".format(output,path,year)),
-                 TFile("{0}/{1}_{2}_3_2d.root".format(output,path,year))]
+    numberOfSel = 8
+    histoFakeEffSelEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
+    fileTight = [[0 for y in range(numberOfSel)] for x in range(2)]
 
-    histoFakeEffSelEtaPt = [
-        TH2D("histoFakeEffSelEtaPt_{0}".format(0), "histoFakeEffSelEtaPt_{0}".format(0), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),
-        TH2D("histoFakeEffSelEtaPt_{0}".format(1), "histoFakeEffSelEtaPt_{0}".format(1), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins)]
+    fileLoose = [TFile("{0}/{1}_{2}_0_2d.root".format(output,path,year)), TFile("{0}/{1}_{2}_1_2d.root".format(output,path,year))]
+    for thePlot in range(2):
+        for nsel in range(numberOfSel):
+            fileTight[thePlot][nsel] = TFile("{0}/{1}_{2}_{3}_2d.root".format(output,path,year,2+thePlot+nsel*2))
+
+    for thePlot in range(2):
+        for j in range(numberOfSel):
+            histoFakeEffSelEtaPt[thePlot][j] = TH2D("histoFakeEffSelEtaPt_{0}_{1}".format(thePlot,j), "histoFakeEffSelEtaPt_{0}_{1}".format(thePlot,j), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins)
 
     fileFakeRateName = "histoFakeEtaPt_{0}.root".format(year)
     outFileFakeRate = TFile(fileFakeRateName,"recreate")
     outFileFakeRate.cd()
     for thePlot in range(2):
-        histoFakeDenDA = fileLoose[thePlot].Get("histo2d{0}".format(plotCategory("kPlotData")))
-        histoFakeDenBG = fileLoose[thePlot].Get("histo2d{0}".format(plotCategory("kPlotSignal3")))
-        histoFakeNumDA = fileTight[thePlot].Get("histo2d{0}".format(plotCategory("kPlotData")))
-        histoFakeNumBG = fileTight[thePlot].Get("histo2d{0}".format(plotCategory("kPlotSignal3")))
-        for nc in range(nCat):
-            if(nc == plotCategory("kPlotData") or nc == plotCategory("kPlotSignal3")): continue
-            histoFakeDenBG.Add(fileLoose[thePlot].Get("histo2d{0}".format(nc)))
-            histoFakeNumBG.Add(fileTight[thePlot].Get("histo2d{0}".format(nc)))
+        for nsel in range(numberOfSel):
+            histoFakeDenDA = (fileLoose[thePlot].Get("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
+            histoFakeDenBG = (fileLoose[thePlot].Get("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoFakeNumDA = (fileTight[thePlot][nsel].Get("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
+            histoFakeNumBG = (fileTight[thePlot][nsel].Get("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            for nc in range(nCat):
+                if(nc == plotCategory("kPlotData") or nc == plotCategory("kPlotSignal3")): continue
+                histoFakeDenBG.Add(fileLoose[thePlot].Get("histo2d{0}".format(nc)))
+                histoFakeNumBG.Add(fileTight[thePlot][nsel].Get("histo2d{0}".format(nc)))
 
-        print("Channel({0}) = ({1}-{2})/({3}-{4})".format(thePlot,histoFakeNumDA.GetSumOfWeights(),histoFakeNumBG.GetSumOfWeights(),histoFakeDenDA.GetSumOfWeights(),histoFakeDenBG.GetSumOfWeights()))
+            print("Channel({0},{1}) = ({2}-{3})/({4}-{5}) = {6}".format(thePlot,nsel,
+	            histoFakeNumDA.GetSumOfWeights(),histoFakeNumBG.GetSumOfWeights() , histoFakeDenDA.GetSumOfWeights(),histoFakeDenBG.GetSumOfWeights(),
+	           (histoFakeNumDA.GetSumOfWeights()-histoFakeNumBG.GetSumOfWeights())/(histoFakeDenDA.GetSumOfWeights()-histoFakeDenBG.GetSumOfWeights())))
 
-        for i in range(histoFakeDenDA.GetNbinsX()):
-            for j in range(histoFakeDenDA.GetNbinsY()):
-                den = histoFakeDenDA.GetBinContent(i+1,j+1) - histoFakeDenBG.GetBinContent(i+1,j+1)*prescale[thePlot][j]
-                num = histoFakeNumDA.GetBinContent(i+1,j+1) - histoFakeNumBG.GetBinContent(i+1,j+1)*prescale[thePlot][j]
-                eff = 1.0
-                unc = 0.0
-                if(den > 0 and num > 0):
-                    eff = num / den
-                    unc = pow(eff*(1-eff)/den,0.5)
+            for i in range(histoFakeDenDA.GetNbinsX()):
+                for j in range(histoFakeDenDA.GetNbinsY()):
+                    den = histoFakeDenDA.GetBinContent(i+1,j+1) - histoFakeDenBG.GetBinContent(i+1,j+1)*prescale[thePlot][j]
+                    num = histoFakeNumDA.GetBinContent(i+1,j+1) - histoFakeNumBG.GetBinContent(i+1,j+1)*prescale[thePlot][j]
+                    eff = 1.0
+                    unc = 0.0
+                    if(den > 0 and num > 0 and num <= den):
+                        eff = num / den
+                        unc = pow(eff*(1-eff)/den,0.5)
 
-                elif(den > 0):
-                    eff = 0.0
-                    unc = min(pow(1.0/den,0.5),0.999)
+                    elif(den > 0):
+                        eff = 0.0
+                        unc = min(pow(1.0/den,0.5),0.999)
 
-                histoFakeEffSelEtaPt[thePlot].SetBinContent(i+1,j+1,eff);
-                histoFakeEffSelEtaPt[thePlot].SetBinError  (i+1,j+1,unc);
-                print("({0},{1}): ({2:8.1f} - {3:8.1f}) / ({4:8.1f} - {5:8.1f}) = {6:8.1f} / {7:8.1f} = {8:0.3f} +/- {9:0.3f}".format(i+1,j+1,
-                    histoFakeNumDA.GetBinContent(i+1,j+1),histoFakeNumBG.GetBinContent(i+1,j+1)*prescale[thePlot][j],
-                    histoFakeDenDA.GetBinContent(i+1,j+1),histoFakeDenBG.GetBinContent(i+1,j+1)*prescale[thePlot][j],
-                    num,den,eff,unc))
+                    histoFakeEffSelEtaPt[thePlot][nsel].SetBinContent(i+1,j+1,eff);
+                    histoFakeEffSelEtaPt[thePlot][nsel].SetBinError  (i+1,j+1,unc);
+                    print("({0},{1}): ({2:8.1f} - {3:8.1f}) / ({4:8.1f} - {5:8.1f}) = {6:8.1f} / {7:8.1f} = {8:0.3f} +/- {9:0.3f}".format(i+1,j+1,
+                        histoFakeNumDA.GetBinContent(i+1,j+1),histoFakeNumBG.GetBinContent(i+1,j+1)*prescale[thePlot][j],
+                        histoFakeDenDA.GetBinContent(i+1,j+1),histoFakeDenBG.GetBinContent(i+1,j+1)*prescale[thePlot][j],
+                        num,den,eff,unc))
 
-        histoFakeEffSelEtaPt[thePlot].Write()
+        histoFakeEffSelEtaPt[thePlot][nsel].Write()
 
     outFileFakeRate.Close()
