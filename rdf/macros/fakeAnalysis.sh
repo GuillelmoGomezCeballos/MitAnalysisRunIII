@@ -17,9 +17,20 @@ ls -l
 echo $PWD
 
 python fakeAnalysis.py --process=$1 --year=$2 --whichJob=$3
+status=$?
 
 rm -f functions_cc* *.pyc
 
-mv fillhistoFakeAna_sample$1_year$2_job$3.root fillhistoFakeAna$4_sample$1_year$2_job$3.root
+if [ -f "fillhistoFakeAna_sample$1_year$2_job$3.root" ]; then
+  mv fillhistoFakeAna_sample$1_year$2_job$3.root fillhistoFakeAna$4_sample$1_year$2_job$3.root
+  echo "DONE"
+
+elif [ $status -eq 0 ]; then
+  echo "DONE NO FILES"
+
+else
+  echo "FAILED"
+
+fi
 
 ls -l

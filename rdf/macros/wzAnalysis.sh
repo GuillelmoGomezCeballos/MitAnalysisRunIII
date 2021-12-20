@@ -16,13 +16,13 @@ whoami
 ls -l
 echo $PWD
 
-python zAnalysis.py --process=$1 --year=$2 --whichJob=$3
+python wzAnalysis.py --process=$1 --year=$2 --whichJob=$3
 status=$?
 
 rm -f functions_cc* *.pyc
 
-if [ -f "fillhistoZAna_sample$1_year$2_job$3.root" ]; then
-  mv fillhistoZAna_sample$1_year$2_job$3.root fillhistoZAna$4_sample$1_year$2_job$3.root
+if [ -f "fillhistoWZAna_sample$1_year$2_job$3.root" ]; then
+  mv fillhistoWZAna_sample$1_year$2_job$3.root fillhistoWZAna$4_sample$1_year$2_job$3.root
   echo "DONE"
 
 elif [ $status -eq 0 ]; then

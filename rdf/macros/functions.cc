@@ -231,6 +231,178 @@ float compute_ll_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
    return theVar;
 }
 
+// Trilepton variables
+float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass, const Vec_f& mu_charge,
+                     const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass, const Vec_f& el_charge,
+		     const float met_pt, const float met_phi, unsigned int var)
+{
+   if(mu_pt.size() + el_pt.size() != 3) return 0;
+
+   vector<PtEtaPhiMVector> p4mom;
+   vector<int> charge, ltype;
+   if     (mu_pt.size() == 3){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[2],mu_eta[2],mu_phi[2],mu_mass[2])); charge.push_back(mu_charge[2]); ltype.push_back(0);
+   }
+   else if(mu_pt.size() == 2){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 1){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() ==  0){
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[2],el_eta[2],el_phi[2],el_mass[2])); charge.push_back(el_charge[2]); ltype.push_back(1);
+   }
+   else {
+      printf("3l impossible combination\n");
+      return 0;
+   }
+
+   float mllmin = 10000;
+   for(int i=0; i<3; i++){
+     for(int j=i+1; j<3; j++){
+       if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
+       if(p4mom[i].Pt() < p4mom[j].Pt()){
+         PtEtaPhiMVector paux = p4mom[j]; int chargeaux = charge[j]; int ltypeaux = ltype[j];
+         p4mom[j] = p4mom[i];                 charge[j] = charge[i];     ltype[j] = ltype[i];
+         p4mom[i] = paux;                     charge[i] = chargeaux;     ltype[i] = ltypeaux;
+       }
+     }
+   }
+   
+   double mllZ = 10000;
+   int tagZ[2] = {-1, -1}; int tagW = -1;
+   double theVar = 0;
+   if     (var == 0) theVar = (p4mom[0]+p4mom[1]+p4mom[2]).M();
+   else if(var == 1) theVar = mllmin;
+   else {
+     for(int i=0; i<3; i++){
+       for(int j=i+1; j<3; j++){  
+         if(charge[i] != charge[j] && ltype[i] == ltype[j]){
+           if(fabs((p4mom[i]+p4mom[j]).M()-91.1876) < fabs(mllZ-91.1876)) {
+	     mllZ = (p4mom[i]+p4mom[j]).M();
+	     tagZ[0] = i;
+	     tagZ[1] = j;
+	   }
+         }
+       }
+     }
+     if(tagZ[0] == -1) return -1;
+     for(int i=0; i<3; i++){
+       if(i != tagZ[0] && i != tagZ[1]) tagW = i;
+     }
+     
+     if     (var == 2) theVar = fabs(mllZ-91.1876);
+     else if(var == 3) theVar = p4mom[tagZ[0]].Pt();
+     else if(var == 4) theVar = p4mom[tagZ[1]].Pt();
+     else if(var == 5) theVar = p4mom[tagW].Pt();
+     else if(var == 6) theVar = std::sqrt(2*p4mom[tagW].Pt()*met_pt*(1-std::cos(p4mom[tagW].Phi()-met_phi)));
+   }
+   return theVar;
+}
+
+// Fourlepton variables
+float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass, const Vec_f& mu_charge,
+                     const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass, const Vec_f& el_charge,
+		     const float met_pt, const float met_phi, unsigned int var)
+{
+   if(mu_pt.size() + el_pt.size() != 4) return 0;
+
+   vector<PtEtaPhiMVector> p4mom;
+   vector<int> charge, ltype;
+   if     (mu_pt.size() == 4){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[2],mu_eta[2],mu_phi[2],mu_mass[2])); charge.push_back(mu_charge[2]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[3],mu_eta[3],mu_phi[3],mu_mass[3])); charge.push_back(mu_charge[3]); ltype.push_back(0);
+   }
+   else if(mu_pt.size() == 3){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[2],mu_eta[2],mu_phi[2],mu_mass[2])); charge.push_back(mu_charge[2]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 2){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 1){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[2],el_eta[2],el_phi[2],el_mass[2])); charge.push_back(el_charge[2]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() ==  0){
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[2],el_eta[2],el_phi[2],el_mass[2])); charge.push_back(el_charge[2]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[3],el_eta[3],el_phi[3],el_mass[3])); charge.push_back(el_charge[3]); ltype.push_back(1);
+   }
+   else {
+      printf("4l impossible combination\n");
+      return 0;
+   }
+
+   float mllmin = 10000;
+   for(int i=0; i<4; i++){
+     for(int j=i+1; j<4; j++){
+       if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
+       if(p4mom[i].Pt() < p4mom[j].Pt()){
+         PtEtaPhiMVector paux = p4mom[j]; int chargeaux = charge[j]; int ltypeaux = ltype[j];
+         p4mom[j] = p4mom[i];                 charge[j] = charge[i];     ltype[j] = ltype[i];
+         p4mom[i] = paux;                     charge[i] = chargeaux;     ltype[i] = ltypeaux;
+       }
+     }
+   }
+   
+   double mllZ1 = 10000; double mllZ2 = 10000;
+   int tagZ1[2] = {-1, -1}; int tagZ2[2] = {-1, -1};
+   double theVar = 0;
+   if     (var == 0) theVar = (p4mom[0]+p4mom[1]+p4mom[2]+p4mom[3]).M();
+   else if(var == 1) theVar = mllmin;
+   else {
+     for(int i=0; i<4; i++){
+       for(int j=i+1; j<4; j++){  
+         if(charge[i] != charge[j] && ltype[i] == ltype[j]){
+           if(fabs((p4mom[i]+p4mom[j]).M()-91.1876) < fabs(mllZ1-91.1876)) {
+	     mllZ1 = (p4mom[i]+p4mom[j]).M();
+	     tagZ1[0] = i;
+	     tagZ1[1] = j;
+	   }
+         }
+       }
+     }
+     if(tagZ1[0] == -1) return -1;
+     for(int i=0; i<4; i++){
+       if(i != tagZ1[0] && i != tagZ1[1] && tagZ2[0] == -1) tagZ2[0] = i;
+     }
+     for(int i=0; i<4; i++){
+       if(i != tagZ1[0] && i != tagZ1[1] && i != tagZ2[0]) tagZ2[1] = i;
+     }
+
+     if(charge[tagZ2[0]] != charge[tagZ2[1]] && ltype[tagZ2[0]] == ltype[tagZ2[1]]){     
+       mllZ2 = (p4mom[tagZ2[0]]+p4mom[tagZ2[1]]).M();
+     }
+     
+     if     (var == 2) theVar = fabs(mllZ1-91.1876);
+     else if(var == 3) theVar = fabs(mllZ2-91.1876);
+     else if(var == 4) theVar = p4mom[tagZ1[0]].Pt();
+     else if(var == 5) theVar = p4mom[tagZ1[1]].Pt();
+     else if(var == 6) theVar = p4mom[tagZ2[0]].Pt();
+     else if(var == 7) theVar = p4mom[tagZ2[1]].Pt();
+   }
+   return theVar;
+}
+
 int applySkim(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
               const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
 	      const int lep_charge, const float met_pt)

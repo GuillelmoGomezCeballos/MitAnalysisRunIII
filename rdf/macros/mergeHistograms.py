@@ -61,7 +61,11 @@ if __name__ == "__main__":
             outputFile.cd()
             for nc in range(nCat):
                 histo[nc].SetNameTitle("histo{0}".format(nc),"histo{0}".format(nc))
-                histo[nc].Write();
+		histo[nc].SetBinContent(histo[nc].GetNbinsX(),histo[nc].GetBinContent(histo[nc].GetNbinsX())+histo[nc].GetBinContent(histo[nc].GetNbinsX()+1))
+		histo[nc].SetBinError  (histo[nc].GetNbinsX(),pow(pow(histo[nc].GetBinError(histo[nc].GetNbinsX()),2)+pow(histo[nc].GetBinError(histo[nc].GetNbinsX()+1),2),0.5))
+		histo[nc].SetBinContent(histo[nc].GetNbinsX()+1,0.0)
+		histo[nc].SetBinError  (histo[nc].GetNbinsX()+1,0.0)
+                histo[nc].Write()
             outputFile.Close()
 
         # 2D

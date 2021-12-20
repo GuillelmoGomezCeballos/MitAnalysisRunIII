@@ -1,16 +1,30 @@
+import ROOT
 import os, sys, getopt
+from subprocess import call,check_output
+
+def findDataset(name):
+
+    DASclient = "dasgoclient -query '%(query)s'"
+    cmd= DASclient%{'query':'file dataset=%s'%name}
+    print(cmd)
+    check_output(cmd,shell=True)
+    fileList=[ 'root://xrootd-cms.infn.it//'+x for x in check_output(cmd,shell=True).split() ]
+
+    files_ROOT = ROOT.vector('string')()
+    for f in fileList: files_ROOT.push_back(f)
+
+    return files_ROOT
+
 
 if __name__ == "__main__":
 
-    inputDir = "/home/tier3/cmsprod/catalog/t2mit/nanohr/D00/"
-    inputCfg = "skim_input_samples.cfg"
-    outputCfg = "skim_input_files.cfg"
-    outputForCondorCfg = "skim_input_condor_jobs.cfg"
+    inputCfg = "skim_input_samples_fromDAS.cfg"
+    outputCfg = "skim_input_files_fromDAS.cfg"
+    outputForCondorCfg = "skim_input_condor_jobs_fromDAS.cfg"
     group = 10
 
-    valid = ['inputDir=', "inputCfg=", "outputCfg=", "outputForCondorCfg=", "group=", 'help']
-    usage  =  "Usage: ana.py --inputDir=<{0}>\n".format(inputDir)
-    usage +=  "              --inputCfg=<{0}>\n".format(inputCfg)
+    valid = ["inputCfg=", "outputCfg=", "outputForCondorCfg=", "group=", 'help']
+    usage  =  "Usage: ana.py --inputCfg=<{0}>\n".format(inputCfg)
     usage +=  "              --outputCfg=<{0}>\n".format(outputCfg)
     usage +=  "              --outputForCondorCfg=<{0}>\n".format(outputForCondorCfg)
     usage +=  "              --group=<{0}>".format(group)
@@ -25,8 +39,6 @@ if __name__ == "__main__":
         if opt == "--help":
             print(usage)
             sys.exit(1)
-        if opt == "--inputDir":
-            inputDir = str(arg)
         if opt == "--inputCfg":
             inputCfg = str(arg)
         if opt == "--outputCfg":
@@ -47,26 +59,21 @@ if __name__ == "__main__":
             break
         countSamples += 1
         print(line)
-        rawfile = os.path.join(inputDir, line, "RawFiles.00")
-        if not os.path.isfile(rawfile):
-            print("File %s does not exist!" % rawFile)
+
+        lineForDAS = "/" + line.replace("+","/")
+        filesDAS = findDataset(lineForDAS)
 
         countJobs = 0
         countFiles = 0
-        inputRawFile = open(rawfile, 'r')
-        while True:
-            lineRaw = inputRawFile.readline().strip().split(None, 1)
-            if not lineRaw:
-                break
-
+        for nf in range(len(filesDAS)):
+            lineRaw = filesDAS[nf]
             if(countFiles%group == 0):
                 lineForCondor = "{0} {1} {2} {3}\n".format(countSamples-1,countJobs,group,line)
                 outputForCondorFile.writelines(lineForCondor)
                 countJobs += 1
 
             countFiles += 1
-            #outputFile.writelines(lineRaw[0].replace("root://xrootd.cmsaf.mit.edu//store","gsiftp://se01.cmsaf.mit.edu:2811/cms/store"))
-            outputFile.writelines(lineRaw[0])
+            outputFile.writelines(lineRaw)
             outputFile.writelines("\n")
 
         print("Sample({0}): files/jobs: {1} / {2}".format(countSamples,countFiles,countJobs))

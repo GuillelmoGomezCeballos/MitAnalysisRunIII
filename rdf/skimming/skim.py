@@ -45,7 +45,7 @@ def loadJSON(fIn):
             vec.push_back(pair)
             ROOT.jsonMap[int(k)] = vec
 
-# split fIns files in groups of group files 
+# split fIns files in groups of group files
 def groupFiles(fIns, group):
 
     ret = [fIns[x:x+group] for x in range(0, len(fIns), group)]
@@ -139,13 +139,18 @@ if __name__ == "__main__":
         else:
             loadJSON(jsnName)
 
+    print(inputFilesCfg)
     rootFiles = ROOT.vector('string')()
     inputFilesFile = open(inputFilesCfg, 'r')
+    #trick to deal with official samples
+    sampleToFilter = sampleToSkim
+    if("NANOAODSIM" in sampleToFilter):
+        sampleToFilter = sampleToSkim.split("+")[0]
     while True:
         line = inputFilesFile.readline().strip()
         if not line:
             break
-        if(sampleToSkim not in line):
+        if(sampleToFilter not in line):
             continue
         rootFiles.push_back(line)
 

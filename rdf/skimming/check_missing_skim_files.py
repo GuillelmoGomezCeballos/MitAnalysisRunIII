@@ -10,7 +10,7 @@ if __name__ == "__main__":
     valid = ['outputDir=', "outputForCondorCfg=", "missingFilesCfg=", "debug=", "help"]
     usage  =  "Usage: ana.py --outputDir=<{0}>\n".format(outputDir)
     usage +=  "              --outputForCondorCfg=<{0}>\n".format(outputForCondorCfg)
-    usage +=  "              --missingFilesCfg=<{0}>".format(missingFilesCfg)
+    usage +=  "              --missingFilesCfg=<{0}>\n".format(missingFilesCfg)
     usage +=  "              --debug=<{0}>".format(debug)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
@@ -53,7 +53,7 @@ if __name__ == "__main__":
             isMissingFile[0] = False
         else:
             countMissingFiles[0] += 1
-	    if(debug == 1): print(fileNameB)
+            if(debug == 1): print(fileNameB)
 
         # 2l
         fileNameA = os.path.join(outputDir, "2l", line[3], "output_2l_{0}.root".format(line[1]))
@@ -65,7 +65,7 @@ if __name__ == "__main__":
             isMissingFile[1] = False
         else:
             countMissingFiles[1] += 1
-	    if(debug == 1): print(fileNameB)
+            if(debug == 1): print(fileNameB)
 
         # 3l
         fileNameA = os.path.join(outputDir, "3l", line[3], "output_3l_{0}.root".format(line[1]))
@@ -77,7 +77,7 @@ if __name__ == "__main__":
             isMissingFile[2] = False
         else:
             countMissingFiles[2] += 1
-	    if(debug == 1): print(fileNameB)
+            if(debug == 1): print(fileNameB)
 
         if(isMissingFile[0] == True or isMissingFile[1] == True or isMissingFile[2] == True):
             missingFile.writelines(lineRaw)

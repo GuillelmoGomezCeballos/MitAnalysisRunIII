@@ -243,10 +243,10 @@ def readMCSample(sampleNOW, year, skimType, whichJob, group):
 def readDataSample(sampleNOW, year, skimType, whichJob, group):
 
     PDType = "0"
-    if  (sampleNOW >= 101 and sampleNOW <= 104): PDType = "SingleMuon"
-    elif(sampleNOW >= 105 and sampleNOW <= 108): PDType = "DoubleMuon"
-    elif(sampleNOW >= 109 and sampleNOW <= 112): PDType = "MuonEG"
-    elif(sampleNOW >= 112 and sampleNOW <= 116): PDType = "EGamma"
+    if  (sampleNOW >= 1001 and sampleNOW <= 1004): PDType = "SingleMuon"
+    elif(sampleNOW >= 1005 and sampleNOW <= 1008): PDType = "DoubleMuon"
+    elif(sampleNOW >= 1009 and sampleNOW <= 1012): PDType = "MuonEG"
+    elif(sampleNOW >= 1012 and sampleNOW <= 1016): PDType = "EGamma"
 
     files = getDATAlist(sampleNOW, year, skimType)
     print("Total files: {0}".format(len(files)))
@@ -299,16 +299,16 @@ if __name__ == "__main__":
             whichJob = int(arg)
 
     try:
-        if(process >= 0 and process < 100):
+        if(process >= 0 and process < 1000):
             readMCSample(process,year,skimType,whichJob,group)
             sys.exit(0)
-        elif(process > 100):
+        elif(process > 1000):
             readDataSample(process,year,skimType,whichJob,group)
             sys.exit(0)
     except Exception as e:
         print("Error sample: {0}".format(e))
 
-    for i in 105,106,107,108,113,114,115,116:
+    for i in 1005,1006,1007,1008,1013,1014,1015,1016:
         try:
             readDataSample(i,year,skimType,whichJob,group)
         except Exception as e:
