@@ -273,7 +273,7 @@ def readDataSample(sampleNOW, year, skimType, whichJob, group):
 
 if __name__ == "__main__":
 
-    group = 20
+    group = 10
 
     skimType = "2l"
     year = 2018
