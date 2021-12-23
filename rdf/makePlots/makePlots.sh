@@ -16,6 +16,9 @@ if [ $NSEL == 'z' ]; then
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"m_{ll}","GeV","anaZ/fillhistoZAna1001_'${YEAR}'_103.root","dy_zsel_massem",0,'${YEAR}',"'${legendBSM}'",1.0, '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"m_{ll}","GeV","anaZ/fillhistoZAna1001_'${YEAR}'_114.root","dy_zsel_massee",0,'${YEAR}',"'${legendBSM}'",1.0, '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
 
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"MVA","","anaZ/fillhistoZAna1001_'${YEAR}'_130.root","dy_zsel_tthmvam",0,'${YEAR}',"'${legendBSM}'",1.0, '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"MVA","","anaZ/fillhistoZAna1001_'${YEAR}'_131.root","dy_zsel_tthmvae",0,'${YEAR}',"'${legendBSM}'",1.0, '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+
 elif [ $NSEL == 'fake' ]; then
   export legendBSM="";
   export isNeverBlinded=0;
