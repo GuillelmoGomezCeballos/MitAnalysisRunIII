@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     missingFile = open(missingFilesCfg, 'w')
 
-    countMissingFiles = [0, 0, 0, 0]
+    countMissingFiles = [0, 0, 0, 0, 0]
     outputFile = open(outputForCondorCfg, 'r')
     while True:
         lineRaw = outputFile.readline()
@@ -42,14 +42,15 @@ if __name__ == "__main__":
         if not line:
             break
 
-        isMissingFile = [True, True, True]
+        isMissingFile = [True, True, True, True]
         # 1l
         fileNameA = os.path.join(outputDir, "1l", line[3], "output_1l_{0}.root".format(line[1]))
         fileNameB = os.path.join(outputDir, "1l", line[3], "output_1l_{0}_{1}.root".format(line[0],line[1]))
         fileNameC = os.path.join(outputDir, "1l", line[3], "output_1l_{0}_{1}.txt".format(line[0],line[1]))
 
         if((os.path.exists(fileNameA) and os.path.getsize(fileNameA) > 1000) or
-           (os.path.exists(fileNameB) and os.path.getsize(fileNameB) > 1000)):
+           (os.path.exists(fileNameB) and os.path.getsize(fileNameB) > 1000) or
+            os.path.exists(fileNameC)):
             isMissingFile[0] = False
         else:
             countMissingFiles[0] += 1
@@ -61,7 +62,8 @@ if __name__ == "__main__":
         fileNameC = os.path.join(outputDir, "2l", line[3], "output_2l_{0}_{1}.txt".format(line[0],line[1]))
 
         if((os.path.exists(fileNameA) and os.path.getsize(fileNameA) > 1000) or
-           (os.path.exists(fileNameB) and os.path.getsize(fileNameB) > 1000)):
+           (os.path.exists(fileNameB) and os.path.getsize(fileNameB) > 1000) or
+            os.path.exists(fileNameC)):
             isMissingFile[1] = False
         else:
             countMissingFiles[1] += 1
@@ -73,17 +75,31 @@ if __name__ == "__main__":
         fileNameC = os.path.join(outputDir, "3l", line[3], "output_3l_{0}_{1}.txt".format(line[0],line[1]))
 
         if((os.path.exists(fileNameA) and os.path.getsize(fileNameA) > 1000) or
-           (os.path.exists(fileNameB) and os.path.getsize(fileNameB) > 1000)):
+           (os.path.exists(fileNameB) and os.path.getsize(fileNameB) > 1000) or
+            os.path.exists(fileNameC)):
             isMissingFile[2] = False
         else:
             countMissingFiles[2] += 1
             if(debug == 1): print(fileNameB)
 
-        if(isMissingFile[0] == True or isMissingFile[1] == True or isMissingFile[2] == True):
-            missingFile.writelines(lineRaw)
+        # met
+        fileNameA = os.path.join(outputDir, "met", line[3], "output_met_{0}.root".format(line[1]))
+        fileNameB = os.path.join(outputDir, "met", line[3], "output_met_{0}_{1}.root".format(line[0],line[1]))
+        fileNameC = os.path.join(outputDir, "met", line[3], "output_met_{0}_{1}.txt".format(line[0],line[1]))
+
+        if((os.path.exists(fileNameA) and os.path.getsize(fileNameA) > 1000) or
+           (os.path.exists(fileNameB) and os.path.getsize(fileNameB) > 1000) or
+            os.path.exists(fileNameC)):
+            isMissingFile[3] = False or isMissingFile[2] == True
+        else:
             countMissingFiles[3] += 1
+            if(debug == 1): print(fileNameB)
+
+        if(isMissingFile[0] == True or isMissingFile[1] == True or isMissingFile[2] == True or isMissingFile[3] == True):
+            missingFile.writelines(lineRaw)
+            countMissingFiles[4] += 1
 
     missingFile.close()
 
-    print("missingFiles: {0} / {1} / {2} / {3}".format(countMissingFiles[0],countMissingFiles[1],countMissingFiles[2],countMissingFiles[3]))
+    print("missingFiles: {0} / {1} / {2} / {3} / {4}".format(countMissingFiles[0],countMissingFiles[1],countMissingFiles[2],countMissingFiles[3],countMissingFiles[4]))
     os.system("wc {0};wc {1}".format(outputForCondorCfg,missingFilesCfg))

@@ -1,2 +1,3 @@
-skim_*.cfg
+skim_input_files_*.cfg
+skim_input_condor_*.cfg
 functions.cc

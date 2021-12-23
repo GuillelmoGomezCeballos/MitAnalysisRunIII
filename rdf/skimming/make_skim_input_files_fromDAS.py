@@ -46,7 +46,7 @@ if __name__ == "__main__":
         if opt == "--outputForCondorCfg":
             outputForCondorCfg = str(arg)
         if opt == "--group":
-            group = str(arg)
+            group = int(arg)
 
     outputFile = open(outputCfg, 'w')
     outputForCondorFile = open(outputForCondorCfg, 'w')
