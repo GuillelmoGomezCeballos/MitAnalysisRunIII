@@ -7,7 +7,7 @@ echo ${USERPROXY}
 #transfer_input_files = ""
 #transfer_output_remaps = "output_1l_${whichSample}_${whichJob}.root = /work/submit/ceballos/skims/1l/${sampleName}/output_1l_${whichSample}_${whichJob}.root; output_2l_${whichSample}_${whichJob}.root = /work/submit/ceballos/skims/2l/${sampleName}/output_2l_${whichSample}_${whichJob}.root; output_3l_${whichSample}_${whichJob}.root = /work/submit/ceballos/skims/3l/${sampleName}/output_3l_${whichSample}_${whichJob}.root"
 
-voms-proxy-init --voms cms --valid 168:00
+voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 
 while IFS= read -r line; do
 

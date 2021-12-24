@@ -5,7 +5,7 @@ echo ${USERPROXY}
 
 condorJob=1001
 
-voms-proxy-init --voms cms --valid 168:00
+voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 
 while IFS= read -r line; do
 
