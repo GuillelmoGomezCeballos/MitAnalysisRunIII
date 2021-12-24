@@ -203,6 +203,15 @@ def getDATAlist(type, year, skimType):
     elif(year == 2018 and type == 1016):
         files1 = findDIR("{0}/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
 
+    elif(year == 2018 and type == 1021):
+        files1 = findDIR("{0}/MET+Run2018A-UL2018_MiniAODv2_NanoAODv9-v2+NANOAOD".format(dirT2))
+    elif(year == 2018 and type == 1022):
+        files1 = findDIR("{0}/MET+Run2018B-UL2018_MiniAODv2_NanoAODv9-v2+NANOAOD".format(dirT2))
+    elif(year == 2018 and type == 1023):
+        files1 = findDIR("{0}/MET+Run2018C-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
+    elif(year == 2018 and type == 1024):
+        files1 = findDIR("{0}/MET+Run2018D-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
+
     files = ROOT.vector('string')()
     concatenate(files, files1)
 
@@ -216,11 +225,11 @@ def SwitchSample(argument, skimType):
 
     switch = {
          0: (dirT2+"/DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18NanoAODv9-20UL18JMENano_106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",2008.4*3*3.78*1000,plotCategory("kPlotDY")),
-         1: (dirT2+"/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1_ext1-v1+MINIAODSIM",2008.4*3*1000,plotCategory("kPlotDY")),
+         1: (dirT2+"/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",2008.4*3*1000,plotCategory("kPlotDY")),
 
          2: (dirT2+"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM",20508.9*3*1000,plotCategory("kPlotOther")),
 
-         3: (dirT2+"/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1+MINIAODSIM",831.76*0.1086*0.1086*9*1000,plotCategory("kPlotTop")),
+         3: (dirT2+"/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",831.76*0.1086*0.1086*9*1000,plotCategory("kPlotTop")),
          4: (dirT2+"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2+MINIAODSIM",831.76*0.1086*3*(1-0.1086*3)*2*1000,plotCategory("kPlotTop")),
          5: (dirT2+"/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",35.6*(1.0-((1-0.1086*3)*(1-0.1086*3)))*1000,plotCategory("kPlotTop")),
          6: (dirT2+"/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",35.6*(1.0-((1-0.1086*3)*(1-0.1086*3)))*1000,plotCategory("kPlotTop")),
@@ -278,6 +287,9 @@ def SwitchSample(argument, skimType):
         50: (dirT2+"/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.01398*1000,plotCategory("kPlotVVV")),
         51: (dirT2+"/WWG_TuneCP5_13TeV-amcatnlo-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.21470*1000,plotCategory("kPlotVVV")),
         52: (dirT2+"/WZG_TuneCP5_13TeV-amcatnlo-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.04345*1000,plotCategory("kPlotVVV")),
+
+        61: (dirT2+"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",2008.4*3*1000,plotCategory("kPlotDY")),
+        62: (dirT2+"/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.92*4.658*1.109*1000,plotCategory("kPlotWZ")),
 
         99:(dirLocal+"/ZLLphigamma_pythia8_genFix",0.10*1000,plotCategory("kPlotBSM"))
 

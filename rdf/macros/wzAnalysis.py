@@ -122,7 +122,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
     dfwzbcat = []
     for x in range(nCat):
         dfwzcat.append(dfbase.Define("theCat{0}".format(x), "compute_category({0})".format(theCat))
-        		     .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
+                             .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
 
         histo[ 0][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),120,  0, 120), "mllmin","weight")
         dfwzcat[x] = dfwzcat[x].Filter("mllmin > 1","mllmin cut")

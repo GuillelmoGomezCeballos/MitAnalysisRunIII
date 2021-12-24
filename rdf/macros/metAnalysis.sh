@@ -16,16 +16,20 @@ whoami
 ls -l
 echo $PWD
 
-python skim.py --whichSample=$1 --whichJob=$2 --group=$3 --inputSamplesCfg=$4 --inputFilesCfg=$5
+python metAnalysis.py --process=$1 --year=$2 --whichJob=$3
 status=$?
 
-rm -f functions_cc*
+rm -f functions_cc* *.pyc
+
+if [ -f "fillhistoMETAna_sample$1_year$2_job$3.root" ]; then
+  mv fillhistoMETAna_sample$1_year$2_job$3.root fillhistoMETAna$4_sample$1_year$2_job$3.root
+  echo "DONE"
 
 elif [ $status -eq 0 ]; then
-  echo "SUCCESS"
+  echo "DONE NO FILES"
 
 else
-  echo "FAILURE"
+  echo "FAILED"
 
 fi
 

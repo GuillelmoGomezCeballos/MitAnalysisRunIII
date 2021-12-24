@@ -14,6 +14,26 @@ TRIGGERFAKEEL = "(HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele12_CaloIdL_Tra
 
 JSON = "isGoodRunLS(isData, run, luminosityBlock)"
 
+FAKE_MU   = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1)"
+TIGHT_MU0 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 4)"
+TIGHT_MU1 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_pfIsoId >= 4)"
+TIGHT_MU2 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 2)"
+TIGHT_MU3 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_miniIsoId >= 3)"
+TIGHT_MU4 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 3)"
+TIGHT_MU5 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_pfIsoId >= 4)"
+TIGHT_MU6 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_mvaTTH > 0.7)"
+TIGHT_MU7 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 4 && Muon_miniIsoId >= 4)"
+
+FAKE_EL   = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2)"
+TIGHT_EL0 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 3)"
+TIGHT_EL1 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4)"
+TIGHT_EL2 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP90 == true)"
+TIGHT_EL3 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true)"
+TIGHT_EL4 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.7)"
+TIGHT_EL5 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4 && Electron_tightCharge == 2)"
+TIGHT_EL6 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true && Electron_tightCharge == 2)"
+TIGHT_EL7 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.7 && Electron_tightCharge == 2)"
+
 def selectionLL(df,year,PDType,isData):
 
     TRIGGERFAKE = "0"
@@ -36,34 +56,36 @@ def selectionLL(df,year,PDType,isData):
               .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
               .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
               .Filter("Sum(loose_mu)+Sum(loose_el) == 1","One skim lepton")\
-              .Define("fake_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 1 && Muon_miniIsoId >= 1")\
+              .Define("fake_mu", "{0}".format(FAKE_MU))\
               .Define("fakemu_pt",    "Muon_pt[fake_mu]")\
               .Define("fakemu_eta",   "abs(Muon_eta[fake_mu])")\
               .Define("fakemu_phi",   "Muon_phi[fake_mu]")\
               .Define("fakemu_mass",  "Muon_mass[fake_mu]")\
               .Define("fakemu_charge","Muon_charge[fake_mu]")\
-              .Define("tight_mu0", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 4")\
-              .Define("tight_mu1", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_pfIsoId >= 4")\
-              .Define("tight_mu2", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 2")\
-              .Define("tight_mu3", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_miniIsoId >= 3")\
-              .Define("tight_mu4", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 3")\
-              .Define("tight_mu5", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_pfIsoId >= 4")\
-              .Define("tight_mu6", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_mvaTTH > 0.7")\
-              .Define("tight_mu7", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 4 && Muon_miniIsoId >= 4")\
-              .Define("fake_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2")\
+              .Define("fakemu_mvaTTH","Muon_mvaTTH[fake_mu]")\
+              .Define("tight_mu0", "{0}".format(TIGHT_MU0))\
+              .Define("tight_mu1", "{0}".format(TIGHT_MU1))\
+              .Define("tight_mu2", "{0}".format(TIGHT_MU2))\
+              .Define("tight_mu3", "{0}".format(TIGHT_MU3))\
+              .Define("tight_mu4", "{0}".format(TIGHT_MU4))\
+              .Define("tight_mu5", "{0}".format(TIGHT_MU5))\
+              .Define("tight_mu6", "{0}".format(TIGHT_MU6))\
+              .Define("tight_mu7", "{0}".format(TIGHT_MU7))\
+              .Define("fake_el", "{0}".format(FAKE_EL))\
               .Define("fakeel_pt",    "Electron_pt[fake_el]")\
               .Define("fakeel_eta",   "abs(Electron_eta[fake_el])")\
               .Define("fakeel_phi",   "Electron_phi[fake_el]")\
               .Define("fakeel_mass",  "Electron_mass[fake_el]")\
               .Define("fakeel_charge","Electron_charge[fake_el]")\
-              .Define("tight_el0", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 3")\
-              .Define("tight_el1", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4")\
-              .Define("tight_el2", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP90 == true")\
-              .Define("tight_el3", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true")\
-              .Define("tight_el4", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.7")\
-              .Define("tight_el5", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4 && Electron_tightCharge == 2")\
-              .Define("tight_el6", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true && Electron_tightCharge == 2")\
-              .Define("tight_el7", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.7 && Electron_tightCharge == 2")\
+              .Define("fakeel_mvaTTH","Electron_mvaTTH[fake_el]")\
+              .Define("tight_el0", "{0}".format(TIGHT_EL0))\
+              .Define("tight_el1", "{0}".format(TIGHT_EL1))\
+              .Define("tight_el2", "{0}".format(TIGHT_EL2))\
+              .Define("tight_el3", "{0}".format(TIGHT_EL3))\
+              .Define("tight_el4", "{0}".format(TIGHT_EL4))\
+              .Define("tight_el5", "{0}".format(TIGHT_EL5))\
+              .Define("tight_el6", "{0}".format(TIGHT_EL6))\
+              .Define("tight_el7", "{0}".format(TIGHT_EL7))\
               .Filter("Sum(fake_mu)+Sum(fake_el) == 1","One fake lepton")\
               .Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")\
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")\
@@ -133,6 +155,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
                 histo[ltype+36][y] = dfcat[2*y+ltype].Filter("Sum(tight_mu3)==1 && Max(fakemu_eta) < 1.5 && Max(fakemu_pt) > 30 && Max(fakemu_pt) < 35").Histo1D(("histo_{0}_{1}".format(ltype+36,y), "histo_{0}_{1}".format(ltype+36,y),100, 0, 200), "maxmtmet","weight")
                 histo[ltype+38][y] = dfcat[2*y+ltype].Filter("Sum(tight_mu3)==1 && Max(fakemu_eta) < 1.5 && Max(fakemu_pt) > 35 && Max(fakemu_pt) < 40").Histo1D(("histo_{0}_{1}".format(ltype+38,y), "histo_{0}_{1}".format(ltype+38,y),100, 0, 200), "maxmtmet","weight")
                 histo[ltype+40][y] = dfcat[2*y+ltype].Filter("Sum(tight_mu3)==1 && Max(fakemu_eta) < 1.5 && minmtmet > 60").Histo1D(("histo_{0}_{1}".format(ltype+40,y), "histo_{0}_{1}".format(ltype+40,y), len(xPtbins)-1, xPtbins), "fakemu_pt","weight")
+                histo[ltype+42][y] = dfcat[2*y+ltype].Filter("maxmtmet < 30").Histo1D(("histo_{0}_{1}".format(ltype+42,y), "histo_{0}_{1}".format(ltype+42,y),100,0.0,1.0), "fakemu_mvaTTH","weight")
 
                 histo2D[ltype+ 0][y] = dfcat[2*y+ltype].Filter("maxmtmet < 30")                     .Histo2D(("histo2d_{0}_{1}".format(ltype+ 0,y), "histo2d_{0}_{1}".format(ltype+ 0,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "fakemu_eta", "fakemu_pt","weight")
                 histo2D[ltype+ 2][y] = dfcat[2*y+ltype].Filter("Sum(tight_mu0)==1 && maxmtmet < 30").Histo2D(("histo2d_{0}_{1}".format(ltype+ 2,y), "histo2d_{0}_{1}".format(ltype+ 2,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "fakemu_eta", "fakemu_pt","weight")
@@ -162,8 +185,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
                 histo[ltype+36][y] = dfcat[2*y+ltype].Filter("Sum(tight_el3)==1 && Max(fakeel_eta) < 1.5 && Max(fakeel_pt) > 30 && Max(fakeel_pt) < 35").Histo1D(("histo_{0}_{1}".format(ltype+36,y), "histo_{0}_{1}".format(ltype+36,y),100, 0, 200), "maxmtmet","weight")
                 histo[ltype+38][y] = dfcat[2*y+ltype].Filter("Sum(tight_el3)==1 && Max(fakeel_eta) < 1.5 && Max(fakeel_pt) > 35 && Max(fakeel_pt) < 40").Histo1D(("histo_{0}_{1}".format(ltype+38,y), "histo_{0}_{1}".format(ltype+38,y),100, 0, 200), "maxmtmet","weight")
                 histo[ltype+40][y] = dfcat[2*y+ltype].Filter("Sum(tight_el3)==1 && Max(fakeel_eta) < 1.5 && minmtmet > 60").Histo1D(("histo_{0}_{1}".format(ltype+40,y), "histo_{0}_{1}".format(ltype+40,y), len(xPtbins)-1, xPtbins), "fakeel_pt","weight")
+                histo[ltype+42][y] = dfcat[2*y+ltype].Filter("maxmtmet < 30").Histo1D(("histo_{0}_{1}".format(ltype+42,y), "histo_{0}_{1}".format(ltype+42,y),100,0.0,1.0), "fakeel_mvaTTH","weight")
 
-                histo2D[ltype+ 0][y] = dfcat[2*y+ltype].Filter("maxmtmet < 30") 		    .Histo2D(("histo2d_{0}_{1}".format(ltype+ 0,y), "histo2d_{0}_{1}".format(ltype+ 0,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "fakeel_eta", "fakeel_pt","weight")
+                histo2D[ltype+ 0][y] = dfcat[2*y+ltype].Filter("maxmtmet < 30")                     .Histo2D(("histo2d_{0}_{1}".format(ltype+ 0,y), "histo2d_{0}_{1}".format(ltype+ 0,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "fakeel_eta", "fakeel_pt","weight")
                 histo2D[ltype+ 2][y] = dfcat[2*y+ltype].Filter("Sum(tight_el0)==1 && maxmtmet < 30").Histo2D(("histo2d_{0}_{1}".format(ltype+ 2,y), "histo2d_{0}_{1}".format(ltype+ 2,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "fakeel_eta", "fakeel_pt","weight")
                 histo2D[ltype+ 4][y] = dfcat[2*y+ltype].Filter("Sum(tight_el1)==1 && maxmtmet < 30").Histo2D(("histo2d_{0}_{1}".format(ltype+ 4,y), "histo2d_{0}_{1}".format(ltype+ 4,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "fakeel_eta", "fakeel_pt","weight")
                 histo2D[ltype+ 6][y] = dfcat[2*y+ltype].Filter("Sum(tight_el2)==1 && maxmtmet < 30").Histo2D(("histo2d_{0}_{1}".format(ltype+ 6,y), "histo2d_{0}_{1}".format(ltype+ 6,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "fakeel_eta", "fakeel_pt","weight")

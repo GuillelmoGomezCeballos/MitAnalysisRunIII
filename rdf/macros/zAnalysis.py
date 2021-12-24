@@ -1,5 +1,6 @@
 import ROOT
 import os, sys, getopt
+from array import array
 
 ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
@@ -18,6 +19,26 @@ TRIGGERDEL  = "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloI
 TRIGGERSEL  = "(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf||HLT_Ele115_CaloIdVT_GsfTrkIdT)"
 
 JSON = "isGoodRunLS(isData, run, luminosityBlock)"
+
+FAKE_MU   = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1)"
+TIGHT_MU0 = "(abs(goodmu_eta) < 2.4 && goodmu_pt > 10 && goodmu_looseId == true && goodmu_mediumId == true && goodmu_pfIsoId >= 4)"
+TIGHT_MU1 = "(abs(goodmu_eta) < 2.4 && goodmu_pt > 10 && goodmu_looseId == true && goodmu_tightId == true && goodmu_pfIsoId >= 4)"
+TIGHT_MU2 = "(abs(goodmu_eta) < 2.4 && goodmu_pt > 10 && goodmu_looseId == true && goodmu_mvaId >= 2 && goodmu_miniIsoId >= 2)"
+TIGHT_MU3 = "(abs(goodmu_eta) < 2.4 && goodmu_pt > 10 && goodmu_looseId == true && goodmu_mvaId >= 3 && goodmu_miniIsoId >= 3)"
+TIGHT_MU4 = "(abs(goodmu_eta) < 2.4 && goodmu_pt > 10 && goodmu_looseId == true && goodmu_mvaId >= 2 && goodmu_miniIsoId >= 3)"
+TIGHT_MU5 = "(abs(goodmu_eta) < 2.4 && goodmu_pt > 10 && goodmu_looseId == true && goodmu_mvaId >= 3 && goodmu_pfIsoId >= 4)"
+TIGHT_MU6 = "(abs(goodmu_eta) < 2.4 && goodmu_pt > 10 && goodmu_looseId == true && goodmu_tightId == true && goodmu_mvaTTH > 0.7)"
+TIGHT_MU7 = "(abs(goodmu_eta) < 2.4 && goodmu_pt > 10 && goodmu_looseId == true && goodmu_mvaId >= 4 && goodmu_miniIsoId >= 4)"
+
+FAKE_EL   = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2)"
+TIGHT_EL0 = "(abs(goodel_eta) < 2.5 && goodel_pt > 10 && goodel_cutBased >= 2 && goodel_cutBased >= 3)"
+TIGHT_EL1 = "(abs(goodel_eta) < 2.5 && goodel_pt > 10 && goodel_cutBased >= 2 && goodel_cutBased >= 4)"
+TIGHT_EL2 = "(abs(goodel_eta) < 2.5 && goodel_pt > 10 && goodel_cutBased >= 2 && goodel_mvaFall17V2Iso_WP90 == true)"
+TIGHT_EL3 = "(abs(goodel_eta) < 2.5 && goodel_pt > 10 && goodel_cutBased >= 2 && goodel_mvaFall17V2Iso_WP80 == true)"
+TIGHT_EL4 = "(abs(goodel_eta) < 2.5 && goodel_pt > 10 && goodel_cutBased >= 2 && goodel_mvaTTH > 0.7)"
+TIGHT_EL5 = "(abs(goodel_eta) < 2.5 && goodel_pt > 10 && goodel_cutBased >= 2 && goodel_cutBased >= 4 && goodel_tightCharge == 2)"
+TIGHT_EL6 = "(abs(goodel_eta) < 2.5 && goodel_pt > 10 && goodel_cutBased >= 2 && goodel_mvaFall17V2Iso_WP80 == true && goodel_tightCharge == 2)"
+TIGHT_EL7 = "(abs(goodel_eta) < 2.5 && goodel_pt > 10 && goodel_cutBased >= 2 && goodel_mvaTTH > 0.7 && goodel_tightCharge == 2)"
 
 def selectionLL(df,year,PDType,isData):
 
@@ -43,36 +64,54 @@ def selectionLL(df,year,PDType,isData):
               .Define("trigger","{0}".format(TRIGGERLEP))\
               .Filter("trigger > 0","Passed trigger")\
               .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
-              .Define("loose_highpt_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true")\
-              .Define("good_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 20 && Muon_looseId == true && Muon_mvaId >= 1 && Muon_miniIsoId >= 1")\
-              .Define("goodmu_pt",    "Muon_pt[good_mu]")\
-              .Define("goodmu_eta",   "Muon_eta[good_mu]")\
-              .Define("goodmu_phi",   "Muon_phi[good_mu]")\
-              .Define("goodmu_mass",  "Muon_mass[good_mu]")\
-              .Define("goodmu_charge","Muon_charge[good_mu]")\
-              .Define("goodmu_mediumId","Muon_mediumId[good_mu]")\
-              .Define("goodmu_tightId","Muon_tightId[good_mu]")\
-              .Define("goodmu_pfIsoId","Muon_pfIsoId[good_mu]")\
-              .Define("goodmu_mvaId","Muon_mvaId[good_mu]")\
+              .Define("good_mu", "{0}".format(FAKE_MU))\
+              .Define("goodmu_pt"       ,"Muon_pt[good_mu]")\
+              .Define("goodmu_abseta"   ,"abs(Muon_eta[good_mu])")\
+              .Define("goodmu_eta"      ,"Muon_eta[good_mu]")\
+              .Define("goodmu_phi"      ,"Muon_phi[good_mu]")\
+              .Define("goodmu_mass"     ,"Muon_mass[good_mu]")\
+              .Define("goodmu_charge"   ,"Muon_charge[good_mu]")\
+              .Define("goodmu_looseId"  ,"Muon_looseId[good_mu]")\
+              .Define("goodmu_mediumId" ,"Muon_mediumId[good_mu]")\
+              .Define("goodmu_tightId"  ,"Muon_tightId[good_mu]")\
+              .Define("goodmu_pfIsoId"  ,"Muon_pfIsoId[good_mu]")\
+              .Define("goodmu_mvaId"    ,"Muon_mvaId[good_mu]")\
               .Define("goodmu_miniIsoId","Muon_miniIsoId[good_mu]")\
-              .Define("goodmu_mvaTTH","Muon_mvaTTH[good_mu]")\
+              .Define("goodmu_mvaTTH"   ,"Muon_mvaTTH[good_mu]")\
+              .Define("tight_mu0", "{0}".format(TIGHT_MU0))\
+              .Define("tight_mu1", "{0}".format(TIGHT_MU1))\
+              .Define("tight_mu2", "{0}".format(TIGHT_MU2))\
+              .Define("tight_mu3", "{0}".format(TIGHT_MU3))\
+              .Define("tight_mu4", "{0}".format(TIGHT_MU4))\
+              .Define("tight_mu5", "{0}".format(TIGHT_MU5))\
+              .Define("tight_mu6", "{0}".format(TIGHT_MU6))\
+              .Define("tight_mu7", "{0}".format(TIGHT_MU7))\
+              .Define("fake_el", "{0}".format(FAKE_EL))\
               .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
-              .Define("loose_highpt_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 1")\
-              .Define("good_el", "abs(Electron_eta) < 2.5 && Electron_pt > 20 && Electron_cutBased >= 2")\
-              .Define("goodel_pt",    "Electron_pt[good_el]")\
-              .Define("goodel_eta",   "Electron_eta[good_el]")\
-              .Define("goodel_phi",   "Electron_phi[good_el]")\
-              .Define("goodel_mass",  "Electron_mass[good_el]")\
-              .Define("goodel_charge","Electron_charge[good_el]")\
-              .Define("goodel_cutBased","Electron_cutBased[good_el]")\
+              .Define("good_el", "{0}".format(FAKE_EL))\
+              .Define("goodel_pt"                 ,"Electron_pt[good_el]")\
+              .Define("goodel_eta"                ,"Electron_eta[good_el]")\
+              .Define("goodel_abseta"             ,"abs(Electron_eta[good_el])")\
+              .Define("goodel_phi"                ,"Electron_phi[good_el]")\
+              .Define("goodel_mass"               ,"Electron_mass[good_el]")\
+              .Define("goodel_charge"             ,"Electron_charge[good_el]")\
+              .Define("goodel_cutBased"           ,"Electron_cutBased[good_el]")\
               .Define("goodel_mvaFall17V2Iso_WP90","Electron_mvaFall17V2Iso_WP90[good_el]")\
               .Define("goodel_mvaFall17V2Iso_WP80","Electron_mvaFall17V2Iso_WP80[good_el]")\
-              .Define("goodel_tightCharge","Electron_tightCharge[good_el]")\
-              .Define("goodel_mvaTTH","Electron_mvaTTH[good_el]")\
+              .Define("goodel_tightCharge"        ,"Electron_tightCharge[good_el]")\
+              .Define("goodel_mvaTTH"             ,"Electron_mvaTTH[good_el]")\
+              .Define("tight_el0", "{0}".format(TIGHT_EL0))\
+              .Define("tight_el1", "{0}".format(TIGHT_EL1))\
+              .Define("tight_el2", "{0}".format(TIGHT_EL2))\
+              .Define("tight_el3", "{0}".format(TIGHT_EL3))\
+              .Define("tight_el4", "{0}".format(TIGHT_EL4))\
+              .Define("tight_el5", "{0}".format(TIGHT_EL5))\
+              .Define("tight_el6", "{0}".format(TIGHT_EL6))\
+              .Define("tight_el7", "{0}".format(TIGHT_EL7))\
               .Filter("Sum(loose_mu)+Sum(loose_el) >= 2","At least two loose leptons")\
               .Filter("Sum(loose_mu)+Sum(loose_el) == 2","Only two loose leptons")\
-              .Filter("Sum(loose_highpt_mu)+Sum(loose_highpt_el) == 2","Only two loose high pt leptons")\
               .Filter("Sum(good_mu)+Sum(good_el) == 2","Two good leptons")\
+              .Filter("(Sum(good_mu) > 0 and Max(goodmu_pt) > 25) or (Sum(good_el) > 0 and Max(goodel_pt) > 25)","At least one high pt lepton")\
               .Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && ((Tau_idDeepTau2017v2p1VSe & 8) != 0) && ((Tau_idDeepTau2017v2p1VSjet & 16) != 0) && ((Tau_idDeepTau2017v2p1VSmu & 8) != 0)")\
               .Filter("Sum(good_tau) == 0","No selected hadronic taus")\
               .Define("mll",    "compute_ll_var(goodmu_pt, goodmu_eta, goodmu_phi, goodmu_mass, goodel_pt, goodel_eta, goodel_phi, goodel_mass,0)")\
@@ -112,11 +151,15 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
+    xPtbins = array('d', [10,15,20,25,30,35,40,50,60,70,85,100,200,1000])
+    xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
+
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
     nCat, nHisto = plotCategory("kPlotCategories"), 200
-    histo = [[0 for y in range(nCat)] for x in range(nHisto)]
+    histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
+    histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
 
     dftag = selectionLL(df,year,PDType,isData)
 
@@ -151,8 +194,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
             histo[ltype+ 9][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 9,x), "histo_{0}_{1}".format(ltype+ 9,x), 50,  0, 3.1416), "dphill","weight")
             histo[ltype+12][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x), 40,  0, 200), "ptl1","weight")
             histo[ltype+15][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+15,x), "histo_{0}_{1}".format(ltype+15,x), 40,  0, 200), "ptl2","weight")
-            histo[ltype+18][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+18,x), "histo_{0}_{1}".format(ltype+18,x), 40,-2.5,2.5), "etal1","weight")
-            histo[ltype+21][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+21,x), "histo_{0}_{1}".format(ltype+21,x), 40,-2.5,2.5), "etal2","weight")
+            histo[ltype+18][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+18,x), "histo_{0}_{1}".format(ltype+18,x), 25,  0,2.5), "etal1","weight")
+            histo[ltype+21][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+21,x), "histo_{0}_{1}".format(ltype+21,x), 25,  0,2.5), "etal2","weight")
             histo[ltype+24][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+24,x), "histo_{0}_{1}".format(ltype+24,x), 10,-0.5, 9.5), "ngood_jets","weight")
 
             dfjetcat.append(dfcat[3*x+ltype].Filter("ngood_jets >= 2", "At least two jets"))
@@ -192,6 +235,53 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
             histo[ltype+124][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+124,x), "histo_{0}_{1}".format(ltype+124,x), 100, 0, 200), "MET_pt","weight")
             histo[ltype+127][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+127,x), "histo_{0}_{1}".format(ltype+127,x), 100, 0, 200), "PuppiMET_pt","weight")
 
+            if(ltype == 0):
+                histo[130][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(130,x), "histo_{0}_{1}".format(130,x), 100, 0, 1.0), "goodmu_mvaTTH","weight")
+            if(ltype == 2):
+                histo[131][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(131,x), "histo_{0}_{1}".format(131,x), 100, 0, 1.0), "goodel_mvaTTH","weight")
+
+            if(ltype == 0):
+                histo2D[ 0][x] = dfcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format( 0, x), "histo2d_{0}_{1}".format( 0, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[ 1][x] = dfcat[3*x+ltype].Filter("tight_mu0[0] == true").Histo2D(("histo2d_{0}_{1}".format( 1, x), "histo2d_{0}_{1}".format( 1, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[ 2][x] = dfcat[3*x+ltype].Filter("tight_mu1[0] == true").Histo2D(("histo2d_{0}_{1}".format( 2, x), "histo2d_{0}_{1}".format( 2, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[ 3][x] = dfcat[3*x+ltype].Filter("tight_mu2[0] == true").Histo2D(("histo2d_{0}_{1}".format( 3, x), "histo2d_{0}_{1}".format( 3, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[ 4][x] = dfcat[3*x+ltype].Filter("tight_mu3[0] == true").Histo2D(("histo2d_{0}_{1}".format( 4, x), "histo2d_{0}_{1}".format( 4, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[ 5][x] = dfcat[3*x+ltype].Filter("tight_mu4[0] == true").Histo2D(("histo2d_{0}_{1}".format( 5, x), "histo2d_{0}_{1}".format( 5, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[ 6][x] = dfcat[3*x+ltype].Filter("tight_mu5[0] == true").Histo2D(("histo2d_{0}_{1}".format( 6, x), "histo2d_{0}_{1}".format( 6, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[ 7][x] = dfcat[3*x+ltype].Filter("tight_mu6[0] == true").Histo2D(("histo2d_{0}_{1}".format( 7, x), "histo2d_{0}_{1}".format( 7, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[ 8][x] = dfcat[3*x+ltype].Filter("tight_mu7[0] == true").Histo2D(("histo2d_{0}_{1}".format( 8, x), "histo2d_{0}_{1}".format( 8, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+
+                histo2D[10][x] = dfcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format(10, x), "histo2d_{0}_{1}".format(10, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[11][x] = dfcat[3*x+ltype].Filter("tight_mu0[1] == true").Histo2D(("histo2d_{0}_{1}".format(11, x), "histo2d_{0}_{1}".format(11, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[12][x] = dfcat[3*x+ltype].Filter("tight_mu1[1] == true").Histo2D(("histo2d_{0}_{1}".format(12, x), "histo2d_{0}_{1}".format(12, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[13][x] = dfcat[3*x+ltype].Filter("tight_mu2[1] == true").Histo2D(("histo2d_{0}_{1}".format(13, x), "histo2d_{0}_{1}".format(13, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[14][x] = dfcat[3*x+ltype].Filter("tight_mu3[1] == true").Histo2D(("histo2d_{0}_{1}".format(14, x), "histo2d_{0}_{1}".format(14, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[15][x] = dfcat[3*x+ltype].Filter("tight_mu4[1] == true").Histo2D(("histo2d_{0}_{1}".format(15, x), "histo2d_{0}_{1}".format(15, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[16][x] = dfcat[3*x+ltype].Filter("tight_mu5[1] == true").Histo2D(("histo2d_{0}_{1}".format(16, x), "histo2d_{0}_{1}".format(16, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[17][x] = dfcat[3*x+ltype].Filter("tight_mu6[1] == true").Histo2D(("histo2d_{0}_{1}".format(17, x), "histo2d_{0}_{1}".format(17, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[18][x] = dfcat[3*x+ltype].Filter("tight_mu7[1] == true").Histo2D(("histo2d_{0}_{1}".format(18, x), "histo2d_{0}_{1}".format(18, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+
+            if(ltype == 2):
+                histo2D[20][x] = dfcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format(20, x), "histo2d_{0}_{1}".format(20, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[21][x] = dfcat[3*x+ltype].Filter("tight_el0[0] == true").Histo2D(("histo2d_{0}_{1}".format(21, x), "histo2d_{0}_{1}".format(21, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[22][x] = dfcat[3*x+ltype].Filter("tight_el1[0] == true").Histo2D(("histo2d_{0}_{1}".format(22, x), "histo2d_{0}_{1}".format(22, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[23][x] = dfcat[3*x+ltype].Filter("tight_el2[0] == true").Histo2D(("histo2d_{0}_{1}".format(23, x), "histo2d_{0}_{1}".format(23, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[24][x] = dfcat[3*x+ltype].Filter("tight_el3[0] == true").Histo2D(("histo2d_{0}_{1}".format(24, x), "histo2d_{0}_{1}".format(24, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[25][x] = dfcat[3*x+ltype].Filter("tight_el4[0] == true").Histo2D(("histo2d_{0}_{1}".format(25, x), "histo2d_{0}_{1}".format(25, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[26][x] = dfcat[3*x+ltype].Filter("tight_el5[0] == true").Histo2D(("histo2d_{0}_{1}".format(26, x), "histo2d_{0}_{1}".format(26, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[27][x] = dfcat[3*x+ltype].Filter("tight_el6[0] == true").Histo2D(("histo2d_{0}_{1}".format(27, x), "histo2d_{0}_{1}".format(27, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+                histo2D[28][x] = dfcat[3*x+ltype].Filter("tight_el7[0] == true").Histo2D(("histo2d_{0}_{1}".format(28, x), "histo2d_{0}_{1}".format(28, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
+
+                histo2D[30][x] = dfcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format(30, x), "histo2d_{0}_{1}".format(30, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[31][x] = dfcat[3*x+ltype].Filter("tight_el0[1] == true").Histo2D(("histo2d_{0}_{1}".format(31, x), "histo2d_{0}_{1}".format(31, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[32][x] = dfcat[3*x+ltype].Filter("tight_el1[1] == true").Histo2D(("histo2d_{0}_{1}".format(32, x), "histo2d_{0}_{1}".format(32, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[33][x] = dfcat[3*x+ltype].Filter("tight_el2[1] == true").Histo2D(("histo2d_{0}_{1}".format(33, x), "histo2d_{0}_{1}".format(33, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[34][x] = dfcat[3*x+ltype].Filter("tight_el3[1] == true").Histo2D(("histo2d_{0}_{1}".format(34, x), "histo2d_{0}_{1}".format(34, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[35][x] = dfcat[3*x+ltype].Filter("tight_el4[1] == true").Histo2D(("histo2d_{0}_{1}".format(35, x), "histo2d_{0}_{1}".format(35, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[36][x] = dfcat[3*x+ltype].Filter("tight_el5[1] == true").Histo2D(("histo2d_{0}_{1}".format(36, x), "histo2d_{0}_{1}".format(36, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[37][x] = dfcat[3*x+ltype].Filter("tight_el6[1] == true").Histo2D(("histo2d_{0}_{1}".format(37, x), "histo2d_{0}_{1}".format(37, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+                histo2D[38][x] = dfcat[3*x+ltype].Filter("tight_el7[1] == true").Histo2D(("histo2d_{0}_{1}".format(38, x), "histo2d_{0}_{1}".format(38, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+
     report = []
     for x in range(nCat):
         for ltype in range(3):
@@ -205,6 +295,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue
             histo[j][i].Write()
+        for j in range(nHisto):
+            if(histo2D[j][i] == 0): continue
+            if(histo2D[j][i].GetSumOfWeights() > 0): print("({0},{1}): {2}".format(j,i,histo2D[j][i].GetSumOfWeights()))
+            histo2D[j][i].Write()
     myfile.Close()
 
 def readMCSample(sampleNOW, year, skimType, whichJob, group):

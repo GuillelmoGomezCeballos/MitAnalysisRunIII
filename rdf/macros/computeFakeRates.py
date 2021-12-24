@@ -10,12 +10,12 @@ xPtbins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 35.0])
 if __name__ == "__main__":
     path = "fillhistoFakeAna1001"
     year = 2018
-    output = "anaZ"
+    inputDir = "anaZ"
 
-    valid = ['path=', "year=", 'output=', 'help']
+    valid = ['path=', "year=", 'inputDir=', 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
-    usage +=  "              --output=<{0}>".format(output)
+    usage +=  "              --inputDir=<{0}>".format(inputDir)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -31,8 +31,8 @@ if __name__ == "__main__":
             path = str(arg)
         if opt == "--year":
             year = int(arg)
-        if opt == "--output":
-            output = str(arg)
+        if opt == "--inputDir":
+            inputDir = str(arg)
 
     nCat = plotCategory("kPlotCategories")
 
@@ -40,8 +40,8 @@ if __name__ == "__main__":
     print(prescale)
 
     fileWLName = [0 for x in range(2)]
-    fileWLName[0] = "{0}/{1}_{2}_40.root".format(output,path,year)
-    fileWLName[1] = "{0}/{1}_{2}_41.root".format(output,path,year)
+    fileWLName[0] = "{0}/{1}_{2}_40.root".format(inputDir,path,year)
+    fileWLName[1] = "{0}/{1}_{2}_41.root".format(inputDir,path,year)
 
     myWLfile = [0 for x in range(2)]
     for nf in range(2):
@@ -63,10 +63,10 @@ if __name__ == "__main__":
     histoFakeEffSelEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
     fileTight = [[0 for y in range(numberOfSel)] for x in range(2)]
 
-    fileLoose = [TFile("{0}/{1}_{2}_0_2d.root".format(output,path,year)), TFile("{0}/{1}_{2}_1_2d.root".format(output,path,year))]
+    fileLoose = [TFile("{0}/{1}_{2}_0_2d.root".format(inputDir,path,year)), TFile("{0}/{1}_{2}_1_2d.root".format(inputDir,path,year))]
     for thePlot in range(2):
         for nsel in range(numberOfSel):
-            fileTight[thePlot][nsel] = TFile("{0}/{1}_{2}_{3}_2d.root".format(output,path,year,2+thePlot+nsel*2))
+            fileTight[thePlot][nsel] = TFile("{0}/{1}_{2}_{3}_2d.root".format(inputDir,path,year,2+thePlot+nsel*2))
 
     for thePlot in range(2):
         for j in range(numberOfSel):
@@ -87,8 +87,8 @@ if __name__ == "__main__":
                 histoFakeNumBG.Add(fileTight[thePlot][nsel].Get("histo2d{0}".format(nc)))
 
             print("Channel({0},{1}) = ({2}-{3})/({4}-{5}) = {6}".format(thePlot,nsel,
-	            histoFakeNumDA.GetSumOfWeights(),histoFakeNumBG.GetSumOfWeights() , histoFakeDenDA.GetSumOfWeights(),histoFakeDenBG.GetSumOfWeights(),
-	           (histoFakeNumDA.GetSumOfWeights()-histoFakeNumBG.GetSumOfWeights())/(histoFakeDenDA.GetSumOfWeights()-histoFakeDenBG.GetSumOfWeights())))
+                    histoFakeNumDA.GetSumOfWeights(),histoFakeNumBG.GetSumOfWeights() , histoFakeDenDA.GetSumOfWeights(),histoFakeDenBG.GetSumOfWeights(),
+                   (histoFakeNumDA.GetSumOfWeights()-histoFakeNumBG.GetSumOfWeights())/(histoFakeDenDA.GetSumOfWeights()-histoFakeDenBG.GetSumOfWeights())))
 
             for i in range(histoFakeDenDA.GetNbinsX()):
                 for j in range(histoFakeDenDA.GetNbinsY()):
@@ -104,8 +104,8 @@ if __name__ == "__main__":
                         eff = 0.0
                         unc = min(pow(1.0/den,0.5),0.999)
 
-                    histoFakeEffSelEtaPt[thePlot][nsel].SetBinContent(i+1,j+1,eff);
-                    histoFakeEffSelEtaPt[thePlot][nsel].SetBinError  (i+1,j+1,unc);
+                    histoFakeEffSelEtaPt[thePlot][nsel].SetBinContent(i+1,j+1,eff)
+                    histoFakeEffSelEtaPt[thePlot][nsel].SetBinError  (i+1,j+1,unc)
                     print("({0},{1}): ({2:8.1f} - {3:8.1f}) / ({4:8.1f} - {5:8.1f}) = {6:8.1f} / {7:8.1f} = {8:0.3f} +/- {9:0.3f}".format(i+1,j+1,
                         histoFakeNumDA.GetBinContent(i+1,j+1),histoFakeNumBG.GetBinContent(i+1,j+1)*prescale[thePlot][j],
                         histoFakeDenDA.GetBinContent(i+1,j+1),histoFakeDenBG.GetBinContent(i+1,j+1)*prescale[thePlot][j],

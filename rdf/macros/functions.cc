@@ -154,8 +154,8 @@ float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, unsigned int v
   else if(var == 3) theVar = deltaPhi(p1.Phi(), p2.Phi());
   else if(var == 4) theVar = p1.Pt();
   else if(var == 5) theVar = p2.Pt();
-  else if(var == 6) theVar = p1.Eta();
-  else if(var == 7) theVar = p2.Eta();
+  else if(var == 6) theVar = abs(p1.Eta());
+  else if(var == 7) theVar = abs(p2.Eta());
   return theVar;
 }
 
@@ -255,7 +255,7 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
        p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
        p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
    }
-   else if(mu_pt.size() ==  0){
+   else if(mu_pt.size() == 0){
        p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
        p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
        p4mom.push_back(PtEtaPhiMVector(el_pt[2],el_eta[2],el_phi[2],el_mass[2])); charge.push_back(el_charge[2]); ltype.push_back(1);
@@ -341,7 +341,7 @@ float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
        p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
        p4mom.push_back(PtEtaPhiMVector(el_pt[2],el_eta[2],el_phi[2],el_mass[2])); charge.push_back(el_charge[2]); ltype.push_back(1);
    }
-   else if(mu_pt.size() ==  0){
+   else if(mu_pt.size() == 0){
        p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
        p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
        p4mom.push_back(PtEtaPhiMVector(el_pt[2],el_eta[2],el_phi[2],el_mass[2])); charge.push_back(el_charge[2]); ltype.push_back(1);
@@ -399,6 +399,117 @@ float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      else if(var == 5) theVar = p4mom[tagZ1[1]].Pt();
      else if(var == 6) theVar = p4mom[tagZ2[0]].Pt();
      else if(var == 7) theVar = p4mom[tagZ2[1]].Pt();
+   }
+   return theVar;
+}
+
+
+// Multilepton variables
+float compute_nl_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass, const Vec_f& mu_charge,
+                     const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass, const Vec_f& el_charge,
+		     const float met_pt, const float met_phi, unsigned int var)
+{
+   if(mu_pt.size() + el_pt.size() < 2 || mu_pt.size() + el_pt.size() > 4) return 0;
+
+   vector<PtEtaPhiMVector> p4mom;
+   vector<int> charge, ltype;
+   if     (mu_pt.size() == 4 && el_pt.size() == 0){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[2],mu_eta[2],mu_phi[2],mu_mass[2])); charge.push_back(mu_charge[2]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[3],mu_eta[3],mu_phi[3],mu_mass[3])); charge.push_back(mu_charge[3]); ltype.push_back(0);
+   }
+   else if(mu_pt.size() == 3 && el_pt.size() == 1){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[2],mu_eta[2],mu_phi[2],mu_mass[2])); charge.push_back(mu_charge[2]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 2 && el_pt.size() == 2){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 1 && el_pt.size() == 3){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[2],el_eta[2],el_phi[2],el_mass[2])); charge.push_back(el_charge[2]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 0 && el_pt.size() == 4){
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[2],el_eta[2],el_phi[2],el_mass[2])); charge.push_back(el_charge[2]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[3],el_eta[3],el_phi[3],el_mass[3])); charge.push_back(el_charge[3]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 3 && el_pt.size() == 0){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[2],mu_eta[2],mu_phi[2],mu_mass[2])); charge.push_back(mu_charge[2]); ltype.push_back(0);
+   }
+   else if(mu_pt.size() == 2 && el_pt.size() == 1){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 1 && el_pt.size() == 2){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 0 && el_pt.size() == 3){
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[2],el_eta[2],el_phi[2],el_mass[2])); charge.push_back(el_charge[2]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 2 && el_pt.size() == 0){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
+   }
+   else if(mu_pt.size() == 1 && el_pt.size() == 1){
+       p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+   }
+   else if(mu_pt.size() == 0 && el_pt.size() == 2){
+       p4mom.push_back(PtEtaPhiMVector(el_pt[0],el_eta[0],el_phi[0],el_mass[0])); charge.push_back(el_charge[0]); ltype.push_back(1);
+       p4mom.push_back(PtEtaPhiMVector(el_pt[1],el_eta[1],el_phi[1],el_mass[1])); charge.push_back(el_charge[1]); ltype.push_back(1);
+   }
+   else {
+      printf("Impossible combination %lu %lu\n",mu_pt.size(),el_pt.size());
+      return 0;
+   }
+
+   float mllmin = 10000;
+   PtEtaPhiMVector p4momTot = p4mom[0];
+   for(unsigned int i=0; i<p4mom.size(); i++){
+     if(i != 0) p4momTot = p4momTot + p4mom[i];
+     for(unsigned int j=i+1; j<p4mom.size(); j++){
+       if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
+       if(p4mom[i].Pt() < p4mom[j].Pt()){
+         PtEtaPhiMVector paux = p4mom[j]; int chargeaux = charge[j]; int ltypeaux = ltype[j];
+         p4mom[j] = p4mom[i];                 charge[j] = charge[i];     ltype[j] = ltype[i];
+         p4mom[i] = paux;                     charge[i] = chargeaux;     ltype[i] = ltypeaux;
+       }
+     }
+   }
+
+   double theVar = -1;
+   if     (var == 0) theVar = p4momTot.M();
+   else if(var == 1) theVar = mllmin;
+   else if(var == 2) {
+     if     (p4mom.size() == 2 && ltype[0] == 0 && ltype[1] == 0) theVar = 0;
+     else if(p4mom.size() == 2 && ltype[0] == 1 && ltype[1] == 1) theVar = 1;
+     else if(p4mom.size() == 2 && ltype[0] == 0 && ltype[1] == 1) theVar = 2;
+     else if(p4mom.size() == 2 && ltype[0] == 1 && ltype[1] == 0) theVar = 3;
+     else if(p4mom.size() == 3) theVar = 4;
+     else if(p4mom.size() == 4) theVar = 5;
+   }
+   else {
+     if     (var ==  3) theVar = p4mom[0].Pt();
+     else if(var ==  4) theVar = p4mom[p4mom.size()-1].Pt();
+     else if(var ==  5) theVar = abs(p4mom[0].Eta());
+     else if(var ==  6) theVar = abs(p4mom[p4mom.size()-1].Eta());
    }
    return theVar;
 }
