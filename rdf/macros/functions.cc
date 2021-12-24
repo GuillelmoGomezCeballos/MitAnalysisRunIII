@@ -265,10 +265,8 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
       return 0;
    }
 
-   float mllmin = 10000;
-   for(int i=0; i<3; i++){
-     for(int j=i+1; j<3; j++){
-       if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
+   for(unsigned int i=0; i<p4mom.size(); i++){
+     for(unsigned int j=i+1; j<p4mom.size(); j++){
        if(p4mom[i].Pt() < p4mom[j].Pt()){
          PtEtaPhiMVector paux = p4mom[j]; int chargeaux = charge[j]; int ltypeaux = ltype[j];
          p4mom[j] = p4mom[i];                 charge[j] = charge[i];     ltype[j] = ltype[i];
@@ -276,11 +274,20 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
        }
      }
    }
+
+   float mllmin = 10000;
+   PtEtaPhiMVector p4momTot = p4mom[0];
+   for(unsigned int i=0; i<p4mom.size(); i++){
+     if(i != 0) p4momTot = p4momTot + p4mom[i];
+     for(unsigned int j=i+1; j<p4mom.size(); j++){
+       if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
+     }
+   }
    
    double mllZ = 10000;
    int tagZ[2] = {-1, -1}; int tagW = -1;
    double theVar = 0;
-   if     (var == 0) theVar = (p4mom[0]+p4mom[1]+p4mom[2]).M();
+   if     (var == 0) theVar = p4momTot.M();
    else if(var == 1) theVar = mllmin;
    else {
      for(int i=0; i<3; i++){
@@ -352,10 +359,8 @@ float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
       return 0;
    }
 
-   float mllmin = 10000;
-   for(int i=0; i<4; i++){
-     for(int j=i+1; j<4; j++){
-       if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
+   for(unsigned int i=0; i<p4mom.size(); i++){
+     for(unsigned int j=i+1; j<p4mom.size(); j++){
        if(p4mom[i].Pt() < p4mom[j].Pt()){
          PtEtaPhiMVector paux = p4mom[j]; int chargeaux = charge[j]; int ltypeaux = ltype[j];
          p4mom[j] = p4mom[i];                 charge[j] = charge[i];     ltype[j] = ltype[i];
@@ -363,11 +368,20 @@ float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
        }
      }
    }
+
+   float mllmin = 10000;
+   PtEtaPhiMVector p4momTot = p4mom[0];
+   for(unsigned int i=0; i<p4mom.size(); i++){
+     if(i != 0) p4momTot = p4momTot + p4mom[i];
+     for(unsigned int j=i+1; j<p4mom.size(); j++){
+       if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
+     }
+   }
    
    double mllZ1 = 10000; double mllZ2 = 10000;
    int tagZ1[2] = {-1, -1}; int tagZ2[2] = {-1, -1};
    double theVar = 0;
-   if     (var == 0) theVar = (p4mom[0]+p4mom[1]+p4mom[2]+p4mom[3]).M();
+   if     (var == 0) theVar = p4momTot.M();
    else if(var == 1) theVar = mllmin;
    else {
      for(int i=0; i<4; i++){
@@ -480,12 +494,8 @@ float compute_nl_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
       return 0;
    }
 
-   float mllmin = 10000;
-   PtEtaPhiMVector p4momTot = p4mom[0];
    for(unsigned int i=0; i<p4mom.size(); i++){
-     if(i != 0) p4momTot = p4momTot + p4mom[i];
      for(unsigned int j=i+1; j<p4mom.size(); j++){
-       if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
        if(p4mom[i].Pt() < p4mom[j].Pt()){
          PtEtaPhiMVector paux = p4mom[j]; int chargeaux = charge[j]; int ltypeaux = ltype[j];
          p4mom[j] = p4mom[i];                 charge[j] = charge[i];     ltype[j] = ltype[i];
@@ -494,16 +504,26 @@ float compute_nl_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      }
    }
 
-   double theVar = -1;
+   float mllmin = 10000;
+   PtEtaPhiMVector p4momTot = p4mom[0];
+   for(unsigned int i=0; i<p4mom.size(); i++){
+     if(i != 0) p4momTot = p4momTot + p4mom[i];
+     for(unsigned int j=i+1; j<p4mom.size(); j++){
+       if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
+     }
+   }
+
+   float theVar = -1;
    if     (var == 0) theVar = p4momTot.M();
    else if(var == 1) theVar = mllmin;
    else if(var == 2) {
-     if     (p4mom.size() == 2 && ltype[0] == 0 && ltype[1] == 0) theVar = 0;
-     else if(p4mom.size() == 2 && ltype[0] == 1 && ltype[1] == 1) theVar = 1;
-     else if(p4mom.size() == 2 && ltype[0] == 0 && ltype[1] == 1) theVar = 2;
-     else if(p4mom.size() == 2 && ltype[0] == 1 && ltype[1] == 0) theVar = 3;
-     else if(p4mom.size() == 3) theVar = 4;
-     else if(p4mom.size() == 4) theVar = 5;
+     if     (p4mom.size() == 2 && ltype[0] == 0 && ltype[1] == 0) theVar = 0.;
+     else if(p4mom.size() == 2 && ltype[0] == 1 && ltype[1] == 1) theVar = 1.;
+     else if(p4mom.size() == 2 && ltype[0] == 0 && ltype[1] == 1) theVar = 2.;
+     else if(p4mom.size() == 2 && ltype[0] == 1 && ltype[1] == 0) theVar = 3.;
+     else if(p4mom.size() == 3) theVar = 4.;
+     else if(p4mom.size() == 4) theVar = 5.;
+     else printf("Impossible ltype %lu %lu\n",mu_pt.size(),el_pt.size());
    }
    else {
      if     (var ==  3) theVar = p4mom[0].Pt();
