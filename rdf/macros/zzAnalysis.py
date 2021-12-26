@@ -17,6 +17,26 @@ TRIGGERSMU  = "(HLT_IsoMu24||HLT_IsoMu27||HLT_Mu50)"
 TRIGGERDEL  = "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_DoubleEle25_CaloIdL_MW||HLT_DoublePhoton70)"
 TRIGGERSEL  = "(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf||HLT_Ele115_CaloIdVT_GsfTrkIdT)"
 
+FAKE_MU   = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1)"
+TIGHT_MU0 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 4)"
+TIGHT_MU1 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_pfIsoId >= 4)"
+TIGHT_MU2 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 2)"
+TIGHT_MU3 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_miniIsoId >= 3)"
+TIGHT_MU4 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 3)"
+TIGHT_MU5 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_pfIsoId >= 4)"
+TIGHT_MU6 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_mvaTTH > 0.7)"
+TIGHT_MU7 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 4 && Muon_miniIsoId >= 4)"
+
+FAKE_EL   = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2)"
+TIGHT_EL0 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 3)"
+TIGHT_EL1 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4)"
+TIGHT_EL2 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP90 == true)"
+TIGHT_EL3 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true)"
+TIGHT_EL4 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.7)"
+TIGHT_EL5 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4 && Electron_tightCharge == 2)"
+TIGHT_EL6 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true && Electron_tightCharge == 2)"
+TIGHT_EL7 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.7 && Electron_tightCharge == 2)"
+
 JSON = "isGoodRunLS(isData, run, luminosityBlock)"
 
 def selectionLL(df,year,PDType,isData):
@@ -47,21 +67,21 @@ def selectionLL(df,year,PDType,isData):
               .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")
               .Filter("Sum(loose_mu)+Sum(loose_el) == 4","Four loose leptons")
 
-              .Define("fake_mu", "loose_mu == true && Muon_mvaId >= 1 && Muon_miniIsoId >= 1")
+              .Define("fake_mu", "{0}".format(FAKE_MU))
               .Define("fakemu_pt",    "Muon_pt[fake_mu]")
               .Define("fakemu_eta",   "abs(Muon_eta[fake_mu])")
               .Define("fakemu_phi",   "Muon_phi[fake_mu]")
               .Define("fakemu_mass",  "Muon_mass[fake_mu]")
               .Define("fakemu_charge","Muon_charge[fake_mu]")
-              .Define("tight_mu", "fake_mu == true && Muon_tightId == true && Muon_mvaTTH > 0.7")
+              .Define("tight_mu", "{0}".format(TIGHT_MU6))
 
-              .Define("fake_el", "loose_el == true && Electron_cutBased >= 2")
+              .Define("fake_el", "{0}".format(FAKE_EL))
               .Define("fakeel_pt",    "Electron_pt[fake_el]")
               .Define("fakeel_eta",   "abs(Electron_eta[fake_el])")
               .Define("fakeel_phi",   "Electron_phi[fake_el]")
               .Define("fakeel_mass",  "Electron_mass[fake_el]")
               .Define("fakeel_charge","Electron_charge[fake_el]")
-              .Define("tight_el", "fake_el == true && Electron_mvaTTH > 0.7")
+              .Define("tight_el", "{0}".format(TIGHT_EL4))
 
               .Filter("Sum(fake_mu)+Sum(fake_el) == 4","Four fake leptons")
               .Filter("Sum(tight_mu)+Sum(tight_el) == 4","Four tight leptons")
