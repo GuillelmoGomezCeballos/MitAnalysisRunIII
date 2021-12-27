@@ -9,6 +9,8 @@ echo ${USERPROXY}
 
 voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 
+touch skim_input_files.cfg skim_input_files_fromDAS.cfg;
+
 while IFS= read -r line; do
 
 set -- $line

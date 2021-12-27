@@ -193,6 +193,8 @@ float compute_ll_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
                      const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
 		     unsigned int var)
 {
+   if(mu_pt.size() + el_pt.size() != 2) return 0;
+
    float pt[2], eta[2], phi[2], mass[2];
    if(mu_pt.size() == 2){
        pt[0] = mu_pt[0]; eta[0] = mu_eta[0]; phi[0] = mu_phi[0]; mass[0] = mu_mass[0];

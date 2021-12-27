@@ -49,6 +49,7 @@ elif [ $NSEL == 'fake' ]; then
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","GeV","anaZ/fillhistoFakeAna1001_'${YEAR}'_36.root","fakemsel_sel4_mt", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","GeV","anaZ/fillhistoFakeAna1001_'${YEAR}'_38.root","fakemsel_sel5_mt", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","GeV","anaZ/fillhistoFakeAna1001_'${YEAR}'_40.root","fakemsel_ptl", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","GeV","anaZ/fillhistoFakeAna1001_'${YEAR}'_42.root","fakemsel_tthmva", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
 
   export SF_DY=0.8;
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","GeV","anaZ/fillhistoFakeAna1001_'${YEAR}'_1.root","fakeesel_mt", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
@@ -72,6 +73,7 @@ elif [ $NSEL == 'fake' ]; then
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","GeV","anaZ/fillhistoFakeAna1001_'${YEAR}'_37.root","fakeesel_sel4_mt", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","GeV","anaZ/fillhistoFakeAna1001_'${YEAR}'_39.root","fakeesel_sel5_mt", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","GeV","anaZ/fillhistoFakeAna1001_'${YEAR}'_41.root","fakeesel_ptl", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","GeV","anaZ/fillhistoFakeAna1001_'${YEAR}'_43.root","fakeesel_tthmva", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
 
 elif [ $NSEL == 'wz' ]; then
   export legendBSM="";
@@ -139,5 +141,33 @@ elif [ $NSEL == 'met' ]; then
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"Min(m_{ll})","GeV","anaZ/fillhistoMETAna1001_'${YEAR}'_9.root","metsel3_mllmin", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"Min(m_{ll})","GeV","anaZ/fillhistoMETAna1001_'${YEAR}'_10.root","metsel4_mllmin", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
   root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"Min(m_{ll})","GeV","anaZ/fillhistoMETAna1001_'${YEAR}'_11.root","metsel5_mllmin", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+
+elif [ $NSEL == 'ssww' ]; then
+  export legendBSM="";
+  export isNeverBlinded=0;
+  export isBlinded=0;
+  export fidAnaName="";
+  export mlfitResult="";
+  export channelName="XXX"; 
+  export SF_DY=1;
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"m_{ll}","GeV","anaZ/fillhistoSSWWAna1001_'${YEAR}'_0.root","sswwpresel_mll", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"N_{bjets}","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_1.root","sswwpresel_nbjets", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"p_{T}^{miss}","GeV","anaZ/fillhistoSSWWAna1001_'${YEAR}'_2.root","sswwpresel_met", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"p_{T}^{miss}","GeV","anaZ/fillhistoSSWWAna1001_'${YEAR}'_3.root","sswwbpresel_met", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"Lepton type","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_4.root","sswwpresel_ltype", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"Lepton type","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_5.root","sswwbpresel_ltype", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"N_{jets}","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_6.root","sswwsel_njets", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"N_{jets}","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_7.root","sswwbsel_njets", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"Lepton type","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_8.root","sswwsel_ltype", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"Lepton type","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_9.root","sswwbsel_ltype", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+ root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"m_{jj}","GeV","anaZ/fillhistoSSWWAna1001_'${YEAR}'_10.root","sswwsel_mjj", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"m_{jj}","GeV","anaZ/fillhistoSSWWAna1001_'${YEAR}'_11.root","sswwbsel_mjj", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"p_{T}^{jj}","GeV","anaZ/fillhistoSSWWAna1001_'${YEAR}'_12.root","sswwsel_ptjj", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"p_{T}^{jj}","GeV","anaZ/fillhistoSSWWAna1001_'${YEAR}'_13.root","sswwbsel_ptjj", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"#Delta#eta_{jj}","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_14.root","sswwsel_detajj", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"#Delta#eta_{jj}","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_15.root","sswwbsel_detajj", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"#Delta#phi_{jj}","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_16.root","sswwsel_dphijj", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+  root -q -b -l MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"#Delta#phi_{jj}","","anaZ/fillhistoSSWWAna1001_'${YEAR}'_17.root","sswwbsel_dphijj", 0,'${YEAR}',"'${legendBSM}'",'${SF_DY}', '${isBlinded}',"",1,'${APPLYSCALING}',"'${mlfitResult}'","'${channelName}'")';
+
 
 fi
