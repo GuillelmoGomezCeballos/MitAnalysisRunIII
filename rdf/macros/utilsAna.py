@@ -292,6 +292,8 @@ def SwitchSample(argument, skimType):
 
         61: (dirT2+"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",2008.4*3*1000,plotCategory("kPlotDY")),
         62: (dirT2+"/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.92*4.658*1.109*1000,plotCategory("kPlotWZ")),
+        63: (dirT2+"/WWJJToLNuLNu_EWK_noTop_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.09283*1000,plotCategory("kPlotqqWW")),
+        64: (dirT2+"/WWJJToLNuLNu_QCD_noTop_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",2.19000*1000,plotCategory("kPlotqqWW")),
 
         99:(dirLocal+"/ZLLphigamma_pythia8_genFix",0.10*1000,plotCategory("kPlotBSM"))
 

@@ -122,12 +122,56 @@ int compute_elid_var(const Vec_i& el_cutBased, const Vec_b& el_mvaFall17V2Iso_WP
   if(el_cutBased[nsel] >= 4) var = var + 2;
   if(el_mvaFall17V2Iso_WP90[nsel] == true) var = var + 4;
   if(el_mvaFall17V2Iso_WP80[nsel] == true) var = var + 8;
-  if(el_mvaTTH[nsel] > 0.7) var = var + 16;
+  if(el_mvaTTH[nsel] > 0.5) var = var + 16;
   if(el_cutBased[nsel] >= 4 && el_tightCharge[nsel] == 2) var = var + 32;
   if(el_mvaFall17V2Iso_WP80[nsel] == true && el_tightCharge[nsel] == 2) var = var + 64;
-  if(el_mvaTTH[nsel] > 0.7 && el_tightCharge[nsel] == 2) var = var + 128;
+  if(el_mvaTTH[nsel] > 0.5 && el_tightCharge[nsel] == 2) var = var + 128;
 
   return var;
+}
+
+// Jet-lepton variables
+float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
+                             const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
+                             const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
+		             unsigned int var)
+{
+  if(mu_pt.size() + el_pt.size() == 0) return -1;
+  if(pt.size() < 2) return -1;
+
+  vector<PtEtaPhiMVector> p4mom;
+
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+    p4mom.push_back(PtEtaPhiMVector(mu_pt[i],mu_eta[i],mu_phi[i],mu_mass[i]));   
+  }
+
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    p4mom.push_back(PtEtaPhiMVector(el_pt[i],el_eta[i],el_phi[i],el_mass[i]));   
+  }
+
+  PtEtaPhiMVector p4momTot = p4mom[0];
+  for(unsigned int i=0; i<p4mom.size(); i++){
+    if(i != 0) p4momTot = p4momTot + p4mom[i];
+  }
+
+  PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
+  PtEtaPhiMVector p2(pt[1], eta[1], phi[1], mass[1]);
+  if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
+  for(unsigned int i=0;i<pt.size();i++) {
+    for(unsigned int j=i+1;j<pt.size();j++) {
+      if(pt[i]>pt[j]) {
+        float temp0 = pt[i]; float temp1 = eta[i]; float temp2 = phi[i]; float temp3 = mass[i];
+        pt[i] = pt[j];	     eta[i] = eta[j];	   phi[i] = phi[j];      mass[i] = mass[j];
+        pt[j] = temp0;	     eta[j] = temp1;	   phi[j] = temp2;	 mass[j] = temp3;
+      }
+    }
+  }
+
+  float deltaEtaJJ = fabs(p1.Eta()-p2.Eta());
+
+  double theVar = 0;
+  if(var == 0) theVar = fabs(p4momTot.Eta()-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
+  return theVar;
 }
 
 // Jet variables
@@ -150,7 +194,7 @@ float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, unsigned int v
   double theVar = 0;
   if	 (var == 0) theVar = (p1 + p2).M();
   else if(var == 1) theVar = (p1 + p2).Pt();
-  else if(var == 2) theVar = deltaR(p1.Eta(), p1.Phi(), p2.Eta(), p2.Phi());
+  else if(var == 2) theVar = fabs(p1.Eta()-p2.Eta());
   else if(var == 3) theVar = deltaPhi(p1.Phi(), p2.Phi());
   else if(var == 4) theVar = p1.Pt();
   else if(var == 5) theVar = p2.Pt();

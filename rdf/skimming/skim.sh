@@ -21,7 +21,7 @@ status=$?
 
 rm -f functions_cc*
 
-elif [ $status -eq 0 ]; then
+if [ $status -eq 0 ]; then
   echo "SUCCESS"
 
 else
