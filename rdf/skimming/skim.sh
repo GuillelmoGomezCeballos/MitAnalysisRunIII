@@ -16,7 +16,7 @@ whoami
 ls -l
 echo $PWD
 
-python skim.py --whichSample=$1 --whichJob=$2 --group=$3 --inputSamplesCfg=$4 --inputFilesCfg=$5
+python3 skim.py --whichSample=$1 --whichJob=$2 --group=$3 --inputSamplesCfg=$4 --inputFilesCfg=$5
 status=$?
 
 rm -f functions_cc*

@@ -24,4 +24,4 @@ hadd -f ${output}/${path}_${year}_tightel5_2d.root ${output}/${path}_${year}_26_
 hadd -f ${output}/${path}_${year}_tightel6_2d.root ${output}/${path}_${year}_27_2d.root ${output}/${path}_${year}_37_2d.root
 hadd -f ${output}/${path}_${year}_tightel7_2d.root ${output}/${path}_${year}_28_2d.root ${output}/${path}_${year}_38_2d.root
 
-python computeLeptonEff_2d.py --path=${path} --year=${year} --output=${output}
+python3 computeLeptonEff_2d.py --path=${path} --year=${year} --output=${output}

@@ -138,8 +138,8 @@ if __name__ == "__main__":
                           eff0,unc0,eff1,unc1,sf,sfe))
 
             histoLepEffSelDAEtaPt[nlep][theSel - 1].SetNameTitle("histoLepEffSelDAEtaPt_{0}_{1}".format(nlep,theSel - 1),"histoLepEffSelDAEtaPt_{0}_{1}".format(nlep,theSel - 1))
-            histoLepEffSelDAEtaPt[nlep][theSel - 1].SetNameTitle("histoLepEffSelDYEtaPt_{0}_{1}".format(nlep,theSel - 1),"histoLepEffSelDYEtaPt_{0}_{1}".format(nlep,theSel - 1))
-            histoLepEffSelDAEtaPt[nlep][theSel - 1].SetNameTitle("histoLepSFEtaPt_{0}_{1}".format(nlep,theSel - 1),      "histoLepSFEtaPt_{0}_{1}".format(nlep,theSel - 1))
+            histoLepEffSelDYEtaPt[nlep][theSel - 1].SetNameTitle("histoLepEffSelDYEtaPt_{0}_{1}".format(nlep,theSel - 1),"histoLepEffSelDYEtaPt_{0}_{1}".format(nlep,theSel - 1))
+            histoLepSFEtaPt      [nlep][theSel - 1].SetNameTitle("histoLepSFEtaPt_{0}_{1}".format(nlep,theSel - 1),      "histoLepSFEtaPt_{0}_{1}".format(nlep,theSel - 1))
             histoLepEffSelDAEtaPt[nlep][theSel - 1].Write()
             histoLepEffSelDYEtaPt[nlep][theSel - 1].Write()
             histoLepSFEtaPt      [nlep][theSel - 1].Write()

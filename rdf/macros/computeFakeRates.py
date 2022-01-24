@@ -3,6 +3,7 @@ from ROOT import TFile, TH1D, TH2D
 import os, sys, getopt, glob
 from array import array
 from utilsAna import plotCategory
+import json
 
 xEtabins = array('d', [0.0, 1.0, 1.5, 2.0, 2.5])
 xPtbins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 35.0])
@@ -111,6 +112,9 @@ if __name__ == "__main__":
                         histoFakeDenDA.GetBinContent(i+1,j+1),histoFakeDenBG.GetBinContent(i+1,j+1)*prescale[thePlot][j],
                         num,den,eff,unc))
 
-        histoFakeEffSelEtaPt[thePlot][nsel].Write()
-
+            histoFakeEffSelEtaPt[thePlot][nsel].Write()
+            #json = ROOT.TBufferJSON.ConvertToJSON(histoFakeEffSelEtaPt[thePlot][nsel])
+            #f = open("fakeRate_{0}_{1}.json".format(thePlot,nsel), "w")
+            #f.write(json.Data())
+            #f.close()
     outFileFakeRate.Close()

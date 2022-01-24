@@ -17,24 +17,24 @@ TRIGGERDEL  = "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloI
 TRIGGERSEL  = "(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf||HLT_Ele115_CaloIdVT_GsfTrkIdT)"
 
 FAKE_MU   = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1)"
-TIGHT_MU0 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 4)"
-TIGHT_MU1 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_pfIsoId >= 4)"
-TIGHT_MU2 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 2)"
-TIGHT_MU3 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_miniIsoId >= 3)"
-TIGHT_MU4 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 3)"
-TIGHT_MU5 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_pfIsoId >= 4)"
-TIGHT_MU6 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_mvaTTH > 0.7)"
-TIGHT_MU7 = "(abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 4 && Muon_miniIsoId >= 4)"
+TIGHT_MU0 = "(abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mediumId == true && fakemu_pfIsoId >= 4)"
+TIGHT_MU1 = "(abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_tightId == true && fakemu_pfIsoId >= 4)"
+TIGHT_MU2 = "(abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 2 && fakemu_miniIsoId >= 2)"
+TIGHT_MU3 = "(abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 3 && fakemu_miniIsoId >= 3)"
+TIGHT_MU4 = "(abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 2 && fakemu_miniIsoId >= 3)"
+TIGHT_MU5 = "(abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 3 && fakemu_pfIsoId >= 4)"
+TIGHT_MU6 = "(abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_tightId == true && fakemu_mvaTTH > 0.7)"
+TIGHT_MU7 = "(abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 4 && fakemu_miniIsoId >= 4)"
 
 FAKE_EL   = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2)"
-TIGHT_EL0 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 3)"
-TIGHT_EL1 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4)"
-TIGHT_EL2 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP90 == true)"
-TIGHT_EL3 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true)"
-TIGHT_EL4 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.5)"
-TIGHT_EL5 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4 && Electron_tightCharge == 2)"
-TIGHT_EL6 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true && Electron_tightCharge == 2)"
-TIGHT_EL7 = "(abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.5 && Electron_tightCharge == 2)"
+TIGHT_EL0 = "(abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 3)"
+TIGHT_EL1 = "(abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 4)"
+TIGHT_EL2 = "(abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP90 == true)"
+TIGHT_EL3 = "(abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP80 == true)"
+TIGHT_EL4 = "(abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaTTH > 0.5)"
+TIGHT_EL5 = "(abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 4 && fakeel_tightCharge == 2)"
+TIGHT_EL6 = "(abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP80 == true && fakeel_tightCharge == 2)"
+TIGHT_EL7 = "(abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaTTH > 0.5 && fakeel_tightCharge == 2)"
 
 JSON = "isGoodRunLS(isData, run, luminosityBlock)"
 
@@ -66,24 +66,24 @@ def selectionLL(df,year,PDType,isData):
               .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")
               .Filter("Sum(loose_mu)+Sum(loose_el) == 2","Two loose leptons")
 
-              .Define("fake_mu"         ,"{0}".format(FAKE_MU))
-              .Define("fakemu_pt"       ,"Muon_pt[fake_mu]")
-              .Define("fakemu_eta"      ,"abs(Muon_eta[fake_mu])")
-              .Define("fakemu_phi"      ,"Muon_phi[fake_mu]")
-              .Define("fakemu_mass"     ,"Muon_mass[fake_mu]")
-              .Define("fakemu_charge"   ,"Muon_charge[fake_mu]")
-              .Define("fakemu_looseId"  ,"Muon_looseId[fake_mu]")
-              .Define("fakemu_mediumId" ,"Muon_mediumId[fake_mu]")
-              .Define("fakemu_tightId"  ,"Muon_tightId[fake_mu]")
-              .Define("fakemu_pfIsoId"  ,"Muon_pfIsoId[fake_mu]")
-              .Define("fakemu_mvaId"    ,"Muon_mvaId[fake_mu]")
-              .Define("fakemu_miniIsoId","Muon_miniIsoId[fake_mu]")
-              .Define("fakemu_mvaTTH"   ,"Muon_mvaTTH[fake_mu]")
-              .Define("tight_mu"        ,"{0}".format(TIGHT_MU6))
+              .Define("fake_mu"           ,"{0}".format(FAKE_MU))
+              .Define("fakemu_pt"         ,"Muon_pt[fake_mu]")
+              .Define("fakemu_eta"        ,"Muon_eta[fake_mu]")
+              .Define("fakemu_phi"        ,"Muon_phi[fake_mu]")
+              .Define("fakemu_mass"       ,"Muon_mass[fake_mu]")
+              .Define("fakemu_charge"     ,"Muon_charge[fake_mu]")
+              .Define("fakemu_looseId"    ,"Muon_looseId[fake_mu]")
+              .Define("fakemu_mediumId"   ,"Muon_mediumId[fake_mu]")
+              .Define("fakemu_tightId"    ,"Muon_tightId[fake_mu]")
+              .Define("fakemu_pfIsoId"    ,"Muon_pfIsoId[fake_mu]")
+              .Define("fakemu_mvaId"      ,"Muon_mvaId[fake_mu]")
+              .Define("fakemu_miniIsoId"  ,"Muon_miniIsoId[fake_mu]")
+              .Define("fakemu_mvaTTH"     ,"Muon_mvaTTH[fake_mu]")
+              .Define("tight_mu"          ,"{0}".format(TIGHT_MU6))
 
               .Define("fake_el"                   ,"{0}".format(FAKE_EL))
               .Define("fakeel_pt"                 ,"Electron_pt[fake_el]")
-              .Define("fakeel_eta"                ,"abs(Electron_eta[fake_el])")
+              .Define("fakeel_eta"                ,"Electron_eta[fake_el]")
               .Define("fakeel_phi"                ,"Electron_phi[fake_el]")
               .Define("fakeel_mass"               ,"Electron_mass[fake_el]")
               .Define("fakeel_charge"             ,"Electron_charge[fake_el]")
@@ -95,8 +95,10 @@ def selectionLL(df,year,PDType,isData):
               .Define("tight_el"                  ,"{0}".format(TIGHT_EL7))
 
               .Filter("Sum(fakemu_charge)+Sum(fakeel_charge) != 0", "Sign-sign leptons")
-              .Filter("Sum(fake_mu)+Sum(fake_el) == 2","Two fake leptons")
-              .Filter("Sum(tight_mu)+Sum(tight_el) == 2","Two tight leptons")
+              .Define("nFake","Sum(fake_mu)+Sum(fake_el)")
+              .Define("nTight","Sum(tight_mu)+Sum(tight_el)")
+              .Filter("nFake == 2","Two fake leptons")
+             #.Filter("nTight == 2","Two tight leptons")
 
               .Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && ((Tau_idDeepTau2017v2p1VSe & 8) != 0) && ((Tau_idDeepTau2017v2p1VSjet & 16) != 0) && ((Tau_idDeepTau2017v2p1VSmu & 8) != 0)")
               .Filter("Sum(good_tau) == 0","No selected hadronic taus")
@@ -109,8 +111,9 @@ def selectionLL(df,year,PDType,isData):
               .Define("dphill", "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,3)")
               .Define("ptl1",   "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,4)")
               .Define("ptl2",   "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,5)")
-              .Define("etal1",  "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,6)")
-              .Define("etal2",  "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,7)")
+              .Define("etal1",  "abs(compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,6))")
+              .Define("etal2",  "abs(compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,7))")
+              .Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
 
               .Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
@@ -131,11 +134,13 @@ def selectionLL(df,year,PDType,isData):
               .Define("zepvv", "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, 0)")
               .Define("goodloose_bjet", "goodloosejet_btagDeepB > 0.7100")
               .Define("nbtagloosejet",  "Sum(goodloose_bjet)")
+
+              .Define("ltype",  "compute_nl_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,2)")
               )
     return dftag
 
 
-def analysis(df,count,category,weight,year,PDType,isData,whichJob):
+def analysis(df,count,category,weight,year,PDType,isData,whichJob,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
@@ -145,20 +150,60 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
     nCat, nHisto = plotCategory("kPlotCategories"), 200
     histo = [[0 for y in range(nCat)] for x in range(nHisto)]
 
+    ROOT.initHisto(histoFakeEtaPt_mu,0)
+    ROOT.initHisto(histoFakeEtaPt_el,1)
+    ROOT.initHisto(histoLepSFEtaPt_mu,2)
+    ROOT.initHisto(histoLepSFEtaPt_el,3)
+    ROOT.initHisto(histoTriggerSFEtaPt_0_0, 4)
+    ROOT.initHisto(histoTriggerSFEtaPt_0_1, 5)
+    ROOT.initHisto(histoTriggerSFEtaPt_0_2, 6)
+    ROOT.initHisto(histoTriggerSFEtaPt_0_3, 7)
+    ROOT.initHisto(histoTriggerSFEtaPt_1_0, 8)
+    ROOT.initHisto(histoTriggerSFEtaPt_1_1, 9)
+    ROOT.initHisto(histoTriggerSFEtaPt_1_2,10)
+    ROOT.initHisto(histoTriggerSFEtaPt_1_3,11)
+    ROOT.initHisto(histoTriggerSFEtaPt_2_0,12)
+    ROOT.initHisto(histoTriggerSFEtaPt_2_1,13)
+    ROOT.initHisto(histoTriggerSFEtaPt_2_2,14)
+    ROOT.initHisto(histoTriggerSFEtaPt_2_3,15)
+    ROOT.initHisto(histoTriggerSFEtaPt_3_0,16)
+    ROOT.initHisto(histoTriggerSFEtaPt_3_1,17)
+    ROOT.initHisto(histoTriggerSFEtaPt_3_2,18)
+    ROOT.initHisto(histoTriggerSFEtaPt_3_3,19)
+
     dftag = selectionLL(df,year,PDType,isData)
+    dftag = dftag.Define("weightFake","compute_fakeRate(isData,fakemu_pt,fakemu_eta,tight_mu,fakeel_pt,fakeel_eta,tight_el)")
 
     if(theCat == plotCategory("kPlotData")):
-        dfbase = dftag.Define("weight","1.0")
+        dfbase =(dftag.Define("weightNoLepSF","weightFake*1.0")
+                      .Define("weightNoTriggerSF","weightFake*1.0")
+                      .Define("weight","weightFake*1.0")
+                      )
+
     else:
-        dfbase = dftag.Define("PDType","\"{0}\"".format(PDType))\
-                       .Define("weight","compute_weights({0},genWeight,PDType)".format(weight))
+        dfbase = (dftag.Define("PDType","\"{0}\"".format(PDType))
+                       #.Define("weightsTest1", ROOT.WeightsComputer(histoFakeEtaPt_mu), ("fakemu_pt", "fakemu_eta"))
+                       #.Filter("weightsTest1 >= 0","good fake weight1")
+                       .Define("fakemu_genPartFlav","Muon_genPartFlav[fake_mu]")
+                       .Define("fakeel_genPartFlav"        ,"Electron_genPartFlav[fake_el]")
+                       .Define("weightLepSF","compute_LepSF(fakemu_pt,fakemu_eta,fakeel_pt,fakeel_eta)")
+                       .Filter("weightLepSF > 0","good LepSF weight")
+                       .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype)")
+                       .Filter("weightTriggerSF > 0","good TriggerSF weight")
+                       .Define("weightMC","compute_weights({0},genWeight,PDType,fakemu_genPartFlav,fakeel_genPartFlav,1)".format(weight))
+                       .Filter("weightMC != 0","MC weight")
+                       .Define("weight"           ,"weightFake*weightLepSF*weightTriggerSF*weightMC")
+                       .Define("weightNoLepSF"    ,"weightFake*weightTriggerSF*weightMC")
+                       .Define("weightNoTriggerSF","weightFake*weightLepSF*weightMC")
+                       )
 
     dfwwcat = []
     dfwwbcat = []
     dfwwvbscat = []
     dfwwbvbscat = []
     for x in range(nCat):
-        dfwwcat.append(dfbase.Define("theCat{0}".format(x), "compute_category({0})".format(theCat))
+        dfwwcat.append(dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
+                             .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
                              .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
 
         histo[ 0][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),40, 20, 220), "mll","weight")
@@ -178,8 +223,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
 
         dfwwcat[x]  = dfwwcat[x] .Filter("ngoodvbs_jets >= 2", "At least two VBS jets")
         dfwwbcat[x] = dfwwbcat[x].Filter("ngoodvbs_jets >= 2", "At least two VBS jets")
-        histo[ 8][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format( 8,x), "histo_{0}_{1}".format( 8,x), 3,-0.5, 2.5), "DiLepton_flavor","weight")
-        histo[ 9][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format( 9,x), "histo_{0}_{1}".format( 9,x), 3,-0.5, 2.5), "DiLepton_flavor","weight")
+        histo[ 8][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format( 8,x), "histo_{0}_{1}".format( 8,x), 4,-0.5, 3.5), "ltype","weight")
+        histo[ 9][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format( 9,x), "histo_{0}_{1}".format( 9,x), 4,-0.5, 3.5), "ltype","weight")
         histo[10][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 4, 1.5, 5.5), "ngood_jets","weight")
         histo[11][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 4, 1.5, 5.5), "ngood_jets","weight")
         histo[12][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 40,0,2000), "mjj","weight")
@@ -206,10 +251,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
         histo[30][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x), 10,0,1), "zepvv","weight")
         histo[31][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x), 10,0,1), "zepvv","weight")
 
+        histo[32][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(32,x), "histo_{0}_{1}".format(32,x), 4,-0.5, 3.5), "ltype","weightNoLepSF")
+        histo[33][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(33,x), "histo_{0}_{1}".format(33,x), 4,-0.5, 3.5), "ltype","weightNoTriggerSF")
+
     report = []
     for x in range(nCat):
         report.append(dfwwvbscat[x].Report())
-        if(x != theCat): continue
+        if(x != theCat and x != plotCategory("kPlotNonPrompt")): continue
         print("---------------- SUMMARY {0} -------------".format(x))
         report[x].Print()
 
@@ -220,7 +268,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
             histo[j][i].Write()
     myfile.Close()
 
-def readMCSample(sampleNOW, year, skimType, whichJob, group):
+def readMCSample(sampleNOW,year,skimType,whichJob,group,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
@@ -255,9 +303,9 @@ def readMCSample(sampleNOW, year, skimType, whichJob, group):
 
     PDType = os.path.basename(SwitchSample(sampleNOW, skimType)[0]).split('+')[0]
 
-    analysis(df, sampleNOW, SwitchSample(sampleNOW, skimType)[2], weight, year, PDType, "false", whichJob)
+    analysis(df,sampleNOW,SwitchSample(sampleNOW,skimType)[2],weight,year,PDType,"false",whichJob,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
 
-def readDataSample(sampleNOW, year, skimType, whichJob, group):
+def readDataSample(sampleNOW,year,skimType,whichJob,group,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     PDType = "0"
     if  (sampleNOW >= 1001 and sampleNOW <= 1004): PDType = "SingleMuon"
@@ -282,7 +330,7 @@ def readDataSample(sampleNOW, year, skimType, whichJob, group):
     nevents = df.Count().GetValue()
     print("%s entries in the dataset" %nevents)
 
-    analysis(df, sampleNOW, sampleNOW, weight, year, PDType, "true", whichJob)
+    analysis(df,sampleNOW,sampleNOW,weight,year,PDType,"true",whichJob,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
 
 if __name__ == "__main__":
 
@@ -315,24 +363,82 @@ if __name__ == "__main__":
         if opt == "--whichJob":
             whichJob = int(arg)
 
+    fakePath = "data/histoFakeEtaPt_{0}.root".format(year)
+    if(not os.path.exists(fakePath)):
+        fakePath = "histoFakeEtaPt_{0}.root".format(year)
+    fFakeFile = ROOT.TFile(fakePath)
+    histoFakeEtaPt_mu = fFakeFile.Get("histoFakeEffSelEtaPt_0_6")
+    histoFakeEtaPt_el = fFakeFile.Get("histoFakeEffSelEtaPt_1_7")
+    histoFakeEtaPt_mu.SetDirectory(0)
+    histoFakeEtaPt_el.SetDirectory(0)
+    fFakeFile.Close()
+
+    lepSFPath = "data/histoLepSFEtaPt_{0}.root".format(year)
+    if(not os.path.exists(lepSFPath)):
+        lepSFPath = "histoLepSFEtaPt_{0}.root".format(year)
+    fLepSFFile = ROOT.TFile(lepSFPath)
+    histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_6")
+    histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_7")
+    histoLepSFEtaPt_mu.SetDirectory(0)
+    histoLepSFEtaPt_el.SetDirectory(0)
+    fLepSFFile.Close()
+
+    triggerSFPath = "data/histoTriggerSFEtaPt_{0}.root".format(year)
+    if(not os.path.exists(triggerSFPath)):
+        triggerSFPath = "histoTriggerSFEtaPt_{0}.root".format(year)
+    fTriggerSFFile = ROOT.TFile(triggerSFPath)
+    histoTriggerSFEtaPt_0_0 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_0")
+    histoTriggerSFEtaPt_0_1 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_1")
+    histoTriggerSFEtaPt_0_2 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_2")
+    histoTriggerSFEtaPt_0_3 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_3")
+    histoTriggerSFEtaPt_1_0 = fTriggerSFFile.Get("histoTriggerSFEtaPt_1_0")
+    histoTriggerSFEtaPt_1_1 = fTriggerSFFile.Get("histoTriggerSFEtaPt_1_1")
+    histoTriggerSFEtaPt_1_2 = fTriggerSFFile.Get("histoTriggerSFEtaPt_1_2")
+    histoTriggerSFEtaPt_1_3 = fTriggerSFFile.Get("histoTriggerSFEtaPt_1_3")
+    histoTriggerSFEtaPt_2_0 = fTriggerSFFile.Get("histoTriggerSFEtaPt_2_0")
+    histoTriggerSFEtaPt_2_1 = fTriggerSFFile.Get("histoTriggerSFEtaPt_2_1")
+    histoTriggerSFEtaPt_2_2 = fTriggerSFFile.Get("histoTriggerSFEtaPt_2_2")
+    histoTriggerSFEtaPt_2_3 = fTriggerSFFile.Get("histoTriggerSFEtaPt_2_3")
+    histoTriggerSFEtaPt_3_0 = fTriggerSFFile.Get("histoTriggerSFEtaPt_3_0")
+    histoTriggerSFEtaPt_3_1 = fTriggerSFFile.Get("histoTriggerSFEtaPt_3_1")
+    histoTriggerSFEtaPt_3_2 = fTriggerSFFile.Get("histoTriggerSFEtaPt_3_2")
+    histoTriggerSFEtaPt_3_3 = fTriggerSFFile.Get("histoTriggerSFEtaPt_3_3")
+    histoTriggerSFEtaPt_0_0.SetDirectory(0)
+    histoTriggerSFEtaPt_0_1.SetDirectory(0)
+    histoTriggerSFEtaPt_0_2.SetDirectory(0)
+    histoTriggerSFEtaPt_0_3.SetDirectory(0)
+    histoTriggerSFEtaPt_1_0.SetDirectory(0)
+    histoTriggerSFEtaPt_1_1.SetDirectory(0)
+    histoTriggerSFEtaPt_1_2.SetDirectory(0)
+    histoTriggerSFEtaPt_1_3.SetDirectory(0)
+    histoTriggerSFEtaPt_2_0.SetDirectory(0)
+    histoTriggerSFEtaPt_2_1.SetDirectory(0)
+    histoTriggerSFEtaPt_2_2.SetDirectory(0)
+    histoTriggerSFEtaPt_2_3.SetDirectory(0)
+    histoTriggerSFEtaPt_3_0.SetDirectory(0)
+    histoTriggerSFEtaPt_3_1.SetDirectory(0)
+    histoTriggerSFEtaPt_3_2.SetDirectory(0)
+    histoTriggerSFEtaPt_3_3.SetDirectory(0)
+    fTriggerSFFile.Close()
+
     try:
         if(process >= 0 and process < 1000):
-            readMCSample(process,year,skimType,whichJob,group)
+            readMCSample(process,year,skimType,whichJob,group,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
             sys.exit(0)
         elif(process > 1000):
-            readDataSample(process,year,skimType,whichJob,group)
+            readDataSample(process,year,skimType,whichJob,group,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
             sys.exit(0)
     except Exception as e:
         print("Error sample: {0}".format(e))
 
     for i in 1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1011,1012,1013,1014,1015,1016:
         try:
-            readDataSample(i,year,skimType,whichJob,group)
+            readDataSample(i,year,skimType,whichJob,group,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
         except Exception as e:
             print("Error sampleDA({0}): {1}".format(i,e))
 
     for i in range(4):
         try:
-            readMCSample(i,year,skimType,whichJob,group)
+            readMCSample(i,year,skimType,whichJob,group,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
         except Exception as e:
             print("Error sampleMC({0}): {1}".format(i,e))

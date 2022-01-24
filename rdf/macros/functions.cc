@@ -3,9 +3,8 @@
 
 #include "TROOT.h"
 #include "TFile.h"
-#include "TH2.h"
-#include "TH3.h"
-#include "TF1.h"
+#include "TH1.h"
+#include "TF2.h"
 #include "TString.h"
 #include "TRandom.h"
 #include "TRandom3.h"
@@ -44,6 +43,149 @@ using Vec_ui = ROOT::VecOps::RVec<unsigned int>;
 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > PtEtaPhiMVector;
 std::unordered_map< UInt_t, std::vector< std::pair<UInt_t,UInt_t> > > jsonMap;
+TH2D histoFakeEtaPt_mu;
+TH2D histoFakeEtaPt_el;
+TH2D histoLepSFEtaPt_mu;
+TH2D histoLepSFEtaPt_el;
+TH2D histoTriggerSFEtaPt_0_0;
+TH2D histoTriggerSFEtaPt_0_1;
+TH2D histoTriggerSFEtaPt_0_2;
+TH2D histoTriggerSFEtaPt_0_3;
+TH2D histoTriggerSFEtaPt_1_0;
+TH2D histoTriggerSFEtaPt_1_1;
+TH2D histoTriggerSFEtaPt_1_2;
+TH2D histoTriggerSFEtaPt_1_3;
+TH2D histoTriggerSFEtaPt_2_0;
+TH2D histoTriggerSFEtaPt_2_1;
+TH2D histoTriggerSFEtaPt_2_2;
+TH2D histoTriggerSFEtaPt_2_3;
+TH2D histoTriggerSFEtaPt_3_0;
+TH2D histoTriggerSFEtaPt_3_1;
+TH2D histoTriggerSFEtaPt_3_2;
+TH2D histoTriggerSFEtaPt_3_3;
+
+void initHisto(TH2D h, int nsel){
+  if     (nsel ==  0) histoFakeEtaPt_mu = h;
+  else if(nsel ==  1) histoFakeEtaPt_el = h;
+  else if(nsel ==  2) histoLepSFEtaPt_mu = h;
+  else if(nsel ==  3) histoLepSFEtaPt_el = h;
+  else if(nsel ==  4) histoTriggerSFEtaPt_0_0 = h;
+  else if(nsel ==  5) histoTriggerSFEtaPt_0_1 = h;
+  else if(nsel ==  6) histoTriggerSFEtaPt_0_2 = h;
+  else if(nsel ==  7) histoTriggerSFEtaPt_0_3 = h;
+  else if(nsel ==  8) histoTriggerSFEtaPt_1_0 = h;
+  else if(nsel ==  9) histoTriggerSFEtaPt_1_1 = h;
+  else if(nsel == 10) histoTriggerSFEtaPt_1_2 = h;
+  else if(nsel == 11) histoTriggerSFEtaPt_1_3 = h;
+  else if(nsel == 12) histoTriggerSFEtaPt_2_0 = h;
+  else if(nsel == 13) histoTriggerSFEtaPt_2_1 = h;
+  else if(nsel == 14) histoTriggerSFEtaPt_2_2 = h;
+  else if(nsel == 15) histoTriggerSFEtaPt_2_3 = h;
+  else if(nsel == 16) histoTriggerSFEtaPt_3_0 = h;
+  else if(nsel == 17) histoTriggerSFEtaPt_3_1 = h;
+  else if(nsel == 18) histoTriggerSFEtaPt_3_2 = h;
+  else if(nsel == 19) histoTriggerSFEtaPt_3_3 = h;
+}
+
+float getValFromTH2(const TH2& h, const float& x, const float& y, const float& sumError=0.0) {
+  //std::cout << "x,y --> " << x << "," << y << std::endl;
+  int xbin = std::max(1, std::min(h.GetNbinsX(), h.GetXaxis()->FindFixBin(x)));
+  int ybin = std::max(1, std::min(h.GetNbinsY(), h.GetYaxis()->FindFixBin(y)));
+  //std::cout << "xbin,ybin --> " << xbin << "," << ybin << std::endl;
+  if (sumError)
+    return h.GetBinContent(xbin, ybin) + sumError * h.GetBinError(xbin, ybin);
+  else
+    return h.GetBinContent(xbin, ybin);
+}
+
+float compute_test(const Vec_f& mu_pt, const Vec_f& mu_eta, TH2D histo_mu){
+  printf("test %f\n",histo_mu.GetBinContent(2,2));
+  return 1.0;
+}
+
+struct WeightsComputer {
+   TH2D *fHist2D;
+   WeightsComputer(TH2D *h) : fHist2D(h) {}
+
+   float operator()(const Vec_f &mu_pt, const Vec_f &mu_eta) {
+      return compute_test(mu_pt, mu_eta, *fHist2D);
+  }
+};
+
+float compute_fakeRate(const bool isData,
+                       const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& tight_mu,
+                       const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& tight_el){
+
+  if(mu_pt.size() != tight_mu.size() || el_pt.size() != tight_el.size()) {
+    printf("PROBLEM in compute_fakeRate!\n");
+    return 0;
+  }
+
+  double sfTot = 1.0;
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+    if(tight_mu[i] == 1) continue;
+    const TH2D& hcorr = histoFakeEtaPt_mu;
+    double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),mu_pt[i]);
+    sfTot = -sfTot*sf/(1-sf)*0.5;
+    //printf("fakemu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sf/(1-sf),sfTot);
+  }
+
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    if(tight_el[i] == 1) continue;
+    const TH2D& hcorr = histoFakeEtaPt_el;
+    double sf = getValFromTH2(hcorr, fabs(el_eta[i]), el_pt[i]);
+    sfTot = -sfTot*sf/(1-sf);
+    //printf("fakeel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sf/(1-sf),sfTot);
+  }
+      
+  if(sfTot != 1 && isData) sfTot = -sfTot;
+  return sfTot;
+}
+
+float compute_LepSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
+                    const Vec_f& el_pt, const Vec_f& el_eta){
+
+  //printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
+  double sfTot = 1.0;
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+    const TH2D& hcorr = histoLepSFEtaPt_mu;
+    double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),mu_pt[i]);
+    sfTot = sfTot*sf;
+    //printf("lepmu(%d) %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sfTot);
+  }
+
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    const TH2D& hcorr = histoLepSFEtaPt_el;
+    double sf = getValFromTH2(hcorr, fabs(el_eta[i]), el_pt[i]);
+    sfTot = sfTot*sf;
+    //printf("lepel(%d) %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sfTot);
+  }
+      
+  return sfTot;
+}
+
+float compute_TriggerSF(float ptl1, float ptl2, float etal1, float etal2, int ltype){
+
+  TH2D hcorr;
+  if	 (etal1 <= 1.5 && etal2 <= 1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_0;
+  else if(etal1 >  1.5 && etal2 <= 1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_1;
+  else if(etal1 <= 1.5 && etal2 >  1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_2;
+  else if(etal1 >  1.5 && etal2 >  1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_3;
+  else if(etal1 <= 1.5 && etal2 <= 1.5 && ltype == 1) hcorr = histoTriggerSFEtaPt_1_0;
+  else if(etal1 >  1.5 && etal2 <= 1.5 && ltype == 1) hcorr = histoTriggerSFEtaPt_1_1;
+  else if(etal1 <= 1.5 && etal2 >  1.5 && ltype == 1) hcorr = histoTriggerSFEtaPt_1_2;
+  else if(etal1 >  1.5 && etal2 >  1.5 && ltype == 1) hcorr = histoTriggerSFEtaPt_1_3;
+  else if(etal1 <= 1.5 && etal2 <= 1.5 && ltype == 2) hcorr = histoTriggerSFEtaPt_2_0;
+  else if(etal1 >  1.5 && etal2 <= 1.5 && ltype == 2) hcorr = histoTriggerSFEtaPt_2_1;
+  else if(etal1 <= 1.5 && etal2 >  1.5 && ltype == 2) hcorr = histoTriggerSFEtaPt_2_2;
+  else if(etal1 >  1.5 && etal2 >  1.5 && ltype == 2) hcorr = histoTriggerSFEtaPt_2_3;
+  else if(etal1 <= 1.5 && etal2 <= 1.5 && ltype == 3) hcorr = histoTriggerSFEtaPt_3_0;
+  else if(etal1 >  1.5 && etal2 <= 1.5 && ltype == 3) hcorr = histoTriggerSFEtaPt_3_1;
+  else if(etal1 <= 1.5 && etal2 >  1.5 && ltype == 3) hcorr = histoTriggerSFEtaPt_3_2;
+  else if(etal1 >  1.5 && etal2 >  1.5 && ltype == 3) hcorr = histoTriggerSFEtaPt_3_3;
+  else printf("Problem trigger type (%d) %f %f\n",ltype,etal1,etal2);
+  return getValFromTH2(hcorr, ptl1, ptl2);
+}
 
 bool isGoodRunLS(const bool isData, const UInt_t run, const UInt_t lumi) {
 
@@ -129,6 +271,43 @@ int compute_elid_var(const Vec_i& el_cutBased, const Vec_b& el_mvaFall17V2Iso_WP
 
   return var;
 }
+
+// Met-lepton variables
+float compute_met_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
+                             const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
+                             const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
+			     const float met_pt, const float met_phi,
+		             unsigned int var)
+{
+  if(mu_pt.size() + el_pt.size() < 2) return -1;
+
+  PtEtaPhiMVector p4llmom = PtEtaPhiMVector(0.0,0.0,0.0,0.0);
+
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+    p4llmom += PtEtaPhiMVector(mu_pt[i],mu_eta[i],mu_phi[i],mu_mass[i]);
+  }
+
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    p4llmom += PtEtaPhiMVector(el_pt[i],el_eta[i],el_phi[i],el_mass[i]);
+  }
+
+  PtEtaPhiMVector p4jetmom = PtEtaPhiMVector(met_pt,0.0,met_phi,0.0);
+  float dPhiJMET = 999.;
+  for(unsigned int i=0;i<pt.size();i++) {
+    p4jetmom += PtEtaPhiMVector(pt[i],eta[i],phi[i],mass[i]);
+    if(dPhiJMET > deltaPhi(phi[i],met_phi)) dPhiJMET = deltaPhi(phi[i],met_phi);
+  }
+
+  double theVar = 0;
+  if     (var == 0) theVar = fabs(p4llmom.Pt()-met_pt)/p4llmom.Pt();
+  else if(var == 1) theVar = fabs(p4llmom.Pt()-p4jetmom.Pt())/p4llmom.Pt();
+  else if(var == 2) theVar = deltaPhi(p4llmom.Phi(),met_phi);
+  else if(var == 3) theVar = deltaPhi(p4llmom.Phi(),p4jetmom.Phi());
+  else if(var == 4) theVar = sqrt(2*p4llmom.Pt()*met_pt*(1-cos(deltaPhi(p4llmom.Phi(),met_phi))));
+  else if(var == 5) theVar = dPhiJMET;
+  return theVar;
+}
+
 
 // Jet-lepton variables
 float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
@@ -626,16 +805,31 @@ int applySkim(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, cons
 }
 
 // compute category
-int compute_category(const int mc){
+int compute_category(const int mc, const int typeFake, const int nFake, const int nTight){
+  if     (nFake > nTight) return typeFake;
+  else if(nFake < nTight) {printf("IMPOSSIBLE compute_category\n"); return -1;}
   return mc;
 }
 
 // compute category
-float compute_weights(const float weight, const float genWeight, const TString theCat){
+float compute_weights(const float weight, const float genWeight, const TString theCat,
+                      const Vec_f& mu_genPartFlav, const Vec_f& el_genPartFlav, unsigned int var){
   if(theCat.Contains("WJetsToLNu") && genWeight > 10000) {
     printf("Huge genWeight: %f\n",genWeight);
     return 0.0;
   }
+  if(var == 1) {
+    bool isRealGenLep = true;
+    for(unsigned int i=0;i<mu_genPartFlav.size();i++) {
+       if(mu_genPartFlav[i] != 1 && mu_genPartFlav[i] != 15) {isRealGenLep = false; break;}
+    }
+    if(isRealGenLep == false) return 0.0;
+
+    for(unsigned int i=0;i<el_genPartFlav.size();i++) {
+       if(el_genPartFlav[i] != 1 && el_genPartFlav[i] != 15 && el_genPartFlav[i] != 22) {isRealGenLep = false; break;}
+    }
+    if(isRealGenLep == false) return 0.0;
+  }   
   return weight*genWeight;
 }
 

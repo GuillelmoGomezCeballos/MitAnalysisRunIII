@@ -18,17 +18,17 @@ do
 
 cat << EOF > submit
 Universe   = vanilla
-Executable = zzAnalysis.sh
+Executable = zmetAnalysis.sh
 Arguments  = ${whichSample} ${whichYear} ${whichJob} ${condorJob}
 RequestMemory = 6000
 RequestCpus = 1
 RequestDisk = DiskUsage
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
-Log    = logs/simple_zzAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}.log
-Output = logs/simple_zzAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}.out
-Error  = logs/simple_zzAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}.error
-transfer_input_files = zzAnalysis.py, functions.cc, utilsAna.py, ../skimming/jsns/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt, data/histoFakeEtaPt_2018.root, data/histoLepSFEtaPt_2018.root, data/histoTriggerSFEtaPt_2018.root
+Log    = logs/simple_zmetAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}.log
+Output = logs/simple_zmetAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}.out
+Error  = logs/simple_zmetAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}.error
+transfer_input_files = zmetAnalysis.py, functions.cc, utilsAna.py, ../skimming/jsns/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt, data/histoFakeEtaPt_2018.root, data/histoLepSFEtaPt_2018.root, data/histoTriggerSFEtaPt_2018.root
 use_x509userproxy = True
 x509userproxy = /tmp/x509up_u${USERPROXY}
 Requirements = ((BOSCOGroup == "bosco_cms" && BOSCOCluster == "ce03.cmsaf.mit.edu") || (BOSCOCluster == "t3serv008.mit.edu")) && (Machine != "t3btch070.mit.edu") && (Machine != "t3desk014.mit.edu")
@@ -40,6 +40,6 @@ condor_submit submit
 
 done
 
-done < zzAnalysis_input_condor_jobs.cfg
+done < zmetAnalysis_input_condor_jobs.cfg
 
 rm -f submit

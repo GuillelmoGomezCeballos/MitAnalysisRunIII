@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     numberOfLep = 6
     numberOfSel = 5
-    histoLepSFEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
+    histoTriggerSFEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepDenDA = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepDenDY = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepNumDA = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
@@ -46,7 +46,7 @@ if __name__ == "__main__":
             fileTriggerDEN = TFile("{0}/{1}_{2}_{3}_2d.root".format(output,path,year,  nlep+12*nsel))
             fileTriggerDEN.cd()
 
-            histoLepSFEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoTriggerSFEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
 
             histoLepDenDA[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
             histoLepDenDY[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotDY")))).Clone()
@@ -54,7 +54,7 @@ if __name__ == "__main__":
                 if(nc == plotCategory("kPlotData") or nc == plotCategory("kPlotDY") or nc == plotCategory("kPlotSignal3")): continue
                 histoLepDenDY[nlep][nsel].Add(ROOT.gROOT.FindObject("histo2d{0}".format(nc)),1.0)
 
-            histoLepSFEtaPt[nlep][nsel].SetDirectory(0)
+            histoTriggerSFEtaPt[nlep][nsel].SetDirectory(0)
             histoLepDenDA[nlep][nsel].SetDirectory(0)
             histoLepDenDY[nlep][nsel].SetDirectory(0)
 
@@ -113,16 +113,17 @@ if __name__ == "__main__":
                         sf = eff0/eff1
                         sfe = sf*pow(pow(unc0/eff0,0.5)+pow(unc1/eff1,0.5),2)
 
-                    histoLepSFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
-                    histoLepSFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
+                    histoTriggerSFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
+                    histoTriggerSFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
 
                     print("({0:2d},{1:2d}): ({2:.3f} +/- {3:.3f}) / ({4:.3f} - {5:.3f}) = {6:.3f} / {7:.3f}".format(i+1,j+1,
                           eff0,unc0,eff1,unc1,sf,sfe))
 
-    fileTriggerEffName = "histoLepSFEtaPt_{0}.root".format(year)
+    fileTriggerEffName = "histoTriggerSFEtaPt_{0}.root".format(year)
     outfileTriggerEff = TFile(fileTriggerEffName,"recreate")
     outfileTriggerEff.cd()
     for nlep in range(numberOfLep):
         for nsel in range(numberOfSel):
-            histoLepSFEtaPt[nlep][nsel].Write()
+            histoTriggerSFEtaPt[nlep][nsel].SetNameTitle("histoTriggerSFEtaPt_{0}_{1}".format(nlep,nsel),      "histoTriggerSFEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerSFEtaPt[nlep][nsel].Write()
     outfileTriggerEff.Close()
