@@ -5,6 +5,8 @@ ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles
+#import correctionlib
+#correctionlib.register_pyroot_binding()
 
 lumi = [36.1, 41.5, 60.0]
 
@@ -174,6 +176,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,histoFakeEtaPt
     dftag = selectionLL(df,year,PDType,isData)
     dftag = dftag.Define("weightFake","compute_fakeRate(isData,fakemu_pt,fakemu_eta,tight_mu,fakeel_pt,fakeel_eta,tight_el)")
 
+    #yearSTR = "{0}_UL".format(year)
+    #ROOT.gInterpreter.Declare('auto csetEl = correction::CorrectionSet::from_file("POG/MUO/2018_UL/muon_Z.json");')
+    #ROOT.gInterpreter.Declare('auto csetEl_2016preID = csetEl->at("NUM_MediumID_DEN_genTracks");')
+    ##ROOT.gInterpreter.Declare('auto csetEl = correction::CorrectionSet::from_file("POG/EGM/2018_UL/electron.json");')
+    ##ROOT.gInterpreter.Declare('auto csetEl_2016preID = csetEl->at("UL-Electron-ID-SF");')
+
     if(theCat == plotCategory("kPlotData")):
         dfbase =(dftag.Define("weightNoLepSF","weightFake*1.0")
                       .Define("weightNoTriggerSF","weightFake*1.0")
@@ -186,6 +194,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,histoFakeEtaPt
                        #.Filter("weightsTest1 >= 0","good fake weight1")
                        .Define("fakemu_genPartFlav","Muon_genPartFlav[fake_mu]")
                        .Define("fakeel_genPartFlav"        ,"Electron_genPartFlav[fake_el]")
+		       #.Define("sfMu",'csetEl_2016preID.evaluate("2018_UL", etal1, ptl1, "sf")')
+		       #.Define("leadElSF",('csetEl_2016preID->evaluate({"2016preVFP", "sf", "wp90iso",etal1,ptl1})'))
                        .Define("weightLepSF","compute_LepSF(fakemu_pt,fakemu_eta,fakeel_pt,fakeel_eta)")
                        .Filter("weightLepSF > 0","good LepSF weight")
                        .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype)")
