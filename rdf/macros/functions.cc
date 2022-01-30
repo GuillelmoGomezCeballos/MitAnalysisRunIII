@@ -43,6 +43,7 @@ using Vec_ui = ROOT::VecOps::RVec<unsigned int>;
 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > PtEtaPhiMVector;
 std::unordered_map< UInt_t, std::vector< std::pair<UInt_t,UInt_t> > > jsonMap;
+
 TH2D histoFakeEtaPt_mu;
 TH2D histoFakeEtaPt_el;
 TH2D histoLepSFEtaPt_mu;
@@ -63,8 +64,20 @@ TH2D histoTriggerSFEtaPt_3_0;
 TH2D histoTriggerSFEtaPt_3_1;
 TH2D histoTriggerSFEtaPt_3_2;
 TH2D histoTriggerSFEtaPt_3_3;
+TH2F histoElRecoSF;
+TH2F histoElSelSF;
+TH2F histoMuIDSF;
+TH2F histoMuISOSF;
+TH1D puWeights;
 
-void initHisto(TH2D h, int nsel){
+void initHisto2F(TH2F h, int nsel){
+  if     (nsel == 0) histoElRecoSF = h;
+  else if(nsel == 1) histoElSelSF = h;
+  else if(nsel == 2) histoMuIDSF = h;
+  else if(nsel == 3) histoMuISOSF = h;
+}
+
+void initHisto2D(TH2D h, int nsel){
   if     (nsel ==  0) histoFakeEtaPt_mu = h;
   else if(nsel ==  1) histoFakeEtaPt_el = h;
   else if(nsel ==  2) histoLepSFEtaPt_mu = h;
@@ -85,6 +98,18 @@ void initHisto(TH2D h, int nsel){
   else if(nsel == 17) histoTriggerSFEtaPt_3_1 = h;
   else if(nsel == 18) histoTriggerSFEtaPt_3_2 = h;
   else if(nsel == 19) histoTriggerSFEtaPt_3_3 = h;
+}
+
+void initHisto1D(TH1D h, int nsel){
+  if(nsel == 0) puWeights = h;
+}
+
+float getValFromTH1(const TH1& h, const float& x, const float& sumError=0.0) {
+  int xbin = std::max(1, std::min(h.GetNbinsX(), h.GetXaxis()->FindFixBin(x)));
+  if (sumError)
+    return h.GetBinContent(xbin) + sumError * h.GetBinError(xbin);
+  else
+    return h.GetBinContent(xbin);
 }
 
 float getValFromTH2(const TH2& h, const float& x, const float& y, const float& sumError=0.0) {
@@ -161,6 +186,38 @@ float compute_LepSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
     //printf("lepel(%d) %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sfTot);
   }
       
+  return sfTot;
+}
+
+float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
+                       const Vec_f& el_pt, const Vec_f& el_eta,
+		       const float nPU){
+
+  //printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
+  double sfTot = 1.0;
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+    const TH2F& hcorr0 = histoMuIDSF;
+    double sf0 = getValFromTH2(hcorr0, fabs(mu_eta[i]),mu_pt[i]);
+    const TH2F& hcorr1 = histoMuISOSF;
+    double sf1 = getValFromTH2(hcorr1, fabs(mu_eta[i]),mu_pt[i]);
+    sfTot = sfTot*sf0*sf1;
+    //printf("leprecomu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf0,sf1,sfTot);
+  }
+
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    const TH2F& hcorr0 = histoElRecoSF;
+    double sf0 = getValFromTH2(hcorr0, el_eta[i], el_pt[i]);
+    const TH2F& hcorr1 = histoElSelSF;
+    double sf1 = getValFromTH2(hcorr1, el_eta[i], el_pt[i]);
+    sfTot = sfTot*sf0*sf1;
+    //printf("leprecoel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf0,sf1,sfTot);
+  }
+
+  const TH1D& hcorr = puWeights;
+  double sf = getValFromTH1(hcorr, nPU);
+  sfTot = sfTot*sf;
+  //printf("pu %.3f %.3f %.3f\n",nPU,sf,sfTot);
+
   return sfTot;
 }
 

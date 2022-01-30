@@ -2,7 +2,7 @@ import ROOT
 import os, json
 from subprocess import call,check_output
 from XRootD import client
-from correctionlib import _core
+#from correctionlib import _core
 
 lumi = [36.1, 41.5, 60.0]
 
@@ -42,29 +42,29 @@ def plotCategory(key):
 if "/functions.so" not in ROOT.gSystem.GetLibraries():
     ROOT.gSystem.CompileMacro("functions.cc","k")
 
-def loadCorrectionSet(type,year):
-
-    fname = "POG/"
-    if type=='MUO':
-        fname += "MUO/"+year+"/muon_Z.json.gz"
-    elif type=='ELE':
-        fname += "EGM/"+year+"/electron.json.gz"
-    elif type=='PH':
-        fname += "EGM/"+year+"/photon.json.gz"
-    elif type=='LUM':
-        fname += "LUM/"+year+"/puWeights.json.gz"
-    elif type=='BTV':
-        fname += "BTV/"+year+"/btagging.json.gz"
-
-    if fname.endswith(".json.gz"):
-        import gzip
-        with gzip.open(fname,'rt') as file:
-            data = file.read().strip()
-            evaluator = _core.CorrectionSet.from_string(data)
-    else:
-        evaluator = _core.CorrectionSet.from_file(fname)
-
-    return evaluator
+#def loadCorrectionSet(type,year):
+#
+#    fname = "POG/"
+#    if type=='MUO':
+#        fname += "MUO/"+year+"/muon_Z.json.gz"
+#    elif type=='ELE':
+#        fname += "EGM/"+year+"/electron.json.gz"
+#    elif type=='PH':
+#        fname += "EGM/"+year+"/photon.json.gz"
+#    elif type=='LUM':
+#        fname += "LUM/"+year+"/puWeights.json.gz"
+#    elif type=='BTV':
+#        fname += "BTV/"+year+"/btagging.json.gz"
+#
+#    if fname.endswith(".json.gz"):
+#        import gzip
+#        with gzip.open(fname,'rt') as file:
+#            data = file.read().strip()
+#            evaluator = _core.CorrectionSet.from_string(data)
+#    else:
+#        evaluator = _core.CorrectionSet.from_file(fname)
+#
+#    return evaluator
 
 def loadJSON(fIn):
 

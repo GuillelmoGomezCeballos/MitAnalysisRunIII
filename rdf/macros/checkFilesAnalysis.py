@@ -19,7 +19,7 @@ def readMCSample(sampleNOW, year, PDType, skimType):
         except Exception as e:
             print("{0} {1}".format(files[f].replace("root://t3serv017.mit.edu/","/mnt/T3_US_MIT/hadoop"),e))
 
-def readDataSample(sampleNOW, year, PDType, skimType):
+def readDASample(sampleNOW, year, PDType, skimType):
 
     files = getDATAlist(sampleNOW, year, PDType, skimType)
     print(len(files))
@@ -36,12 +36,12 @@ if __name__ == "__main__":
 
     year = 2018
     skimType = "1l"
-    test = 0
+    process = 0
 
-    valid = ["year=", "skimType=", "test=", 'help']
+    valid = ["year=", "skimType=", "process=", 'help']
     usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
     usage +=  "              --skimType=<{0}>\n".format(skimType)
-    usage +=  "              --test=<{0}>".format(test)
+    usage +=  "              --process=<{0}>".format(process)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -57,39 +57,16 @@ if __name__ == "__main__":
             year = int(arg)
         if opt == "--skimType":
             skimType = str(arg)
-        if opt == "--test":
-            test = int(arg)
+        if opt == "--process":
+            process = int(arg)
 
-    if(test == 1):
-        #readMCSample(10,2018,"All")
+    if(process == 1):
         readMCSample(1,2018,"All",skimType)
-        sys.exit(0)
-    elif(test == 101):
-        readDataSample(test,2018,"SingleMuon",skimType)
-        sys.exit(0)
-    elif(test == 102):
-        readDataSample(test,2018,"DoubleMuon",skimType)
-        sys.exit(0)
-    elif(test == 102):
-        readDataSample(test,2018,"MuonEG",skimType)
-        sys.exit(0)
-    elif(test == 104):
-        readDataSample(test,2018,"Egamma",skimType)
-        sys.exit(0)
-
-    anaNamesDict = dict()
-    anaNamesDict.update({"1":[101,2018,"SingleMuon"]})
-    anaNamesDict.update({"2":[102,2018,"DoubleMuon"]})
-    anaNamesDict.update({"3":[103,2018,"MuonEG"]})
-    anaNamesDict.update({"4":[104,2018,"Egamma"]})
-    for key in anaNamesDict:
-        try:
-            readDataSample(anaNamesDict[key][0],anaNamesDict[key][1],anaNamesDict[key][2],skimType)
-        except Exception as e:
-            print("Error sampleDA({0}): {1}".format(key,e))
-
-    for i in range(4):
-        try:
-            readMCSample(i,2018,"All",skimType)
-        except Exception as e:
-            print("Error sampleMC({0}): {1}".format(i,e))
+    elif(process == 101):
+        readDASample(process,2018,"SingleMuon",skimType)
+    elif(process == 102):
+        readDASample(process,2018,"DoubleMuon",skimType)
+    elif(process == 102):
+        readDASample(process,2018,"MuonEG",skimType)
+    elif(process == 104):
+        readDASample(process,2018,"Egamma",skimType)

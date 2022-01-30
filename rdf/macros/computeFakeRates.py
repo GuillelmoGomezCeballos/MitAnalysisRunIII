@@ -12,11 +12,13 @@ if __name__ == "__main__":
     path = "fillhistoFakeAna1001"
     year = 2018
     inputDir = "anaZ"
+    anaType = 0
 
-    valid = ['path=', "year=", 'inputDir=', 'help']
+    valid = ['path=', "year=", 'inputDir=', 'anaType=', 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
-    usage +=  "              --inputDir=<{0}>".format(inputDir)
+    usage +=  "              --inputDir=<{0}>\n".format(inputDir)
+    usage +=  "              --anaType=<{0}>".format(anaType)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -34,6 +36,25 @@ if __name__ == "__main__":
             year = int(arg)
         if opt == "--inputDir":
             inputDir = str(arg)
+        if opt == "--anaType":
+            anaType = int(arg)
+
+    startHisto = [0, 0]
+    if  (anaType == 0):
+        startHisto[0] = 0
+        startHisto[1] = 0
+    elif(anaType == 1):
+        startHisto[0] = 18
+        startHisto[1] = 18
+    elif(anaType == 2):
+        startHisto[0] = 36
+        startHisto[1] = 36
+    elif(anaType == 3):
+        startHisto[0] = 36
+        startHisto[1] = 18
+    else:
+        print("Problem with anaType")
+        sys.exit(1)
 
     nCat = plotCategory("kPlotCategories")
 
@@ -64,16 +85,16 @@ if __name__ == "__main__":
     histoFakeEffSelEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
     fileTight = [[0 for y in range(numberOfSel)] for x in range(2)]
 
-    fileLoose = [TFile("{0}/{1}_{2}_0_2d.root".format(inputDir,path,year)), TFile("{0}/{1}_{2}_1_2d.root".format(inputDir,path,year))]
+    fileLoose = [TFile("{0}/{1}_{2}_{3}_2d.root".format(inputDir,path,year,startHisto[0])), TFile("{0}/{1}_{2}_{3}_2d.root".format(inputDir,path,year,startHisto[1]+1))]
     for thePlot in range(2):
         for nsel in range(numberOfSel):
-            fileTight[thePlot][nsel] = TFile("{0}/{1}_{2}_{3}_2d.root".format(inputDir,path,year,2+thePlot+nsel*2))
+            fileTight[thePlot][nsel] = TFile("{0}/{1}_{2}_{3}_2d.root".format(inputDir,path,year,2+thePlot+nsel*2+startHisto[thePlot]))
 
     for thePlot in range(2):
         for j in range(numberOfSel):
             histoFakeEffSelEtaPt[thePlot][j] = TH2D("histoFakeEffSelEtaPt_{0}_{1}".format(thePlot,j), "histoFakeEffSelEtaPt_{0}_{1}".format(thePlot,j), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins)
 
-    fileFakeRateName = "histoFakeEtaPt_{0}.root".format(year)
+    fileFakeRateName = "histoFakeEtaPt_{0}_anaType{1}.root".format(year,anaType)
     outFileFakeRate = TFile(fileFakeRateName,"recreate")
     outFileFakeRate.cd()
     for thePlot in range(2):

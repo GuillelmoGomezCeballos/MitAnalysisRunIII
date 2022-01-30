@@ -77,28 +77,15 @@ def readMCSample(sampleNOW, year, PDType, skimType):
 
     analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false")
 
-def readDataSample(sampleNOW, year, PDType):
-
-    files = getDATAlist(sampleNOW, year, PDType)
-    print(len(files))
-
-    df = ROOT.RDataFrame("Events", files)
-
-    weight=1.
-    nevents = df.Count().GetValue()
-    print("%s entries in the dataset" %nevents)
-
-    analysis(df, sampleNOW, sampleNOW, weight, year, PDType, "true")
-
 if __name__ == "__main__":
 
     year = 2018
-    test = 0
+    process = 0
     skimType = "2l"
 
-    valid = ['year=', "test=", 'help']
+    valid = ['year=', "process=", 'help']
     usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
-    usage +=  "              --test=<{0}>".format(test)
+    usage +=  "              --process=<{0}>".format(process)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -112,11 +99,7 @@ if __name__ == "__main__":
             sys.exit(1)
         if opt == "--year":
             year = int(arg)
-        if opt == "--test":
-            test = int(arg)
+        if opt == "--process":
+            process = int(arg)
 
-    if(test == 1):
-        readMCSample(1,2018,"All", skimType)
-        sys.exit(0)
-
-    readMCSample(1,2018,"All", skimType)
+    readMCSample(process,2018,"All", skimType)
