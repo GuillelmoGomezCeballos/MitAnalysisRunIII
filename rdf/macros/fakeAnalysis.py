@@ -1,40 +1,51 @@
 import ROOT
-import os, sys, getopt
+import os, sys, getopt, json
 from array import array
 
 ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
 
 lumi = [0.1, 0.1, 0.1]
 
-TRIGGERFAKEMU = "(HLT_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL)"
-TRIGGERFAKEEL = "(HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele15_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)"
+selectionJsonPath = "config/selection.json"
+if(not os.path.exists(selectionJsonPath)):
+    selectionJsonPath = "selection.json"
 
-JSON = "isGoodRunLS(isData, run, luminosityBlock)"
+with open(selectionJsonPath) as jsonFile:
+    jsonObject = json.load(jsonFile)
+    jsonFile.close()
 
-FAKE_MU   = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1)"
-TIGHT_MU0 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mediumId == true && fakemu_pfIsoId >= 4)"
-TIGHT_MU1 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_tightId == true && fakemu_pfIsoId >= 4)"
-TIGHT_MU2 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 2 && fakemu_miniIsoId >= 2)"
-TIGHT_MU3 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 3 && fakemu_miniIsoId >= 3)"
-TIGHT_MU4 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 2 && fakemu_miniIsoId >= 3)"
-TIGHT_MU5 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 3 && fakemu_pfIsoId >= 4)"
-TIGHT_MU6 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_tightId == true && fakemu_mvaTTH > 0.7)"
-TIGHT_MU7 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 4 && fakemu_miniIsoId >= 4)"
+JSON = jsonObject['JSON']
 
-FAKE_EL   = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2)"
-TIGHT_EL0 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 3)"
-TIGHT_EL1 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 4)"
-TIGHT_EL2 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP90 == true)"
-TIGHT_EL3 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP80 == true)"
-TIGHT_EL4 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaTTH > 0.5)"
-TIGHT_EL5 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 4 && fakeel_tightCharge == 2)"
-TIGHT_EL6 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP80 == true && fakeel_tightCharge == 2)"
-TIGHT_EL7 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaTTH > 0.5 && fakeel_tightCharge == 2)"
+VBSSEL = jsonObject['VBSSEL']
+
+FAKE_MU   = jsonObject['FAKE_MU']
+TIGHT_MU0 = jsonObject['TIGHT_MU0']
+TIGHT_MU1 = jsonObject['TIGHT_MU1']
+TIGHT_MU2 = jsonObject['TIGHT_MU2']
+TIGHT_MU3 = jsonObject['TIGHT_MU3']
+TIGHT_MU4 = jsonObject['TIGHT_MU4']
+TIGHT_MU5 = jsonObject['TIGHT_MU5']
+TIGHT_MU6 = jsonObject['TIGHT_MU6']
+TIGHT_MU7 = jsonObject['TIGHT_MU7']
+
+FAKE_EL   = jsonObject['FAKE_EL']
+TIGHT_EL0 = jsonObject['TIGHT_EL0']
+TIGHT_EL1 = jsonObject['TIGHT_EL1']
+TIGHT_EL2 = jsonObject['TIGHT_EL2']
+TIGHT_EL3 = jsonObject['TIGHT_EL3']
+TIGHT_EL4 = jsonObject['TIGHT_EL4']
+TIGHT_EL5 = jsonObject['TIGHT_EL5']
+TIGHT_EL6 = jsonObject['TIGHT_EL6']
+TIGHT_EL7 = jsonObject['TIGHT_EL7']
 
 def selectionLL(df,year,PDType,isData):
+
+    overallTriggers = jsonObject['triggers']
+    TRIGGERFAKEMU = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
+    TRIGGERFAKEEL = getTriggerFromJson(overallTriggers, "TRIGGERFAKEEL", year)
 
     TRIGGERFAKE = "0"
 

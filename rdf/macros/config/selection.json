@@ -1,0 +1,155 @@
+{
+
+"JSON" : "isGoodRunLS(isData, run, luminosityBlock)",
+
+"FAKE_MU"   : "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1)",
+"TIGHT_MU0" : "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mediumId == true && fakemu_pfIsoId >= 4)",
+"TIGHT_MU1" : "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_tightId == true && fakemu_pfIsoId >= 4)",
+"TIGHT_MU2" : "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 2 && fakemu_miniIsoId >= 2)",
+"TIGHT_MU3" : "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 3 && fakemu_miniIsoId >= 3)",
+"TIGHT_MU4" : "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 2 && fakemu_miniIsoId >= 3)",
+"TIGHT_MU5" : "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 3 && fakemu_pfIsoId >= 4)",
+"TIGHT_MU6" : "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_tightId == true && fakemu_mvaTTH > 0.7)",
+"TIGHT_MU7" : "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 4 && fakemu_miniIsoId >= 4)",
+
+"FAKE_EL"   : "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2)",
+"TIGHT_EL0" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 3)",
+"TIGHT_EL1" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 4)",
+"TIGHT_EL2" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP90 == true)",
+"TIGHT_EL3" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP80 == true)",
+"TIGHT_EL4" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaTTH > 0.5)",
+"TIGHT_EL5" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 4 && fakeel_tightCharge == 2)",
+"TIGHT_EL6" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP80 == true && fakeel_tightCharge == 2)",
+"TIGHT_EL7" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaTTH > 0.5 && fakeel_tightCharge == 2)",
+
+"VBSSEL" : "(ngoodvbs_jets >=2 && mjj > 500 && detajj > 2.5 && zepvv < 1.0)",
+
+"BARRELphotons" : "(Photon_pt > 20 and Photon_isScEtaEB and Photon_cutBased >= 2 and Photon_electronVeto and photon_mask)",
+"ENDCAPphotons" : "(Photon_pt > 20 and Photon_isScEtaEE and Photon_cutBased >= 2 and Photon_electronVeto and photon_mask)",
+
+"triggers": [
+	{
+	    "name": "TRIGGERMUEG",
+	    "year": 2016,
+	    "definition": "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL)"
+	},
+	{
+	    "name": "TRIGGERDMU",
+	    "year": 2016,
+	    "definition": "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ||HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ||HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL)"
+	},
+	{
+	    "name": "TRIGGERSMU",
+	    "year": 2016,
+	    "definition": "(HLT_IsoMu24||HLT_IsoTkMu24||HLT_IsoMu22||HLT_IsoTkMu22||HLT_Mu45_eta2p1||HLT_Mu50)"
+	},
+	{
+	    "name": "TRIGGERDEL",
+	    "year": 2016,
+	    "definition": "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_DoubleEle24_22_eta2p1_WPLoose_Gsf)"
+	},
+	{
+	    "name": "TRIGGERSEL",
+	    "year": 2016,
+	    "definition": "(HLT_Ele25_eta2p1_WPTight_Gsf||HLT_Ele27_eta2p1_WPLoose_Gsf||HLT_Ele27_WPTight_Gsf||HLT_Ele30_WPTight_Gsf||HLT_Ele35_WPLoose_Gsf||HLT_Ele27_WP85_Gsf||HLT_Ele27_WPLoose_Gsf||HLT_Ele105_CaloIdVT_GsfTrkIdT||HLT_Ele115_CaloIdVT_GsfTrkIdT||HLT_Ele27_eta2p1_WPTight_Gsf||HLT_Ele32_eta2p1_WPTight_Gsf||HLT_ECALHT800)"
+	},
+	{
+	    "name": "TRIGGERFAKEMU",
+	    "year": 2016,
+	    "definition": "(HLT_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL)"
+	},
+	{
+	    "name": "TRIGGERFAKEEL",
+	    "year": 2016,
+	    "definition": "(HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)"
+	},
+	{
+	    "name": "TRIGGERMET",
+	    "year": 2016,
+	    "definition": "(HLT_PFMET170_NoiseCleaned||HLT_PFMET170_HBHECleaned||HLT_PFMET170_JetIdCleaned||HLT_PFMET170_NotCleaned||HLT_PFMET170_HBHE_BeamHaloCleaned||HLT_PFMETNoMu120_NoiseCleaned_PFMHTNoMu120_IDTight||HLT_PFMETNoMu110_NoiseCleaned_PFMHTNoMu110_IDTight||HLT_PFMETNoMu90_NoiseCleaned_PFMHTNoMu90_IDTight||HLT_PFMETNoMu90_PFMHTNoMu90_IDTight||HLT_PFMETNoMu100_PFMHTNoMu100_IDTight||HLT_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight)"
+	},
+
+	{
+	    "name": "TRIGGERMUEG",
+	    "year": 2017,
+	    "definition": "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL)"
+	},
+	{
+	    "name": "TRIGGERDMU",
+	    "year": 2017,
+	    "definition": "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8||HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL_DZ_Mass3p8||HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL_DZ_Mass8)"
+	},
+	{
+	    "name": "TRIGGERSMU",
+	    "year": 2017,
+	    "definition": "(HLT_IsoMu24||HLT_IsoMu27||HLT_IsoMu30||HLT_Mu50)"
+	},
+	{
+	    "name": "TRIGGERDEL",
+	    "year": 2017,
+	    "definition": "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_DiEle27_WPTightCaloOnly_L1DoubleEG||HLT_DoubleEle25_CaloIdL_MW||HLT_DoubleEle33_CaloIdL_MW||HLT_DoublePhoton70)"
+	},
+	{
+	    "name": "TRIGGERSEL",
+	    "year": 2017,
+	    "definition": "(HLT_Ele115_CaloIdVT_GsfTrkIdT||HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele35_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Photon200)"
+	},
+	{
+	    "name": "TRIGGERFAKEMU",
+	    "year": 2017,
+	    "definition": "(HLT_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL)"
+	},
+	{
+	    "name": "TRIGGERFAKEEL",
+	    "year": 2017,
+	    "definition": "(HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)"
+	},
+	{
+	    "name": "TRIGGERMET",
+	    "year": 2017,
+	    "definition": "(HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_PFMETNoMu140_PFMHTNoMu140_IDTight)"
+	},
+
+	{
+	    "name": "TRIGGERMUEG",
+	    "year": 2018,
+	    "definition": "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)"
+	},
+	{
+	    "name": "TRIGGERDMU",
+	    "year": 2018,
+	    "definition": "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8)"
+	},
+	{
+	    "name": "TRIGGERSMU",
+	    "year": 2018,
+	    "definition": "(HLT_IsoMu24||HLT_IsoMu27||HLT_Mu50)"
+	},
+	{
+	    "name": "TRIGGERDEL",
+	    "year": 2018,
+	    "definition": "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_DoubleEle25_CaloIdL_MW||HLT_DoublePhoton70)"
+	},
+	{
+	    "name": "TRIGGERSEL",
+	    "year": 2018,
+	    "definition": "(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf||HLT_Ele115_CaloIdVT_GsfTrkIdT)"
+	},
+	{
+	    "name": "TRIGGERFAKEMU",
+	    "year": 2018,
+	    "definition": "(HLT_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL)"
+	},
+	{
+	    "name": "TRIGGERFAKEEL",
+	    "year": 2018,
+	    "definition": "(HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)"
+	},
+	{
+	    "name": "TRIGGERMET",
+	    "year": 2018,
+	    "definition": "(HLT_CaloMET70_HBHECleaned||HLT_CaloMET80_HBHECleaned||HLT_CaloMET90_HBHECleaned||HLT_CaloMET100_HBHECleaned||HLT_CaloMET250_HBHECleaned||HLT_CaloMET300_HBHECleaned||HLT_CaloMET350_HBHECleaned||HLT_MonoCentralPFJet80_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu140_PFMHTNoMu140_IDTight||HLT_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_PFMETNoMu140_PFMHTNoMu140_IDTight||HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_PFHT60||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60)"
+	}
+
+    ]
+}

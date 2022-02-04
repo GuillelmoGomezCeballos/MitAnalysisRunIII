@@ -260,7 +260,7 @@ float deltaPhi(float phi1, float phi2) {
   float result = phi1 - phi2;
   while (result > float(M_PI)) result -= float(2*M_PI);
   while (result <= -float(M_PI)) result += float(2*M_PI);
-  return result;
+  return fabs(result);
 }
 
 float deltaR2(float eta1, float phi1, float eta2, float phi2) {
@@ -329,6 +329,51 @@ int compute_elid_var(const Vec_i& el_cutBased, const Vec_b& el_mvaFall17V2Iso_WP
   return var;
 }
 
+// Met-lepton-gamma variables
+float compute_met_lepton_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
+                                   const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
+                                   const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
+			           const float met_pt, const float met_phi,
+				   const Vec_f& ph_pt, const Vec_f& ph_eta, const Vec_f& ph_phi,
+		                   unsigned int var)
+{
+  if(mu_pt.size() + el_pt.size() < 2) return -1;
+  if(ph_pt.size() < 1) return -1;
+
+  float HT[2]= {0,0};
+  PtEtaPhiMVector p4llgmom = PtEtaPhiMVector(0.0,0.0,0.0,0.0);
+
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+    HT[0] += mu_pt[i];
+    p4llgmom += PtEtaPhiMVector(mu_pt[i],mu_eta[i],mu_phi[i],mu_mass[i]);
+  }
+
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    HT[0] += el_pt[i];
+    p4llgmom += PtEtaPhiMVector(el_pt[i],el_eta[i],el_phi[i],el_mass[i]);
+  }
+
+  HT[0] += ph_pt[0];
+  p4llgmom += PtEtaPhiMVector(ph_pt[0],ph_eta[0],ph_phi[0],0.0);
+
+  PtEtaPhiMVector p4jetmom = PtEtaPhiMVector(met_pt,0.0,met_phi,0.0);
+  float dPhiJMET = 999.;
+  for(unsigned int i=0;i<pt.size();i++) {
+    HT[1] += pt[i];
+    p4jetmom += PtEtaPhiMVector(pt[i],eta[i],phi[i],mass[i]);
+    if(dPhiJMET > deltaPhi(phi[i],met_phi)) dPhiJMET = deltaPhi(phi[i],met_phi);
+  }
+
+  double theVar = 0;
+  if     (var == 0) theVar = fabs(p4llgmom.Pt()-met_pt)/p4llgmom.Pt();
+  else if(var == 1) theVar = fabs(p4llgmom.Pt()-p4jetmom.Pt())/p4llgmom.Pt();
+  else if(var == 2) theVar = deltaPhi(p4llgmom.Phi(),met_phi);
+  else if(var == 3) theVar = deltaPhi(p4llgmom.Phi(),p4jetmom.Phi());
+  else if(var == 4) theVar = sqrt(2*ph_pt[0]*met_pt*(1-cos(deltaPhi(ph_phi[0],met_phi))));
+  else if(var == 5) theVar = HT[1]/(HT[0]+HT[1]);
+  return theVar;
+}
+
 // Met-lepton variables
 float compute_met_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
                              const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
@@ -338,19 +383,23 @@ float compute_met_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
 {
   if(mu_pt.size() + el_pt.size() < 2) return -1;
 
+  float HT[2]= {0,0};
   PtEtaPhiMVector p4llmom = PtEtaPhiMVector(0.0,0.0,0.0,0.0);
 
   for(unsigned int i=0;i<mu_pt.size();i++) {
+    HT[0] += mu_pt[i];
     p4llmom += PtEtaPhiMVector(mu_pt[i],mu_eta[i],mu_phi[i],mu_mass[i]);
   }
 
   for(unsigned int i=0;i<el_pt.size();i++) {
+    HT[0] += el_pt[i];
     p4llmom += PtEtaPhiMVector(el_pt[i],el_eta[i],el_phi[i],el_mass[i]);
   }
 
   PtEtaPhiMVector p4jetmom = PtEtaPhiMVector(met_pt,0.0,met_phi,0.0);
   float dPhiJMET = 999.;
   for(unsigned int i=0;i<pt.size();i++) {
+    HT[1] += pt[i];
     p4jetmom += PtEtaPhiMVector(pt[i],eta[i],phi[i],mass[i]);
     if(dPhiJMET > deltaPhi(phi[i],met_phi)) dPhiJMET = deltaPhi(phi[i],met_phi);
   }
@@ -361,10 +410,10 @@ float compute_met_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   else if(var == 2) theVar = deltaPhi(p4llmom.Phi(),met_phi);
   else if(var == 3) theVar = deltaPhi(p4llmom.Phi(),p4jetmom.Phi());
   else if(var == 4) theVar = sqrt(2*p4llmom.Pt()*met_pt*(1-cos(deltaPhi(p4llmom.Phi(),met_phi))));
-  else if(var == 5) theVar = dPhiJMET;
+  else if(var == 5) theVar = HT[1]/(HT[0]+HT[1]);
+  else if(var == 6) theVar = dPhiJMET;
   return theVar;
 }
-
 
 // Jet-lepton variables
 float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
@@ -458,7 +507,7 @@ float compute_lmet_var(const Vec_f& mu_pt, const Vec_f& mu_phi,
 
    double theVar = 0;
    if     (var == 0) theVar = std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi)));
-   else if(var == 1) theVar = std::abs(deltaPhi(phil,met_phi));
+   else if(var == 1) theVar = deltaPhi(phil,met_phi);
    else if(var == 2) theVar = std::sqrt(2*30.0*met_pt*(1-std::cos(phil-met_phi)));
    else if(var == 3) theVar = std::max(std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi))),met_pt);
    else if(var == 4) theVar = std::min(std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi))),met_pt);

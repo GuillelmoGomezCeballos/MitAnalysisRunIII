@@ -86,6 +86,11 @@ def loadJSON(fIn):
             vec.push_back(pair)
             ROOT.jsonMap[int(k)] = vec
 
+def getTriggerFromJson(overall, type, year ):
+
+    for trigger in overall:
+        if(trigger['name'] == type and trigger['year'] == year): return trigger['definition']
+
 def findDataset(name):
 
     DASclient = "dasgoclient -query '%(query)s'"

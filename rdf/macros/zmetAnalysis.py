@@ -1,46 +1,57 @@
 import ROOT
-import os, sys, getopt
+import os, sys, getopt, json
 from array import array
 
 ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
 
 lumi = [36.1, 41.5, 60.0]
 
-BARRELphotons = "(Photon_pt > 20 and Photon_isScEtaEB and Photon_cutBased >= 2 and Photon_electronVeto and photon_mask)"
-ENDCAPphotons = "(Photon_pt > 20 and Photon_isScEtaEE and Photon_cutBased >= 2 and Photon_electronVeto and photon_mask)"
+selectionJsonPath = "config/selection.json"
+if(not os.path.exists(selectionJsonPath)):
+    selectionJsonPath = "selection.json"
 
-TRIGGERMUEG = "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)"
-TRIGGERDMU  = "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8)"
-TRIGGERSMU  = "(HLT_IsoMu24||HLT_IsoMu27||HLT_Mu50)"
-TRIGGERDEL  = "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_DoubleEle25_CaloIdL_MW||HLT_DoublePhoton70)"
-TRIGGERSEL  = "(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf||HLT_Ele115_CaloIdVT_GsfTrkIdT)"
+with open(selectionJsonPath) as jsonFile:
+    jsonObject = json.load(jsonFile)
+    jsonFile.close()
 
-JSON = "isGoodRunLS(isData, run, luminosityBlock)"
+BARRELphotons = jsonObject['BARRELphotons']
+ENDCAPphotons = jsonObject['ENDCAPphotons']
 
-FAKE_MU   = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1)"
-TIGHT_MU0 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mediumId == true && fakemu_pfIsoId >= 4)"
-TIGHT_MU1 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_tightId == true && fakemu_pfIsoId >= 4)"
-TIGHT_MU2 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 2 && fakemu_miniIsoId >= 2)"
-TIGHT_MU3 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 3 && fakemu_miniIsoId >= 3)"
-TIGHT_MU4 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 2 && fakemu_miniIsoId >= 3)"
-TIGHT_MU5 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 3 && fakemu_pfIsoId >= 4)"
-TIGHT_MU6 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_tightId == true && fakemu_mvaTTH > 0.7)"
-TIGHT_MU7 = "(abs(fakemu_dxy) < 0.2 && abs(fakemu_dz) < 0.5 && abs(fakemu_eta) < 2.4 && fakemu_pt > 10 && fakemu_looseId == true && fakemu_mvaId >= 4 && fakemu_miniIsoId >= 4)"
+JSON = jsonObject['JSON']
 
-FAKE_EL   = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2)"
-TIGHT_EL0 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 3)"
-TIGHT_EL1 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 4)"
-TIGHT_EL2 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP90 == true)"
-TIGHT_EL3 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP80 == true)"
-TIGHT_EL4 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaTTH > 0.5)"
-TIGHT_EL5 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_cutBased >= 4 && fakeel_tightCharge == 2)"
-TIGHT_EL6 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP80 == true && fakeel_tightCharge == 2)"
-TIGHT_EL7 = "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaTTH > 0.5 && fakeel_tightCharge == 2)"
+VBSSEL = jsonObject['VBSSEL']
+
+FAKE_MU   = jsonObject['FAKE_MU']
+TIGHT_MU0 = jsonObject['TIGHT_MU0']
+TIGHT_MU1 = jsonObject['TIGHT_MU1']
+TIGHT_MU2 = jsonObject['TIGHT_MU2']
+TIGHT_MU3 = jsonObject['TIGHT_MU3']
+TIGHT_MU4 = jsonObject['TIGHT_MU4']
+TIGHT_MU5 = jsonObject['TIGHT_MU5']
+TIGHT_MU6 = jsonObject['TIGHT_MU6']
+TIGHT_MU7 = jsonObject['TIGHT_MU7']
+
+FAKE_EL   = jsonObject['FAKE_EL']
+TIGHT_EL0 = jsonObject['TIGHT_EL0']
+TIGHT_EL1 = jsonObject['TIGHT_EL1']
+TIGHT_EL2 = jsonObject['TIGHT_EL2']
+TIGHT_EL3 = jsonObject['TIGHT_EL3']
+TIGHT_EL4 = jsonObject['TIGHT_EL4']
+TIGHT_EL5 = jsonObject['TIGHT_EL5']
+TIGHT_EL6 = jsonObject['TIGHT_EL6']
+TIGHT_EL7 = jsonObject['TIGHT_EL7']
 
 def selectionLL(df,year,PDType,isData):
+
+    overallTriggers = jsonObject['triggers']
+    TRIGGERMUEG = getTriggerFromJson(overallTriggers, "TRIGGERMUEG", year)
+    TRIGGERDMU  = getTriggerFromJson(overallTriggers, "TRIGGERDMU", year)
+    TRIGGERSMU  = getTriggerFromJson(overallTriggers, "TRIGGERSMU", year)
+    TRIGGERDEL  = getTriggerFromJson(overallTriggers, "TRIGGERDEL", year)
+    TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
 
     TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
@@ -149,7 +160,22 @@ def selectionLL(df,year,PDType,isData):
               .Define("dphillmet", "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 2)")
               .Define("dphilljmet","compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 3)")
               .Define("mt",        "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 4)")
-              .Define("dphijmet",  "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 5)")
+              .Define("jetPtFrac", "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 5)")
+              .Define("dphijmet",  "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 6)")
+
+              .Define("photon_mask", "cleaningMask(Electron_photonIdx[fake_el],nPhoton)")
+              .Define("goodPhotons", "{}".format(BARRELphotons)+" or {}".format(ENDCAPphotons) )
+              .Define("goodPhotons_pt", "Photon_pt[goodPhotons]")
+              .Define("goodPhotons_eta", "Photon_eta[goodPhotons]")
+              .Define("goodPhotons_phi", "Photon_phi[goodPhotons]")
+
+              .Define("ptgbalance", "compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 0)")
+              .Define("ptgjbalance","compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 1)")
+              .Define("dphillgmet", "compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 2)")
+              .Define("dphillgjmet","compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 3)")
+              .Define("mtg",        "compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 4)")
+              .Define("jetPtgFrac", "compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 5)")
+
               )
 
     return dftag
@@ -196,13 +222,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
 
     dftag = selectionLL(df,year,PDType,isData)
 
-    dftag = (dftag.Define("photon_mask", "cleaningMask(Electron_photonIdx[fake_el],nPhoton)")
-              .Define("goodPhotons", "{}".format(BARRELphotons)+" or {}".format(ENDCAPphotons) )
-              .Define("goodPhotons_pt", "Photon_pt[goodPhotons]")
-              .Define("goodPhotons_eta", "Photon_eta[goodPhotons]")
-              .Define("goodPhotons_phi", "Photon_phi[goodPhotons]")
-             )
-
     if(theCat == plotCategory("kPlotData")):
         dfbase =(dftag.Define("weightNoPURecoSF","1.0")
                       .Define("weightNoLepSF","1.0")
@@ -240,12 +259,27 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
                                   .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
                                   .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                                   )
-
             dfzllbcat.append(dfzllcat[3*x+ltype].Filter("nbtagloosejet > 0","at least one btagloosejet"))
+            dfzllbcat[3*x+ltype] = dfzllbcat[3*x+ltype].Filter("ptbalance < 0.4","ptbalance < 0.4")
+            dfzllbcat[3*x+ltype] = dfzllbcat[3*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
 
             dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("nbtagloosejet == 0","no btagloosejet")
 
             dfzllgcat.append(dfzllcat[3*x+ltype].Filter("Sum(goodPhotons) > 0","At least one photon"))
+
+            histo[ltype+30][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+30,x), "histo_{0}_{1}".format(ltype+30,x), 50, 0, 2), "ptbalance","weight")
+            histo[ltype+33][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+33,x), "histo_{0}_{1}".format(ltype+33,x), 50, 0, 2), "ptjbalance","weight")
+
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("ptbalance < 0.4","ptbalance < 0.4")
+
+            histo[ltype+36][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 50, 0, 3.1416), "dphillmet","weight")
+            histo[ltype+39][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 50, 0, 3.1416), "dphilljmet","weight")
+
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
+
+            histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 50, 60, 260), "MET_pt","weight")
+
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("MET_pt > 100","MET_pt > 100")
 
             histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
             histo[ltype+ 3][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 50,  60, 260), "ptll","weight")
@@ -256,17 +290,33 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
             histo[ltype+18][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+18,x), "histo_{0}_{1}".format(ltype+18,x), 25,  0,2.5), "etal1","weight")
             histo[ltype+21][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+21,x), "histo_{0}_{1}".format(ltype+21,x), 25,  0,2.5), "etal2","weight")
             histo[ltype+24][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+24,x), "histo_{0}_{1}".format(ltype+24,x), 10,-0.5, 9.5), "ngood_jets","weight")
-            histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 50, 60, 260), "MET_pt","weight")
-            histo[ltype+30][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+30,x), "histo_{0}_{1}".format(ltype+30,x), 50, 0, 2), "ptbalance","weight")
-            histo[ltype+33][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+33,x), "histo_{0}_{1}".format(ltype+33,x), 50, 0, 2), "ptjbalance","weight")
-            histo[ltype+36][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 50, 0, 3.1416), "dphillmet","weight")
-            histo[ltype+39][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 50, 0, 3.1416), "dphilljmet","weight")
             histo[ltype+42][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 50, 0, 3.1416), "dphijmet","weight")
-            histo[ltype+45][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 50, 60, 460), "mt","weight")
-            histo[ltype+48][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 50, 60, 260), "ptll","weight")
-            histo[ltype+51][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 50, 60, 260), "MET_pt","weight")
-            histo[ltype+54][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 50, 60, 460), "mt","weight")
-            histo[ltype+57][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+57,x), "histo_{0}_{1}".format(ltype+57,x), 50, 60, 260), "MET_pt","weight")
+            histo[ltype+45][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 40,100, 500), "mt","weight")
+            histo[ltype+84][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+84,x), "histo_{0}_{1}".format(ltype+84,x), 40,0,80), "MET_significance","weight")
+            histo[ltype+87][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+87,x), "histo_{0}_{1}".format(ltype+87,x), 20,0,1), "jetPtFrac","weight")
+
+            histo[ltype+48][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 40, 60, 260), "ptll","weight")
+            histo[ltype+51][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 40,100, 300), "MET_pt","weight")
+            histo[ltype+54][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 40,100, 500), "mt","weight")
+
+            histo[ltype+57][x] = dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+57,x), "histo_{0}_{1}".format(ltype+57,x), 50, 0, 2), "ptgbalance","weight")
+            histo[ltype+60][x] = dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+60,x), "histo_{0}_{1}".format(ltype+60,x), 50, 0, 2), "ptgjbalance","weight")
+
+            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("ptgbalance < 0.4","ptgbalance < 0.4")
+
+            histo[ltype+63][x] = dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+63,x), "histo_{0}_{1}".format(ltype+63,x), 50, 0, 3.1416), "dphillgmet","weight")
+            histo[ltype+66][x] = dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+66,x), "histo_{0}_{1}".format(ltype+66,x), 50, 0, 3.1416), "dphillgjmet","weight")
+
+            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("dphillgmet > 2.5","dphillgmet > 2.5")
+
+            histo[ltype+69][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+69,x), "histo_{0}_{1}".format(ltype+69,x), 25, 60, 260), "MET_pt","weight")
+
+            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("MET_pt > 100","MET_pt > 100")
+
+            histo[ltype+72][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+72,x), "histo_{0}_{1}".format(ltype+72,x), 20,0,400), "mtg","weight")
+            histo[ltype+75][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+75,x), "histo_{0}_{1}".format(ltype+75,x), 10,-0.5, 9.5), "ngood_jets","weight")
+            histo[ltype+78][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+78,x), "histo_{0}_{1}".format(ltype+78,x), 40,0,80), "MET_significance","weight")
+            histo[ltype+81][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+81,x), "histo_{0}_{1}".format(ltype+81,x), 20,0,1), "jetPtgFrac","weight")
 
             histo[ltype+97][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+97,x), "histo_{0}_{1}".format(ltype+97,x), 10,-0.5, 9.5), "ngood_jets","weightNoPURecoSF")
             histo[ltype+98][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+98,x), "histo_{0}_{1}".format(ltype+98,x), 10,-0.5, 9.5), "ngood_jets","weightNoLepSF")

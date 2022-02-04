@@ -1,47 +1,58 @@
 import ROOT
-import os, sys, getopt
+import os, sys, getopt, json
 from array import array
 
 ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
 
 lumi = [36.1, 41.5, 60.0]
 
-TRIGGERMET = "(HLT_CaloMET70_HBHECleaned||HLT_CaloMET80_HBHECleaned||HLT_CaloMET90_HBHECleaned||HLT_CaloMET100_HBHECleaned||HLT_CaloMET250_HBHECleaned||HLT_CaloMET300_HBHECleaned||HLT_CaloMET350_HBHECleaned||HLT_MonoCentralPFJet80_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu140_PFMHTNoMu140_IDTight||HLT_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_PFMETNoMu140_PFMHTNoMu140_IDTight||HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_PFHT60||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60)"
+selectionJsonPath = "config/selection.json"
+if(not os.path.exists(selectionJsonPath)):
+    selectionJsonPath = "selection.json"
 
-TRIGGERMUEG = "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)"
-TRIGGERDMU  = "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8)"
-TRIGGERSMU  = "(HLT_IsoMu24||HLT_IsoMu27||HLT_Mu50)"
-TRIGGERDEL  = "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_DoubleEle25_CaloIdL_MW||HLT_DoublePhoton70)"
-TRIGGERSEL  = "(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf||HLT_Ele115_CaloIdVT_GsfTrkIdT)"
+with open(selectionJsonPath) as jsonFile:
+    jsonObject = json.load(jsonFile)
+    jsonFile.close()
 
-TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+JSON = jsonObject['JSON']
 
-JSON = "isGoodRunLS(isData, run, luminosityBlock)"
+VBSSEL = jsonObject['VBSSEL']
 
-FAKE_MU   = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1)"
-TIGHT_MU0 = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 4)"
-TIGHT_MU1 = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_pfIsoId >= 4)"
-TIGHT_MU2 = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 2)"
-TIGHT_MU3 = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_miniIsoId >= 3)"
-TIGHT_MU4 = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 2 && Muon_miniIsoId >= 3)"
-TIGHT_MU5 = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 3 && Muon_pfIsoId >= 4)"
-TIGHT_MU6 = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_tightId == true && Muon_mvaTTH > 0.7)"
-TIGHT_MU7 = "(abs(Muon_dxy) < 0.2 && abs(Muon_dz) < 0.5 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mvaId >= 4 && Muon_miniIsoId >= 4)"
+FAKE_MU   = jsonObject['FAKE_MU']
+TIGHT_MU0 = jsonObject['TIGHT_MU0']
+TIGHT_MU1 = jsonObject['TIGHT_MU1']
+TIGHT_MU2 = jsonObject['TIGHT_MU2']
+TIGHT_MU3 = jsonObject['TIGHT_MU3']
+TIGHT_MU4 = jsonObject['TIGHT_MU4']
+TIGHT_MU5 = jsonObject['TIGHT_MU5']
+TIGHT_MU6 = jsonObject['TIGHT_MU6']
+TIGHT_MU7 = jsonObject['TIGHT_MU7']
 
-FAKE_EL   = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2)"
-TIGHT_EL0 = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 3)"
-TIGHT_EL1 = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4)"
-TIGHT_EL2 = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP90 == true)"
-TIGHT_EL3 = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true)"
-TIGHT_EL4 = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.5)"
-TIGHT_EL5 = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_cutBased >= 4 && Electron_tightCharge == 2)"
-TIGHT_EL6 = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaFall17V2Iso_WP80 == true && Electron_tightCharge == 2)"
-TIGHT_EL7 = "(abs(Electron_dxy) < 0.2 && abs(Electron_dz) < 0.5 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_mvaTTH > 0.5 && Electron_tightCharge == 2)"
+FAKE_EL   = jsonObject['FAKE_EL']
+TIGHT_EL0 = jsonObject['TIGHT_EL0']
+TIGHT_EL1 = jsonObject['TIGHT_EL1']
+TIGHT_EL2 = jsonObject['TIGHT_EL2']
+TIGHT_EL3 = jsonObject['TIGHT_EL3']
+TIGHT_EL4 = jsonObject['TIGHT_EL4']
+TIGHT_EL5 = jsonObject['TIGHT_EL5']
+TIGHT_EL6 = jsonObject['TIGHT_EL6']
+TIGHT_EL7 = jsonObject['TIGHT_EL7']
 
 def selectionLL(df,year,PDType,isData):
+
+    overallTriggers = jsonObject['triggers']
+    TRIGGERMET = getTriggerFromJson(overallTriggers, "TRIGGERMET", year)
+
+    TRIGGERMUEG = getTriggerFromJson(overallTriggers, "TRIGGERMUEG", year)
+    TRIGGERDMU  = getTriggerFromJson(overallTriggers, "TRIGGERDMU", year)
+    TRIGGERSMU  = getTriggerFromJson(overallTriggers, "TRIGGERSMU", year)
+    TRIGGERDEL  = getTriggerFromJson(overallTriggers, "TRIGGERDEL", year)
+    TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
+
+    TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
     dftag =(df.Define("isData","{}".format(isData))
               .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
@@ -49,22 +60,41 @@ def selectionLL(df,year,PDType,isData):
               .Filter("trigger > 0","Passed trigger")
 
               .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
-              .Define("fake_mu", "{0}".format(TIGHT_MU0))
-              .Define("fakemu_pt",    "Muon_pt[fake_mu]")
-              .Define("fakemu_eta",   "Muon_eta[fake_mu]")
-              .Define("fakemu_phi",   "Muon_phi[fake_mu]")
-              .Define("fakemu_mass",  "Muon_mass[fake_mu]")
-              .Define("fakemu_charge","Muon_charge[fake_mu]")
-
               .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")
-              .Define("fake_el", "{0}".format(TIGHT_EL0))
-              .Define("fakeel_pt",    "Electron_pt[fake_el]")
-              .Define("fakeel_eta",   "Electron_eta[fake_el]")
-              .Define("fakeel_phi",   "Electron_phi[fake_el]")
-              .Define("fakeel_mass",  "Electron_mass[fake_el]")
-              .Define("fakeel_charge","Electron_charge[fake_el]")
-
               .Filter("Sum(loose_mu)+Sum(loose_el) >= 2 and Sum(loose_mu)+Sum(loose_el) <= 4","Between two and four loose leptons")
+
+              .Define("fake_mu"           ,"{0}".format(FAKE_MU))
+              .Define("fakemu_pt"         ,"Muon_pt[fake_mu]")
+              .Define("fakemu_eta"        ,"Muon_eta[fake_mu]")
+              .Define("fakemu_phi"        ,"Muon_phi[fake_mu]")
+              .Define("fakemu_mass"       ,"Muon_mass[fake_mu]")
+              .Define("fakemu_charge"     ,"Muon_charge[fake_mu]")
+              .Define("fakemu_dxy"        ,"Muon_dxy[fake_mu]")
+              .Define("fakemu_dz"         ,"Muon_dz[fake_mu]")
+              .Define("fakemu_looseId"    ,"Muon_looseId[fake_mu]")
+              .Define("fakemu_mediumId"   ,"Muon_mediumId[fake_mu]")
+              .Define("fakemu_tightId"    ,"Muon_tightId[fake_mu]")
+              .Define("fakemu_pfIsoId"    ,"Muon_pfIsoId[fake_mu]")
+              .Define("fakemu_mvaId"      ,"Muon_mvaId[fake_mu]")
+              .Define("fakemu_miniIsoId"  ,"Muon_miniIsoId[fake_mu]")
+              .Define("fakemu_mvaTTH"     ,"Muon_mvaTTH[fake_mu]")
+              .Define("tight_mu"          ,"{0}".format(TIGHT_MU0))
+
+              .Define("fake_el"                   ,"{0}".format(FAKE_EL))
+              .Define("fakeel_pt"                 ,"Electron_pt[fake_el]")
+              .Define("fakeel_eta"                ,"Electron_eta[fake_el]")
+              .Define("fakeel_phi"                ,"Electron_phi[fake_el]")
+              .Define("fakeel_mass"               ,"Electron_mass[fake_el]")
+              .Define("fakeel_charge"             ,"Electron_charge[fake_el]")
+              .Define("fakeel_dxy"                ,"Electron_dxy[fake_el]")
+              .Define("fakeel_dz"                 ,"Electron_dz[fake_el]")
+              .Define("fakeel_cutBased"           ,"Electron_cutBased[fake_el]")
+              .Define("fakeel_mvaFall17V2Iso_WP90","Electron_mvaFall17V2Iso_WP90[fake_el]")
+              .Define("fakeel_mvaFall17V2Iso_WP80","Electron_mvaFall17V2Iso_WP80[fake_el]")
+              .Define("fakeel_tightCharge"        ,"Electron_tightCharge[fake_el]")
+              .Define("fakeel_mvaTTH"             ,"Electron_mvaTTH[fake_el]")
+              .Define("tight_el"                  ,"{0}".format(TIGHT_EL0))
+
               .Filter("Sum(fake_mu)+Sum(fake_el) >= 2 and Sum(fake_mu)+Sum(fake_el) <= 4","Between two and four tight leptons")
               .Filter("(Sum(fake_mu) > 0 and Max(fakemu_pt) > 25) or (Sum(fake_el) > 0 and Max(fakeel_pt) > 25)","At least one high pt lepton")
               .Define("MultiLepton_flavor", "Sum(fake_mu)+4*Sum(fake_el)-2")\
