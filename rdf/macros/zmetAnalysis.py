@@ -189,6 +189,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
+    elif(theCat == plotCategory("kPlotqqWW") or theCat == plotCategory("kPlotggWW") or
+         theCat == plotCategory("kPlotTop") or theCat == plotCategory("kPlotHiggs")):
+       theCat = plotCategory("kPlotEM")
+    elif(theCat == plotCategory("kPlotTVX")):
+       theCat = plotCategory("kPlotVVV")
 
     nCat, nHisto = plotCategory("kPlotCategories"), 200
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
@@ -277,9 +282,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
 
             dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
 
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("MET_pt >  60 && (MET_significance > 20||jetPtFrac<0.2)","MET_pt > X1")
+
             histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 50, 60, 260), "MET_pt","weight")
 
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("MET_pt > 100","MET_pt > 100")
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("MET_pt > 100 && (MET_significance > 20||jetPtFrac<0.2)","MET_pt > X2")
 
             histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
             histo[ltype+ 3][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 50,  60, 260), "ptll","weight")
@@ -309,9 +316,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
 
             dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("dphillgmet > 2.5","dphillgmet > 2.5")
 
+            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("MET_pt >  60 && (MET_significance > 20||jetPtgFrac<0.2)","MET_pt > X1")
+
             histo[ltype+69][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+69,x), "histo_{0}_{1}".format(ltype+69,x), 25, 60, 260), "MET_pt","weight")
 
-            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("MET_pt > 100","MET_pt > 100")
+            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("MET_pt > 100 && (MET_significance > 20||jetPtgFrac<0.2)","MET_pt > X2")
 
             histo[ltype+72][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+72,x), "histo_{0}_{1}".format(ltype+72,x), 20,0,400), "mtg","weight")
             histo[ltype+75][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+75,x), "histo_{0}_{1}".format(ltype+75,x), 10,-0.5, 9.5), "ngood_jets","weight")
