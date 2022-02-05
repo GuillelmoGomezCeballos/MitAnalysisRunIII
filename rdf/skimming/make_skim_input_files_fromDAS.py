@@ -8,7 +8,7 @@ def findDataset(name):
     cmd= DASclient%{'query':'file dataset=%s'%name}
     print(cmd)
     check_output(cmd,shell=True)
-    fileList=[ 'root://xrootd-cms.infn.it//'+x for x in check_output(cmd,shell=True).split() ]
+    fileList=[ 'root://xrootd-cms.infn.it//'+ str(x) for x in check_output(cmd,shell=True).decode('utf8').split() ]
 
     files_ROOT = ROOT.vector('string')()
     for f in fileList: files_ROOT.push_back(f)
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     inputCfg = "skim_input_samples_fromDAS.cfg"
     outputCfg = "skim_input_files_fromDAS.cfg"
     outputForCondorCfg = "skim_input_condor_jobs_fromDAS.cfg"
-    group = 10
+    group = 5
 
     valid = ["inputCfg=", "outputCfg=", "outputForCondorCfg=", "group=", 'help']
     usage  =  "Usage: ana.py --inputCfg=<{0}>\n".format(inputCfg)
