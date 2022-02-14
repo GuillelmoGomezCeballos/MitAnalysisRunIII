@@ -111,22 +111,22 @@ def selectionLL(df,year,PDType,isData):
               .Define("nTight","Sum(tight_mu)+Sum(tight_el)")
               .Filter("nFake == 4","Four fake leptons")
               .Filter("nTight == 4","Four tight leptons")
-              .Filter("Sum(fakemu_charge)+Sum(fakeel_charge) == 0", "0 net charge")
 
               .Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && ((Tau_idDeepTau2017v2p1VSe & 8) != 0) && ((Tau_idDeepTau2017v2p1VSjet & 16) != 0) && ((Tau_idDeepTau2017v2p1VSmu & 8) != 0)")
               .Filter("Sum(good_tau) == 0","No selected hadronic taus")
 
               .Define("FourLepton_flavor", "Sum(fake_mu)+4*Sum(fake_el)-4")
               .Define("m4l",   "compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 0)")
-              .Define("mllmin","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 1)")
-              .Define("mllZ1", "compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 2)")
-              .Define("mllZ2", "compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 3)")
-              .Filter("mllZ2 < 100","Found two Z boson candidates")
-              .Define("ptl1Z1","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 4)")
-              .Define("ptl2Z1","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 5)")
-              .Define("ptl1Z2","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 6)")
-              .Define("ptl2Z2","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 7)")
-              .Filter("ptl1Z1 > 25 or ptl1Z2 > 25","ptl > 25 for one of the leptons")
+              .Define("ptlmax","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 1)")
+              .Filter("ptlmax > 25","ptl > 25 for one of the leptons")
+              .Define("mllmin","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 2)")
+              .Define("mllZ1", "compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 3)")
+              .Define("mllZ2", "compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 4)")
+              .Define("ptl1Z1","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 5)")
+              .Define("ptl2Z1","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 6)")
+              .Define("ptl1Z2","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 7)")
+              .Define("ptl2Z2","compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 8)")
+              .Define("mllxy", "compute_4l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 9)")
 
               .Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
@@ -213,6 +213,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
                        )
 
     dfzzcat = []
+    dfzzxycat = []
     dfzzjjcat = []
     dfzzvbscat = []
     for x in range(nCat):
@@ -221,13 +222,19 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
                              .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
 
         histo[ 0][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),120,  0, 120), "mllmin","weight")
-        dfzzcat[x] = dfzzcat[x].Filter("mllmin > 4","mllmin cut")
+        dfzzcat[x] = dfzzcat[x].Filter("mllmin > 5","mllmin cut")
+
+        histo[21][x] = dfzzcat[x].Filter("mllZ1 > 1000").Histo1D(("histo_{0}_{1}".format(21,x), "histo_{0}_{1}".format(21,x),13,-0.5, 12.5), "FourLepton_flavor","weight")
+
+        dfzzcat[x] = dfzzcat[x].Filter("Sum(fakemu_charge)+Sum(fakeel_charge) == 0", "0 net charge")
 
         histo[ 1][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 1,x), "histo_{0}_{1}".format( 1,x),100,  0, 100), "mllZ1","weight")
-        dfzzcat[x] = dfzzcat[x].Filter("mllZ1 < 100","mllZ1 cut")
+        dfzzcat[x] = dfzzcat[x].Filter("mllZ1 < 1000","mllZ1 cut")
+
+        dfzzxycat.append(dfzzcat[x].Filter("mllxy > 0"))
 
         histo[ 2][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 2,x), "histo_{0}_{1}".format( 2,x),100,  0, 100), "mllZ2","weight")
-        dfzzcat[x] = dfzzcat[x].Filter("mllZ2 < 100","mllZ2 cut")
+        dfzzcat[x] = dfzzcat[x].Filter("mllZ2 < 1000","mllZ2 cut")
 
         histo[ 3][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 40, 10, 210), "ptl1Z1","weight")
         histo[ 4][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 20, 10, 110), "ptl2Z1","weight")
@@ -251,6 +258,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
         histo[18][x] = dfzzvbscat[x] .Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 14,2.5,9.5), "detajj","weight")
         histo[19][x] = dfzzvbscat[x] .Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 10,0,3.1416), "dphijj","weight")
         histo[20][x] = dfzzvbscat[x] .Histo1D(("histo_{0}_{1}".format(20,x), "histo_{0}_{1}".format(20,x), 10,0,1), "zepvv","weight")
+
+        histo[22][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(22,x), "histo_{0}_{1}".format(22,x),13,-0.5, 12.5), "FourLepton_flavor","weight")
+        histo[23][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(23,x), "histo_{0}_{1}".format(23,x),40, 5, 205), "mllxy","weight")
 
         histo[91][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x),13,-0.5, 12.5), "FourLepton_flavor","weightNoPURecoSF")
         histo[92][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x),13,-0.5, 12.5), "FourLepton_flavor","weightNoLepSF")

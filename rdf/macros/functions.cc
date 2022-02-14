@@ -702,20 +702,22 @@ float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      }
    }
 
-   float mllmin = 10000;
+   float mllmin = 10000; float ptmax = 0;
    PtEtaPhiMVector p4momTot = p4mom[0];
    for(unsigned int i=0; i<p4mom.size(); i++){
+     if(p4mom[i].Pt() > ptmax) ptmax = p4mom[i].Pt();
      if(i != 0) p4momTot = p4momTot + p4mom[i];
      for(unsigned int j=i+1; j<p4mom.size(); j++){
        if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
      }
    }
    
-   double mllZ1 = 10000; double mllZ2 = 10000;
+   float mllZ1 = 10000; float mllZ2 = 10000; float mllxy = 0;
    int tagZ1[2] = {-1, -1}; int tagZ2[2] = {-1, -1};
-   double theVar = 0;
+   float theVar = 0;
    if     (var == 0) theVar = p4momTot.M();
-   else if(var == 1) theVar = mllmin;
+   else if(var == 1) theVar = ptmax;
+   else if(var == 2) theVar = mllmin;
    else {
      for(int i=0; i<4; i++){
        for(int j=i+1; j<4; j++){  
@@ -739,13 +741,24 @@ float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      if(charge[tagZ2[0]] != charge[tagZ2[1]] && ltype[tagZ2[0]] == ltype[tagZ2[1]]){     
        mllZ2 = (p4mom[tagZ2[0]]+p4mom[tagZ2[1]]).M();
      }
+     else if(tagZ2[0] >= 0 && tagZ2[1] >= 0 && charge[tagZ2[0]] != charge[tagZ2[1]]){     
+       mllxy = (p4mom[tagZ2[0]]+p4mom[tagZ2[1]]).M();
+     }
+     else if(tagZ2[0] >= 0 && tagZ2[1] >= 0){     
+       mllxy = 0.0;
+       printf("same charge lepton candidates %d %d\n",tagZ2[0],tagZ2[1]);
+     }
+     else {     
+       printf("mllxy problem %d %d\n",tagZ2[0],tagZ2[1]);
+     }
      
-     if     (var == 2) theVar = fabs(mllZ1-91.1876);
-     else if(var == 3) theVar = fabs(mllZ2-91.1876);
-     else if(var == 4) theVar = p4mom[tagZ1[0]].Pt();
-     else if(var == 5) theVar = p4mom[tagZ1[1]].Pt();
-     else if(var == 6) theVar = p4mom[tagZ2[0]].Pt();
-     else if(var == 7) theVar = p4mom[tagZ2[1]].Pt();
+     if     (var == 3) theVar = fabs(mllZ1-91.1876);
+     else if(var == 4) theVar = fabs(mllZ2-91.1876);
+     else if(var == 5) theVar = p4mom[tagZ1[0]].Pt();
+     else if(var == 6) theVar = p4mom[tagZ1[1]].Pt();
+     else if(var == 7) theVar = p4mom[tagZ2[0]].Pt();
+     else if(var == 8) theVar = p4mom[tagZ2[1]].Pt();
+     else if(var == 9) theVar = mllxy;
    }
    return theVar;
 }
