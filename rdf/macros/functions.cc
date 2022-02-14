@@ -371,6 +371,8 @@ float compute_met_lepton_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   else if(var == 3) theVar = deltaPhi(p4llgmom.Phi(),p4jetmom.Phi());
   else if(var == 4) theVar = sqrt(2*ph_pt[0]*met_pt*(1-cos(deltaPhi(ph_phi[0],met_phi))));
   else if(var == 5) theVar = HT[1]/(HT[0]+HT[1]);
+  else if(var == 6) theVar = ph_pt[0];
+  else if(var == 7) theVar = p4llgmom.M();
   return theVar;
 }
 
@@ -637,7 +639,7 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
        if(i != tagZ[0] && i != tagZ[1]) tagW = i;
      }
      
-     if     (var == 2) theVar = fabs(mllZ-91.1876);
+     if     (var == 2) theVar = mllZ;
      else if(var == 3) theVar = p4mom[tagZ[0]].Pt();
      else if(var == 4) theVar = p4mom[tagZ[1]].Pt();
      else if(var == 5) theVar = p4mom[tagW].Pt();

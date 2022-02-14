@@ -118,18 +118,19 @@ def selectionLL(df,year,PDType,isData):
               .Define("TriLepton_flavor", "Sum(fake_mu)+3*Sum(fake_el)-3")
               .Define("m3l",   "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 0)")
               .Define("mllmin","compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 1)")
-              .Define("mllZ",  "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 2)")
+              .Define("mll",   "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 2)")
               .Define("ptl1Z", "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 3)")
-              .Filter("ptl1Z > 25","Found a Z boson candidate with ptl1Z > 25")
               .Define("ptl2Z", "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 4)")
               .Define("ptlW",  "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 5)")
               .Define("mtW",   "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 6)")
+              .Filter("ptl1Z > 25","ptl1Z > 25")
+              .Define("mllZ",  "abs(mll-91.1876)")
 
               .Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
-              .Define("goodloose_jet", "abs(Jet_eta) < 4.7 && Jet_pt > 20 && jet_mask1 && jet_mask2")
-              .Define("good_jet"     , "abs(Jet_eta) < 4.7 && Jet_pt > 30 && jet_mask1 && jet_mask2")
-              .Define("goodvbs_jet"  , "abs(Jet_eta) < 4.7 && Jet_pt > 50 && jet_mask1 && jet_mask2")
+              .Define("goodloose_jet", "abs(Jet_eta) < 5.0 && Jet_pt > 20 && jet_mask1 && jet_mask2")
+              .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_mask1 && jet_mask2 && Jet_puId > 0 && Jet_puId > 0")
+              .Define("goodvbs_jet"  , "abs(Jet_eta) < 5.0 && Jet_pt > 50 && jet_mask1 && jet_mask2 && Jet_puId > 0 && Jet_puId > 0")
               .Define("ngood_jets", "Sum(good_jet)")
               .Define("ngoodvbs_jets", "Sum(goodvbs_jet)")
               .Define("goodvbsjet_pt",    "Jet_pt[goodvbs_jet]")
@@ -216,11 +217,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
     dfwzbjjcat = []
     dfwzvbscat = []
     dfwzbvbscat = []
+    dfzgcat = []
     for x in range(nCat):
         dfwzcat.append(dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                              .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
                              .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                              )
+
+        dfzgcat.append(dfwzcat[x].Filter("mll > 10 && mll < 110 && ptl2Z > 20 && ptlW > 20"))
 
         histo[ 0][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),120,  0, 120), "mllmin","weight")
         dfwzcat[x] = dfwzcat[x].Filter("mllmin > 1","mllmin cut")
@@ -277,6 +281,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
         histo[34][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(34,x), "histo_{0}_{1}".format(34,x), 10,0,3.1416), "dphijj","weight")
         histo[35][x] = dfwzvbscat[x] .Histo1D(("histo_{0}_{1}".format(35,x), "histo_{0}_{1}".format(35,x), 10,0,1), "zepvv","weight")
         histo[36][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(36,x), "histo_{0}_{1}".format(36,x), 10,0,1), "zepvv","weight")
+
+        histo[37][x] = dfzgcat[x].Histo1D(("histo_{0}_{1}".format(37,x), "histo_{0}_{1}".format(37,x), 40, 10, 210), "m3l","weight")
+        dfzgcat[x] = dfzgcat[x].Filter("abs(m3l-91.1876)<15")
+        histo[38][x] = dfzgcat[x].Histo1D(("histo_{0}_{1}".format(38,x), "histo_{0}_{1}".format(38,x), 7,-0.5, 6.5), "TriLepton_flavor","weight")
+        histo[39][x] = dfzgcat[x].Filter("TriLepton_flavor==2||TriLepton_flavor==6").Histo1D(("histo_{0}_{1}".format(39,x), "histo_{0}_{1}".format(39,x),20, 20, 120), "ptlW","weight")
+        histo[40][x] = dfzgcat[x].Filter("TriLepton_flavor==0||TriLepton_flavor==4").Histo1D(("histo_{0}_{1}".format(40,x), "histo_{0}_{1}".format(40,x),20, 20, 120), "ptlW","weight")
 
         histo[91][x] = dfwzcat[x] .Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 7,-0.5, 6.5), "TriLepton_flavor","weightNoPURecoSF")
         histo[92][x] = dfwzcat[x] .Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x), 7,-0.5, 6.5), "TriLepton_flavor","weightNoLepSF")

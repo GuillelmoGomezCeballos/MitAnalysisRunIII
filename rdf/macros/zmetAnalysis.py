@@ -139,12 +139,12 @@ def selectionLL(df,year,PDType,isData):
               .Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
 
-              .Define("goodloose_jet", "abs(Jet_eta) < 4.7 && Jet_pt > 20 && jet_mask1 && jet_mask2")
+              .Define("goodloose_jet", "abs(Jet_eta) < 5.0 && Jet_pt > 20 && jet_mask1 && jet_mask2")
               .Define("goodloosejet_btagDeepB",     "Jet_btagDeepB[goodloose_jet]")
               .Define("goodloose_bjet", "goodloosejet_btagDeepB > 0.7100")
               .Define("nbtagloosejet",  "Sum(goodloose_bjet)")
 
-              .Define("good_jet"     , "abs(Jet_eta) < 4.7 && Jet_pt > 30 && jet_mask1 && jet_mask2")
+              .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_mask1 && jet_mask2 && Jet_puId > 0 && Jet_puId > 0")
               .Define("ngood_jets", "Sum(good_jet)")
               .Define("goodjet_pt",    "Jet_pt[good_jet]")
               .Define("goodjet_eta",   "Jet_eta[good_jet]")
@@ -191,9 +191,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
     if(theCat > 100): theCat = plotCategory("kPlotData")
     elif(theCat == plotCategory("kPlotqqWW") or theCat == plotCategory("kPlotggWW") or
          theCat == plotCategory("kPlotTop") or theCat == plotCategory("kPlotHiggs")):
-       theCat = plotCategory("kPlotEM")
+        theCat = plotCategory("kPlotEM")
     elif(theCat == plotCategory("kPlotTVX")):
-       theCat = plotCategory("kPlotVVV")
+        theCat = plotCategory("kPlotVVV")
 
     nCat, nHisto = plotCategory("kPlotCategories"), 200
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
