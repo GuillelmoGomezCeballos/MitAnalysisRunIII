@@ -17,6 +17,8 @@
 #include "Math/GenVector/LorentzVector.h"
 #include "Math/GenVector/PtEtaPhiM4D.h"
 
+#include "mysf.h"
+
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -64,11 +66,15 @@ TH2D histoTriggerSFEtaPt_3_0;
 TH2D histoTriggerSFEtaPt_3_1;
 TH2D histoTriggerSFEtaPt_3_2;
 TH2D histoTriggerSFEtaPt_3_3;
+TH2D histoBTVEffEtaPtLF;
+TH2D histoBTVEffEtaPtCJ;
+TH2D histoBTVEffEtaPtBJ;
 TH2F histoElRecoSF;
 TH2F histoElSelSF;
 TH2F histoMuIDSF;
 TH2F histoMuISOSF;
 TH1D puWeights;
+auto corrSFs = MyCorrections(2018);
 
 void initHisto2F(TH2F h, int nsel){
   if     (nsel == 0) histoElRecoSF = h;
@@ -98,6 +104,9 @@ void initHisto2D(TH2D h, int nsel){
   else if(nsel == 17) histoTriggerSFEtaPt_3_1 = h;
   else if(nsel == 18) histoTriggerSFEtaPt_3_2 = h;
   else if(nsel == 19) histoTriggerSFEtaPt_3_3 = h;
+  else if(nsel == 20) histoBTVEffEtaPtLF = h;
+  else if(nsel == 21) histoBTVEffEtaPtCJ = h;
+  else if(nsel == 22) histoBTVEffEtaPtBJ = h;
 }
 
 void initHisto1D(TH1D h, int nsel){
@@ -121,6 +130,69 @@ float getValFromTH2(const TH2& h, const float& x, const float& y, const float& s
     return h.GetBinContent(xbin, ybin) + sumError * h.GetBinError(xbin, ybin);
   else
     return h.GetBinContent(xbin, ybin);
+}
+
+void initJSONSFs(int year){
+  corrSFs = MyCorrections(year);
+}
+
+// BTag SFs
+float compute_JSONS_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet_flavor, unsigned int sel)
+{
+  //printf("btagsf: %lu %lu %lu %lu %d\n",jet_pt.size(),jet_eta.size(),jet_btag.size(),jet_flavor.size(),sel);
+  double sfTot[2] = {1.0, 1.0};
+  char *valType = (char*)"T"; double bcut = 0.711;
+  if     (sel == 0) {valType = (char*)"T"; bcut = 0.7100;}
+  else if(sel == 1) {valType = (char*)"M"; bcut = 0.2783;}
+  else if(sel == 2) {valType = (char*)"L"; bcut = 0.0490;}
+  for(unsigned int i=0;i<jet_pt.size();i++) {
+    if(jet_flavor[i] != 0 && jet_flavor[i] != 4 && jet_flavor[i] != 5) continue;
+    if(jet_pt[i] <= 20 || fabs(jet_eta[i]) >= 2.5) continue;
+    double sf = corrSFs.eval_btvSF((char*)"central",valType,abs(jet_eta[i]),min(jet_pt[i],999.999f),jet_flavor[i]);
+    double eff = 1;
+    if     (jet_flavor[i] == 0) {const TH2D& hcorr0 = histoBTVEffEtaPtLF; eff = getValFromTH2(hcorr0, fabs(jet_eta[i]),min(jet_pt[i],999.999f));}
+    else if(jet_flavor[i] == 4) {const TH2D& hcorr1 = histoBTVEffEtaPtCJ; eff = getValFromTH2(hcorr1, fabs(jet_eta[i]),min(jet_pt[i],999.999f));}
+    else if(jet_flavor[i] == 5) {const TH2D& hcorr2 = histoBTVEffEtaPtBJ; eff = getValFromTH2(hcorr2, fabs(jet_eta[i]),min(jet_pt[i],999.999f));}
+    if(jet_btag[i] > bcut) {
+      sfTot[0] *= sf * eff; sfTot[1] *= eff;
+    }
+    else {
+      sfTot[0] *= (1.0 - sf * eff); sfTot[1] *= (1.0 - eff);
+    }
+    //printf("btagsf(%d) %.3f %.3f %d %d %.3f %.3f %.3f %.3f\n",i,jet_pt[i],jet_eta[i],jet_flavor[i],jet_btag[i] > bcut,sfTot[0],sfTot[1],sf,eff);
+  }
+  
+  if(sfTot[1] > 0) return sfTot[0]/sfTot[1];
+  return 1.0;
+}
+
+
+float compute_JSON_SFs(const Vec_f& mu_pt, const Vec_f& mu_eta,
+                       const Vec_f& el_pt, const Vec_f& el_eta){
+
+  //printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
+  double sfTot = 1.0;
+
+  char *year = (char*)"2018_UL";
+  char *valType = (char*)"sf";
+  char *workingPoint = (char*)"Medium";
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+    double sf = corrSFs.eval_muonIDSF (year,valType,workingPoint,mu_eta[i],max(mu_pt[i],15.0f))*
+    		corrSFs.eval_muonISOSF(year,valType,workingPoint,mu_eta[i],max(mu_pt[i],15.0f));
+    sfTot = sfTot*sf;
+    //printf("lepmu(%d) %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sfTot);
+  }
+
+  year = (char*)"2018";
+  valType = (char*)"sf";
+  workingPoint = (char*)"Medium";
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    double sf = corrSFs.eval_electronSF(year,valType,workingPoint,el_eta[i],el_pt[i]);
+    sfTot = sfTot*sf;
+    //printf("lepel(%d) %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sfTot);
+  }
+      
+  return sfTot;
 }
 
 float compute_test(const Vec_f& mu_pt, const Vec_f& mu_eta, TH2D histo_mu){
@@ -508,11 +580,11 @@ float compute_lmet_var(const Vec_f& mu_pt, const Vec_f& mu_phi,
    }
 
    double theVar = 0;
-   if     (var == 0) theVar = std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi)));
+   if     (var == 0) theVar = std::sqrt(2*ptl*met_pt*(1-std::cos(deltaPhi(phil,met_phi))));
    else if(var == 1) theVar = deltaPhi(phil,met_phi);
-   else if(var == 2) theVar = std::sqrt(2*30.0*met_pt*(1-std::cos(phil-met_phi)));
-   else if(var == 3) theVar = std::max(std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi))),met_pt);
-   else if(var == 4) theVar = std::min(std::sqrt(2*ptl*met_pt*(1-std::cos(phil-met_phi))),met_pt);
+   else if(var == 2) theVar = std::sqrt(2*30.0*met_pt*(1-std::cos(deltaPhi(phil,met_phi))));
+   else if(var == 3) theVar = std::max(std::sqrt(2*ptl*met_pt*(1-std::cos(deltaPhi(phil,met_phi)))),met_pt);
+   else if(var == 4) theVar = std::min(std::sqrt(2*ptl*met_pt*(1-std::cos(deltaPhi(phil,met_phi)))),met_pt);
 
    theVar = std::min(theVar, 199.999);
    
@@ -608,20 +680,28 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      }
    }
 
-   float mllmin = 10000;
+   float mllmin = 10000; float drllmin = 10000;
    PtEtaPhiMVector p4momTot = p4mom[0];
    for(unsigned int i=0; i<p4mom.size(); i++){
      if(i != 0) p4momTot = p4momTot + p4mom[i];
      for(unsigned int j=i+1; j<p4mom.size(); j++){
+       if(charge[i] == charge[j]) continue;
        if((p4mom[i]+p4mom[j]).M() < mllmin) mllmin = (p4mom[i]+p4mom[j]).M();
+       if(deltaR(p4mom[i].Eta(),p4mom[i].Phi(),p4mom[j].Eta(),p4mom[j].Phi()) < drllmin){
+         drllmin = deltaR(p4mom[i].Eta(), p4mom[i].Phi(), p4mom[j].Eta(), p4mom[j].Phi());
+       }
      }
    }
-   
+
    double mllZ = 10000;
    int tagZ[2] = {-1, -1}; int tagW = -1;
    double theVar = 0;
    if     (var == 0) theVar = p4momTot.M();
    else if(var == 1) theVar = mllmin;
+   else if(var == 2) theVar = drllmin;
+   else if(var == 3) theVar = p4mom[0].Pt();
+   else if(var == 4) theVar = p4mom[1].Pt();
+   else if(var == 5) theVar = p4mom[2].Pt();
    else {
      for(int i=0; i<3; i++){
        for(int j=i+1; j<3; j++){  
@@ -639,11 +719,11 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
        if(i != tagZ[0] && i != tagZ[1]) tagW = i;
      }
      
-     if     (var == 2) theVar = mllZ;
-     else if(var == 3) theVar = p4mom[tagZ[0]].Pt();
-     else if(var == 4) theVar = p4mom[tagZ[1]].Pt();
-     else if(var == 5) theVar = p4mom[tagW].Pt();
-     else if(var == 6) theVar = std::sqrt(2*p4mom[tagW].Pt()*met_pt*(1-std::cos(p4mom[tagW].Phi()-met_phi)));
+     if     (var ==  6) theVar = mllZ;
+     else if(var ==  7) theVar = p4mom[tagZ[0]].Pt();
+     else if(var ==  8) theVar = p4mom[tagZ[1]].Pt();
+     else if(var ==  9) theVar = p4mom[tagW].Pt();
+     else if(var == 10) theVar = std::sqrt(2*p4mom[tagW].Pt()*met_pt*(1-std::cos(deltaPhi(p4mom[tagW].Phi(),met_phi))));
    }
    return theVar;
 }
@@ -712,7 +792,7 @@ float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      }
    }
    
-   float mllZ1 = 10000; float mllZ2 = 10000; float mllxy = 0;
+   float mllZ1 = 100000; float mllZ2 = 100000; float mllxy = 0;
    int tagZ1[2] = {-1, -1}; int tagZ2[2] = {-1, -1};
    float theVar = 0;
    if     (var == 0) theVar = p4momTot.M();
@@ -746,19 +826,22 @@ float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      }
      else if(tagZ2[0] >= 0 && tagZ2[1] >= 0){     
        mllxy = 0.0;
-       printf("same charge lepton candidates %d %d\n",tagZ2[0],tagZ2[1]);
+       printf("mllxy same-sign leptons %d %d\n",tagZ2[0],tagZ2[1]);
      }
      else {     
        printf("mllxy problem %d %d\n",tagZ2[0],tagZ2[1]);
      }
      
-     if     (var == 3) theVar = fabs(mllZ1-91.1876);
-     else if(var == 4) theVar = fabs(mllZ2-91.1876);
-     else if(var == 5) theVar = p4mom[tagZ1[0]].Pt();
-     else if(var == 6) theVar = p4mom[tagZ1[1]].Pt();
-     else if(var == 7) theVar = p4mom[tagZ2[0]].Pt();
-     else if(var == 8) theVar = p4mom[tagZ2[1]].Pt();
-     else if(var == 9) theVar = mllxy;
+     if     (var ==  3) theVar = fabs(mllZ1-91.1876);
+     else if(var ==  4) theVar = fabs(mllZ2-91.1876);
+     else if(var ==  5) theVar = p4mom[tagZ1[0]].Pt();
+     else if(var ==  6) theVar = p4mom[tagZ1[1]].Pt();
+     else if(var ==  7) theVar = p4mom[tagZ2[0]].Pt();
+     else if(var ==  8) theVar = p4mom[tagZ2[1]].Pt();
+     else if(var ==  9) theVar = mllxy;
+     else if(var == 10) theVar = (p4mom[tagZ1[0]]+p4mom[tagZ1[1]]).Pt();
+     else if(var == 11) theVar = (p4mom[tagZ2[0]]+p4mom[tagZ2[1]]).Pt();
+     else if(var == 12) theVar = std::sqrt(2*(p4mom[tagZ2[0]]+p4mom[tagZ2[1]]).Pt()*met_pt*(1-std::cos(deltaPhi((p4mom[tagZ2[0]]+p4mom[tagZ2[1]]).Phi(),met_phi))));
    }
    return theVar;
 }

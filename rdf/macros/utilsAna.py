@@ -3,6 +3,10 @@ import os, json
 from subprocess import call,check_output
 from XRootD import client
 #from correctionlib import _core
+import correctionlib
+correctionlib.register_pyroot_binding()
+#ROOT.gInterpreter.Declare('#include "mysf.h"')
+#ROOT.gInterpreter.Load("mysf.so")
 
 lumi = [36.1, 41.5, 60.0]
 
@@ -330,6 +334,15 @@ def SwitchSample(argument, skimType):
         67: (dirT2+"/DYJetsToLL_Pt-250To400_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",1.5*4.348*1000,plotCategory("kPlotDY")),
         68: (dirT2+"/DYJetsToLL_Pt-400To650_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",1.5*0.6236*1000,plotCategory("kPlotDY")),
         69: (dirT2+"/DYJetsToLL_Pt-650ToInf_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",1.5*0.04511*1000,plotCategory("kPlotDY")),
+
+        70: (dirT2+"/TTHH_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.0007408*1000,plotCategory("kPlotTVX")),
+        71: (dirT2+"/TTTT_TuneCP5_13TeV-amcatnlo-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.0120000*1000,plotCategory("kPlotTVX")),
+        72: (dirT2+"/TTWW_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.0078820*1000,plotCategory("kPlotTVX")),
+        73: (dirT2+"/TTZZ_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.0015720*1000,plotCategory("kPlotTVX")),
+        74: (dirT2+"/TTTW_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.0007330*1000,plotCategory("kPlotTVX")),
+        75: (dirT2+"/TTWH_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.0013590*1000,plotCategory("kPlotTVX")),
+        76: (dirT2+"/TTWZ_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.0029740*1000,plotCategory("kPlotTVX")),
+        77: (dirT2+"/TTZH_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.0012530*1000,plotCategory("kPlotTVX")),
 
         99:(dirLocal+"/ZLLphigamma_pythia8_genFix",0.10*1000,plotCategory("kPlotBSM"))
 

@@ -2,8 +2,8 @@
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 export SCRAM_ARCH=slc7_amd64_gcc900
-scramv1 project CMSSW CMSSW_11_2_0 # cmsrel is an alias not on the workers
-cd CMSSW_11_2_0/src/
+scramv1 project CMSSW CMSSW_12_2_0 # cmsrel is an alias not on the workers
+cd CMSSW_12_2_0/src/
 eval `scramv1 runtime -sh` # cmsenv is an alias not on the workers
 cd ../..
 
@@ -13,10 +13,18 @@ echo "hostname"
 hostname
 whoami
 
+if [ ! -d "jsonpog/POG" ]; then
+  mkdir -p jsonpog/POG/$2;
+  mv btagging.json jsonpog/POG/$2/btagging.json;
+  mv electron.json jsonpog/POG/$2/electron.json;
+  mv muon_Z.json   jsonpog/POG/$2/muon_Z.json;
+  mv photon.json   jsonpog/POG/$2/photon.json;
+fi
+
 ls -l
 echo $PWD
 
-python wzAnalysis.py --process=$1 --year=$2 --whichJob=$3
+python3 wzAnalysis.py --process=$1 --year=$2 --whichJob=$3
 status=$?
 
 rm -f functions_cc* *.pyc

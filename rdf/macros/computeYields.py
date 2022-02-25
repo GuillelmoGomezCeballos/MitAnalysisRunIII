@@ -44,6 +44,8 @@ if __name__ == "__main__":
     elif('WZ' in path):
         histo.append(11)
         signalDict.append(plotCategory("kPlotWZ"))
+        histo.append(12)
+        signalDict.append(plotCategory("kPlotWZ"))
     elif('ZMET' in path):
         histo.append(24)
         signalDict.append(plotCategory("kPlotZZ"))
