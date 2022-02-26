@@ -12,7 +12,7 @@ class MyCorrections {
     double eval_electronSF(char *year, char *valType, char *workingPoint, double eta, double pt);
     double eval_photonSF  (char *year, char *valType, char *workingPoint, double eta, double pt);
     double eval_btvSF     (            char *valType, char *workingPoint, double eta, double pt, int flavor);
-
+    double eval_puJetIDSF (            char *valType, char *workingPoint, double eta, double pt);
   private:
     correction::Correction::Ref muonIDSF_;
     correction::Correction::Ref muonISOSF_;
@@ -20,4 +20,5 @@ class MyCorrections {
     correction::Correction::Ref photonSF_;
     correction::Correction::Ref btvHFSF_;
     correction::Correction::Ref btvLFSF_;
+    correction::Correction::Ref puJetIDSF_;
 };

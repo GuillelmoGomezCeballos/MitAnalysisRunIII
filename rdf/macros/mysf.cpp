@@ -30,6 +30,13 @@ MyCorrections::MyCorrections(int year) {
   auto csetBTV = correction::CorrectionSet::from_file(fileNameBTV);
   btvHFSF_ = csetBTV->at("deepJet_comb");
   btvLFSF_ = csetBTV->at("deepJet_incl");
+
+  char* fileNamePUJetID = (char*)"";
+  if(year == 2018){
+    fileNamePUJetID = (char*)"jsonpog/POG/2018/jmar.json";
+  }
+  auto csetPUJetID = correction::CorrectionSet::from_file(fileNamePUJetID);
+  puJetIDSF_ = csetPUJetID->at("PUJetID_eff");
 }
 
 double MyCorrections::eval_muonIDSF(char *year, char *valType, char *workingPoint, double eta, double pt) {
@@ -55,4 +62,8 @@ double MyCorrections::eval_btvSF(char *valType, char *workingPoint, double eta, 
     return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
   else
     return btvLFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
+};
+
+double MyCorrections::eval_puJetIDSF(char *valType, char *workingPoint, double eta, double pt) {
+  return puJetIDSF_->evaluate({eta, pt, valType, workingPoint});
 };

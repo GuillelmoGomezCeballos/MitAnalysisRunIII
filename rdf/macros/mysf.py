@@ -10,3 +10,4 @@ ROOT.gInterpreter.ProcessLine('corr.eval_muonIDSF((char*)"2018_UL",(char*)"sf",(
 ROOT.gInterpreter.ProcessLine('corr.eval_btvSF((char*)"central",(char*)"T",1.1,35.0,4)')
 ROOT.gInterpreter.ProcessLine('corr.eval_btvSF((char*)"central",(char*)"T",1.1,35.0,5)')
 ROOT.gInterpreter.ProcessLine('corr.eval_btvSF((char*)"central",(char*)"T",1.1,35.0,0)')
+ROOT.gInterpreter.ProcessLine('corr.eval_puJetIDSF((char*)"nom",(char*)"L",4.7,20.0)')

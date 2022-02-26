@@ -148,7 +148,7 @@ def selectionLL(df,year,PDType,isData):
 
               .Define("jet_mask1", "cleaningMask(Muon_jetIdx[good_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[good_el],nJet)")
-              .Define("good_jet", "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_mask1 && jet_mask2 && Jet_puId > 0 && Jet_puId > 0")
+              .Define("good_jet", "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_mask1 && jet_mask2 && Jet_jetId > 0 && Jet_puId > 0")
               .Define("ngood_jets", "Sum(good_jet)")
               .Define("goodjet_pt",    "Jet_pt[good_jet]")
               .Define("goodjet_eta",   "Jet_eta[good_jet]")

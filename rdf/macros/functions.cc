@@ -136,6 +136,33 @@ void initJSONSFs(int year){
   corrSFs = MyCorrections(year);
 }
 
+Vec_f compute_JES(Vec_f jet_pt, Vec_f jet_eta) {
+
+  Vec_f jet_pt_new(jet_pt.size(), 0);
+  for(unsigned int i=0;i<jet_pt.size();i++) {
+    jet_pt_new[i] = jet_pt[i]*0.03;
+  }
+  return jet_pt_new;
+}
+
+// PUJetID SFs
+float compute_JSONS_PUJetID_SF(Vec_f jet_pt, Vec_f jet_eta, unsigned int sel)
+{
+  //printf("pujetidsf: %lu %lu %d\n",jet_pt.size(),jet_eta.size(),sel);
+  double sfTot = 1.0;
+  char *valType = (char*)"T"; double bcut = 0.711;
+  if     (sel == 0) {valType = (char*)"T";}
+  else if(sel == 1) {valType = (char*)"M";}
+  else if(sel == 2) {valType = (char*)"L";}
+  for(unsigned int i=0;i<jet_pt.size();i++) {
+    if(jet_pt[i] <= 30 || fabs(jet_eta[i]) >= 5.0) continue;
+    double sf = corrSFs.eval_puJetIDSF((char*)"nom",valType,jet_eta[i],min(jet_pt[i],999.999f));
+    sfTot *= sf;
+    //printf("pujetidsf(%d) %.3f %.3f %.3f %.3f\n",i,jet_pt[i],jet_eta[i],sfTot,sf);
+  }
+  return sfTot;
+}
+
 // BTag SFs
 float compute_JSONS_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet_flavor, unsigned int sel)
 {

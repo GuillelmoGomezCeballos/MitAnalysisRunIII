@@ -15,10 +15,11 @@ whoami
 
 if [ ! -d "jsonpog/POG" ]; then
   mkdir -p jsonpog/POG/$2;
-  mv btagging.json jsonpog/POG/$2/btagging.json;
-  mv electron.json jsonpog/POG/$2/electron.json;
-  mv muon_Z.json   jsonpog/POG/$2/muon_Z.json;
-  mv photon.json   jsonpog/POG/$2/photon.json;
+  mv btagging.json jsonpog/POG/$2/;
+  mv electron.json jsonpog/POG/$2/;
+  mv muon_Z.json   jsonpog/POG/$2/;
+  mv photon.json   jsonpog/POG/$2/;
+  mv jmar.json     jsonpog/POG/$2/;
 fi
 
 ls -l

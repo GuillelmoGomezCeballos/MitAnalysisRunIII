@@ -146,7 +146,7 @@ def selectionLL(df,year,PDType,isData):
               .Define("goodloose_bjet", "goodloosejet_btagDeepB > 0.7100")
               .Define("nbtagloosejet", "Sum(goodloose_bjet)")
  
-              .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_mask1 && jet_mask2 && Jet_puId > 0 && Jet_puId > 0")
+              .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_mask1 && jet_mask2 && Jet_jetId > 0 && Jet_puId > 0")
               .Define("ngood_jets", "Sum(good_jet)")
               .Define("goodjet_pt",    "Jet_pt[good_jet]")
               .Define("goodjet_eta",   "Jet_eta[good_jet]")
