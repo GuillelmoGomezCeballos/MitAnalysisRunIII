@@ -135,8 +135,8 @@ def selectionLL(df,year,PDType,isData):
               .Define("goodloose_jet", "abs(Jet_eta) < 2.5 && Jet_pt > 20 && jet_mask1 && jet_mask2")
               .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_mask1 && jet_mask2 && Jet_jetId > 0 && Jet_puId > 0")
               .Define("goodvbs_jet"  , "abs(Jet_eta) < 5.0 && Jet_pt > 50 && jet_mask1 && jet_mask2 && Jet_jetId > 0 && Jet_puId > 0")
-              .Define("ngood_jets", "Sum(good_jet)")
-              .Define("ngoodvbs_jets", "Sum(goodvbs_jet)")
+              .Define("ngood_jets", "Sum(good_jet)*1.0f")
+              .Define("ngoodvbs_jets", "Sum(goodvbs_jet)*1.0f")
               .Define("goodvbsjet_pt",    "Jet_pt[goodvbs_jet]")
               .Define("goodvbsjet_eta",   "Jet_eta[goodvbs_jet]")
               .Define("goodvbsjet_phi",   "Jet_phi[goodvbs_jet]")
@@ -145,7 +145,14 @@ def selectionLL(df,year,PDType,isData):
               .Define("ptjj",   "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 1)")
               .Define("detajj", "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 2)")
               .Define("dphijj", "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 3)")
-              .Define("zepvv", "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, 0)")
+              .Define("ptj1",   "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 4)")
+              .Define("ptj2",   "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 5)")
+              .Define("etaj1",  "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 6)")
+              .Define("etaj2",  "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 7)")
+              .Define("zepvv",  "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 0)")
+              .Define("zepmax", "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 1)")
+              .Define("sumHT",  "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 2)")
+              .Define("ptvv",   "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 3)")
               .Define("goodloosejet_pt", "Jet_pt[goodloose_jet]")
               .Define("goodloosejet_eta", "abs(Jet_eta[goodloose_jet])")
               .Define("goodloosejet_btagDeepB", "Jet_btagDeepB[goodloose_jet]")
@@ -198,6 +205,15 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
 
     ROOT.initJSONSFs(2018)
 
+    ROOT.gInterpreter.ProcessLine('''
+    TMVA::Experimental::RReader model("weights_mva/bdt_BDTG_vbfinc_v0.weights.xml");
+    computeModel = TMVA::Experimental::Compute<13, float>(model);
+    ''')
+
+    variables = ROOT.model.GetVariableNames()
+    print(variables)
+
+
     dftag = selectionLL(df,year,PDType,isData)
     dftag = dftag.Define("weightFake","compute_fakeRate(isData,fakemu_pt,fakemu_eta,tight_mu,fakeel_pt,fakeel_eta,tight_el)")
 
@@ -245,14 +261,16 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
                        .Define("weightNoBTVSF"    ,"weightFake*weightPURecoSF*weightLepSF*weightTriggerSF*weightMC")
                        )
 
+    dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
+                    .Define("theCat","compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
+		    .Define("bdt_vbfinc", ROOT.computeModel, ROOT.model.GetVariableNames())
+                    )
     dfwwcat = []
     dfwwbcat = []
     dfwwvbscat = []
     dfwwbvbscat = []
     for x in range(nCat):
-        dfwwcat.append(dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
-                             .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
-                             .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
+        dfwwcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
 
         histo[ 0][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),40, 20, 220), "mll","weight")
         dfwwcat[x] = dfwwcat[x].Filter("DiLepton_flavor != 2 || abs(mll-91.1876) > 15","Z veto")
@@ -298,6 +316,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
         histo[29][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x), 10,0,3.1416), "dphijj","weight")
         histo[30][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x), 10,0,1), "zepvv","weight")
         histo[31][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x), 10,0,1), "zepvv","weight")
+        histo[32][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(32,x), "histo_{0}_{1}".format(32,x), 40,-1,1), "bdt_vbfinc","weight")
+        histo[33][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(33,x), "histo_{0}_{1}".format(33,x), 40,-1,1), "bdt_vbfinc","weight")
 
         histo[92][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x), 4,-0.5, 3.5), "ltype","weightNoPURecoSF")
         histo[93][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(93,x), "histo_{0}_{1}".format(93,x), 4,-0.5, 3.5), "ltype","weightNoLepSF")

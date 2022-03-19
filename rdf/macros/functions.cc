@@ -520,25 +520,10 @@ float compute_met_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
 float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
                              const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
                              const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
-		             unsigned int var)
+		             const float met_pt, const float met_phi, unsigned int var)
 {
   if(mu_pt.size() + el_pt.size() == 0) return -1;
   if(pt.size() < 2) return -1;
-
-  vector<PtEtaPhiMVector> p4mom;
-
-  for(unsigned int i=0;i<mu_pt.size();i++) {
-    p4mom.push_back(PtEtaPhiMVector(mu_pt[i],mu_eta[i],mu_phi[i],mu_mass[i]));   
-  }
-
-  for(unsigned int i=0;i<el_pt.size();i++) {
-    p4mom.push_back(PtEtaPhiMVector(el_pt[i],el_eta[i],el_phi[i],el_mass[i]));   
-  }
-
-  PtEtaPhiMVector p4momTot = p4mom[0];
-  for(unsigned int i=0; i<p4mom.size(); i++){
-    if(i != 0) p4momTot = p4momTot + p4mom[i];
-  }
 
   PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
   PtEtaPhiMVector p2(pt[1], eta[1], phi[1], mass[1]);
@@ -554,9 +539,36 @@ float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   }
 
   float deltaEtaJJ = fabs(p1.Eta()-p2.Eta());
+  float maxZ = 0.0;
+  float sumHT = p1.Pt() + p2.Pt() + met_pt;
+
+  vector<PtEtaPhiMVector> p4mom;
+
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+    p4mom.push_back(PtEtaPhiMVector(mu_pt[i],mu_eta[i],mu_phi[i],mu_mass[i]));
+    if(fabs(mu_eta[i]-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ > maxZ) maxZ = fabs(mu_eta[i]-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
+    sumHT += mu_pt[i];
+  }
+
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    p4mom.push_back(PtEtaPhiMVector(el_pt[i],el_eta[i],el_phi[i],el_mass[i]));   
+    if(fabs(el_eta[i]-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ > maxZ) maxZ = fabs(el_eta[i]-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
+    sumHT += el_pt[i];
+  }
+
+  PtEtaPhiMVector p4momTot = p4mom[0];
+  for(unsigned int i=0; i<p4mom.size(); i++){
+    if(i != 0) p4momTot = p4momTot + p4mom[i];
+  }
 
   double theVar = 0;
-  if(var == 0) theVar = fabs(p4momTot.Eta()-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
+  if     (var == 0) theVar = fabs(p4momTot.Eta()-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
+  else if(var == 1) theVar = maxZ;
+  else if(var == 2) theVar = sumHT;
+  else if(var == 3) {
+    p4momTot = p4momTot + PtEtaPhiMVector(met_pt,0,met_phi,0);
+    theVar = p4momTot.Pt();
+  }
   return theVar;
 }
 

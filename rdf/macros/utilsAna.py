@@ -281,7 +281,7 @@ def SwitchSample(argument, skimType):
 
         17: (dirT2+"/WZTo3LNu_mllmin4p0_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",4.658*1.109*1000,plotCategory("kPlotWZ")),
         18: (dirT2+"/WZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",9.302*1000,plotCategory("kPlotWZ")),
-        19: (dirT2+"/WZJJ_EWK_InclusivePolarization_TuneCP5_13TeV_madgraph-madspin-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.01654*1000,plotCategory("kPlotWZ")),
+        19: (dirT2+"/WZJJ_EWK_InclusivePolarization_TuneCP5_13TeV_madgraph-madspin-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.01654*1000,plotCategory("kPlotEWKWZ")),
 
         20: (dirT2+"/ZZTo2L2Nu_TuneCP5_13TeV_powheg_pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.600*1000,plotCategory("kPlotZZ")),
         21: (dirT2+"/GluGluToContinToZZTo2e2nu_TuneCP5_13TeV-mcfm701-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.001720*2.3*1000,plotCategory("kPlotZZ")),
