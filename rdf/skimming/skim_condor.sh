@@ -40,7 +40,7 @@ transfer_input_files = ""
 Log    = logs/simple_skim_${whichSample}_${whichJob}.log
 Output = logs/simple_skim_${whichSample}_${whichJob}.out
 Error  = logs/simple_skim_${whichSample}_${whichJob}.error
-transfer_input_files = skim.py, skim_input_samples.cfg, skim_input_samples_fromDAS.cfg, skim_input_files.cfg, skim_input_files_fromDAS.cfg, functions.cc, haddnanoaod.py, jsns/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt
+transfer_input_files = skim.py, skim_input_samples.cfg, skim_input_samples_fromDAS.cfg, skim_input_files.cfg, skim_input_files_fromDAS.cfg, functions_skim.cc, haddnanoaod.py, jsns/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt
 use_x509userproxy = True
 x509userproxy = /tmp/x509up_u${USERPROXY}
 Requirements = ((BOSCOGroup == "bosco_cms" && BOSCOCluster == "ce03.cmsaf.mit.edu") || (BOSCOCluster == "t3serv008.mit.edu")) && (Machine != "t3btch070.mit.edu") && (Machine != "t3desk014.mit.edu")
