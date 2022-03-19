@@ -556,19 +556,21 @@ float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
     sumHT += el_pt[i];
   }
 
-  PtEtaPhiMVector p4momTot = p4mom[0];
+  PtEtaPhiMVector p4momVV = PtEtaPhiMVector(met_pt,0,met_phi,0);
+  PtEtaPhiMVector p4momTot = PtEtaPhiMVector(met_pt,0,met_phi,0) + p1 + p2;
   for(unsigned int i=0; i<p4mom.size(); i++){
-    if(i != 0) p4momTot = p4momTot + p4mom[i];
+    p4momVV = p4momVV + p4mom[i];
+    p4momTot = p4momTot + p4mom[i];
   }
 
   double theVar = 0;
-  if     (var == 0) theVar = fabs(p4momTot.Eta()-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
+  if     (var == 0) theVar = fabs(p4momVV.Eta()-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
   else if(var == 1) theVar = maxZ;
   else if(var == 2) theVar = sumHT;
-  else if(var == 3) {
-    p4momTot = p4momTot + PtEtaPhiMVector(met_pt,0,met_phi,0);
-    theVar = p4momTot.Pt();
-  }
+  else if(var == 3) theVar = p4momVV.Pt();
+  else if(var == 4) theVar = p4momTot.Pt();
+  else if(var == 5) theVar = fabs(p4momVV.Eta()-p1.Eta());
+  else if(var == 6) theVar = fabs(p4momVV.Eta()-p2.Eta());
   return theVar;
 }
 
@@ -1072,7 +1074,7 @@ float compute_weights(const float weight, const float genWeight, const TString t
        if(el_genPartFlav[i] != 1 && el_genPartFlav[i] != 15 && el_genPartFlav[i] != 22) {isRealGenLep = false; break;}
     }
     if(isRealGenLep == false) return 0.0;
-  }   
+  }
   return weight*genWeight;
 }
 

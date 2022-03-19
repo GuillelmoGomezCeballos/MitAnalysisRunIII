@@ -12,7 +12,7 @@ void ewkvbsMVA(
   TString inputFileName = "/work/submit/ceballos/mva_samples/ntupleWZAna_year2018.root",
   int nsel = 0,
   TString extraString="vbfinc_v0",
-  bool moreMVAs = true,
+  bool moreMVAs = false,
   bool dodnn = false
 ) {
   gROOT->ProcessLine("TMVA::gConfig().GetVariablePlotting().fMaxNumOfAllowedVariablesForScatterPlots = 50");
@@ -34,32 +34,36 @@ void ewkvbsMVA(
   factory = new TMVA::Factory("bdt", output_file, factoryOptions);
   TMVA::DataLoader *dataloader=new TMVA::DataLoader("MitEWKVBSAnalysis");
 
-  TCut cutTrainSignal = Form("%s && ptj1 > 50 && ptj2 > 50 && theCat==%d",trainTreeEventSplitStr.Data(),7);
-  TCut cutTrainBkg    = Form("%s && ptj1 > 50 && ptj2 > 50 && theCat!=%d",trainTreeEventSplitStr.Data(),7);
-  TCut cutTestSignal  = Form("%s && ptj1 > 50 && ptj2 > 50 && theCat==%d",testTreeEventSplitStr.Data(), 7);
-  TCut cutTestBkg     = Form("%s && ptj1 > 50 && ptj2 > 50 && theCat!=%d",testTreeEventSplitStr.Data(), 7);
+  TCut cutTrainSignal = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),5,7);
+  TCut cutTrainBkg    = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat!=%d&&theCat!=%d)",trainTreeEventSplitStr.Data(),5,7);
+  TCut cutTestSignal  = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 5,7);
+  TCut cutTestBkg     = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat!=%d&&theCat!=%d)",testTreeEventSplitStr.Data(), 5,7);
   dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTrainSignal, "train");
   dataloader->AddTree(mvaTree, "Background", 1.0, cutTrainBkg	, "train");
   dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTestSignal , "test");
   dataloader->AddTree(mvaTree, "Background", 1.0, cutTestBkg    , "test");
   dataloader->SetWeightExpression("abs(weight)", "Signal");
   dataloader->SetWeightExpression("abs(weight)", "Background");
+  //dataloader->SetWeightExpression("1.0", "Signal");
+  //dataloader->SetWeightExpression("1.0", "Background");
   
   if(nsel == 0){
-    dataloader->AddVariable("ngood_jets"   ,"ngood_jets"   ,"",'F');
-    //dataloader->AddVariable("ngoodvbs_jets","ngoodvbs_jets","",'F');
-    dataloader->AddVariable("mjj" 	   ,"mjj"	   ,"",'F');
-    dataloader->AddVariable("ptjj" 	   ,"ptjj"	   ,"",'F');
-    dataloader->AddVariable("detajj" 	   ,"detajj"	   ,"",'F');
-    dataloader->AddVariable("dphijj" 	   ,"dphijj"	   ,"",'F');
-    dataloader->AddVariable("ptj1" 	   ,"ptj1"	   ,"",'F');
-    dataloader->AddVariable("ptj2" 	   ,"ptj2"	   ,"",'F');
-    dataloader->AddVariable("etaj1" 	   ,"etaj1"	   ,"",'F');
-    dataloader->AddVariable("etaj2" 	   ,"etaj2"	   ,"",'F');
-    dataloader->AddVariable("zepvv" 	   ,"zepvv"	   ,"",'F');
-    dataloader->AddVariable("zepmax" 	   ,"zepmax"	   ,"",'F');
-    dataloader->AddVariable("sumHT" 	   ,"sumHT"	   ,"",'F');
-    dataloader->AddVariable("ptvv"	   ,"ptvv"	   ,"",'F');
+    dataloader->AddVariable("ngood_jets","ngood_jets","",'F');
+    dataloader->AddVariable("mjj"       ,"mjj"       ,"",'F');
+    dataloader->AddVariable("ptjj"      ,"ptjj"      ,"",'F');
+    dataloader->AddVariable("detajj"    ,"detajj"    ,"",'F');
+    dataloader->AddVariable("dphijj"    ,"dphijj"    ,"",'F');
+    dataloader->AddVariable("ptj1"      ,"ptj1"      ,"",'F');
+    dataloader->AddVariable("ptj2"      ,"ptj2"      ,"",'F');
+    dataloader->AddVariable("etaj1"     ,"etaj1"     ,"",'F');
+    dataloader->AddVariable("etaj2"     ,"etaj2"     ,"",'F');
+    dataloader->AddVariable("zepvv"     ,"zepvv"     ,"",'F');
+    //dataloader->AddVariable("zepmax"    ,"zepmax"    ,"",'F');
+    dataloader->AddVariable("sumHT"     ,"sumHT"     ,"",'F');
+    dataloader->AddVariable("ptvv"      ,"ptvv"      ,"",'F');
+    dataloader->AddVariable("pttot"     ,"pttot"     ,"",'F');
+    dataloader->AddVariable("detavvj1"  ,"detavvj1"  ,"",'F');
+    dataloader->AddVariable("detavvj2"  ,"detavvj2"  ,"",'F');
   }
 
   TString prepareOptions="NormMode=None";
@@ -70,7 +74,7 @@ void ewkvbsMVA(
   TString hyperparameters;
 
   hyperparameters=
-  "!H:!V:NTrees=1000:BoostType=Grad:MinNodeSize=5%:NegWeightTreatment=IgnoreNegWeightsInTraining:Shrinkage=0.20:UseBaggedBoost:GradBaggingFraction=0.5:nCuts=1000:MaxDepth=2";
+  "!H:!V:NTrees=1000:BoostType=Grad:MinNodeSize=5%:NegWeightTreatment=IgnoreNegWeightsInTraining:Shrinkage=0.10:UseBaggedBoost:GradBaggingFraction=0.5:nCuts=1000:MaxDepth=2";
   factory->BookMethod(dataloader, TMVA::Types::kBDT, Form("BDTG_%s",extraString.Data()), hyperparameters);
 
   TString layoutString ("Layout=TANH|100,TANH|50,TANH|10,LINEAR");
