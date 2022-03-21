@@ -42,10 +42,10 @@ void ewkvbsMVA(
   dataloader->AddTree(mvaTree, "Background", 1.0, cutTrainBkg	, "train");
   dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTestSignal , "test");
   dataloader->AddTree(mvaTree, "Background", 1.0, cutTestBkg    , "test");
-  dataloader->SetWeightExpression("abs(weight)", "Signal");
-  dataloader->SetWeightExpression("abs(weight)", "Background");
-  //dataloader->SetWeightExpression("1.0", "Signal");
-  //dataloader->SetWeightExpression("1.0", "Background");
+  //dataloader->SetWeightExpression("abs(weight)", "Signal");
+  //dataloader->SetWeightExpression("abs(weight)", "Background");
+  dataloader->SetWeightExpression("1.0", "Signal");
+  dataloader->SetWeightExpression("1.0", "Background");
   
   if(nsel == 0){
     dataloader->AddVariable("ngood_jets","ngood_jets","",'F');
@@ -60,10 +60,11 @@ void ewkvbsMVA(
     dataloader->AddVariable("zepvv"     ,"zepvv"     ,"",'F');
     //dataloader->AddVariable("zepmax"    ,"zepmax"    ,"",'F');
     dataloader->AddVariable("sumHT"     ,"sumHT"     ,"",'F');
-    dataloader->AddVariable("ptvv"      ,"ptvv"      ,"",'F');
+    //dataloader->AddVariable("ptvv"      ,"ptvv"      ,"",'F');
     dataloader->AddVariable("pttot"     ,"pttot"     ,"",'F');
     dataloader->AddVariable("detavvj1"  ,"detavvj1"  ,"",'F');
     dataloader->AddVariable("detavvj2"  ,"detavvj2"  ,"",'F');
+    dataloader->AddVariable("ptbalance" ,"ptbalance" ,"",'F');
   }
 
   TString prepareOptions="NormMode=None";

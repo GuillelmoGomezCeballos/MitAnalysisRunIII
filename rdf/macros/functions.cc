@@ -222,6 +222,14 @@ float compute_JSON_SFs(const Vec_f& mu_pt, const Vec_f& mu_eta,
   return sfTot;
 }
 
+float compute_bdt_test(const Vec_f& bdt){
+  if(bdt.size() != 1) {
+    printf("bdt size != 1 %lu\n",bdt.size());
+    return -10.0;
+  }
+  return bdt[0];
+}
+
 float compute_test(const Vec_f& mu_pt, const Vec_f& mu_eta, TH2D histo_mu){
   printf("test %f\n",histo_mu.GetBinContent(2,2));
   return 1.0;
@@ -571,6 +579,7 @@ float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   else if(var == 4) theVar = p4momTot.Pt();
   else if(var == 5) theVar = fabs(p4momVV.Eta()-p1.Eta());
   else if(var == 6) theVar = fabs(p4momVV.Eta()-p2.Eta());
+  else if(var == 7) theVar = (p4momVV.Pt()-(p1+p2).Pt())/(p1+p2).Pt();
   return theVar;
 }
 
