@@ -18,8 +18,8 @@ void ewkvbsMVA(
   gROOT->ProcessLine("TMVA::gConfig().GetVariablePlotting().fMaxNumOfAllowedVariablesForScatterPlots = 50");
   TFile *output_file;
   TMVA::Factory *factory;
-  TString trainTreeEventSplitStr="(eventNum % 10)<5";
-  TString testTreeEventSplitStr="(eventNum % 10)>=5";
+  TString trainTreeEventSplitStr="(eventNum % 10)>=5";
+  TString testTreeEventSplitStr="(eventNum % 10)<5";
 
   // Determine the input trees
   TFile *inputFile = TFile::Open(inputFileName,"READ");
@@ -35,9 +35,9 @@ void ewkvbsMVA(
   TMVA::DataLoader *dataloader=new TMVA::DataLoader("MitEWKVBSAnalysis");
 
   TCut cutTrainSignal = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),5,7);
-  TCut cutTrainBkg    = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat!=%d&&theCat!=%d)",trainTreeEventSplitStr.Data(),5,7);
+  TCut cutTrainBkg    = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),8);
   TCut cutTestSignal  = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 5,7);
-  TCut cutTestBkg     = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat!=%d&&theCat!=%d)",testTreeEventSplitStr.Data(), 5,7);
+  TCut cutTestBkg     = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(), 8);
   dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTrainSignal, "train");
   dataloader->AddTree(mvaTree, "Background", 1.0, cutTrainBkg	, "train");
   dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTestSignal , "test");

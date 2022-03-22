@@ -331,8 +331,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
         histo[15][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 40,0,10), "detajj","weight")
         histo[16][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 40,0,3.1416), "dphijj","weight")
         histo[17][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 40,0,3.1416), "dphijj","weight")
-        histo[18][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 40,0,2), "zepvv","weight")
-        histo[19][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 40,0,2), "zepvv","weight")
+        histo[18][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 20,-1,1), "bdt_vbfinc","weight")
+        histo[19][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 20,-1,1), "bdt_vbfinc","weight")
 
         dfwwvbscat .append(dfwwcat[x] .Filter(VBSSEL, "VBS selection"))
         dfwwbvbscat.append(dfwwbcat[x].Filter(VBSSEL, "VBS selection"))

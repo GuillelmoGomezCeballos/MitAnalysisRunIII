@@ -22,6 +22,11 @@ if [ ! -d "jsonpog/POG" ]; then
   mv jmar.json     jsonpog/POG/$2/;
 fi
 
+if [ ! -d "weights_mva" ]; then
+  mkdir -p weights_mva;
+  mv bdt_BDTG_vbfinc_v0.weights.xml weights_mva/;
+fi
+
 ls -l
 echo $PWD
 

@@ -8,6 +8,8 @@ from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
 
 lumi = [36.1, 41.5, 60.0]
 
+doNtuples = False
+
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
     selectionJsonPath = "selection.json"
@@ -139,25 +141,34 @@ def selectionLL(df,year,PDType,isData):
               .Define("goodloose_jet", "abs(Jet_eta) < 2.5 && Jet_pt > 20 && jet_mask1 && jet_mask2")
               .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_mask1 && jet_mask2 && Jet_jetId > 0 && Jet_puId > 0")
               .Define("goodvbs_jet"  , "abs(Jet_eta) < 5.0 && Jet_pt > 50 && jet_mask1 && jet_mask2 && Jet_jetId > 0 && Jet_puId > 0")
-              .Define("ngood_jets", "Sum(good_jet)")
-              .Define("ngoodvbs_jets", "Sum(goodvbs_jet)")
+              .Define("ngood_jets", "Sum(good_jet)*1.0f")
+              .Define("ngoodvbs_jets", "Sum(goodvbs_jet)*1.0f")
               .Define("goodvbsjet_pt",    "Jet_pt[goodvbs_jet]")
               .Define("goodvbsjet_eta",   "Jet_eta[goodvbs_jet]")
               .Define("goodvbsjet_phi",   "Jet_phi[goodvbs_jet]")
               .Define("goodvbsjet_mass",  "Jet_mass[goodvbs_jet]")
-              .Define("mjj",    "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 0)")
-              .Define("ptjj",   "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 1)")
-              .Define("detajj", "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 2)")
-              .Define("dphijj", "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 3)")
-              .Define("zepvv",  "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 0)")
-              .Define("zepmax", "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 1)")
-              .Define("sumHT",  "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 2)")
-              .Define("ptvv",   "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 3)")
+              .Define("mjj",   "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 0)")
+              .Define("ptjj",  "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 1)")
+              .Define("detajj","compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 2)")
+              .Define("dphijj","compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 3)")
+              .Define("ptj1",  "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 4)")
+              .Define("ptj2",  "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 5)")
+              .Define("etaj1", "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 6)")
+              .Define("etaj2", "compute_jet_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, 7)")
+              .Define("zepvv",    "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 0)")
+              .Define("zepmax",   "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 1)")
+              .Define("sumHT",    "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 2)")
+              .Define("ptvv",     "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 3)")
+              .Define("pttot",    "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 4)")
+              .Define("detavvj1", "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 5)")
+              .Define("detavvj2", "compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 6)")
+              .Define("ptbalance","compute_jet_lepton_var(goodvbsjet_pt, goodvbsjet_eta, goodvbsjet_phi, goodvbsjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 7)")
               .Define("goodloosejet_pt", "Jet_pt[goodloose_jet]")
               .Define("goodloosejet_eta", "abs(Jet_eta[goodloose_jet])")
               .Define("goodloosejet_btagDeepB", "Jet_btagDeepB[goodloose_jet]")
               .Define("goodloose_bjet", "goodloosejet_btagDeepB > 0.2783")
               .Define("nbtagloosejet", "Sum(goodloose_bjet)")
+              .Define("eventNum", "event")
               )
     return dftag
 
@@ -203,6 +214,39 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
 
     ROOT.initJSONSFs(2018)
 
+    branchList = ROOT.vector('string')()
+    for branchName in [
+            "eventNum",
+            "weight",
+            "theCat",
+            "ngood_jets",
+            "mjj",
+            "ptjj",
+            "detajj",
+            "dphijj",
+            "ptj1",
+            "ptj2",
+            "etaj1",
+            "etaj2",
+            "zepvv",
+            "zepmax",
+            "sumHT",
+            "ptvv",
+            "pttot",
+            "detavvj1",
+            "detavvj2",
+	    "ptbalance"
+    ]:
+        branchList.push_back(branchName)
+
+    ROOT.gInterpreter.ProcessLine('''
+    TMVA::Experimental::RReader model("weights_mva/bdt_BDTG_vbfinc_v0.weights.xml");
+    computeModel = TMVA::Experimental::Compute<15, float>(model);
+    ''')
+
+    variables = ROOT.model.GetVariableNames()
+    print(variables)
+
     dftag = selectionLL(df,year,PDType,isData)
 
     if(theCat == plotCategory("kPlotData")):
@@ -235,14 +279,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
                        .Define("weightNoBTVSF"    ,"weightPURecoSF*weightLepSF*weightMC")
                        )
 
+    dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
+                    .Define("theCat","compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
+		    .Define("bdt_vbfinc", ROOT.computeModel, ROOT.model.GetVariableNames())
+                    )
+
     dfzzcat = []
     dfzzxycat = []
     dfzzjjcat = []
     dfzzvbscat = []
     for x in range(nCat):
-        dfzzcat.append(dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
-                             .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
-                             .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
+        dfzzcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
 
         histo[ 0][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),120,  0, 120), "mllmin","weight")
         dfzzcat[x] = dfzzcat[x].Filter("mllmin > 5","mllmin cut")
@@ -273,14 +320,18 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
         histo[12][x] = dfzzjjcat[x]  .Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 20,0,2000), "mjj","weight")
         histo[13][x] = dfzzjjcat[x]  .Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 20,0,10), "detajj","weight")
         histo[14][x] = dfzzjjcat[x]  .Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 20,0,3.1416), "dphijj","weight")
-        histo[15][x] = dfzzjjcat[x]  .Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 20,0,2), "zepvv","weight")
+        histo[15][x] = dfzzjjcat[x]  .Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 20,-1,1), "bdt_vbfinc","weight")
 
         dfzzvbscat .append(dfzzjjcat[x] .Filter(VBSSEL, "VBS selection"))
         histo[16][x] = dfzzvbscat[x] .Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 4,1.5, 5.5), "ngood_jets","weight")
         histo[17][x] = dfzzvbscat[x] .Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 10,500,2500), "mjj","weight")
         histo[18][x] = dfzzvbscat[x] .Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 14,2.5,9.5), "detajj","weight")
         histo[19][x] = dfzzvbscat[x] .Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 10,0,3.1416), "dphijj","weight")
-        histo[20][x] = dfzzvbscat[x] .Histo1D(("histo_{0}_{1}".format(20,x), "histo_{0}_{1}".format(20,x), 10,0,1), "zepvv","weight")
+        histo[20][x] = dfzzvbscat[x] .Histo1D(("histo_{0}_{1}".format(20,x), "histo_{0}_{1}".format(20,x), 20,-1,1), "bdt_vbfinc","weight")
+
+        if(doNtuples == True and x == theCat):
+            outputFile = "ntupleZZAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob)
+            dfzzvbscat[x].Snapshot("events", outputFile, branchList)
 
         histo[24][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(24,x), "histo_{0}_{1}".format(24,x),5,-0.5 ,4.5), "nbtagloosejet","weight")
         histo[25][x] = dfzzxycat[x].Filter("nbtagloosejet  > 0").Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x),20, 0, 500), "m4l","weight")

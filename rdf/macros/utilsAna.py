@@ -255,7 +255,7 @@ def SwitchSample(argument, skimType):
 
     #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
     dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType
-    dirLocal = "/work/submit/mariadlf/Hrare/OCT14"
+    dirLocal = "/work/submit/mariadlf/Hrare/D01"
 
     switch = {
          0: (dirT2+"/DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18NanoAODv9-20UL18JMENano_106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",2008.4*3*3.78*1000,plotCategory("kPlotDY")),
@@ -344,7 +344,7 @@ def SwitchSample(argument, skimType):
         76: (dirT2+"/TTWZ_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.0029740*1000,plotCategory("kPlotTVX")),
         77: (dirT2+"/TTZH_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.0012530*1000,plotCategory("kPlotTVX")),
 
-        99:(dirLocal+"/ZLLphigamma_pythia8_genFix",0.10*1000,plotCategory("kPlotBSM"))
+        99:(dirLocal+"/2018/vbf-hphigamma-powheg/NANOAOD_01",0.10*1000,plotCategory("kPlotBSM"))
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")
