@@ -524,6 +524,51 @@ float compute_met_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   return theVar;
 }
 
+// Jet-X-gamma variables
+float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
+                             const float  x_pt, const float  x_eta, const float  x_phi, const float x_mass,
+                             const float ph_pt, const float ph_eta, const float pt_phi,
+		             unsigned int var)
+{
+  if(pt.size() < 2) return -1;
+
+  PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
+  PtEtaPhiMVector p2(pt[1], eta[1], phi[1], mass[1]);
+  if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
+  for(unsigned int i=0;i<pt.size();i++) {
+    for(unsigned int j=i+1;j<pt.size();j++) {
+      if(pt[i]>pt[j]) {
+        float temp0 = pt[i]; float temp1 = eta[i]; float temp2 = phi[i]; float temp3 = mass[i];
+        pt[i] = pt[j];	     eta[i] = eta[j];	   phi[i] = phi[j];      mass[i] = mass[j];
+        pt[j] = temp0;	     eta[j] = temp1;	   phi[j] = temp2;	 mass[j] = temp3;
+      }
+    }
+  }
+
+  float deltaEtaJJ = fabs(p1.Eta()-p2.Eta());
+  float sumHT = p1.Pt() + p2.Pt() + x_pt + ph_pt;
+
+  PtEtaPhiMVector p4momX  = PtEtaPhiMVector( x_pt, x_eta, x_phi, x_mass);
+  PtEtaPhiMVector p4momPh = PtEtaPhiMVector(ph_pt,ph_eta,pt_phi, 0);
+
+  PtEtaPhiMVector p4momVV = p4momX + p4momPh;
+  PtEtaPhiMVector p4momTot = p4momX + p4momPh + p1 + p2;
+
+  float maxZ = fabs(x_eta-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
+  if(fabs(ph_eta-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ > maxZ) maxZ = fabs(ph_eta-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
+
+  double theVar = 0;
+  if     (var == 0) theVar = fabs(p4momVV.Eta()-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
+  else if(var == 1) theVar = maxZ;
+  else if(var == 2) theVar = sumHT;
+  else if(var == 3) theVar = p4momVV.Pt();
+  else if(var == 4) theVar = p4momTot.Pt();
+  else if(var == 5) theVar = fabs(p4momVV.Eta()-p1.Eta());
+  else if(var == 6) theVar = fabs(p4momVV.Eta()-p2.Eta());
+  else if(var == 7) theVar = (p4momVV.Pt()-(p1+p2).Pt())/(p1+p2).Pt();
+  return theVar;
+}
+
 // Jet-lepton variables
 float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
                              const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
@@ -1056,6 +1101,71 @@ int applySkim(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, cons
 
    printf("This can not happen\n");
    return 0;
+}
+
+// Select meson-photon pair
+Vec_i HiggsCandFromRECO(const Vec_f& meson_pt, const Vec_f& meson_eta, const Vec_f& meson_phi, const Vec_f& meson_mass,
+                        const Vec_f& ph_pt, const Vec_f& ph_eta, const Vec_f& ph_phi) {
+
+  Vec_i idx(2, -1); // initialize with -1 a vector of size 2
+  if(ph_pt.size() == 0 || meson_pt.size() == 0) return idx;
+
+  //float Minv = -1;
+  //float ptHiggs = -1;
+  float ptCandMax=0;
+
+  PtEtaPhiMVector p_ph(ph_pt[0], ph_eta[0], ph_phi[0], 0);
+  int indexPhoton = 0;
+  for(unsigned int i=1; i<ph_pt.size(); i++){
+    if(ph_pt[i] > p_ph.Pt()) {
+      p_ph.SetPt(ph_pt[i]);
+      p_ph.SetEta(ph_eta[i]);
+      p_ph.SetPhi(ph_phi[i]);
+      indexPhoton = i;
+    }
+  }
+
+  // loop over all the phiCand
+  for (unsigned int i=0; i<meson_pt.size(); i++) {
+
+    PtEtaPhiMVector p_meson(meson_pt[i], meson_eta[i], meson_phi[i], meson_mass[i]);
+    // save the leading Pt
+    float ptCand = p_meson.pt();
+    if( ptCand < ptCandMax ) continue;
+    ptCandMax=ptCand;
+    //Minv = (p_meson + p_ph).mass();
+    //ptHiggs = (p_meson + p_ph).pt();
+    idx[0] = i;
+    idx[1] = indexPhoton;
+  }
+
+  return idx;
+
+}
+
+// cleaning jets close-by to the meson
+Vec_b cleaningJetFromMeson(Vec_f & Jeta, Vec_f & Jphi, float & eta, float & phi) {
+
+  Vec_b mask(Jeta.size(), true);
+  for (unsigned int idx = 0; idx < Jeta.size(); ++idx) {
+    if(deltaR(Jeta[idx], Jphi[idx], eta, phi)<0.3) mask[idx] = false;
+  }
+  return mask;
+}
+
+// Minv2
+std::pair<float, float>  Minv2(const float& pt, const float& eta, const float& phi, const float& m,
+                               const float& ph_pt, const float& ph_eta, const float& ph_phi) {
+
+  PtEtaPhiMVector p_M(pt, eta, phi, m);
+  PtEtaPhiMVector p_ph(ph_pt, ph_eta, ph_phi, 0);
+
+  float Minv = (p_M + p_ph).mass();
+  float ptPair = (p_M + p_ph).pt();
+
+  std::pair<float, float> pairRECO = std::make_pair(Minv , ptPair);
+  return pairRECO;
+
 }
 
 // compute category

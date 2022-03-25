@@ -22,10 +22,46 @@
 "TIGHT_EL6" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaFall17V2Iso_WP80 == true && fakeel_tightCharge == 2)",
 "TIGHT_EL7" : "(abs(fakeel_dxy) < 0.2 && abs(fakeel_dz) < 0.5 && abs(fakeel_eta) < 2.5 && fakeel_pt > 10 && fakeel_cutBased >= 2 && fakeel_mvaTTH > 0.5 && fakeel_tightCharge == 2)",
 
-"VBSSEL" : "(ngoodvbs_jets >=2 && mjj > 500 && detajj > 2.5 && zepvv < 1.0)",
+"VBSSEL" : "(ngoodvbs_jets >= 2 && mjj > 500 && detajj > 2.5 && zepvv < 1.0)",
+
+"VBSLOOSESEL" : "(ngoodvbs_jets >= 2 && mjj > 300 && detajj > 2.5)",
 
 "BARRELphotons" : "(Photon_pt > 20 and Photon_isScEtaEB and Photon_cutBased >= 2 and Photon_electronVeto and photon_mask)",
 "ENDCAPphotons" : "(Photon_pt > 20 and Photon_isScEtaEE and Photon_cutBased >= 2 and Photon_electronVeto and photon_mask)",
+
+"mesons": [
+    {
+    	"name": "isVBF",
+    	"type": "isPhiCat",
+    	"definition": "(abs(phi_kin_mass-1.02)<0.01 && phi_kin_pt>20 && phi_trk1_pt>5 && phi_trk2_pt>5 && phi_kin_valid && phi_iso > 0.9 && phi_kin_vtx_prob > 0.05)"
+    },
+    {
+    	"name": "isVBF",
+    	"type": "isRhoCat",
+    	"definition": "(rho_kin_mass>0.6 && rho_kin_mass<0.95 && rho_kin_pt>20 && rho_trk1_pt>5 && rho_trk2_pt>5 && rho_kin_valid && rho_iso > 0.9 && rho_kin_vtx_prob > 0.05)"
+    },
+    {
+    	"name": "isVBF",
+    	"type": "isKsCat",
+    	"definition": "(abs(ks_kin_mass-0.498)<0.05 && ks_kin_pt>5 && ks_trk1_pt>5 && ks_trk2_pt>5 && ks_kin_valid)"
+    },
+    {
+    	"name": "isVBF",
+    	"type": "isJPsiCat",
+    	"definition": "(abs(Jpsi_kin_mass-0.498)<0.05 && Jpsi_kin_pt>5  && Jpsi_kin_valid && (Jpsi_muon1_isMediumMuon && Jpsi_muon2_isMediumMuon) && (Jpsi_muon1_isTightMuon or Jpsi_muon2_isTightMuon))"
+    },
+    {
+    	"name": "VH",
+    	"type": "isPhiCat",
+    	"definition": "(abs(phi_kin_mass-1.02)<0.01 && phi_kin_pt>20 && phi_trk1_pt>5 && phi_trk2_pt>5 && phi_kin_valid && phi_iso > 0.8)"
+    },
+    {
+    	"name": "VH",
+    	"type": "isRhoCat",
+    	"definition": "(rho_kin_mass>0.6 && rho_kin_mass<0.95 && rho_kin_pt>20 && rho_trk1_pt>5 && rho_trk2_pt>5 && rho_kin_valid && rho_iso > 0.9 && rho_kin_vtx_prob > 0.05)"
+    }
+],
+
 
 "triggers": [
 	{
@@ -149,6 +185,16 @@
 	    "name": "TRIGGERMET",
 	    "year": 2018,
 	    "definition": "(HLT_CaloMET70_HBHECleaned||HLT_CaloMET80_HBHECleaned||HLT_CaloMET90_HBHECleaned||HLT_CaloMET100_HBHECleaned||HLT_CaloMET250_HBHECleaned||HLT_CaloMET300_HBHECleaned||HLT_CaloMET350_HBHECleaned||HLT_MonoCentralPFJet80_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu140_PFMHTNoMu140_IDTight||HLT_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_PFMETNoMu140_PFMHTNoMu140_IDTight||HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_PFHT60||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60)"
+	},
+	{
+	    "name": "TRIGGERVBF",
+	    "year": 2018,
+	    "definition": "(HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ600DEta3)"
+	},
+	{
+	    "name": "TRIGGERKKG",
+	    "year": 2018,
+	    "definition": "(HLT_Photon35_TwoProngs35)"
 	}
 
     ]
