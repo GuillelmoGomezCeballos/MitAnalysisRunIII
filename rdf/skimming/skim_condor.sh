@@ -19,12 +19,13 @@ whichJob=$2
 group=$3
 sampleName=$4
 
-if [ ! -d "/work/submit/ceballos/skims/met/${sampleName}" ]; then
+if [ ! -d "/work/submit/ceballos/skims/pho/${sampleName}" ]; then
   echo "creating output folders" /work/submit/ceballos/skims/nl/${sampleName}
   mkdir -p /work/submit/ceballos/skims/1l/${sampleName}
   mkdir -p /work/submit/ceballos/skims/2l/${sampleName}
   mkdir -p /work/submit/ceballos/skims/3l/${sampleName}
   mkdir -p /work/submit/ceballos/skims/met/${sampleName}
+  mkdir -p /work/submit/ceballos/skims/pho/${sampleName}
 fi
 
 cat << EOF > submit

@@ -349,6 +349,12 @@ def SwitchSample(argument, skimType):
         76: (dirT2+"/TTWZ_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",0.0029740*1000,plotCategory("kPlotTVX")),
         77: (dirT2+"/TTZH_TuneCP5_13TeV-madgraph-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2+NANOAODSIM",0.0012530*1000,plotCategory("kPlotTVX")),
 
+        78: (dirT2+"/GJets_DR-0p4_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",5027.300*1000,plotCategory("kPlotOther")),
+        79: (dirT2+"/GJets_DR-0p4_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",1124.133*1000,plotCategory("kPlotOther")),
+        80: (dirT2+"/GJets_DR-0p4_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",125.088*1000,plotCategory("kPlotOther")),
+        81: (dirT2+"/GJets_DR-0p4_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",40.685*1000,plotCategory("kPlotOther")),
+        82: (dirT2+"/QCD_Pt-15to7000_TuneCP5_Flat2018_13TeV_pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",1000*1000,plotCategory("kPlotNonPrompt")),
+
         99:(dirLocal+"/2018/vbf-hphigamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        199:(dirLocal+"/2018/vbf-hrhogamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        299:(dirLocal+"/2018/vbf-hphiKLKSgamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM"))

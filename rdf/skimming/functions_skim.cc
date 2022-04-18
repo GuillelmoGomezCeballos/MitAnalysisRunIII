@@ -56,6 +56,16 @@ bool isGoodRunLS(const bool isData, const UInt_t run, const UInt_t lumi) {
   return match->first <= lumi && match->second >= lumi;
 }
 
+Vec_b cleaningMask(Vec_i indices, int size) {
+
+  Vec_b mask(size, true);
+  for (int idx : indices) {
+    if(idx < 0) continue;
+    mask[idx] = false;
+  }
+  return mask;
+}
+
 int applySkim(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
               const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
 	      const int lep_charge, const float met_pt)

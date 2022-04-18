@@ -195,6 +195,11 @@
 	    "name": "TRIGGERKKG",
 	    "year": 2018,
 	    "definition": "(HLT_Photon35_TwoProngs35)"
+	},
+	{
+	    "name": "TRIGGERPHOINC",
+	    "year": 2018,
+	    "definition": "(HLT_Photon20||HLT_Photon33||HLT_Photon50||HLT_Photon75||HLT_Photon90||HLT_Photon120||HLT_Photon150||HLT_Photon175||HLT_Photon200||HLT_Photon50_R9Id90_HE10_IsoM||HLT_Photon75_R9Id90_HE10_IsoM||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_CaloMJJ300_PFJetsMJJ400DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_CaloMJJ400_PFJetsMJJ600DEta3||HLT_Photon90_R9Id90_HE10_IsoM||HLT_Photon120_R9Id90_HE10_IsoM||HLT_Photon165_R9Id90_HE10_IsoM||HLT_Photon50_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3_PFMET50||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ600DEta3)"
 	}
 
     ]

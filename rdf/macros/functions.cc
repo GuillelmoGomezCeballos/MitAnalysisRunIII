@@ -230,6 +230,30 @@ float compute_bdt_test(const Vec_f& bdt){
   return bdt[0];
 }
 
+float compute_photon_test(const Vec_f& Photon_pt, const Vec_f& Photon_eta, const Vec_f& Photon_phi, 
+const Vec_i& Photon_cutBased, const Vec_f& Photon_pfRelIso03_all, const Vec_f& Photon_pfRelIso03_chg, 
+const Vec_f& Photon_hoe, const Vec_f& Photon_sieie, const Vec_i& Photon_vidNestedWPBitmap)
+{
+  for(unsigned int i=0;i<Photon_pt.size();i++) {
+  int pass0 = (Photon_vidNestedWPBitmap[i]>>4&3);
+  int pass1 = (Photon_vidNestedWPBitmap[i]>>6&3);
+  int pass2 = (Photon_vidNestedWPBitmap[i]>>8&3);
+  int pass3 = (Photon_vidNestedWPBitmap[i]>>10&3);
+  int pass4 = (Photon_vidNestedWPBitmap[i]>>12&3);
+  printf("test %5.1f %d %d %.5f %.4f %.4f %.4f %.4f | %d %d %d %d %d\n",Photon_pt[i],(int)(Photon_eta[i]<1.5),Photon_cutBased[i],Photon_hoe[i],Photon_sieie[i],
+  Photon_pfRelIso03_all[i]*Photon_pt[i],Photon_pfRelIso03_chg[i]*Photon_pt[i],(Photon_pfRelIso03_all[i]-Photon_pfRelIso03_chg[i])*Photon_pt[i],
+  pass0,pass1,pass2,pass3,pass4);
+
+  //printf("test %5.1f %d %d %.5f %.4f %.4f %.4f %.4f | %d %d | %d %d | %d %d | %d %d | %d %d | %d %d | %d %d\n",Photon_pt[i],(int)(Photon_eta[i]<1.5),Photon_cutBased[i],Photon_hoe[i],Photon_sieie[i],
+  //Photon_pfRelIso03_all[i]*Photon_pt[i],Photon_pfRelIso03_chg[i]*Photon_pt[i],(Photon_pfRelIso03_all[i]-Photon_pfRelIso03_chg[i])*Photon_pt[i],
+  //(Photon_vidNestedWPBitmap[i]&(1<<0))==(1<<0),(Photon_vidNestedWPBitmap[i]&(1<<1))==(1<<1),(Photon_vidNestedWPBitmap[i]&(1<<2))==(1<<2),(Photon_vidNestedWPBitmap[i]&(1<<3))==(1<<3),
+  //(Photon_vidNestedWPBitmap[i]&(1<<4))==(1<<4),(Photon_vidNestedWPBitmap[i]&(1<<5))==(1<<5),(Photon_vidNestedWPBitmap[i]&(1<<6))==(1<<6),(Photon_vidNestedWPBitmap[i]&(1<<7))==(1<<7),
+  //(Photon_vidNestedWPBitmap[i]&(1<<8))==(1<<8),(Photon_vidNestedWPBitmap[i]&(1<<9))==(1<<9),(Photon_vidNestedWPBitmap[i]&(1<<10))==(1<<10),(Photon_vidNestedWPBitmap[i]&(1<<11))==(1<<11),
+  //(Photon_vidNestedWPBitmap[i]&(1<<12))==(1<<12),(Photon_vidNestedWPBitmap[i]&(1<<13))==(1<<13));
+  }
+  return 1.0;
+}
+
 float compute_test(const Vec_f& mu_pt, const Vec_f& mu_eta, TH2D histo_mu){
   printf("test %f\n",histo_mu.GetBinContent(2,2));
   return 1.0;
@@ -378,6 +402,14 @@ float deltaR2(float eta1, float phi1, float eta2, float phi2) {
 
 float deltaR(float eta1, float phi1, float eta2, float phi2) {
   return std::sqrt(deltaR2(eta1,phi1,eta2,phi2));
+}
+
+Vec_f compute_deltaR_var(Vec_f eta, Vec_f phi, float eta1, float phi1){
+  Vec_f dR(eta.size(), 0.0);
+  for (unsigned int idx = 0; idx < eta.size(); idx++) {
+    dR[idx] = std::sqrt(deltaR2(eta[idx],phi[idx],eta1,phi1));
+  }
+  return dR;
 }
 
 Vec_b cleaningMask(Vec_i indices, int size) {
