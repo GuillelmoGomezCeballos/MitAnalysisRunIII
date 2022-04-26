@@ -56,6 +56,16 @@ bool isGoodRunLS(const bool isData, const UInt_t run, const UInt_t lumi) {
   return match->first <= lumi && match->second >= lumi;
 }
 
+Vec_b cleaningBitmap(const Vec_i& Photon_vidNestedWPBitmap, int var, int cutBased) {
+
+  Vec_b mask(Photon_vidNestedWPBitmap.size(), true);
+  for(unsigned int i=0;i<Photon_vidNestedWPBitmap.size();i++) {
+    if((Photon_vidNestedWPBitmap[i]>>var&3) >= cutBased) continue;
+    mask[i] = false;
+  }
+  return mask;
+}
+
 Vec_b cleaningMask(Vec_i indices, int size) {
 
   Vec_b mask(size, true);

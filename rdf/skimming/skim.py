@@ -320,7 +320,7 @@ if __name__ == "__main__":
                                  .Filter("triggerlep > 0 or triggerpho > 0","Passed trigger")\
                                  .Define("skim_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
                                  .Define("photon_mask", "cleaningMask(Electron_photonIdx[skim_el],nPhoton)")\
-                                 .Define("skim_photon", "Photon_pt > 20 && abs(Photon_eta) < 2.5 && photon_mask && Photon_hoe < 0.1 && Photon_pfRelIso03_all*Photon_pt < 10")\
+                                 .Define("skim_photon", "Photon_pt > 20 && abs(Photon_eta) < 2.5 && photon_mask && Photon_pfRelIso03_chg*Photon_pt < 10 && cleaningBitmap(Photon_vidNestedWPBitmap,4,2) && cleaningBitmap(Photon_vidNestedWPBitmap,10,2) && cleaningBitmap(Photon_vidNestedWPBitmap,12,2)")\
                                  .Filter("Sum(skim_photon) >= 1","One loose photon")\
                                  .Snapshot("Events", fOutIndivName5)
 

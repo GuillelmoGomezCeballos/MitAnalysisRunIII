@@ -22,7 +22,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
-#include <cstdlib> //as stdlib.h      
+#include <cstdlib>
 #include <cstdio>
 #include <cmath>
 #include <array>
@@ -193,7 +193,6 @@ float compute_JSONS_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i je
   return 1.0;
 }
 
-
 float compute_JSON_SFs(const Vec_f& mu_pt, const Vec_f& mu_eta,
                        const Vec_f& el_pt, const Vec_f& el_eta){
 
@@ -230,16 +229,26 @@ float compute_bdt_test(const Vec_f& bdt){
   return bdt[0];
 }
 
+Vec_b cleaningBitmap(const Vec_i& Photon_vidNestedWPBitmap, int var, int cutBased) {
+
+  Vec_b mask(Photon_vidNestedWPBitmap.size(), true);
+  for(unsigned int i=0;i<Photon_vidNestedWPBitmap.size();i++) {
+    if((Photon_vidNestedWPBitmap[i]>>var&3) >= cutBased) continue;
+    mask[i] = false;
+  }
+  return mask;
+}
+
 float compute_photon_test(const Vec_f& Photon_pt, const Vec_f& Photon_eta, const Vec_f& Photon_phi, 
 const Vec_i& Photon_cutBased, const Vec_f& Photon_pfRelIso03_all, const Vec_f& Photon_pfRelIso03_chg, 
 const Vec_f& Photon_hoe, const Vec_f& Photon_sieie, const Vec_i& Photon_vidNestedWPBitmap)
 {
   for(unsigned int i=0;i<Photon_pt.size();i++) {
-  int pass0 = (Photon_vidNestedWPBitmap[i]>>4&3);
-  int pass1 = (Photon_vidNestedWPBitmap[i]>>6&3);
-  int pass2 = (Photon_vidNestedWPBitmap[i]>>8&3);
-  int pass3 = (Photon_vidNestedWPBitmap[i]>>10&3);
-  int pass4 = (Photon_vidNestedWPBitmap[i]>>12&3);
+  int pass0 = (Photon_vidNestedWPBitmap[i]>>4&3);  // H/E
+  int pass1 = (Photon_vidNestedWPBitmap[i]>>6&3);  // sigmaiEtaiEta
+  int pass2 = (Photon_vidNestedWPBitmap[i]>>8&3);  // ChIso
+  int pass3 = (Photon_vidNestedWPBitmap[i]>>10&3); // NeuIso
+  int pass4 = (Photon_vidNestedWPBitmap[i]>>12&3); // PhoIso
   printf("test %5.1f %d %d %.5f %.4f %.4f %.4f %.4f | %d %d %d %d %d\n",Photon_pt[i],(int)(Photon_eta[i]<1.5),Photon_cutBased[i],Photon_hoe[i],Photon_sieie[i],
   Photon_pfRelIso03_all[i]*Photon_pt[i],Photon_pfRelIso03_chg[i]*Photon_pt[i],(Photon_pfRelIso03_all[i]-Photon_pfRelIso03_chg[i])*Photon_pt[i],
   pass0,pass1,pass2,pass3,pass4);
@@ -430,6 +439,24 @@ bool hasTriggerMatch(const float& eta, const float& phi, const Vec_f& TrigObj_et
   return false;
 }
 
+float get_variable_index(Vec_f var, Vec_f pt, const unsigned int index){
+
+  if(var.size() < index) return 0.0;
+
+  for(unsigned int i=0;i<pt.size();i++) {
+    for(unsigned int j=i+1;j<pt.size();j++) {
+      if(pt[i]<pt[j]) {
+        float temp0 = pt[i]; float temp1 = var[i];
+        pt[i] = pt[j];	     var[i] = var[j];
+        pt[j] = temp0;	     var[j] = temp1;
+      }
+    }
+  }
+  
+  return var[index];
+
+}
+
 // Muon Id variables
 int compute_muid_var(const Vec_b& mu_mediumId, const Vec_b& mu_tightId, const Vec_i& mu_pfIsoId,
 		     const Vec_i& mu_mvaId,  const Vec_i& mu_miniIsoId, const Vec_f& mu_mvaTTH, 
@@ -449,6 +476,7 @@ int compute_muid_var(const Vec_b& mu_mediumId, const Vec_b& mu_tightId, const Ve
 
   return var;
 }
+
 // Electron Id variables
 int compute_elid_var(const Vec_i& el_cutBased, const Vec_b& el_mvaFall17V2Iso_WP90, const Vec_b& el_mvaFall17V2Iso_WP80,
                      const Vec_i& el_tightCharge, const Vec_f& el_mvaTTH, unsigned int nsel)
@@ -569,7 +597,7 @@ float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
   for(unsigned int i=0;i<pt.size();i++) {
     for(unsigned int j=i+1;j<pt.size();j++) {
-      if(pt[i]>pt[j]) {
+      if(pt[i]<pt[j]) {
         float temp0 = pt[i]; float temp1 = eta[i]; float temp2 = phi[i]; float temp3 = mass[i];
         pt[i] = pt[j];	     eta[i] = eta[j];	   phi[i] = phi[j];      mass[i] = mass[j];
         pt[j] = temp0;	     eta[j] = temp1;	   phi[j] = temp2;	 mass[j] = temp3;
@@ -615,7 +643,7 @@ float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
   for(unsigned int i=0;i<pt.size();i++) {
     for(unsigned int j=i+1;j<pt.size();j++) {
-      if(pt[i]>pt[j]) {
+      if(pt[i]<pt[j]) {
         float temp0 = pt[i]; float temp1 = eta[i]; float temp2 = phi[i]; float temp3 = mass[i];
         pt[i] = pt[j];	     eta[i] = eta[j];	   phi[i] = phi[j];      mass[i] = mass[j];
         pt[j] = temp0;	     eta[j] = temp1;	   phi[j] = temp2;	 mass[j] = temp3;
@@ -669,7 +697,7 @@ float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, unsigned int v
   if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
   for(unsigned int i=0;i<pt.size();i++) {
     for(unsigned int j=i+1;j<pt.size();j++) {
-      if(pt[i]>pt[j]) {
+      if(pt[i]<pt[j]) {
         float temp0 = pt[i]; float temp1 = eta[i]; float temp2 = phi[i]; float temp3 = mass[i];
         pt[i] = pt[j];	     eta[i] = eta[j];	   phi[i] = phi[j];      mass[i] = mass[j];
         pt[j] = temp0;	     eta[j] = temp1;	   phi[j] = temp2;	 mass[j] = temp3;
