@@ -357,7 +357,8 @@ def SwitchSample(argument, skimType):
 
         99:(dirLocal+"/2018/vbf-hphigamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        199:(dirLocal+"/2018/vbf-hrhogamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
-       299:(dirLocal+"/2018/vbf-hphiKLKSgamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM"))
+       299:(dirLocal+"/2018/vbf-hphiKLKSgamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
+       399:("testsample",1.0*1000,plotCategory("kPlotBSM"))
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")

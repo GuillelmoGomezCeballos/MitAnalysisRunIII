@@ -18,7 +18,7 @@ void makeGammaDataCards(TString InputDir = "anaZ", int fidAna = 0, int mHVal = 0
   TFile *inputFile;
   TFile *outputFile;
 
-  for(unsigned nPtBin=0; nPtBin<12; nPtBin++) {
+  for(unsigned nPtBin=0; nPtBin<20; nPtBin++) {
     for(unsigned nEtaBin=0; nEtaBin<2; nEtaBin++) {
 
       TH1D *histo_Baseline[nPlotCategories];

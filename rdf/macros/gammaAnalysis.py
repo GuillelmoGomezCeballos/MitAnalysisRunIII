@@ -230,7 +230,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
                        .Define("weight","weightMC")
                        )
 
-    xPtbins = array('d', [20,40,60,80,100,125,150,175,200,250,300,400,1000])
+    xPtbins = array('d', [20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,350,400,450,500,750,1000])
 
     dfcat = []
     for x in range(nCat):
