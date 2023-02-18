@@ -5,21 +5,18 @@ import math
 
 ROOT.ROOT.EnableImplicitMT(2)
 
-if "./functions.so" not in ROOT.gSystem.GetLibraries():
+if "./functions_skim.so" not in ROOT.gSystem.GetLibraries():
     ROOT.gSystem.CompileMacro("./functions_skim.cc","k")
 
-TRIGGERMUEG = "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)"
-TRIGGERDMU  = "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8)"
-TRIGGERSMU  = "(HLT_IsoMu24||HLT_IsoMu27||HLT_Mu50)"
-TRIGGERDEL  = "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_DoubleEle25_CaloIdL_MW||HLT_DoublePhoton70)"
-TRIGGERSEL  = "(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf||HLT_Ele115_CaloIdVT_GsfTrkIdT)"
+selectionJsonPath = "config/selection.json"
+if(not os.path.exists(selectionJsonPath)):
+    selectionJsonPath = "selection.json"
 
-TRIGGERFAKEMU = "(HLT_Mu8_TrkIsoVVL||HLT_Mu17_TrkIsoVVL)"
-TRIGGERFAKEEL = "(HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele15_CaloIdL_TrackIdL_IsoVL_PFJet30||HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)"
+with open(selectionJsonPath) as jsonFile:
+    jsonObject = json.load(jsonFile)
+    jsonFile.close()
 
-TRIGGERMET = "(HLT_CaloMET70_HBHECleaned||HLT_CaloMET80_HBHECleaned||HLT_CaloMET90_HBHECleaned||HLT_CaloMET100_HBHECleaned||HLT_CaloMET250_HBHECleaned||HLT_CaloMET300_HBHECleaned||HLT_CaloMET350_HBHECleaned||HLT_MonoCentralPFJet80_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_MonoCentralPFJet80_PFMETNoMu140_PFMHTNoMu140_IDTight||HLT_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_PFMETNoMu140_PFMHTNoMu140_IDTight||HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_PFHT60||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60)"
-
-TRIGGERPHO = "(HLT_Photon20||HLT_Photon33||HLT_Photon50||HLT_Photon75||HLT_Photon90||HLT_Photon120||HLT_Photon150||HLT_Photon175||HLT_Photon200||HLT_Photon50_R9Id90_HE10_IsoM||HLT_Photon75_R9Id90_HE10_IsoM||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_CaloMJJ300_PFJetsMJJ400DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_CaloMJJ400_PFJetsMJJ600DEta3||HLT_Photon90_R9Id90_HE10_IsoM||HLT_Photon120_R9Id90_HE10_IsoM||HLT_Photon165_R9Id90_HE10_IsoM||HLT_Photon50_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3_PFMET50||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ600DEta3)"
+overallTriggers = jsonObject['triggers']
 
 JSON = "isGoodRunLS(isSkimData, run, luminosityBlock)"
 
@@ -56,13 +53,18 @@ def groupFiles(fIns, group):
 
     return ret
 
+def getTriggerFromJson(overall, type, year ):
+
+    for trigger in overall:
+        if(trigger['name'] == type and trigger['year'] == year): return trigger['definition']
+
 if __name__ == "__main__":
 
     copyFilesToFS = True
     #            1l     2l     3l     met    pho
-    doSkimSel = [False, False, False, False, True]
+    doSkimSel = [False, True, False, False, False]
 
-    outputDir = "root://t3serv017.mit.edu//scratch/ceballos/nanoaod/skims_submit"
+    outputDir = "root://submit50.mit.edu//store/user/ceballos/nanoaod/skims_submit/"
     inputSamplesCfg = "skim_input_samples.cfg"
     inputFilesCfg = "skim_input_files.cfg"
     whichSample = 1
@@ -130,20 +132,48 @@ if __name__ == "__main__":
     if("Run2018" in sampleToSkim):
         year = 2018
         isSkimData = 1
+    elif("Run2022" in sampleToSkim):
+        year = 2022
+        isSkimData = 1
     elif("RunIISummer20UL18" in sampleToSkim):
         year = 2018
+        isSkimData = 0
+    elif("Run3Summer22" in sampleToSkim):
+        year = 2022
         isSkimData = 0
 
     if(year == -1 or isSkimData == -1):
         print("Incorrect year/isSkimData: {0} / {1}".format(year, isSkimData))
         sys.exit(1)
 
-    if(year == 2018):
+    jsnName = ""
+    if(year == 2016):
+        jsnName = "Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt"
+    elif(year == 2017):
+        jsnName = "Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt"
+    elif(year == 2018):
         jsnName = "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
-        if os.path.exists(os.path.join("jsns",jsnName)):
-            loadJSON(os.path.join("jsns",jsnName))
-        else:
-            loadJSON(jsnName)
+    elif(year == 2022):
+        jsnName = "Cert_Collisions2022_355100_362760_Golden.json"
+
+    if os.path.exists(os.path.join("jsns",jsnName)):
+        loadJSON(os.path.join("jsns",jsnName))
+    else:
+        loadJSON(jsnName)
+
+    TRIGGERMUEG = getTriggerFromJson(overallTriggers, "TRIGGERMUEG", year)
+    TRIGGERDMU  = getTriggerFromJson(overallTriggers, "TRIGGERDMU", year)
+    TRIGGERSMU  = getTriggerFromJson(overallTriggers, "TRIGGERSMU", year)
+    TRIGGERDEL  = getTriggerFromJson(overallTriggers, "TRIGGERDEL", year)
+    TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
+
+    TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+    TRIGGERFAKEMU = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
+    TRIGGERFAKEEL = getTriggerFromJson(overallTriggers, "TRIGGERFAKEEL", year)
+
+    TRIGGERMET = getTriggerFromJson(overallTriggers, "TRIGGERMET", year)
+    TRIGGERPHO = getTriggerFromJson(overallTriggers, "TRIGGERPHOINC", year)
 
     print(inputFilesCfg)
     rootFiles = ROOT.vector('string')()
@@ -226,11 +256,11 @@ if __name__ == "__main__":
 
             print("Create {0} / {1} / {2} / {3} / {4}".format(fOutName1,fOutName2,fOutName3,fOutName4,fOutName5))
 
-            msgMerge1 = "python haddnanoaod.py %s" % (fOutName1)
-            msgMerge2 = "python haddnanoaod.py %s" % (fOutName2)
-            msgMerge3 = "python haddnanoaod.py %s" % (fOutName3)
-            msgMerge4 = "python haddnanoaod.py %s" % (fOutName4)
-            msgMerge5 = "python haddnanoaod.py %s" % (fOutName5)
+            msgMerge1 = "python3 haddnanoaod.py %s" % (fOutName1)
+            msgMerge2 = "python3 haddnanoaod.py %s" % (fOutName2)
+            msgMerge3 = "python3 haddnanoaod.py %s" % (fOutName3)
+            msgMerge4 = "python3 haddnanoaod.py %s" % (fOutName4)
+            msgMerge5 = "python3 haddnanoaod.py %s" % (fOutName5)
             msgRm = "rm -f"
 
             isJobFailure = False
@@ -268,12 +298,16 @@ if __name__ == "__main__":
                     isJobFailure = True
                     break
 
-                print("Processing({0}): {1}".format(nf,inputSingleFile))
                 rdf = ROOT.RDataFrame("Events", inputSingleFileBase)\
                             .Define("isSkimData","{}".format(isSkimData))\
                             .Define("applyDataJson","{}".format(JSON)).Filter("applyDataJson","pass JSON")
 
-                if(doSkimSel[1] == True or doSkimSel[2] == True):
+                print("Processing({0}): {1} / {2}".format(nf,inputSingleFile,rdf.Count().GetValue()))
+                nonZeroEvents = True
+                if(rdf.Count().GetValue() == 0):
+                    nonZeroEvents = False
+
+                if((doSkimSel[1] == True or doSkimSel[2] == True) and nonZeroEvents == True):
                     rdf_ll = rdf.Define("skim_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
                                 .Define("skim_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\
                                 .Filter("Sum(skim_mu)+Sum(skim_el) >= 2","At least two loose leptons")\
@@ -300,7 +334,7 @@ if __name__ == "__main__":
                                    .Filter("skim == 1 || skim == 2 || skim == 3",">=3, q(l1+l2)!=0, met>50/ptll>50")\
                                    .Snapshot("Events", fOutIndivName3)
 
-                if(doSkimSel[0] == True):
+                if(doSkimSel[0] == True and nonZeroEvents == True):
                     rdf_1l = rdf.Define("trigger1l","{0} or {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))\
                                 .Filter("trigger1l > 0","Passed trigger1l")\
                                 .Define("skim_fake_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
@@ -308,13 +342,13 @@ if __name__ == "__main__":
                                 .Filter("Sum(skim_fake_mu)+Sum(skim_fake_el) == 1","One fake lepton")\
                                 .Snapshot("Events", fOutIndivName1)
 
-                if(doSkimSel[3] == True):
+                if(doSkimSel[3] == True and nonZeroEvents == True):
                     rdf_met= rdf_ll.Define("triggermet","{0}".format(TRIGGERMET))\
                                    .Filter("triggermet > 0","Passed triggermet")\
                                    .Filter("skim >= 1","Two or more loose leptons")\
                                    .Snapshot("Events", fOutIndivName4)
 
-                if(doSkimSel[4] == True):
+                if(doSkimSel[4] == True and nonZeroEvents == True):
                     rdf_pho = rdf.Define("triggerlep","{0}".format(TRIGGERALLLEP))\
                                  .Define("triggerpho","{0}".format(TRIGGERPHO))\
                                  .Filter("triggerlep > 0 or triggerpho > 0","Passed trigger")\
@@ -327,27 +361,32 @@ if __name__ == "__main__":
                 eventCounts = [0, 0, 0, 0, 0]
                 try:
                     eventCounts[0] = rdf_1l.Count().GetValue()
+                    del rdf_1l
                 except Exception as e:
                     print("No selected events in {0}".format(fOutIndivName1))
                 try:
                     eventCounts[1] = rdf_2l.Count().GetValue()
+                    del rdf_2l
                 except Exception as e:
                     print("No selected events in {0}".format(fOutIndivName2))
                 try:
                     eventCounts[2] = rdf_3l.Count().GetValue()
+                    del rdf_3l
                 except Exception as e:
                     print("No selected events in {0}".format(fOutIndivName3))
                 try:
                     eventCounts[3] = rdf_met.Count().GetValue()
+                    del rdf_met
                 except Exception as e:
                     print("No selected events in {0}".format(fOutIndivName4))
                 try:
                     eventCounts[4] = rdf_pho.Count().GetValue()
+                    del rdf_pho
                 except Exception as e:
                     print("No selected events in {0}".format(fOutIndivName5))
 
                 try:
-                    del rdf, rdf_ll, rdf_2l, rdf_3l, rdf_1l, rdf_met, rdf_pho
+                    del rdf, rdf_ll
                 except Exception as e:
                     print("Delete exception {0}".format(e))
 

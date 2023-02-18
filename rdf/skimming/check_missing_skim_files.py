@@ -2,7 +2,7 @@ import os, sys, getopt, time
 
 if __name__ == "__main__":
 
-    outputDir = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit"
+    outputDir = "/data/submit/cms/store/user/ceballos/nanoaod/skims_submit"
     outputForCondorCfg = "skim_input_condor_jobs_fromDAS.cfg"
     missingFilesCfg = "skim_input_condor_missing_jobs_fromDAS.cfg"
     debug = 0
@@ -46,7 +46,8 @@ if __name__ == "__main__":
         if not line:
             break
 
-        isMissingFile = [True, True, True, True, True]
+        #isMissingFile = [True, True, True, True, True]
+        isMissingFile = [False, True, False, False, False]
         # 1l
         fileNameA = os.path.join(outputDir, "1l", line[3], "output_1l_{0}.root".format(line[1]))
         fileNameB = os.path.join(outputDir, "1l", line[3], "output_1l_{0}_{1}.root".format(line[0],line[1]))
@@ -114,9 +115,9 @@ if __name__ == "__main__":
 
         # summary
         if((type == 0 and (isMissingFile[0] == True or isMissingFile[1] == True or isMissingFile[2] == True or isMissingFile[3] == True or isMissingFile[4] == True)) or
-	   (type == 1 and (isMissingFile[1] == True or isMissingFile[2] == True or isMissingFile[3] == True or isMissingFile[4] == True)) or
-	   (type == 2 and (isMissingFile[4] == True))
-	  ):
+           (type == 1 and (isMissingFile[1] == True or isMissingFile[2] == True or isMissingFile[3] == True or isMissingFile[4] == True)) or
+           (type == 2 and (isMissingFile[4] == True))
+          ):
             missingFile.writelines(lineRaw)
             countMissingFiles[5] += 1
 

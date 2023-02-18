@@ -1,9 +1,9 @@
 #!/bin/sh
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-export SCRAM_ARCH=slc7_amd64_gcc900
-scramv1 project CMSSW CMSSW_11_2_0 # cmsrel is an alias not on the workers
-cd CMSSW_11_2_0/src/
+export SCRAM_ARCH=slc7_amd64_gcc10
+scramv1 project CMSSW CMSSW_12_6_3 # cmsrel is an alias not on the workers
+cd CMSSW_12_6_3/src/
 eval `scramv1 runtime -sh` # cmsenv is an alias not on the workers
 cd ../..
 
@@ -13,13 +13,18 @@ echo "hostname"
 hostname
 whoami
 
+tar xvzf skim.tgz
+
 ls -l
 echo $PWD
 
 python3 skim.py --whichSample=$1 --whichJob=$2 --group=$3 --inputSamplesCfg=$4 --inputFilesCfg=$5
 status=$?
 
-rm -f functions_skim_cc*
+rm -rf functions_skim_cc* skim.tgz \
+skim.py skim_*.cfg \
+functions_skim.cc haddnanoaod.py \
+jsns config
 
 if [ $status -eq 0 ]; then
   echo "SUCCESS"

@@ -259,7 +259,8 @@ def getDATAlist(type, year, skimType):
 def SwitchSample(argument, skimType):
 
     #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
-    dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType
+    #dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType
+    dirT2 = "/data/submit/cms/store/user/ceballos/nanoaod/skims_submit/" + skimType
     dirLocal = "/work/submit/mariadlf/Hrare/D01"
 
     switch = {
