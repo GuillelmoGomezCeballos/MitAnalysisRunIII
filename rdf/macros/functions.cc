@@ -287,7 +287,7 @@ float compute_JSON_TAU_SFs(const Vec_f& tau_pt, const Vec_f& tau_eta, const Vec_
 }
 
 Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_f& jet_rawFactor, const Vec_f& jet_area, const double rho, int type){
-  bool debug = true;
+  bool debug = false;
   if(debug) printf("jes: %lu %f %d\n",jet_pt.size(),rho,type);
   Vec_f new_jet_pt(jet_pt.size(), 1.0);
 
@@ -295,7 +295,7 @@ Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
     if     (type ==  0) {
       double sf = corrSFs.eval_jetCORR(jet_area[idx], jet_eta[idx], jet_pt[idx]*(1-jet_rawFactor[idx]), rho);
       new_jet_pt[idx] = jet_pt[idx] * (1-jet_rawFactor[idx]) * sf;
-      printf("jes(%d): %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,jet_area[idx],jet_eta[idx],jet_pt[idx]*(1-jet_rawFactor[idx]), jet_pt[idx],1./(1-jet_rawFactor[idx]),sf,new_jet_pt[idx]);
+      if(debug) printf("jes(%d): %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,jet_area[idx],jet_eta[idx],jet_pt[idx]*(1-jet_rawFactor[idx]), jet_pt[idx],1./(1-jet_rawFactor[idx]),sf,new_jet_pt[idx]);
     }
     else {
       double unc = corrSFs.eval_jesUnc(jet_eta[idx], jet_pt[idx], abs(type)-1);
@@ -681,7 +681,7 @@ float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
 
   PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
   PtEtaPhiMVector p2(pt[1], eta[1], phi[1], mass[1]);
-  if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
+  //if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
   for(unsigned int i=0;i<pt.size();i++) {
     for(unsigned int j=i+1;j<pt.size();j++) {
       if(pt[i]<pt[j]) {
@@ -727,7 +727,7 @@ float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
 
   PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
   PtEtaPhiMVector p2(pt[1], eta[1], phi[1], mass[1]);
-  if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
+  //if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
   for(unsigned int i=0;i<pt.size();i++) {
     for(unsigned int j=i+1;j<pt.size();j++) {
       if(pt[i]<pt[j]) {
@@ -781,7 +781,7 @@ float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, unsigned int v
   if(pt.size() < 2) return -1;
   PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
   PtEtaPhiMVector p2(pt[1], eta[1], phi[1], mass[1]);
-  if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
+  //if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
   for(unsigned int i=0;i<pt.size();i++) {
     for(unsigned int j=i+1;j<pt.size();j++) {
       if(pt[i]<pt[j]) {

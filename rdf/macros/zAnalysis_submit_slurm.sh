@@ -16,6 +16,7 @@ cat << EOF > submit
 #SBATCH --job-name=simple_zAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}
 #SBATCH --output=logs/simple_zAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.out
 #SBATCH --error=logs/simple_zAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.error
+#SBATCH --mem-per-cpu=2000
 srun ./zAnalysis_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob}
 EOF
 

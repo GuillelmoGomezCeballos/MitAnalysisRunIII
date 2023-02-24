@@ -9,15 +9,11 @@ cd ../..
 
 voms-proxy-info
 
-echo "hostname"
-hostname
-whoami
-
 tar xvzf zAnalysis.tgz
 
 echo $PWD
 
-./zAnalysis_slurm.sh
+./zAnalysis_slurm.sh $1 $2 $3 $4
 
 rm -rf functions_cc* *.pyc zAnalysis.tgz \
 zAnalysis.py zAnalysis_slurm.sh functions.cc utilsAna.py \

@@ -137,7 +137,7 @@ def selectionLL(df,year,PDType,isData):
               .Filter("(Sum(fake_mu) > 0 and Max(fakemu_pt) > 25) or (Sum(fake_el) > 0 and Max(fakeel_pt) > 25)","At least one high pt lepton")
 
               .Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && Tau_idDeepTau2018v2p5VSjet >= 6 && Tau_idDeepTau2018v2p5VSe >= 6 && Tau_idDeepTau2018v2p5VSmu >= 4")
-              #.Filter("Sum(good_tau) == 0","No selected hadronic taus")
+              .Filter("Sum(good_tau) == 0","No selected hadronic taus")
               .Define("goodtau_pt", "Tau_pt[good_tau]")
               .Define("goodtau_eta", "Tau_eta[good_tau]")
               .Define("goodtau_decayMode", "Tau_decayMode[good_tau]")
@@ -185,7 +185,7 @@ def selectionLL(df,year,PDType,isData):
               .Define("jet_ptUp",   "compute_JSON_JES_Unc(goodjet_pt,goodjet_eta,goodjet_rawFactor,goodjet_area,Rho_fixedGridRhoFastjetAll,+1)")
               .Define("jet_ptDown", "compute_JSON_JES_Unc(goodjet_pt,goodjet_eta,goodjet_rawFactor,goodjet_area,Rho_fixedGridRhoFastjetAll,-1)")
               .Define("mjjNew",   "compute_jet_var(jet_ptNew , goodjet_eta, goodjet_phi, goodjet_mass, 0)")
-              .Filter("mjjNew > 0","mjjNew > 0")
+              #.Filter("mjjNew > 0","mjjNew > 0")
               .Define("mjjUp",    "compute_jet_var(jet_ptUp  , goodjet_eta, goodjet_phi, goodjet_mass, 0)")
               .Define("mjjDown",  "compute_jet_var(jet_ptDown, goodjet_eta, goodjet_phi, goodjet_mass, 0)")
 

@@ -1,5 +1,9 @@
 #!/bin/sh
 
+echo "hostname"
+hostname
+whoami
+
 python3 zAnalysis.py --process=$1 --year=$2 --whichJob=$3
 status=$?
 
