@@ -9,6 +9,7 @@ correctionlib.register_pyroot_binding()
 #ROOT.gInterpreter.Load("mysf.so")
 
 lumi = [36.1, 41.5, 60.0]
+useXROOTD = False
 
 def plotCategory(key):
     plotCategoryDict = dict()
@@ -46,29 +47,10 @@ def plotCategory(key):
 if "/functions.so" not in ROOT.gSystem.GetLibraries():
     ROOT.gSystem.CompileMacro("functions.cc","k")
 
-#def loadCorrectionSet(type,year):
-#
-#    fname = "POG/"
-#    if type=='MUO':
-#        fname += "MUO/"+year+"/muon_Z.json.gz"
-#    elif type=='ELE':
-#        fname += "EGM/"+year+"/electron.json.gz"
-#    elif type=='PH':
-#        fname += "EGM/"+year+"/photon.json.gz"
-#    elif type=='LUM':
-#        fname += "LUM/"+year+"/puWeights.json.gz"
-#    elif type=='BTV':
-#        fname += "BTV/"+year+"/btagging.json.gz"
-#
-#    if fname.endswith(".json.gz"):
-#        import gzip
-#        with gzip.open(fname,'rt') as file:
-#            data = file.read().strip()
-#            evaluator = _core.CorrectionSet.from_string(data)
-#    else:
-#        evaluator = _core.CorrectionSet.from_file(fname)
-#
-#    return evaluator
+#def loadCorrectionSet(year):
+#    ROOT.gInterpreter.Load("mysf.so")
+#    ROOT.gInterpreter.Declare('#include "mysf.h"')
+#    ROOT.gInterpreter.ProcessLine('auto corr_sf = MyCorrections(%d);' % (year))
 
 def loadJSON(fIn):
 
@@ -124,11 +106,11 @@ def findDIR(directory):
     counter = 0
     rootFiles = ROOT.vector('string')()
 
-    if("/mnt/T3_US_MIT/hadoop" in directory):
-        fs = client.FileSystem('root://t3serv017.mit.edu/')
-        lsst = fs.dirlist(directory.replace("/mnt/T3_US_MIT/hadoop",""))
+    if(useXROOTD == True and "/data/submit/cms" in directory):
+        fs = client.FileSystem('root://submit50.mit.edu/')
+        lsst = fs.dirlist(directory.replace("/data/submit/cms",""))
         for e in lsst[1]:
-            filePath = directory.replace("/mnt/T3_US_MIT/hadoop","root://t3serv017.mit.edu/") + e.name
+            filePath = os.path.join(directory.replace("/data/submit/cms","root://submit50.mit.edu/"),e.name)
             if "failed/" in filePath: continue
             if "log/" in filePath: continue
             if ".txt" in filePath: continue
@@ -142,7 +124,6 @@ def findDIR(directory):
 
                 isBadFile = False
                 filePath = os.path.join(os.path.abspath(root), f)
-                filePath = filePath.replace("/mnt/T3_US_MIT/hadoop","root://t3serv017.mit.edu/")
                 if "failed/" in filePath: continue
                 if "log/" in filePath: continue
                 if ".txt" in filePath: continue
@@ -158,6 +139,7 @@ def findDIR(directory):
                 if(counter > maxFiles): break
                 rootFiles.push_back(filePath)
 
+    #print(rootFiles)
     return rootFiles
 
 def findMany(basedir, regex):
@@ -196,14 +178,23 @@ def getMClist(sampleNOW, skimType):
 def getDATAlist(type, year, skimType):
 
     #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
-    dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType
+    #dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType
+    dirT2 = "/data/submit/cms/store/user/ceballos/nanoaod/skims_submit/" + skimType
 
-    if(year == 2018):
+    jsnName = ""
+    if(year == 2016):
+        jsnName = "Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt"
+    elif(year == 2017):
+        jsnName = "Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt"
+    elif(year == 2018):
         jsnName = "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
-        if os.path.exists(os.path.join("../skimming/jsns/",jsnName)):
-            loadJSON(os.path.join("../skimming/jsns",jsnName))
-        else:
-            loadJSON(jsnName)
+    elif(year == 2022):
+        jsnName = "Cert_Collisions2022_355100_362760_Golden.json"
+
+    if os.path.exists(os.path.join("jsns",jsnName)):
+        loadJSON(os.path.join("jsns",jsnName))
+    else:
+        loadJSON(jsnName)
 
     files1 = []
     if(year == 2018 and type == 1001):
@@ -250,6 +241,34 @@ def getDATAlist(type, year, skimType):
         files1 = findDIR("{0}/MET+Run2018C-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1024):
         files1 = findDIR("{0}/MET+Run2018D-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2022 and type == 1017):
+        files1 = findDIR("{0}/Muon+Run2022E-PromptNanoAODv10_v1-v3+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1018):
+        files1 = findDIR("{0}/Muon+Run2022F-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1019):
+        files1 = findDIR("{0}/Muon+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+
+    elif(year == 2022 and type == 1009):
+        files1 = findDIR("{0}/MuonEG+Run2022E-PromptNanoAODv10_v1-v3+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1010):
+        files1 = findDIR("{0}/MuonEG+Run2022F-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1011):
+        files1 = findDIR("{0}/MuonEG+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+
+    elif(year == 2022 and type == 1013):
+        files1 = findDIR("{0}/EGamma+Run2022E-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1014):
+        files1 = findDIR("{0}/EGamma+Run2022F-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1015):
+        files1 = findDIR("{0}/EGamma+Run2022G-PromptNanoAODv10_v1-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2022 and type == 1021):
+        files1 = findDIR("{0}/JetMET+Run2022E-PromptNanoAODv10_v1-v3+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1022):
+        files1 = findDIR("{0}/JetMET+Run2022F-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1023):
+        files1 = findDIR("{0}/JetMET+Run2022G-PromptNanoAODv10_v1-v1+NANOAOD".format(dirT2))
 
     files = ROOT.vector('string')()
     concatenate(files, files1)
@@ -359,7 +378,12 @@ def SwitchSample(argument, skimType):
         99:(dirLocal+"/2018/vbf-hphigamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        199:(dirLocal+"/2018/vbf-hrhogamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        299:(dirLocal+"/2018/vbf-hphiKLKSgamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
-       399:("testsample",1.0*1000,plotCategory("kPlotBSM"))
+       399:("testsample",1.0*1000,plotCategory("kPlotBSM")),
+
+       100: (dirT2+"/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",19317.5*1000,plotCategory("kPlotDY")),
+       101: (dirT2+"/DYto2L-2Jets_MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",6221.3*1000,plotCategory("kPlotDY")),
+       102: (dirT2+"/WZ_TuneCP5_13p6TeV_pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",54.3*1000,plotCategory("kPlotWZ")),
+       103: (dirT2+"/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*0.1086*0.1086*9*1000,plotCategory("kPlotTop")),
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")

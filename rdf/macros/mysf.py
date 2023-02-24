@@ -11,3 +11,8 @@ ROOT.gInterpreter.ProcessLine('corr.eval_btvSF((char*)"central",(char*)"T",1.1,3
 ROOT.gInterpreter.ProcessLine('corr.eval_btvSF((char*)"central",(char*)"T",1.1,35.0,5)')
 ROOT.gInterpreter.ProcessLine('corr.eval_btvSF((char*)"central",(char*)"T",1.1,35.0,0)')
 ROOT.gInterpreter.ProcessLine('corr.eval_puJetIDSF((char*)"nom",(char*)"L",4.7,20.0)')
+ROOT.gInterpreter.ProcessLine('corr.eval_tauJETSF(38.2,11,5,"Tight","nom")')
+ROOT.gInterpreter.ProcessLine('corr.eval_tauELESF(0.3,3,"Tight","nom")')
+ROOT.gInterpreter.ProcessLine('corr.eval_tauMUOSF(-2.1,5,"Tight","nom")')
+ROOT.gInterpreter.ProcessLine('corr.eval_jetCORR(0.5,0.,100,15)')
+ROOT.gInterpreter.ProcessLine('corr.eval_jesUnc(1.5,30,0)')

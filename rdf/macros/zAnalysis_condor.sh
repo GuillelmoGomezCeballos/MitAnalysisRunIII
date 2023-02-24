@@ -1,45 +1,28 @@
 #!/bin/sh
 
-USERPROXY=`id -u`
-echo ${USERPROXY}
+source /cvmfs/cms.cern.ch/cmsset_default.sh
+export SCRAM_ARCH=slc7_amd64_gcc10
+scramv1 project CMSSW CMSSW_12_6_3 # cmsrel is an alias not on the workers
+cd CMSSW_12_6_3/src/
+eval `scramv1 runtime -sh` # cmsenv is an alias not on the workers
+cd ../..
 
-condorJob=1001
+voms-proxy-info
 
-voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
+echo "hostname"
+hostname
+whoami
 
-while IFS= read -r line; do
+tar xvzf zAnalysis.tgz
 
-set -- $line
-whichSample=$1
-whichYear=$2
+echo $PWD
 
-for whichJob in 0 1 2 3 4 5 6 7 8 9
-do
+./zAnalysis_slurm.sh
 
-cat << EOF > submit
-Universe   = vanilla
-Executable = zAnalysis.sh
-Arguments  = ${whichSample} ${whichYear} ${whichJob} ${condorJob}
-RequestMemory = 6000
-RequestCpus = 1
-RequestDisk = DiskUsage
-should_transfer_files = YES
-when_to_transfer_output = ON_EXIT
-Log    = logs/simple_zAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}.log
-Output = logs/simple_zAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}.out
-Error  = logs/simple_zAnalysis_${condorJob}_${whichSample}_${whichYear}_${whichJob}.error
-transfer_input_files = zAnalysis.py, functions.cc, utilsAna.py, config/selection.json, ../skimming/jsns/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt, data/Efficiencies_muon_generalTracks_Z_Run2018_UL_ID.root, data/Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.root, data/electronMediumID_UL_2018.root, data/electronReco_UL_2018.root, data/histoFakeEtaPt_2018_anaType3.root, data/histoLepSFEtaPt_2018.root, data/histoTriggerSFEtaPt_2018.root, data/puWeights_UL_2018.root, data/histoBtagEffSelEtaPt_2018.root, jsonpog/POG/2018/btagging.json, jsonpog/POG/2018/electron.json, jsonpog/POG/2018/muon_Z.json, jsonpog/POG/2018/photon.json, jsonpog/POG/2018/jmar.json, mysf.h, mysf.cpp, mysf.so
-use_x509userproxy = True
-x509userproxy = /tmp/x509up_u${USERPROXY}
-Requirements = ((BOSCOGroup == "bosco_cms" && BOSCOCluster == "ce03.cmsaf.mit.edu") || (BOSCOCluster == "t3serv008.mit.edu")) && (Machine != "t3btchxxx.mit.edu") && (Machine != "t3deskxxx.mit.edu")
-+REQUIRED_OS = "rhel7"
-Queue
-EOF
+rm -rf functions_cc* *.pyc zAnalysis.tgz \
+zAnalysis.py zAnalysis_slurm.sh functions.cc utilsAna.py \
+data \
+mysf.* \
+jsns config
 
-condor_submit submit
-
-done
-
-done < zAnalysis_input_condor_jobs.cfg
-
-rm -f submit
+ls -l

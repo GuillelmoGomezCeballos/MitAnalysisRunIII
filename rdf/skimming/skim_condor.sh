@@ -14,7 +14,7 @@ touch skim_input_files.cfg skim_input_files_fromDAS.cfg;
 tar cvzf skim.tgz \
 skim.py skim_*.cfg \
 functions_skim.cc haddnanoaod.py \
-jsns config/selection.json
+jsns/* config/*
 
 while IFS= read -r line; do
 
