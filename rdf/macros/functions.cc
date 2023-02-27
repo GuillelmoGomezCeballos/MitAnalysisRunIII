@@ -308,6 +308,31 @@ Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
   return new_jet_pt;
 }
 
+Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_i& jet_genJetIdx, const Vec_f& GenJet_pt, const double rho, int type){
+  bool debug = true;
+  if(debug) printf("jer: %lu %f %d\n",jet_pt.size(),rho,type);
+  Vec_f new_jet_pt(jet_pt.size(), 1.0);
+
+  for (unsigned int idx = 0; idx < jet_pt.size(); ++idx) {
+    if(jet_genJetIdx[idx] >= 0) {
+      double s_jer = max(corrSFs.eval_jerMethod1(jet_eta[idx], type)-1.0, 0.0);
+      double pt_diff_rel = (jet_pt[idx]-GenJet_pt[jet_genJetIdx[idx]])/jet_pt[idx];
+      double sf = max(1 + s_jer*pt_diff_rel, 0.0);
+      new_jet_pt[idx] = jet_pt[idx] * sf;
+      if(debug) printf("jermethod1(%d): %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,s_jer,pt_diff_rel,sf,jet_eta[idx],jet_pt[idx],new_jet_pt[idx]);
+    }
+    else {
+    double eval_jerMethod2(double eta, double pt, double rho);
+      double s_jer = max(corrSFs.eval_jerMethod2(jet_eta[idx], jet_pt[idx], rho), 0.0);
+      double sf = 1 + gRandom->Gaus(0.0,0.1) * s_jer;
+      new_jet_pt[idx] = jet_pt[idx] * sf;
+      if(debug) printf("jermethod2(%d): %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,jet_eta[idx],jet_pt[idx],rho,s_jer,sf,new_jet_pt[idx]);
+    }
+  }
+
+  return new_jet_pt;
+}
+
 float compute_bdt_test(const Vec_f& bdt){
   if(bdt.size() != 1) {
     printf("bdt size != 1 %lu\n",bdt.size());

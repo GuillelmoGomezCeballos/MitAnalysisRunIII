@@ -50,11 +50,11 @@ MyCorrections::MyCorrections(int year) {
   std::string fileNameJEC = dirName+"JME/"+subDirName+"jet_jerc.json.gz";
   auto csetJEC = correction::CorrectionSet::from_file(fileNameJEC);
 
-  std::string jecName = "";
-  if(year == 2018)  jecName = "Summer19UL18_V5_MC";
-  if(year == 2017)  jecName = "Summer19UL17_V5_MC";
-  if(year == 22016) jecName = "Summer19UL16_V5_MC";
-  if(year == 12016) jecName = "Summer19UL16APV_V5_MC";
+  std::string jecName = ""; std::string jerName = "";
+  if(year == 2018)  {jecName = "Summer19UL18_V5_MC";    jerName = "Summer19UL18_JRV2_MC";}
+  if(year == 2017)  {jecName = "Summer19UL17_V5_MC";    jerName = "Summer19UL17_JRV2_MC";}
+  if(year == 22016) {jecName = "Summer19UL16_V5_MC";    jerName = "Summer20UL16_JRV3";}
+  if(year == 12016) {jecName = "Summer19UL16APV_V5_MC"; jerName = "Summer20UL16APV_JRV3";}
 
   std::string algoName = "AK4PFchs";
 
@@ -63,6 +63,12 @@ MyCorrections::MyCorrections(int year) {
 
   tagName = jecName + "_" + "Total" + "_" + algoName;
   jesUnc_ = csetJEC->at(tagName);
+
+  tagName = jerName + "_" + "ScaleFactor" + "_" + algoName;
+  jerMethod1Unc_ = csetJEC->at(tagName);
+
+  tagName = jerName + "_" + "PtResolution" + "_" + algoName;
+  jerMethod2Unc_ = csetJEC->at(tagName);
 
   std::string fileNamePUJetID = dirName+"JME/"+subDirName+"jmar.json.gz";
   auto csetPUJetID = correction::CorrectionSet::from_file(fileNamePUJetID);
@@ -131,6 +137,17 @@ double MyCorrections::eval_jetCORR(double area, double eta, double pt, double rh
 double MyCorrections::eval_jesUnc(double eta, double pt, int type) {
   if(type == 0) return jesUnc_->evaluate({eta, pt});
   return 0.0;
+};
+
+double MyCorrections::eval_jerMethod1(double eta, int type) {
+  if     (type ==  0) return jerMethod1Unc_->evaluate({eta,"nom"});
+  else if(type == +1) return jerMethod1Unc_->evaluate({eta,"up"});
+  else if(type == -1) return jerMethod1Unc_->evaluate({eta,"down"});
+  return 0.0;
+};
+
+double MyCorrections::eval_jerMethod2(double eta, double pt, double rho) {
+  return jerMethod2Unc_->evaluate({eta,pt,rho});
 };
 
 double MyCorrections::eval_puJetIDSF(char *valType, char *workingPoint, double eta, double pt) {

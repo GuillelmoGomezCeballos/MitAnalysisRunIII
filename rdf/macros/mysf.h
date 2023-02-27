@@ -20,6 +20,8 @@ class MyCorrections {
     double eval_btvSF     (char *valType, char *workingPoint, double eta, double pt, int flavor);
     double eval_jetCORR   (double area, double eta, double pt, double rho);
     double eval_jesUnc    (double eta, double pt, int type);
+    double eval_jerMethod1(double eta, int type);
+    double eval_jerMethod2(double eta, double pt, double rho);
     double eval_puJetIDSF (char *valType, char *workingPoint, double eta, double pt);
   private:
     correction::Correction::Ref puSF_;
@@ -35,5 +37,7 @@ class MyCorrections {
     correction::Correction::Ref btvLFSF_;
     correction::CompoundCorrection::Ref JEC_;
     correction::Correction::Ref jesUnc_;
+    correction::Correction::Ref jerMethod1Unc_;
+    correction::Correction::Ref jerMethod2Unc_;
     correction::Correction::Ref puJetIDSF_;
 };
