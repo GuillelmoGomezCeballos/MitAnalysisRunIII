@@ -16,6 +16,7 @@
 #include "TVector2.h"
 #include "Math/GenVector/LorentzVector.h"
 #include "Math/GenVector/PtEtaPhiM4D.h"
+#include "Math/GenVector/PxPyPzM4D.h"
 
 #include "mysf.h"
 
@@ -44,6 +45,7 @@ using Vec_i = ROOT::VecOps::RVec<int>;
 using Vec_ui = ROOT::VecOps::RVec<unsigned int>;
 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > PtEtaPhiMVector;
+typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzM4D<double> > PxPyPzMVector;
 std::unordered_map< UInt_t, std::vector< std::pair<UInt_t,UInt_t> > > jsonMap;
 
 TH2D histoFakeEtaPt_mu;
@@ -134,15 +136,6 @@ float getValFromTH2(const TH2& h, const float& x, const float& y, const float& s
 
 void initJSONSFs(int year){
   corrSFs = MyCorrections(year);
-}
-
-Vec_f compute_JES(Vec_f jet_pt, Vec_f jet_eta) {
-
-  Vec_f jet_pt_new(jet_pt.size(), 0);
-  for(unsigned int i=0;i<jet_pt.size();i++) {
-    jet_pt_new[i] = jet_pt[i]*0.03;
-  }
-  return jet_pt_new;
 }
 
 // PUJetID SFs
@@ -309,7 +302,7 @@ Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
 }
 
 Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_i& jet_genJetIdx, const Vec_f& GenJet_pt, const double rho, int type){
-  bool debug = true;
+  bool debug = false;
   if(debug) printf("jer: %lu %f %d\n",jet_pt.size(),rho,type);
   Vec_f new_jet_pt(jet_pt.size(), 1.0);
 
@@ -331,6 +324,42 @@ Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
   }
 
   return new_jet_pt;
+}
+
+float compute_JSON_MET_Unc(const double MET_pt, const double MET_phi, const double RAWMET_pt, const double RAWMET_phi, 
+const Vec_f& Jet_chEmEF, const Vec_f& Jet_neEmEF, const Vec_f& Jet_muonSubtrFactor, const Vec_f& Jet_rawFactor,
+const Vec_f& Jet_pt_def, const Vec_f& Jet_pt_mod, const Vec_f& Jet_eta, const Vec_f& Jet_phi, const Vec_f& Jet_mass, int type){
+  bool debug = false;
+  if(debug) printf("MET: %lu %d\n",Jet_pt_def.size(),type);
+  if(Jet_pt_def.size() != Jet_pt_mod.size()) printf("Different jet sizes in MET corrector!!!\n");
+
+  double ini_met[2] = {MET_pt * cos(MET_phi), MET_pt * sin(MET_phi)};
+  if(type < 0){
+    ini_met[0] = RAWMET_pt * cos(RAWMET_phi);
+    ini_met[1] = RAWMET_pt * sin(RAWMET_phi);
+  }
+
+  for (unsigned int idx = 0; idx < Jet_pt_def.size(); ++idx) {
+    if(Jet_chEmEF[idx] + Jet_neEmEF[idx] >= 0.9) continue;
+    if(Jet_pt_def[idx] * (1-Jet_muonSubtrFactor[idx]) < 15) continue;
+    PtEtaPhiMVector jetForMET_raw = PtEtaPhiMVector(Jet_pt_def[idx] * (1-Jet_rawFactor[idx]) * (1-Jet_muonSubtrFactor[idx]), Jet_eta[idx], Jet_phi[idx], Jet_mass[idx]);
+    PtEtaPhiMVector jetForMET_def = PtEtaPhiMVector(Jet_pt_def[idx] *                          (1-Jet_muonSubtrFactor[idx]), Jet_eta[idx], Jet_phi[idx], Jet_mass[idx]);
+    PtEtaPhiMVector jetForMET_mod = PtEtaPhiMVector(Jet_pt_mod[idx] *                          (1-Jet_muonSubtrFactor[idx]), Jet_eta[idx], Jet_phi[idx], Jet_mass[idx]);
+    if(type > 0){
+      ini_met[0] = ini_met[0] - jetForMET_mod.Px() + jetForMET_def.Px();
+      ini_met[1] = ini_met[1] - jetForMET_mod.Py() + jetForMET_def.Py();
+    } else {
+      ini_met[0] = ini_met[0] - jetForMET_def.Px() + jetForMET_raw.Px();
+      ini_met[1] = ini_met[1] - jetForMET_def.Py() + jetForMET_raw.Py();
+    }
+  }
+  PxPyPzMVector newMET = PxPyPzMVector(ini_met[0],ini_met[1],0.0,0.0);
+  if(debug) printf("%6.1f %6.1f %6.1f | %6.2f %6.2f %6.2f\n",MET_pt,RAWMET_pt,newMET.Pt(),MET_phi,RAWMET_phi,newMET.Phi());
+
+  if     (abs(type) == 1) return newMET.Pt();
+  else if(abs(type) == 2) return newMET.Phi(); 
+  
+  return 0;
 }
 
 float compute_bdt_test(const Vec_f& bdt){

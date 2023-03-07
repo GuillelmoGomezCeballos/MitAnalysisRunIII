@@ -8,8 +8,18 @@ correctionlib.register_pyroot_binding()
 #ROOT.gInterpreter.Declare('#include "mysf.h"')
 #ROOT.gInterpreter.Load("mysf.so")
 
-lumi = [36.1, 41.5, 60.0]
-useXROOTD = False
+useXROOTD = True
+
+def getLumi(year):
+    lumi = [36.1, 41.5, 60.0, 26.3]
+
+    lumiBit = -1
+    if(lumiBit == 2016): lumiBit = 0
+    elif(lumiBit == 2017): lumiBit = 1
+    elif(lumiBit == 2018): lumiBit = 2
+    elif(lumiBit == 2022): lumiBit = 3
+
+    return lumi[lumiBit]
 
 def plotCategory(key):
     plotCategoryDict = dict()

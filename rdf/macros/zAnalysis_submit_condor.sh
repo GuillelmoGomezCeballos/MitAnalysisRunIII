@@ -10,7 +10,7 @@ voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 tar cvzf zAnalysis.tgz \
 zAnalysis.py zAnalysis_slurm.sh functions.cc utilsAna.py \
 data/* \
-mysf.* \
+mysf.cpp mysf.h \
 jsns/* config/*
 
 while IFS= read -r line; do
@@ -27,7 +27,7 @@ Universe   = vanilla
 Executable = zAnalysis_condor.sh
 Arguments  = ${whichSample} ${whichYear} ${whichJob} ${condorJob}
 RequestMemory = 6000
-RequestCpus = 4
+RequestCpus = 1
 RequestDisk = DiskUsage
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT

@@ -4,9 +4,8 @@ import os, sys, getopt, json
 ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
-
-lumi = [36.1, 41.5, 60.0]
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
+from utilsSelection import selectionTauVeto, selectionJetMet, selection3LVar, selectionTrigger2L, selectionElMu, selectionMCWeigths
 
 doNtuples = False
 
@@ -51,88 +50,20 @@ def selectionLL(df,year,PDType,isData):
     TRIGGERDEL  = getTriggerFromJson(overallTriggers, "TRIGGERDEL", year)
     TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
 
-    TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-    if(year == 2018 and PDType == "MuonEG"):
-        TRIGGERLEP = "{0}".format(TRIGGERMUEG)
-    elif(year == 2018 and PDType == "DoubleMuon"):
-        TRIGGERLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
-    elif(year == 2018 and PDType == "SingleMuon"):
-        TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-    elif(year == 2018 and PDType == "EGamma"):
-        TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-    elif(year == 2018):
-        TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-    else:
-        print("PROBLEM with triggers!!!")
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
 
-    print("TRIGGERLEP: {0}".format(TRIGGERLEP))
+    dftag =(dftag.Filter("nLoose == 3","Only two loose leptons")
+                 .Filter("nFake == 3","Two fake leptons")
+                #.Filter("nTight == 3","Two tight leptons")
+                 .Filter("abs(Sum(fakemu_charge)+Sum(fakeel_charge)) == 1", "+/- 1 net charge")
+                 )
 
-    dftag =(df.Define("isData","{}".format(isData))
-              .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
-              .Define("trigger","{0}".format(TRIGGERLEP))
-              .Filter("trigger > 0","Passed trigger")
-
-              .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
-              .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")
-              .Filter("Sum(loose_mu)+Sum(loose_el) == 3","Three loose leptons")
-
-              .Define("fake_mu"           ,"{0}".format(FAKE_MU))
-              .Define("fakemu_pt"         ,"Muon_pt[fake_mu]")
-              .Define("fakemu_eta"        ,"Muon_eta[fake_mu]")
-              .Define("fakemu_phi"        ,"Muon_phi[fake_mu]")
-              .Define("fakemu_mass"       ,"Muon_mass[fake_mu]")
-              .Define("fakemu_charge"     ,"Muon_charge[fake_mu]")
-              .Define("fakemu_dxy"        ,"Muon_dxy[fake_mu]")
-              .Define("fakemu_dz"         ,"Muon_dz[fake_mu]")
-              .Define("fakemu_looseId"    ,"Muon_looseId[fake_mu]")
-              .Define("fakemu_mediumId"   ,"Muon_mediumId[fake_mu]")
-              .Define("fakemu_tightId"    ,"Muon_tightId[fake_mu]")
-              .Define("fakemu_pfIsoId"    ,"Muon_pfIsoId[fake_mu]")
-              .Define("fakemu_mvaId"      ,"Muon_mvaId[fake_mu]")
-              .Define("fakemu_miniIsoId"  ,"Muon_miniIsoId[fake_mu]")
-              .Define("fakemu_mvaTTH"     ,"Muon_mvaTTH[fake_mu]")
-              .Define("tight_mu"          ,"{0}".format(TIGHT_MU6))
-
-              .Define("fake_el"                   ,"{0}".format(FAKE_EL))
-              .Define("fakeel_pt"                 ,"Electron_pt[fake_el]")
-              .Define("fakeel_eta"                ,"Electron_eta[fake_el]")
-              .Define("fakeel_phi"                ,"Electron_phi[fake_el]")
-              .Define("fakeel_mass"               ,"Electron_mass[fake_el]")
-              .Define("fakeel_charge"             ,"Electron_charge[fake_el]")
-              .Define("fakeel_dxy"                ,"Electron_dxy[fake_el]")
-              .Define("fakeel_dz"                 ,"Electron_dz[fake_el]")
-              .Define("fakeel_cutBased"           ,"Electron_cutBased[fake_el]")
-              .Define("fakeel_mvaFall17V2Iso_WP90","Electron_mvaFall17V2Iso_WP90[fake_el]")
-              .Define("fakeel_mvaFall17V2Iso_WP80","Electron_mvaFall17V2Iso_WP80[fake_el]")
-              .Define("fakeel_tightCharge"        ,"Electron_tightCharge[fake_el]")
-              .Define("fakeel_mvaTTH"             ,"Electron_mvaTTH[fake_el]")
-              .Define("tight_el"                  ,"{0}".format(TIGHT_EL4))
-
-              .Define("nFake","Sum(fake_mu)+Sum(fake_el)")
-              .Define("nTight","Sum(tight_mu)+Sum(tight_el)")
-              .Filter("nFake == 3","Three fake leptons")
-             #.Filter("nTight == 3","Three tight leptons")
-
-              .Filter("abs(Sum(fakemu_charge)+Sum(fakeel_charge)) == 1", "+/- 1 net charge")
-
-              .Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && ((Tau_idDeepTau2017v2p1VSe & 8) != 0) && ((Tau_idDeepTau2017v2p1VSjet & 16) != 0) && ((Tau_idDeepTau2017v2p1VSmu & 8) != 0)")
-              .Filter("Sum(good_tau) == 0","No selected hadronic taus")
-
-              .Define("TriLepton_flavor", "(Sum(fake_mu)+3*Sum(fake_el)-3)/2")
-              .Define("m3l",    "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 0)")
-              .Define("mllmin", "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 1)")
-              .Define("drllmin","compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 2)")
-              .Define("ptl1",   "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 3)")
-              .Define("ptl2",   "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 4)")
-              .Define("ptl3",   "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 5)")
-              .Define("mll",    "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 6)")
-              .Define("ptl1Z",  "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 7)")
-              .Define("ptl2Z",  "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 8)")
-              .Define("ptlW",   "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi, 9)")
-              .Define("mtW",    "compute_3l_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,10)")
-              .Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
-              .Define("mllZ",  "abs(mll-91.1876)")
+    dftag = selectionTauVeto(dftag,year)
+    dftag = selectionJetMet (dftag,year)
+    dftag = selection3LVar  (dftag,year)
+		              
 
               .Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")

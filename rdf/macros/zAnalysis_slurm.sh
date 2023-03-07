@@ -4,7 +4,7 @@ echo "hostname"
 hostname
 whoami
 
-python3 zAnalysis.py --process=$1 --year=$2 --whichJob=$3
+time python3 zAnalysis.py --process=$1 --year=$2 --whichJob=$3
 status=$?
 
 if [ -f "fillhistoZAna_sample$1_year$2_job$3.root" ]; then
