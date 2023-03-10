@@ -22,9 +22,9 @@
 "TIGHT_EL6" : "(abs(fake_Electron_dxy) < 0.2 && abs(fake_Electron_dz) < 0.5 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaIso_Fall17V2_WP80 == true && fake_Electron_tightCharge == 2)",
 "TIGHT_EL7" : "(abs(fake_Electron_dxy) < 0.2 && abs(fake_Electron_dz) < 0.5 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaTTH > 0.5 && fake_Electron_tightCharge == 2)",
 
-"VBSSEL" : "(ngoodvbs_jets >= 2 && mjj > 500 && detajj > 2.5 && zepvv < 1.0)",
+"VBSSEL" : "(nvbs_jets >= 2 && vbs_mjj > 500 && vbs_detajj > 2.5 && vbs_zepvv < 1.0)",
 
-"VBSLOOSESEL" : "(ngoodvbs_jets >= 2 && mjj > 300 && detajj > 2.5)",
+"VBSLOOSESEL" : "(nvbs_jets >= 2 && vbs_mjj > 300 && vbs_detajj > 2.5)",
 
 "BARRELphotons" : "(Photon_pt > 20 && abs(Photon_eta) < 2.5 && Photon_isScEtaEB && Photon_cutBased >= 2 && Photon_electronVeto && photon_mask)",
 "ENDCAPphotons" : "(Photon_pt > 20 && abs(Photon_eta) < 2.5 && Photon_isScEtaEE && Photon_cutBased >= 2 && Photon_electronVeto && photon_mask)",

@@ -307,7 +307,7 @@ Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
   Vec_f new_jet_pt(jet_pt.size(), 1.0);
 
   for (unsigned int idx = 0; idx < jet_pt.size(); ++idx) {
-    if(jet_genJetIdx[idx] >= 0) {
+    if(jet_genJetIdx[idx] >= 0 && GenJet_pt.size() > (unsigned)jet_genJetIdx[idx]) {
       double s_jer = max(corrSFs.eval_jerMethod1(jet_eta[idx], type)-1.0, 0.0);
       double pt_diff_rel = (jet_pt[idx]-GenJet_pt[jet_genJetIdx[idx]])/jet_pt[idx];
       double sf = max(1 + s_jer*pt_diff_rel, 0.0);
@@ -503,6 +503,8 @@ float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
 }
 
 float compute_TriggerSF(float ptl1, float ptl2, float etal1, float etal2, int ltype){
+
+  if(ltype >= 4) return 1.0;
 
   TH2D hcorr;
   if	 (etal1 <= 1.5 && etal2 <= 1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_0;
@@ -998,6 +1000,9 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
    else if(var == 3) theVar = p4mom[0].Pt();
    else if(var == 4) theVar = p4mom[1].Pt();
    else if(var == 5) theVar = p4mom[2].Pt();
+   else if(var == 6) theVar = p4mom[0].Pt();
+   else if(var == 7) theVar = p4mom[1].Pt();
+   else if(var == 8) theVar = p4mom[2].Pt();
    else {
      for(int i=0; i<3; i++){
        for(int j=i+1; j<3; j++){  
@@ -1015,11 +1020,11 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
        if(i != tagZ[0] && i != tagZ[1]) tagW = i;
      }
      
-     if     (var ==  6) theVar = mllZ;
-     else if(var ==  7) theVar = p4mom[tagZ[0]].Pt();
-     else if(var ==  8) theVar = p4mom[tagZ[1]].Pt();
-     else if(var ==  9) theVar = p4mom[tagW].Pt();
-     else if(var == 10) theVar = std::sqrt(2*p4mom[tagW].Pt()*met_pt*(1-std::cos(deltaPhi(p4mom[tagW].Phi(),met_phi))));
+     if     (var ==  9) theVar = mllZ;
+     else if(var == 10) theVar = p4mom[tagZ[0]].Pt();
+     else if(var == 11) theVar = p4mom[tagZ[1]].Pt();
+     else if(var == 12) theVar = p4mom[tagW].Pt();
+     else if(var == 13) theVar = std::sqrt(2*p4mom[tagW].Pt()*met_pt*(1-std::cos(deltaPhi(p4mom[tagW].Phi(),met_phi))));
    }
    return theVar;
 }

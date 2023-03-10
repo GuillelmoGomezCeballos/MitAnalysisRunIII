@@ -9,8 +9,6 @@ from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionMCWeigths
 #from utilsAna import loadCorrectionSet
 
-lumi = [36.1, 41.5, 60.0, 26.3]
-
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
     selectionJsonPath = "selection.json"
@@ -142,7 +140,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
     if(theCat == plotCategory("kPlotData")):
         dfbase = dfbase.Define("weight","1.0")
     else:
-        dfbase = selectionMCWeigths(dfbase,year,PDType,weight)
+        dfbase = selectionMCWeigths(dfbase,year,PDType,weight,0)
 
     dfcat = []
     dfzllcat = []
@@ -231,12 +229,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
             dfzgcat[3*x+ltype] = dfzgcat[3*x+ltype].Filter("abs(mllg-91.1876)<15")
             histo[ltype+173][x] = dfzgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+173,x), "histo_{0}_{1}".format(ltype+173,x), 20, 20, 120), "ptg","weight")
 
-            histo[ltype+176][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+176,x), "histo_{0}_{1}".format(ltype+176,x), 100, 0, 200), "MET_pt_def"    ,"weight")
-            histo[ltype+179][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+179,x), "histo_{0}_{1}".format(ltype+179,x), 100, 0, 200), "MET_pt_JesUp"  ,"weight")
-            histo[ltype+182][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+182,x), "histo_{0}_{1}".format(ltype+182,x), 100, 0, 200), "MET_pt_JesDown","weight")
-            histo[ltype+185][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+185,x), "histo_{0}_{1}".format(ltype+185,x), 100, 0, 200), "MET_pt_JerUp"  ,"weight")
-            histo[ltype+188][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+188,x), "histo_{0}_{1}".format(ltype+188,x), 100, 0, 200), "MET_pt_JerDown","weight")
-            histo[ltype+191][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+191,x), "histo_{0}_{1}".format(ltype+191,x), 100, 0, 200), "newMET"        ,"weight")
+            histo[ltype+176][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+176,x), "histo_{0}_{1}".format(ltype+176,x), 100, 0, 200), "MET_ptDef"    ,"weight")
+            histo[ltype+179][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+179,x), "histo_{0}_{1}".format(ltype+179,x), 100, 0, 200), "MET_ptJesUp"  ,"weight")
+            histo[ltype+182][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+182,x), "histo_{0}_{1}".format(ltype+182,x), 100, 0, 200), "MET_ptJesDown","weight")
+            histo[ltype+185][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+185,x), "histo_{0}_{1}".format(ltype+185,x), 100, 0, 200), "MET_ptJerUp"  ,"weight")
+            histo[ltype+188][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+188,x), "histo_{0}_{1}".format(ltype+188,x), 100, 0, 200), "MET_ptJerDown","weight")
+            histo[ltype+191][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+191,x), "histo_{0}_{1}".format(ltype+191,x), 100, 0, 200), "newMET"       ,"weight")
 
             if(ltype == 0):
                 histo2D[ 0][x] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format( 0, x), "histo2d_{0}_{1}".format( 0, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
@@ -314,7 +312,6 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
         runTree.GetEntry(i)
         genEventSumWeight += runTree.genEventSumw
         genEventSumNoWeight += runTree.genEventCount
-
 
     weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)
     weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)

@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     copyFilesToFS = True
     #            1l     2l     3l     met    pho
-    doSkimSel = [False, True, False, False, False]
+    doSkimSel = [True, True, True, False, False]
 
     outputDir = "root://submit50.mit.edu//store/user/ceballos/nanoaod/skims_submit/"
     inputSamplesCfg = "skim_input_samples.cfg"
