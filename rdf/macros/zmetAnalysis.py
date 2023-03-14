@@ -5,9 +5,14 @@ from array import array
 ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionLGVar, selectionTrigger2L, selectionElMu, selectionWeigths, makeFinalVariable
 
-lumi = [36.1, 41.5, 60.0]
+doNtuples = False
+# 0 = T, 1 = M, 2 = L
+bTagSel = 1
+
+useFR = 0
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -53,136 +58,30 @@ def selectionLL(df,year,PDType,isData):
     TRIGGERDEL  = getTriggerFromJson(overallTriggers, "TRIGGERDEL", year)
     TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
 
-    TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-    if(year == 2018 and PDType == "MuonEG"):
-        TRIGGERLEP = "{0}".format(TRIGGERMUEG)
-    elif(year == 2018 and PDType == "DoubleMuon"):
-        TRIGGERLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
-    elif(year == 2018 and PDType == "SingleMuon"):
-        TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-    elif(year == 2018 and PDType == "EGamma"):
-        TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-    elif(year == 2018):
-        TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-    else:
-        print("PROBLEM with triggers!!!")
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
 
-    print("TRIGGERLEP: {0}".format(TRIGGERLEP))
+    dftag =(dftag.Filter("nLoose == 2","Only two loose leptons")
+                 .Filter("nFake == 2","Two fake leptons")
+                 .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Sign-sign leptons")
+                 .Filter("nTight == 2","Two tight leptons")
+                 )
 
-    dftag =(df.Define("isData","{}".format(isData))
-              .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
-              .Define("trigger","{0}".format(TRIGGERLEP))
-              .Filter("trigger > 0","Passed trigger")
+    dftag = selectionTauVeto(dftag,year)
+    dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
+    dftag = selectionJetMet (dftag,year,bTagSel)
+    dftag = selection2LVar  (dftag,year)
+    dftag = selectionLGVar  (dftag,year)
 
-              .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
-              .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")
-              .Filter("Sum(loose_mu)+Sum(loose_el) == 2","Three loose leptons")
-
-              .Define("fake_mu"           ,"{0}".format(FAKE_MU))
-              .Define("fakemu_pt"         ,"Muon_pt[fake_mu]")
-              .Define("fakemu_eta"        ,"Muon_eta[fake_mu]")
-              .Define("fakemu_phi"        ,"Muon_phi[fake_mu]")
-              .Define("fakemu_mass"       ,"Muon_mass[fake_mu]")
-              .Define("fakemu_charge"     ,"Muon_charge[fake_mu]")
-              .Define("fakemu_dxy"        ,"Muon_dxy[fake_mu]")
-              .Define("fakemu_dz"         ,"Muon_dz[fake_mu]")
-              .Define("fakemu_looseId"    ,"Muon_looseId[fake_mu]")
-              .Define("fakemu_mediumId"   ,"Muon_mediumId[fake_mu]")
-              .Define("fakemu_tightId"    ,"Muon_tightId[fake_mu]")
-              .Define("fakemu_pfIsoId"    ,"Muon_pfIsoId[fake_mu]")
-              .Define("fakemu_mvaId"      ,"Muon_mvaId[fake_mu]")
-              .Define("fakemu_miniIsoId"  ,"Muon_miniIsoId[fake_mu]")
-              .Define("fakemu_mvaTTH"     ,"Muon_mvaTTH[fake_mu]")
-              .Define("tight_mu"          ,"{0}".format(TIGHT_MU0))
-
-              .Define("fake_el"                   ,"{0}".format(FAKE_EL))
-              .Define("fakeel_pt"                 ,"Electron_pt[fake_el]")
-              .Define("fakeel_eta"                ,"Electron_eta[fake_el]")
-              .Define("fakeel_phi"                ,"Electron_phi[fake_el]")
-              .Define("fakeel_mass"               ,"Electron_mass[fake_el]")
-              .Define("fakeel_charge"             ,"Electron_charge[fake_el]")
-              .Define("fakeel_dxy"                ,"Electron_dxy[fake_el]")
-              .Define("fakeel_dz"                 ,"Electron_dz[fake_el]")
-              .Define("fakeel_cutBased"           ,"Electron_cutBased[fake_el]")
-              .Define("fakeel_mvaFall17V2Iso_WP90","Electron_mvaFall17V2Iso_WP90[fake_el]")
-              .Define("fakeel_mvaFall17V2Iso_WP80","Electron_mvaFall17V2Iso_WP80[fake_el]")
-              .Define("fakeel_tightCharge"        ,"Electron_tightCharge[fake_el]")
-              .Define("fakeel_mvaTTH"             ,"Electron_mvaTTH[fake_el]")
-              .Define("tight_el"                  ,"{0}".format(TIGHT_EL0))
-
-              .Define("nFake","Sum(fake_mu)+Sum(fake_el)")
-              .Define("nTight","Sum(tight_mu)+Sum(tight_el)")
-              .Filter("nFake == 2","Two fake leptons")
-              .Filter("nTight == 2","Two tight leptons")
-              .Filter("Sum(fakemu_charge)+Sum(fakeel_charge) == 0", "Opposite-sign leptons")
-
-              .Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && ((Tau_idDeepTau2017v2p1VSe & 8) != 0) && ((Tau_idDeepTau2017v2p1VSjet & 16) != 0) && ((Tau_idDeepTau2017v2p1VSmu & 8) != 0)")
-              .Filter("Sum(good_tau) == 0","No selected hadronic taus")
-
-              .Define("mll",    "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,0)")
-              .Define("DiLepton_flavor", "Sum(fake_mu)+2*Sum(fake_el)-2")
-              .Filter("abs(mll-91.1876) < 15","abs(mll-mZ)<15")
-              .Define("ptll",   "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,1)")
-              .Filter("MET_pt > 60 && ptll > 60","met > 60 && ptll > 60")
-
-              .Define("drll",   "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,2)")
-              .Define("dphill", "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,3)")
-              .Define("ptl1",   "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,4)")
-              .Define("ptl2",   "compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,5)")
-              .Define("etal1",  "abs(compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,6))")
-              .Define("etal2",  "abs(compute_ll_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass,7))")
-              .Define("ltype",  "compute_nl_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,2)")
-
-              .Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
-
-              .Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
-              .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
-
-              .Define("goodloose_jet", "abs(Jet_eta) < 2.5 && Jet_pt > 20 && jet_mask1 && jet_mask2")
-              .Define("goodloosejet_pt", "Jet_pt[goodloose_jet]")
-              .Define("goodloosejet_eta", "abs(Jet_eta[goodloose_jet])")
-              .Define("goodloosejet_btagDeepB", "Jet_btagDeepB[goodloose_jet]")
-              .Define("goodloose_bjet", "goodloosejet_btagDeepB > 0.7100")
-              .Define("nbtagloosejet", "Sum(goodloose_bjet)")
- 
-              .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_mask1 && jet_mask2 && Jet_jetId > 0 && Jet_puId > 0")
-              .Define("ngood_jets", "Sum(good_jet)")
-              .Define("goodjet_pt",    "Jet_pt[good_jet]")
-              .Define("goodjet_eta",   "Jet_eta[good_jet]")
-              .Define("goodjet_phi",   "Jet_phi[good_jet]")
-              .Define("goodjet_mass",  "Jet_mass[good_jet]")
-              .Define("mjj",    "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 0)")
-              .Define("ptjj",   "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 1)")
-              .Define("detajj", "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 2)")
-              .Define("dphijj", "compute_jet_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, 3)")
-
-              .Define("ptbalance", "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 0)")
-              .Define("ptjbalance","compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 1)")
-              .Define("dphillmet", "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 2)")
-              .Define("dphilljmet","compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 3)")
-              .Define("mt",        "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 4)")
-              .Define("jetPtFrac", "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 5)")
-              .Define("dphijmet",  "compute_met_lepton_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, 6)")
-
-              .Define("photon_mask", "cleaningMask(Electron_photonIdx[fake_el],nPhoton)")
-              .Define("goodPhotons", "{}".format(BARRELphotons)+" or {}".format(ENDCAPphotons) )
-              .Define("goodPhotons_pt", "Photon_pt[goodPhotons]")
-              .Define("goodPhotons_eta", "Photon_eta[goodPhotons]")
-              .Define("goodPhotons_phi", "Photon_phi[goodPhotons]")
-
-              .Define("ptgbalance", "compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 0)")
-              .Define("ptgjbalance","compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 1)")
-              .Define("dphillgmet", "compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 2)")
-              .Define("dphillgjmet","compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 3)")
-              .Define("mtg",        "compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 4)")
-              .Define("jetPtgFrac", "compute_met_lepton_gamma_var(goodjet_pt, goodjet_eta, goodjet_phi, goodjet_mass, fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, MET_pt, MET_phi, goodPhotons_pt, goodPhotons_eta, goodPhotons_phi, 5)")
-
-              )
+    dftag = (dftag.Filter("abs(mll-91.1876) < 15","abs(mll-mZ)<15")
+                  .Filter("MET_pt > 60 && ptll > 60","met > 60 && ptll > 60")
+                  .Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
+		  )
 
     return dftag
 
-def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
+def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
@@ -197,7 +96,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
     elif(theCat == plotCategory("kPlotTVX")):
         theCat = plotCategory("kPlotVVV")
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 200
+    nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
 
@@ -230,61 +129,28 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
     ROOT.initHisto2F(histoMuISOSF,3)
     ROOT.initHisto1D(puWeights,0)
 
-    ROOT.initJSONSFs(2018)
+    ROOT.initJSONSFs(year)
 
     dftag = selectionLL(df,year,PDType,isData)
 
-    if(theCat == plotCategory("kPlotData")):
-        dfbase =(dftag.Define("weightNoPURecoSF","1.0")
-                      .Define("weightNoLepSF","1.0")
-                      .Define("weightNoTriggerSF","1.0")
-                      .Define("weightNoBTVSF","1.0")
-                      .Define("weight","1.0")
-                      )
-
-    else:
-        dfbase = (dftag.Define("PDType","\"{0}\"".format(PDType))
-                       #.Define("weightsTest1", ROOT.WeightsComputer(histoFakeEtaPt_mu), ("fakemu_pt", "fakemu_eta"))
-                       #.Filter("weightsTest1 >= 0","good fake weight1")
-                       .Define("goodloosejet_hadronFlavour","Jet_hadronFlavour[goodloose_jet]")
-                       .Define("fakemu_genPartFlav","Muon_genPartFlav[fake_mu]")
-                       .Define("fakeel_genPartFlav"        ,"Electron_genPartFlav[fake_el]")
-                       .Define("weightPURecoSF","compute_PURecoSF(fakemu_pt,fakemu_eta,fakeel_pt,fakeel_eta,Pileup_nTrueInt)")
-                       .Filter("weightPURecoSF > 0","good PURecoSF weight")
-                       .Define("weightLepSF","compute_LepSF(fakemu_pt,fakemu_eta,fakeel_pt,fakeel_eta)")
-                       .Filter("weightLepSF > 0","good LepSF weight")
-                       .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype)")
-                       .Filter("weightTriggerSF > 0","good TriggerSF weight")
-                       .Define("weightMC","compute_weights({0},genWeight,PDType,fakemu_genPartFlav,fakeel_genPartFlav,0)".format(weight))
-                       .Filter("weightMC != 0","MC weight")
-                       .Define("weightBtagSFJSON","compute_JSONS_BTV_SF(goodloosejet_pt,goodloosejet_eta,goodloosejet_btagDeepB,goodloosejet_hadronFlavour,0)")
-                       .Filter("weightBtagSFJSON > 0","weightBtagSFJSON > 0")
-                       .Define("weightLepSFJSON","compute_JSON_SFs(fakemu_pt,fakemu_eta,fakeel_pt,fakeel_eta)")
-                       .Filter("weightLepSFJSON > 0","weightLepSFJSON > 0")
-                       .Define("weight"           ,"weightPURecoSF*weightLepSF*weightTriggerSF*weightMC*weightBtagSFJSON")
-                       .Define("weightNoPURecoSF" ,"weightLepSF*weightTriggerSF*weightMC*weightBtagSFJSON")
-                       .Define("weightNoLepSF"    ,"weightPURecoSF*weightTriggerSF*weightMC*weightBtagSFJSON")
-                       .Define("weightNoTriggerSF","weightPURecoSF*weightLepSF*weightMC*weightBtagSFJSON")
-                       .Define("weightNoBTVSF"    ,"weightPURecoSF*weightLepSF*weightTriggerSF*weightMC")
-                       )
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,nPDFReplicas)
 
     dfzllcat = []
     dfzllbcat = []
     dfzllgcat = []
     for x in range(nCat):
         for ltype in range(3):
-            dfzllcat.append(dfbase.Filter("DiLepton_flavor=={0}".format(ltype), "flavor type == {0}".format(ltype))
-                                  .Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
+            dfzllcat.append(dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                                   .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
                                   .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                                   )
-            dfzllbcat.append(dfzllcat[3*x+ltype].Filter("nbtagloosejet > 0","at least one btagloosejet"))
+            dfzllbcat.append(dfzllcat[3*x+ltype].Filter("nbtag_goodbtag_Jet_bjet > 0","at least one btagged jet"))
             dfzllbcat[3*x+ltype] = dfzllbcat[3*x+ltype].Filter("ptbalance < 0.4","ptbalance < 0.4")
             dfzllbcat[3*x+ltype] = dfzllbcat[3*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
 
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("nbtagloosejet == 0","no btagloosejet")
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("nbtag_goodbtag_Jet_bjet == 0","no btagged jet")
 
-            dfzllgcat.append(dfzllcat[3*x+ltype].Filter("Sum(goodPhotons) > 0","At least one photon"))
+            dfzllgcat.append(dfzllcat[3*x+ltype].Filter("Sum(good_Photons) > 0","At least one photon"))
 
             histo[ltype+30][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+30,x), "histo_{0}_{1}".format(ltype+30,x), 50, 0, 2), "ptbalance","weight")
             histo[ltype+33][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+33,x), "histo_{0}_{1}".format(ltype+33,x), 50, 0, 2), "ptjbalance","weight")
@@ -341,10 +207,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
             histo[ltype+78][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+78,x), "histo_{0}_{1}".format(ltype+78,x), 40,0,80), "MET_significance","weight")
             histo[ltype+81][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+81,x), "histo_{0}_{1}".format(ltype+81,x), 20,0,1), "jetPtgFrac","weight")
 
-            histo[ltype+96][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+96,x), "histo_{0}_{1}".format(ltype+96,x), 10,-0.5, 9.5), "ngood_jets","weightNoPURecoSF")
-            histo[ltype+97][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+97,x), "histo_{0}_{1}".format(ltype+97,x), 10,-0.5, 9.5), "ngood_jets","weightNoLepSF")
-            histo[ltype+98][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+98,x), "histo_{0}_{1}".format(ltype+98,x), 10,-0.5, 9.5), "ngood_jets","weightNoTriggerSF")
-            histo[ltype+99][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+99,x), "histo_{0}_{1}".format(ltype+99,x), 10,-0.5, 9.5), "ngood_jets","weightNoBTVSF")
+            #histo[ltype+96][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+96,x), "histo_{0}_{1}".format(ltype+96,x), 10,-0.5, 9.5), "ngood_jets","weightNoPURecoSF")
+            #histo[ltype+97][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+97,x), "histo_{0}_{1}".format(ltype+97,x), 10,-0.5, 9.5), "ngood_jets","weightNoLepSF")
+            #histo[ltype+98][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+98,x), "histo_{0}_{1}".format(ltype+98,x), 10,-0.5, 9.5), "ngood_jets","weightNoTriggerSF")
+            #histo[ltype+99][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+99,x), "histo_{0}_{1}".format(ltype+99,x), 10,-0.5, 9.5), "ngood_jets","weightNoBTVSF")
 
     reporta = []
     reportb = []
@@ -358,7 +224,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
             print("-----------------------------")
             reportb[3*x+ltype].Print()
 
-    myfile = ROOT.TFile("fillhistoZMETAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
+    myfile = ROOT.TFile("fillhistozmetAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue
@@ -370,12 +236,23 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
 
-    rdfRunTree = ROOT.RDataFrame("Runs", files)
-    genEventSumWeight = rdfRunTree.Sum("genEventSumw").GetValue()
-    genEventSumNoWeight = rdfRunTree.Sum("genEventCount").GetValue()
+    runTree = ROOT.TChain("Runs")
+    for f in range(len(files)):
+        runTree.AddFile(files[f])
 
-    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*lumi[year-2016]
-    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*lumi[year-2016]
+    genEventSumWeight = 0
+    genEventSumNoWeight = 0
+    nPDFReplicas = 0
+    for i in range(runTree.GetEntries()):
+        runTree.GetEntry(i)
+        genEventSumWeight += runTree.genEventSumw
+        genEventSumNoWeight += runTree.genEventCount
+        if(i == 0 and runTree.FindBranch("nLHEPdfSumw")):
+            nPDFReplicas = runTree.nLHEPdfSumw
+    print("Number of PDF replicas: {0}".format(nPDFReplicas))
+
+    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)
+    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)
 
     if(whichJob != -1):
         groupedFile = groupFiles(files, group)
@@ -388,12 +265,12 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
     df = ROOT.RDataFrame("Events", files)
     nevents = df.Count().GetValue()
 
-    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(rdfRunTree.Count().GetValue(),genEventSumWeight,genEventSumNoWeight,nevents))
+    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
     print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
     PDType = os.path.basename(SwitchSample(sampleNOW, skimType)[0]).split('+')[0]
 
-    analysis(df,sampleNOW,SwitchSample(sampleNOW,skimType)[2],weight,year,PDType,"false",whichJob,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    analysis(df,sampleNOW,SwitchSample(sampleNOW,skimType)[2],weight,year,PDType,"false",whichJob,nPDFReplicas,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
 
 def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
@@ -420,7 +297,7 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
     nevents = df.Count().GetValue()
     print("%s entries in the dataset" %nevents)
 
-    analysis(df,sampleNOW,sampleNOW,weight,year,PDType,"true",whichJob,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    analysis(df,sampleNOW,sampleNOW,weight,year,PDType,"true",whichJob,0,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
 
 if __name__ == "__main__":
 

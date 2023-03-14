@@ -1,6 +1,12 @@
 import ROOT
 import os, json
 
+def getBTagCut(type):
+
+    if(type < 0 or type > 2): return 100
+    value = [0.7100, 0.2783, 0.0490]
+    return value[type]
+
 def selectionTauVeto(df,year):
 
     dftag =(df.Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && Tau_idDeepTau2018v2p5VSjet >= 6 && Tau_idDeepTau2018v2p5VSe >= 6 && Tau_idDeepTau2018v2p5VSmu >= 4")
@@ -24,7 +30,7 @@ def selectionPhoton(df,year,BARRELphotons,ENDCAPphotons):
 
     return dftag
 
-def makeJES(df,year,postFix):
+def makeJES(df,year,postFix,bTagSel):
     postFitDef = postFix
     postFitMet = "Def"
     if(postFix == ""):
@@ -56,7 +62,7 @@ def makeJES(df,year,postFix):
               .Define("goodbtag_Jet_pt{0}".format(postFix), "clean_Jet_pt{0}[goodbtag_jet{1}]".format(postFitDef,postFix))
               .Define("goodbtag_Jet_eta{0}".format(postFix), "abs(clean_Jet_eta[goodbtag_jet{0}])".format(postFix))
               .Define("goodbtag_Jet_btagDeepB{0}".format(postFix), "clean_Jet_btagDeepB[goodbtag_jet{0}]".format(postFix))
-              .Define("goodbtag_Jet_bjet{0}".format(postFix), "goodbtag_Jet_btagDeepB{0} > 0.7100".format(postFix))
+              .Define("goodbtag_Jet_bjet{0}".format(postFix), "goodbtag_Jet_btagDeepB{0} > {1}".format(postFix,getBTagCut(bTagSel)))
               .Define("nbtag_goodbtag_Jet_bjet{0}".format(postFix), "Sum(goodbtag_Jet_bjet{0})*1.0f".format(postFix))
 
               .Define("vbs_jet{0}".format(postFix), "abs(clean_Jet_eta) < 5.0 && clean_Jet_pt{0} > 50".format(postFitDef))
@@ -90,7 +96,7 @@ def makeJES(df,year,postFix):
 
     return dftag
 
-def selectionJetMet(df,year):
+def selectionJetMet(df,year,bTagSel):
 
     dftag =(df.Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
@@ -121,80 +127,187 @@ def selectionJetMet(df,year):
               .Filter("newMET > 0","Good newMET")
               )
 
-    dftag = makeJES(dftag,year,"")
-    dftag = makeJES(dftag,year,"JesUp"  )
-    dftag = makeJES(dftag,year,"JesDown")
-    dftag = makeJES(dftag,year,"JerUp"  )
-    dftag = makeJES(dftag,year,"JerDown")
+    dftag = makeJES(dftag,year,""       ,bTagSel)
+    dftag = makeJES(dftag,year,"JesUp"  ,bTagSel)
+    dftag = makeJES(dftag,year,"JesDown",bTagSel)
+    dftag = makeJES(dftag,year,"JerUp"  ,bTagSel)
+    dftag = makeJES(dftag,year,"JerDown",bTagSel)
+
+    return dftag
+
+def makeLGVar(df,postFixMu,postFixEl,postFixPh):
+
+    postFix = ""
+    if(postFixMu != ""):
+        postFix = postFixMu
+    elif(postFixEl != ""):
+        postFix = postFixEl
+    elif(postFixPh != ""):
+        postFix = postFixPh
+
+    dftag =(df.Define("ptbalance{0}".format(postFix), "compute_met_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, 0)".format(postFixMu,postFixEl))
+              .Define("ptjbalance{0}".format(postFix),"compute_met_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, 1)".format(postFixMu,postFixEl))
+              .Define("dphillmet{0}".format(postFix), "compute_met_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, 2)".format(postFixMu,postFixEl))
+              .Define("dphilljmet{0}".format(postFix),"compute_met_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, 3)".format(postFixMu,postFixEl))
+              .Define("mt{0}".format(postFix),        "compute_met_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, 4)".format(postFixMu,postFixEl))
+              .Define("jetPtFrac{0}".format(postFix), "compute_met_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, 5)".format(postFixMu,postFixEl))
+              .Define("dphijmet{0}".format(postFix),  "compute_met_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, 6)".format(postFixMu,postFixEl))
+              .Define("ptgbalance{0}".format(postFix), "compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, good_Photons_pt{2}, good_Photons_eta, good_Photons_phi, 0)".format(postFixMu,postFixEl,postFixPh))
+              .Define("ptgjbalance{0}".format(postFix),"compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, good_Photons_pt{2}, good_Photons_eta, good_Photons_phi, 1)".format(postFixMu,postFixEl,postFixPh))
+              .Define("dphillgmet{0}".format(postFix), "compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, good_Photons_pt{2}, good_Photons_eta, good_Photons_phi, 2)".format(postFixMu,postFixEl,postFixPh))
+              .Define("dphillgjmet{0}".format(postFix),"compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, good_Photons_pt{2}, good_Photons_eta, good_Photons_phi, 3)".format(postFixMu,postFixEl,postFixPh))
+              .Define("mtg{0}".format(postFix),        "compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, good_Photons_pt{2}, good_Photons_eta, good_Photons_phi, 4)".format(postFixMu,postFixEl,postFixPh))
+              .Define("jetPtgFrac{0}".format(postFix), "compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, MET_pt, MET_phi, good_Photons_pt{2}, good_Photons_eta, good_Photons_phi, 5)".format(postFixMu,postFixEl,postFixPh))
+	      )
+
+    return dftag
+
+def selectionLGVar(df,year):
+
+    dftag =(df.Define("good_Photons_ptPhotonMomUp"  , "compute_PHOPT_Unc(good_Photons_pt,+1)")
+              .Define("good_Photons_ptPhotonMomDown", "compute_PHOPT_Unc(good_Photons_pt,-1)")
+              )
+
+    dftag = makeLGVar(dftag,""            ,""              ,"")
+    dftag = makeLGVar(dftag,"MuonMomUp"  ,""               ,"")
+    dftag = makeLGVar(dftag,"MuonMomDown",""               ,"")
+    dftag = makeLGVar(dftag,""           ,"ElectronMomUp"  ,"")
+    dftag = makeLGVar(dftag,""           ,"ElectronMomDown","")
+    dftag = makeLGVar(dftag,""            ,""              ,"PhotonMomUp")
+    dftag = makeLGVar(dftag,""            ,""              ,"PhotonMomDown")
+
+    return dftag
+
+
+def make4LVar(df,postFixMu,postFixEl):
+
+    postFix = ""
+    if(postFixMu != ""):
+        postFix = postFixMu
+    elif(postFixEl != ""):
+        postFix = postFixEl
+
+    dftag =(df.Define("m4l{0}".format(postFix),   "compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 0)".format(postFixMu,postFixEl))
+              .Define("ptlmax{0}".format(postFix),"compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 1)".format(postFixMu,postFixEl))
+              .Define("mllmin{0}".format(postFix),"compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 2)".format(postFixMu,postFixEl))
+              .Define("mllZ1{0}".format(postFix), "compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 3)".format(postFixMu,postFixEl))
+              .Define("mllZ2{0}".format(postFix), "compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 4)".format(postFixMu,postFixEl))
+              .Define("ptl1Z1{0}".format(postFix),"compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 5)".format(postFixMu,postFixEl))
+              .Define("ptl2Z1{0}".format(postFix),"compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 6)".format(postFixMu,postFixEl))
+              .Define("ptl1Z2{0}".format(postFix),"compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 7)".format(postFixMu,postFixEl))
+              .Define("ptl2Z2{0}".format(postFix),"compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 8)".format(postFixMu,postFixEl))
+              .Define("mllxy{0}".format(postFix), "compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 9)".format(postFixMu,postFixEl))
+              .Define("ptZ1{0}".format(postFix),  "compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,10)".format(postFixMu,postFixEl))
+              .Define("ptZ2{0}".format(postFix),  "compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,11)".format(postFixMu,postFixEl))
+              .Define("mtxy{0}".format(postFix),  "compute_4l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,12)".format(postFixMu,postFixEl))
+              .Define("ltype{0}".format(postFix), "compute_nl_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,2)".format(postFixMu,postFixEl))
+	      )
 
     return dftag
 
 def selection4LVar(df,year):
 
     dftag =(df.Define("FourLepton_flavor", "(Sum(fake_mu)+4*Sum(fake_el)-4)/6")
-              .Define("m4l",   "compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 0)")
-              .Define("ptlmax","compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 1)")
-              .Filter("ptlmax > 25","ptl > 25 for one of the leptons")
-              .Define("mllmin","compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 2)")
-              .Define("mllZ1", "compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 3)")
-              .Define("mllZ2", "compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 4)")
-              .Define("ptl1Z1","compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 5)")
-              .Define("ptl2Z1","compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 6)")
-              .Define("ptl1Z2","compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 7)")
-              .Define("ptl2Z2","compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 8)")
-              .Define("mllxy", "compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 9)")
-              .Define("ptZ1",  "compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,10)")
-              .Define("ptZ2",  "compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,11)")
-              .Define("mtxy",  "compute_4l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,12)")
-              .Define("ltype", "compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,2)")
-	      )
+              .Define("fake_Muon_ptMuonMomUp"  , "compute_MUOPT_Unc(fake_Muon_pt,+1)")
+              .Define("fake_Muon_ptMuonMomDown", "compute_MUOPT_Unc(fake_Muon_pt,-1)")
+              .Define("fake_Electron_ptElectronMomUp"  , "compute_ELEPT_Unc(fake_Electron_pt,+1)")
+              .Define("fake_Electron_ptElectronMomDown", "compute_ELEPT_Unc(fake_Electron_pt,-1)")
+              )
+
+    dftag = make4LVar(dftag,"","")
+    dftag = make4LVar(dftag,"MuonMomUp","")
+    dftag = make4LVar(dftag,"MuonMomDown","")
+    dftag = make4LVar(dftag,"","ElectronMomUp")
+    dftag = make4LVar(dftag,"","ElectronMomDown")
+
+    return dftag
+
+
+def make3LVar(df,postFixMu,postFixEl):
+
+    postFix = ""
+    if(postFixMu != ""):
+        postFix = postFixMu
+    elif(postFixEl != ""):
+        postFix = postFixEl
+
+    dftag =(df.Define("m3l{0}".format(postFix),    "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 0)".format(postFixMu,postFixEl))
+              .Define("mllmin{0}".format(postFix), "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 1)".format(postFixMu,postFixEl))
+              .Define("drllmin{0}".format(postFix),"compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 2)".format(postFixMu,postFixEl))
+              .Define("ptl1{0}".format(postFix),   "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 3)".format(postFixMu,postFixEl))
+              .Define("ptl2{0}".format(postFix),   "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 4)".format(postFixMu,postFixEl))
+              .Define("ptl3{0}".format(postFix),   "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 5)".format(postFixMu,postFixEl))
+              .Define("etal1{0}".format(postFix),  "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 6)".format(postFixMu,postFixEl))
+              .Define("etal2{0}".format(postFix),  "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 7)".format(postFixMu,postFixEl))
+              .Define("etal3{0}".format(postFix),  "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 8)".format(postFixMu,postFixEl))
+              .Define("mll{0}".format(postFix),    "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 9)".format(postFixMu,postFixEl))
+              .Define("ptl1Z{0}".format(postFix),  "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,10)".format(postFixMu,postFixEl))
+              .Define("ptl2Z{0}".format(postFix),  "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,11)".format(postFixMu,postFixEl))
+              .Define("ptlW{0}".format(postFix),   "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,12)".format(postFixMu,postFixEl))
+              .Define("mtW{0}".format(postFix),    "compute_3l_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,13)".format(postFixMu,postFixEl))
+              .Define("mllZ{0}".format(postFix),   "abs(mll{0}-91.1876)".format(postFix))
+              .Define("ltype{0}".format(postFix),  "compute_nl_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,2)".format(postFixMu,postFixEl))
+              )
 
     return dftag
 
 def selection3LVar(df,year):
 
     dftag =(df.Define("TriLepton_flavor", "(Sum(fake_mu)+3*Sum(fake_el)-3)/2")
-              .Define("m3l",    "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 0)")
-              .Define("mllmin", "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 1)")
-              .Define("drllmin","compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 2)")
-              .Define("ptl1",   "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 3)")
-              .Define("ptl2",   "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 4)")
-              .Define("ptl3",   "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 5)")
-              .Define("etal1",  "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 6)")
-              .Define("etal2",  "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 7)")
-              .Define("etal3",  "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 8)")
-              .Define("mll",    "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi, 9)")
-              .Define("ptl1Z",  "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,10)")
-              .Define("ptl2Z",  "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,11)")
-              .Define("ptlW",   "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,12)")
-              .Define("mtW",    "compute_3l_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,13)")
-              .Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
-              .Define("mllZ",  "abs(mll-91.1876)")
-              .Define("ltype",  "compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,2)")
+              .Define("fake_Muon_ptMuonMomUp"  , "compute_MUOPT_Unc(fake_Muon_pt,+1)")
+              .Define("fake_Muon_ptMuonMomDown", "compute_MUOPT_Unc(fake_Muon_pt,-1)")
+              .Define("fake_Electron_ptElectronMomUp"  , "compute_ELEPT_Unc(fake_Electron_pt,+1)")
+              .Define("fake_Electron_ptElectronMomDown", "compute_ELEPT_Unc(fake_Electron_pt,-1)")
+              )
+
+    dftag = make3LVar(dftag,"","")
+    dftag = make3LVar(dftag,"MuonMomUp","")
+    dftag = make3LVar(dftag,"MuonMomDown","")
+    dftag = make3LVar(dftag,"","ElectronMomUp")
+    dftag = make3LVar(dftag,"","ElectronMomDown")
+
+    return dftag
+
+def make2LVar(df,postFixMu,postFixEl):
+
+    postFix = ""
+    if(postFixMu != ""):
+        postFix = postFixMu
+    elif(postFixEl != ""):
+        postFix = postFixEl
+
+    dftag =(df.Define("mll{0}".format(postFix),   "compute_ll_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,0)".format(postFixMu,postFixEl))
+              .Define("ptll{0}".format(postFix),  "compute_ll_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,1)".format(postFixMu,postFixEl))
+              .Define("drll{0}".format(postFix),  "compute_ll_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,2)".format(postFixMu,postFixEl))
+              .Define("dphill{0}".format(postFix),"compute_ll_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,3)".format(postFixMu,postFixEl))
+              .Define("ptl1{0}".format(postFix),  "compute_ll_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,4)".format(postFixMu,postFixEl))
+              .Define("ptl2{0}".format(postFix),  "compute_ll_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,5)".format(postFixMu,postFixEl))
+              .Define("etal1{0}".format(postFix), "abs(compute_ll_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,6))".format(postFixMu,postFixEl))
+              .Define("etal2{0}".format(postFix), "abs(compute_ll_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,7))".format(postFixMu,postFixEl))
+              .Define("ltype{0}".format(postFix), "compute_nl_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,2)".format(postFixMu,postFixEl))
               )
 
     return dftag
 
 def selection2LVar(df,year):
 
-    dftag =(df.Define("mll",    "compute_ll_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,0)")
-              .Define("ptll",   "compute_ll_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,1)")
-              .Define("drll",   "compute_ll_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,2)")
-              .Define("dphill", "compute_ll_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,3)")
-              .Define("ptl1",   "compute_ll_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,4)")
-              .Define("ptl2",   "compute_ll_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,5)")
-              .Define("ptl3",   "0.0f")
-              .Define("etal1",  "abs(compute_ll_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,6))")
-              .Define("etal2",  "abs(compute_ll_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass,7))")
-              .Define("DiLepton_flavor", "Sum(fake_mu)+2*Sum(fake_el)-2")
-
-              .Define("muid1",  "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, 0)")
-              .Define("muid2",  "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, 1)")
-              .Define("elid1",  "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaIso_Fall17V2_WP90, fake_Electron_mvaIso_Fall17V2_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, 0)")
-              .Define("elid2",  "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaIso_Fall17V2_WP90, fake_Electron_mvaIso_Fall17V2_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, 1)")
-
-              .Define("ltype",  "compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,2)")
+    dftag =(df.Define("DiLepton_flavor", "Sum(fake_mu)+2*Sum(fake_el)-2")
+              .Define("fake_Muon_ptMuonMomUp"  , "compute_MUOPT_Unc(fake_Muon_pt,+1)")
+              .Define("fake_Muon_ptMuonMomDown", "compute_MUOPT_Unc(fake_Muon_pt,-1)")
+              .Define("fake_Electron_ptElectronMomUp"  , "compute_ELEPT_Unc(fake_Electron_pt,+1)")
+              .Define("fake_Electron_ptElectronMomDown", "compute_ELEPT_Unc(fake_Electron_pt,-1)")
+              .Define("ptl3", "0.0f")
+              .Define("muid1", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, 0)")
+              .Define("muid2", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, 1)")
+              .Define("elid1", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaIso_Fall17V2_WP90, fake_Electron_mvaIso_Fall17V2_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, 0)")
+              .Define("elid2", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaIso_Fall17V2_WP90, fake_Electron_mvaIso_Fall17V2_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, 1)")
               )
+
+    dftag = make2LVar(dftag,"","")
+    dftag = make2LVar(dftag,"MuonMomUp","")
+    dftag = make2LVar(dftag,"MuonMomDown","")
+    dftag = make2LVar(dftag,"","ElectronMomUp")
+    dftag = make2LVar(dftag,"","ElectronMomDown")
 
     return dftag
 
@@ -275,7 +388,24 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
 
     return dftag
 
-def selectionMCWeigths(df,year,PDType,weight,type):
+def selectionDAWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas):
+    dftag =(df.Define("PDType","\"{0}\"".format(PDType))
+              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,fake_Electron_pt,fake_Electron_eta,tight_el)")
+              .Define("weight","weightFake*1.0")
+              )
+
+    return dftag
+
+def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas):
+
+    hasTheoryColumnName = [True, True, True]
+    theoryColumnName = ["PSWeight", "LHEScaleWeight", "LHEPdfWeight"]
+    for x in range(len(theoryColumnName)):
+        try:
+            ColumnType = df.GetColumnType(theoryColumnName[x])
+        except Exception as e:
+            print("No {0} weights: {1}".format(theoryColumnName[x],e))
+            hasTheoryColumnName[x] = False
 
     MUOYEAR = "2018_UL"
     #if(year == 2022): MUOYEAR = "2022"
@@ -294,28 +424,142 @@ def selectionMCWeigths(df,year,PDType,weight,type):
               .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype)")
               .Filter("weightTriggerSF > 0","good TriggerSF weight")
 
+              .Define("weightMC","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})".format(weight,type))
+              .Filter("weightMC != 0","MC weight")
+
               .Define("MUOYEAR","\"{0}\"".format(MUOYEAR))
               .Define("ELEYEAR","\"{0}\"".format(ELEYEAR))
               .Define("PHOYEAR","\"{0}\"".format(PHOYEAR))
               .Define("MUOWP","\"Medium\"")
               .Define("ELEWP","\"Medium\"")
               .Define("PHOWP","\"Medium\"")
-              .Define("weightBtagSFJSON","compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,0)")
-              .Filter("weightBtagSFJSON > 0","weightBtagSFJSON > 0")
-              .Define("weightMuoSFJSON","compute_JSON_MUO_SFs(MUOYEAR,\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-              .Filter("weightMuoSFJSON > 0","weightMuoSFJSON > 0")
-              .Define("weightEleSFJSON","compute_JSON_ELE_SFs(ELEYEAR,\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
-              .Filter("weightEleSFJSON > 0","weightEleSFJSON > 0")
+
+              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,fake_Electron_pt,fake_Electron_eta,tight_el)")
+
+              .Define("weightBtagSF","compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"central\",0,{0})".format(bTagSel))
+
+              .Define("weightMuoSFJSON","compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+
+              .Define("weightEleSFJSON","compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
+
+              .Define("weightPUSF_Nom","compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
+
+              .Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom")
+
+
+              .Define("weightBtagSFBC_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",1,{0})".format(bTagSel))
+              .Define("weightBtagSFBC_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_correlated\",1,{0})".format(bTagSel))
+              .Define("weightBtagSFBC_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",1,{0})".format(bTagSel))
+              .Define("weightBtagSFBC_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",1,{0})".format(bTagSel))
+
+              .Define("weightBtagSFLF_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",-1,{0})".format(bTagSel))
+              .Define("weightBtagSFLF_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_correlated\",-1,{0})".format(bTagSel))
+              .Define("weightBtagSFLF_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",-1,{0})".format(bTagSel))
+              .Define("weightBtagSFLF_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",-1,{0})".format(bTagSel))
+
+              .Define("weightMuoSFTRKUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"systup\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+              .Define("weightMuoSFIDUp" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"systup\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+              .Define("weightMuoSFISOUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"systup\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+
+              .Define("weightMuoSFTRKDown","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"systdown\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+              .Define("weightMuoSFIDDown" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"systdown\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+              .Define("weightMuoSFISODown","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"systdown\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+
+              .Define("weightEleSFTRKUp","weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sfup\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
+              .Define("weightEleSFIDUp" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sfup\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
+
+              .Define("weightEleSFTRKDown","weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sfdown\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
+              .Define("weightEleSFIDDown" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sfdown\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
+
+              .Define("weightPUSF_Up"  ,"weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"up\")")
+              .Define("weightPUSF_Down","weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"down\")")
+
+
               .Define("weightPhoSFJSON","compute_JSON_PHO_SFs(PHOYEAR,\"sf\",PHOWP,good_Photons_pt,good_Photons_eta)")
               .Filter("weightPhoSFJSON > 0","weightPhoSFJSON > 0")
+
               .Define("weightTauSFJSON","compute_JSON_TAU_SFs(good_Tau_pt,good_Tau_eta,good_Tau_decayMode,good_Tau_genPartFlav,\"nom\")")
               .Filter("weightTauSFJSON > 0","weightTauSFJSON > 0")
-              .Define("weightPUSF_Nom","compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
-              .Filter("weightPUSF_Nom > 0","weightPUSF_Nom > 0")
 
-              .Define("weightMC","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})".format(weight,type))
-              .Filter("weightMC != 0","MC weight")
-              .Define("weight","weightMC")
               )
 
+    if(hasTheoryColumnName[0] == True):
+        dftag =(dftag.Define("weightPS0" ,"weight*PSWeight[0]")
+                     .Define("weightPS1" ,"weight*PSWeight[1]")
+                     .Define("weightPS2" ,"weight*PSWeight[2]")
+                     .Define("weightPS3" ,"weight*PSWeight[3]")
+                     )
+    else:
+        dftag =(dftag.Define("weightPS0" ,"weight*1.0")
+                     .Define("weightPS1" ,"weight*1.0")
+                     .Define("weightPS2" ,"weight*1.0")
+                     .Define("weightPS3" ,"weight*1.0")
+                     )
+
+    if(hasTheoryColumnName[1] == True):
+        #LHEScaleWeight 2 / 4 / 6 not used
+        dftag =(dftag.Define("weightQCDScale0" ,"weight*LHEScaleWeight[0]")
+                     .Define("weightQCDScale1" ,"weight*LHEScaleWeight[1]")
+                     .Define("weightQCDScale2" ,"weight*LHEScaleWeight[3]")
+                     .Define("weightQCDScale3" ,"weight*LHEScaleWeight[5]")
+                     .Define("weightQCDScale4" ,"weight*LHEScaleWeight[7]")
+                     .Define("weightQCDScale5" ,"weight*LHEScaleWeight[8]")
+                     )
+    else:
+        dftag =(dftag.Define("weightQCDScale0" ,"weight*1.0")
+                     .Define("weightQCDScale1" ,"weight*1.0")
+                     .Define("weightQCDScale2" ,"weight*1.0")
+                     .Define("weightQCDScale3" ,"weight*1.0")
+                     .Define("weightQCDScale4" ,"weight*1.0")
+                     .Define("weightQCDScale5" ,"weight*1.0")
+                     )
+
+    # 0 (default) 1...100 101/102 (Up/Down for alphas)
+    if(hasTheoryColumnName[2] == True):
+        for xpdf in range(103):
+            if(nPDFReplicas > xpdf):
+                dftag = dftag.Define("weightPDF{0}".format(xpdf),"weight*LHEPdfWeight[{0}]".format(xpdf))
+            else:
+                dftag = dftag.Define("weightPDF{0}".format(xpdf),"weight*1.0")
+    else:
+        for xpdf in range(103):
+            dftag = dftag.Define("weightPDF{0}".format(xpdf),"weight*1.0")
+
     return dftag
+
+def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,nPDFReplicas):
+
+    if(isData == True): return selectionDAWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas)
+    else:               return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas)
+
+def makeFinalVariable(df,var,start,x,bin,min,max,type):
+    histoNumber = start+type
+    if  (type ==  0): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weight")
+    elif(type ==  1): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFBC_correlatedUp")
+    elif(type ==  2): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFBC_correlatedDown")
+    elif(type ==  3): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFBC_uncorrelatedUp")
+    elif(type ==  4): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFBC_uncorrelatedDown")
+    elif(type ==  5): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFLF_correlatedUp")
+    elif(type ==  6): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFLF_correlatedDown")
+    elif(type ==  7): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFLF_uncorrelatedUp")
+    elif(type ==  8): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFLF_uncorrelatedDown")
+    elif(type ==  9): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightMuoSFTRKUp")
+    elif(type == 10): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightMuoSFIDUp" )
+    elif(type == 11): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightMuoSFISOUp")
+    elif(type == 12): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightEleSFTRKUp")
+    elif(type == 13): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightEleSFIDUp" )
+    elif(type == 14): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightPUSF_Up"  )
+    elif(type == 15): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightPUSF_Down")
+    elif(type == 16): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightPS0")
+    elif(type == 17): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightPS1")
+    elif(type == 18): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightPS2")
+    elif(type == 19): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightPS3")
+    elif(type == 20): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightQCDScale0")
+    elif(type == 21): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightQCDScale1")
+    elif(type == 22): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightQCDScale2")
+    elif(type == 23): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightQCDScale3")
+    elif(type == 24): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightQCDScale4")
+    elif(type == 25): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightQCDScale5")
+    elif(type >= 26 and type <= 128):
+                      return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightPDF{0}".format(type-26))
+    else:             return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weight")

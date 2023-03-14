@@ -5,11 +5,13 @@ ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionMCWeigths
-#import correctionlib
-#correctionlib.register_pyroot_binding()
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, makeFinalVariable
 
 doNtuples = False
+# 0 = T, 1 = M, 2 = L
+bTagSel = 0
+
+useFR = 1
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -62,13 +64,13 @@ def selectionLL(df,year,PDType,isData):
     dftag =(dftag.Filter("nLoose == 2","Only two loose leptons")
                  .Filter("nFake == 2","Two fake leptons")
                  .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0", "Sign-sign leptons")
-                 #.Filter("nTight == 2","Two tight leptons")
-                  .Define("eventNum", "event")
-                  )
+                #.Filter("nTight == 2","Two tight leptons")
+                 .Define("eventNum", "event")
+                 )
 
     dftag = selectionTauVeto(dftag,year)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year)
+    dftag = selectionJetMet (dftag,year,bTagSel)
     dftag = selection2LVar  (dftag,year)
 
     dftag = (dftag.Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
@@ -77,15 +79,14 @@ def selectionLL(df,year,PDType,isData):
 
     return dftag
 
-
-def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
+def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 200
+    nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo = [[0 for y in range(nCat)] for x in range(nHisto)]
 
     ROOT.initHisto2D(histoFakeEtaPt_mu,0)
@@ -154,24 +155,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
 
 
     dftag = selectionLL(df,year,PDType,isData)
-    dftag = dftag.Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,fake_Electron_pt,fake_Electron_eta,tight_el)")
 
-    #yearSTR = "{0}_UL".format(year)
-    #ROOT.gInterpreter.Declare('auto csetEl = correction::CorrectionSet::from_file("POG/MUO/2018_UL/muon_Z.json");')
-    #ROOT.gInterpreter.Declare('auto csetEl_2016preID = csetEl->at("NUM_MediumID_DEN_genTracks");')
-    ##ROOT.gInterpreter.Declare('auto csetEl = correction::CorrectionSet::from_file("POG/EGM/2018_UL/electron.json");')
-    ##ROOT.gInterpreter.Declare('auto csetEl_2016preID = csetEl->at("UL-Electron-ID-SF");')
-
-    if(theCat == plotCategory("kPlotData")):
-        dfbase =(dftag.Define("weightNoPURecoSF","weightFake*1.0")
-                      .Define("weightNoLepSF","weightFake*1.0")
-                      .Define("weightNoTriggerSF","weightFake*1.0")
-                      .Define("weightNoBTVSF","weightFake*1.0")
-                      .Define("weight","weightFake*1.0")
-                      )
-
-    else:
-         dfbase = selectionMCWeigths(dftag,year,PDType,weight,1)
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,nPDFReplicas)
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("theCat","compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
@@ -240,6 +225,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
         #histo[94][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(94,x), "histo_{0}_{1}".format(94,x), 4,-0.5, 3.5), "ltype","weightNoTriggerSF")
         #histo[95][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(95,x), "histo_{0}_{1}".format(95,x), 4,-0.5, 3.5), "ltype","weightNoBTVSF")
 
+        startF = 300
+        BinF = 50
+        minF = 500
+        maxF = 2500
+        for nv in range(129):
+            histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj"       ,startF,x,BinF,minF,maxF,nv)
+        histo[startF+129][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesUp"  ,startF,x,BinF,minF,maxF,129)
+        histo[startF+130][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesDown",startF,x,BinF,minF,maxF,130)
+        histo[startF+131][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerUp"  ,startF,x,BinF,minF,maxF,131)
+        histo[startF+132][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerDown",startF,x,BinF,minF,maxF,132)
+
     report = []
     for x in range(nCat):
         report.append(dfwwvbscat[x].Report())
@@ -265,10 +261,14 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
 
     genEventSumWeight = 0
     genEventSumNoWeight = 0
+    nPDFReplicas = 0
     for i in range(runTree.GetEntries()):
         runTree.GetEntry(i)
         genEventSumWeight += runTree.genEventSumw
         genEventSumNoWeight += runTree.genEventCount
+        if(i == 0 and runTree.FindBranch("nLHEPdfSumw")):
+            nPDFReplicas = runTree.nLHEPdfSumw
+    print("Number of PDF replicas: {0}".format(nPDFReplicas))
 
     weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)
     weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)
@@ -289,7 +289,7 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
 
     PDType = os.path.basename(SwitchSample(sampleNOW, skimType)[0]).split('+')[0]
 
-    analysis(df,sampleNOW,SwitchSample(sampleNOW,skimType)[2],weight,year,PDType,"false",whichJob,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    analysis(df,sampleNOW,SwitchSample(sampleNOW,skimType)[2],weight,year,PDType,"false",whichJob,nPDFReplicas,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
 
 def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
@@ -316,7 +316,7 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
     nevents = df.Count().GetValue()
     print("%s entries in the dataset" %nevents)
 
-    analysis(df,sampleNOW,sampleNOW,weight,year,PDType,"true",whichJob,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    analysis(df,sampleNOW,sampleNOW,weight,year,PDType,"true",whichJob,0,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
 
 if __name__ == "__main__":
 

@@ -17,7 +17,7 @@ class MyCorrections {
     double eval_tauJETSF  (double pt, int dm, int genmatch, const char *workingPoint, const char *valType);
     double eval_tauELESF  (double eta, int genmatch, const char *workingPoint, const char *valType);
     double eval_tauMUOSF  (double eta, int genmatch, const char *workingPoint, const char *valType);
-    double eval_btvSF     (char *valType, char *workingPoint, double eta, double pt, int flavor);
+    double eval_btvSF     (const char *valType, char *workingPoint, double eta, double pt, int flavor);
     double eval_jetCORR   (double area, double eta, double pt, double rho);
     double eval_jesUnc    (double eta, double pt, int type);
     double eval_jerMethod1(double eta, int type);

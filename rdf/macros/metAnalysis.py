@@ -4,10 +4,9 @@ from array import array
 
 ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
-from utilsAna import getMClist, getDATAlist
+from utilsAna import getMClist, getDATAlist, getLumi
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
-
-lumi = [36.1, 41.5, 60.0]
+from utilsSelection import selection2LVar, selectionElMu
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -58,56 +57,24 @@ def selectionLL(df,year,PDType,isData):
               .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
               .Define("trigger","{0}".format(TRIGGERMET))
               .Filter("trigger > 0","Passed trigger")
+              )
 
-              .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
-              .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")
-              .Filter("Sum(loose_mu)+Sum(loose_el) >= 2 and Sum(loose_mu)+Sum(loose_el) <= 4","Between two and four loose leptons")
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
 
-              .Define("fake_mu"           ,"{0}".format(FAKE_MU))
-              .Define("fakemu_pt"         ,"Muon_pt[fake_mu]")
-              .Define("fakemu_eta"        ,"Muon_eta[fake_mu]")
-              .Define("fakemu_phi"        ,"Muon_phi[fake_mu]")
-              .Define("fakemu_mass"       ,"Muon_mass[fake_mu]")
-              .Define("fakemu_charge"     ,"Muon_charge[fake_mu]")
-              .Define("fakemu_dxy"        ,"Muon_dxy[fake_mu]")
-              .Define("fakemu_dz"         ,"Muon_dz[fake_mu]")
-              .Define("fakemu_looseId"    ,"Muon_looseId[fake_mu]")
-              .Define("fakemu_mediumId"   ,"Muon_mediumId[fake_mu]")
-              .Define("fakemu_tightId"    ,"Muon_tightId[fake_mu]")
-              .Define("fakemu_pfIsoId"    ,"Muon_pfIsoId[fake_mu]")
-              .Define("fakemu_mvaId"      ,"Muon_mvaId[fake_mu]")
-              .Define("fakemu_miniIsoId"  ,"Muon_miniIsoId[fake_mu]")
-              .Define("fakemu_mvaTTH"     ,"Muon_mvaTTH[fake_mu]")
-              .Define("tight_mu"          ,"{0}".format(TIGHT_MU0))
+    dftag = (dftag.Filter("Sum(fake_mu)+Sum(fake_el) >= 2 and Sum(fake_mu)+Sum(fake_el) <= 4","Between two and four tight leptons")
+                  .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
+                  .Define("MultiLepton_flavor", "Sum(fake_mu)+4*Sum(fake_el)-2")\
+                  .Define("mtot",  "compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,0)")
+                  .Define("mllmin","compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,1)")
+                  .Filter("mllmin > 10")
+                  .Define("triggerl","{0}".format(TRIGGERLEP))
+                  .Define("ptlmax", "compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,3)")
+                  .Define("ptlmin", "compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,4)")
+                  .Define("etalmax","compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,5)")
+                  .Define("etalmin","compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,6)")
+                  )
 
-              .Define("fake_el"                   ,"{0}".format(FAKE_EL))
-              .Define("fakeel_pt"                 ,"Electron_pt[fake_el]")
-              .Define("fakeel_eta"                ,"Electron_eta[fake_el]")
-              .Define("fakeel_phi"                ,"Electron_phi[fake_el]")
-              .Define("fakeel_mass"               ,"Electron_mass[fake_el]")
-              .Define("fakeel_charge"             ,"Electron_charge[fake_el]")
-              .Define("fakeel_dxy"                ,"Electron_dxy[fake_el]")
-              .Define("fakeel_dz"                 ,"Electron_dz[fake_el]")
-              .Define("fakeel_cutBased"           ,"Electron_cutBased[fake_el]")
-              .Define("fakeel_mvaFall17V2Iso_WP90","Electron_mvaFall17V2Iso_WP90[fake_el]")
-              .Define("fakeel_mvaFall17V2Iso_WP80","Electron_mvaFall17V2Iso_WP80[fake_el]")
-              .Define("fakeel_tightCharge"        ,"Electron_tightCharge[fake_el]")
-              .Define("fakeel_mvaTTH"             ,"Electron_mvaTTH[fake_el]")
-              .Define("tight_el"                  ,"{0}".format(TIGHT_EL0))
-
-              .Filter("Sum(fake_mu)+Sum(fake_el) >= 2 and Sum(fake_mu)+Sum(fake_el) <= 4","Between two and four tight leptons")
-              .Filter("(Sum(fake_mu) > 0 and Max(fakemu_pt) > 25) or (Sum(fake_el) > 0 and Max(fakeel_pt) > 25)","At least one high pt lepton")
-              .Define("MultiLepton_flavor", "Sum(fake_mu)+4*Sum(fake_el)-2")\
-              .Define("mtot",  "compute_nl_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,0)")
-              .Define("mllmin","compute_nl_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,1)")
-              .Filter("mllmin > 10")
-              .Define("ltype",  "compute_nl_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,2)")
-              .Define("ptlmax", "compute_nl_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,3)")
-              .Define("ptlmin", "compute_nl_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,4)")
-              .Define("etalmax","compute_nl_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,5)")
-              .Define("etalmin","compute_nl_var(fakemu_pt, fakemu_eta, fakemu_phi, fakemu_mass, fakemu_charge, fakeel_pt, fakeel_eta, fakeel_phi, fakeel_mass, fakeel_charge, MET_pt, MET_phi,6)")
-              .Define("triggerl","{0}".format(TRIGGERLEP))
-             )
+    dftag = selection2LVar  (dftag,year)
 
     return dftag
 
@@ -170,7 +137,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
             print("---------------- SUMMARY 6*{0}+{1} = {2} -------------".format(x,ltype,6*x+ltype))
             report[6*x+ltype].Print()
 
-    myfile = ROOT.TFile("fillhistoMETAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
+    myfile = ROOT.TFile("fillhistometAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue
@@ -197,8 +164,8 @@ def readMCSample(sampleNOW, year, skimType, whichJob, group):
         genEventSumWeight += runTree.genEventSumw
         genEventSumNoWeight += runTree.genEventCount
 
-    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*lumi[year-2016]
-    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*lumi[year-2016]
+    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)
+    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)
 
     if(whichJob != -1):
         groupedFile = groupFiles(files, group)

@@ -6,7 +6,12 @@ ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionJetMet, selectionElMu, selectionMCWeigths
+from utilsSelection import selectionJetMet, selectionElMu, selectionWeigths
+
+# 0 = T, 1 = M, 2 = L
+bTagSel = 1
+
+useFR = 1
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -98,7 +103,7 @@ def selectionLL(df,year,PDType,isData):
                  .Define("minmtmet","compute_lmet_var(fake_Muon_pt, fake_Muon_phi, fake_Electron_pt, fake_Electron_phi, MET_pt, MET_phi,4)")
                 )
 
-    dftag = selectionJetMet(dftag,year)
+    dftag = selectionJetMet(dftag,year,bTagSel)
 
     return dftag
 
@@ -126,7 +131,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
         dfbase =(dfbase.Define("PDType","\"{0}\"".format(PDType))
                        .Define("fake_Muon_genPartFlav","Muon_genPartFlav[fake_mu]")
                        .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
-                       .Define("weight","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,1)".format(weight))
+                       .Define("weight","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})".format(weight,useFR))
                        .Filter("weight != 0","good weight")
                        )
 

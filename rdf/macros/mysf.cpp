@@ -123,7 +123,7 @@ double MyCorrections::eval_tauMUOSF(double eta, int genmatch, const char *workin
   return tauMUOSF_->evaluate({eta, genmatch, workingPoint, valType});
 };
 
-double MyCorrections::eval_btvSF(char *valType, char *workingPoint, double eta, double pt, int flavor) {
+double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double eta, double pt, int flavor) {
   if(flavor != 0)
     return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
   else

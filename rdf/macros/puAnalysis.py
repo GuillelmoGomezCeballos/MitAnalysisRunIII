@@ -4,10 +4,8 @@ from array import array
 
 ROOT.ROOT.EnableImplicitMT(5)
 from utilsAna import plotCategory
-from utilsAna import getMClist, getDATAlist
+from utilsAna import getMClist, getDATAlist, getLumi
 from utilsAna import SwitchSample
-
-lumi = [36.1, 41.5, 60.0]
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -134,6 +132,9 @@ def analysis(df,count,category,weight,year,PDType,isData):
     histo2D[10][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(10,x),"histo2d_{0}_{1}".format(10,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_l","goodloosejet_pt_cj_l","weight")
     histo2D[11][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(11,x),"histo2d_{0}_{1}".format(11,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_l","goodloosejet_pt_bj_l","weight")
 
+    #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "MET_pt", "nbtag"]
+    #dfcat.Snapshot("Events", "test.root", branches)
+
     report = dfcat.Report()
     print("---------------- SUMMARY -------------")
     report.Print()
@@ -167,7 +168,7 @@ def readMCSample(sampleNOW, year, PDType, skimType):
         runTree.GetEntry(i)
         genEventSum += runTree.genEventSumw
 
-    weight = (SwitchSample(sampleNOW,skimType)[1] / genEventSum)*lumi[year-2016]
+    weight = (SwitchSample(sampleNOW,skimType)[1] / genEventSum)*getLumi(year)
 
     nevents = df.Count().GetValue()
 
@@ -202,6 +203,6 @@ if __name__ == "__main__":
             process = int(arg)
 
     try:
-        readMCSample(process,2018,"All", skimType)
+        readMCSample(process,year,"All", skimType)
     except Exception as e:
         print("Error sample: {0}".format(e))

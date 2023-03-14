@@ -5,9 +5,7 @@ from array import array
 ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
-
-lumi = [36.1, 41.5, 60.0]
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -44,7 +42,7 @@ TIGHT_EL5 = jsonObject['TIGHT_EL5']
 TIGHT_EL6 = jsonObject['TIGHT_EL6']
 TIGHT_EL7 = jsonObject['TIGHT_EL7']
 
-PHOTONSKIM = "Photon_pt > 20 && abs(Photon_eta) < 2.5 && Photon_electronVeto && photon_mask && Photon_pfRelIso03_chg*Photon_pt < 10 && cleaningBitmap(Photon_vidNestedWPBitmap,4,2) && cleaningBitmap(Photon_vidNestedWPBitmap,10,2) && cleaningBitmap(Photon_vidNestedWPBitmap,12,2)"
+PHOTONSKIM = "Photon_pt > 20 && abs(Photon_eta) < 2.5 && Photon_electronVeto && Photon_pfChargedIsoPFPV*Photon_pt < 10 && cleaningBitmap(Photon_vidNestedWPBitmap,4,2) && cleaningBitmap(Photon_vidNestedWPBitmap,10,2) && cleaningBitmap(Photon_vidNestedWPBitmap,12,2)"
 
 def selectionLL(df,year,PDType,isData):
 
@@ -60,19 +58,25 @@ def selectionLL(df,year,PDType,isData):
     TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
     if(year == 2018 and PDType == "MuonEG"):
-        TRIGGERLEP = "{0}".format(TRIGGERMUEG)
+        triggerLEP = "{0}".format(TRIGGERMUEG)
     elif(year == 2018 and PDType == "DoubleMuon"):
-        TRIGGERLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
+        triggerLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
     elif(year == 2018 and PDType == "SingleMuon"):
-        TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+        triggerLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
     elif(year == 2018 and PDType == "EGamma"):
-        TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+        triggerLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
     elif(year == 2018):
-        TRIGGERLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+        triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    elif(year == 2022 and PDType == "MuonEG"):
+        triggerLEP = "{0}".format(TRIGGERMUEG)
+    elif(year == 2022 and PDType == "Muon"):
+        triggerLEP = "({0} or {1}) and not {1}".format(TRIGGERDMU,TRIGGERSMU,TRIGGERMUEG)
+    elif(year == 2022 and PDType == "EGamma"):
+        triggerLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+    elif(year == 2022):
+        triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
     else:
         print("PROBLEM with triggers!!!")
-
-    print("TRIGGERLEP: {0}".format(TRIGGERLEP))
 
     dftag =(df.Define("isData","{}".format(isData))
               .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
@@ -88,49 +92,49 @@ def selectionLL(df,year,PDType,isData):
               .Define("goodPhotonsEB0", "{0} && Photon_isScEtaEB && cleaningBitmap(Photon_vidNestedWPBitmap,6,2) && cleaningBitmap(Photon_vidNestedWPBitmap,8,2)".format(PHOTONSKIM))
               .Define("goodPhotonsEB0_pt", "get_variable_index(Photon_pt[goodPhotonsEB0],Photon_pt[goodPhotonsEB0],0)")
               .Define("goodPhotonsEB0_sieie", "get_variable_index(Photon_sieie[goodPhotonsEB0],Photon_pt[goodPhotonsEB0],0)")
-              .Define("goodPhotonsEB0_iso03_chg", "get_variable_index(Photon_pfRelIso03_chg[goodPhotonsEB0]*Photon_pt[goodPhotonsEB0],Photon_pt[goodPhotonsEB0],0)")
+              .Define("goodPhotonsEB0_iso03_chg", "get_variable_index(Photon_pfChargedIsoPFPV[goodPhotonsEB0]*Photon_pt[goodPhotonsEB0],Photon_pt[goodPhotonsEB0],0)")
               .Define("nGoodPhotonsEB0","Sum(goodPhotonsEB0)")
 
-              .Define("goodPhotonsEB1", "{0} && Photon_isScEtaEB && cleaningBitmap(Photon_vidNestedWPBitmap,8,2) == false && Photon_pfRelIso03_chg*Photon_pt > 3 && Photon_pfRelIso03_chg*Photon_pt < 6".format(PHOTONSKIM))
+              .Define("goodPhotonsEB1", "{0} && Photon_isScEtaEB && cleaningBitmap(Photon_vidNestedWPBitmap,8,2) == false && Photon_pfChargedIsoPFPV*Photon_pt > 3 && Photon_pfChargedIsoPFPV*Photon_pt < 6".format(PHOTONSKIM))
               .Define("goodPhotonsEB1_pt", "get_variable_index(Photon_pt[goodPhotonsEB1],Photon_pt[goodPhotonsEB1],0)")
               .Define("goodPhotonsEB1_sieie", "get_variable_index(Photon_sieie[goodPhotonsEB1],Photon_pt[goodPhotonsEB1],0)")
-              .Define("goodPhotonsEB1_iso03_chg", "get_variable_index(Photon_pfRelIso03_chg[goodPhotonsEB1]*Photon_pt[goodPhotonsEB1],Photon_pt[goodPhotonsEB1],0)")
+              .Define("goodPhotonsEB1_iso03_chg", "get_variable_index(Photon_pfChargedIsoPFPV[goodPhotonsEB1]*Photon_pt[goodPhotonsEB1],Photon_pt[goodPhotonsEB1],0)")
               .Define("nGoodPhotonsEB1","Sum(goodPhotonsEB1)")
 
-              .Define("goodPhotonsEB2", "{0} && Photon_isScEtaEB && cleaningBitmap(Photon_vidNestedWPBitmap,8,2) == false && Photon_pfRelIso03_chg*Photon_pt > 6 && Photon_pfRelIso03_chg*Photon_pt < 9".format(PHOTONSKIM))
+              .Define("goodPhotonsEB2", "{0} && Photon_isScEtaEB && cleaningBitmap(Photon_vidNestedWPBitmap,8,2) == false && Photon_pfChargedIsoPFPV*Photon_pt > 6 && Photon_pfChargedIsoPFPV*Photon_pt < 9".format(PHOTONSKIM))
               .Define("goodPhotonsEB2_pt", "get_variable_index(Photon_pt[goodPhotonsEB2],Photon_pt[goodPhotonsEB2],0)")
               .Define("goodPhotonsEB2_sieie", "get_variable_index(Photon_sieie[goodPhotonsEB2],Photon_pt[goodPhotonsEB2],0)")
-              .Define("goodPhotonsEB2_iso03_chg", "get_variable_index(Photon_pfRelIso03_chg[goodPhotonsEB2]*Photon_pt[goodPhotonsEB2],Photon_pt[goodPhotonsEB2],0)")
+              .Define("goodPhotonsEB2_iso03_chg", "get_variable_index(Photon_pfChargedIsoPFPV[goodPhotonsEB2]*Photon_pt[goodPhotonsEB2],Photon_pt[goodPhotonsEB2],0)")
               .Define("nGoodPhotonsEB2","Sum(goodPhotonsEB2)")
 
               .Define("goodPhotonsEB3", "{0} && Photon_isScEtaEB && cleaningBitmap(Photon_vidNestedWPBitmap,8,2)".format(PHOTONSKIM))
               .Define("goodPhotonsEB3_pt", "get_variable_index(Photon_pt[goodPhotonsEB3],Photon_pt[goodPhotonsEB3],0)")
               .Define("goodPhotonsEB3_sieie", "get_variable_index(Photon_sieie[goodPhotonsEB3],Photon_pt[goodPhotonsEB3],0)")
-              .Define("goodPhotonsEB3_iso03_chg", "get_variable_index(Photon_pfRelIso03_chg[goodPhotonsEB3]*Photon_pt[goodPhotonsEB3],Photon_pt[goodPhotonsEB3],0)")
+              .Define("goodPhotonsEB3_iso03_chg", "get_variable_index(Photon_pfChargedIsoPFPV[goodPhotonsEB3]*Photon_pt[goodPhotonsEB3],Photon_pt[goodPhotonsEB3],0)")
               .Define("nGoodPhotonsEB3","Sum(goodPhotonsEB3)")
 
               .Define("goodPhotonsEE0", "{0} && Photon_isScEtaEE && cleaningBitmap(Photon_vidNestedWPBitmap,6,2) && cleaningBitmap(Photon_vidNestedWPBitmap,8,2)".format(PHOTONSKIM))
               .Define("goodPhotonsEE0_pt", "get_variable_index(Photon_pt[goodPhotonsEE0],Photon_pt[goodPhotonsEE0],0)")
               .Define("goodPhotonsEE0_sieie", "get_variable_index(Photon_sieie[goodPhotonsEE0],Photon_pt[goodPhotonsEE0],0)")
-              .Define("goodPhotonsEE0_iso03_chg", "get_variable_index(Photon_pfRelIso03_chg[goodPhotonsEE0]*Photon_pt[goodPhotonsEE0],Photon_pt[goodPhotonsEE0],0)")
+              .Define("goodPhotonsEE0_iso03_chg", "get_variable_index(Photon_pfChargedIsoPFPV[goodPhotonsEE0]*Photon_pt[goodPhotonsEE0],Photon_pt[goodPhotonsEE0],0)")
               .Define("nGoodPhotonsEE0","Sum(goodPhotonsEE0)")
 
-              .Define("goodPhotonsEE1", "{0} && Photon_isScEtaEE && cleaningBitmap(Photon_vidNestedWPBitmap,8,2) == false && Photon_pfRelIso03_chg*Photon_pt > 3 && Photon_pfRelIso03_chg*Photon_pt < 6".format(PHOTONSKIM))
+              .Define("goodPhotonsEE1", "{0} && Photon_isScEtaEE && cleaningBitmap(Photon_vidNestedWPBitmap,8,2) == false && Photon_pfChargedIsoPFPV*Photon_pt > 3 && Photon_pfChargedIsoPFPV*Photon_pt < 6".format(PHOTONSKIM))
               .Define("goodPhotonsEE1_pt", "get_variable_index(Photon_pt[goodPhotonsEE1],Photon_pt[goodPhotonsEE1],0)")
               .Define("goodPhotonsEE1_sieie", "get_variable_index(Photon_sieie[goodPhotonsEE1],Photon_pt[goodPhotonsEE1],0)")
-              .Define("goodPhotonsEE1_iso03_chg", "get_variable_index(Photon_pfRelIso03_chg[goodPhotonsEE1]*Photon_pt[goodPhotonsEE1],Photon_pt[goodPhotonsEE1],0)")
+              .Define("goodPhotonsEE1_iso03_chg", "get_variable_index(Photon_pfChargedIsoPFPV[goodPhotonsEE1]*Photon_pt[goodPhotonsEE1],Photon_pt[goodPhotonsEE1],0)")
               .Define("nGoodPhotonsEE1","Sum(goodPhotonsEE1)")
 
-              .Define("goodPhotonsEE2", "{0} && Photon_isScEtaEE && cleaningBitmap(Photon_vidNestedWPBitmap,8,2) == false && Photon_pfRelIso03_chg*Photon_pt > 6 && Photon_pfRelIso03_chg*Photon_pt < 9".format(PHOTONSKIM))
+              .Define("goodPhotonsEE2", "{0} && Photon_isScEtaEE && cleaningBitmap(Photon_vidNestedWPBitmap,8,2) == false && Photon_pfChargedIsoPFPV*Photon_pt > 6 && Photon_pfChargedIsoPFPV*Photon_pt < 9".format(PHOTONSKIM))
               .Define("goodPhotonsEE2_pt", "get_variable_index(Photon_pt[goodPhotonsEE2],Photon_pt[goodPhotonsEE2],0)")
               .Define("goodPhotonsEE2_sieie", "get_variable_index(Photon_sieie[goodPhotonsEE2],Photon_pt[goodPhotonsEE2],0)")
-              .Define("goodPhotonsEE2_iso03_chg", "get_variable_index(Photon_pfRelIso03_chg[goodPhotonsEE2]*Photon_pt[goodPhotonsEE2],Photon_pt[goodPhotonsEE2],0)")
+              .Define("goodPhotonsEE2_iso03_chg", "get_variable_index(Photon_pfChargedIsoPFPV[goodPhotonsEE2]*Photon_pt[goodPhotonsEE2],Photon_pt[goodPhotonsEE2],0)")
               .Define("nGoodPhotonsEE2","Sum(goodPhotonsEE2)")
 
               .Define("goodPhotonsEE3", "{0} && Photon_isScEtaEE && cleaningBitmap(Photon_vidNestedWPBitmap,8,2)".format(PHOTONSKIM))
               .Define("goodPhotonsEE3_pt", "get_variable_index(Photon_pt[goodPhotonsEE3],Photon_pt[goodPhotonsEE3],0)")
               .Define("goodPhotonsEE3_sieie", "get_variable_index(Photon_sieie[goodPhotonsEE3],Photon_pt[goodPhotonsEE3],0)")
-              .Define("goodPhotonsEE3_iso03_chg", "get_variable_index(Photon_pfRelIso03_chg[goodPhotonsEE3]*Photon_pt[goodPhotonsEE3],Photon_pt[goodPhotonsEE3],0)")
+              .Define("goodPhotonsEE3_iso03_chg", "get_variable_index(Photon_pfChargedIsoPFPV[goodPhotonsEE3]*Photon_pt[goodPhotonsEE3],Photon_pt[goodPhotonsEE3],0)")
               .Define("nGoodPhotonsEE3","Sum(goodPhotonsEE3)")
 
               .Filter("nGoodPhotonsEB0+nGoodPhotonsEB1+nGoodPhotonsEB2+nGoodPhotonsEB3+nGoodPhotonsEE0+nGoodPhotonsEE1+nGoodPhotonsEE2+nGoodPhotonsEE3 >= 1","At least one loose photon")
@@ -153,7 +157,7 @@ def selectionLL(df,year,PDType,isData):
               .Define("goodloose_bjet", "goodloosejet_btagDeepB > 0.7100")
               .Define("nbtagloosejet", "Sum(goodloose_bjet)")
 
-              .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_maskl0 && jet_maskl1 && jet_maskg0 && jet_maskg1 && jet_maskg2 && jet_maskg3 && jet_maskg4 && jet_maskg5 && jet_maskg6 && jet_maskg7 && Jet_jetId > 0 && Jet_puId > 0")
+              .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_maskl0 && jet_maskl1 && jet_maskg0 && jet_maskg1 && jet_maskg2 && jet_maskg3 && jet_maskg4 && jet_maskg5 && jet_maskg6 && jet_maskg7 && Jet_jetId > 0")
               .Define("ngood_jets", "Sum(good_jet)")
               .Define("goodjet_pt",    "Jet_pt[good_jet]")
               .Define("goodjet_eta",   "Jet_eta[good_jet]")
@@ -209,7 +213,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
     ROOT.initHisto2F(histoMuISOSF,3)
     ROOT.initHisto1D(puWeights,0)
 
-    ROOT.initJSONSFs(2018)
+    ROOT.initJSONSFs(year)
 
     dftag = selectionLL(df,year,PDType,isData)
 
@@ -285,7 +289,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
         print("---------------- SUMMARY {0} -------------".format(x))
         report[x].Print()
 
-    myfile = ROOT.TFile("fillhistoGAMMAAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
+    myfile = ROOT.TFile("fillhistogammaAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue
@@ -301,8 +305,8 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
     genEventSumWeight = rdfRunTree.Sum("genEventSumw").GetValue()
     genEventSumNoWeight = rdfRunTree.Sum("genEventCount").GetValue()
 
-    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*lumi[year-2016]
-    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*lumi[year-2016]
+    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)
+    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)
 
     if(whichJob != -1):
         groupedFile = groupFiles(files, group)

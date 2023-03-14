@@ -164,11 +164,13 @@ float compute_JSON_PU_SF(double NumTrueInteractions, std::string type){
 }
 
 // BTag SFs
-float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet_flavor, unsigned int sel)
+float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet_flavor, std::string keyS, int flavorToStudy, unsigned int sel)
 {
+  // flavorToStudy = 0 (central) / > 0 (BC) / < 0 (LF)
   bool debug = false;
-  if(debug) printf("btagsf: %lu %lu %lu %lu %d\n",jet_pt.size(),jet_eta.size(),jet_btag.size(),jet_flavor.size(),sel);
+  if(debug) printf("btagsf: %lu %lu %lu %lu %d %d\n",jet_pt.size(),jet_eta.size(),jet_btag.size(),jet_flavor.size(),flavorToStudy,sel);
   double sfTot[2] = {1.0, 1.0};
+  const char *key = keyS.c_str();
   char *valType = (char*)"T"; double bcut = 0.711;
   if     (sel == 0) {valType = (char*)"T"; bcut = 0.7100;}
   else if(sel == 1) {valType = (char*)"M"; bcut = 0.2783;}
@@ -176,7 +178,18 @@ float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet
   for(unsigned int i=0;i<jet_pt.size();i++) {
     if(jet_flavor[i] != 0 && jet_flavor[i] != 4 && jet_flavor[i] != 5) continue;
     if(jet_pt[i] <= 20 || fabs(jet_eta[i]) >= 2.5) continue;
-    double sf = corrSFs.eval_btvSF((char*)"central",valType,abs(jet_eta[i]),min(jet_pt[i],999.999f),jet_flavor[i]);
+    double sf = 1.0;
+    if     (flavorToStudy == 0) sf = corrSFs.eval_btvSF((char*)"central",valType,abs(jet_eta[i]),min(jet_pt[i],999.999f),jet_flavor[i]);
+    else if(flavorToStudy > 0 && 
+            jet_flavor[i] != 0) sf = corrSFs.eval_btvSF(key,valType,abs(jet_eta[i]),min(jet_pt[i],999.999f),jet_flavor[i]);
+    else if(flavorToStudy > 0 && 
+            jet_flavor[i] == 0) sf = corrSFs.eval_btvSF((char*)"central",valType,abs(jet_eta[i]),min(jet_pt[i],999.999f),jet_flavor[i]);
+    else if(flavorToStudy < 0 && 
+            jet_flavor[i] != 0) sf = corrSFs.eval_btvSF((char*)"central",valType,abs(jet_eta[i]),min(jet_pt[i],999.999f),jet_flavor[i]);
+    else if(flavorToStudy < 0 && 
+            jet_flavor[i] == 0) sf = corrSFs.eval_btvSF(key,valType,abs(jet_eta[i]),min(jet_pt[i],999.999f),jet_flavor[i]);
+    else printf("btag flavorToStudy no possible\n");
+
     double eff = 1;
     if     (jet_flavor[i] == 0) {const TH2D& hcorr0 = histoBTVEffEtaPtLF; eff = getValFromTH2(hcorr0, fabs(jet_eta[i]),min(jet_pt[i],999.999f));}
     else if(jet_flavor[i] == 4) {const TH2D& hcorr1 = histoBTVEffEtaPtCJ; eff = getValFromTH2(hcorr1, fabs(jet_eta[i]),min(jet_pt[i],999.999f));}
@@ -194,47 +207,50 @@ float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet
   return 1.0;
 }
 
-float compute_JSON_MUO_SFs(std::string yearS, std::string valTypeS, std::string workingPointS,
-                           const Vec_f& mu_pt, const Vec_f& mu_eta){
+float compute_JSON_MUO_SFs(std::string yearS, std::string valType0S, std::string valType1S, std::string valType2S, 
+                           std::string workingPointS, const Vec_f& mu_pt, const Vec_f& mu_eta){
   if(mu_pt.size() == 0) return 1.0;
   bool debug = false;
   if(debug) printf("muoeff: %lu\n",mu_pt.size());
   double sfTot = 1.0;
 
   const char *year = yearS.c_str();
-  const char *valType = valTypeS.c_str();
+  const char *valType0 = valType0S.c_str();
+  const char *valType1 = valType1S.c_str();
+  const char *valType2 = valType2S.c_str();
   const char *workingPoint = workingPointS.c_str();
 
   for(unsigned int i=0;i<mu_pt.size();i++) {
-    double sf0 = corrSFs.eval_muonTRKSF(year,valType,workingPoint,mu_eta[i],mu_pt[i]);
-    double sf1 = corrSFs.eval_muonIDSF (year,valType,workingPoint,mu_eta[i],mu_pt[i]);
-    double sf2 = corrSFs.eval_muonISOSF(year,valType,workingPoint,mu_eta[i],mu_pt[i]);
+    double sf0 = corrSFs.eval_muonTRKSF(year,valType0,workingPoint,mu_eta[i],mu_pt[i]);
+    double sf1 = corrSFs.eval_muonIDSF (year,valType1,workingPoint,mu_eta[i],mu_pt[i]);
+    double sf2 = corrSFs.eval_muonISOSF(year,valType2,workingPoint,mu_eta[i],mu_pt[i]);
     sfTot = sfTot*sf0*sf1*sf2;
-    if(debug) printf("muoeff(%d) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf0,sf1,sf2,sf0*sf1*sf2,sfTot);
+    if(debug) printf("muoeff(%d-%s/%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,valType2,mu_pt[i],mu_eta[i],sf0,sf1,sf2,sf0*sf1*sf2,sfTot);
   }
 
   return sfTot;
 }
 
-float compute_JSON_ELE_SFs(std::string yearS, std::string valTypeS, std::string workingPointS,
-                           const Vec_f& el_pt, const Vec_f& el_eta){
+float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string valType1S, 
+                           std::string workingPointS, const Vec_f& el_pt, const Vec_f& el_eta){
   if(el_pt.size() == 0) return 1.0;
   bool debug = false;
   if(debug) printf("eleeff: %lu\n",el_pt.size());
   double sfTot = 1.0;
 
   const char *year = yearS.c_str();
-  const char *valType = valTypeS.c_str();
+  const char *valType0 = valType0S.c_str();
+  const char *valType1 = valType1S.c_str();
   const char *workingPoint = workingPointS.c_str();
 
   for(unsigned int i=0;i<el_pt.size();i++) {
     char *recoNameAux = (char*)"RecoAbove20";
     if(el_pt[i] <= 20) recoNameAux = (char*)"RecoBelow20";
     const char *recoName = recoNameAux;
-    double sf0 = corrSFs.eval_electronSF(year,valType,    recoName,el_eta[i],el_pt[i]);
-    double sf1 = corrSFs.eval_electronSF(year,valType,workingPoint,el_eta[i],el_pt[i]);
+    double sf0 = corrSFs.eval_electronSF(year,valType0,    recoName,el_eta[i],el_pt[i]);
+    double sf1 = corrSFs.eval_electronSF(year,valType1,workingPoint,el_eta[i],el_pt[i]);
     sfTot = sfTot*sf0*sf1;
-    if(debug) printf("eleff(%d) %.3f %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf0,sf1,sf0*sf1,sfTot);
+    if(debug) printf("eleff(%d-%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,el_pt[i],el_eta[i],sf0,sf1,sf0*sf1,sfTot);
   }
 
   return sfTot;
@@ -361,6 +377,37 @@ const Vec_f& Jet_pt_def, const Vec_f& Jet_pt_mod, const Vec_f& Jet_eta, const Ve
   
   return 0;
 }
+
+Vec_f compute_MUOPT_Unc(const Vec_f& mu_pt, int type){
+  Vec_f new_mu_pt(mu_pt.size(), 1.0);
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+     if     (type == +1) new_mu_pt[i] = mu_pt[i]*1.01;
+     else if(type == -1) new_mu_pt[i] = mu_pt[i]*0.99;
+  }
+
+  return new_mu_pt;
+}
+
+Vec_f compute_ELEPT_Unc(const Vec_f& el_pt, int type){
+  Vec_f new_el_pt(el_pt.size(), 1.0);
+  for(unsigned int i=0;i<el_pt.size();i++) {
+     if     (type == +1) new_el_pt[i] = el_pt[i]*1.01;
+     else if(type == -1) new_el_pt[i] = el_pt[i]*0.99;
+  }
+
+  return new_el_pt;
+}
+
+Vec_f compute_PHOPT_Unc(const Vec_f& ph_pt, int type){
+  Vec_f new_ph_pt(ph_pt.size(), 1.0);
+  for(unsigned int i=0;i<ph_pt.size();i++) {
+     if     (type == +1) new_ph_pt[i] = ph_pt[i]*1.01;
+     else if(type == -1) new_ph_pt[i] = ph_pt[i]*0.99;
+  }
+
+  return new_ph_pt;
+}
+
 
 float compute_bdt_test(const Vec_f& bdt){
   if(bdt.size() != 1) {
