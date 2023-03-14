@@ -11,7 +11,7 @@ correctionlib.register_pyroot_binding()
 useXROOTD = True
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 26.3]
+    lumi = [36.1, 41.5, 60.0, 3.1]
 
     lumiBit = -1
     if(lumiBit == 2016): lumiBit = 0
@@ -252,33 +252,14 @@ def getDATAlist(type, year, skimType):
     elif(year == 2018 and type == 1024):
         files1 = findDIR("{0}/MET+Run2018D-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
 
-    elif(year == 2022 and type == 1017):
-        files1 = findDIR("{0}/Muon+Run2022E-PromptNanoAODv10_v1-v3+NANOAOD".format(dirT2))
-    elif(year == 2022 and type == 1018):
-        files1 = findDIR("{0}/Muon+Run2022F-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
-    elif(year == 2022 and type == 1019):
-        files1 = findDIR("{0}/Muon+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
-
     elif(year == 2022 and type == 1009):
-        files1 = findDIR("{0}/MuonEG+Run2022E-PromptNanoAODv10_v1-v3+NANOAOD".format(dirT2))
-    elif(year == 2022 and type == 1010):
-        files1 = findDIR("{0}/MuonEG+Run2022F-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
-    elif(year == 2022 and type == 1011):
         files1 = findDIR("{0}/MuonEG+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
 
     elif(year == 2022 and type == 1013):
-        files1 = findDIR("{0}/EGamma+Run2022E-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
-    elif(year == 2022 and type == 1014):
-        files1 = findDIR("{0}/EGamma+Run2022F-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
-    elif(year == 2022 and type == 1015):
-        files1 = findDIR("{0}/EGamma+Run2022G-PromptNanoAODv10_v1-v1+NANOAOD".format(dirT2))
+        files1 = findDIR("{0}/EGamma+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
 
-    elif(year == 2022 and type == 1021):
-        files1 = findDIR("{0}/JetMET+Run2022E-PromptNanoAODv10_v1-v3+NANOAOD".format(dirT2))
-    elif(year == 2022 and type == 1022):
-        files1 = findDIR("{0}/JetMET+Run2022F-PromptNanoAODv10_v1-v2+NANOAOD".format(dirT2))
-    elif(year == 2022 and type == 1023):
-        files1 = findDIR("{0}/JetMET+Run2022G-PromptNanoAODv10_v1-v1+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1017):
+        files1 = findDIR("{0}/Muon+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
 
     files = ROOT.vector('string')()
     concatenate(files, files1)
@@ -392,8 +373,14 @@ def SwitchSample(argument, skimType):
 
        100: (dirT2+"/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",19317.5*1000,plotCategory("kPlotDY")),
        101: (dirT2+"/DYto2L-2Jets_MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",6221.3*1000,plotCategory("kPlotDY")),
-       102: (dirT2+"/WZ_TuneCP5_13p6TeV_pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",54.3*1000,plotCategory("kPlotWZ")),
-       103: (dirT2+"/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*0.1086*0.1086*9*1000,plotCategory("kPlotTop")),
+       102: (dirT2+"/WW_TuneCP5_13p6TeV_pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",122.3*1000,plotCategory("kPlotqqWW")),
+       103: (dirT2+"/WZ_TuneCP5_13p6TeV_pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",54.3*1000,plotCategory("kPlotWZ")),
+       104: (dirT2+"/ZZ_TuneCP5_13p6TeV_pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",16.7*1000,plotCategory("kPlotZZ")),
+       105: (dirT2+"/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*0.1086*0.1086*9*1000,plotCategory("kPlotTop")),
+       106: (dirT2+"/TTtoLNu2Q_MT-175p5_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*0.1086*3*(1-0.1086*3)*2*1000,plotCategory("kPlotTop")),
+       107: (dirT2+"/TbarWplus_DR_AtLeastOneLepton_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",24.2*1000,plotCategory("kPlotTop")),
+       108: (dirT2+"/TWminus_DR_AtLeastOneLepton_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",24.2*1000,plotCategory("kPlotTop")),
+       109: (dirT2+"/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",63199.9*1000,plotCategory("kPlotOther")),
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")

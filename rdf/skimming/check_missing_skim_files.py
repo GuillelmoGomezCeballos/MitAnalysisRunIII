@@ -47,7 +47,7 @@ if __name__ == "__main__":
             break
 
         #isMissingFile = [True, True, True, True, True]
-        isMissingFile = [False, True, False, False, False]
+        isMissingFile = [True, True, True, False, False]
         # 1l
         fileNameA = os.path.join(outputDir, "1l", line[3], "output_1l_{0}.root".format(line[1]))
         fileNameB = os.path.join(outputDir, "1l", line[3], "output_1l_{0}_{1}.root".format(line[0],line[1]))

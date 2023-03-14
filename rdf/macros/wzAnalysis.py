@@ -11,7 +11,7 @@ doNtuples = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 0
 
-useFR = 1
+useFR = 0
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -63,7 +63,7 @@ def selectionLL(df,year,PDType,isData):
 
     dftag =(dftag.Filter("nLoose == 3","Only three loose leptons")
                  .Filter("nFake == 3","Three fake leptons")
-                #.Filter("nTight == 3","Three tight leptons")
+                 .Filter("nTight == 3","Three tight leptons")
                  .Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 1", "+/- 1 net charge")
                  .Define("eventNum", "event")
                  .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
@@ -378,7 +378,9 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
     if  (sampleNOW >= 1001 and sampleNOW <= 1004): PDType = "SingleMuon"
     elif(sampleNOW >= 1005 and sampleNOW <= 1008): PDType = "DoubleMuon"
     elif(sampleNOW >= 1009 and sampleNOW <= 1012): PDType = "MuonEG"
-    elif(sampleNOW >= 1012 and sampleNOW <= 1016): PDType = "EGamma"
+    elif(sampleNOW >= 1013 and sampleNOW <= 1016): PDType = "EGamma"
+    elif(sampleNOW >= 1017 and sampleNOW <= 1020): PDType = "Muon"
+    elif(sampleNOW >= 1021 and sampleNOW <= 1024): PDType = "MET"
 
     files = getDATAlist(sampleNOW, year, skimType)
     print("Total files: {0}".format(len(files)))

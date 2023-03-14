@@ -346,7 +346,9 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
     if  (sampleNOW >= 1001 and sampleNOW <= 1004): PDType = "SingleMuon"
     elif(sampleNOW >= 1005 and sampleNOW <= 1008): PDType = "DoubleMuon"
     elif(sampleNOW >= 1009 and sampleNOW <= 1012): PDType = "MuonEG"
-    elif(sampleNOW >= 1012 and sampleNOW <= 1016): PDType = "EGamma"
+    elif(sampleNOW >= 1013 and sampleNOW <= 1016): PDType = "EGamma"
+    elif(sampleNOW >= 1017 and sampleNOW <= 1020): PDType = "Muon"
+    elif(sampleNOW >= 1021 and sampleNOW <= 1024): PDType = "MET"
 
     files = getDATAlist(sampleNOW, year, skimType)
     print("Total files: {0}".format(len(files)))
