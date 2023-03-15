@@ -69,9 +69,9 @@ def selectionLL(df,year,PDType,isData):
                  .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
                  )
 
-    dftag = selectionTauVeto(dftag,year)
+    dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData)
     dftag = selection3LVar  (dftag,year)
 
     return dftag
@@ -310,12 +310,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         BinF = 50
         minF = 500
         maxF = 2500
-        for nv in range(129):
-            histo[startF+nv][x] = makeFinalVariable(dfwzvbscat[x],"vbs_mjj"       ,startF,x,BinF,minF,maxF,nv)
-        histo[startF+129][x]    = makeFinalVariable(dfwzvbscat[x],"vbs_mjjJesUp"  ,startF,x,BinF,minF,maxF,129)
-        histo[startF+130][x]    = makeFinalVariable(dfwzvbscat[x],"vbs_mjjJesDown",startF,x,BinF,minF,maxF,130)
-        histo[startF+131][x]    = makeFinalVariable(dfwzvbscat[x],"vbs_mjjJerUp"  ,startF,x,BinF,minF,maxF,131)
-        histo[startF+132][x]    = makeFinalVariable(dfwzvbscat[x],"vbs_mjjJerDown",startF,x,BinF,minF,maxF,132)
+        histo[startF+0][x] = makeFinalVariable(dfwzvbscat[x],"vbs_mjj"       ,startF,x,BinF,minF,maxF,0)
+        if(isData == False):
+            for nv in range(1,129):
+                histo[startF+nv][x] = makeFinalVariable(dfwzvbscat[x],"vbs_mjj"       ,startF,x,BinF,minF,maxF,nv)
+            histo[startF+129][x]    = makeFinalVariable(dfwzvbscat[x],"vbs_mjjJesUp"  ,startF,x,BinF,minF,maxF,129)
+            histo[startF+130][x]    = makeFinalVariable(dfwzvbscat[x],"vbs_mjjJesDown",startF,x,BinF,minF,maxF,130)
+            histo[startF+131][x]    = makeFinalVariable(dfwzvbscat[x],"vbs_mjjJerUp"  ,startF,x,BinF,minF,maxF,131)
+            histo[startF+132][x]    = makeFinalVariable(dfwzvbscat[x],"vbs_mjjJerDown",startF,x,BinF,minF,maxF,132)
 
     report = []
     for x in range(nCat):

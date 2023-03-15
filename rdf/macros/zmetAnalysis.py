@@ -68,9 +68,9 @@ def selectionLL(df,year,PDType,isData):
                  .Filter("nTight == 2","Two tight leptons")
                  )
 
-    dftag = selectionTauVeto(dftag,year)
+    dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData)
     dftag = selection2LVar  (dftag,year)
     dftag = selectionLGVar  (dftag,year)
 

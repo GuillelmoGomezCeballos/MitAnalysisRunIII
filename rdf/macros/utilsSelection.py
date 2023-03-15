@@ -7,15 +7,17 @@ def getBTagCut(type):
     value = [0.7100, 0.2783, 0.0490]
     return value[type]
 
-def selectionTauVeto(df,year):
+def selectionTauVeto(df,year,isData):
 
     dftag =(df.Define("good_tau", "abs(Tau_eta) < 2.3 && Tau_pt > 20 && Tau_idDeepTau2018v2p5VSjet >= 6 && Tau_idDeepTau2018v2p5VSe >= 6 && Tau_idDeepTau2018v2p5VSmu >= 4")
               .Filter("Sum(good_tau) == 0","No selected hadronic taus")
               .Define("good_Tau_pt", "Tau_pt[good_tau]")
               .Define("good_Tau_eta", "Tau_eta[good_tau]")
               .Define("good_Tau_decayMode", "Tau_decayMode[good_tau]")
-              .Define("good_Tau_genPartFlav", "Tau_genPartFlav[good_tau]")
               )
+
+    if(isData == "false"):
+        dftag = dftag.Define("good_Tau_genPartFlav", "Tau_genPartFlav[good_tau]")
 
     return dftag
 
@@ -96,7 +98,7 @@ def makeJES(df,year,postFix,bTagSel):
 
     return dftag
 
-def selectionJetMet(df,year,bTagSel):
+def selectionJetMet(df,year,bTagSel,isData):
 
     dftag =(df.Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
@@ -107,31 +109,36 @@ def selectionJetMet(df,year,bTagSel):
               .Define("clean_Jet_mass", "Jet_mass[clean_jet]")
               .Define("clean_Jet_area", "Jet_area[clean_jet]")
               .Define("clean_Jet_rawFactor", "Jet_rawFactor[clean_jet]")
-              .Define("clean_Jet_genJetIdx", "Jet_genJetIdx[clean_jet]")
               .Define("clean_Jet_btagCSVV2", "Jet_btagCSVV2[clean_jet]")
               .Define("clean_Jet_btagDeepB", "Jet_btagDeepB[clean_jet]")
               .Define("clean_Jet_btagDeepFlavB", "Jet_btagDeepFlavB[clean_jet]")
               .Define("clean_Jet_muonSubtrFactor", "Jet_muonSubtrFactor[clean_jet]")
               .Define("clean_Jet_chEmEF", "Jet_chEmEF[clean_jet]")
               .Define("clean_Jet_neEmEF", "Jet_neEmEF[clean_jet]")
-
-              #.Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,0)")
-              #.Define("clean_Jet_ptDef",  "clean_Jet_pt")
-              .Define("clean_Jet_ptDef"    , "compute_JSON_JER_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,0)")
-              .Define("clean_Jet_ptJesUp"  , "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,+1)")
-              .Define("clean_Jet_ptJesDown", "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,-1)")
-              .Define("clean_Jet_ptJerUp"  , "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,+1)")
-              .Define("clean_Jet_ptJerDown", "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,-1)")
-
-              .Define("newMET", "compute_JSON_MET_Unc(MET_pt,MET_phi,RawMET_pt,RawMET_phi,clean_Jet_chEmEF,clean_Jet_neEmEF,clean_Jet_muonSubtrFactor,clean_Jet_rawFactor,clean_Jet_pt,clean_Jet_ptDef,clean_Jet_eta,clean_Jet_phi,clean_Jet_mass,-1)")
-              .Filter("newMET > 0","Good newMET")
               )
 
+    if(isData == "false"):
+        dftag =(dftag.Define("clean_Jet_genJetIdx", "Jet_genJetIdx[clean_jet]")
+                     #.Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,0)")
+                     #.Define("clean_Jet_ptDef",  "clean_Jet_pt")
+                     .Define("clean_Jet_ptDef"    , "compute_JSON_JER_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,0)")
+                     .Define("clean_Jet_ptJesUp"  , "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,+1)")
+                     .Define("clean_Jet_ptJesDown", "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,-1)")
+                     .Define("clean_Jet_ptJerUp"  , "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,+1)")
+                     .Define("clean_Jet_ptJerDown", "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,-1)")
+                     .Define("newMET", "compute_JSON_MET_Unc(MET_pt,MET_phi,RawMET_pt,RawMET_phi,clean_Jet_chEmEF,clean_Jet_neEmEF,clean_Jet_muonSubtrFactor,clean_Jet_rawFactor,clean_Jet_pt,clean_Jet_ptDef,clean_Jet_eta,clean_Jet_phi,clean_Jet_mass,-1)")
+                     .Filter("newMET > 0","Good newMET")
+                     )
+
+    else:
+        dftag = dftag.Define("clean_Jet_ptDef","clean_Jet_pt")
+
     dftag = makeJES(dftag,year,""       ,bTagSel)
-    dftag = makeJES(dftag,year,"JesUp"  ,bTagSel)
-    dftag = makeJES(dftag,year,"JesDown",bTagSel)
-    dftag = makeJES(dftag,year,"JerUp"  ,bTagSel)
-    dftag = makeJES(dftag,year,"JerDown",bTagSel)
+    if(isData == "false"):
+        dftag = makeJES(dftag,year,"JesUp"  ,bTagSel)
+        dftag = makeJES(dftag,year,"JesDown",bTagSel)
+        dftag = makeJES(dftag,year,"JerUp"  ,bTagSel)
+        dftag = makeJES(dftag,year,"JerDown",bTagSel)
 
     return dftag
 
@@ -528,9 +535,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas):
     return dftag
 
 def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,nPDFReplicas):
-
-    if(isData == True): return selectionDAWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas)
-    else:               return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas)
+    if(isData == "true"): return selectionDAWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas)
+    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas)
 
 def makeFinalVariable(df,var,start,x,bin,min,max,type):
     histoNumber = start+type

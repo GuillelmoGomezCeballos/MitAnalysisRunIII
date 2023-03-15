@@ -68,9 +68,9 @@ def selectionLL(df,year,PDType,isData):
                  .Define("eventNum", "event")
                  )
 
-    dftag = selectionTauVeto(dftag,year)
+    dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData)
     dftag = selection2LVar  (dftag,year)
 
     dftag = (dftag.Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
@@ -229,12 +229,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         BinF = 50
         minF = 500
         maxF = 2500
-        for nv in range(129):
-            histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj"       ,startF,x,BinF,minF,maxF,nv)
-        histo[startF+129][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesUp"  ,startF,x,BinF,minF,maxF,129)
-        histo[startF+130][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesDown",startF,x,BinF,minF,maxF,130)
-        histo[startF+131][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerUp"  ,startF,x,BinF,minF,maxF,131)
-        histo[startF+132][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerDown",startF,x,BinF,minF,maxF,132)
+        histo[startF+0][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj",startF,x,BinF,minF,maxF,0)
+        if(isData == False):
+            for nv in range(1,129):
+                histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj",startF,x,BinF,minF,maxF,nv)
+            histo[startF+129][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesUp"  ,startF,x,BinF,minF,maxF,129)
+            histo[startF+130][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesDown",startF,x,BinF,minF,maxF,130)
+            histo[startF+131][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerUp"  ,startF,x,BinF,minF,maxF,131)
+            histo[startF+132][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerDown",startF,x,BinF,minF,maxF,132)
 
     report = []
     for x in range(nCat):

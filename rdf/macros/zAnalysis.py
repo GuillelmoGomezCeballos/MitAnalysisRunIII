@@ -87,9 +87,9 @@ def selectionLL(df,year,PDType,isData):
                   .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
                   )
 
-    dftag = selectionTauVeto(dftag,year)
+    dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData)
     dftag = selection2LVar  (dftag,year)
 
     return dftag
@@ -189,10 +189,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+39][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 50,0,1), "good_Jet_btagDeepB","weight")
             histo[ltype+42][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 50,30,230), "good_Jet_pt","weight")
             histo[ltype+45][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 50,-5.0,5.0), "good_Jet_eta","weight")
-            histo[ltype+48][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 50,0,2000), "mjjJesUp","weight")
-            histo[ltype+51][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 50,0,2000), "mjjJesDown","weight")
-            histo[ltype+54][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 50,0,2000), "mjjJerUp","weight")
-            histo[ltype+57][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+57,x), "histo_{0}_{1}".format(ltype+57,x), 50,0,2000), "mjjJerDown","weight")
+            #histo[ltype+48][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 50,0,2000), "mjjJesUp","weight")
+            #histo[ltype+51][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 50,0,2000), "mjjJesDown","weight")
+            #histo[ltype+54][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 50,0,2000), "mjjJerUp","weight")
+            #histo[ltype+57][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+57,x), "histo_{0}_{1}".format(ltype+57,x), 50,0,2000), "mjjJerDown","weight")
 
             if(ltype == 2):
                 histo[61][x] = dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Muon_charge) == 0&&DiLepton_flavor==2&&tight_el7[0]==true&&tight_el7[1]==true")\
@@ -232,11 +232,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+173][x] = dfzgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+173,x), "histo_{0}_{1}".format(ltype+173,x), 20, 20, 120), "ptg","weight")
 
             histo[ltype+176][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+176,x), "histo_{0}_{1}".format(ltype+176,x), 100, 0, 200), "MET_ptDef"    ,"weight")
-            histo[ltype+179][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+179,x), "histo_{0}_{1}".format(ltype+179,x), 100, 0, 200), "MET_ptJesUp"  ,"weight")
-            histo[ltype+182][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+182,x), "histo_{0}_{1}".format(ltype+182,x), 100, 0, 200), "MET_ptJesDown","weight")
-            histo[ltype+185][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+185,x), "histo_{0}_{1}".format(ltype+185,x), 100, 0, 200), "MET_ptJerUp"  ,"weight")
-            histo[ltype+188][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+188,x), "histo_{0}_{1}".format(ltype+188,x), 100, 0, 200), "MET_ptJerDown","weight")
-            histo[ltype+191][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+191,x), "histo_{0}_{1}".format(ltype+191,x), 100, 0, 200), "newMET"       ,"weight")
+            #histo[ltype+179][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+179,x), "histo_{0}_{1}".format(ltype+179,x), 100, 0, 200), "MET_ptJesUp"  ,"weight")
+            #histo[ltype+182][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+182,x), "histo_{0}_{1}".format(ltype+182,x), 100, 0, 200), "MET_ptJesDown","weight")
+            #histo[ltype+185][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+185,x), "histo_{0}_{1}".format(ltype+185,x), 100, 0, 200), "MET_ptJerUp"  ,"weight")
+            #histo[ltype+188][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+188,x), "histo_{0}_{1}".format(ltype+188,x), 100, 0, 200), "MET_ptJerDown","weight")
+            #histo[ltype+191][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+191,x), "histo_{0}_{1}".format(ltype+191,x), 100, 0, 200), "newMET"       ,"weight")
 
             if(ltype == 0):
                 histo2D[ 0][x] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format( 0, x), "histo2d_{0}_{1}".format( 0, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")

@@ -74,9 +74,9 @@ def selectionLL(df,year,PDType,isData):
                  .Define("etal2","1.0f")
                  )
 
-    dftag = selectionTauVeto(dftag,year)
+    dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData)
     dftag = selection4LVar  (dftag,year)
 
     dftag = (dftag.Filter("ptlmax > 25", "ptlmax > 25")

@@ -103,7 +103,7 @@ def selectionLL(df,year,PDType,isData):
                  .Define("minmtmet","compute_lmet_var(fake_Muon_pt, fake_Muon_phi, fake_Electron_pt, fake_Electron_phi, MET_pt, MET_phi,4)")
                 )
 
-    dftag = selectionJetMet(dftag,year,bTagSel)
+    dftag = selectionJetMet(dftag,year,bTagSel,isData)
 
     return dftag
 
