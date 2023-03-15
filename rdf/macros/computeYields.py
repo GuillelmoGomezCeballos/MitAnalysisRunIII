@@ -33,20 +33,20 @@ if __name__ == "__main__":
 
     histo = []
     signalDict = []
-    if('SSWW' in path):
+    if('ssww' in path):
         histo.append(20)
         signalDict.append(plotCategory("kPlotEWKSSWW"))
         histo.append(21)
         signalDict.append(plotCategory("kPlotEWKSSWW"))
-    elif('ZZ' in path):
+    elif('zz' in path):
         histo.append(8)
         signalDict.append(plotCategory("kPlotZZ"))
-    elif('WZ' in path):
+    elif('wz' in path):
         histo.append(11)
         signalDict.append(plotCategory("kPlotWZ"))
         histo.append(12)
         signalDict.append(plotCategory("kPlotWZ"))
-    elif('ZMET' in path):
+    elif('zmet' in path):
         histo.append(24)
         signalDict.append(plotCategory("kPlotZZ"))
         histo.append(25)

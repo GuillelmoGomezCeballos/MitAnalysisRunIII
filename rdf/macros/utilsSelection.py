@@ -324,22 +324,31 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
 
     if(year == 2018 and PDType == "MuonEG"):
         triggerLEP = "{0}".format(triggerMUEG)
+
     elif(year == 2018 and PDType == "DoubleMuon"):
         triggerLEP = "{0} and not {1}".format(triggerDMU,triggerMUEG)
+
     elif(year == 2018 and PDType == "SingleMuon"):
         triggerLEP = "{0} and not {1} and not {2}".format(triggerSMU,triggerDMU,triggerMUEG)
+
     elif(year == 2018 and PDType == "EGamma"):
         triggerLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
     elif(year == 2018):
         triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
     elif(year == 2022 and PDType == "MuonEG"):
         triggerLEP = "{0}".format(triggerMUEG)
+
     elif(year == 2022 and PDType == "Muon"):
-        triggerLEP = "({0} or {1}) and not {1}".format(triggerDMU,triggerSMU,triggerMUEG)
+        triggerLEP = "({0} or {1}) and not {2}".format(triggerDMU,triggerSMU,triggerMUEG)
+
     elif(year == 2022 and PDType == "EGamma"):
         triggerLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
     elif(year == 2022):
         triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
     else:
         print("PROBLEM with triggers!!!")
 

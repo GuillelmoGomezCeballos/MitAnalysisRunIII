@@ -61,9 +61,9 @@ def selectionLL(df,year,PDType,isData):
 
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
 
-    dftag =(dftag.Filter("nLoose == 4","Only three loose leptons")
-                 .Filter("nFake == 4","Three fake leptons")
-                 .Filter("nTight == 4","Three tight leptons")
+    dftag =(dftag.Filter("nLoose == 4","Only four loose leptons")
+                 .Filter("nFake == 4","Four fake leptons")
+                 .Filter("nTight == 4","Four tight leptons")
                  .Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 0", "0 net charge")
                  .Define("vtight_mu","{0}".format(TIGHT_MU3))
                  .Define("vtight_el","{0}".format(TIGHT_EL3))

@@ -19,7 +19,7 @@ g++ $(correction config --cflags --ldflags) mysf.cpp -shared -fPIC -o mysf.so
 
 rm -rf functions* *.pyc $5.tgz \
 *Analysis.py analysis_slurm.sh functions.cc utils*.py \
-data \
+data weights_mva \
 mysf.* \
 jsns config
 
