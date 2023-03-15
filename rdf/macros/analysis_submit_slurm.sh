@@ -7,7 +7,19 @@ if [ $theAna -eq 0 ]; then
  whichAna="zAnalysis"
 
 elif [ $theAna -eq 1 ]; then
+ whichAna="wzAnalysis"
+
+elif [ $theAna -eq 2 ]; then
  whichAna="zzAnalysis"
+
+elif [ $theAna -eq 3 ]; then
+ whichAna="sswwAnalysis"
+
+elif [ $theAna -eq 4 ]; then
+ whichAna="zmetAnalysis"
+
+elif [ $theAna -eq 5 ]; then
+ whichAna="fakeAnalysis"
 
 fi
 

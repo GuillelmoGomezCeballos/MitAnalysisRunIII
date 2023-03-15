@@ -9,7 +9,7 @@ xEtabins = array('d', [0.0, 1.0, 1.5, 2.0, 2.5])
 xPtbins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 35.0])
 
 if __name__ == "__main__":
-    path = "fillhistoFakeAna1001"
+    path = "fillhisto_fakeAnalysis1001"
     year = 2018
     inputDir = "anaZ"
     anaType = 0

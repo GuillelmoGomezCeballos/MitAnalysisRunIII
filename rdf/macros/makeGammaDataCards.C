@@ -22,13 +22,13 @@ void makeGammaDataCards(TString InputDir = "anaZ", int fidAna = 0, int mHVal = 0
     for(unsigned nEtaBin=0; nEtaBin<2; nEtaBin++) {
 
       TH1D *histo_Baseline[nPlotCategories];
-      inputFile = new TFile(Form("%s/fillhistoGAMMAAna1001_2018_%d.root",InputDir.Data(),3+4*nEtaBin+10*nPtBin), "read");
+      inputFile = new TFile(Form("%s/fillhisto_gammaAnalysis1001_2018_%d.root",InputDir.Data(),3+4*nEtaBin+10*nPtBin), "read");
       for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
         histo_Baseline[ic]  = (TH1D*)inputFile->Get(Form("histo%d", ic));  histo_Baseline[ic] ->SetDirectory(0);
       }
       delete inputFile;
 
-      inputFile = new TFile(Form("%s/fillhistoGAMMAAna1001_2018_%d.root",InputDir.Data(),1+4*nEtaBin+10*nPtBin), "read");
+      inputFile = new TFile(Form("%s/fillhisto_gammaAnalysis1001_2018_%d.root",InputDir.Data(),1+4*nEtaBin+10*nPtBin), "read");
       histo_Baseline[kPlotNonPrompt] = (TH1D*)inputFile->Get(Form("histo%d", kPlotData)); histo_Baseline[kPlotNonPrompt] ->SetDirectory(0);
       delete inputFile;
 

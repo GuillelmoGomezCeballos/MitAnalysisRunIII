@@ -5,7 +5,7 @@ from array import array
 from utilsAna import plotCategory
 
 if __name__ == "__main__":
-    path = "fillhistoSSWWAna1001"
+    path = "fillhisto_sswwAnalysis1001"
     year = 2018
     output = "anaZ"
 

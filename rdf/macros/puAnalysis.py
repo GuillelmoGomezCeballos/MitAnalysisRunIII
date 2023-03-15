@@ -139,7 +139,7 @@ def analysis(df,count,category,weight,year,PDType,isData):
     print("---------------- SUMMARY -------------")
     report.Print()
 
-    myfile = ROOT.TFile("fillhistoPUAna_sample{0}_year{1}.root".format(count,year),'RECREATE')
+    myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}.root".format(count,year),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue

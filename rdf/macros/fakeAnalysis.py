@@ -265,7 +265,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
             print("---------------- SUMMARY 2*{0}+{1} = {2} -------------".format(y,ltype,2*y+ltype))
             report[2*y+ltype].Print()
 
-    myfile = ROOT.TFile("fillhistoFakeAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
+    myfile = ROOT.TFile("fillhisto_fakeAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export path="fillhistoZAna1001"
+export path="fillhisto_zAnalysis1001"
 export year=2018
 export output="anaZ"
 

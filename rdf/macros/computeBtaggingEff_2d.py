@@ -6,7 +6,7 @@ from utilsAna import plotCategory
 
 
 if __name__ == "__main__":
-    path = "fillhistoPUAna"
+    path = "fillhisto_puAnalysis"
     year = 2018
     output = "anaZ"
 

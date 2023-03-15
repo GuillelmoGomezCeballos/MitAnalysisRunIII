@@ -5,7 +5,7 @@ from utilsAna import plotCategory
 ROOT.PyConfig.DisableRootLogon = True
 
 if __name__ == "__main__":
-    path = "fillhistoZAna"
+    path = "fillhisto_zAnalysis"
     year = 2018
     output = "anaZ"
 
