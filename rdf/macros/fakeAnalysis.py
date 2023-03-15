@@ -293,8 +293,8 @@ def readMCSample(sampleNOW, year, skimType, whichJob, group):
         genEventSumWeight += runTree.genEventSumw
         genEventSumNoWeight += runTree.genEventCount
 
-    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)
-    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)
+    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)/1000.
+    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)/1000.
 
     if(whichJob != -1):
         groupedFile = groupFiles(files, group)

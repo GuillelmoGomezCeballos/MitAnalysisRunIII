@@ -40,15 +40,19 @@ if __name__ == "__main__":
             anaType = int(arg)
 
     startHisto = [0, 0]
+    # no jet requirements / no jet requirements
     if  (anaType == 0):
         startHisto[0] = 0
         startHisto[1] = 0
+    # njets > 0 / njets > 0
     elif(anaType == 1):
         startHisto[0] = 18
         startHisto[1] = 18
+    # nbjets > 0 / nbjets > 0
     elif(anaType == 2):
         startHisto[0] = 36
         startHisto[1] = 36
+    # nbjets > 0 / njets > 0
     elif(anaType == 3):
         startHisto[0] = 36
         startHisto[1] = 18
