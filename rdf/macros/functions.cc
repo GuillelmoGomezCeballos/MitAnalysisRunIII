@@ -520,16 +520,17 @@ float compute_LepSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
 float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
                        const Vec_f& el_pt, const Vec_f& el_eta,
 		       const float nPU){
-
-  //printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
+  bool debug = false;
+  if(debug) printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
   double sfTot = 1.0;
+  /*
   for(unsigned int i=0;i<mu_pt.size();i++) {
     const TH2F& hcorr0 = histoMuIDSF;
     double sf0 = getValFromTH2(hcorr0, fabs(mu_eta[i]),mu_pt[i]);
     const TH2F& hcorr1 = histoMuISOSF;
     double sf1 = getValFromTH2(hcorr1, fabs(mu_eta[i]),mu_pt[i]);
     sfTot = sfTot*sf0*sf1;
-    //printf("leprecomu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf0,sf1,sfTot);
+    if(debug) printf("leprecomu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf0,sf1,sfTot);
   }
 
   for(unsigned int i=0;i<el_pt.size();i++) {
@@ -538,13 +539,13 @@ float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
     const TH2F& hcorr1 = histoElSelSF;
     double sf1 = getValFromTH2(hcorr1, el_eta[i], el_pt[i]);
     sfTot = sfTot*sf0*sf1;
-    //printf("leprecoel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf0,sf1,sfTot);
+    if(debug) printf("leprecoel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf0,sf1,sfTot);
   }
-
+  */
   const TH1D& hcorr = puWeights;
   double sf = getValFromTH1(hcorr, nPU);
   sfTot = sfTot*sf;
-  //printf("pu %.3f %.3f %.3f\n",nPU,sf,sfTot);
+  if(debug) printf("pu %.3f %.3f %.3f\n",nPU,sf,sfTot);
 
   return sfTot;
 }
