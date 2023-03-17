@@ -245,7 +245,7 @@ float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string
 
   for(unsigned int i=0;i<el_pt.size();i++) {
     char *recoNameAux = (char*)"RecoAbove20";
-    if(el_pt[i] <= 20) recoNameAux = (char*)"RecoBelow20";
+    if(el_pt[i] < 20) recoNameAux = (char*)"RecoBelow20";
     const char *recoName = recoNameAux;
     double sf0 = corrSFs.eval_electronSF(year,valType0,    recoName,el_eta[i],el_pt[i]);
     double sf1 = corrSFs.eval_electronSF(year,valType1,workingPoint,el_eta[i],el_pt[i]);
