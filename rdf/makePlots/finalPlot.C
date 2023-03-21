@@ -240,7 +240,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
      myPlot.setMCHist(kPlotSignal0, _hist[kPlotSignal0]);
   }
 
-  if(hBck->GetSumOfWeights() == 0) return;
+  if(hBck->GetSumOfWeights() <= 0 || (isBlind == false && hData->GetSumOfWeights() <= 0)) return;
   double scale = hData->GetSumOfWeights()/hBck->GetSumOfWeights();
   double daUnc = 1.0; if(hData->GetSumOfWeights() > 0) daUnc = 1/hData->GetSumOfWeights();
   double mcUnc = (totalStatUnc+totalSystUnc)/hBck->GetSumOfWeights()/hBck->GetSumOfWeights();

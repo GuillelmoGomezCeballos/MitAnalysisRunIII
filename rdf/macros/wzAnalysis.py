@@ -59,7 +59,7 @@ def selectionLL(df,year,PDType,isData):
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU6,FAKE_EL,TIGHT_EL4)
 
     dftag =(dftag.Filter("nLoose == 3","Only three loose leptons")
                  .Filter("nFake == 3","Three fake leptons")
@@ -169,6 +169,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     dfzgcat = []
     dfwhcat = []
     dfwzvbsBDTcat = []
+    dfEMMcat = []
+    dfMEEcat = []
     for x in range(nCat):
         dfwzcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
 
@@ -180,6 +182,38 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
         histo[ 0][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),120,  0, 120), "mllmin","weight")
         dfwzcat[x] = dfwzcat[x].Filter("mllmin > 1","mllmin cut")
+
+        dfEMMcat.append(dfwzcat[x].Filter("TriLepton_flavor == 1 && triggerSEL > 0 && fake_Electron_pt[0] > 30")
+	                          .Define("pttag","Max(fake_Electron_pt)")
+	                          .Define("ptmax","Max(fake_Muon_pt)")
+	                          .Define("ptmin","Min(fake_Muon_pt)")
+                                  )
+        dfMEEcat.append(dfwzcat[x].Filter("TriLepton_flavor == 2 && triggerSMU > 0 && fake_Muon_pt[0] > 30")
+	                          .Define("pttag","Max(fake_Muon_pt)")
+	                          .Define("ptmax","Max(fake_Electron_pt)")
+	                          .Define("ptmin","Min(fake_Electron_pt)")
+                                  )
+        histo[61][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(61,x), "histo_{0}_{1}".format(61,x), 40, 30, 230), "pttag","weight")
+        histo[62][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(62,x), "histo_{0}_{1}".format(62,x), 40, 30, 230), "pttag","weight")
+
+        dfEMMcat[x] = dfEMMcat[x].Filter("hasTriggerMatch(fake_Electron_eta[0],fake_Electron_phi[0],TrigObj_eta,TrigObj_phi)")
+        dfMEEcat[x] = dfMEEcat[x].Filter("hasTriggerMatch(fake_Muon_eta[0],fake_Muon_phi[0],TrigObj_eta,TrigObj_phi)")
+
+        histo[63][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(63,x), "histo_{0}_{1}".format(63,x), 40, 30, 230), "pttag","weight")
+        histo[64][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(64,x), "histo_{0}_{1}".format(64,x), 40, 30, 230), "pttag","weight")
+
+        histo[65][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), 40, 10, 210), "ptmax","weight")
+        histo[66][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(66,x), "histo_{0}_{1}".format(66,x), 40, 10, 210), "ptmin","weight")
+        histo[67][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(67,x), "histo_{0}_{1}".format(67,x), 40, 10, 210), "ptmax","weight")
+        histo[68][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(68,x), "histo_{0}_{1}".format(68,x), 40, 10, 210), "ptmin","weight")
+
+        dfEMMcat[x] = dfEMMcat[x].Filter("triggerDMU > 0")
+        dfMEEcat[x] = dfMEEcat[x].Filter("triggerDEL > 0")
+
+        histo[69][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), 40, 10, 210), "ptmax","weight")
+        histo[70][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), 40, 10, 210), "ptmin","weight")
+        histo[71][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(71,x), "histo_{0}_{1}".format(71,x), 40, 10, 210), "ptmax","weight")
+        histo[72][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(72,x), "histo_{0}_{1}".format(72,x), 40, 10, 210), "ptmin","weight")
 
         histo[ 1][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 1,x), "histo_{0}_{1}".format( 1,x),100,  0, 100), "mllZ","weight")
         dfwzcat[x] = dfwzcat[x].Filter("mllZ < 15","mllZ cut")
