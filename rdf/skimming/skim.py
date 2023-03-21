@@ -392,11 +392,17 @@ if __name__ == "__main__":
 
                 runTree = ROOT.TChain("Runs")
                 runTree.AddFile(inputSingleFileBase)
+                lumiTree = ROOT.TChain("LuminosityBlocks")
+                if(isSkimData == 1):
+                    lumiTree.AddFile(inputSingleFileBase)
 
                 fOut1 = ROOT.TFile(fOutIndivName1,"UPDATE")
                 fOut1.cd()
                 runTreeCopy1 = runTree.CopyTree("");
                 runTreeCopy1.Write()
+                if(isSkimData == 1):
+                    lumiTreeCopy1 = lumiTree.CopyTree("");
+                    lumiTreeCopy1.Write()		    
                 fOut1.Close()
                 atLeastOneFile[0] = True
                 msgMerge1 = msgMerge1 + " " + fOutIndivName1
@@ -405,6 +411,9 @@ if __name__ == "__main__":
                 fOut2.cd()
                 runTreeCopy2 = runTree.CopyTree("");
                 runTreeCopy2.Write()
+                if(isSkimData == 1):
+                    lumiTreeCopy2 = lumiTree.CopyTree("");
+                    lumiTreeCopy2.Write()		    
                 fOut2.Close()
                 atLeastOneFile[1] = True
                 msgMerge2 = msgMerge2 + " " + fOutIndivName2
@@ -413,6 +422,9 @@ if __name__ == "__main__":
                 fOut3.cd()
                 runTreeCopy3 = runTree.CopyTree("");
                 runTreeCopy3.Write()
+                if(isSkimData == 1):
+                    lumiTreeCopy3 = lumiTree.CopyTree("");
+                    lumiTreeCopy3.Write()		    
                 fOut3.Close()
                 atLeastOneFile[2] = True
                 msgMerge3 = msgMerge3 + " " + fOutIndivName3
@@ -421,6 +433,9 @@ if __name__ == "__main__":
                 fOut4.cd()
                 runTreeCopy4 = runTree.CopyTree("");
                 runTreeCopy4.Write()
+                if(isSkimData == 1):
+                    lumiTreeCopy4 = lumiTree.CopyTree("");
+                    lumiTreeCopy4.Write()		    
                 fOut4.Close()
                 atLeastOneFile[3] = True
                 msgMerge4 = msgMerge4 + " " + fOutIndivName4
@@ -429,6 +444,9 @@ if __name__ == "__main__":
                 fOut5.cd()
                 runTreeCopy5 = runTree.CopyTree("");
                 runTreeCopy5.Write()
+                if(isSkimData == 1):
+                    lumiTreeCopy5 = lumiTree.CopyTree("");
+                    lumiTreeCopy5.Write()		    
                 fOut5.Close()
                 atLeastOneFile[4] = True
                 msgMerge5 = msgMerge5 + " " + fOutIndivName5

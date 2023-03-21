@@ -358,6 +358,11 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
               .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
               .Define("trigger","{0}".format(triggerLEP))
               .Filter("trigger > 0","Passed trigger")
+              .Define("triggerMUEG","{0}".format(triggerMUEG))
+              .Define("triggerDMU", "{0}".format(triggerDMU))
+              .Define("triggerSMU", "{0}".format(triggerSMU))
+              .Define("triggerDEL", "{0}".format(triggerDEL))
+              .Define("triggerSEL", "{0}".format(triggerSEL))
               )
 
     return dftag
