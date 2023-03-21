@@ -40,10 +40,11 @@ if __name__ == "__main__":
     process = -1
     whichJob = -1
 
-    valid = ['year=', "process=", 'whichJob=', 'help']
+    valid = ['year=', "process=", 'whichJob=', 'skimType=', 'help']
     usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
     usage +=  "              --process=<{0}>\n".format(process)
-    usage +=  "              --whichJob=<{0}>".format(whichJob)
+    usage +=  "              --whichJob=<{0}>\n".format(whichJob)
+    usage +=  "              --skimType=<{0}>".format(skimType)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -61,6 +62,8 @@ if __name__ == "__main__":
             process = int(arg)
         if opt == "--whichJob":
             whichJob = int(arg)
+        if opt == "--skimType":
+            skimType = arg
 
     jsnName = ""
     lumiName = ""
