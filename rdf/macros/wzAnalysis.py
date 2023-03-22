@@ -1,5 +1,6 @@
 import ROOT
 import os, sys, getopt, json
+from array import array
 
 ROOT.ROOT.EnableImplicitMT(3)
 from utilsAna import plotCategory
@@ -83,6 +84,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
+
+    xPtTrgbins = array('d', [10,15,20,25,30,35,40,50,60,70,90,120,200,1000])
 
     nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo = [[0 for y in range(nCat)] for x in range(nHisto)]
@@ -193,27 +196,27 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 	                          .Define("ptmax","Max(fake_Electron_pt)")
 	                          .Define("ptmin","Min(fake_Electron_pt)")
                                   )
-        histo[61][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(61,x), "histo_{0}_{1}".format(61,x), 40, 30, 230), "pttag","weight")
-        histo[62][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(62,x), "histo_{0}_{1}".format(62,x), 40, 30, 230), "pttag","weight")
+        histo[61][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(61,x), "histo_{0}_{1}".format(61,x), 20, 30, 130), "pttag","weight")
+        histo[62][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(62,x), "histo_{0}_{1}".format(62,x), 20, 30, 130), "pttag","weight")
 
         dfEMMcat[x] = dfEMMcat[x].Filter("hasTriggerMatch(fake_Electron_eta[0],fake_Electron_phi[0],TrigObj_eta,TrigObj_phi)")
         dfMEEcat[x] = dfMEEcat[x].Filter("hasTriggerMatch(fake_Muon_eta[0],fake_Muon_phi[0],TrigObj_eta,TrigObj_phi)")
 
-        histo[63][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(63,x), "histo_{0}_{1}".format(63,x), 40, 30, 230), "pttag","weight")
-        histo[64][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(64,x), "histo_{0}_{1}".format(64,x), 40, 30, 230), "pttag","weight")
+        histo[63][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(63,x), "histo_{0}_{1}".format(63,x), 20, 30, 130), "pttag","weight")
+        histo[64][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(64,x), "histo_{0}_{1}".format(64,x), 20, 30, 130), "pttag","weight")
 
-        histo[65][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), 40, 10, 210), "ptmax","weight")
-        histo[66][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(66,x), "histo_{0}_{1}".format(66,x), 40, 10, 210), "ptmin","weight")
-        histo[67][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(67,x), "histo_{0}_{1}".format(67,x), 40, 10, 210), "ptmax","weight")
-        histo[68][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(68,x), "histo_{0}_{1}".format(68,x), 40, 10, 210), "ptmin","weight")
+        histo[65][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmax","weight")
+        histo[66][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(66,x), "histo_{0}_{1}".format(66,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmin","weight")
+        histo[67][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(67,x), "histo_{0}_{1}".format(67,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmax","weight")
+        histo[68][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(68,x), "histo_{0}_{1}".format(68,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmin","weight")
 
         dfEMMcat[x] = dfEMMcat[x].Filter("triggerDMU > 0")
         dfMEEcat[x] = dfMEEcat[x].Filter("triggerDEL > 0")
 
-        histo[69][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), 40, 10, 210), "ptmax","weight")
-        histo[70][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), 40, 10, 210), "ptmin","weight")
-        histo[71][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(71,x), "histo_{0}_{1}".format(71,x), 40, 10, 210), "ptmax","weight")
-        histo[72][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(72,x), "histo_{0}_{1}".format(72,x), 40, 10, 210), "ptmin","weight")
+        histo[69][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmax","weight")
+        histo[70][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmin","weight")
+        histo[71][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(71,x), "histo_{0}_{1}".format(71,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmax","weight")
+        histo[72][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(72,x), "histo_{0}_{1}".format(72,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmin","weight")
 
         histo[ 1][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 1,x), "histo_{0}_{1}".format( 1,x),100,  0, 100), "mllZ","weight")
         dfwzcat[x] = dfwzcat[x].Filter("mllZ < 15","mllZ cut")

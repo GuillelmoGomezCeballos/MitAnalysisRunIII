@@ -244,7 +244,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   double scale = hData->GetSumOfWeights()/hBck->GetSumOfWeights();
   double daUnc = 1.0; if(hData->GetSumOfWeights() > 0) daUnc = 1/hData->GetSumOfWeights();
   double mcUnc = (totalStatUnc+totalSystUnc)/hBck->GetSumOfWeights()/hBck->GetSumOfWeights();
-  printf("data/bck: %f / %f +/- %f/%f/%f = %f +/- %f\n",hData->GetSumOfWeights(),hBck->GetSumOfWeights(),TMath::Sqrt(totalStatUnc),TMath::Sqrt(totalSystUnc),TMath::Sqrt(totalStatUnc+totalSystUnc),scale,TMath::Sqrt(daUnc+mcUnc)*scale);
+  printf("%s data/bck: %f / %f +/- %f/%f/%f = %f +/- %f\n",plotName.Data(),hData->GetSumOfWeights(),hBck->GetSumOfWeights(),TMath::Sqrt(totalStatUnc),TMath::Sqrt(totalSystUnc),TMath::Sqrt(totalStatUnc+totalSystUnc),scale,TMath::Sqrt(daUnc+mcUnc)*scale);
   if(applyScaling == true) hBck->Scale(scale);
 
   for(int ic=0; ic<nPlotCategories; ic++){

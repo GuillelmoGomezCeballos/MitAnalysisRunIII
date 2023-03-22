@@ -102,6 +102,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     xPtbins = array('d', [10,15,20,25,30,35,40,50,60,70,85,100,200,1000])
     xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
 
+    xPtTrgbins = array('d', [10,15,20,25,30,35,40,50,60,70,90,120,200,1000])
+
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
@@ -252,22 +254,22 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                                                   .Define("pttag","Max(fake_Electron_pt)")
                                                   .Define("ptprobe","Max(fake_Muon_pt)")
                                                   )
-                histo[206][x] = dfzmecat[x].Histo1D(("histo_{0}_{1}".format(206,x), "histo_{0}_{1}".format(206,x), 40,  30, 230), "pttag","weight")
-                histo[207][x] = dfzemcat[x].Histo1D(("histo_{0}_{1}".format(207,x), "histo_{0}_{1}".format(207,x), 40,  30, 230), "pttag","weight")
+                histo[206][x] = dfzmecat[x].Histo1D(("histo_{0}_{1}".format(206,x), "histo_{0}_{1}".format(206,x), 20, 30, 130), "pttag","weight")
+                histo[207][x] = dfzemcat[x].Histo1D(("histo_{0}_{1}".format(207,x), "histo_{0}_{1}".format(207,x), 20, 30, 130), "pttag","weight")
 
                 dfzmecat[x] = dfzmecat[x].Filter("hasTriggerMatch(fake_Muon_eta[0],fake_Muon_phi[0],TrigObj_eta,TrigObj_phi)")
                 dfzemcat[x] = dfzemcat[x].Filter("hasTriggerMatch(fake_Electron_eta[0],fake_Electron_phi[0],TrigObj_eta,TrigObj_phi)")
 
-                histo[208][x] = dfzmecat[x].Histo1D(("histo_{0}_{1}".format(208,x), "histo_{0}_{1}".format(208,x), 40,  30, 230), "pttag","weight")
-                histo[209][x] = dfzemcat[x].Histo1D(("histo_{0}_{1}".format(209,x), "histo_{0}_{1}".format(209,x), 40,  30, 230), "pttag","weight")
-                histo[210][x] = dfzmecat[x].Histo1D(("histo_{0}_{1}".format(210,x), "histo_{0}_{1}".format(210,x), 40,  10, 210), "ptprobe","weight")
-                histo[211][x] = dfzemcat[x].Histo1D(("histo_{0}_{1}".format(211,x), "histo_{0}_{1}".format(211,x), 40,  10, 210), "ptprobe","weight")
+                histo[208][x] = dfzmecat[x].Histo1D(("histo_{0}_{1}".format(208,x), "histo_{0}_{1}".format(208,x), 20, 30, 130), "pttag","weight")
+                histo[209][x] = dfzemcat[x].Histo1D(("histo_{0}_{1}".format(209,x), "histo_{0}_{1}".format(209,x), 20, 30, 130), "pttag","weight")
+                histo[210][x] = dfzmecat[x].Histo1D(("histo_{0}_{1}".format(210,x), "histo_{0}_{1}".format(210,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
+                histo[211][x] = dfzemcat[x].Histo1D(("histo_{0}_{1}".format(211,x), "histo_{0}_{1}".format(211,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
 
-                histo[212][x] = dfzmecat[x].Filter("triggerMUEG > 0").Histo1D(("histo_{0}_{1}".format(212,x), "histo_{0}_{1}".format(212,x), 40,  10, 210), "ptprobe","weight")
-                histo[213][x] = dfzemcat[x].Filter("triggerMUEG > 0").Histo1D(("histo_{0}_{1}".format(213,x), "histo_{0}_{1}".format(213,x), 40,  10, 210), "ptprobe","weight")
+                histo[212][x] = dfzmecat[x].Filter("triggerMUEG > 0").Histo1D(("histo_{0}_{1}".format(212,x), "histo_{0}_{1}".format(212,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
+                histo[213][x] = dfzemcat[x].Filter("triggerMUEG > 0").Histo1D(("histo_{0}_{1}".format(213,x), "histo_{0}_{1}".format(213,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
 
-                histo[214][x] = dfzmecat[x].Filter("triggerSEL  > 0").Histo1D(("histo_{0}_{1}".format(214,x), "histo_{0}_{1}".format(214,x), 40,  10, 210), "ptprobe","weight")
-                histo[215][x] = dfzemcat[x].Filter("triggerSMU  > 0").Histo1D(("histo_{0}_{1}".format(215,x), "histo_{0}_{1}".format(215,x), 40,  10, 210), "ptprobe","weight")
+                histo[214][x] = dfzmecat[x].Filter("triggerSEL  > 0").Histo1D(("histo_{0}_{1}".format(214,x), "histo_{0}_{1}".format(214,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
+                histo[215][x] = dfzemcat[x].Filter("triggerSMU  > 0").Histo1D(("histo_{0}_{1}".format(215,x), "histo_{0}_{1}".format(215,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
 
             if(ltype == 0):
                 histo2D[ 0][x] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format( 0, x), "histo2d_{0}_{1}".format( 0, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")
