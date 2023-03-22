@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     for nsel in range(numberOfSel):
         pathDEN = "{0}/{1}_{2}_{3}.root".format(output,pathWZ,year,nsel+65)
-        if(nsel >= 4):
+        if(nsel >= 4 and nsel < 6):
             pathDEN = "{0}/{1}_{2}_{3}.root".format(output,pathDY,year,nsel+210-4)
         elif(nsel >= 6):
             pathDEN = "{0}/{1}_{2}_{3}.root".format(output,pathDY,year,nsel+210-6)
