@@ -85,7 +85,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    xPtTrgbins = array('d', [10,15,20,25,30,35,40,50,60,70,90,120,200,1000])
+    xPtTrgbins = array('d', [10,15,20,25,30,35,40,50,60,70,80,90,105,120,150,200])
 
     nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo = [[0 for y in range(nCat)] for x in range(nHisto)]

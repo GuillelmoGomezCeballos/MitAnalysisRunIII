@@ -102,7 +102,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     xPtbins = array('d', [10,15,20,25,30,35,40,50,60,70,85,100,200,1000])
     xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
 
-    xPtTrgbins = array('d', [10,15,20,25,30,35,40,50,60,70,90,120,200,1000])
+    xPtTrgbins = array('d', [10,15,20,25,30,35,40,50,60,70,80,90,105,120,150,200])
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
