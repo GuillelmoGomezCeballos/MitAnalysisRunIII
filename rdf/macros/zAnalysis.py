@@ -95,7 +95,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     xPtbins = array('d', [10,15,20,25,30,35,40,50,60,70,85,100,200,1000])
     xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
 
-    xPtTrgbins = array('d', [10,15,20,25,30,35,40,50,60,70,80,90,105,120,150,200])
+    xPtTrgbins = array('d', [25,30,35,40,45,50,55,60,65,70,75,80,90,105,120,150,200])
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
@@ -184,7 +184,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             )
 
             #dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll-91.1876) < 15) || (DiLepton_flavor == 1 && mll > 30 && tight_mu6[0] == 1 && tight_el4[0] == 1)","mll cut")
-            dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll-91.1876) < 15) || (DiLepton_flavor == 1 && mll > 30)","mll cut")
+            dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll-91.1876) < 15) || (DiLepton_flavor == 1 && mll > 30 && ptl2 > 25)","mll cut")
 
             dfzllcat.append(dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons"))
 
@@ -243,7 +243,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             if(ltype == 0):
                 histo[160][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(160,x), "histo_{0}_{1}".format(160,x), 100, 0, 1.0), "fake_Muon_mvaTTH","weight")
             if(ltype == 2):
-                histo[161][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(161,x), "histo_{0}_{1}".format(161,x), 100, 0, 1.0), "fake_Muon_mvaTTH","weight")
+                histo[161][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(161,x), "histo_{0}_{1}".format(161,x), 100, 0, 1.0), "fake_Electron_mvaTTH","weight")
 
             histo[ltype+170][x] = dfzgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+170,x), "histo_{0}_{1}".format(ltype+170,x), 40, 10, 210), "mllg","weight")
             dfzgcat[3*x+ltype] = dfzgcat[3*x+ltype].Filter("abs(mllg-91.1876)<15")
@@ -329,6 +329,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                 histo2D[38][x] = dfzllcat[3*x+ltype].Filter("tight_el7[1] == true").Histo2D(("histo2d_{0}_{1}".format(38, x), "histo2d_{0}_{1}".format(38, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
 
             dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("ptl1 > 25 && ptl2 > 25")
+            histo[ltype+297][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+297,x), "histo_{0}_{1}".format(ltype+297,x), 20, 25, 125), "ptl2","weight")
             for nTrg in range(len(list_TRIGGER)):
                 histo[3*nTrg+ltype+300][x] = dfzllcat[3*x+ltype].Filter("{0} > 0".format(list_TRIGGER[nTrg])).Histo1D(("histo_{0}_{1}".format(3*nTrg+ltype+300,x), "histo_{0}_{1}".format(3*nTrg+ltype+300,x), 20, 25, 125), "ptl2","weight")
 

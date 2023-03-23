@@ -1,7 +1,7 @@
 #!/bin/sh
 
 export path="fillhisto_zAnalysis1001"
-export year=2018
+export year=2022
 export output="anaZ"
 
 hadd -f ${output}/${path}_${year}_muB.root ${output}/${path}_${year}_130.root ${output}/${path}_${year}_136.root
