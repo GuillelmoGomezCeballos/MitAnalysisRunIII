@@ -132,6 +132,17 @@ void makeAllPlots(TString nsel, int applyScaling, int year){
     finalPlot(0,1,"p_{T}^{#gamma}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_174.root",year),"dy_emg_ptg",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{#gamma}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_175.root",year),"dy_eeg_ptg",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
   }
+  else if(nsel == "ztrigger"){
+    for(int nTrg=0; nTrg<20; nTrg++){
+       finalPlot(0,1,"p_{T}^{lmin}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_%d.root",year,3*nTrg+0+300),Form("dy_zmmtrg_ptmin%d",3*nTrg+0+300),0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    }
+    for(int nTrg=0; nTrg<20; nTrg++){
+       finalPlot(0,1,"p_{T}^{lmin}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_%d.root",year,3*nTrg+1+300),Form("dy_zemtrg_ptmin%d",3*nTrg+1+300),0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    }
+    for(int nTrg=0; nTrg<20; nTrg++){
+       finalPlot(0,1,"p_{T}^{lmin}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_%d.root",year,3*nTrg+2+300),Form("dy_zeetrg_ptmin%d",3*nTrg+2+300),0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    }
+  }
   else if(nsel == "fake"){
     legendBSM="";
     isNeverBlinded=0;

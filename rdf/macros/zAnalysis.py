@@ -49,14 +49,7 @@ TIGHT_EL5 = jsonObject['TIGHT_EL5']
 TIGHT_EL6 = jsonObject['TIGHT_EL6']
 TIGHT_EL7 = jsonObject['TIGHT_EL7']
 
-def selectionLL(df,year,PDType,isData):
-
-    overallTriggers = jsonObject['triggers']
-    TRIGGERMUEG = getTriggerFromJson(overallTriggers, "TRIGGERMUEG", year)
-    TRIGGERDMU  = getTriggerFromJson(overallTriggers, "TRIGGERDMU", year)
-    TRIGGERSMU  = getTriggerFromJson(overallTriggers, "TRIGGERSMU", year)
-    TRIGGERDEL  = getTriggerFromJson(overallTriggers, "TRIGGERDEL", year)
-    TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
+def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL):
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
@@ -107,7 +100,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 300
+    nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
 
@@ -142,7 +135,27 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
     ROOT.initJSONSFs(year)
 
-    dfbase = selectionLL(df,year,PDType,isData)
+    overallTriggers = jsonObject['triggers']
+    TRIGGERMUEG = getTriggerFromJson(overallTriggers, "TRIGGERMUEG", year)
+    TRIGGERDMU  = getTriggerFromJson(overallTriggers, "TRIGGERDMU", year)
+    TRIGGERSMU  = getTriggerFromJson(overallTriggers, "TRIGGERSMU", year)
+    TRIGGERDEL  = getTriggerFromJson(overallTriggers, "TRIGGERDEL", year)
+    TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
+
+    list_TRIGGERMUEG = TRIGGERMUEG.split('(')[1].split(')')[0].split('||')
+    list_TRIGGERDMU  = TRIGGERDMU .split('(')[1].split(')')[0].split('||')
+    list_TRIGGERSMU  = TRIGGERSMU .split('(')[1].split(')')[0].split('||')
+    list_TRIGGERDEL  = TRIGGERDEL .split('(')[1].split(')')[0].split('||')
+    list_TRIGGERSEL  = TRIGGERSEL .split('(')[1].split(')')[0].split('||')
+
+    list_TRIGGER = list_TRIGGERMUEG
+    list_TRIGGER.extend(list_TRIGGERDMU)
+    list_TRIGGER.extend(list_TRIGGERSMU)
+    list_TRIGGER.extend(list_TRIGGERDEL)
+    list_TRIGGER.extend(list_TRIGGERSEL)
+    print("Total number of trigger paths: {0}".format(len(list_TRIGGER)))
+
+    dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL)
 
     dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,nPDFReplicas)
 
@@ -154,6 +167,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     dfzgcat = []
     dfzemcat = []
     dfzmecat = []
+    dfemtrg = []
     for x in range(nCat):
         for ltype in range(3):
             dfcat.append(dfbase.Filter("DiLepton_flavor=={0}".format(ltype), "flavor type == {0}".format(ltype))
@@ -169,7 +183,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
               .Define("mllg","compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, MET_pt, MET_phi, good_Photons_pt, good_Photons_eta, good_Photons_phi, 7)")
             )
 
-            dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll-91.1876) < 15) || (DiLepton_flavor == 1 && mll > 30 && tight_mu6[0] == 1 && tight_el4[0] == 1)","mll cut")
+            #dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll-91.1876) < 15) || (DiLepton_flavor == 1 && mll > 30 && tight_mu6[0] == 1 && tight_el4[0] == 1)","mll cut")
+            dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll-91.1876) < 15) || (DiLepton_flavor == 1 && mll > 30)","mll cut")
 
             dfzllcat.append(dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons"))
 
@@ -312,6 +327,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                 histo2D[36][x] = dfzllcat[3*x+ltype].Filter("tight_el5[1] == true").Histo2D(("histo2d_{0}_{1}".format(36, x), "histo2d_{0}_{1}".format(36, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
                 histo2D[37][x] = dfzllcat[3*x+ltype].Filter("tight_el6[1] == true").Histo2D(("histo2d_{0}_{1}".format(37, x), "histo2d_{0}_{1}".format(37, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
                 histo2D[38][x] = dfzllcat[3*x+ltype].Filter("tight_el7[1] == true").Histo2D(("histo2d_{0}_{1}".format(38, x), "histo2d_{0}_{1}".format(38, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
+
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("ptl1 > 25 && ptl2 > 25")
+            for nTrg in range(len(list_TRIGGER)):
+                histo[3*nTrg+ltype+300][x] = dfzllcat[3*x+ltype].Filter("{0} > 0".format(list_TRIGGER[nTrg])).Histo1D(("histo_{0}_{1}".format(3*nTrg+ltype+300,x), "histo_{0}_{1}".format(3*nTrg+ltype+300,x), 20, 25, 125), "ptl2","weight")
 
     report = []
     for x in range(nCat):
