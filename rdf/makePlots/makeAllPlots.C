@@ -139,7 +139,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year){
       else if(ltype == 1) legendLL="em";
       else if(ltype == 2) legendLL="ee";
       finalPlot(0,1,"p_{T}^{lmin}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_%d.root",year,ltype+297),Form("dy_z%strg_ptmin%d",legendLL.Data(),ltype),0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-      for(int nTrg=0; nTrg<20; nTrg++){
+      for(int nTrg=0; nTrg<18; nTrg++){
          finalPlot(0,1,"p_{T}^{lmin}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_%d.root",year,3*nTrg+ltype+300),Form("dy_z%strg_ptmin%d",legendLL.Data(),3*nTrg+ltype+300),0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
       }
     }

@@ -167,7 +167,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     dfzgcat = []
     dfzemcat = []
     dfzmecat = []
-    dfemtrg = []
     for x in range(nCat):
         for ltype in range(3):
             dfcat.append(dfbase.Filter("DiLepton_flavor=={0}".format(ltype), "flavor type == {0}".format(ltype))
@@ -285,6 +284,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
                 histo[214][x] = dfzmecat[x].Filter("triggerSEL  > 0").Histo1D(("histo_{0}_{1}".format(214,x), "histo_{0}_{1}".format(214,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
                 histo[215][x] = dfzemcat[x].Filter("triggerSMU  > 0").Histo1D(("histo_{0}_{1}".format(215,x), "histo_{0}_{1}".format(215,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
+
+            histo[ltype+216][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+216,x), "histo_{0}_{1}".format(ltype+216,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight0")
+            histo[ltype+219][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+219,x), "histo_{0}_{1}".format(ltype+219,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight1")
+            histo[ltype+222][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+222,x), "histo_{0}_{1}".format(ltype+222,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight2")
+            histo[ltype+225][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+225,x), "histo_{0}_{1}".format(ltype+225,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight3")
+            histo[ltype+228][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+228,x), "histo_{0}_{1}".format(ltype+228,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight4")
+            histo[ltype+231][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+231,x), "histo_{0}_{1}".format(ltype+231,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight5")
 
             if(ltype == 0):
                 histo2D[ 0][x] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format( 0, x), "histo2d_{0}_{1}".format( 0, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")

@@ -436,7 +436,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas):
     #if(year == 2022): PHOYEAR = "2022"
 
     dftag =(df.Define("PDType","\"{0}\"".format(PDType))
-              .Define("clean_Jet_hadronFlavour", "Jet_btagDeepFlavB[clean_jet]")
+              .Define("clean_Jet_hadronFlavour", "Jet_hadronFlavour[clean_jet]")
               .Define("goodbtag_Jet_hadronFlavour","clean_Jet_hadronFlavour[goodbtag_jet]")
               .Define("fake_Muon_genPartFlav","Muon_genPartFlav[fake_mu]")
               .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
@@ -466,7 +466,14 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas):
               .Define("weightPUSF_Nom","compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
 
               #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom")
-              .Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
+              #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
+              .Define("weight","weightMC*weightFake")
+              .Define("weight0","weightMC*weightFake*weightBtagSF")
+              .Define("weight1","weightMC*weightFake*weightMuoSFJSON")
+              .Define("weight2","weightMC*weightFake*weightEleSFJSON")
+              .Define("weight3","weightMC*weightFake*weightPUSF_Nom")
+              .Define("weight4","weightMC*weightFake*weightPURecoSF")
+              .Define("weight5","weightMC")
 
 
               .Define("weightBtagSFBC_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",1,{0})".format(bTagSel))

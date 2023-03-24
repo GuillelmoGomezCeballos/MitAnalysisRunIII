@@ -164,11 +164,12 @@ float compute_JSON_PU_SF(double NumTrueInteractions, std::string type){
 }
 
 // BTag SFs
-float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet_flavor, std::string keyS, int flavorToStudy, unsigned int sel)
+float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet_flavor, std::string keyS, int flavorToStudy, const int sel)
 {
+  if(sel == -1) return 1.0;
   // flavorToStudy = 0 (central) / > 0 (BC) / < 0 (LF)
   bool debug = false;
-  if(debug) printf("btagsf: %lu %lu %lu %lu %d %d\n",jet_pt.size(),jet_eta.size(),jet_btag.size(),jet_flavor.size(),flavorToStudy,sel);
+  if(debug) printf("btagsf(%s): %lu %lu %lu %lu %d %d\n",keyS.c_str(),jet_pt.size(),jet_eta.size(),jet_btag.size(),jet_flavor.size(),flavorToStudy,sel);
   double sfTot[2] = {1.0, 1.0};
   const char *key = keyS.c_str();
   char *valType = (char*)"T"; double bcut = 0.711;
@@ -200,9 +201,12 @@ float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet
     else {
       sfTot[0] *= (1.0 - sf * eff); sfTot[1] *= (1.0 - eff);
     }
-    if(debug) printf("btagsf(%d) %.3f %.3f %d %d %.3f %.3f %.3f %.3f\n",i,jet_pt[i],jet_eta[i],jet_flavor[i],jet_btag[i] > bcut,sfTot[0],sfTot[1],sf,eff);
+    if(debug) {
+      printf("btagsf(%d) %.3f %.3f %d %d %.3f %.3f %.3f %.3f --> ",i,jet_pt[i],jet_eta[i],jet_flavor[i],jet_btag[i] > bcut,sfTot[0],sfTot[1],sf,eff);
+      if(sfTot[1] > 0) printf("%.3f\n",sfTot[0]/sfTot[1]); else printf("1.0\n");
+    }
   }
-  
+
   if(sfTot[1] > 0) return sfTot[0]/sfTot[1];
   return 1.0;
 }
