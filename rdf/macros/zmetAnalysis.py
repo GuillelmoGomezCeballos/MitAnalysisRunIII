@@ -11,6 +11,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 1
+useBTaggingWeights = 1
 
 useFR = 0
 
@@ -133,7 +134,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
     dftag = selectionLL(df,year,PDType,isData)
 
-    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,nPDFReplicas)
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas)
 
     dfzllcat = []
     dfzllbcat = []

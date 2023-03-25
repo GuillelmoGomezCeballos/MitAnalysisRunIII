@@ -6,6 +6,7 @@ ROOT.ROOT.EnableImplicitMT(5)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist, getLumi
 from utilsAna import SwitchSample
+from utilsSelection import getBTagCut
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -82,15 +83,15 @@ def analysis(df,count,category,weight,year,PDType,isData):
           .Define("goodloosejet_lf",   "goodloosejet_hadronFlavour == 0")
           .Define("goodloosejet_cj",   "goodloosejet_hadronFlavour == 4")
           .Define("goodloosejet_bj",   "goodloosejet_hadronFlavour == 5")
-          .Define("goodloosejet_lf_t", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepB > 0.7100")
-          .Define("goodloosejet_cj_t", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepB > 0.7100")
-          .Define("goodloosejet_bj_t", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepB > 0.7100")
-          .Define("goodloosejet_lf_m", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepB > 0.2783")
-          .Define("goodloosejet_cj_m", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepB > 0.2783")
-          .Define("goodloosejet_bj_m", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepB > 0.2783")
-          .Define("goodloosejet_lf_l", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepB > 0.0490")
-          .Define("goodloosejet_cj_l", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepB > 0.0490")
-          .Define("goodloosejet_bj_l", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepB > 0.0490")
+          .Define("goodloosejet_lf_t", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepB > {0}".format(getBTagCut(0)))
+          .Define("goodloosejet_cj_t", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepB > {0}".format(getBTagCut(0)))
+          .Define("goodloosejet_bj_t", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepB > {0}".format(getBTagCut(0)))
+          .Define("goodloosejet_lf_m", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepB > {0}".format(getBTagCut(1)))
+          .Define("goodloosejet_cj_m", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepB > {0}".format(getBTagCut(1)))
+          .Define("goodloosejet_bj_m", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepB > {0}".format(getBTagCut(1)))
+          .Define("goodloosejet_lf_l", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepB > {0}".format(getBTagCut(2)))
+          .Define("goodloosejet_cj_l", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepB > {0}".format(getBTagCut(2)))
+          .Define("goodloosejet_bj_l", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepB > {0}".format(getBTagCut(2)))
           .Define("goodloosejet_pt_lf",   "goodloosejet_pt[goodloosejet_lf]")
           .Define("goodloosejet_pt_cj",   "goodloosejet_pt[goodloosejet_cj]")
           .Define("goodloosejet_pt_bj",   "goodloosejet_pt[goodloosejet_bj]")

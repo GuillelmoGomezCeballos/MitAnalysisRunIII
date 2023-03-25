@@ -10,6 +10,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 0
+useBTaggingWeights = 0
 
 useFR = 0
 
@@ -160,7 +161,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
     dftag = selectionLL(df,year,PDType,isData)
 
-    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,nPDFReplicas)
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas)
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("theCat","compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
@@ -179,7 +180,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
         histo[21][x] = dfzzcat[x].Filter("mllZ1 == -1 && Sum(vtight_mu)+Sum(vtight_el) == 4").Histo1D(("histo_{0}_{1}".format(21,x), "histo_{0}_{1}".format(21,x),3,-0.5, 2.5), "FourLepton_flavor","weight")
         histo[22][x] = dfzzcat[x].Filter("mllZ1 == -1 && Sum(vtight_mu)+Sum(vtight_el) == 4").Histo1D(("histo_{0}_{1}".format(22,x), "histo_{0}_{1}".format(22,x),10, 0, 500), "m4l","weight")
-        histo[23][x] = dfzzcat[x].Filter("mllZ1 == -1 && Sum(vtight_mu)+Sum(vtight_el) == 4").Histo1D(("histo_{0}_{1}".format(23,x), "histo_{0}_{1}".format(23,x),5,-0.5 ,4.5), "nbtag_goodbtag_Jet_bjet","weight")
+        histo[23][x] = dfzzcat[x].Filter("mllZ1 == -1 && Sum(vtight_mu)+Sum(vtight_el) == 4").Histo1D(("histo_{0}_{1}".format(23,x), "histo_{0}_{1}".format(23,x),5,-0.5 ,4.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
 
         histo[ 1][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 1,x), "histo_{0}_{1}".format( 1,x),100,  0, 100), "mllZ1","weight")
         dfzzcat[x] = dfzzcat[x].Filter("mllZ1 < 10000 && mllZ1 >= 0","mllZ1 cut")
@@ -216,17 +217,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             outputFile = "ntupleZZAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob)
             dfzzvbscat[x].Snapshot("events", outputFile, branchList)
 
-        histo[24][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(24,x), "histo_{0}_{1}".format(24,x),5,-0.5 ,4.5), "nbtag_goodbtag_Jet_bjet","weight")
-        histo[25][x] = dfzzxycat[x].Filter("nbtag_goodbtag_Jet_bjet  > 0").Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x),20, 0, 500), "m4l","weight")
+        histo[24][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(24,x), "histo_{0}_{1}".format(24,x),5,-0.5 ,4.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
+        histo[25][x] = dfzzxycat[x].Filter("nbtag_goodbtag_Jet_bjet  > 0").Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x),20, 0, 500), "m4l","weightBTag")
 
         dfzzxycat[x] = dfzzxycat[x].Filter("nbtag_goodbtag_Jet_bjet == 0")
 
-        histo[26][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(26,x), "histo_{0}_{1}".format(26,x),3,-0.5, 2.5), "FourLepton_flavor","weight")
-        histo[27][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(27,x), "histo_{0}_{1}".format(27,x),20, 5, 205), "mllxy","weight")
-        histo[28][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(28,x), "histo_{0}_{1}".format(28,x),20, 0, 200), "PuppiMET_pt","weight")
-        histo[29][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x),20, 0, 500), "m4l","weight")
-        histo[30][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x),20, 0, 200), "ptZ2","weight")
-        histo[31][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x),20, 0, 200), "mtxy","weight")
+        histo[26][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(26,x), "histo_{0}_{1}".format(26,x),3,-0.5, 2.5), "FourLepton_flavor","weightBTag")
+        histo[27][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(27,x), "histo_{0}_{1}".format(27,x),20, 5, 205), "mllxy","weightBTag")
+        histo[28][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(28,x), "histo_{0}_{1}".format(28,x),20, 0, 200), "PuppiMET_pt","weightBTag")
+        histo[29][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x),20, 0, 500), "m4l","weightBTag")
+        histo[30][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x),20, 0, 200), "ptZ2","weightBTag")
+        histo[31][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x),20, 0, 200), "mtxy","weightBTag")
 
         #histo[91][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x),3,-0.5, 2.5), "FourLepton_flavor","weightNoPURecoSF")
         #histo[92][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x),3,-0.5, 2.5), "FourLepton_flavor","weightNoLepSF")

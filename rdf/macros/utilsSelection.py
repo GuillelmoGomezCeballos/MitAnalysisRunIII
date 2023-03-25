@@ -409,15 +409,23 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
 
     return dftag
 
-def selectionDAWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas):
+def selectionDAWeigths(df,year,PDType):
     dftag =(df.Define("PDType","\"{0}\"".format(PDType))
               .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,fake_Electron_pt,fake_Electron_eta,tight_el)")
               .Define("weight","weightFake*1.0")
+              .Define("weight0","1.0")
+              .Define("weight1","weightFake*1.0")
+              .Define("weight2","weightFake*1.0")
+              .Define("weight3","weightFake*1.0")
+              .Define("weight4","weightFake*1.0")
+              .Define("weight5","weightFake*1.0")
+              .Define("weightBTag","weight")
+              .Define("weightNoBTag","weight")
               )
 
     return dftag
 
-def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas):
+def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas):
 
     hasTheoryColumnName = [True, True, True]
     theoryColumnName = ["PSWeight", "LHEScaleWeight", "LHEPdfWeight"]
@@ -464,53 +472,65 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas):
               .Define("weightEleSFJSON","compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
 
               .Define("weightPUSF_Nom","compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
-
-              #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom")
-              #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-              .Define("weight","weightMC*weightFake")
-              .Define("weight0","weightMC*weightFake*weightBtagSF")
-              .Define("weight1","weightMC*weightFake*weightMuoSFJSON")
-              .Define("weight2","weightMC*weightFake*weightEleSFJSON")
-              .Define("weight3","weightMC*weightFake*weightPUSF_Nom")
-              .Define("weight4","weightMC*weightFake*weightPURecoSF")
-              .Define("weight5","weightMC")
-
-
-              .Define("weightBtagSFBC_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",1,{0})".format(bTagSel))
-              .Define("weightBtagSFBC_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_correlated\",1,{0})".format(bTagSel))
-              .Define("weightBtagSFBC_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",1,{0})".format(bTagSel))
-              .Define("weightBtagSFBC_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",1,{0})".format(bTagSel))
-
-              .Define("weightBtagSFLF_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",-1,{0})".format(bTagSel))
-              .Define("weightBtagSFLF_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_correlated\",-1,{0})".format(bTagSel))
-              .Define("weightBtagSFLF_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",-1,{0})".format(bTagSel))
-              .Define("weightBtagSFLF_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",-1,{0})".format(bTagSel))
-
-              .Define("weightMuoSFTRKUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"systup\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-              .Define("weightMuoSFIDUp" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"systup\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-              .Define("weightMuoSFISOUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"systup\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-
-              .Define("weightMuoSFTRKDown","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"systdown\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-              .Define("weightMuoSFIDDown" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"systdown\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-              .Define("weightMuoSFISODown","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"systdown\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-
-              .Define("weightEleSFTRKUp","weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sfup\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
-              .Define("weightEleSFIDUp" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sfup\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
-
-              .Define("weightEleSFTRKDown","weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sfdown\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
-              .Define("weightEleSFIDDown" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sfdown\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
-
-              .Define("weightPUSF_Up"  ,"weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"up\")")
-              .Define("weightPUSF_Down","weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"down\")")
-
-
-              .Define("weightPhoSFJSON","compute_JSON_PHO_SFs(PHOYEAR,\"sf\",PHOWP,good_Photons_pt,good_Photons_eta)")
-              .Filter("weightPhoSFJSON > 0","weightPhoSFJSON > 0")
-
-              .Define("weightTauSFJSON","compute_JSON_TAU_SFs(good_Tau_pt,good_Tau_eta,good_Tau_decayMode,good_Tau_genPartFlav,\"nom\")")
-              .Filter("weightTauSFJSON > 0","weightTauSFJSON > 0")
-
               )
+
+    if(useBTaggingWeights == 1):
+        dftag = (dftag
+                 #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
+                 .Define("weight","weightMC*weightFake*weightBtagSF")
+                 .Define("weightBTag","weight")
+                 .Define("weightNoBTag","weight/weightBtagSF")
+                )
+    else:
+        dftag = (dftag
+                 #.Define("weight","weightMC*weightFake*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
+                 .Define("weight","weightMC*weightFake")
+                 .Define("weightBTag","weight*weightBtagSF")
+                 .Define("weightNoBTag","weight")
+                )
+
+    dftag =(dftag.Define("weight0","weightMC*weightFake*weightBtagSF")
+                 .Define("weight1","weightMC*weightFake*weightMuoSFJSON")
+                 .Define("weight2","weightMC*weightFake*weightEleSFJSON")
+                 .Define("weight3","weightMC*weightFake*weightPUSF_Nom")
+                 .Define("weight4","weightMC*weightFake*weightPURecoSF")
+                 .Define("weight5","weightMC")
+
+                 .Define("weightBtagSFBC_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",1,{0})".format(bTagSel))
+                 .Define("weightBtagSFBC_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_correlated\",1,{0})".format(bTagSel))
+                 .Define("weightBtagSFBC_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",1,{0})".format(bTagSel))
+                 .Define("weightBtagSFBC_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",1,{0})".format(bTagSel))
+
+                 .Define("weightBtagSFLF_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",-1,{0})".format(bTagSel))
+                 .Define("weightBtagSFLF_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_correlated\",-1,{0})".format(bTagSel))
+                 .Define("weightBtagSFLF_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",-1,{0})".format(bTagSel))
+                 .Define("weightBtagSFLF_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",-1,{0})".format(bTagSel))
+
+                 .Define("weightMuoSFTRKUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"systup\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFIDUp" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"systup\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFISOUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"systup\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+
+                 .Define("weightMuoSFTRKDown","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"systdown\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFIDDown" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"systdown\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFISODown","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"systdown\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+
+                 .Define("weightEleSFTRKUp","weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sfup\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
+                 .Define("weightEleSFIDUp" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sfup\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
+
+                 .Define("weightEleSFTRKDown","weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sfdown\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
+                 .Define("weightEleSFIDDown" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sfdown\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
+
+                 .Define("weightPUSF_Up"  ,"weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"up\")")
+                 .Define("weightPUSF_Down","weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"down\")")
+
+
+                 .Define("weightPhoSFJSON","compute_JSON_PHO_SFs(PHOYEAR,\"sf\",PHOWP,good_Photons_pt,good_Photons_eta)")
+                 .Filter("weightPhoSFJSON > 0","weightPhoSFJSON > 0")
+
+                 .Define("weightTauSFJSON","compute_JSON_TAU_SFs(good_Tau_pt,good_Tau_eta,good_Tau_decayMode,good_Tau_genPartFlav,\"nom\")")
+                 .Filter("weightTauSFJSON > 0","weightTauSFJSON > 0")
+
+                 )
 
     if(hasTheoryColumnName[0] == True):
         dftag =(dftag.Define("weightPS0" ,"weight*PSWeight[0]")
@@ -556,9 +576,9 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas):
 
     return dftag
 
-def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,nPDFReplicas):
-    if(isData == "true"): return selectionDAWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas)
-    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,nPDFReplicas)
+def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas):
+    if(isData == "true"): return selectionDAWeigths(df,year,PDType)
+    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas)
 
 def makeFinalVariable(df,var,start,x,bin,min,max,type):
     histoNumber = start+type

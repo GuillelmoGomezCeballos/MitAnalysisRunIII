@@ -166,7 +166,6 @@ float compute_JSON_PU_SF(double NumTrueInteractions, std::string type){
 // BTag SFs
 float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet_flavor, std::string keyS, int flavorToStudy, const int sel)
 {
-  if(sel == -1) return 1.0;
   // flavorToStudy = 0 (central) / > 0 (BC) / < 0 (LF)
   bool debug = false;
   if(debug) printf("btagsf(%s): %lu %lu %lu %lu %d %d\n",keyS.c_str(),jet_pt.size(),jet_eta.size(),jet_btag.size(),jet_flavor.size(),flavorToStudy,sel);
