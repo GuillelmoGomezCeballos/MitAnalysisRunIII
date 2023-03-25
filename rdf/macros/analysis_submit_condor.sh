@@ -1,6 +1,11 @@
 #!/bin/sh
 
-theAna=0
+if [ $# -lt 1 ]; then
+   echo "TOO FEW PARAMETERS"
+   exit
+fi
+
+theAna=$1
 whichAna="DUMMY"
 
 if [ $theAna -eq 0 ]; then

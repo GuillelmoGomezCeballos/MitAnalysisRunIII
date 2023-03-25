@@ -477,14 +477,14 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     if(useBTaggingWeights == 1):
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 .Define("weight","weightMC*weightFake*weightBtagSF")
+                 .Define("weight","weightMC*weightFake*weightBtagSF*weightPURecoSF")
                  .Define("weightBTag","weight")
                  .Define("weightNoBTag","weight/weightBtagSF")
                 )
     else:
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 .Define("weight","weightMC*weightFake")
+                 .Define("weight","weightMC*weightFake*weightPURecoSF")
                  .Define("weightBTag","weight*weightBtagSF")
                  .Define("weightNoBTag","weight")
                 )
