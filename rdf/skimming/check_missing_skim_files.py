@@ -12,7 +12,7 @@ if __name__ == "__main__":
     usage  =  "Usage: ana.py --outputDir=<{0}>\n".format(outputDir)
     usage +=  "              --outputForCondorCfg=<{0}>\n".format(outputForCondorCfg)
     usage +=  "              --missingFilesCfg=<{0}>\n".format(missingFilesCfg)
-    usage +=  "              --debug=<{0}>".format(debug)
+    usage +=  "              --debug=<{0}>\n".format(debug)
     usage +=  "              --type=<{0}>".format(type)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)

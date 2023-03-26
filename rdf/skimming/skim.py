@@ -181,10 +181,10 @@ if __name__ == "__main__":
     #trick to deal with official samples
     sampleToFilter = [sampleToSkim, sampleToSkim]
     if("NANOAODSIM" in sampleToSkim):
-        sampleToFilter[0] = sampleToSkim.split("+")[0]
+        sampleToFilter[0] = sampleToSkim.split("+")[0]+"/"
         sampleToFilter[1] = sampleToSkim.split("+")[0]
     elif("NANOAOD" in sampleToSkim):
-        sampleToFilter[0] = sampleToSkim.split("+")[0]
+        sampleToFilter[0] = sampleToSkim.split("+")[0]+"/"
         sampleToFilter[1] = sampleToSkim.split("+")[1].split("-")[0]
     while True:
         line = inputFilesFile.readline().strip()
@@ -215,6 +215,9 @@ if __name__ == "__main__":
 
     elif("SingleMuon+Run" in sampleToSkim):
         TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+    elif("Muon+Run" in sampleToSkim):
+        TRIGGERLEP = "({0} or {1}) and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
     elif("EGamma+Run" in sampleToSkim):
         TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)

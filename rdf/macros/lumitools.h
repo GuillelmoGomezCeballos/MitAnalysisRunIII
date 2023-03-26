@@ -24,6 +24,7 @@ public:
   double operator () (unsigned int run, unsigned int lumi) const {
 
     const auto it = lumimap_->find(std::make_pair(run, lumi));
+    //std::cout << "LUMI " << run << " " << lumi << std::endl;
     if (it != lumimap_->end()) {
       return it->second;
     }

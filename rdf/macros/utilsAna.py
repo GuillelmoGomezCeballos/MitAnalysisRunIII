@@ -190,6 +190,7 @@ def getDATAlist(type, year, skimType):
     #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
     #dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType
     dirT2 = "/data/submit/cms/store/user/ceballos/nanoaod/skims_submit/" + skimType
+    dirTest = "/data/submit/cms/store/user/ceballos/test/test/"
 
     jsnName = ""
     if(year == 2016):
@@ -260,6 +261,9 @@ def getDATAlist(type, year, skimType):
 
     elif(year == 2022 and type == 1017):
         files1 = findDIR("{0}/Muon+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+
+    elif(year == 2022 and type == 9999):
+        files1 = findDIR("{0}".format(dirTest))
 
     files = ROOT.vector('string')()
     concatenate(files, files1)
