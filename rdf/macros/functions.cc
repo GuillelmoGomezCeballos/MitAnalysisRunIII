@@ -473,7 +473,7 @@ float compute_fakeRate(const bool isData,
                        const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& tight_el){
 
   if(mu_pt.size() != tight_mu.size() || el_pt.size() != tight_el.size()) {
-    printf("PROBLEM in compute_fakeRate!\n");
+    printf("PROBLEM in compute_fakeRate (%zu/%zu) (%zu/%zu)!\n",mu_pt.size(),tight_mu.size(),el_pt.size(),tight_el.size());
     return 0;
   }
 
@@ -625,10 +625,70 @@ Vec_b cleaningMask(Vec_i indices, int size) {
   return mask;
 }
 
-bool hasTriggerMatch(const float& eta, const float& phi, const Vec_f& TrigObj_eta, const Vec_f& TrigObj_phi) {
+// 0 => CaloIdL_TrackIdL_IsoVL, 1 => 1e (WPTight), 2 => 1e (WPLoose), 
+// 3 => OverlapFilter PFTau, 4 => 2e, 5 => 1e-1mu, 6 => 1e-1tau, 7 => 3e, 
+// 8 => 2e-1mu, 9 => 1e-2mu, 10 => 1e (32_L1DoubleEG_AND_L1SingleEGOr), 11 => 1e (CaloIdVT_GsfTrkIdT), 
+// 12 => 1e (PFJet), 13 => 1e (Photon175_OR_Photon200) for Electron (PixelMatched e/gamma);
+
+// 0 => hltEG33L1EG26HEFilter, 1 => hltEG50HEFilter, 2 => hltEG75HEFilter, 3 => hltEG90HEFilter, 
+// 4 => hltEG120HEFilter, 5 => hltEG150HEFilter, 6 => hltEG150HEFilter, 7 => hltEG200HEFilter, 
+// 8 => hltHtEcal800, 9 => hltEG110EBTightIDTightIsoTrackIsoFilter, 10 => hltEG120EBTightIDTightIsoTrackIsoFilter, 11 => 1mu-1photon for Photon;
+
+// 0 => TrkIsoVVL, 1 => Iso, 2 => OverlapFilter PFTau, 3 => 1mu, 
+// 4 => 2mu, 5 => 1mu-1e, 6 => 1mu-1tau, 7 => 3mu, 
+// 8 => 2mu-1e, 9 => 1mu-2e, 10 => 1mu (Mu50), 11 => 1mu (Mu100), 
+// 12 => 1mu-1photon for Muon;
+bool hasTriggerMatch(const float& eta, const float& phi, const Vec_f& TrigObj_eta, const Vec_f& TrigObj_phi,
+                     const Vec_i& TrigObj_id, const Vec_i& TrigObj_filterBits,
+                     const int whichId, const bool selectSingleLep) {
+  bool debug = false;
+  if(debug) printf("triggerMatch(%.2f,%.2f): %d %d\n",eta,phi,whichId,selectSingleLep);
+  int whichBits[5] = {0,0,0,0,0};
+  if     (whichId == 13 && selectSingleLep == true){
+    whichBits[0] = 1;
+    whichBits[1] = 3;
+    whichBits[2] = 10;
+    whichBits[3] = 11;
+    whichBits[4] = 11;
+  }
+  else if(whichId == 13 && selectSingleLep == false){
+    whichBits[0] = 0;
+    whichBits[1] = 4;
+    whichBits[2] = 5;
+    whichBits[3] = 5;
+    whichBits[4] = 5;
+  }
+  else if(whichId == 11 && selectSingleLep == true){
+    whichBits[0] = 1;
+    whichBits[1] = 2;
+    whichBits[2] = 10;
+    whichBits[3] = 11;
+    whichBits[4] = 13;
+  }
+  else if(whichId == 11 && selectSingleLep == false){
+    whichBits[0] = 0;
+    whichBits[1] = 4;
+    whichBits[2] = 5;
+    whichBits[3] = 5;
+    whichBits[4] = 5;
+  }
+  else {
+    printf("whichId problem! %d\n",whichId);
+  }
 
   for (unsigned int jtrig = 0; jtrig < TrigObj_eta.size(); ++jtrig) {
-    if (deltaR(eta, phi, TrigObj_eta[jtrig], TrigObj_phi[jtrig]) < 0.3) return true;
+    if(TrigObj_id[jtrig] != whichId) continue;
+    bool passSingleLep = ((TrigObj_filterBits[jtrig] & (1<<whichBits[0]))!=0) || ((TrigObj_filterBits[jtrig] & (1<<whichBits[1]))!=0) ||
+                         ((TrigObj_filterBits[jtrig] & (1<<whichBits[2]))!=0) || ((TrigObj_filterBits[jtrig] & (1<<whichBits[3]))!=0) ||
+                         ((TrigObj_filterBits[jtrig] & (1<<whichBits[4]))!=0);
+    if(passSingleLep == false)  continue;
+    double dRlt = deltaR(eta, phi, TrigObj_eta[jtrig], TrigObj_phi[jtrig]);
+    if(debug) printf("(%d,%.2f,%.2f,%.2f): %d/%d/%d/%d/%d - %d - %d\n",TrigObj_filterBits[jtrig],TrigObj_eta[jtrig],TrigObj_phi[jtrig],dRlt,
+    ((TrigObj_filterBits[jtrig] & (1<<whichBits[0]))!=0),((TrigObj_filterBits[jtrig] & (1<<whichBits[1]))!=0),
+    ((TrigObj_filterBits[jtrig] & (1<<whichBits[2]))!=0),((TrigObj_filterBits[jtrig] & (1<<whichBits[3]))!=0),
+    ((TrigObj_filterBits[jtrig] & (1<<whichBits[4]))!=0),
+    passSingleLep,dRlt<0.3);
+    if (dRlt < 0.3) return true;
   }
   return false;
 }

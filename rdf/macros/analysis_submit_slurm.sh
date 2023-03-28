@@ -26,6 +26,9 @@ elif [ $theAna -eq 4 ]; then
 elif [ $theAna -eq 5 ]; then
  whichAna="fakeAnalysis"
 
+elif [ $theAna -eq 6 ]; then
+ whichAna="triggerAnalysis"
+
 fi
 
 if [ ${whichAna} = "DUMMY" ]; then

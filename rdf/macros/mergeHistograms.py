@@ -83,7 +83,20 @@ if __name__ == "__main__":
             outputFile.cd()
             for nc in range(nCat):
                 histo2d[nc].SetNameTitle("histo2d{0}".format(nc),"histo2d{0}".format(nc))
-                histo2d[nc].Write();
+
+                for i in range(histo2d[nc].GetNbinsX()):
+                    histo2d[nc].SetBinContent(i+1,histo2d[nc].GetNbinsY(),histo2d[nc].GetBinContent(i+1,histo2d[nc].GetNbinsY())+histo2d[nc].GetBinContent(i+1,histo2d[nc].GetNbinsY()+1))
+                    histo2d[nc].SetBinError  (i+1,histo2d[nc].GetNbinsY(),pow(pow(histo2d[nc].GetBinError(i+1,histo2d[nc].GetNbinsY()),2)+pow(histo2d[nc].GetBinError(i+1,histo2d[nc].GetNbinsY()+1),2),0.5))
+                    histo2d[nc].SetBinContent(i+1,histo2d[nc].GetNbinsY()+1,0.0)
+                    histo2d[nc].SetBinError  (i+1,histo2d[nc].GetNbinsY()+1,0.0)
+
+                for i in range(histo2d[nc].GetNbinsY()):
+                    histo2d[nc].SetBinContent(histo2d[nc].GetNbinsX(),i+1,histo2d[nc].GetBinContent(histo2d[nc].GetNbinsX(),i+1)+histo2d[nc].GetBinContent(histo2d[nc].GetNbinsX()+1,i+1))
+                    histo2d[nc].SetBinError  (histo2d[nc].GetNbinsX(),i+1,pow(pow(histo2d[nc].GetBinError(histo2d[nc].GetNbinsX(),i+1),2)+pow(histo2d[nc].GetBinError(histo2d[nc].GetNbinsX()+1,i+1),2),0.5))
+                    histo2d[nc].SetBinContent(histo2d[nc].GetNbinsX()+1,i+1,0.0)
+                    histo2d[nc].SetBinError  (histo2d[nc].GetNbinsX()+1,i+1,0.0)
+
+                histo2d[nc].Write()
             outputFile.Close()
 
     for nf in range(len(inputDataFolders)):
