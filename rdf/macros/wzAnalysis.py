@@ -30,6 +30,7 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 
 VBSSEL = jsonObject['VBSSEL']
 
+muSelChoice = 6
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU0 = jsonObject['TIGHT_MU0']
 TIGHT_MU1 = jsonObject['TIGHT_MU1']
@@ -40,6 +41,7 @@ TIGHT_MU5 = jsonObject['TIGHT_MU5']
 TIGHT_MU6 = jsonObject['TIGHT_MU6']
 TIGHT_MU7 = jsonObject['TIGHT_MU7']
 
+elSelChoice = 4
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 TIGHT_EL1 = jsonObject['TIGHT_EL1']
@@ -336,10 +338,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 	#	                      .Define("bdt_vbfincJesUp", ROOT.computeModel, ROOT.model.GetVariableNames()))
         #histo[91][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 20,-1,1), "bdt_vbfincJesUp","weight")
 
-        #histo[91][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 4,-0.5, 3.5), "TriLepton_flavor","weightNoPURecoSF")
-        #histo[92][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x), 4,-0.5, 3.5), "TriLepton_flavor","weightNoLepSF")
-        #histo[93][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(93,x), "histo_{0}_{1}".format(93,x), 4,-0.5, 3.5), "TriLepton_flavor","weightNoBTVSF")
-        #histo[94][x] = dfwzcat[x].Filter("TriLepton_flavor==0").Histo1D(("histo_{0}_{1}".format(94,x), "histo_{0}_{1}".format(94,x), 6,-0.5, 5.5), "ngood_jets","weightNoBTVSF")
+        histo[91][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 4,-0.5, 3.5), "TriLepton_flavor","weight3")
+        histo[92][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x), 4,-0.5, 3.5), "TriLepton_flavor","weight4")
+        histo[93][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(93,x), "histo_{0}_{1}".format(93,x), 4,-0.5, 3.5), "TriLepton_flavor","weightBTag")
+        histo[94][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(94,x), "histo_{0}_{1}".format(94,x), 4,-0.5, 3.5), "TriLepton_flavor","weightNoBTag")
         #histo[95][x] = dfwzcat[x].Filter("TriLepton_flavor==1").Histo1D(("histo_{0}_{1}".format(95,x), "histo_{0}_{1}".format(95,x), 6,-0.5, 5.5), "ngood_jets","weightNoBTVSF")
         #histo[96][x] = dfwzcat[x].Filter("TriLepton_flavor==2").Histo1D(("histo_{0}_{1}".format(96,x), "histo_{0}_{1}".format(96,x), 6,-0.5, 5.5), "ngood_jets","weightNoBTVSF")
         #histo[97][x] = dfwzcat[x].Filter("TriLepton_flavor==3").Histo1D(("histo_{0}_{1}".format(97,x), "histo_{0}_{1}".format(97,x), 6,-0.5, 5.5), "ngood_jets","weightNoBTVSF")
@@ -349,7 +351,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         minF = 500
         maxF = 2500
         histo[startF+0][x] = makeFinalVariable(dfwzvbscat[x],"vbs_mjj"       ,startF,x,BinF,minF,maxF,0)
-        if(isData == False):
+        if(theCat != plotCategory("kPlotData")):
             for nv in range(1,129):
                 histo[startF+nv][x] = makeFinalVariable(dfwzvbscat[x],"vbs_mjj"       ,startF,x,BinF,minF,maxF,nv)
             histo[startF+129][x]    = makeFinalVariable(dfwzvbscat[x],"vbs_mjjJesUp"  ,startF,x,BinF,minF,maxF,129)
@@ -473,68 +475,52 @@ if __name__ == "__main__":
             whichJob = int(arg)
 
     puPath = "data/puWeights_UL_{0}.root".format(year)
-    if(not os.path.exists(puPath)):
-        puPath = "puWeights_UL_{0}.root".format(year)
     fPuFile = ROOT.TFile(puPath)
     puWeights = fPuFile.Get("puWeights")
     puWeights.SetDirectory(0)
     fPuFile.Close()
 
     recoElPath = "data/electronReco_UL_{0}.root".format(year)
-    if(not os.path.exists(recoElPath)):
-        recoElPath = "electronReco_UL_{0}.root".format(year)
     fRecoElFile = ROOT.TFile(recoElPath)
     histoElRecoSF = fRecoElFile.Get("EGamma_SF2D")
     histoElRecoSF.SetDirectory(0)
     fRecoElFile.Close()
 
     selElPath = "data/electronMediumID_UL_{0}.root".format(year)
-    if(not os.path.exists(selElPath)):
-        selElPath = "electronMediumID_UL_{0}.root".format(year)
     fSelElFile = ROOT.TFile(selElPath)
     histoElSelSF = fSelElFile.Get("EGamma_SF2D")
     histoElSelSF.SetDirectory(0)
     fSelElFile.Close()
 
     idMuPath = "data/Efficiencies_muon_generalTracks_Z_Run{0}_UL_ID.root".format(year)
-    if(not os.path.exists(idMuPath)):
-        idMuPath = "Efficiencies_muon_generalTracks_Z_Run{0}_UL_ID.root".format(year)
     fidMuFile = ROOT.TFile(idMuPath)
     histoMuIDSF = fidMuFile.Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt")
     histoMuIDSF.SetDirectory(0)
     fidMuFile.Close()
 
     isoMuPath = "data/Efficiencies_muon_generalTracks_Z_Run{0}_UL_ISO.root".format(year)
-    if(not os.path.exists(isoMuPath)):
-        isoMuPath = "Efficiencies_muon_generalTracks_Z_Run{0}_UL_ISO.root".format(year)
     fisoMuFile = ROOT.TFile(isoMuPath)
     histoMuISOSF = fisoMuFile.Get("NUM_TightRelIso_DEN_MediumID_abseta_pt")
     histoMuISOSF.SetDirectory(0)
     fisoMuFile.Close()
 
     fakePath = "data/histoFakeEtaPt_{0}_anaType3.root".format(year)
-    if(not os.path.exists(fakePath)):
-        fakePath = "histoFakeEtaPt_{0}_anaType3.root".format(year)
     fFakeFile = ROOT.TFile(fakePath)
-    histoFakeEtaPt_mu = fFakeFile.Get("histoFakeEffSelEtaPt_0_6")
-    histoFakeEtaPt_el = fFakeFile.Get("histoFakeEffSelEtaPt_1_4")
+    histoFakeEtaPt_mu = fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}".format(muSelChoice))
+    histoFakeEtaPt_el = fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}".format(elSelChoice))
     histoFakeEtaPt_mu.SetDirectory(0)
     histoFakeEtaPt_el.SetDirectory(0)
     fFakeFile.Close()
 
     lepSFPath = "data/histoLepSFEtaPt_{0}.root".format(year)
-    if(not os.path.exists(lepSFPath)):
-        lepSFPath = "histoLepSFEtaPt_{0}.root".format(year)
     fLepSFFile = ROOT.TFile(lepSFPath)
-    histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_6")
-    histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_4")
+    histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(muSelChoice))
+    histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_{0}".format(elSelChoice))
     histoLepSFEtaPt_mu.SetDirectory(0)
     histoLepSFEtaPt_el.SetDirectory(0)
     fLepSFFile.Close()
 
     triggerSFPath = "data/histoTriggerSFEtaPt_{0}.root".format(year)
-    if(not os.path.exists(triggerSFPath)):
-        triggerSFPath = "histoTriggerSFEtaPt_{0}.root".format(year)
     fTriggerSFFile = ROOT.TFile(triggerSFPath)
     histoTriggerSFEtaPt_0_0 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_0")
     histoTriggerSFEtaPt_0_1 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_1")
@@ -571,8 +557,6 @@ if __name__ == "__main__":
     fTriggerSFFile.Close()
 
     BTVEffPath = "data/histoBtagEffSelEtaPt_{0}.root".format(year)
-    if(not os.path.exists(BTVEffPath)):
-        BTVEffPath = "histoBtagEffSelEtaPt_{0}.root".format(year)
     fBTVEffPathFile = ROOT.TFile(BTVEffPath)
     histoBTVEffEtaPtLF = fBTVEffPathFile.Get("histoBtagEffSelEtaPt_0")
     histoBTVEffEtaPtCJ = fBTVEffPathFile.Get("histoBtagEffSelEtaPt_1")

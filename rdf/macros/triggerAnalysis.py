@@ -103,7 +103,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
-    xPtbins = array('d', [10,15,20,25,30,35,40,45,50,60,70,80,90,100,200,300])
+    xPtbins = array('d', [10,15,20,25,30,35,40,45,50,55,60,70,80,90,100,150,200,250])
     xEtabins = array('d', [0.0,0.5,1.0,1.5,2.0,2.5])
 
     theCat = category
@@ -214,11 +214,26 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
                 histo[2*ltype+ltag+ 8][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+ 8,x), "histo_{0}_{1}".format(2*ltype+ltag+ 8,x), len(xPtbins)-1, xPtbins), "ptl{0}".format(lprobe+1),"weight")
 
+                histo[2*ltype+ltag+16][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 10 && ptl{0} < 15".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+16,x), "histo_{0}_{1}".format(2*ltype+ltag+16,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+                histo[2*ltype+ltag+20][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 15 && ptl{0} < 20".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+20,x), "histo_{0}_{1}".format(2*ltype+ltag+20,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+                histo[2*ltype+ltag+24][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 20 && ptl{0} < 25".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+24,x), "histo_{0}_{1}".format(2*ltype+ltag+24,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+                histo[2*ltype+ltag+28][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 25 && ptl{0} < 30".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+28,x), "histo_{0}_{1}".format(2*ltype+ltag+28,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+                if(theCat != plotCategory("kPlotData")):
+                     if(ltype == 0):
+                         histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllMuonMomUp","weight")
+                         histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllMuonMomDown","weight")
+                     else:
+                         histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllElectronMomUp","weight")
+                         histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllElectronMomDown","weight")
+                else:
+                     histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+                     histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+
+                # tighter ID to perform trigger efficiency measurements
                 dfzoscat[4*x+2*ltype+ltag] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}1[{1}] == true".format(lflavor,lprobe),"tight id({0}1[{1}])".format(lflavor,lprobe))
                 dfzsscat[4*x+2*ltype+ltag] = dfzsscat[4*x+2*ltype+ltag].Filter("{0}1[{1}] == true".format(lflavor,lprobe),"tight id({0}1[{1}])".format(lflavor,lprobe))
 
                 histo[2*ltype+ltag+12][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+12,x), "histo_{0}_{1}".format(2*ltype+ltag+12,x), len(xPtbins)-1, xPtbins), "ptl{0}".format(lprobe+1),"weight")
-
                 probeTriggerSMuSel = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,1))".format(lprobe,lprobe)
                 probeTriggerSElSel = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,1))".format(lprobe,lprobe)
                 probeTriggerDMuSel = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,0))".format(lprobe,lprobe)

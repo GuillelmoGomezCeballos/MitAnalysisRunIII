@@ -381,21 +381,31 @@ const Vec_f& Jet_pt_def, const Vec_f& Jet_pt_mod, const Vec_f& Jet_eta, const Ve
   return 0;
 }
 
-Vec_f compute_MUOPT_Unc(const Vec_f& mu_pt, int type){
+Vec_f compute_MUOPT_Unc(const Vec_f& mu_pt, const Vec_f& mu_eta, int type){
   Vec_f new_mu_pt(mu_pt.size(), 1.0);
   for(unsigned int i=0;i<mu_pt.size();i++) {
-     if     (type == +1) new_mu_pt[i] = mu_pt[i]*1.01;
-     else if(type == -1) new_mu_pt[i] = mu_pt[i]*0.99;
+     if     (type == +1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9999+gRandom->Gaus(0.0,0.01));
+     else if(type ==  0 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9995+gRandom->Gaus(0.0,0.01));
+     else if(type == -1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9991+gRandom->Gaus(0.0,0.01));
+     else if(type == +1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9993+gRandom->Gaus(0.0,0.05));
+     else if(type ==  0 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9989+gRandom->Gaus(0.0,0.05));
+     else if(type == -1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9985+gRandom->Gaus(0.0,0.05));
+     else printf("PROBLEM in compute_MUOPT_Unc\n");
   }
 
   return new_mu_pt;
 }
 
-Vec_f compute_ELEPT_Unc(const Vec_f& el_pt, int type){
+Vec_f compute_ELEPT_Unc(const Vec_f& el_pt, const Vec_f& el_eta, int type){
   Vec_f new_el_pt(el_pt.size(), 1.0);
   for(unsigned int i=0;i<el_pt.size();i++) {
-     if     (type == +1) new_el_pt[i] = el_pt[i]*1.01;
-     else if(type == -1) new_el_pt[i] = el_pt[i]*0.99;
+     if     (type == +1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9921+gRandom->Gaus(0.0,0.07));
+     else if(type ==  0 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9917+gRandom->Gaus(0.0,0.07));
+     else if(type == -1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9913+gRandom->Gaus(0.0,0.07));
+     else if(type == +1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(0.9983+gRandom->Gaus(0.0,0.13));
+     else if(type ==  0 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(0.9979+gRandom->Gaus(0.0,0.13));
+     else if(type == -1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(0.9975+gRandom->Gaus(0.0,0.13));
+     else printf("PROBLEM in compute_MUOPT_Unc\n");
   }
 
   return new_el_pt;
@@ -501,20 +511,21 @@ float compute_fakeRate(const bool isData,
 float compute_LepSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
                     const Vec_f& el_pt, const Vec_f& el_eta){
 
-  //printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
+  bool debug = false;
+  if(debug) printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
   double sfTot = 1.0;
   for(unsigned int i=0;i<mu_pt.size();i++) {
     const TH2D& hcorr = histoLepSFEtaPt_mu;
     double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),mu_pt[i]);
     sfTot = sfTot*sf;
-    //printf("lepmu(%d) %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sfTot);
+    if(debug) printf("lepmu(%d) %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sfTot);
   }
 
   for(unsigned int i=0;i<el_pt.size();i++) {
     const TH2D& hcorr = histoLepSFEtaPt_el;
     double sf = getValFromTH2(hcorr, fabs(el_eta[i]), el_pt[i]);
     sfTot = sfTot*sf;
-    //printf("lepel(%d) %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sfTot);
+    if(debug) printf("lepel(%d) %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sfTot);
   }
       
   return sfTot;
