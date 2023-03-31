@@ -11,14 +11,9 @@ def readDASample(sampleNOW,year,skimType,jsnName,lumiName):
     files = getDATAlist(sampleNOW, year, skimType)
     print("Total files: {0}".format(len(files)))
 
-    if(whichJob != -1):
-        groupedFile = groupFiles(files, group)
-        files = groupedFile[whichJob]
-        if(len(files) == 0):
-            print("no files in job/group: {0} / {1}".format(whichJob, group))
-            return 0
-        print("Used files: {0}".format(len(files)))
-
+    if(len(files) == 0):
+        print("Nothing to process, exit")
+        return
     jsonhelper = make_jsonhelper(jsnName)
     lumihelper = make_lumihelper(lumiName)
 

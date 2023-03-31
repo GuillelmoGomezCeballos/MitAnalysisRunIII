@@ -207,12 +207,6 @@ def getDATAlist(type, year, skimType):
     else:
         loadJSON(jsnName)
 
-    if  (sampleNOW >= 1000 and sampleNOW <= 1009): PDType = "SingleMuon"
-    elif(sampleNOW >= 1010 and sampleNOW <= 1019): PDType = "DoubleMuon"
-    elif(sampleNOW >= 1020 and sampleNOW <= 1029): PDType = "MuonEG"
-    elif(sampleNOW >= 1030 and sampleNOW <= 1039): PDType = "EGamma"
-    elif(sampleNOW >= 1040 and sampleNOW <= 1049): PDType = "Muon"
-    elif(sampleNOW >= 1050 and sampleNOW <= 1059): PDType = "MET"
     files1 = []
     ##### 2018 ####
     if(year == 2018 and type == 1000):
