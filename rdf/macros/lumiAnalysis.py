@@ -38,12 +38,10 @@ if __name__ == "__main__":
     skimType = "2l"
     year = 2022
     process = -1
-    whichJob = -1
 
-    valid = ['year=', "process=", 'whichJob=', 'skimType=', 'help']
+    valid = ['year=', "process=",  'skimType=', 'help']
     usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
     usage +=  "              --process=<{0}>\n".format(process)
-    usage +=  "              --whichJob=<{0}>\n".format(whichJob)
     usage +=  "              --skimType=<{0}>".format(skimType)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
@@ -60,8 +58,6 @@ if __name__ == "__main__":
             year = int(arg)
         if opt == "--process":
             process = int(arg)
-        if opt == "--whichJob":
-            whichJob = int(arg)
         if opt == "--skimType":
             skimType = arg
 

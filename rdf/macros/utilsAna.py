@@ -11,7 +11,7 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 3.0]
+    lumi = [36.1, 41.5, 60.0, 20.0]
 
     lumiBit = -1
     if(lumiBit == 2016): lumiBit = 0
@@ -207,60 +207,79 @@ def getDATAlist(type, year, skimType):
     else:
         loadJSON(jsnName)
 
+    if  (sampleNOW >= 1000 and sampleNOW <= 1009): PDType = "SingleMuon"
+    elif(sampleNOW >= 1010 and sampleNOW <= 1019): PDType = "DoubleMuon"
+    elif(sampleNOW >= 1020 and sampleNOW <= 1029): PDType = "MuonEG"
+    elif(sampleNOW >= 1030 and sampleNOW <= 1039): PDType = "EGamma"
+    elif(sampleNOW >= 1040 and sampleNOW <= 1049): PDType = "Muon"
+    elif(sampleNOW >= 1050 and sampleNOW <= 1059): PDType = "MET"
     files1 = []
-    if(year == 2018 and type == 1001):
+    ##### 2018 ####
+    if(year == 2018 and type == 1000):
         files1 = findDIR("{0}/SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1002):
+    elif(year == 2018 and type == 1001):
         files1 = findDIR("{0}/SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1003):
+    elif(year == 2018 and type == 1002):
         files1 = findDIR("{0}/SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1004):
+    elif(year == 2018 and type == 1003):
         files1 = findDIR("{0}/SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD".format(dirT2))
 
-    elif(year == 2018 and type == 1005):
+    elif(year == 2018 and type == 1010):
         files1 = findDIR("{0}/DoubleMuon+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1006):
+    elif(year == 2018 and type == 1011):
         files1 = findDIR("{0}/DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1007):
+    elif(year == 2018 and type == 1012):
         files1 = findDIR("{0}/DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1008):
+    elif(year == 2018 and type == 1013):
         files1 = findDIR("{0}/DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
 
-    elif(year == 2018 and type == 1009):
+    elif(year == 2018 and type == 1020):
         files1 = findDIR("{0}/MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1010):
+    elif(year == 2018 and type == 1021):
         files1 = findDIR("{0}/MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1011):
+    elif(year == 2018 and type == 1022):
         files1 = findDIR("{0}/MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1012):
+    elif(year == 2018 and type == 1023):
         files1 = findDIR("{0}/MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
 
-    elif(year == 2018 and type == 1013):
+    elif(year == 2018 and type == 1030):
         files1 = findDIR("{0}/EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1014):
+    elif(year == 2018 and type == 1031):
         files1 = findDIR("{0}/EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1015):
+    elif(year == 2018 and type == 1032):
         files1 = findDIR("{0}/EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
-    elif(year == 2018 and type == 1016):
+    elif(year == 2018 and type == 1033):
         files1 = findDIR("{0}/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
 
-    elif(year == 2018 and type == 1021):
+    elif(year == 2018 and type == 1050):
         files1 = findDIR("{0}/MET+Run2018A-UL2018_MiniAODv2_NanoAODv9-v2+NANOAOD".format(dirT2))
-    elif(year == 2018 and type == 1022):
+    elif(year == 2018 and type == 1051):
         files1 = findDIR("{0}/MET+Run2018B-UL2018_MiniAODv2_NanoAODv9-v2+NANOAOD".format(dirT2))
-    elif(year == 2018 and type == 1023):
+    elif(year == 2018 and type == 1052):
         files1 = findDIR("{0}/MET+Run2018C-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
-    elif(year == 2018 and type == 1024):
+    elif(year == 2018 and type == 1053):
         files1 = findDIR("{0}/MET+Run2018D-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
 
-    elif(year == 2022 and type == 1009):
+    ##### 2022 ####
+    elif(year == 2022 and type == 1020):
+        files1 = findDIR("{0}/MuonEG+Run2022F-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1021):
         files1 = findDIR("{0}/MuonEG+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
 
-    elif(year == 2022 and type == 1013):
+    elif(year == 2022 and type == 1030):
+        files1 = findDIR("{0}/EGamma+Run2022F-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1031):
         files1 = findDIR("{0}/EGamma+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
 
-    elif(year == 2022 and type == 1017):
+    elif(year == 2022 and type == 1040):
+        files1 = findDIR("{0}/Muon+Run2022F-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1041):
         files1 = findDIR("{0}/Muon+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+
+    elif(year == 2022 and type == 1050):
+        files1 = findDIR("{0}/JetMET+Run2022F-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1051):
+        files1 = findDIR("{0}/JetMET+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
 
     elif(year == 2022 and type == 9999):
         files1 = findDIR("{0}".format(dirTest))

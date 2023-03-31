@@ -276,12 +276,12 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
 def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     PDType = "0"
-    if  (sampleNOW >= 1001 and sampleNOW <= 1004): PDType = "SingleMuon"
-    elif(sampleNOW >= 1005 and sampleNOW <= 1008): PDType = "DoubleMuon"
-    elif(sampleNOW >= 1009 and sampleNOW <= 1012): PDType = "MuonEG"
-    elif(sampleNOW >= 1013 and sampleNOW <= 1016): PDType = "EGamma"
-    elif(sampleNOW >= 1017 and sampleNOW <= 1020): PDType = "Muon"
-    elif(sampleNOW >= 1021 and sampleNOW <= 1024): PDType = "MET"
+    if  (sampleNOW >= 1000 and sampleNOW <= 1009): PDType = "SingleMuon"
+    elif(sampleNOW >= 1010 and sampleNOW <= 1019): PDType = "DoubleMuon"
+    elif(sampleNOW >= 1020 and sampleNOW <= 1029): PDType = "MuonEG"
+    elif(sampleNOW >= 1030 and sampleNOW <= 1039): PDType = "EGamma"
+    elif(sampleNOW >= 1040 and sampleNOW <= 1049): PDType = "Muon"
+    elif(sampleNOW >= 1050 and sampleNOW <= 1059): PDType = "MET"
 
     files = getDATAlist(sampleNOW, year, skimType)
     print("Total files: {0}".format(len(files)))
@@ -446,7 +446,7 @@ if __name__ == "__main__":
     try:
         if(process >= 0 and process < 1000):
             readMCSample(process,year,skimType,whichJob,group,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
-        elif(process > 1000):
+        elif(process >= 1000):
             readDASample(process,year,skimType,whichJob,group,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
     except Exception as e:
         print("Error sample: {0}".format(e))

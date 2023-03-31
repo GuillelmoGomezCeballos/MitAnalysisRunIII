@@ -59,6 +59,8 @@ def selectionLL(df,year,PDType,isData):
         TRIGGERFAKE =  TRIGGERFAKEEL
     elif(year == 2022 and PDType == "DoubleMuon"):
         TRIGGERFAKE = TRIGGERfake_Muon
+    elif(year == 2022 and PDType == "Muon"):
+        TRIGGERFAKE = TRIGGERfake_Muon
     elif(year == 2022 and PDType == "EGamma"):
         TRIGGERFAKE =  TRIGGERFAKEEL
     elif(year == 2018):
@@ -327,12 +329,12 @@ def readMCSample(sampleNOW, year, skimType, whichJob, group):
 def readDASample(sampleNOW, year, skimType, whichJob, group):
 
     PDType = "0"
-    if  (sampleNOW >= 1001 and sampleNOW <= 1004): PDType = "SingleMuon"
-    elif(sampleNOW >= 1005 and sampleNOW <= 1008): PDType = "DoubleMuon"
-    elif(sampleNOW >= 1009 and sampleNOW <= 1012): PDType = "MuonEG"
-    elif(sampleNOW >= 1013 and sampleNOW <= 1016): PDType = "EGamma"
-    elif(sampleNOW >= 1017 and sampleNOW <= 1020): PDType = "Muon"
-    elif(sampleNOW >= 1021 and sampleNOW <= 1024): PDType = "MET"
+    if  (sampleNOW >= 1000 and sampleNOW <= 1009): PDType = "SingleMuon"
+    elif(sampleNOW >= 1010 and sampleNOW <= 1019): PDType = "DoubleMuon"
+    elif(sampleNOW >= 1020 and sampleNOW <= 1029): PDType = "MuonEG"
+    elif(sampleNOW >= 1030 and sampleNOW <= 1039): PDType = "EGamma"
+    elif(sampleNOW >= 1040 and sampleNOW <= 1049): PDType = "Muon"
+    elif(sampleNOW >= 1050 and sampleNOW <= 1059): PDType = "MET"
 
     files = getDATAlist(sampleNOW, year, skimType)
     print("Total files: {0}".format(len(files)))
@@ -387,7 +389,7 @@ if __name__ == "__main__":
     try:
         if(process >= 0 and process < 1000):
             readMCSample(process,year,skimType,whichJob,group)
-        elif(process > 1000):
+        elif(process >= 1000):
             readDASample(process,year,skimType,whichJob,group)
     except Exception as e:
         print("Error sample: {0}".format(e))
