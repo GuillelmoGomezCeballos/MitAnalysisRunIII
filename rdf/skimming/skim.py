@@ -238,7 +238,7 @@ if __name__ == "__main__":
 
     TRIGGERFAKE0 = TRIGGERFAKEMU
     TRIGGERFAKE1 = TRIGGERFAKEEL
-    if(("SingleMuon+Run" in sampleToSkim) or ("DoubleMuon+Run" in sampleToSkim) or ("MuonEG+Run" in sampleToSkim)):
+    if(("SingleMuon+Run" in sampleToSkim) or ("DoubleMuon+Run" in sampleToSkim) or ("MuonEG+Run" in sampleToSkim) or ("Muon+Run" in sampleToSkim)):
         TRIGGERFAKE1 = TRIGGERFAKEMU
     elif(("EGamma+Run" in sampleToSkim) or ("DoubleEG+Run" in sampleToSkim) or ("SingleElectron+Run" in sampleToSkim)):
         TRIGGERFAKE0 = TRIGGERFAKEEL
