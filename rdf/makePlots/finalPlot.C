@@ -441,7 +441,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   }
 
   bool computePU = false;
-  if(computePU){
+  if(computePU || plotName.Contains("_npv.root") == true){
     hBck->Scale(hData->GetSumOfWeights()/hBck->GetSumOfWeights());
     TH1D * npvWeights =  (TH1D*)hData->Clone("npvWeights");
     npvWeights->Sumw2();

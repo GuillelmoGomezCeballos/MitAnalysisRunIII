@@ -11,11 +11,9 @@ from utilsSelection import selectionJetMet, selectionElMu, selectionWeigths
 # 0 = T, 1 = M, 2 = L
 bTagSel = 1
 
-useFR = 1
+useFR = 0
 
 selectionJsonPath = "config/selection.json"
-if(not os.path.exists(selectionJsonPath)):
-    selectionJsonPath = "selection.json"
 
 with open(selectionJsonPath) as jsonFile:
     jsonObject = json.load(jsonFile)
@@ -48,25 +46,25 @@ TIGHT_EL7 = jsonObject['TIGHT_EL7']
 def selectionLL(df,year,PDType,isData):
 
     overallTriggers = jsonObject['triggers']
-    TRIGGERfake_Muon = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
+    TRIGGERFAKEMU = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
     TRIGGERFAKEEL = getTriggerFromJson(overallTriggers, "TRIGGERFAKEEL", year)
 
     TRIGGERFAKE = "0"
 
     if(year == 2018 and PDType == "DoubleMuon"):
-        TRIGGERFAKE = TRIGGERfake_Muon
+        TRIGGERFAKE = TRIGGERFAKEMU
     elif(year == 2018 and PDType == "EGamma"):
         TRIGGERFAKE =  TRIGGERFAKEEL
     elif(year == 2022 and PDType == "DoubleMuon"):
-        TRIGGERFAKE = TRIGGERfake_Muon
+        TRIGGERFAKE = TRIGGERFAKEMU
     elif(year == 2022 and PDType == "Muon"):
-        TRIGGERFAKE = TRIGGERfake_Muon
+        TRIGGERFAKE = TRIGGERFAKEMU
     elif(year == 2022 and PDType == "EGamma"):
         TRIGGERFAKE =  TRIGGERFAKEEL
     elif(year == 2018):
-        TRIGGERFAKE = "{0} or {1}".format(TRIGGERfake_Muon,TRIGGERFAKEEL)
+        TRIGGERFAKE = "{0} or {1}".format(TRIGGERFAKEMU,TRIGGERFAKEEL)
     elif(year == 2022):
-        TRIGGERFAKE = "{0} or {1}".format(TRIGGERfake_Muon,TRIGGERFAKEEL)
+        TRIGGERFAKE = "{0} or {1}".format(TRIGGERFAKEMU,TRIGGERFAKEEL)
     else:
         print("PROBLEM with triggers!!!")
 

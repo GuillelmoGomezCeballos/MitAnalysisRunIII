@@ -428,6 +428,7 @@ def selectionDAWeigths(df,year,PDType):
               .Define("weight3","weightFake*1.0")
               .Define("weight4","weightFake*1.0")
               .Define("weight5","weightFake*1.0")
+              .Define("weightNoLepSF","weightFake*1.0")
               .Define("weightBTag","weight")
               .Define("weightNoBTag","weight")
               )
@@ -487,7 +488,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
                  ##.Define("weight","weightMC*weightFake*weightPURecoSF*weightLepSF*weightBtagSF")
-                 .Define("weight","weightMC*weightFake*weightBtagSF")
+                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF")
+                 .Define("weightNoLepSF","weightMC*weightFake*weightBtagSF*weightPURecoSF")
                  .Define("weightBTag","weight")
                  .Define("weightNoBTag","weight/weightBtagSF")
                 )
@@ -495,7 +497,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
                  ##.Define("weight","weightMC*weightFake*weightPURecoSF*weightLepSF")
-                 .Define("weight","weightMC*weightFake")
+                 .Define("weight",       "weightMC*weightFake*weightPURecoSF")
+                 .Define("weightNoLepSF","weightMC*weightFake*weightPURecoSF")
                  .Define("weightBTag","weight*weightBtagSF")
                  .Define("weightNoBTag","weight")
                 )

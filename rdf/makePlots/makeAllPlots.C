@@ -14,7 +14,10 @@ void makeAllPlots(TString nsel, int applyScaling, int year){
   TString mlfitResult="";
   TString channelName="XXX"; 
   double SF_DY=1.0;
-  if(nsel == "z"){
+  if(nsel.Contains(".root") == true){
+    finalPlot(0,1,"NPV","",Form("%s",nsel.Data()),"variable",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+  }
+  else if(nsel == "z"){
     finalPlot(0,1,"m_{ll}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_0.root",year),"dy_zsel_massmm",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"m_{ll}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_1.root",year),"dy_zsel_massem",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"m_{ll}","GeV",Form("anaZ/fillhisto_zAnalysis1001_%d_2.root",year),"dy_zsel_massee",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());

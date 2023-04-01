@@ -16,8 +16,6 @@ useBTaggingWeights = 0
 useFR = 0
 
 selectionJsonPath = "config/selection.json"
-if(not os.path.exists(selectionJsonPath)):
-    selectionJsonPath = "selection.json"
 
 with open(selectionJsonPath) as jsonFile:
     jsonObject = json.load(jsonFile)

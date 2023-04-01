@@ -16,8 +16,6 @@ useBTaggingWeights = 0
 useFR = 0
 
 selectionJsonPath = "config/selection.json"
-if(not os.path.exists(selectionJsonPath)):
-    selectionJsonPath = "selection.json"
 
 with open(selectionJsonPath) as jsonFile:
     jsonObject = json.load(jsonFile)
@@ -192,8 +190,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                 dfzoscat[4*x+2*ltype+ltag] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(tagTriggerMuSel,tagTriggerElSel),"Tag trigger match ({0})".format(ltag))
                 dfzsscat[4*x+2*ltype+ltag] = dfzsscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(tagTriggerMuSel,tagTriggerElSel),"Tag trigger match ({0})".format(ltag))
 
-                histo[2*ltype+ltag+ 0][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+ 0,x), "histo_{0}_{1}".format(2*ltype+ltag+ 0,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
-                histo[2*ltype+ltag+ 4][x] = dfzsscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+ 4,x), "histo_{0}_{1}".format(2*ltype+ltag+ 4,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+                histo[2*ltype+ltag+ 0][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+ 0,x), "histo_{0}_{1}".format(2*ltype+ltag+ 0,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightNoLepSF")
+                histo[2*ltype+ltag+ 4][x] = dfzsscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+ 4,x), "histo_{0}_{1}".format(2*ltype+ltag+ 4,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightNoLepSF")
 
                 lprobe = 1
                 if(ltag == 1): lprobe = 0
@@ -201,46 +199,46 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                 lflavor = "tight_mu"
                 if(ltype == 1): lflavor = "tight_el"
 
-                histo2D[2*ltype+ltag+ 0][x] = dfzoscat[4*x+2*ltype+ltag]                                                   .Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+ 0, x), "histo2d_{0}_{1}".format(2*ltype+ltag+ 0, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+ 4][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}0[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+ 4, x), "histo2d_{0}_{1}".format(2*ltype+ltag+ 4, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+ 8][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}1[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+ 8, x), "histo2d_{0}_{1}".format(2*ltype+ltag+ 8, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+12][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}2[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+12, x), "histo2d_{0}_{1}".format(2*ltype+ltag+12, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+16][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}3[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+16, x), "histo2d_{0}_{1}".format(2*ltype+ltag+16, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+20][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}4[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+20, x), "histo2d_{0}_{1}".format(2*ltype+ltag+20, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+24][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}5[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+24, x), "histo2d_{0}_{1}".format(2*ltype+ltag+24, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+28][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}6[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+28, x), "histo2d_{0}_{1}".format(2*ltype+ltag+28, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}7[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+32, x), "histo2d_{0}_{1}".format(2*ltype+ltag+32, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}8[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+36, x), "histo2d_{0}_{1}".format(2*ltype+ltag+36, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
+                histo2D[2*ltype+ltag+ 0][x] = dfzoscat[4*x+2*ltype+ltag]                                                   .Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+ 0, x), "histo2d_{0}_{1}".format(2*ltype+ltag+ 0, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+ 4][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}0[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+ 4, x), "histo2d_{0}_{1}".format(2*ltype+ltag+ 4, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+ 8][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}1[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+ 8, x), "histo2d_{0}_{1}".format(2*ltype+ltag+ 8, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+12][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}2[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+12, x), "histo2d_{0}_{1}".format(2*ltype+ltag+12, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+16][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}3[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+16, x), "histo2d_{0}_{1}".format(2*ltype+ltag+16, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+20][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}4[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+20, x), "histo2d_{0}_{1}".format(2*ltype+ltag+20, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+24][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}5[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+24, x), "histo2d_{0}_{1}".format(2*ltype+ltag+24, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+28][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}6[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+28, x), "histo2d_{0}_{1}".format(2*ltype+ltag+28, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}7[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+32, x), "histo2d_{0}_{1}".format(2*ltype+ltag+32, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}8[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+36, x), "histo2d_{0}_{1}".format(2*ltype+ltag+36, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
 
-                histo[2*ltype+ltag+ 8][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+ 8,x), "histo_{0}_{1}".format(2*ltype+ltag+ 8,x), len(xPtbins)-1, xPtbins), "ptl{0}".format(lprobe+1),"weight")
+                histo[2*ltype+ltag+ 8][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+ 8,x), "histo_{0}_{1}".format(2*ltype+ltag+ 8,x), len(xPtbins)-1, xPtbins), "ptl{0}".format(lprobe+1),"weightNoLepSF")
 
-                histo[2*ltype+ltag+16][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 10 && ptl{0} < 15".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+16,x), "histo_{0}_{1}".format(2*ltype+ltag+16,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
-                histo[2*ltype+ltag+20][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 15 && ptl{0} < 20".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+20,x), "histo_{0}_{1}".format(2*ltype+ltag+20,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
-                histo[2*ltype+ltag+24][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 20 && ptl{0} < 25".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+24,x), "histo_{0}_{1}".format(2*ltype+ltag+24,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
-                histo[2*ltype+ltag+28][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 25 && ptl{0} < 30".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+28,x), "histo_{0}_{1}".format(2*ltype+ltag+28,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+                histo[2*ltype+ltag+16][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 10 && ptl{0} < 15".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+16,x), "histo_{0}_{1}".format(2*ltype+ltag+16,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightNoLepSF")
+                histo[2*ltype+ltag+20][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 15 && ptl{0} < 20".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+20,x), "histo_{0}_{1}".format(2*ltype+ltag+20,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightNoLepSF")
+                histo[2*ltype+ltag+24][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 20 && ptl{0} < 25".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+24,x), "histo_{0}_{1}".format(2*ltype+ltag+24,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightNoLepSF")
+                histo[2*ltype+ltag+28][x] = dfzoscat[4*x+2*ltype+ltag].Filter("ptl{0} > 25 && ptl{0} < 30".format(lprobe+1)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+28,x), "histo_{0}_{1}".format(2*ltype+ltag+28,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightNoLepSF")
                 if(theCat != plotCategory("kPlotData")):
                      if(ltype == 0):
-                         histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllMuonMomUp","weight")
-                         histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllMuonMomDown","weight")
+                         histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllMuonMomUp","weightNoLepSF")
+                         histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllMuonMomDown","weightNoLepSF")
                      else:
-                         histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllElectronMomUp","weight")
-                         histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllElectronMomDown","weight")
+                         histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllElectronMomUp","weightNoLepSF")
+                         histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 60, xMllMin[ltype], xMllMax[ltype]), "mllElectronMomDown","weightNoLepSF")
                 else:
-                     histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
-                     histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+                     histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightNoLepSF")
+                     histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightNoLepSF")
 
                 # tighter ID to perform trigger efficiency measurements
                 dfzoscat[4*x+2*ltype+ltag] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}1[{1}] == true".format(lflavor,lprobe),"tight id({0}1[{1}])".format(lflavor,lprobe))
                 dfzsscat[4*x+2*ltype+ltag] = dfzsscat[4*x+2*ltype+ltag].Filter("{0}1[{1}] == true".format(lflavor,lprobe),"tight id({0}1[{1}])".format(lflavor,lprobe))
 
-                histo[2*ltype+ltag+12][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+12,x), "histo_{0}_{1}".format(2*ltype+ltag+12,x), len(xPtbins)-1, xPtbins), "ptl{0}".format(lprobe+1),"weight")
+                histo[2*ltype+ltag+12][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+12,x), "histo_{0}_{1}".format(2*ltype+ltag+12,x), len(xPtbins)-1, xPtbins), "ptl{0}".format(lprobe+1),"weightNoLepSF")
                 probeTriggerSMuSel = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,1))".format(lprobe,lprobe)
                 probeTriggerSElSel = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,1))".format(lprobe,lprobe)
                 probeTriggerDMuSel = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,0))".format(lprobe,lprobe)
                 probeTriggerDElSel = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,0))".format(lprobe,lprobe)
 
-                histo2D[2*ltype+ltag+40][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerSMuSel,probeTriggerSElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+40, x), "histo2d_{0}_{1}".format(2*ltype+ltag+40, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
-                histo2D[2*ltype+ltag+44][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerDMuSel,probeTriggerDElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+44, x), "histo2d_{0}_{1}".format(2*ltype+ltag+44, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
+                histo2D[2*ltype+ltag+40][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerSMuSel,probeTriggerSElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+40, x), "histo2d_{0}_{1}".format(2*ltype+ltag+40, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+44][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerDMuSel,probeTriggerDElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+44, x), "histo2d_{0}_{1}".format(2*ltype+ltag+44, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
 
     report = []
     for x in range(nCat):
