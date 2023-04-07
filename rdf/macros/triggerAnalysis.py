@@ -6,7 +6,7 @@ ROOT.ROOT.EnableImplicitMT(4)
 from utilsAna import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger1L, selectionTrigger2L, selectionElMu, selectionWeigths
 #from utilsAna import loadCorrectionSet
 
 # 0 = T, 1 = M, 2 = L
@@ -30,6 +30,7 @@ VBSSEL = jsonObject['VBSSEL']
 
 FAKE_MU0   = "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true"
 FAKE_MU1   = "abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true"
+FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU0 = jsonObject['TIGHT_MU0']
 TIGHT_MU1 = jsonObject['TIGHT_MU1']
 TIGHT_MU2 = jsonObject['TIGHT_MU2']
@@ -42,6 +43,7 @@ TIGHT_MU8 = "(abs(fake_Muon_dxy) < 0.2 && abs(fake_Muon_dz) < 0.5 && abs(fake_Mu
 
 FAKE_EL0   = "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1"
 FAKE_EL1   = "abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 1"
+FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 TIGHT_EL1 = jsonObject['TIGHT_EL1']
 TIGHT_EL2 = jsonObject['TIGHT_EL2']
@@ -96,6 +98,27 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
     return dftag
 
+def selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
+
+    dftag = selectionTrigger1L(df,year,PDType,JSON,isData,TRIGGERFAKEMU,TRIGGERFAKEEL)
+
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU1,FAKE_EL,TIGHT_EL1)
+
+    dftag = (dftag.Filter("nLoose == 2","Only two loose leptons")
+                  .Filter("nFake == 2","Two fake leptons")
+                  .Filter("nTight == 2","Two tight leptons")
+                  .Filter("(Sum(fake_mu) == 2 and triggerFAKEMU > 0 and Sum(fake_Muon_charge) == 0 and fake_Muon_pt[0] > 30 and fake_Muon_pt[1] > 30) or (Sum(fake_el) == 2 and triggerFAKEEL > 0 and Sum(fake_Electron_charge) == 0 and fake_Electron_pt[0] > 30 and fake_Electron_pt[1] > 30)","Two high pt leptons")
+                  )
+
+    dftag = selectionTauVeto(dftag,year,isData)
+    dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData)
+    dftag = selection2LVar  (dftag,year)
+
+    dftag = (dftag.Filter("abs(mll-91.1876) < 15","mll cut")
+                  )
+
+    return dftag
 
 def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
@@ -160,17 +183,41 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     list_TRIGGER.extend(list_TRIGGERSMU)
     list_TRIGGER.extend(list_TRIGGERDEL)
     list_TRIGGER.extend(list_TRIGGERSEL)
-    print("Total number of trigger paths: {0}".format(len(list_TRIGGER)))
+    print("Total number of lepton trigger paths: {0}".format(len(list_TRIGGER)))
 
     dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL)
 
     dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas)
+
+    TRIGGERFAKEMU = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
+    TRIGGERFAKEEL = getTriggerFromJson(overallTriggers, "TRIGGERFAKEEL", year)
+
+    list_TRIGGERFAKEMU = TRIGGERFAKEMU.split('(')[1].split(')')[0].split('||')
+    list_TRIGGERFAKEEL = TRIGGERFAKEEL.split('(')[1].split(')')[0].split('||')
+    list_TRIGGERFAKE = list_TRIGGERFAKEMU
+    list_TRIGGERFAKE.extend(list_TRIGGERFAKEEL)
+    print("Total number of fake trigger paths: {0}".format(len(list_TRIGGERFAKE)))
+
+    dffake = selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL)
+
+    dffake = selectionWeigths(dffake,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas)
+    if(theCat == plotCategory("kPlotData")):
+        dffake = (dffake.Define("weightFakeSel0", "weight")
+                        .Define("weightFakeSel1", "weight")
+                        .Define("weightFakeSel2", "weight")
+                        )
+    else:
+        dffake = (dffake.Define("weightFakeSel0", "weight*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,0)")
+                        .Define("weightFakeSel1", "weight*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,1)")
+                        .Define("weightFakeSel2", "weight*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,2)")
+                        )
 
     xMllMin = [91.1876-15, 91.1876-15]
     xMllMax = [91.1876+15, 91.1876+15]
     dfcat = []
     dfzoscat = []
     dfzsscat = []
+    dffakecat = []
     for x in range(nCat):
         for ltype in range(2):
             dfcat.append(dfbase.Filter("DiLepton_flavor=={0}".format(2*ltype), "flavor type == {0}".format(2*ltype))
@@ -178,8 +225,22 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                                .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
                                .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                                )
+            dffakecat.append(dffake.Filter("DiLepton_flavor=={0}".format(2*ltype), "flavor type == {0}".format(2*ltype))
+                                   .Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
+                                   .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
+                                   .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
+                                   )
+            # Fake lepton study
+            for trgfake in range(3):
+                if(ltype == 0):
+                    histo[ltype+50+2*trgfake][x] = dffakecat[2*x+ltype].Filter("{0}".format(list_TRIGGERFAKEMU[trgfake])).Histo1D(("histo_{0}_{1}".format(ltype+50+2*trgfake,x), "histo_{0}_{1}".format(ltype+50+2*trgfake,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightFakeSel{0}".format(trgfake))
+                    histo[ltype+56+2*trgfake][x] = dffakecat[2*x+ltype].Filter("{0}".format(list_TRIGGERFAKEMU[trgfake])).Filter("{0}".format(TRIGGERSMU)).Histo1D(("histo_{0}_{1}".format(ltype+56+2*trgfake,x), "histo_{0}_{1}".format(ltype+56+2*trgfake,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightFakeSel{0}".format(trgfake))
+                else:
+                    histo[ltype+50+2*trgfake][x] = dffakecat[2*x+ltype].Filter("{0}".format(list_TRIGGERFAKEEL[trgfake])).Histo1D(("histo_{0}_{1}".format(ltype+50+2*trgfake,x), "histo_{0}_{1}".format(ltype+50+2*trgfake,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightFakeSel{0}".format(trgfake))
+                    histo[ltype+56+2*trgfake][x] = dffakecat[2*x+ltype].Filter("{0}".format(list_TRIGGERFAKEEL[trgfake])).Filter("{0}".format(TRIGGERSEL)).Histo1D(("histo_{0}_{1}".format(ltype+56+2*trgfake,x), "histo_{0}_{1}".format(ltype+56+2*trgfake,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weightFakeSel{0}".format(trgfake))
 
             for ltag in range(2):
+                # Real lepton study
                 theLeptonSel = "((Sum(fake_mu) == 2 and tight_mu6[{0}] == true) or (Sum(fake_el) == 2 and tight_el3[{1}] == true))".format(ltag,ltag)
                 dfzoscat.append(dfcat[2*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 and {0}".format(theLeptonSel), "Opposite-sign leptons ({0})".format(ltag)))
                 dfzsscat.append(dfcat[2*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0 and {0}".format(theLeptonSel), "Same-sign leptons ({0})".format(ltag)))
@@ -232,13 +293,22 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                 dfzsscat[4*x+2*ltype+ltag] = dfzsscat[4*x+2*ltype+ltag].Filter("{0}1[{1}] == true".format(lflavor,lprobe),"tight id({0}1[{1}])".format(lflavor,lprobe))
 
                 histo[2*ltype+ltag+12][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+12,x), "histo_{0}_{1}".format(2*ltype+ltag+12,x), len(xPtbins)-1, xPtbins), "ptl{0}".format(lprobe+1),"weightNoLepSF")
-                probeTriggerSMuSel = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,1))".format(lprobe,lprobe)
-                probeTriggerSElSel = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,1))".format(lprobe,lprobe)
-                probeTriggerDMuSel = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,0))".format(lprobe,lprobe)
-                probeTriggerDElSel = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,0))".format(lprobe,lprobe)
+                probeTriggerSMuSel  = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,1))".format(lprobe,lprobe)
+                probeTriggerSElSel  = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,1))".format(lprobe,lprobe)
+                probeTriggerDMuSel  = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,0))".format(lprobe,lprobe)
+                probeTriggerDElSel  = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,0))".format(lprobe,lprobe)
+                probeTrigger1MuSel0 = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,2) &&     fake_Muon_pt[{2}] > 10 && HLT_Mu8_TrkIsoVVL)".format(lprobe,lprobe,lprobe)
+                probeTrigger1ElSel0 = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,2) && fake_Electron_pt[{2}] > 10 && HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30)".format(lprobe,lprobe,lprobe)
+                probeTrigger1MuSel1 = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,2) &&     fake_Muon_pt[{2}] > 20 && HLT_Mu17_TrkIsoVVL)".format(lprobe,lprobe,lprobe)
+                probeTrigger1ElSel1 = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,2) && fake_Electron_pt[{2}] > 15 && HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30)".format(lprobe,lprobe,lprobe)
+                probeTrigger1MuSel2 = "(Sum(fake_mu) == 2 and hasTriggerMatch(    fake_Muon_eta[{0}],    fake_Muon_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,13,2) &&     fake_Muon_pt[{2}] > 20 && HLT_Mu19_TrkIsoVVL)".format(lprobe,lprobe,lprobe)
+                probeTrigger1ElSel2 = "(Sum(fake_el) == 2 and hasTriggerMatch(fake_Electron_eta[{0}],fake_Electron_phi[{1}],TrigObj_eta,TrigObj_phi,TrigObj_id,TrigObj_filterBits,11,2) && fake_Electron_pt[{2}] > 25 && HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)".format(lprobe,lprobe,lprobe)
 
-                histo2D[2*ltype+ltag+40][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerSMuSel,probeTriggerSElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+40, x), "histo2d_{0}_{1}".format(2*ltype+ltag+40, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
-                histo2D[2*ltype+ltag+44][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerDMuSel,probeTriggerDElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+44, x), "histo2d_{0}_{1}".format(2*ltype+ltag+44, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
+                histo2D[2*ltype+ltag+40][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerSMuSel,probeTriggerSElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+40, x), "histo2d_{0}_{1}".format(2*ltype+ltag+40, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
+                histo2D[2*ltype+ltag+44][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerDMuSel,probeTriggerDElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+44, x), "histo2d_{0}_{1}".format(2*ltype+ltag+44, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
+                histo2D[2*ltype+ltag+48][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerDMuSel,probeTriggerDElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+48, x), "histo2d_{0}_{1}".format(2*ltype+ltag+48, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
+                histo2D[2*ltype+ltag+52][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerDMuSel,probeTriggerDElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+52, x), "histo2d_{0}_{1}".format(2*ltype+ltag+52, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
+                histo2D[2*ltype+ltag+56][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0} or {1}".format(probeTriggerDMuSel,probeTriggerDElSel)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+56, x), "histo2d_{0}_{1}".format(2*ltype+ltag+56, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weight")
 
     report = []
     for x in range(nCat):

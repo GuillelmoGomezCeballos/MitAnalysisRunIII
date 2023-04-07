@@ -172,6 +172,8 @@ if __name__ == "__main__":
     TRIGGERFAKEMU = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
     TRIGGERFAKEEL = getTriggerFromJson(overallTriggers, "TRIGGERFAKEEL", year)
 
+    TRIGGERFAKE = "{0} or {1}".format(TRIGGERFAKEMU,TRIGGERFAKEEL)
+
     TRIGGERMET = getTriggerFromJson(overallTriggers, "TRIGGERMET", year)
     TRIGGERPHO = getTriggerFromJson(overallTriggers, "TRIGGERPHOINC", year)
 
@@ -236,14 +238,7 @@ if __name__ == "__main__":
 
     print("TRIGGERLEP: {0}".format(TRIGGERLEP))
 
-    TRIGGERFAKE0 = TRIGGERFAKEMU
-    TRIGGERFAKE1 = TRIGGERFAKEEL
-    if(("SingleMuon+Run" in sampleToSkim) or ("DoubleMuon+Run" in sampleToSkim) or ("MuonEG+Run" in sampleToSkim) or ("Muon+Run" in sampleToSkim)):
-        TRIGGERFAKE1 = TRIGGERFAKEMU
-    elif(("EGamma+Run" in sampleToSkim) or ("DoubleEG+Run" in sampleToSkim) or ("SingleElectron+Run" in sampleToSkim)):
-        TRIGGERFAKE0 = TRIGGERFAKEEL
-
-    print("TRIGGERFAKE: {0} / {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))
+    print("TRIGGERFAKE: {0}".format(TRIGGERFAKE))
 
     for i, groupedFile in enumerate(groupedFiles):
         passJob = whichJob == -1 or whichJob == i
@@ -327,7 +322,7 @@ if __name__ == "__main__":
                                 .Define("skim_lep_charge","Sum(skimmu_charge)+Sum(skimel_charge)")\
                                 .Define("skim","applySkim(skimmu_pt, skimmu_eta, skimmu_phi, skimmu_mass, skimel_pt, skimel_eta, skimel_phi, skimel_mass, skim_lep_charge, MET_pt)")
 
-                    rdf_2l = rdf_ll.Define("trigger2l","{0}".format(TRIGGERLEP))\
+                    rdf_2l = rdf_ll.Define("trigger2l","({0}) or ({1})".format(TRIGGERLEP,TRIGGERFAKE))\
                                    .Filter("trigger2l > 0","Passed trigger2l")\
                                    .Filter("skim >= 2","Two loose leptons with mll > 10 GeV")\
                                    .Snapshot("Events", fOutIndivName2)
@@ -338,7 +333,7 @@ if __name__ == "__main__":
                                    .Snapshot("Events", fOutIndivName3)
 
                 if(doSkimSel[0] == True and nonZeroEvents == True):
-                    rdf_1l = rdf.Define("trigger1l","{0} or {1}".format(TRIGGERFAKE0,TRIGGERFAKE1))\
+                    rdf_1l = rdf.Define("trigger1l","{0}".format(TRIGGERFAKE))\
                                 .Filter("trigger1l > 0","Passed trigger1l")\
                                 .Define("skim_fake_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")\
                                 .Define("skim_fake_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")\

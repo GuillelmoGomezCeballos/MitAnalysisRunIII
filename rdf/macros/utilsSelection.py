@@ -376,6 +376,41 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
 
     return dftag
 
+def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
+
+    triggerFAKE = "0"
+
+    if(year == 2018 and PDType == "DoubleMuon"):
+        triggerFAKE = triggerFAKEMU
+    elif(year == 2018 and PDType == "EGamma"):
+        triggerFAKE =  triggerFAKEEL
+    elif(year == 2022 and PDType == "DoubleMuon"):
+        triggerFAKE = triggerFAKEMU
+    elif(year == 2022 and PDType == "Muon"):
+        triggerFAKE = triggerFAKEMU
+    elif(year == 2022 and PDType == "EGamma"):
+        triggerFAKE =  triggerFAKEEL
+    elif(PDType == "MuonEG"):
+        triggerFAKE =  "0"
+    elif(year == 2018):
+        triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
+    elif(year == 2022):
+        triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
+    else:
+        print("PROBLEM with triggers!!!")
+
+    print("triggerFAKE: {0}".format(triggerFAKE))
+
+    dftag =(df.Define("isData","{}".format(isData))
+              .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
+              .Define("trigger","{0}".format(triggerFAKE))
+              .Filter("trigger > 0","Passed trigger1l")
+              .Define("triggerFAKEMU","{0}".format(triggerFAKEMU))
+              .Define("triggerFAKEEL", "{0}".format(triggerFAKEEL))
+	      )
+
+    return dftag
+
 def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
     dftag =(df.Define("loose_mu"           ,"abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
               .Define("fake_mu"            ,"{0}".format(fake_mu))
@@ -386,6 +421,7 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
               .Define("fake_Muon_dz"       ,"Muon_dz[fake_mu]")
               .Define("fake_Muon_mass"     ,"Muon_mass[fake_mu]")
               .Define("fake_Muon_charge"   ,"Muon_charge[fake_mu]")
+              .Define("fake_Muon_jetRelIso","Muon_jetRelIso[fake_mu]")
               .Define("fake_Muon_looseId"  ,"Muon_looseId[fake_mu]")
               .Define("fake_Muon_mediumId" ,"Muon_mediumId[fake_mu]")
               .Define("fake_Muon_tightId"  ,"Muon_tightId[fake_mu]")
@@ -402,6 +438,7 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
               .Define("fake_Electron_phi"                 ,"Electron_phi[fake_el]")
               .Define("fake_Electron_mass"                ,"Electron_mass[fake_el]")
               .Define("fake_Electron_charge"              ,"Electron_charge[fake_el]")
+              .Define("fake_Electron_jetRelIso"           ,"Electron_jetRelIso[fake_el]")
               .Define("fake_Electron_dxy"                 ,"Electron_dxy[fake_el]")
               .Define("fake_Electron_dz"                  ,"Electron_dz[fake_el]")
               .Define("fake_Electron_cutBased"            ,"Electron_cutBased[fake_el]")
@@ -487,8 +524,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     if(useBTaggingWeights == 1):
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 ##.Define("weight","weightMC*weightFake*weightPURecoSF*weightLepSF*weightBtagSF")
-                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF")
+                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightLepSF")
                  .Define("weightNoLepSF","weightMC*weightFake*weightBtagSF*weightPURecoSF")
                  .Define("weightBTag","weight")
                  .Define("weightNoBTag","weight/weightBtagSF")
@@ -496,8 +532,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     else:
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 ##.Define("weight","weightMC*weightFake*weightPURecoSF*weightLepSF")
-                 .Define("weight",       "weightMC*weightFake*weightPURecoSF")
+                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightLepSF")
                  .Define("weightNoLepSF","weightMC*weightFake*weightPURecoSF")
                  .Define("weightBTag","weight*weightBtagSF")
                  .Define("weightNoBTag","weight")

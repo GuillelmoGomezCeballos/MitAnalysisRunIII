@@ -589,6 +589,26 @@ float compute_TriggerSF(float ptl1, float ptl2, float etal1, float etal2, int lt
   return getValFromTH2(hcorr, ptl1, ptl2);
 }
 
+float compute_lumiFakeRate(const Vec_f& mu_pt, const Vec_f& el_pt, const int nTrigger){
+  double lumiPrescalesM[3] = {0.182/1000., 0.769/1000., 0.769/1000.}; // Mu8/17/19
+  double lumiPrescalesE[3] = {0.134/1000., 0.754/1000., 0.754/1000.}; // El8/12/23
+  if     (nTrigger == -1 && mu_pt.size() == 1 && mu_pt[0] <  20) return lumiPrescalesM[0];
+  else if(nTrigger == -1 && mu_pt.size() == 1 && mu_pt[0] >= 20) return lumiPrescalesM[1];
+  else if(nTrigger == -1 && el_pt.size() == 1 && el_pt[0] <  15) return lumiPrescalesE[0];
+  else if(nTrigger == -1 && el_pt.size() == 1 && el_pt[0] >= 15) return lumiPrescalesE[1];
+
+  else if(mu_pt.size() >= 1 && nTrigger == 0) return lumiPrescalesM[0];
+  else if(mu_pt.size() >= 1 && nTrigger == 1) return lumiPrescalesM[1];
+  else if(mu_pt.size() >= 1 && nTrigger == 2) return lumiPrescalesM[2];
+  else if(el_pt.size() >= 1 && nTrigger == 0) return lumiPrescalesE[0];
+  else if(el_pt.size() >= 1 && nTrigger == 1) return lumiPrescalesE[1];
+  else if(el_pt.size() >= 1 && nTrigger == 2) return lumiPrescalesE[2];
+
+  else printf("PROBLEM in compute_lumiFakeRate\n");
+
+  return 1.0;
+}
+
 bool isGoodRunLS(const bool isData, const UInt_t run, const UInt_t lumi) {
 
   if(not isData) return true;
@@ -651,54 +671,70 @@ Vec_b cleaningMask(Vec_i indices, int size) {
 // 12 => 1mu-1photon for Muon;
 bool hasTriggerMatch(const float& eta, const float& phi, const Vec_f& TrigObj_eta, const Vec_f& TrigObj_phi,
                      const Vec_i& TrigObj_id, const Vec_i& TrigObj_filterBits,
-                     const int whichId, const bool selectSingleLep) {
+                     const int whichId, const int selectTriggerLep, const bool applyTriggerLep = true) {
   bool debug = false;
-  if(debug) printf("triggerMatch(%.2f,%.2f): %d %d\n",eta,phi,whichId,selectSingleLep);
+  if(debug) printf("triggerMatch(%.2f,%.2f): %d %d\n",eta,phi,whichId,selectTriggerLep);
   int whichBits[5] = {0,0,0,0,0};
-  if     (whichId == 13 && selectSingleLep == true){
+  // selectTriggerLep = 0 (double lep), = 1 (single lep), 2 (fake lep)
+  if     (whichId == 13 && selectTriggerLep == 0){
+    whichBits[0] = 0;
+    whichBits[1] = 4;
+    whichBits[2] = 5;
+    whichBits[3] = 5;
+    whichBits[4] = 5;
+  }
+  else if(whichId == 13 && selectTriggerLep == 1){
     whichBits[0] = 1;
     whichBits[1] = 3;
     whichBits[2] = 10;
     whichBits[3] = 11;
     whichBits[4] = 11;
   }
-  else if(whichId == 13 && selectSingleLep == false){
+  else if(whichId == 13 && selectTriggerLep == 2){
+    whichBits[0] = 0;
+    whichBits[1] = 0;
+    whichBits[2] = 0;
+    whichBits[3] = 0;
+    whichBits[4] = 0;
+  }
+  else if(whichId == 11 && selectTriggerLep == 0){
     whichBits[0] = 0;
     whichBits[1] = 4;
     whichBits[2] = 5;
     whichBits[3] = 5;
     whichBits[4] = 5;
   }
-  else if(whichId == 11 && selectSingleLep == true){
+  else if(whichId == 11 && selectTriggerLep == 1){
     whichBits[0] = 1;
     whichBits[1] = 2;
     whichBits[2] = 10;
     whichBits[3] = 11;
     whichBits[4] = 13;
   }
-  else if(whichId == 11 && selectSingleLep == false){
+  else if(whichId == 11 && selectTriggerLep == 2){
     whichBits[0] = 0;
-    whichBits[1] = 4;
-    whichBits[2] = 5;
-    whichBits[3] = 5;
-    whichBits[4] = 5;
+    whichBits[1] = 0;
+    whichBits[2] = 0;
+    whichBits[3] = 0;
+    whichBits[4] = 0;
   }
   else {
-    printf("whichId problem! %d\n",whichId);
+    printf("whichId / selectTriggerLep problem! %d / %d\n",whichId,selectTriggerLep);
   }
 
   for (unsigned int jtrig = 0; jtrig < TrigObj_eta.size(); ++jtrig) {
     if(TrigObj_id[jtrig] != whichId) continue;
-    bool passSingleLep = ((TrigObj_filterBits[jtrig] & (1<<whichBits[0]))!=0) || ((TrigObj_filterBits[jtrig] & (1<<whichBits[1]))!=0) ||
-                         ((TrigObj_filterBits[jtrig] & (1<<whichBits[2]))!=0) || ((TrigObj_filterBits[jtrig] & (1<<whichBits[3]))!=0) ||
-                         ((TrigObj_filterBits[jtrig] & (1<<whichBits[4]))!=0);
-    if(passSingleLep == false)  continue;
+    bool passTriggerLep = ((TrigObj_filterBits[jtrig] & (1<<whichBits[0]))!=0) || ((TrigObj_filterBits[jtrig] & (1<<whichBits[1]))!=0) ||
+                          ((TrigObj_filterBits[jtrig] & (1<<whichBits[2]))!=0) || ((TrigObj_filterBits[jtrig] & (1<<whichBits[3]))!=0) ||
+                          ((TrigObj_filterBits[jtrig] & (1<<whichBits[4]))!=0);
+    if(applyTriggerLep == false) passTriggerLep = true;
+    if(passTriggerLep == false)  continue;
     double dRlt = deltaR(eta, phi, TrigObj_eta[jtrig], TrigObj_phi[jtrig]);
     if(debug) printf("(%d,%.2f,%.2f,%.2f): %d/%d/%d/%d/%d - %d - %d\n",TrigObj_filterBits[jtrig],TrigObj_eta[jtrig],TrigObj_phi[jtrig],dRlt,
     ((TrigObj_filterBits[jtrig] & (1<<whichBits[0]))!=0),((TrigObj_filterBits[jtrig] & (1<<whichBits[1]))!=0),
     ((TrigObj_filterBits[jtrig] & (1<<whichBits[2]))!=0),((TrigObj_filterBits[jtrig] & (1<<whichBits[3]))!=0),
     ((TrigObj_filterBits[jtrig] & (1<<whichBits[4]))!=0),
-    passSingleLep,dRlt<0.3);
+    passTriggerLep,dRlt<0.3);
     if (dRlt < 0.3) return true;
   }
   return false;
@@ -983,17 +1019,17 @@ float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, unsigned int v
 }
 
 // lepton+met variables
-float compute_lmet_var(const Vec_f& mu_pt, const Vec_f& mu_phi,
-                       const Vec_f& el_pt, const Vec_f& el_phi,
+float compute_lmet_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_jetRelIso,
+                       const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_jetRelIso,
 		       const float met_pt, const float met_phi,
 		       unsigned int var)
 {
-   float ptl, phil;
+   float ptl, etal, phil, ptCone;
    if(mu_pt.size() == 1){
-       ptl = mu_pt[0]; phil = mu_phi[0];
+       ptl = mu_pt[0]; etal = mu_eta[0]; phil = mu_phi[0]; ptCone = mu_pt[0]*(1+std::max(mu_jetRelIso[0],0.0f))*0.9;
    }
    else if(el_pt.size() == 1){
-       ptl = el_pt[0]; phil = el_phi[0];
+       ptl = el_pt[0]; etal = el_eta[0]; phil = el_phi[0]; ptCone = el_pt[0]*(1+std::max(el_jetRelIso[0],0.0f))*0.9;
    }
    else {
       return 0;
@@ -1002,9 +1038,11 @@ float compute_lmet_var(const Vec_f& mu_pt, const Vec_f& mu_phi,
    double theVar = 0;
    if     (var == 0) theVar = std::sqrt(2*ptl*met_pt*(1-std::cos(deltaPhi(phil,met_phi))));
    else if(var == 1) theVar = deltaPhi(phil,met_phi);
-   else if(var == 2) theVar = std::sqrt(2*30.0*met_pt*(1-std::cos(deltaPhi(phil,met_phi))));
-   else if(var == 3) theVar = std::max(std::sqrt(2*ptl*met_pt*(1-std::cos(deltaPhi(phil,met_phi)))),met_pt);
-   else if(var == 4) theVar = std::min(std::sqrt(2*ptl*met_pt*(1-std::cos(deltaPhi(phil,met_phi)))),met_pt);
+   else if(var == 2) theVar = std::sqrt(2*35.0*met_pt*(1-std::cos(deltaPhi(phil,met_phi))));
+   else if(var == 3) theVar = ptl;
+   else if(var == 4) theVar = fabs(etal);
+   else if(var == 5) theVar = phil;
+   else if(var == 6) theVar = std::max(ptCone, 10.001f);
 
    theVar = std::min(theVar, 199.999);
    

@@ -36,9 +36,6 @@ def plotCategory(key):
     except Exception as e:
         print("Wrong key({0}): {1}".format(key,e))
 
-xPtbins = array('d', [10,15,20,25,30,35,40,45,50,60,70,80,90,100,200,300])
-xEtabins = array('d', [0.0,0.5,1.0,1.5,2.0,2.5])
-
 if __name__ == "__main__":
     path = "fillhisto_triggerAnalysis1001"
     year = 2022
@@ -181,11 +178,17 @@ if __name__ == "__main__":
     # Trigger efficiency
     fileTriggerLep = [[TFile("{0}/{1}_{2}_tightmu1_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggerm0_2d.root".format(output,path,year)),
-        	       TFile("{0}/{1}_{2}_triggerm1_2d.root".format(output,path,year))
+        	       TFile("{0}/{1}_{2}_triggerm1_2d.root".format(output,path,year)),
+        	       TFile("{0}/{1}_{2}_triggerm2_2d.root".format(output,path,year)),
+        	       TFile("{0}/{1}_{2}_triggerm3_2d.root".format(output,path,year)),
+        	       TFile("{0}/{1}_{2}_triggerm4_2d.root".format(output,path,year))
                       ],
                       [TFile("{0}/{1}_{2}_tightel1_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggere0_2d.root".format(output,path,year)),
-        	       TFile("{0}/{1}_{2}_triggere1_2d.root".format(output,path,year))
+        	       TFile("{0}/{1}_{2}_triggere1_2d.root".format(output,path,year)),
+        	       TFile("{0}/{1}_{2}_triggere2_2d.root".format(output,path,year)),
+        	       TFile("{0}/{1}_{2}_triggere3_2d.root".format(output,path,year)),
+        	       TFile("{0}/{1}_{2}_triggere4_2d.root".format(output,path,year))
                       ]]
     print(fileTriggerLep[0][0].GetName())
     print(fileTriggerLep[1][0].GetName())
@@ -193,7 +196,7 @@ if __name__ == "__main__":
 
     outFileLepEff.cd()
 
-    numberOfTriggerSel = 2
+    numberOfTriggerSel = 5
     histoTriggerEffSelDAEtaPt = [[0 for y in range(numberOfTriggerSel)] for x in range(2)]
     histoTriggerEffSelDYEtaPt = [[0 for y in range(numberOfTriggerSel)] for x in range(2)]
     histoTriggerSFEtaPt = [[0 for y in range(numberOfTriggerSel)] for x in range(2)]

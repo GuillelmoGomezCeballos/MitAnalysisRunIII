@@ -16,6 +16,9 @@ hadd -f ${output}/${path}_${year}_tightmu7_2d.root ${output}/${path}_${year}_32_
 hadd -f ${output}/${path}_${year}_tightmu8_2d.root ${output}/${path}_${year}_36_2d.root ${output}/${path}_${year}_37_2d.root
 hadd -f ${output}/${path}_${year}_triggerm0_2d.root ${output}/${path}_${year}_40_2d.root ${output}/${path}_${year}_41_2d.root
 hadd -f ${output}/${path}_${year}_triggerm1_2d.root ${output}/${path}_${year}_44_2d.root ${output}/${path}_${year}_45_2d.root
+hadd -f ${output}/${path}_${year}_triggerm2_2d.root ${output}/${path}_${year}_48_2d.root ${output}/${path}_${year}_49_2d.root
+hadd -f ${output}/${path}_${year}_triggerm3_2d.root ${output}/${path}_${year}_52_2d.root ${output}/${path}_${year}_53_2d.root
+hadd -f ${output}/${path}_${year}_triggerm4_2d.root ${output}/${path}_${year}_56_2d.root ${output}/${path}_${year}_57_2d.root
 
 hadd -f ${output}/${path}_${year}_loose_el_2d.root ${output}/${path}_${year}_2_2d.root  ${output}/${path}_${year}_3_2d.root
 hadd -f ${output}/${path}_${year}_tightel0_2d.root ${output}/${path}_${year}_6_2d.root  ${output}/${path}_${year}_7_2d.root
@@ -29,5 +32,8 @@ hadd -f ${output}/${path}_${year}_tightel7_2d.root ${output}/${path}_${year}_34_
 hadd -f ${output}/${path}_${year}_tightel8_2d.root ${output}/${path}_${year}_38_2d.root ${output}/${path}_${year}_39_2d.root
 hadd -f ${output}/${path}_${year}_triggere0_2d.root ${output}/${path}_${year}_42_2d.root ${output}/${path}_${year}_43_2d.root
 hadd -f ${output}/${path}_${year}_triggere1_2d.root ${output}/${path}_${year}_46_2d.root ${output}/${path}_${year}_47_2d.root
+hadd -f ${output}/${path}_${year}_triggere2_2d.root ${output}/${path}_${year}_50_2d.root ${output}/${path}_${year}_51_2d.root
+hadd -f ${output}/${path}_${year}_triggere3_2d.root ${output}/${path}_${year}_54_2d.root ${output}/${path}_${year}_55_2d.root
+hadd -f ${output}/${path}_${year}_triggere4_2d.root ${output}/${path}_${year}_58_2d.root ${output}/${path}_${year}_59_2d.root
 
 python3 computeLooseLeptonEff_2d.py --path=${path} --year=${year} --output=${output}
