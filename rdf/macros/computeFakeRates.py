@@ -1,24 +1,60 @@
 import ROOT
-from ROOT import TFile, TH1D, TH2D
-import os, sys, getopt, glob
+from ROOT import TFile, TH1D, TH2D, TCanvas
+import os, sys, getopt, glob, time
 from array import array
-from utilsAna import plotCategory
 import json
 
 xPtbins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 35.0])
 xEtabins = array('d', [0.0, 0.5, 1.0, 1.5, 2.0, 2.5])
+ROOT.gROOT.SetBatch(True)
+ROOT.gStyle.SetOptStat(0)
+
+def plotCategory(key):
+    plotCategoryDict = dict()
+    plotCategoryDict.update({"kPlotData"      :[ 0]})
+    plotCategoryDict.update({"kPlotqqWW"      :[ 1]})
+    plotCategoryDict.update({"kPlotggWW"      :[ 2]})
+    plotCategoryDict.update({"kPlotTop"       :[ 3]})
+    plotCategoryDict.update({"kPlotDY"        :[ 4]})
+    plotCategoryDict.update({"kPlotEWKSSWW"   :[ 5]})
+    plotCategoryDict.update({"kPlotQCDSSWW"   :[ 6]})
+    plotCategoryDict.update({"kPlotEWKWZ"     :[ 7]})
+    plotCategoryDict.update({"kPlotWZ"        :[ 8]})
+    plotCategoryDict.update({"kPlotZZ"        :[ 9]})
+    plotCategoryDict.update({"kPlotNonPrompt" :[10]})
+    plotCategoryDict.update({"kPlotVVV"       :[11]})
+    plotCategoryDict.update({"kPlotTVX"       :[12]})
+    plotCategoryDict.update({"kPlotVG"        :[13]})
+    plotCategoryDict.update({"kPlotHiggs"     :[14]})
+    plotCategoryDict.update({"kPlotDPSWW"     :[15]})
+    plotCategoryDict.update({"kPlotWS"        :[16]})
+    plotCategoryDict.update({"kPlotEM"        :[17]})
+    plotCategoryDict.update({"kPlotOther"     :[18]})
+    plotCategoryDict.update({"kPlotBSM"       :[19]})
+    plotCategoryDict.update({"kPlotSignal0"   :[20]})
+    plotCategoryDict.update({"kPlotSignal1"   :[21]})
+    plotCategoryDict.update({"kPlotSignal2"   :[22]})
+    plotCategoryDict.update({"kPlotSignal3"   :[23]})
+    plotCategoryDict.update({"kPlotCategories":[24]})
+
+    try:
+        return plotCategoryDict[key][0]
+    except Exception as e:
+        print("Wrong key({0}): {1}".format(key,e))
 
 if __name__ == "__main__":
     path = "fillhisto_fakeAnalysis1001"
     year = 2022
     inputDir = "anaZ"
     anaType = 0
+    format = "pdf"
 
     valid = ['path=', "year=", 'inputDir=', 'anaType=', 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
     usage +=  "              --inputDir=<{0}>\n".format(inputDir)
-    usage +=  "              --anaType=<{0}>".format(anaType)
+    usage +=  "              --anaType=<{0}>\n".format(anaType)
+    usage +=  "              --format=<{0}>".format(format)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -107,9 +143,9 @@ if __name__ == "__main__":
             for neta in range(len(xEtabins)-1):
                 histoFakeEffSelPt[thePlot][j][neta] = TH1D("histoFakeEffSelPt_{0}_{1}_{2}".format(thePlot,j,neta), "histoFakeEffSelPt_{0}_{1}_{2}".format(thePlot,j,neta), len(xPtbins)-1, xPtbins)
             for npt in range(len(xPtbins)-1):
-                histoFakeEffSelEta[thePlot][j][npt] = TH1D("histoFakeEffSelEta_{0}_{1}_{2}".format(thePlot,j,npt), "histoFakeEffSelEta_{0}_{1}_{2}".format(thePlot,j,npt), len(xPtbins)-1, xPtbins)
+                histoFakeEffSelEta[thePlot][j][npt] = TH1D("histoFakeEffSelEta_{0}_{1}_{2}".format(thePlot,j,npt), "histoFakeEffSelEta_{0}_{1}_{2}".format(thePlot,j,npt), len(xEtabins)-1, xEtabins)
 
-    fileFakeRateName = "histoFakeEtaPt_{0}_anaType{1}.root".format(year,anaType)
+    fileFakeRateName = "histoFakeEtaPt_{0}_{1}_anaType{2}.root".format(path.split("fillhisto_")[1],year,anaType)
     outFileFakeRate = TFile(fileFakeRateName,"recreate")
     outFileFakeRate.cd()
     for thePlot in range(2):
@@ -153,12 +189,40 @@ if __name__ == "__main__":
                     histoFakeEffSelEta[thePlot][nsel][j].SetBinError  (i+1,unc)
 
             histoFakeEffSelEtaPt[thePlot][nsel].Write()
+            histoFakeEffSelEtaPt[thePlot][nsel].SetDirectory(0)
             for neta in range(len(xEtabins)-1):
                 histoFakeEffSelPt[thePlot][nsel][neta].Write()
+                histoFakeEffSelPt[thePlot][nsel][neta].SetDirectory(0)
             for npt in range(len(xEtabins)-1):
                 histoFakeEffSelEta[thePlot][nsel][npt].Write()
+                histoFakeEffSelEta[thePlot][nsel][npt].SetDirectory(0)
             #json = ROOT.TBufferJSON.ConvertToJSON(histoFakeEffSelEtaPt[thePlot][nsel])
             #f = open("fakeRate_{0}_{1}.json".format(thePlot,nsel), "w")
             #f.write(json.Data())
             #f.close()
     outFileFakeRate.Close()
+
+    canvasEta = [0 for y in range(numberOfSel)]
+    canvasPt = [0 for y in range(numberOfSel)]
+
+    for nsel in range(numberOfSel):
+        canvasPt[nsel] = TCanvas("canvasPt{0}".format(nsel), "canvasPt{0}".format(nsel), 10, 10, 500, 500)
+        canvasPt[nsel].Divide(2,len(xPtbins)-1)
+        for thePlot in range(2):
+            for npt in range(len(xPtbins)-1):
+                canvasPt[nsel].cd(thePlot+2*npt+1)
+                #print(histoFakeEffSelPt[thePlot][nsel][npt].GetSumOfWeights())
+                histoFakeEffSelPt[thePlot][nsel][npt].DrawCopy()
+        canvasPt[nsel].Draw()
+        canvasPt[nsel].SaveAs("histoFakePt_{0}_{1}_anaType{2}_nsel{3}.{4}".format(path.split("fillhisto_")[1],year,anaType,nsel,format))
+
+        canvasEta[nsel] = TCanvas("canvasEta{0}".format(nsel), "canvasEta{0}".format(nsel), 10, 10, 500, 500)
+        canvasEta[nsel].Divide(2,len(xEtabins)-1)
+        for thePlot in range(2):
+            for neta in range(len(xEtabins)-1):
+                canvasEta[nsel].cd(thePlot+2*neta+1)
+                #print(histoFakeEffSelEta[thePlot][nsel][neta].GetSumOfWeights())
+                histoFakeEffSelEta[thePlot][nsel][neta].DrawCopy()
+                canvasEta[nsel].Update()
+        canvasEta[nsel].Draw()
+        canvasEta[nsel].SaveAs("histoFakeEta_{0}_{1}_anaType{2}_nsel{3}.{4}".format(path.split("fillhisto_")[1],year,anaType,nsel,format))

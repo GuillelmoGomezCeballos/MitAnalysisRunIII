@@ -63,6 +63,7 @@ def makeJES(df,year,postFix,bTagSel):
               .Define("goodbtag_jet{0}".format(postFix), "abs(clean_Jet_eta) < 2.5 && clean_Jet_pt{0} > 20".format(postFitDef))
               .Define("goodbtag_Jet_pt{0}".format(postFix), "clean_Jet_pt{0}[goodbtag_jet{1}]".format(postFitDef,postFix))
               .Define("goodbtag_Jet_eta{0}".format(postFix), "abs(clean_Jet_eta[goodbtag_jet{0}])".format(postFix))
+              .Define("goodbtag_Jet_phi{0}".format(postFix), "abs(clean_Jet_phi[goodbtag_jet{0}])".format(postFix))
               .Define("goodbtag_Jet_btagDeepB{0}".format(postFix), "clean_Jet_btagDeepB[goodbtag_jet{0}]".format(postFix))
               .Define("goodbtag_Jet_bjet{0}".format(postFix), "goodbtag_Jet_btagDeepB{0} > {1}".format(postFix,getBTagCut(bTagSel)))
               .Define("nbtag_goodbtag_Jet_bjet{0}".format(postFix), "Sum(goodbtag_Jet_bjet{0})*1.0f".format(postFix))

@@ -398,6 +398,8 @@ def SwitchSample(argument, skimType):
        107: (dirT2+"/TbarWplus_DR_AtLeastOneLepton_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",24.2*1000,plotCategory("kPlotTop")),
        108: (dirT2+"/TWminus_DR_AtLeastOneLepton_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",24.2*1000,plotCategory("kPlotTop")),
        109: (dirT2+"/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",63199.9*1000,plotCategory("kPlotOther")),
+       110: (dirT2+"/TTto4Q_TuneCP5CR2_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*(1-0.1086*3)*(1-0.1086*3)*1000,plotCategory("kPlotData")),
+       111: (dirT2+"/QCD_PT-80to120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",96545.52*1000,plotCategory("kPlotData")),
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")

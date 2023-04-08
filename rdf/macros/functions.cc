@@ -673,7 +673,7 @@ bool hasTriggerMatch(const float& eta, const float& phi, const Vec_f& TrigObj_et
                      const Vec_i& TrigObj_id, const Vec_i& TrigObj_filterBits,
                      const int whichId, const int selectTriggerLep, const bool applyTriggerLep = true) {
   bool debug = false;
-  if(debug) printf("triggerMatch(%.2f,%.2f): %d %d\n",eta,phi,whichId,selectTriggerLep);
+  if(debug) printf("triggerMatch(%.2f,%.2f): %d %d %lu\n",eta,phi,whichId,selectTriggerLep,TrigObj_eta.size());
   int whichBits[5] = {0,0,0,0,0};
   // selectTriggerLep = 0 (double lep), = 1 (single lep), 2 (fake lep)
   if     (whichId == 13 && selectTriggerLep == 0){
@@ -723,7 +723,7 @@ bool hasTriggerMatch(const float& eta, const float& phi, const Vec_f& TrigObj_et
   }
 
   for (unsigned int jtrig = 0; jtrig < TrigObj_eta.size(); ++jtrig) {
-    if(TrigObj_id[jtrig] != whichId) continue;
+    if(TrigObj_id[jtrig] != whichId && applyTriggerLep == true) continue;
     bool passTriggerLep = ((TrigObj_filterBits[jtrig] & (1<<whichBits[0]))!=0) || ((TrigObj_filterBits[jtrig] & (1<<whichBits[1]))!=0) ||
                           ((TrigObj_filterBits[jtrig] & (1<<whichBits[2]))!=0) || ((TrigObj_filterBits[jtrig] & (1<<whichBits[3]))!=0) ||
                           ((TrigObj_filterBits[jtrig] & (1<<whichBits[4]))!=0);
@@ -1040,9 +1040,10 @@ float compute_lmet_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_
    else if(var == 1) theVar = deltaPhi(phil,met_phi);
    else if(var == 2) theVar = std::sqrt(2*35.0*met_pt*(1-std::cos(deltaPhi(phil,met_phi))));
    else if(var == 3) theVar = ptl;
-   else if(var == 4) theVar = fabs(etal);
+   else if(var == 4) theVar = etal;
    else if(var == 5) theVar = phil;
-   else if(var == 6) theVar = std::max(ptCone, 10.001f);
+   else if(var == 6) theVar = fabs(etal);
+   else if(var == 7) theVar = std::max(ptCone, 10.001f);
 
    theVar = std::min(theVar, 199.999);
    
