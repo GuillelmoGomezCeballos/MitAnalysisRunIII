@@ -39,7 +39,7 @@ TIGHT_MU4 = jsonObject['TIGHT_MU4']
 TIGHT_MU5 = jsonObject['TIGHT_MU5']
 TIGHT_MU6 = jsonObject['TIGHT_MU6']
 TIGHT_MU7 = jsonObject['TIGHT_MU7']
-TIGHT_MU8 = "(abs(fake_Muon_dxy) < 0.2 && abs(fake_Muon_dz) < 0.5 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 1)"
+TIGHT_MU8 = jsonObject['TIGHT_MU8']
 
 FAKE_EL0   = "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1"
 FAKE_EL1   = "abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 1"
@@ -52,7 +52,7 @@ TIGHT_EL4 = jsonObject['TIGHT_EL4']
 TIGHT_EL5 = jsonObject['TIGHT_EL5']
 TIGHT_EL6 = jsonObject['TIGHT_EL6']
 TIGHT_EL7 = jsonObject['TIGHT_EL7']
-TIGHT_EL8 = "(abs(fake_Electron_dxy) < 0.2 && abs(fake_Electron_dz) < 0.5 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2)"
+TIGHT_EL8 = jsonObject['TIGHT_EL8']
 
 def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL):
 

@@ -61,6 +61,18 @@ def analysis(df,count,category,weight,year,PDType,isData):
     x = 0
     histo[ 0][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x), 100,  0, 100), "Pileup_nTrueInt","weight")
 
+    dfgen = (dfcat
+          .Define("gen_z", "GenPart_pdgId == 23 && GenPart_status == 62")
+          .Filter("Sum(gen_z) >= 1","nZ >= 1")
+          .Filter("Sum(gen_z) == 1","nZ == 1")
+          .Define("Zpt", "GenPart_pt[gen_z]")
+          .Define("Zeta", "GenPart_eta[gen_z]")
+          .Define("Zphi", "abs(GenPart_phi[gen_z])")
+          .Define("Zmass", "GenPart_mass[gen_z]")
+          .Filter("abs(Zmass[0]-91.1876) < 15","abs(Zmass[0]-91.1876) < 15")
+          .Define("Zrap", "abs(makeRapidity(Zpt[0],Zeta[0],Zphi[0],Zmass[0]))")
+            )
+
     dfcat = (dfcat
           .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
           .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")
@@ -133,12 +145,36 @@ def analysis(df,count,category,weight,year,PDType,isData):
     histo2D[10][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(10,x),"histo2d_{0}_{1}".format(10,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_l","goodloosejet_pt_cj_l","weight")
     histo2D[11][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(11,x),"histo2d_{0}_{1}".format(11,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_l","goodloosejet_pt_bj_l","weight")
 
+    histo[10][x] = dfgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
+    histo[11][x] = dfgen.Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 50, 0., 100.), "Zpt","weight")
+    histo[12][x] = dfgen.Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 50, 0., 5.0), "Zrap","weight")
+
+    dfgen = (dfgen
+          .Define("genLep", "(abs(GenDressedLepton_pdgId) == 11 || abs(GenDressedLepton_pdgId) == 13)")
+          .Filter("Sum(genLep) == 2","genLep == 2")
+          .Define("filter_GenDressedLepton_pt", "GenDressedLepton_pt[genLep]")
+          .Define("filter_GenDressedLepton_eta", "GenDressedLepton_eta[genLep]")
+            )
+
+    dfgen = dfgen.Filter("abs(filter_GenDressedLepton_eta[0]) < 2.5 && abs(filter_GenDressedLepton_eta[1]) < 2.5","eta requirements")
+    dfgen = dfgen.Filter("filter_GenDressedLepton_pt[0] > 10 && filter_GenDressedLepton_pt[1] > 10","Minimal pt requirements")
+
+    histo[13][x] = dfgen.Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 50, 0., 100.), "Zpt","weight")
+    histo[14][x] = dfgen.Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 50, 0., 5.0), "Zrap","weight")
+
+    dfgen = dfgen.Filter("filter_GenDressedLepton_pt[0] > 25 && filter_GenDressedLepton_pt[1] > 25","Tighter pt requirements")
+
+    histo[15][x] = dfgen.Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 50, 0., 100.), "Zpt","weight")
+    histo[16][x] = dfgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 50, 0., 5.0), "Zrap","weight")
+
     #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "MET_pt", "nbtag"]
     #dfcat.Snapshot("Events", "test.root", branches)
 
-    report = dfcat.Report()
+    report0 = dfcat.Report()
+    report1 = dfgen.Report()
     print("---------------- SUMMARY -------------")
-    report.Print()
+    report0.Print()
+    report1.Print()
 
     myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}.root".format(count,year),'RECREATE')
     for i in range(nCat):
@@ -180,8 +216,8 @@ def readMCSample(sampleNOW, year, PDType, skimType):
 
 if __name__ == "__main__":
 
-    year = 2018
-    process = 0
+    year = 2022
+    process = 399
     skimType = "2l"
 
     valid = ['year=', "process=", 'help']
