@@ -65,14 +65,16 @@ def selectionLL(df,year,PDType,isData):
     dftag =(dftag.Filter("nLoose == 2","Only two loose leptons")
                  .Filter("nFake == 2","Two fake leptons")
                  .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0", "Sign-sign leptons")
-                #.Filter("nTight == 2","Two tight leptons")
                  .Define("eventNum", "event")
                  )
+
+    if(useFR == 0):
+        dftag = dftag.Filter("nTight == 2","Two tight leptons")
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
     dftag = selectionJetMet (dftag,year,bTagSel,isData)
-    dftag = selection2LVar  (dftag,year)
+    dftag = selection2LVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
                   .Filter("mll > 20","mll > 20 GeV")

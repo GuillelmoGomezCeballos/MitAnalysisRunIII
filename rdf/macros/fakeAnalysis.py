@@ -93,7 +93,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    mtfixCut = 30
+    maxMETMTCut = 30
 
     nCat, nHisto = plotCategory("kPlotCategories"), 200
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
@@ -208,7 +208,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
                 histo[ltype+44+2*ptbin][y] = dfcat[2*y+ltype].Filter("ptl > {0} && ptl < {1}".format(xPtbins[ptbin],xPtbins[ptbin+1]))                             .Histo1D(("histo_{0}_{1}".format(ltype+44+2*ptbin,y), "histo_{0}_{1}".format(ltype+44+2*ptbin,y),100, 0, 200), "mtfix","weight")
                 histo[ltype+54+2*ptbin][y] = dfcat[2*y+ltype].Filter("ptl > {0} && ptl < {1} && Sum(tight_{2}3)==1".format(xPtbins[ptbin],xPtbins[ptbin+1],strLep)).Histo1D(("histo_{0}_{1}".format(ltype+54+2*ptbin,y), "histo_{0}_{1}".format(ltype+54+2*ptbin,y),100, 0, 200), "mtfix","weight")
 
-            dffakecat.append(dfcat[2*y+ltype].Filter("maxMETMT < {0}".format(mtfixCut), "maxMETMT < {0}".format(mtfixCut)))
+            dffakecat.append(dfcat[2*y+ltype].Filter("maxMETMT < {0}".format(maxMETMTCut), "maxMETMT < {0}".format(maxMETMTCut)))
             dfjetcat.append(dffakecat[2*y+ltype].Filter("ngood_jets > 0","at least one jet").Define("drljet","deltaR(good_Jet_eta[0],good_Jet_phi[0],etal,phil)"))
             dfbjetcat.append(dffakecat[2*y+ltype].Filter("nbtag_goodbtag_Jet_bjet > 0","at least one btagjet").Define("drljet","deltaR(goodbtag_Jet_eta[0],goodbtag_Jet_phi[0],etal,phil)"))
 

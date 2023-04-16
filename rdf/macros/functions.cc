@@ -1562,7 +1562,7 @@ float compute_weights(const float weight, const float genWeight, const TString t
     if(isRealGenLep == false) return 0.0;
 
     for(unsigned int i=0;i<el_genPartFlav.size();i++) {
-       if(el_genPartFlav[i] != 1 && el_genPartFlav[i] != 15 && el_genPartFlav[i] != 22) {isRealGenLep = false; break;}
+       if(el_genPartFlav[i] != 1 && el_genPartFlav[i] != 15) {isRealGenLep = false; break;}
     }
     if(isRealGenLep == false) return 0.0;
   }

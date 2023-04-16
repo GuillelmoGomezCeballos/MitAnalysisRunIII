@@ -13,7 +13,7 @@ doNtuples = False
 bTagSel = 0
 useBTaggingWeights = 1
 
-useFR = 0
+useFR = 1
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -67,16 +67,18 @@ def selectionLL(df,year,PDType,isData):
 
     dftag =(dftag.Filter("nLoose == 3","Only three loose leptons")
                  .Filter("nFake == 3","Three fake leptons")
-                 .Filter("nTight == 3","Three tight leptons")
                  .Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 1", "+/- 1 net charge")
                  .Define("eventNum", "event")
                  .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
                  )
 
+    if(useFR == 0):
+        dftag = dftag.Filter("nTight == 3","Three tight leptons")
+
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
     dftag = selectionJetMet (dftag,year,bTagSel,isData)
-    dftag = selection3LVar  (dftag,year)
+    dftag = selection3LVar  (dftag,year,isData)
 
     return dftag
 

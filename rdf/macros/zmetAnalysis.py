@@ -13,8 +13,6 @@ doNtuples = False
 bTagSel = 1
 useBTaggingWeights = 1
 
-useFR = 0
-
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
     selectionJsonPath = "selection.json"
@@ -65,15 +63,15 @@ def selectionLL(df,year,PDType,isData):
 
     dftag =(dftag.Filter("nLoose == 2","Only two loose leptons")
                  .Filter("nFake == 2","Two fake leptons")
-                 .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Sign-sign leptons")
                  .Filter("nTight == 2","Two tight leptons")
+                 .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Sign-sign leptons")
                  )
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
     dftag = selectionJetMet (dftag,year,bTagSel,isData)
-    dftag = selection2LVar  (dftag,year)
-    dftag = selectionLGVar  (dftag,year)
+    dftag = selection2LVar  (dftag,year,isData)
+    dftag = selectionLGVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("abs(mll-91.1876) < 15","abs(mll-mZ)<15")
                   .Filter("MET_pt > 60 && ptll > 60","met > 60 && ptll > 60")
@@ -134,7 +132,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
     dftag = selectionLL(df,year,PDType,isData)
 
-    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas)
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nPDFReplicas)
 
     dfzllcat = []
     dfzllbcat = []

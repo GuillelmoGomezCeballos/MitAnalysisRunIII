@@ -176,14 +176,14 @@ if __name__ == "__main__":
             histoLepSFEtaPt      [nlep][theSel - 1].Write()
 
     # Trigger efficiency
-    fileTriggerLep = [[TFile("{0}/{1}_{2}_tightmu1_2d.root".format(output,path,year)),
+    fileTriggerLep = [[TFile("{0}/{1}_{2}_triggermnum_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggerm0_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggerm1_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggerm2_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggerm3_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggerm4_2d.root".format(output,path,year))
                       ],
-                      [TFile("{0}/{1}_{2}_tightel1_2d.root".format(output,path,year)),
+                      [TFile("{0}/{1}_{2}_triggerenum_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggere0_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggere1_2d.root".format(output,path,year)),
         	       TFile("{0}/{1}_{2}_triggere2_2d.root".format(output,path,year)),

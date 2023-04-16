@@ -170,11 +170,16 @@ def makeLGVar(df,postFixMu,postFixEl,postFixPh):
 
     return dftag
 
-def selectionLGVar(df,year):
+def selectionLGVar(df,year,isData):
 
-    dftag =(df.Define("good_Photons_ptPhotonMomUp"  , "compute_PHOPT_Unc(good_Photons_pt,+1)")
-              .Define("good_Photons_ptPhotonMomDown", "compute_PHOPT_Unc(good_Photons_pt,-1)")
-              )
+    if(isData == "false"):
+        dftag =(df.Define("good_Photons_ptPhotonMomUp"  , "compute_PHOPT_Unc(good_Photons_pt,+1)")
+                  .Define("good_Photons_ptPhotonMomDown", "compute_PHOPT_Unc(good_Photons_pt,-1)")
+                  )
+    else:
+        dftag =(df.Define("good_Photons_ptPhotonMomUp"  , "good_Photons_pt")
+                  .Define("good_Photons_ptPhotonMomDown", "good_Photons_pt")
+                  )
 
     dftag = makeLGVar(dftag,""            ,""              ,"")
     dftag = makeLGVar(dftag,"MuonMomUp"  ,""               ,"")
@@ -213,16 +218,26 @@ def make4LVar(df,postFixMu,postFixEl):
 
     return dftag
 
-def selection4LVar(df,year):
+def selection4LVar(df,year,isData):
 
-    dftag =(df.Define("FourLepton_flavor", "(Sum(fake_mu)+4*Sum(fake_el)-4)/6")
-              .Define("fake_Muon_ptMuonMomUp"  , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,+1)")
-              .Define("fake_Muon_ptDef", "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,0)")
-              .Define("fake_Muon_ptMuonMomDown", "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,-1)")
-              .Define("fake_Electron_ptElectronMomUp"  , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,+1)")
-              .Define("fake_Electron_ptDef"  , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,0)")
-              .Define("fake_Electron_ptElectronMomDown", "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,-1)")
-              )
+    if(isData == "false"):
+        dftag =(df.Define("FourLepton_flavor"              , "(Sum(fake_mu)+4*Sum(fake_el)-4)/6")
+                  .Define("fake_Muon_ptMuonMomUp"          , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,+1)")
+                  .Define("fake_Muon_ptDef"                , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,0)")
+                  .Define("fake_Muon_ptMuonMomDown"        , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,-1)")
+                  .Define("fake_Electron_ptElectronMomUp"  , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,+1)")
+                  .Define("fake_Electron_ptDef"            , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,0)")
+                  .Define("fake_Electron_ptElectronMomDown", "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,-1)")
+                  )
+    else:
+        dftag =(df.Define("FourLepton_flavor"              , "(Sum(fake_mu)+4*Sum(fake_el)-4)/6")
+                  .Define("fake_Muon_ptMuonMomUp"          , "fake_Muon_pt")
+                  .Define("fake_Muon_ptDef"                , "fake_Muon_pt")
+                  .Define("fake_Muon_ptMuonMomDown"        , "fake_Muon_pt")
+                  .Define("fake_Electron_ptElectronMomUp"  , "fake_Electron_pt")
+                  .Define("fake_Electron_ptDef"            , "fake_Electron_pt")
+                  .Define("fake_Electron_ptElectronMomDown", "fake_Electron_pt")
+                  )
 
     dftag = make4LVar(dftag,"","")
     dftag = make4LVar(dftag,"MuonMomUp","")
@@ -262,16 +277,26 @@ def make3LVar(df,postFixMu,postFixEl):
 
     return dftag
 
-def selection3LVar(df,year):
+def selection3LVar(df,year,isData):
 
-    dftag =(df.Define("TriLepton_flavor", "(Sum(fake_mu)+3*Sum(fake_el)-3)/2")
-              .Define("fake_Muon_ptMuonMomUp"  , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,+1)")
-              .Define("fake_Muon_ptDef", "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,0)")
-              .Define("fake_Muon_ptMuonMomDown", "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,-1)")
-              .Define("fake_Electron_ptElectronMomUp"  , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,+1)")
-              .Define("fake_Electron_ptDef"  , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,0)")
-              .Define("fake_Electron_ptElectronMomDown", "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,-1)")
-              )
+    if(isData == "false"):
+        dftag =(df.Define("TriLepton_flavor"               , "(Sum(fake_mu)+3*Sum(fake_el)-3)/2")
+                  .Define("fake_Muon_ptMuonMomUp"          , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,+1)")
+                  .Define("fake_Muon_ptDef"                , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,0)")
+                  .Define("fake_Muon_ptMuonMomDown"        , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,-1)")
+                  .Define("fake_Electron_ptElectronMomUp"  , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,+1)")
+                  .Define("fake_Electron_ptDef"            , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,0)")
+                  .Define("fake_Electron_ptElectronMomDown", "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,-1)")
+                  )
+    else:
+        dftag =(df.Define("TriLepton_flavor"               , "(Sum(fake_mu)+3*Sum(fake_el)-3)/2")
+                  .Define("fake_Muon_ptMuonMomUp"          , "fake_Muon_pt")
+                  .Define("fake_Muon_ptDef"                , "fake_Muon_pt")
+                  .Define("fake_Muon_ptMuonMomDown"        , "fake_Muon_pt")
+                  .Define("fake_Electron_ptElectronMomUp"  , "fake_Electron_pt")
+                  .Define("fake_Electron_ptDef"            , "fake_Electron_pt")
+                  .Define("fake_Electron_ptElectronMomDown", "fake_Electron_pt")
+                  )
 
     dftag = make3LVar(dftag,"","")
     dftag = make3LVar(dftag,"MuonMomUp","")
@@ -303,21 +328,33 @@ def make2LVar(df,postFixMu,postFixEl):
 
     return dftag
 
-def selection2LVar(df,year):
+def selection2LVar(df,year,isData):
 
-    dftag =(df.Define("DiLepton_flavor", "Sum(fake_mu)+2*Sum(fake_el)-2")
-              .Define("fake_Muon_ptMuonMomUp"  , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,+1)")
-              .Define("fake_Muon_ptDef"  , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,0)")
-              .Define("fake_Muon_ptMuonMomDown", "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,-1)")
-              .Define("fake_Electron_ptElectronMomUp"  , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,+1)")
-              .Define("fake_Electron_ptDef"  , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,0)")
-              .Define("fake_Electron_ptElectronMomDown", "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,-1)")
-              .Define("ptl3", "0.0f")
-              .Define("muid1", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, 0)")
-              .Define("muid2", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, 1)")
-              .Define("elid1", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaIso_Fall17V2_WP90, fake_Electron_mvaIso_Fall17V2_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, 0)")
-              .Define("elid2", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaIso_Fall17V2_WP90, fake_Electron_mvaIso_Fall17V2_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, 1)")
-              )
+    if(isData == "false"):
+        dftag =(df.Define("DiLepton_flavor"                , "Sum(fake_mu)+2*Sum(fake_el)-2")
+                  .Define("fake_Muon_ptMuonMomUp"          , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,+1)")
+                  .Define("fake_Muon_ptDef"                , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,0)")
+                  .Define("fake_Muon_ptMuonMomDown"        , "compute_MUOPT_Unc(fake_Muon_pt,fake_Muon_eta,-1)")
+                  .Define("fake_Electron_ptElectronMomUp"  , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,+1)")
+                  .Define("fake_Electron_ptDef"            , "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,0)")
+                  .Define("fake_Electron_ptElectronMomDown", "compute_ELEPT_Unc(fake_Electron_pt,fake_Electron_eta,-1)")
+                  )
+    else:
+        dftag =(df.Define("DiLepton_flavor"                , "Sum(fake_mu)+2*Sum(fake_el)-2")
+                  .Define("fake_Muon_ptMuonMomUp"          , "fake_Muon_pt")
+                  .Define("fake_Muon_ptDef"                , "fake_Muon_pt")
+                  .Define("fake_Muon_ptMuonMomDown"        , "fake_Muon_pt")
+                  .Define("fake_Electron_ptElectronMomUp"  , "fake_Electron_pt")
+                  .Define("fake_Electron_ptDef"            , "fake_Electron_pt")
+                  .Define("fake_Electron_ptElectronMomDown", "fake_Electron_pt")
+                  )
+
+    dftag =(dftag.Define("ptl3", "0.0f")
+                 .Define("muid1", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, 0)")
+                 .Define("muid2", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, 1)")
+                 .Define("elid1", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaIso_Fall17V2_WP90, fake_Electron_mvaIso_Fall17V2_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, 0)")
+                 .Define("elid2", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaIso_Fall17V2_WP90, fake_Electron_mvaIso_Fall17V2_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, 1)")
+                 )
 
     dftag = make2LVar(dftag,"","")
     dftag = make2LVar(dftag,"MuonMomUp","")

@@ -66,7 +66,6 @@ def selectionLL(df,year,PDType,isData):
 
     dftag =(dftag.Filter("nLoose == 4","Only four loose leptons")
                  .Filter("nFake == 4","Four fake leptons")
-                 .Filter("nTight == 4","Four tight leptons")
                  .Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 0", "0 net charge")
                  .Define("vtight_mu","{0}".format(TIGHT_MU3))
                  .Define("vtight_el","{0}".format(TIGHT_EL3))
@@ -77,10 +76,13 @@ def selectionLL(df,year,PDType,isData):
                  .Define("etal2","1.0f")
                  )
 
+    if(useFR == 0):
+        dftag = dftag.Filter("nTight == 4","Four tight leptons")
+
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
     dftag = selectionJetMet (dftag,year,bTagSel,isData)
-    dftag = selection4LVar  (dftag,year)
+    dftag = selection4LVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("ptlmax > 25", "ptlmax > 25")
 		  )

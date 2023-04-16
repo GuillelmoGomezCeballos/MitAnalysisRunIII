@@ -76,15 +76,17 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
                   .Filter("nLoose >= 2","At least two loose leptons")
                   .Filter("nLoose == 2","Only two loose leptons")
                   .Filter("nFake == 2","Two fake leptons")
-                  .Filter("nTight == 2","Two tight leptons")
 
                   .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
                   )
 
+    if(useFR == 0):
+        dftag = dftag.Filter("nTight == 2","Two tight leptons")
+
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
     dftag = selectionJetMet (dftag,year,bTagSel,isData)
-    dftag = selection2LVar  (dftag,year)
+    dftag = selection2LVar  (dftag,year,isData)
 
     return dftag
 
@@ -207,8 +209,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+39][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 50,0,10), "detajj","weight")
             histo[ltype+42][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 50,0,3.1416), "dphijj","weight")
             histo[ltype+45][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 50,0,1), "good_Jet_btagDeepB","weightBTag")
-            histo[ltype+48][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 50,30,230), "good_Jet_pt","weight")
-            histo[ltype+51][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 50,-5.0,5.0), "good_Jet_eta","weight")
+            histo[ltype+48][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 50,30,230), "ptj2","weight")
+            histo[ltype+51][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 50,0.0,5.0), "etaj2","weight")
             histo[ltype+54][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 100, 0, 200), "CaloMET_pt","weight")
             histo[ltype+57][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+57,x), "histo_{0}_{1}".format(ltype+57,x), 100, 0, 200), "ChsMET_pt","weight")
 
@@ -307,41 +309,39 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             isEB = "((etal1>1.5 and etal2<1.5) || (etal1<1.5 and etal2>1.5))"
             isEE = "(etal1>1.5 and etal2>1.5)"
             altShapes = ["", "Def", "MuonMomUp", "MuonMomDown", "", "Def", "ElectronMomUp", "ElectronMomDown"]
-            if(theCat == plotCategory("kPlotData")):
-                for altShape in range(len(altShapes)):
-                    altShapes[altShape] = ""
+
             if(ltype == 0):
-                histo[240][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isBB,altShapes[0])).Histo1D(("histo_{0}_{1}".format(240,x), "histo_{0}_{1}".format(240,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[0]),"weight")
-                histo[241][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEB,altShapes[0])).Histo1D(("histo_{0}_{1}".format(241,x), "histo_{0}_{1}".format(241,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[0]),"weight")
-                histo[242][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEE,altShapes[0])).Histo1D(("histo_{0}_{1}".format(242,x), "histo_{0}_{1}".format(242,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[0]),"weight")
+                histo[240][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isBB,altShapes[0])).Histo1D(("histo_{0}_{1}".format(240,x), "histo_{0}_{1}".format(240,x),100, 80, 100), "mll{0}".format(altShapes[0]),"weight")
+                histo[241][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEB,altShapes[0])).Histo1D(("histo_{0}_{1}".format(241,x), "histo_{0}_{1}".format(241,x),100, 80, 100), "mll{0}".format(altShapes[0]),"weight")
+                histo[242][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEE,altShapes[0])).Histo1D(("histo_{0}_{1}".format(242,x), "histo_{0}_{1}".format(242,x),100, 80, 100), "mll{0}".format(altShapes[0]),"weight")
 
-                histo[243][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isBB,altShapes[1])).Histo1D(("histo_{0}_{1}".format(243,x), "histo_{0}_{1}".format(243,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[1]),"weight")
-                histo[244][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEB,altShapes[1])).Histo1D(("histo_{0}_{1}".format(244,x), "histo_{0}_{1}".format(244,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[1]),"weight")
-                histo[245][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEE,altShapes[1])).Histo1D(("histo_{0}_{1}".format(245,x), "histo_{0}_{1}".format(245,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[1]),"weight")
+                histo[243][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isBB,altShapes[1])).Histo1D(("histo_{0}_{1}".format(243,x), "histo_{0}_{1}".format(243,x),100, 80, 100), "mll{0}".format(altShapes[1]),"weight")
+                histo[244][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEB,altShapes[1])).Histo1D(("histo_{0}_{1}".format(244,x), "histo_{0}_{1}".format(244,x),100, 80, 100), "mll{0}".format(altShapes[1]),"weight")
+                histo[245][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEE,altShapes[1])).Histo1D(("histo_{0}_{1}".format(245,x), "histo_{0}_{1}".format(245,x),100, 80, 100), "mll{0}".format(altShapes[1]),"weight")
 
-                histo[246][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isBB,altShapes[2])).Histo1D(("histo_{0}_{1}".format(246,x), "histo_{0}_{1}".format(246,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[2]),"weight")
-                histo[247][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEB,altShapes[2])).Histo1D(("histo_{0}_{1}".format(247,x), "histo_{0}_{1}".format(247,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[2]),"weight")
-                histo[248][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEE,altShapes[2])).Histo1D(("histo_{0}_{1}".format(248,x), "histo_{0}_{1}".format(248,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[2]),"weight")
+                histo[246][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isBB,altShapes[2])).Histo1D(("histo_{0}_{1}".format(246,x), "histo_{0}_{1}".format(246,x),100, 80, 100), "mll{0}".format(altShapes[2]),"weight")
+                histo[247][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEB,altShapes[2])).Histo1D(("histo_{0}_{1}".format(247,x), "histo_{0}_{1}".format(247,x),100, 80, 100), "mll{0}".format(altShapes[2]),"weight")
+                histo[248][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEE,altShapes[2])).Histo1D(("histo_{0}_{1}".format(248,x), "histo_{0}_{1}".format(248,x),100, 80, 100), "mll{0}".format(altShapes[2]),"weight")
 
-                histo[249][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isBB,altShapes[3])).Histo1D(("histo_{0}_{1}".format(249,x), "histo_{0}_{1}".format(249,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[3]),"weight")
-                histo[250][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEB,altShapes[3])).Histo1D(("histo_{0}_{1}".format(250,x), "histo_{0}_{1}".format(250,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[3]),"weight")
-                histo[251][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEE,altShapes[3])).Histo1D(("histo_{0}_{1}".format(251,x), "histo_{0}_{1}".format(251,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[3]),"weight")
+                histo[249][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isBB,altShapes[3])).Histo1D(("histo_{0}_{1}".format(249,x), "histo_{0}_{1}".format(249,x),100, 80, 100), "mll{0}".format(altShapes[3]),"weight")
+                histo[250][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEB,altShapes[3])).Histo1D(("histo_{0}_{1}".format(250,x), "histo_{0}_{1}".format(250,x),100, 80, 100), "mll{0}".format(altShapes[3]),"weight")
+                histo[251][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEE,altShapes[3])).Histo1D(("histo_{0}_{1}".format(251,x), "histo_{0}_{1}".format(251,x),100, 80, 100), "mll{0}".format(altShapes[3]),"weight")
             elif(ltype == 2):
-                histo[252][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isBB,altShapes[4])).Histo1D(("histo_{0}_{1}".format(252,x), "histo_{0}_{1}".format(252,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[4]),"weight")
-                histo[253][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEB,altShapes[4])).Histo1D(("histo_{0}_{1}".format(253,x), "histo_{0}_{1}".format(253,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[4]),"weight")
-                histo[254][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEE,altShapes[4])).Histo1D(("histo_{0}_{1}".format(254,x), "histo_{0}_{1}".format(254,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[4]),"weight")
+                histo[252][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isBB,altShapes[4])).Histo1D(("histo_{0}_{1}".format(252,x), "histo_{0}_{1}".format(252,x),100, 80, 100), "mll{0}".format(altShapes[4]),"weight")
+                histo[253][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEB,altShapes[4])).Histo1D(("histo_{0}_{1}".format(253,x), "histo_{0}_{1}".format(253,x),100, 80, 100), "mll{0}".format(altShapes[4]),"weight")
+                histo[254][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEE,altShapes[4])).Histo1D(("histo_{0}_{1}".format(254,x), "histo_{0}_{1}".format(254,x),100, 80, 100), "mll{0}".format(altShapes[4]),"weight")
 
-                histo[255][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isBB,altShapes[5])).Histo1D(("histo_{0}_{1}".format(255,x), "histo_{0}_{1}".format(255,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[5]),"weight")
-                histo[256][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEB,altShapes[5])).Histo1D(("histo_{0}_{1}".format(256,x), "histo_{0}_{1}".format(256,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[5]),"weight")
-                histo[257][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEE,altShapes[5])).Histo1D(("histo_{0}_{1}".format(257,x), "histo_{0}_{1}".format(257,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[5]),"weight")
+                histo[255][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isBB,altShapes[5])).Histo1D(("histo_{0}_{1}".format(255,x), "histo_{0}_{1}".format(255,x),100, 80, 100), "mll{0}".format(altShapes[5]),"weight")
+                histo[256][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEB,altShapes[5])).Histo1D(("histo_{0}_{1}".format(256,x), "histo_{0}_{1}".format(256,x),100, 80, 100), "mll{0}".format(altShapes[5]),"weight")
+                histo[257][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEE,altShapes[5])).Histo1D(("histo_{0}_{1}".format(257,x), "histo_{0}_{1}".format(257,x),100, 80, 100), "mll{0}".format(altShapes[5]),"weight")
 
-                histo[258][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isBB,altShapes[6])).Histo1D(("histo_{0}_{1}".format(258,x), "histo_{0}_{1}".format(258,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[6]),"weight")
-                histo[259][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEB,altShapes[6])).Histo1D(("histo_{0}_{1}".format(259,x), "histo_{0}_{1}".format(259,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[6]),"weight")
-                histo[260][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEE,altShapes[6])).Histo1D(("histo_{0}_{1}".format(260,x), "histo_{0}_{1}".format(260,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[6]),"weight")
+                histo[258][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isBB,altShapes[6])).Histo1D(("histo_{0}_{1}".format(258,x), "histo_{0}_{1}".format(258,x),100, 80, 100), "mll{0}".format(altShapes[6]),"weight")
+                histo[259][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEB,altShapes[6])).Histo1D(("histo_{0}_{1}".format(259,x), "histo_{0}_{1}".format(259,x),100, 80, 100), "mll{0}".format(altShapes[6]),"weight")
+                histo[260][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEE,altShapes[6])).Histo1D(("histo_{0}_{1}".format(260,x), "histo_{0}_{1}".format(260,x),100, 80, 100), "mll{0}".format(altShapes[6]),"weight")
 
-                histo[261][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isBB,altShapes[7])).Histo1D(("histo_{0}_{1}".format(261,x), "histo_{0}_{1}".format(261,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[7]),"weight")
-                histo[262][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEB,altShapes[7])).Histo1D(("histo_{0}_{1}".format(262,x), "histo_{0}_{1}".format(262,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[7]),"weight")
-                histo[263][x] = dfzllcat[3*x+ltype].Filter("{0} and abs(mll{1}-91.1876) < 15".format(isEE,altShapes[7])).Histo1D(("histo_{0}_{1}".format(263,x), "histo_{0}_{1}".format(263,x),120, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altShapes[7]),"weight")
+                histo[261][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isBB,altShapes[7])).Histo1D(("histo_{0}_{1}".format(261,x), "histo_{0}_{1}".format(261,x),100, 80, 100), "mll{0}".format(altShapes[7]),"weight")
+                histo[262][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEB,altShapes[7])).Histo1D(("histo_{0}_{1}".format(262,x), "histo_{0}_{1}".format(262,x),100, 80, 100), "mll{0}".format(altShapes[7]),"weight")
+                histo[263][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 80 and mll{1} < 100".format(isEE,altShapes[7])).Histo1D(("histo_{0}_{1}".format(263,x), "histo_{0}_{1}".format(263,x),100, 80, 100), "mll{0}".format(altShapes[7]),"weight")
 
             if(ltype == 0):
                 histo2D[ 0][x] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format( 0, x), "histo2d_{0}_{1}".format( 0, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal1", "ptl1","weight")

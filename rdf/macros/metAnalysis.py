@@ -74,7 +74,7 @@ def selectionLL(df,year,PDType,isData):
                   .Define("etalmin","compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, MET_pt, MET_phi,6)")
                   )
 
-    dftag = selection2LVar  (dftag,year)
+    dftag = selection2LVar(dftag,year,isData)
 
     return dftag
 
