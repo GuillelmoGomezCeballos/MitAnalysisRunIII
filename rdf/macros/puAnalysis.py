@@ -3,7 +3,7 @@ import os, sys, getopt, json
 from array import array
 
 ROOT.ROOT.EnableImplicitMT(5)
-from utilsAna import plotCategory
+from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist, getLumi
 from utilsAna import SwitchSample
 from utilsSelection import getBTagCut

@@ -2,7 +2,7 @@ import ROOT
 from ROOT import TFile, TH1D, TH2D
 import os, sys, getopt, glob
 from array import array
-from utilsAna import plotCategory
+from utilsCategory import plotCategory
 
 if __name__ == "__main__":
     pathWZ = "fillhisto_wzAnalysis1001"
@@ -125,7 +125,7 @@ if __name__ == "__main__":
             sfe = 0.
             if(eff0 > 0 and eff1 > 0):
                 sf = eff0/eff1
-                sfe = sf*pow(pow(unc0/eff0,0.5)+pow(unc1/eff1,0.5),2)
+                sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
 
             histoTriggerSF[nsel].SetBinContent(i+1,sf)
             histoTriggerSF[nsel].SetBinError  (i+1,sfe)
@@ -134,7 +134,7 @@ if __name__ == "__main__":
             histoLepEFFWZ[nsel].SetBinContent(i+1,eff1)
             histoLepEFFWZ[nsel].SetBinError  (i+1,unc1)
 
-            print("({0:2d}): ({1:.3f} +/- {2:.3f}) / ({3:.3f} - {4:.3f}) = {5:.3f} / {6:.3f}".format(i+1,
+            print("({0:2d}): ({1:.3f} +/- {2:.3f}) / ({3:.3f} - {4:.3f}) = {5:.3f} +/- {6:.3f}".format(i+1,
                       eff0,unc0,eff1,unc1,sf,sfe))
 
     fileTriggerEffName = "histoTriggerSFWZ_{0}.root".format(year)

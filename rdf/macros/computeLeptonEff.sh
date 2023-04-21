@@ -1,8 +1,12 @@
 #!/bin/sh
 
-export path="fillhisto_zAnalysis1001"
+export path="fillhisto_zAnalysis1002"
 export year=2022
 export output="anaZ"
+
+if [ $# -eq 1 ]; then
+  export path=$1
+fi
 
 hadd -f ${output}/${path}_${year}_muB.root ${output}/${path}_${year}_130.root ${output}/${path}_${year}_136.root
 hadd -f ${output}/${path}_${year}_muE.root ${output}/${path}_${year}_133.root ${output}/${path}_${year}_139.root

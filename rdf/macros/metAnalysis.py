@@ -3,7 +3,7 @@ import os, sys, getopt, json
 from array import array
 
 ROOT.ROOT.EnableImplicitMT(3)
-from utilsAna import plotCategory
+from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist, getLumi
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
 from utilsSelection import selection2LVar, selectionElMu
@@ -83,9 +83,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
-    xPtMaxBins = array('d', [         25,30,35,40,55,115,1000])
-    xPtMinBins = array('d', [10,15,20,25,30,35,40,55,115,1000])
-    xPtBins = array('d', [10,25,35,55,1000])
+    xPtMaxBins = array('d', [         25,30,35,40,55,115,130])
+    xPtMinBins = array('d', [10,15,20,25,30,35,40,55,115,130])
+    xPtBins = array('d', [10,25,35,55,70])
     xEtaBins = array('d', [0.0,1.5,2.5])
 
     theCat = category
@@ -144,7 +144,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
             histo[j][i].Write()
         for j in range(nHisto):
             if(histo2D[j][i] == 0): continue
-            if(histo2D[j][i].GetSumOfWeights() > 0): print("({0},{1}): {2}".format(j,i,histo2D[j][i].GetSumOfWeights()))
+            #if(histo2D[j][i].GetSumOfWeights() > 0): print("({0},{1}): {2}".format(j,i,histo2D[j][i].GetSumOfWeights()))
             histo2D[j][i].Write()
     myfile.Close()
 

@@ -2,7 +2,7 @@ import ROOT
 from ROOT import TFile, TH1D, TH2D
 import os, sys, getopt, glob
 from array import array
-from utilsAna import plotCategory
+from utilsCategory import plotCategory
 
 if __name__ == "__main__":
     path = "fillhisto_sswwAnalysis1001"

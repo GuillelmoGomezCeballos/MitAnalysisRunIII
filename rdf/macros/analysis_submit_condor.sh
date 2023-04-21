@@ -7,9 +7,16 @@ fi
 
 theAna=$1
 whichAna="DUMMY"
+group=9
+
+condorJob=1001
+if [ $# -eq 2 ]; then
+  condorJob=$2
+fi
 
 if [ $theAna -eq 0 ]; then
  whichAna="zAnalysis"
+ group=19
 
 elif [ $theAna -eq 1 ]; then
  whichAna="wzAnalysis"
@@ -28,6 +35,10 @@ elif [ $theAna -eq 5 ]; then
 
 elif [ $theAna -eq 6 ]; then
  whichAna="triggerAnalysis"
+ group=19
+
+elif [ $theAna -eq 7 ]; then
+ whichAna="metAnalysis"
 
 fi
 
@@ -38,8 +49,6 @@ fi
 
 USERPROXY=`id -u`
 echo ${USERPROXY}
-
-condorJob=1001
 
 voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 
@@ -60,7 +69,7 @@ passSel=$3
 
 if [ "${passSel}" != "no" ]; then
 
-for whichJob in 0 1 2 3 4 5 6 7 8 9
+for whichJob in $(seq 0 $group)
 do
 
 cat << EOF > submit

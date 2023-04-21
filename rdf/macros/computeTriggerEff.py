@@ -2,11 +2,11 @@ import ROOT
 from ROOT import TFile, TH1D, TH2D
 import os, sys, getopt, glob
 from array import array
-from utilsAna import plotCategory
+from utilsCategory import plotCategory
 
 if __name__ == "__main__":
     path = "fillhisto_metAnalysis1001"
-    year = 2018
+    year = 2022
     output = "anaZ"
 
     valid = ['path=', "year=", 'output=', 'help']
@@ -111,7 +111,7 @@ if __name__ == "__main__":
                     sfe = 0.
                     if(eff0 > 0 and eff1 > 0):
                         sf = eff0/eff1
-                        sfe = sf*pow(pow(unc0/eff0,0.5)+pow(unc1/eff1,0.5),2)
+                        sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
 
                     histoTriggerSFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
                     histoTriggerSFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)

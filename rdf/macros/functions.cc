@@ -384,12 +384,12 @@ const Vec_f& Jet_pt_def, const Vec_f& Jet_pt_mod, const Vec_f& Jet_eta, const Ve
 Vec_f compute_MUOPT_Unc(const Vec_f& mu_pt, const Vec_f& mu_eta, int type){
   Vec_f new_mu_pt(mu_pt.size(), 1.0);
   for(unsigned int i=0;i<mu_pt.size();i++) {
-     if     (type == +1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9998+gRandom->Gaus(0.0,0.0037));
-     else if(type ==  0 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9993+gRandom->Gaus(0.0,0.0037));
-     else if(type == -1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9988+gRandom->Gaus(0.0,0.0037));
-     else if(type == +1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9988+gRandom->Gaus(0.0,0.0101));
-     else if(type ==  0 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9983+gRandom->Gaus(0.0,0.0101));
-     else if(type == -1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9978+gRandom->Gaus(0.0,0.0101));
+     if     (type == +1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9998+gRandom->Gaus(0.0,0.0030));
+     else if(type ==  0 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9993+gRandom->Gaus(0.0,0.0030));
+     else if(type == -1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9988+gRandom->Gaus(0.0,0.0030));
+     else if(type == +1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9988+gRandom->Gaus(0.0,0.0110));
+     else if(type ==  0 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9983+gRandom->Gaus(0.0,0.0110));
+     else if(type == -1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9978+gRandom->Gaus(0.0,0.0110));
      else printf("PROBLEM in compute_MUOPT_Unc\n");
   }
 
@@ -399,12 +399,12 @@ Vec_f compute_MUOPT_Unc(const Vec_f& mu_pt, const Vec_f& mu_eta, int type){
 Vec_f compute_ELEPT_Unc(const Vec_f& el_pt, const Vec_f& el_eta, int type){
   Vec_f new_el_pt(el_pt.size(), 1.0);
   for(unsigned int i=0;i<el_pt.size();i++) {
-     if     (type == +1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9972+gRandom->Gaus(0.0,0.0118));
-     else if(type ==  0 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9967+gRandom->Gaus(0.0,0.0118));
-     else if(type == -1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9962+gRandom->Gaus(0.0,0.0118));
-     else if(type == +1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0011+gRandom->Gaus(0.0,0.0183));
-     else if(type ==  0 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0006+gRandom->Gaus(0.0,0.0183));
-     else if(type == -1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0001+gRandom->Gaus(0.0,0.0183));
+     if     (type == +1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9972+gRandom->Gaus(0.0,0.0150));
+     else if(type ==  0 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9967+gRandom->Gaus(0.0,0.0150));
+     else if(type == -1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9962+gRandom->Gaus(0.0,0.0150));
+     else if(type == +1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0011+gRandom->Gaus(0.0,0.0200));
+     else if(type ==  0 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0006+gRandom->Gaus(0.0,0.0200));
+     else if(type == -1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0001+gRandom->Gaus(0.0,0.0200));
      else printf("PROBLEM in compute_MUOPT_Unc\n");
   }
 

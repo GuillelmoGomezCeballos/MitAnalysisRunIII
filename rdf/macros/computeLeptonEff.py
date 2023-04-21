@@ -2,14 +2,11 @@ import ROOT
 from ROOT import TFile, TH1D, TH2D
 import os, sys, getopt, glob
 from array import array
-from utilsAna import plotCategory
-
-xEtabins = array('d', [0.0, 1.0, 1.5, 2.0, 2.5])
-xPtbins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 35.0])
+from utilsCategory import plotCategory
 
 if __name__ == "__main__":
     path = "fillhisto_zAnalysis1001"
-    year = 2018
+    year = 2022
     output = "anaZ"
 
     valid = ['path=', "year=", 'output=', 'help']
@@ -72,9 +69,13 @@ if __name__ == "__main__":
             for k in range(2):
                 if(abs(den[k]-denSum[k])>0.00001): print("Problem with total sum ({0}): {1} / {2}".format(k,den[k],denSum[k]))
 
-                if(den[k] > 0 and sumBits[k][i] > 0):
+                if(den[k] > 0 and sumBits[k][i] > 0 and sumBits[k][i] < den[k]):
                     effBits[k][i] = sumBits[k][i] / den[k]
                     uncBits[k][i] = pow(effBits[k][i]*(1-effBits[k][i])/den[k],0.5)
+
+                elif(den[k] > 0 and sumBits[k][i] > 0):
+                    effBits[k][i] = 1.0
+                    uncBits[k][i] = pow(1.0/den[k],0.5)
 
                 elif(den[k] > 0):
                     effBits[k][i] = 0.0

@@ -2,7 +2,7 @@ import ROOT
 from ROOT import TFile, TH1D, TH2D
 import os, sys, getopt, glob
 from array import array
-from utilsAna import plotCategory
+from utilsCategory import plotCategory
 
 xPtbins = array('d', [10,15,20,25,30,35,40,50,60,70,85,100,200,1000])
 xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
@@ -125,7 +125,7 @@ if __name__ == "__main__":
                     sfe = 0.
                     if(eff0 > 0 and eff1 > 0):
                         sf = eff0/eff1
-                        sfe = sf*pow(pow(unc0/eff0,0.5)+pow(unc1/eff1,0.5),2)
+                        sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
 
                     histoLepEffSelDAEtaPt[nlep][theSel - 1].SetBinContent(i+1,j+1,eff0)
                     histoLepEffSelDAEtaPt[nlep][theSel - 1].SetBinError  (i+1,j+1,unc0)

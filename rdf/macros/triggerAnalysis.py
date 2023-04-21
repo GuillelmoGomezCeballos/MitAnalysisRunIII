@@ -3,7 +3,7 @@ import os, sys, getopt, json
 from array import array
 
 ROOT.ROOT.EnableImplicitMT(4)
-from utilsAna import plotCategory
+from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger1L, selectionTrigger2L, selectionElMu, selectionWeigths
@@ -406,7 +406,7 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
 
 if __name__ == "__main__":
 
-    group = 10
+    group = 20
 
     skimType = "2l"
     year = 2018

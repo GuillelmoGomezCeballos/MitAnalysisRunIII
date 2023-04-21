@@ -565,7 +565,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     if(useBTaggingWeights == 1):
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightLepSF")
+                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightLepSF*weightTriggerSF")
                  .Define("weightNoLepSF","weightMC*weightFake*weightBtagSF*weightPURecoSF")
                  .Define("weightBTag","weight")
                  .Define("weightNoBTag","weight/weightBtagSF")
@@ -573,7 +573,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     else:
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightLepSF")
+                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightLepSF*weightTriggerSF")
                  .Define("weightNoLepSF","weightMC*weightFake*weightPURecoSF")
                  .Define("weightBTag","weight*weightBtagSF")
                  .Define("weightNoBTag","weight")
@@ -584,7 +584,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
                  .Define("weight2","weightMC*weightFake*weightEleSFJSON")
                  .Define("weight3","weight/weightPURecoSF")
                  .Define("weight4","weight/weightLepSF")
-                 .Define("weight5","weightMC")
+                 .Define("weight5","weight/weightTriggerSF")
 
                  .Define("weightBtagSFBC_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",1,{0})".format(bTagSel))
                  .Define("weightBtagSFBC_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_correlated\",1,{0})".format(bTagSel))

@@ -1,7 +1,7 @@
 import ROOT
 from ROOT import TFile, TH1D, TH2D
 import os, sys, getopt, glob
-from utilsAna import plotCategory
+from utilsCategory import plotCategory
 ROOT.PyConfig.DisableRootLogon = True
 
 if __name__ == "__main__":
