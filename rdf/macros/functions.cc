@@ -1161,9 +1161,9 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
    else if(var == 3) theVar = p4mom[0].Pt();
    else if(var == 4) theVar = p4mom[1].Pt();
    else if(var == 5) theVar = p4mom[2].Pt();
-   else if(var == 6) theVar = p4mom[0].Pt();
-   else if(var == 7) theVar = p4mom[1].Pt();
-   else if(var == 8) theVar = p4mom[2].Pt();
+   else if(var == 6) theVar = p4mom[0].Eta();
+   else if(var == 7) theVar = p4mom[1].Eta();
+   else if(var == 8) theVar = p4mom[2].Eta();
    else {
      for(int i=0; i<3; i++){
        for(int j=i+1; j<3; j++){  
@@ -1185,7 +1185,8 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      else if(var == 10) theVar = p4mom[tagZ[0]].Pt();
      else if(var == 11) theVar = p4mom[tagZ[1]].Pt();
      else if(var == 12) theVar = p4mom[tagW].Pt();
-     else if(var == 13) theVar = std::sqrt(2*p4mom[tagW].Pt()*met_pt*(1-std::cos(deltaPhi(p4mom[tagW].Phi(),met_phi))));
+     else if(var == 13) theVar = p4mom[tagW].Eta();
+     else if(var == 14) theVar = std::sqrt(2*p4mom[tagW].Pt()*met_pt*(1-std::cos(deltaPhi(p4mom[tagW].Phi(),met_phi))));
    }
    return theVar;
 }
