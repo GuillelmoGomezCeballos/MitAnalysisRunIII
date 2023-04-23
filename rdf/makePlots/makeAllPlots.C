@@ -476,8 +476,8 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l}","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_70.root",whichCondorJob,year),"wzsel_ptl_trigger5", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{l}","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_71.root",whichCondorJob,year),"wzsel_ptl_trigger6", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{l}","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_72.root",whichCondorJob,year),"wzsel_ptl_trigger7", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"p_{T}^{#mu-W}","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_73.root",whichCondorJob,year),"wzsel_ptmw", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"p_{T}^{e-W}"  ,"GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_74.root",whichCondorJob,year),"wzsel_ptew", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,2,"p_{T}^{#mu-W}","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_73.root",whichCondorJob,year),"wzsel_ptmw", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,2,"p_{T}^{e-W}"  ,"GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_74.root",whichCondorJob,year),"wzsel_ptew", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"|#eta^{#mu-W}|","",Form("anaZ/fillhisto_wzAnalysis%d_%d_75.root",whichCondorJob,year),"wzsel_etamw", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"|#eta^{e-W}|" ,"",Form("anaZ/fillhisto_wzAnalysis%d_%d_76.root",whichCondorJob,year),"wzsel_etaew", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
   }
