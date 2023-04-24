@@ -9,10 +9,10 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
-bTagSel = 0
+bTagSel = 1
 useBTaggingWeights = 1
 
-useFR = 1
+useFR = 0
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -29,6 +29,7 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 
 VBSSEL = jsonObject['VBSSEL']
 
+muSelChoice = 6
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU0 = jsonObject['TIGHT_MU0']
 TIGHT_MU1 = jsonObject['TIGHT_MU1']
@@ -39,6 +40,7 @@ TIGHT_MU5 = jsonObject['TIGHT_MU5']
 TIGHT_MU6 = jsonObject['TIGHT_MU6']
 TIGHT_MU7 = jsonObject['TIGHT_MU7']
 
+elSelChoice = 7
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 TIGHT_EL1 = jsonObject['TIGHT_EL1']
@@ -400,8 +402,8 @@ if __name__ == "__main__":
     if(not os.path.exists(fakePath)):
         fakePath = "histoFakeEtaPt_{0}_anaType3.root".format(year)
     fFakeFile = ROOT.TFile(fakePath)
-    histoFakeEtaPt_mu = fFakeFile.Get("histoFakeEffSelEtaPt_0_6")
-    histoFakeEtaPt_el = fFakeFile.Get("histoFakeEffSelEtaPt_1_7")
+    histoFakeEtaPt_mu = fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}".format(muSelChoice))
+    histoFakeEtaPt_el = fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}".format(elSelChoice))
     histoFakeEtaPt_mu.SetDirectory(0)
     histoFakeEtaPt_el.SetDirectory(0)
     fFakeFile.Close()
@@ -410,8 +412,8 @@ if __name__ == "__main__":
     if(not os.path.exists(lepSFPath)):
         lepSFPath = "histoLepSFEtaPt_{0}.root".format(year)
     fLepSFFile = ROOT.TFile(lepSFPath)
-    histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_6")
-    histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_7")
+    histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(muSelChoice))
+    histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_{0}".format(elSelChoice))
     histoLepSFEtaPt_mu.SetDirectory(0)
     histoLepSFEtaPt_el.SetDirectory(0)
     fLepSFFile.Close()
