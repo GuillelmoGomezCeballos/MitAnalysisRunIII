@@ -28,7 +28,7 @@
 
 "VBSSEL" : "(nvbs_jets >= 2 && vbs_mjj > 500 && vbs_detajj > 2.5 && vbs_zepvv < 1.0)",
 
-"VBSLOOSESEL" : "(nvbs_jets >= 2 && vbs_mjj > 300 && vbs_detajj > 2.5)",
+"VBSQCDSEL" : "(nvbs_jets >= 2 && vbs_mjj > 200 && vbs_mjj < 500 && vbs_detajj > 0.0)",
 
 "BARRELphotons" : "(Photon_pt > 20 && abs(Photon_eta) < 2.5 && Photon_isScEtaEB && Photon_cutBased >= 2 && Photon_electronVeto && photon_mask)",
 "ENDCAPphotons" : "(Photon_pt > 20 && abs(Photon_eta) < 2.5 && Photon_isScEtaEE && Photon_cutBased >= 2 && Photon_electronVeto && photon_mask)",

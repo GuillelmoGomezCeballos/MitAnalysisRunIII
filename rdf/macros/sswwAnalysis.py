@@ -12,7 +12,7 @@ doNtuples = False
 bTagSel = 1
 useBTaggingWeights = 1
 
-useFR = 0
+useFR = 1
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -28,6 +28,7 @@ BARRELphotons = jsonObject['BARRELphotons']
 ENDCAPphotons = jsonObject['ENDCAPphotons']
 
 VBSSEL = jsonObject['VBSSEL']
+VBSQCDSEL = jsonObject['VBSQCDSEL']
 
 muSelChoice = 6
 FAKE_MU   = jsonObject['FAKE_MU']
@@ -171,6 +172,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     dfwwbcat = []
     dfwwvbscat = []
     dfwwbvbscat = []
+    dfwwjjcat = []
+    dfwwbjjcat = []
     for x in range(nCat):
         dfwwcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
 
@@ -184,8 +187,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
         histo[ 2][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format( 2,x), "histo_{0}_{1}".format( 2,x),100,  0, 200), "MET_pt","weight")
         histo[ 3][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x),100,  0, 200), "MET_pt","weight")
-        histo[ 4][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 3,-0.5, 2.5), "DiLepton_flavor","weight")
-        histo[ 5][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format( 5,x), "histo_{0}_{1}".format( 5,x), 3,-0.5, 2.5), "DiLepton_flavor","weight")
+        histo[ 4][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 4,-0.5, 3.5), "ltype","weight")
+        histo[ 5][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format( 5,x), "histo_{0}_{1}".format( 5,x), 4,-0.5, 3.5), "ltype","weight")
         histo[ 6][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format( 6,x), "histo_{0}_{1}".format( 6,x), 6,-0.5, 5.5), "ngood_jets","weight")
         histo[ 7][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format( 7,x), "histo_{0}_{1}".format( 7,x), 6,-0.5, 5.5), "ngood_jets","weight")
 
@@ -220,6 +223,31 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         histo[31][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x), 10,0,1), "vbs_zepvv","weight")
         histo[32][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(32,x), "histo_{0}_{1}".format(32,x), 20,-1,1), "bdt_vbfinc","weight")
         histo[33][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(33,x), "histo_{0}_{1}".format(33,x), 20,-1,1), "bdt_vbfinc","weight")
+
+        dfwwjjcat .append(dfwwcat[x] .Filter(VBSQCDSEL, "dijet non-vbf selection"))
+        dfwwbjjcat.append(dfwwbcat[x].Filter(VBSQCDSEL, "dijet non-vbf selection"))
+        histo[34][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(34,x), "histo_{0}_{1}".format(34,x), 14,0.0,7), "vbs_detajj","weight")
+        histo[35][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(35,x), "histo_{0}_{1}".format(35,x), 14,0.0,7), "vbs_detajj","weight")
+        histo[36][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(36,x), "histo_{0}_{1}".format(36,x), 4,-0.5, 3.5), "ltype","weight")
+        histo[37][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(37,x), "histo_{0}_{1}".format(37,x), 4,-0.5, 3.5), "ltype","weight")
+        histo[38][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(38,x), "histo_{0}_{1}".format(38,x), 4, 1.5, 5.5), "ngood_jets","weight")
+        histo[39][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(39,x), "histo_{0}_{1}".format(39,x), 4, 1.5, 5.5), "ngood_jets","weight")
+        histo[40][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(40,x), "histo_{0}_{1}".format(40,x),40, 50, 250), "vbs_ptj1","weight")
+        histo[41][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(41,x), "histo_{0}_{1}".format(41,x),40, 50, 250), "vbs_ptj1","weight")
+        histo[42][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(42,x), "histo_{0}_{1}".format(42,x),40, 50, 250), "vbs_ptj2","weight")
+        histo[43][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(43,x), "histo_{0}_{1}".format(43,x),40, 50, 250), "vbs_ptj2","weight")
+        histo[44][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(44,x), "histo_{0}_{1}".format(44,x),25, 0, 5), "vbs_etaj1","weight")
+        histo[45][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(45,x), "histo_{0}_{1}".format(45,x),25, 0, 5), "vbs_etaj1","weight")
+        histo[46][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(46,x), "histo_{0}_{1}".format(46,x),25, 0, 5), "vbs_etaj2","weight")
+        histo[47][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(47,x), "histo_{0}_{1}".format(47,x),25, 0, 5), "vbs_etaj2","weight")
+        histo[48][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(48,x), "histo_{0}_{1}".format(48,x),40, 25, 225), "ptl1","weight")
+        histo[49][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(49,x), "histo_{0}_{1}".format(49,x),40, 25, 225), "ptl1","weight")
+        histo[50][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(50,x), "histo_{0}_{1}".format(50,x),20, 20, 120), "ptl2","weight")
+        histo[51][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(51,x), "histo_{0}_{1}".format(51,x),20, 20, 120), "ptl2","weight")
+        histo[52][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(52,x), "histo_{0}_{1}".format(52,x),25, 0, 2.5), "etal1","weight")
+        histo[53][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(53,x), "histo_{0}_{1}".format(53,x),25, 0, 2.5), "etal1","weight")
+        histo[54][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(54,x), "histo_{0}_{1}".format(54,x),25, 0, 2.5), "etal2","weight")
+        histo[55][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(55,x), "histo_{0}_{1}".format(55,x),25, 0, 2.5), "etal2","weight")
 
         if(doNtuples == True and x == theCat):
             outputFile = "ntupleSSWWAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob)
