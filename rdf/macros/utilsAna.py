@@ -223,25 +223,45 @@ def getDATAlist(type, year, skimType):
         files1 = findDIR("{0}/MET+Run2018D-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
 
     ##### 2022 ####
+    elif(year == 2022 and type == 1000):
+        files1 = findDIR("{0}/SingleMuon+Run2022B-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1001):
+        files1 = findDIR("{0}/SingleMuon+Run2022C-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2022 and type == 1010):
+        files1 = findDIR("{0}/DoubleMuon+Run2022B-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1011):
+        files1 = findDIR("{0}/DoubleMuon+Run2022C-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
+
     elif(year == 2022 and type == 1020):
         files1 = findDIR("{0}/MuonEG+Run2022F-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
     elif(year == 2022 and type == 1021):
         files1 = findDIR("{0}/MuonEG+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1022):
+        files1 = findDIR("{0}/MuonEG+Run2022B-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
 
     elif(year == 2022 and type == 1030):
         files1 = findDIR("{0}/EGamma+Run2022F-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
     elif(year == 2022 and type == 1031):
         files1 = findDIR("{0}/EGamma+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1032):
+        files1 = findDIR("{0}/EGamma+Run2022B-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
 
     elif(year == 2022 and type == 1040):
         files1 = findDIR("{0}/Muon+Run2022F-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
     elif(year == 2022 and type == 1041):
         files1 = findDIR("{0}/Muon+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1042):
+        files1 = findDIR("{0}/Muon+Run2022D-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
 
     elif(year == 2022 and type == 1050):
         files1 = findDIR("{0}/JetMET+Run2022F-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
     elif(year == 2022 and type == 1051):
         files1 = findDIR("{0}/JetMET+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1052):
+        files1 = findDIR("{0}/MET+Run2022B-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
+    elif(year == 2022 and type == 1053):
+        files1 = findDIR("{0}/MET+Run2022C-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
 
     elif(year == 2022 and type == 9999):
         files1 = findDIR("{0}".format(dirTest))
@@ -366,8 +386,8 @@ def SwitchSample(argument, skimType):
        107: (dirT2+"/TbarWplus_DR_AtLeastOneLepton_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",24.2*1000,plotCategory("kPlotTop")),
        108: (dirT2+"/TWminus_DR_AtLeastOneLepton_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",24.2*1000,plotCategory("kPlotTop")),
        109: (dirT2+"/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",63199.9*1000,plotCategory("kPlotOther")),
-       110: (dirT2+"/TTto4Q_TuneCP5CR2_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*(1-0.1086*3)*(1-0.1086*3)*1000,plotCategory("kPlotData")),
-       111: (dirT2+"/QCD_PT-80to120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",96545.52*1000,plotCategory("kPlotData")),
-
+       110: (dirT2+"/TTto4Q_TuneCP5CR2_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*(1-0.1086*3)*(1-0.1086*3)*1000,plotCategory("kPlotNonPrompt")),
+       111: (dirT2+"/QCD_PT-80to120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",96545.52*1000,plotCategory("kPlotNonPrompt")),
+       112: (dirT2+"/QCD_PT-15_TuneCP5_Flat2018_13p6TeV_pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",1000*1000,plotCategory("kPlotNonPrompt")),
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")

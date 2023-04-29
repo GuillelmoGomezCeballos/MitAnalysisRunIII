@@ -435,11 +435,9 @@ if __name__ == "__main__":
         if opt == "--whichJob":
             whichJob = int(arg)
 
-    #puPath = "data/puWeights_UL_{0}.root".format(year)
-    puPath = "data/npvWeights_{0}.root".format(year)
+    puPath = "data/puWeights_UL_{0}.root".format(year)
     fPuFile = ROOT.TFile(puPath)
-    #puWeights = fPuFile.Get("puWeights")
-    puWeights = fPuFile.Get("npvWeights")
+    puWeights = fPuFile.Get("puWeights")
     puWeights.SetDirectory(0)
     fPuFile.Close()
 

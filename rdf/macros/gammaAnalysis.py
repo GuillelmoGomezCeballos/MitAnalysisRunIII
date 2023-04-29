@@ -387,8 +387,6 @@ if __name__ == "__main__":
             whichJob = int(arg)
 
     puPath = "data/puWeights_UL_{0}.root".format(year)
-    if(not os.path.exists(puPath)):
-        puPath = "puWeights_UL_{0}.root".format(year)
     fPuFile = ROOT.TFile(puPath)
     puWeights = fPuFile.Get("puWeights")
     puWeights.SetDirectory(0)

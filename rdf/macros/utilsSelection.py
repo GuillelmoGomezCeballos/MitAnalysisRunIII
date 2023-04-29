@@ -50,6 +50,10 @@ def makeJES(df,year,postFix,bTagSel):
               .Define("good_Jet_btagCSVV2{0}".format(postFix), "clean_Jet_btagCSVV2[good_jet{0}]".format(postFix))
               .Define("good_Jet_btagDeepB{0}".format(postFix), "clean_Jet_btagDeepB[good_jet{0}]".format(postFix))
               .Define("good_Jet_btagDeepFlavB{0}".format(postFix), "clean_Jet_btagDeepFlavB[good_jet{0}]".format(postFix))
+              .Define("good_Jet_chEmEF{0}".format(postFix), "clean_Jet_chEmEF[good_jet{0}]".format(postFix))
+              .Define("good_Jet_neEmEF{0}".format(postFix), "clean_Jet_neEmEF[good_jet{0}]".format(postFix))
+              .Define("good_Jet_chHEF{0}".format(postFix), "clean_Jet_chHEF[good_jet{0}]".format(postFix))
+              .Define("good_Jet_neHEF{0}".format(postFix), "clean_Jet_neHEF[good_jet{0}]".format(postFix))
 
               .Define("mjj{0}".format(postFix),	  "compute_jet_var(good_Jet_pt{0}, good_Jet_eta, good_Jet_phi, good_Jet_mass, 0)".format(postFix))
               .Define("ptjj{0}".format(postFix),  "compute_jet_var(good_Jet_pt{0}, good_Jet_eta, good_Jet_phi, good_Jet_mass, 1)".format(postFix))
@@ -116,6 +120,8 @@ def selectionJetMet(df,year,bTagSel,isData):
               .Define("clean_Jet_muonSubtrFactor", "Jet_muonSubtrFactor[clean_jet]")
               .Define("clean_Jet_chEmEF", "Jet_chEmEF[clean_jet]")
               .Define("clean_Jet_neEmEF", "Jet_neEmEF[clean_jet]")
+              .Define("clean_Jet_chHEF",  "Jet_chHEF[clean_jet]")
+              .Define("clean_Jet_neHEF",  "Jet_neHEF[clean_jet]")
               )
 
     if(isData == "false"):
@@ -537,8 +543,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
               .Define("goodbtag_Jet_hadronFlavour","clean_Jet_hadronFlavour[goodbtag_jet]")
               .Define("fake_Muon_genPartFlav","Muon_genPartFlav[fake_mu]")
               .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
-              #.Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt)")
-              .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,PV_npvsGood)")
+              .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt)")
+              #.Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,PV_npvsGood)")
               .Define("weightLepSF","compute_LepSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta)")
               .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype)")
 

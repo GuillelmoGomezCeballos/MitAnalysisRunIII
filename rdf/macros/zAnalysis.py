@@ -30,7 +30,7 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 
 VBSSEL = jsonObject['VBSSEL']
 
-muSelChoice = 0
+muSelChoice = 1
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU0 = jsonObject['TIGHT_MU0']
 TIGHT_MU1 = jsonObject['TIGHT_MU1']
@@ -41,7 +41,7 @@ TIGHT_MU5 = jsonObject['TIGHT_MU5']
 TIGHT_MU6 = jsonObject['TIGHT_MU6']
 TIGHT_MU7 = jsonObject['TIGHT_MU7']
 
-elSelChoice = 0
+elSelChoice = 1
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 TIGHT_EL1 = jsonObject['TIGHT_EL1']
@@ -56,7 +56,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU1,FAKE_EL,TIGHT_EL1)
 
     dftag = (dftag.Define("tight_mu0", "{0}".format(TIGHT_MU0))
                   .Define("tight_mu1", "{0}".format(TIGHT_MU1))
@@ -271,10 +271,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[jtype+120][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+120,x), "histo_{0}_{1}".format(jtype+120,x), 50, 0, 200), "PuppiMET_pt","weight")
             histo[jtype+122][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+122,x), "histo_{0}_{1}".format(jtype+122,x), 50, 0, 200), "ptll","weight")
 
-            dfjetcat[3*x+ltype] = dfjetcat[3*x+ltype].Filter("ngood_jets >= 2", "At least two jets")
-            histo[jtype+124][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+124,x), "histo_{0}_{1}".format(jtype+124,x), 50,0,2000), "mjj","weight")
-            histo[jtype+126][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+126,x), "histo_{0}_{1}".format(jtype+126,x), 50,0,400), "ptjj","weight")
-            histo[jtype+128][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+128,x), "histo_{0}_{1}".format(jtype+128,x), 50,0,3.1416), "dphijj","weight")
+            dfjetcat[3*x+ltype] = dfjetcat[3*x+ltype].Define("good_Jet_neEmEF0","good_Jet_neEmEF[0]").Define("good_Jet_neHEF0","good_Jet_neHEF[0]").Define("good_Jet_chEF0","good_Jet_chEmEF[0]+good_Jet_chHEF[0]")
+            histo[jtype+124][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+124,x), "histo_{0}_{1}".format(jtype+124,x),50,-5.0,5.0), "good_Jet_eta","weight")
+            histo[jtype+126][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+126,x), "histo_{0}_{1}".format(jtype+126,x),50,-5.0,5.0), "vbs_Jet_eta","weight")
+            histo[jtype+128][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.6 && etaj1 < 2.8").Histo1D(("histo_{0}_{1}".format(jtype+128,x), "histo_{0}_{1}".format(jtype+128,x),40,0.0,1.0), "good_Jet_neEmEF0","weight")
 
             histo[ltype+130][x] = dfzllcat[3*x+ltype].Filter("etal1<1.5").Histo1D(("histo_{0}_{1}".format(ltype+130,x), "histo_{0}_{1}".format(ltype+130,x), 256, -0.5, 255.5), "muid1","weight")
             histo[ltype+133][x] = dfzllcat[3*x+ltype].Filter("etal1>1.5").Histo1D(("histo_{0}_{1}".format(ltype+133,x), "histo_{0}_{1}".format(ltype+133,x), 256, -0.5, 255.5), "muid1","weight")
@@ -288,6 +288,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+154][x] = dfzgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+154,x), "histo_{0}_{1}".format(ltype+154,x), 40, 10, 210), "mllg","weight")
             dfzgcat[3*x+ltype] = dfzgcat[3*x+ltype].Filter("abs(mllg-91.1876)<15")
             histo[ltype+157][x] = dfzgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+157,x), "histo_{0}_{1}".format(ltype+157,x), 20, 20, 120), "ptg","weight")
+
+            histo[jtype+160][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.6 && etaj1 < 2.8").Histo1D(("histo_{0}_{1}".format(jtype+160,x), "histo_{0}_{1}".format(jtype+160,x),40,0.0,1.0), "good_Jet_neHEF0","weight")
+            histo[jtype+162][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.6 && etaj1 < 2.8").Histo1D(("histo_{0}_{1}".format(jtype+162,x), "histo_{0}_{1}".format(jtype+162,x),40,0.0,1.0), "good_Jet_chEF0","weight")
+
+            dfjetcat[3*x+ltype] = dfjetcat[3*x+ltype].Filter("ngood_jets >= 2", "At least two jets")
+            histo[jtype+164][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+164,x), "histo_{0}_{1}".format(jtype+164,x), 50,0,2000), "mjj","weight")
+            histo[jtype+166][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+166,x), "histo_{0}_{1}".format(jtype+166,x), 50,0,400), "ptjj","weight")
+            histo[jtype+168][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(jtype+168,x), "histo_{0}_{1}".format(jtype+168,x), 50,0,3.1416), "dphijj","weight")
 
             histo[ltype+179][x] = dfzllcat[3*x+ltype].Filter("triggerMUEG> 0").Histo1D(("histo_{0}_{1}".format(ltype+179,x), "histo_{0}_{1}".format(ltype+179,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
             histo[ltype+182][x] = dfzllcat[3*x+ltype].Filter("triggerDMU > 0").Histo1D(("histo_{0}_{1}".format(ltype+182,x), "histo_{0}_{1}".format(ltype+182,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
@@ -538,11 +546,9 @@ if __name__ == "__main__":
         if opt == "--whichJob":
             whichJob = int(arg)
 
-    #puPath = "data/puWeights_UL_{0}.root".format(year)
-    puPath = "data/npvWeights_{0}.root".format(year)
+    puPath = "data/puWeights_UL_{0}.root".format(year)
     fPuFile = ROOT.TFile(puPath)
-    #puWeights = fPuFile.Get("puWeights")
-    puWeights = fPuFile.Get("npvWeights")
+    puWeights = fPuFile.Get("puWeights")
     puWeights.SetDirectory(0)
     fPuFile.Close()
 

@@ -182,7 +182,7 @@ def analysis(df,count,category,weight,year,PDType,isData):
     for i in range(nCat):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue
-            #histo[j][i].SetNameTitle("pileup","pileup")
+            if(j==0): histo[j][i].SetNameTitle("pileup","pileup")
             histo[j][i].Write()
         for j in range(nHisto):
             if(histo2D[j][i] == 0): continue
