@@ -74,7 +74,7 @@ def selectionLL(df,year,PDType,isData):
     dftag = selectionLGVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("abs(mll-91.1876) < 15","abs(mll-mZ)<15")
-                  .Filter("MET_pt > 60 && ptll > 60","met > 60 && ptll > 60")
+                  .Filter("PuppiMET_pt > 60 && ptll > 60","met > 60 && ptll > 60")
                   .Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
 		  )
 
@@ -161,11 +161,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
             dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
 
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("MET_pt >  60 && (MET_significance > 20||jetPtFrac<0.2)","MET_pt > X1")
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("PuppiMET_pt >  60 && (MET_significance > 20||jetPtFrac<0.2)","PuppiMET_pt > X1")
 
-            histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 50, 60, 260), "MET_pt","weight")
+            histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 50, 60, 260), "PuppiMET_pt","weight")
 
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("MET_pt > 100 && (MET_significance > 20||jetPtFrac<0.2)","MET_pt > X2")
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("PuppiMET_pt > 100 && (MET_significance > 20||jetPtFrac<0.2)","PuppiMET_pt > X2")
 
             histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
             histo[ltype+ 3][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 50,  60, 260), "ptll","weight")
@@ -182,7 +182,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+87][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+87,x), "histo_{0}_{1}".format(ltype+87,x), 20,0,1), "jetPtFrac","weight")
 
             histo[ltype+48][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 40, 60, 260), "ptll","weight")
-            histo[ltype+51][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 40,100, 300), "MET_pt","weight")
+            histo[ltype+51][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 40,100, 300), "PuppiMET_pt","weight")
             histo[ltype+54][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 40,100, 500), "mt","weight")
 
             histo[ltype+57][x] = dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+57,x), "histo_{0}_{1}".format(ltype+57,x), 50, 0, 2), "ptgbalance","weight")
@@ -195,11 +195,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
             dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("dphillgmet > 2.5","dphillgmet > 2.5")
 
-            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("MET_pt >  60 && (MET_significance > 20||jetPtgFrac<0.2)","MET_pt > X1")
+            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("PuppiMET_pt >  60 && (MET_significance > 20||jetPtgFrac<0.2)","PuppiMET_pt > X1")
 
-            histo[ltype+69][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+69,x), "histo_{0}_{1}".format(ltype+69,x), 25, 60, 260), "MET_pt","weight")
+            histo[ltype+69][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+69,x), "histo_{0}_{1}".format(ltype+69,x), 25, 60, 260), "PuppiMET_pt","weight")
 
-            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("MET_pt > 100 && (MET_significance > 20||jetPtgFrac<0.2)","MET_pt > X2")
+            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("PuppiMET_pt > 100 && (MET_significance > 20||jetPtgFrac<0.2)","PuppiMET_pt > X2")
 
             histo[ltype+72][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+72,x), "histo_{0}_{1}".format(ltype+72,x), 20,0,400), "mtg","weight")
             histo[ltype+75][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+75,x), "histo_{0}_{1}".format(ltype+75,x), 10,-0.5, 9.5), "ngood_jets","weight")

@@ -51,7 +51,6 @@ def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
 
     dftag =(dftag.Filter("nLoose == 1","Only one loose lepton")
                  .Filter("nFake == 1","Only one fake lepton")
-                 #.Filter("{0}".format(FILTERLEP),"trigger/lepton requirement")
                  .Define("tight_mu0", "{0}".format(TIGHT_MU0))
                  .Define("tight_mu1", "{0}".format(TIGHT_MU1))
                  .Define("tight_mu2", "{0}".format(TIGHT_MU2))
@@ -83,7 +82,7 @@ def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
 
     return dftag
 
-def analysis(df,count,category,weight,year,PDType,isData,whichJob):
+def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
@@ -95,9 +94,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
 
     maxMETMTCut = 30
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 400
+    nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
+
+    ROOT.initHisto1D(puWeights,0)
 
     overallTriggers = jsonObject['triggers']
     TRIGGERFAKEMU = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
@@ -121,28 +122,33 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
         dfbase =(dfbase.Define("PDType","\"{0}\"".format(PDType))
                        .Define("fake_Muon_genPartFlav","Muon_genPartFlav[fake_mu]")
                        .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
-                       .Define("weight","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,-1)".format(weight,0))
+                       .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt)")
+                       .Define("weight","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,-1)*weightPURecoSF".format(weight,0))
                        .Filter("weight != 0","good weight")
-                       .Define("weightFakeSel0", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,0)".format(weight,0))
-                       .Define("weightFakeSel1", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,1)".format(weight,0))
-                       .Define("weightFakeSel2", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,2)".format(weight,0))
+                       .Define("weightFakeSel0", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,0)*weightPURecoSF".format(weight,0))
+                       .Define("weightFakeSel1", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,1)*weightPURecoSF".format(weight,0))
+                       .Define("weightFakeSel2", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,2)*weightPURecoSF".format(weight,0))
                        )
     else:
         dfbase =(dfbase.Define("PDType","\"{0}\"".format(PDType))
                        .Define("fake_Muon_genPartFlav","Muon_genPartFlav[fake_mu]")
                        .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
-                       .Define("weight","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,-1)".format(weight,useFR))
+                       .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt)")
+                       .Define("weight","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,-1)*weightPURecoSF".format(weight,useFR))
                        .Filter("weight != 0","good weight")
-                       .Define("weightFakeSel0", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,0)".format(weight,useFR))
-                       .Define("weightFakeSel1", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,1)".format(weight,useFR))
-                       .Define("weightFakeSel2", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,2)".format(weight,useFR))
+                       .Define("weightFakeSel0", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,0)*weightPURecoSF".format(weight,useFR))
+                       .Define("weightFakeSel1", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,1)*weightPURecoSF".format(weight,useFR))
+                       .Define("weightFakeSel2", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,2)*weightPURecoSF".format(weight,useFR))
                        )
 
     FILTERMU0 = "(Sum(fake_mu) == 1 && ptl <  20 && HLT_Mu8_TrkIsoVVL)"
     FILTERMU1 = "(Sum(fake_mu) == 1 && ptl >= 20 && HLT_Mu17_TrkIsoVVL)"
     FILTEREL0 = "(Sum(fake_el) == 1 && ptl <  15 && HLT_Ele8_CaloIdL_TrackIdL_IsoVL_PFJet30)"
     FILTEREL1 = "(Sum(fake_el) == 1 && ptl >= 15 && HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30)"
-    FILTERLEP = "{0}||{1}||{2}||{3}".format(FILTERMU0,FILTERMU1,FILTEREL0,FILTEREL1)
+    FILTERLEP = "({0}||{1}||{2}||{3})".format(FILTERMU0,FILTERMU1,FILTEREL0,FILTEREL1)
+    FILTERLEP0 = "({0}||{1})".format(FILTERMU0,FILTEREL0)
+    FILTERLEP1 = "({0}||{1})".format(FILTERMU1,FILTEREL1)
+    list_FILTERLEP = [FILTERLEP0, FILTERLEP1]
     print("FILTERMU0: {0}".format(FILTERMU0))
     print("FILTERMU1: {0}".format(FILTERMU1))
     print("FILTEREL0: {0}".format(FILTEREL0))
@@ -217,21 +223,19 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
             dfjetcat [2*y+ltype] = dfjetcat [2*y+ltype].Filter("drljet > 0.7", "drljet > 0.7")
             dfbjetcat[2*y+ltype] = dfbjetcat[2*y+ltype].Filter("drljet > 0.7", "drljet > 0.7")
 
-            histo[ltype+76][y] = dfjetcat [2*y+ltype].Filter("PuppiMET_pt < 30").Histo1D(("histo_{0}_{1}".format(ltype+76,y), "histo_{0}_{1}".format(ltype+76,y),40, 0, 160), "mtfix","weight")
-            histo[ltype+78][y] = dfbjetcat[2*y+ltype].Filter("PuppiMET_pt < 30").Histo1D(("histo_{0}_{1}".format(ltype+78,y), "histo_{0}_{1}".format(ltype+78,y),40, 0, 160), "mtfix","weight")
-
             strLep = "mu"
             chosenSel = "6"
             if(ltype == 1):
                strLep = "el"
                chosenSel = "4"
 
-            for ptbin in range(len(xPtbins)-1):
-                for etabin in range(len(xEtabins)-1):
-                    histo[ltype+100+2*ptbin+2*(len(xPtbins)-1)*etabin][y] = dfjetcat[2*y+ltype].Filter("ptl     > {0} && ptl     < {1} && absetal > {2} && absetal < {3}".format(xPtbins[ptbin],xPtbins[ptbin+1],xEtabins[etabin],xEtabins[etabin+1]))  				       .Histo1D(("histo_{0}_{1}".format(ltype+100+2*ptbin+2*(len(xPtbins)-1)*etabin,y), "histo_{0}_{1}".format(ltype+100+2*ptbin+2*(len(xPtbins)-1)*etabin,y),40, 0, 160), "mtfix","weight")
-                    histo[ltype+150+2*ptbin+2*(len(xPtbins)-1)*etabin][y] = dfjetcat[2*y+ltype].Filter("ptl     > {0} && ptl     < {1} && absetal > {2} && absetal < {3} && Sum(tight_{4}{5})==1".format(xPtbins[ptbin],xPtbins[ptbin+1],xEtabins[etabin],xEtabins[etabin+1],strLep,chosenSel)).Histo1D(("histo_{0}_{1}".format(ltype+150+2*ptbin+2*(len(xPtbins)-1)*etabin,y), "histo_{0}_{1}".format(ltype+150+2*ptbin+2*(len(xPtbins)-1)*etabin,y),40, 0, 160), "mtfix","weight")
-                    histo[ltype+200+2*ptbin+2*(len(xPtbins)-1)*etabin][y] = dfjetcat[2*y+ltype].Filter("ptlcone > {0} && ptlcone < {1} && absetal > {2} && absetal < {3}".format(xPtbins[ptbin],xPtbins[ptbin+1],xEtabins[etabin],xEtabins[etabin+1]))  				       .Histo1D(("histo_{0}_{1}".format(ltype+200+2*ptbin+2*(len(xPtbins)-1)*etabin,y), "histo_{0}_{1}".format(ltype+200+2*ptbin+2*(len(xPtbins)-1)*etabin,y),40, 0, 160), "mtfix","weight")
-                    histo[ltype+250+2*ptbin+2*(len(xPtbins)-1)*etabin][y] = dfjetcat[2*y+ltype].Filter("ptlcone > {0} && ptlcone < {1} && absetal > {2} && absetal < {3} && Sum(tight_{4}{5})==1".format(xPtbins[ptbin],xPtbins[ptbin+1],xEtabins[etabin],xEtabins[etabin+1],strLep,chosenSel)).Histo1D(("histo_{0}_{1}".format(ltype+250+2*ptbin+2*(len(xPtbins)-1)*etabin,y), "histo_{0}_{1}".format(ltype+250+2*ptbin+2*(len(xPtbins)-1)*etabin,y),40, 0, 160), "mtfix","weight")
+            histo[ltype+76][y] = dfjetcat [2*y+ltype].Filter("PuppiMET_pt < 30 && ptl < 70 && Sum(tight_{0}{1})==1".format(strLep,chosenSel)).Histo1D(("histo_{0}_{1}".format(ltype+76,y), "histo_{0}_{1}".format(ltype+76,y), 50, 0, 100), "mt","weight")
+            histo[ltype+78][y] = dfbjetcat[2*y+ltype].Filter("PuppiMET_pt < 30 && ptl < 70 && Sum(tight_{0}{1})==1".format(strLep,chosenSel)).Histo1D(("histo_{0}_{1}".format(ltype+78,y), "histo_{0}_{1}".format(ltype+78,y), 50, 0, 100), "mt","weight")
+            histo[ltype+80][y] =     dfcat[2*y+ltype]                                                                            .Histo1D(("histo_{0}_{1}".format(ltype+80,y), "histo_{0}_{1}".format(ltype+80,y), 80,-0.5,79.5), "PV_npvsGood","weight")
+
+            for ptbin in range(2):
+                for lepSel in range(8):
+                    histo[ltype+100+2*ptbin+2*2*lepSel][y] = dfjetcat[2*y+ltype].Filter("{0} && Sum(tight_{1}{2})==1".format(list_FILTERLEP[ptbin],strLep,lepSel)).Histo1D(("histo_{0}_{1}".format(ltype+100+2*ptbin+2*2*lepSel,y), "histo_{0}_{1}".format(ltype+100+2*ptbin+2*2*lepSel,y),40, 0, 160), "mtfix","weight")
 
             dffakecat.append(dfcat[2*y+ltype].Filter("maxMETMT < {0}".format(maxMETMTCut), "maxMETMT < {0}".format(maxMETMTCut)))
             dfjetcat [2*y+ltype] = dfjetcat [2*y+ltype].Filter("maxMETMT < {0}".format(maxMETMTCut), "maxMETMT < {0}".format(maxMETMTCut))
@@ -284,15 +288,15 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
     for i in range(nCat):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue
-            if(histo[j][i].GetSumOfWeights() > 0): print("({0},{1}): {2}".format(j,i,histo[j][i].GetSumOfWeights()))
+            #if(histo[j][i].GetSumOfWeights() > 0): print("({0},{1}): {2}".format(j,i,histo[j][i].GetSumOfWeights()))
             histo[j][i].Write()
         for j in range(nHisto):
             if(histo2D[j][i] == 0): continue
-            if(histo2D[j][i].GetSumOfWeights() > 0): print("({0},{1}): {2}".format(j,i,histo2D[j][i].GetSumOfWeights()))
+            #if(histo2D[j][i].GetSumOfWeights() > 0): print("({0},{1}): {2}".format(j,i,histo2D[j][i].GetSumOfWeights()))
             histo2D[j][i].Write()
     myfile.Close()
 
-def readMCSample(sampleNOW, year, skimType, whichJob, group):
+def readMCSample(sampleNOW, year, skimType, whichJob, group, puWeights):
 
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
@@ -325,21 +329,11 @@ def readMCSample(sampleNOW, year, skimType, whichJob, group):
     print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
     print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
-    #puPath = "../datapuWeights_UL_{0}.root".format(year)
-    #fPUFile = ROOT.TFile(puPath)
-    #fhDPU     = fPUFile.Get("puWeights")
-    #fhDPUUp   = fPUFile.Get("puWeightsUp")
-    #fhDPUDown = fPUFile.Get("puWeightsDown")
-    #fhDPU    .SetDirectory(0);
-    #fhDPUUp  .SetDirectory(0);
-    #fhDPUDown.SetDirectory(0);
-    #fPUFile.Close()
-
     PDType = os.path.basename(SwitchSample(sampleNOW, skimType)[0]).split('+')[0]
 
-    analysis(df, sampleNOW, SwitchSample(sampleNOW, skimType)[2], weight, year, PDType, "false", whichJob)
+    analysis(df, sampleNOW, SwitchSample(sampleNOW, skimType)[2], weight, year, PDType, "false", whichJob, puWeights)
 
-def readDASample(sampleNOW, year, skimType, whichJob, group):
+def readDASample(sampleNOW, year, skimType, whichJob, group, puWeights):
 
     PDType = "0"
     if  (sampleNOW >= 1000 and sampleNOW <= 1009): PDType = "SingleMuon"
@@ -366,14 +360,14 @@ def readDASample(sampleNOW, year, skimType, whichJob, group):
     nevents = df.Count().GetValue()
     print("%s entries in the dataset" %nevents)
 
-    analysis(df, sampleNOW, sampleNOW, weight, year, PDType, "true", whichJob)
+    analysis(df, sampleNOW, sampleNOW, weight, year, PDType, "true", whichJob, puWeights)
 
 if __name__ == "__main__":
 
     group = 10
 
     skimType = "1l"
-    year = 2018
+    year = 2022
     process = -1
     whichJob = -1
 
@@ -399,10 +393,16 @@ if __name__ == "__main__":
         if opt == "--whichJob":
             whichJob = int(arg)
 
+    puPath = "data/puWeights_UL_{0}.root".format(year)
+    fPuFile = ROOT.TFile(puPath)
+    puWeights = fPuFile.Get("puWeights")
+    puWeights.SetDirectory(0)
+    fPuFile.Close()
+
     try:
         if(process >= 0 and process < 1000):
-            readMCSample(process,year,skimType,whichJob,group)
+            readMCSample(process,year,skimType,whichJob,group, puWeights)
         elif(process >= 1000):
-            readDASample(process,year,skimType,whichJob,group)
+            readDASample(process,year,skimType,whichJob,group, puWeights)
     except Exception as e:
         print("Error sample: {0}".format(e))

@@ -169,7 +169,7 @@ def analysis(df,count,category,weight,year,PDType,isData):
     histo[16][x] = dfgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 50, 0., 5.0), "Zrap","weight")
     histo2D[101][x] = dfgen.Histo2D(("histo2d_{0}_{1}".format(101,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 101),"Zrap","Zpt","weight")
 
-    #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "MET_pt", "nbtag"]
+    #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "PuppiMET_pt", "nbtag"]
     #dfcat.Snapshot("Events", "test.root", branches)
 
     report0 = dfcat.Report()

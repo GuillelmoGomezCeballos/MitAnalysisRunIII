@@ -87,7 +87,7 @@ def selectionLL(df,year,PDType,isData):
               .Define("loose_el", "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")
               .Filter("Sum(loose_mu)+Sum(loose_el) == 0","No loose leptons")
 
-              .Filter("MET_pt < 100","met < 100")
+              .Filter("PuppiMET_pt < 100","met < 100")
 
               .Define("goodPhotonsEB0", "{0} && Photon_isScEtaEB && cleaningBitmap(Photon_vidNestedWPBitmap,6,2) && cleaningBitmap(Photon_vidNestedWPBitmap,8,2)".format(PHOTONSKIM))
               .Define("goodPhotonsEB0_pt", "get_variable_index(Photon_pt[goodPhotonsEB0],Photon_pt[goodPhotonsEB0],0)")
