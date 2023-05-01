@@ -210,19 +210,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+39][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 100, 0, 200), "MET_pt","weight")
             histo[ltype+42][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 100, 0, 200), "PuppiMET_pt","weight")
             histo[ltype+45][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 100, 0, 200), "TkMET_pt","weight")
-
-            if(ltype == 0):
-                histo[48][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(48,x), "histo_{0}_{1}".format(48,x), 100, 0, 1.0), "fake_Muon_mvaTTH","weight")
-                histo[50][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(50,x), "histo_{0}_{1}".format(50,x), 100, 0,20.0), "fake_Muon_sip3d","weight")
-                histo[52][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(52,x), "histo_{0}_{1}".format(52,x), 100, 0, 1.0), "fake_Muon_jetRelIso","weight")
-                histo[54][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(54,x), "histo_{0}_{1}".format(54,x), 100, 0, 0.1), "fake_Muon_dxy","weight")
-                histo[56][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(56,x), "histo_{0}_{1}".format(56,x), 100, 0, 0.2), "fake_Muon_dz","weight")
-            if(ltype == 2):
-                histo[49][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(49,x), "histo_{0}_{1}".format(49,x), 100, 0, 1.0), "fake_Electron_mvaTTH","weight")
-                histo[51][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(51,x), "histo_{0}_{1}".format(51,x), 100, 0,20.0), "fake_Electron_sip3d","weight")
-                histo[53][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(53,x), "histo_{0}_{1}".format(53,x), 100, 0, 1.0), "fake_Electron_jetRelIso","weight")
-                histo[55][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(55,x), "histo_{0}_{1}".format(55,x), 100, 0, 0.1), "fake_Electron_dxy","weight")
-                histo[57][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(57,x), "histo_{0}_{1}".format(57,x), 100, 0, 0.2), "fake_Electron_dz","weight")
+            histo[ltype+48][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 80,-0.5,79.5), "Rho_fixedGridRhoFastjetAll","weight")
 
             if(ltype == 2):
                 dftightsscat.append(dfcat[3*x+ltype].Filter("Sum(fake_Electron_charge)==0 && DiLepton_flavor==2 && tight_el7[0]==true && tight_el7[1]==true && mll{0}>80 && mll{0}<100".format(altMass)))

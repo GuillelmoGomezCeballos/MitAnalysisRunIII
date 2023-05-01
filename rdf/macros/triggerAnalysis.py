@@ -29,8 +29,8 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 VBSSEL = jsonObject['VBSSEL']
 
 muSelChoice = 0
-FAKE_MU0   = "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true"
-FAKE_MU1   = "abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true"
+FAKE_MU0   = "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && abs(Muon_dxy) < 0.1 && abs(Muon_dz) < 0.2"
+FAKE_MU1   = "abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2"
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU0 = jsonObject['TIGHT_MU0']
 TIGHT_MU1 = jsonObject['TIGHT_MU1']
@@ -43,8 +43,8 @@ TIGHT_MU7 = jsonObject['TIGHT_MU7']
 TIGHT_MU8 = jsonObject['TIGHT_MU8']
 
 elSelChoice = 0
-FAKE_EL0   = "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1"
-FAKE_EL1   = "abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 1"
+FAKE_EL0   = "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1 && abs(Electron_dxy) < 0.1 && abs(Electron_dz) < 0.2"
+FAKE_EL1   = "abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 1 && abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2"
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 TIGHT_EL1 = jsonObject['TIGHT_EL1']
@@ -286,10 +286,64 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                 if(ltype == 0):
                     histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 100, xMllMin[ltype], xMllMax[ltype]), "mllMuonMomUp","weightNoLepSF")
                     histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 100, xMllMin[ltype], xMllMax[ltype]), "mllMuonMomDown","weightNoLepSF")
+                    dfzoscat[4*x+2*ltype+ltag] = (dfzoscat[4*x+2*ltype+ltag].Define("probe_Muon_mvaTTH","fake_Muon_mvaTTH[{0}]".format(lprobe))
+                                                                            .Define("probe_Muon_sip3d","fake_Muon_sip3d[{0}]".format(lprobe))
+                                                                            .Define("probe_Muon_jetRelIso","fake_Muon_jetRelIso[{0}]".format(lprobe))
+                                                                            .Define("probe_Muon_dxy","fake_Muon_dxy[{0}]".format(lprobe))
+                                                                            .Define("probe_Muon_dz","fake_Muon_dz[{0}]".format(lprobe))
+                                                                            .Define("probe_Muon_pfRelIso04_all","fake_Muon_pfRelIso04_all[{0}]".format(lprobe))
+                                                                            .Define("probe_Muon_miniPFRelIso_all","fake_Muon_miniPFRelIso_all[{0}]".format(lprobe))
+                                                                            .Define("probe_Muon_nStations","fake_Muon_nStations[{0}]".format(lprobe))
+                                                                            .Define("probe_Muon_nTrackerLayers","fake_Muon_nTrackerLayers[{0}]".format(lprobe))
+                                                                            )
+                    histo[2*ltype+ltag+100][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+100,x), "histo_{0}_{1}".format(2*ltype+ltag+100,x), 100, 0, 1.0), "probe_Muon_mvaTTH","weight")
+                    histo[2*ltype+ltag+104][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+104,x), "histo_{0}_{1}".format(2*ltype+ltag+104,x), 100, 0, 1.0), "probe_Muon_mvaTTH","weight")
+                    histo[2*ltype+ltag+108][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+108,x), "histo_{0}_{1}".format(2*ltype+ltag+108,x), 100, 0,20.0), "probe_Muon_sip3d","weight")
+                    histo[2*ltype+ltag+112][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+112,x), "histo_{0}_{1}".format(2*ltype+ltag+112,x), 100, 0,20.0), "probe_Muon_sip3d","weight")
+                    histo[2*ltype+ltag+116][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+116,x), "histo_{0}_{1}".format(2*ltype+ltag+116,x), 100, 0, 1.0), "probe_Muon_jetRelIso","weight")
+                    histo[2*ltype+ltag+120][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+120,x), "histo_{0}_{1}".format(2*ltype+ltag+120,x), 100, 0, 1.0), "probe_Muon_jetRelIso","weight")
+                    histo[2*ltype+ltag+124][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+124,x), "histo_{0}_{1}".format(2*ltype+ltag+124,x), 100, 0, 0.1), "probe_Muon_dxy","weight")
+                    histo[2*ltype+ltag+128][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+128,x), "histo_{0}_{1}".format(2*ltype+ltag+128,x), 100, 0, 0.1), "probe_Muon_dxy","weight")
+                    histo[2*ltype+ltag+132][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+132,x), "histo_{0}_{1}".format(2*ltype+ltag+132,x), 100, 0, 0.2), "probe_Muon_dz","weight")
+                    histo[2*ltype+ltag+136][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+136,x), "histo_{0}_{1}".format(2*ltype+ltag+136,x), 100, 0, 0.2), "probe_Muon_dz","weight")
+                    histo[2*ltype+ltag+140][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+140,x), "histo_{0}_{1}".format(2*ltype+ltag+140,x), 100, 0, 0.2), "probe_Muon_pfRelIso04_all","weight")
+                    histo[2*ltype+ltag+144][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+144,x), "histo_{0}_{1}".format(2*ltype+ltag+144,x), 100, 0, 0.2), "probe_Muon_pfRelIso04_all","weight")
+                    histo[2*ltype+ltag+148][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+148,x), "histo_{0}_{1}".format(2*ltype+ltag+148,x), 100, 0, 0.2), "probe_Muon_miniPFRelIso_all","weight")
+                    histo[2*ltype+ltag+152][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+152,x), "histo_{0}_{1}".format(2*ltype+ltag+152,x), 100, 0, 0.2), "probe_Muon_miniPFRelIso_all","weight")
+                    histo[2*ltype+ltag+156][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+156,x), "histo_{0}_{1}".format(2*ltype+ltag+156,x), 6, -0.5,5.5), "probe_Muon_nStations","weight")
+                    histo[2*ltype+ltag+160][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+160,x), "histo_{0}_{1}".format(2*ltype+ltag+160,x), 6, -0.5,5.5), "probe_Muon_nStations","weight")
+                    histo[2*ltype+ltag+164][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+164,x), "histo_{0}_{1}".format(2*ltype+ltag+164,x),20,-0.5,19.5), "probe_Muon_nTrackerLayers","weight")
+                    histo[2*ltype+ltag+168][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Muon_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+168,x), "histo_{0}_{1}".format(2*ltype+ltag+168,x),20,-0.5,19.5), "probe_Muon_nTrackerLayers","weight")
                 else:
                     histo[2*ltype+ltag+32][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+32,x), "histo_{0}_{1}".format(2*ltype+ltag+32,x), 100, xMllMin[ltype], xMllMax[ltype]), "mllElectronMomUp","weightNoLepSF")
                     histo[2*ltype+ltag+36][x] = dfzoscat[4*x+2*ltype+ltag].Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+36,x), "histo_{0}_{1}".format(2*ltype+ltag+36,x), 100, xMllMin[ltype], xMllMax[ltype]), "mllElectronMomDown","weightNoLepSF")
-
+                    dfzoscat[4*x+2*ltype+ltag] = (dfzoscat[4*x+2*ltype+ltag].Define("probe_Electron_mvaTTH","fake_Electron_mvaTTH[{0}]".format(lprobe))
+                                                                            .Define("probe_Electron_sip3d","fake_Electron_sip3d[{0}]".format(lprobe))
+                                                                            .Define("probe_Electron_jetRelIso","fake_Electron_jetRelIso[{0}]".format(lprobe))
+                                                                            .Define("probe_Electron_dxy","fake_Electron_dxy[{0}]".format(lprobe))
+                                                                            .Define("probe_Electron_pfRelIso03_all","fake_Electron_pfRelIso03_all[{0}]".format(lprobe))
+                                                                            .Define("probe_Electron_miniPFRelIso_all","fake_Electron_miniPFRelIso_all[{0}]".format(lprobe))
+                                                                            .Define("probe_Electron_hoe","fake_Electron_hoe[{0}]".format(lprobe))
+                                                                            .Define("probe_Electron_r9","fake_Electron_r9[{0}]".format(lprobe))
+                                                                            )
+                    histo[2*ltype+ltag+100][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+100,x), "histo_{0}_{1}".format(2*ltype+ltag+100,x), 100, 0, 1.0), "probe_Electron_mvaTTH","weight")
+                    histo[2*ltype+ltag+104][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+104,x), "histo_{0}_{1}".format(2*ltype+ltag+104,x), 100, 0, 1.0), "probe_Electron_mvaTTH","weight")
+                    histo[2*ltype+ltag+108][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+108,x), "histo_{0}_{1}".format(2*ltype+ltag+108,x), 100, 0,20.0), "probe_Electron_sip3d","weight")
+                    histo[2*ltype+ltag+112][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+112,x), "histo_{0}_{1}".format(2*ltype+ltag+112,x), 100, 0,20.0), "probe_Electron_sip3d","weight")
+                    histo[2*ltype+ltag+116][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+116,x), "histo_{0}_{1}".format(2*ltype+ltag+116,x), 100, 0, 1.0), "probe_Electron_jetRelIso","weight")
+                    histo[2*ltype+ltag+120][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+120,x), "histo_{0}_{1}".format(2*ltype+ltag+120,x), 100, 0, 1.0), "probe_Electron_jetRelIso","weight")
+                    histo[2*ltype+ltag+124][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+124,x), "histo_{0}_{1}".format(2*ltype+ltag+124,x), 100, 0, 0.1), "probe_Electron_dxy","weight")
+                    histo[2*ltype+ltag+128][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+128,x), "histo_{0}_{1}".format(2*ltype+ltag+128,x), 100, 0, 0.1), "probe_Electron_dxy","weight")
+                    histo[2*ltype+ltag+132][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+132,x), "histo_{0}_{1}".format(2*ltype+ltag+132,x), 100, 0, 0.2), "probe_Electron_dxy","weight")
+                    histo[2*ltype+ltag+136][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+136,x), "histo_{0}_{1}".format(2*ltype+ltag+136,x), 100, 0, 0.2), "probe_Electron_dxy","weight")
+                    histo[2*ltype+ltag+140][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+140,x), "histo_{0}_{1}".format(2*ltype+ltag+140,x), 100, 0, 0.2), "probe_Electron_pfRelIso03_all","weight")
+                    histo[2*ltype+ltag+144][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+144,x), "histo_{0}_{1}".format(2*ltype+ltag+144,x), 100, 0, 0.2), "probe_Electron_pfRelIso03_all","weight")
+                    histo[2*ltype+ltag+148][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+148,x), "histo_{0}_{1}".format(2*ltype+ltag+148,x), 100, 0, 0.2), "probe_Electron_miniPFRelIso_all","weight")
+                    histo[2*ltype+ltag+152][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+152,x), "histo_{0}_{1}".format(2*ltype+ltag+152,x), 100, 0, 0.2), "probe_Electron_miniPFRelIso_all","weight")
+                    histo[2*ltype+ltag+156][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+156,x), "histo_{0}_{1}".format(2*ltype+ltag+156,x),  40, 0, 0.2), "probe_Electron_hoe","weight")
+                    histo[2*ltype+ltag+160][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+160,x), "histo_{0}_{1}".format(2*ltype+ltag+160,x),  40, 0, 0.2), "probe_Electron_hoe","weight")
+                    histo[2*ltype+ltag+164][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+164,x), "histo_{0}_{1}".format(2*ltype+ltag+164,x),100, 0.1,1.1), "probe_Electron_r9","weight")
+                    histo[2*ltype+ltag+168][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+168,x), "histo_{0}_{1}".format(2*ltype+ltag+168,x),100, 0.1,1.1), "probe_Electron_r9","weight")
 
                 # tighter ID to perform trigger efficiency measurements
                 dfzoscat[4*x+2*ltype+ltag] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}{1}[{2}] == true".format(lflavor,lepSelChoice,lprobe),"tight id({0}{1}[{2}])".format(lflavor,lepSelChoice,lprobe))
