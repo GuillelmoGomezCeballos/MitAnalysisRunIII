@@ -34,6 +34,7 @@ TString lumi_13TeV_2017 = "41.5 fb^{-1}";
 TString lumi_13TeV_2018 = "60.0 fb^{-1}";
 TString lumi_13TeV_2019 = "137 fb^{-1}";
 TString lumi_13TeV_2022 = "20 fb^{-1}";
+TString lumi_13TeV_2023 = "0.1 fb^{-1}";
 TString lumi_13TeV_VBFG = "130 fb^{-1}";
 TString lumi_14TeV_HLLHC = "3000 fb^{-1}";
 TString lumi_8TeV       = "19.4 fb^{-1}";

@@ -3,6 +3,7 @@
 MyCorrections::MyCorrections(int year) {
 
   if(year == 2022) year = 2018;
+  if(year == 2023) year = 2018;
 
   std::string dirName = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/";
 

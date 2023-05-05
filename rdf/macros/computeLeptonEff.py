@@ -32,7 +32,7 @@ if __name__ == "__main__":
             output = str(arg)
 
     nCat = plotCategory("kPlotCategories")
-    numberOfBits = 8
+    numberOfBits = 9
 
     # MB, ME, EB, EE
     fileLep = [TFile("{0}/{1}_{2}_muB.root".format(output,path,year)),

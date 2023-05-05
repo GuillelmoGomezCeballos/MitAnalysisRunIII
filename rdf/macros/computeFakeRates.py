@@ -16,12 +16,14 @@ if __name__ == "__main__":
     inputDir = "anaZ"
     anaType = 0
     format = "pdf"
+    isPseudoData = 0
 
-    valid = ['path=', "year=", 'inputDir=', 'anaType=', 'help']
+    valid = ['path=', "year=", 'inputDir=', 'anaType=', 'isPseudoData=', 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
     usage +=  "              --inputDir=<{0}>\n".format(inputDir)
     usage +=  "              --anaType=<{0}>\n".format(anaType)
+    usage +=  "              --isPseudoData=<{0}>\n".format(isPseudoData)
     usage +=  "              --format=<{0}>".format(format)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
@@ -42,6 +44,8 @@ if __name__ == "__main__":
             inputDir = str(arg)
         if opt == "--anaType":
             anaType = int(arg)
+        if opt == "--isPseudoData":
+            isPseudoData = int(arg)
 
     startHisto = [0, 0]
     # no jet requirements / no jet requirements
@@ -50,16 +54,16 @@ if __name__ == "__main__":
         startHisto[1] = 0
     # njets > 0 / njets > 0
     elif(anaType%100 == 1):
-        startHisto[0] = 18
-        startHisto[1] = 18
+        startHisto[0] = 20
+        startHisto[1] = 20
     # nbjets > 0 / nbjets > 0
     elif(anaType%100 == 2):
-        startHisto[0] = 36
-        startHisto[1] = 36
+        startHisto[0] = 40
+        startHisto[1] = 40
     # nbjets > 0 / njets > 0
     elif(anaType%100 == 3):
-        startHisto[0] = 36
-        startHisto[1] = 18
+        startHisto[0] = 40
+        startHisto[1] = 20
     else:
         print("Problem with anaType")
         sys.exit(1)
@@ -69,6 +73,9 @@ if __name__ == "__main__":
         startHisto[1] = startHisto[1] + 100
 
     nCat = plotCategory("kPlotCategories")
+    dataCat = plotCategory("kPlotData")
+    if(isPseudoData == 1):
+        dataCat = plotCategory("kPlotNonPrompt")
 
     prescale = [[1.0 for y in range(len(xPtbins)-1)] for x in range(2)]
     print(prescale)
@@ -80,10 +87,10 @@ if __name__ == "__main__":
     #myWLfile = [0 for x in range(2)]
     #for nf in range(2):
     #    myWLfile[nf] = TFile(fileWLName[nf])
-    #    histoDA = myWLfile[nf].Get("histo{0}".format(plotCategory("kPlotData")))
+    #    histoDA = myWLfile[nf].Get("histo{0}".format(dataCat))
     #    histoBG = myWLfile[nf].Get("histo{0}".format(plotCategory("kPlotSignal3")))
     #    for nc in range(nCat):
-    #        if(nc == plotCategory("kPlotData") or nc == plotCategory("kPlotSignal3")): continue
+    #        if(nc == dataCat or nc == plotCategory("kPlotSignal3")): continue
     #        histoBG.Add(myWLfile[nf].Get("histo{0}".format(nc)))
     #
     #    print("Channel({0}) = {1}/{2}={3}".format(nf,histoDA.GetSumOfWeights(),histoBG.GetSumOfWeights(),histoDA.GetSumOfWeights()/histoBG.GetSumOfWeights()))
@@ -93,7 +100,7 @@ if __name__ == "__main__":
     #
     print("Prescales: ",prescale)
 
-    numberOfSel = 8
+    numberOfSel = 9
     histoFakeEffSelEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
     histoFakeEffSelPt    = [[[0 for z in range(len(xEtabins)-1)] for y in range(numberOfSel)] for x in range(2)]
     histoFakeEffSelEta   = [[[0 for z in range(len(xPtbins)-1)] for y in range(numberOfSel)] for x in range(2)]
@@ -118,12 +125,12 @@ if __name__ == "__main__":
     outFileFakeRate.cd()
     for thePlot in range(2):
         for nsel in range(numberOfSel):
-            histoFakeDenDA = (fileLoose[thePlot].Get("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
+            histoFakeDenDA = (fileLoose[thePlot].Get("histo2d{0}".format(dataCat))).Clone()
             histoFakeDenBG = (fileLoose[thePlot].Get("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
-            histoFakeNumDA = (fileTight[thePlot][nsel].Get("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
+            histoFakeNumDA = (fileTight[thePlot][nsel].Get("histo2d{0}".format(dataCat))).Clone()
             histoFakeNumBG = (fileTight[thePlot][nsel].Get("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
             for nc in range(nCat):
-                if(nc == plotCategory("kPlotData") or nc == plotCategory("kPlotSignal3")): continue
+                if(nc == dataCat or nc == plotCategory("kPlotSignal3")): continue
                 histoFakeDenBG.Add(fileLoose[thePlot].Get("histo2d{0}".format(nc)))
                 histoFakeNumBG.Add(fileTight[thePlot][nsel].Get("histo2d{0}".format(nc)))
 

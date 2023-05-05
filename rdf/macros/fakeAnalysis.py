@@ -32,6 +32,7 @@ TIGHT_MU4 = jsonObject['TIGHT_MU4']
 TIGHT_MU5 = jsonObject['TIGHT_MU5']
 TIGHT_MU6 = jsonObject['TIGHT_MU6']
 TIGHT_MU7 = jsonObject['TIGHT_MU7']
+TIGHT_MU8 = jsonObject['TIGHT_MU8']
 
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
@@ -42,6 +43,7 @@ TIGHT_EL4 = jsonObject['TIGHT_EL4']
 TIGHT_EL5 = jsonObject['TIGHT_EL5']
 TIGHT_EL6 = jsonObject['TIGHT_EL6']
 TIGHT_EL7 = jsonObject['TIGHT_EL7']
+TIGHT_EL8 = jsonObject['TIGHT_EL8']
 
 def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
 
@@ -59,6 +61,7 @@ def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
                  .Define("tight_mu5", "{0}".format(TIGHT_MU5))
                  .Define("tight_mu6", "{0}".format(TIGHT_MU6))
                  .Define("tight_mu7", "{0}".format(TIGHT_MU7))
+                 .Define("tight_mu8", "{0}".format(TIGHT_MU8))
                  .Define("tight_el0", "{0}".format(TIGHT_EL0))
                  .Define("tight_el1", "{0}".format(TIGHT_EL1))
                  .Define("tight_el2", "{0}".format(TIGHT_EL2))
@@ -67,6 +70,7 @@ def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
                  .Define("tight_el5", "{0}".format(TIGHT_EL5))
                  .Define("tight_el6", "{0}".format(TIGHT_EL6))
                  .Define("tight_el7", "{0}".format(TIGHT_EL7))
+                 .Define("tight_el8", "{0}".format(TIGHT_EL8))
                  .Define("mt"      ,"compute_lmet_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_jetRelIso, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_jetRelIso, PuppiMET_pt, PuppiMET_phi,0)")
                  .Define("dphilmet","compute_lmet_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_jetRelIso, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_jetRelIso, PuppiMET_pt, PuppiMET_phi,1)")
                  .Define("mtfix"   ,"compute_lmet_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_jetRelIso, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_jetRelIso, PuppiMET_pt, PuppiMET_phi,2)")
@@ -234,7 +238,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
             histo[ltype+80][y] =     dfcat[2*y+ltype]                                                                            .Histo1D(("histo_{0}_{1}".format(ltype+80,y), "histo_{0}_{1}".format(ltype+80,y), 80,-0.5,79.5), "PV_npvsGood","weight")
 
             for ptbin in range(2):
-                for lepSel in range(8):
+                for lepSel in range(9):
                     histo[ltype+100+2*ptbin+2*2*lepSel][y] = dfjetcat[2*y+ltype].Filter("{0} && Sum(tight_{1}{2})==1".format(list_FILTERLEP[ptbin],strLep,lepSel)).Histo1D(("histo_{0}_{1}".format(ltype+100+2*ptbin+2*2*lepSel,y), "histo_{0}_{1}".format(ltype+100+2*ptbin+2*2*lepSel,y),40, 0, 160), "mtfix","weight")
 
             dffakecat.append(dfcat[2*y+ltype].Filter("maxMETMT < {0}".format(maxMETMTCut), "maxMETMT < {0}".format(maxMETMTCut)))
@@ -255,26 +259,29 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
                 histo2D[ltype+nHist+12][y] = dffakecat[2*y+ltype].Filter("Sum(tight_{0}5)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+12,y), "histo2d_{0}_{1}".format(ltype+nHist+12,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
                 histo2D[ltype+nHist+14][y] = dffakecat[2*y+ltype].Filter("Sum(tight_{0}6)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+14,y), "histo2d_{0}_{1}".format(ltype+nHist+14,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
                 histo2D[ltype+nHist+16][y] = dffakecat[2*y+ltype].Filter("Sum(tight_{0}7)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+16,y), "histo2d_{0}_{1}".format(ltype+nHist+16,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+18][y] = dffakecat[2*y+ltype].Filter("Sum(tight_{0}8)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+18,y), "histo2d_{0}_{1}".format(ltype+nHist+18,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
 
-                histo2D[ltype+nHist+18][y] = dfjetcat[2*y+ltype]                                             .Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+18,y), "histo2d_{0}_{1}".format(ltype+nHist+18,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+20][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}0)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+20,y), "histo2d_{0}_{1}".format(ltype+nHist+20,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+22][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}1)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+22,y), "histo2d_{0}_{1}".format(ltype+nHist+22,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+24][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}2)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+24,y), "histo2d_{0}_{1}".format(ltype+nHist+24,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+26][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}3)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+26,y), "histo2d_{0}_{1}".format(ltype+nHist+26,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+28][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}4)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+28,y), "histo2d_{0}_{1}".format(ltype+nHist+28,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+30][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}5)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+30,y), "histo2d_{0}_{1}".format(ltype+nHist+30,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+32][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}6)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+32,y), "histo2d_{0}_{1}".format(ltype+nHist+32,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+34][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}7)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+34,y), "histo2d_{0}_{1}".format(ltype+nHist+34,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+20][y] = dfjetcat[2*y+ltype]					     .Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+20,y), "histo2d_{0}_{1}".format(ltype+nHist+20,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+22][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}0)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+22,y), "histo2d_{0}_{1}".format(ltype+nHist+22,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+24][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}1)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+24,y), "histo2d_{0}_{1}".format(ltype+nHist+24,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+26][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}2)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+26,y), "histo2d_{0}_{1}".format(ltype+nHist+26,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+28][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}3)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+28,y), "histo2d_{0}_{1}".format(ltype+nHist+28,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+30][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}4)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+30,y), "histo2d_{0}_{1}".format(ltype+nHist+30,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+32][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}5)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+32,y), "histo2d_{0}_{1}".format(ltype+nHist+32,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+34][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}6)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+34,y), "histo2d_{0}_{1}".format(ltype+nHist+34,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+36][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}7)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+36,y), "histo2d_{0}_{1}".format(ltype+nHist+36,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+38][y] = dfjetcat[2*y+ltype] .Filter("Sum(tight_{0}8)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+38,y), "histo2d_{0}_{1}".format(ltype+nHist+38,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
 
-                histo2D[ltype+nHist+36][y] = dfbjetcat[2*y+ltype]                                            .Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+36,y), "histo2d_{0}_{1}".format(ltype+nHist+36,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+38][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}0)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+38,y), "histo2d_{0}_{1}".format(ltype+nHist+38,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+40][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}1)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+40,y), "histo2d_{0}_{1}".format(ltype+nHist+40,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+42][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}2)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+42,y), "histo2d_{0}_{1}".format(ltype+nHist+42,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+44][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}3)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+44,y), "histo2d_{0}_{1}".format(ltype+nHist+44,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+46][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}4)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+46,y), "histo2d_{0}_{1}".format(ltype+nHist+46,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+48][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}5)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+48,y), "histo2d_{0}_{1}".format(ltype+nHist+48,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+50][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}6)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+50,y), "histo2d_{0}_{1}".format(ltype+nHist+50,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
-                histo2D[ltype+nHist+52][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}7)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+52,y), "histo2d_{0}_{1}".format(ltype+nHist+52,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+40][y] = dfbjetcat[2*y+ltype]					     .Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+40,y), "histo2d_{0}_{1}".format(ltype+nHist+40,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+42][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}0)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+42,y), "histo2d_{0}_{1}".format(ltype+nHist+42,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+44][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}1)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+44,y), "histo2d_{0}_{1}".format(ltype+nHist+44,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+46][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}2)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+46,y), "histo2d_{0}_{1}".format(ltype+nHist+46,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+48][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}3)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+48,y), "histo2d_{0}_{1}".format(ltype+nHist+48,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+50][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}4)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+50,y), "histo2d_{0}_{1}".format(ltype+nHist+50,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+52][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}5)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+52,y), "histo2d_{0}_{1}".format(ltype+nHist+52,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+54][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}6)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+54,y), "histo2d_{0}_{1}".format(ltype+nHist+54,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+56][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}7)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+56,y), "histo2d_{0}_{1}".format(ltype+nHist+56,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
+                histo2D[ltype+nHist+58][y] = dfbjetcat[2*y+ltype].Filter("Sum(tight_{0}8)==1".format(strLep)).Histo2D(("histo2d_{0}_{1}".format(ltype+nHist+58,y), "histo2d_{0}_{1}".format(ltype+nHist+58,y), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "absetal", "{0}".format(ptVar),"weight")
 
     report = []
     for y in range(nCat):

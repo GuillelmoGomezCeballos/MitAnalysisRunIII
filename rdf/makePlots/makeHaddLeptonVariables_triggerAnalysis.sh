@@ -44,3 +44,15 @@ hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_264.root anaZ/fillhist
 hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_266.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_166.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_167.root
 hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_268.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_168.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_169.root
 hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_270.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_170.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_171.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_272.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_172.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_173.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_274.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_174.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_175.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_276.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_176.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_177.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_278.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_178.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_179.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_280.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_180.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_181.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_282.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_182.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_183.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_284.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_184.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_185.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_286.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_186.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_187.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_288.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_188.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_189.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_290.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_190.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_191.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_292.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_192.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_193.root
+hadd -f anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_294.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_194.root anaZ/fillhisto_triggerAnalysis${whichJob}_${year}_195.root

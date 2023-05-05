@@ -45,7 +45,8 @@ if __name__ == "__main__":
                 TFile("{0}/{1}_{2}_tightmu4_2d.root".format(output,path,year)),
                 TFile("{0}/{1}_{2}_tightmu5_2d.root".format(output,path,year)),
                 TFile("{0}/{1}_{2}_tightmu6_2d.root".format(output,path,year)),
-                TFile("{0}/{1}_{2}_tightmu7_2d.root".format(output,path,year))
+                TFile("{0}/{1}_{2}_tightmu7_2d.root".format(output,path,year)),
+                TFile("{0}/{1}_{2}_tightmu8_2d.root".format(output,path,year))
                ],
                [TFile("{0}/{1}_{2}_loose_el_2d.root".format(output,path,year)),
                 TFile("{0}/{1}_{2}_tightel0_2d.root".format(output,path,year)),
@@ -55,13 +56,14 @@ if __name__ == "__main__":
                 TFile("{0}/{1}_{2}_tightel4_2d.root".format(output,path,year)),
                 TFile("{0}/{1}_{2}_tightel5_2d.root".format(output,path,year)),
                 TFile("{0}/{1}_{2}_tightel6_2d.root".format(output,path,year)),
-                TFile("{0}/{1}_{2}_tightel7_2d.root".format(output,path,year))
+                TFile("{0}/{1}_{2}_tightel7_2d.root".format(output,path,year)),
+                TFile("{0}/{1}_{2}_tightel8_2d.root".format(output,path,year))
                ]]
     print(fileLep[0][3].GetName())
     print(fileLep[1][3].GetName())
     print(fileLep[1][7].GetName())
 
-    numberOfSel = 8
+    numberOfSel = 9
     histoLepEffSelDAEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
     histoLepEffSelDYEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
     histoLepSFEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]

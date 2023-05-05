@@ -169,6 +169,8 @@ def getDATAlist(type, year, skimType):
         jsnName = "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
     elif(year == 2022):
         jsnName = "Cert_Collisions2022_355100_362760_Golden.json"
+    elif(year == 2023):
+        jsnName = "Cert_Collisions2023_dummy_Golden.json"
 
     if os.path.exists(os.path.join("jsns",jsnName)):
         loadJSON(os.path.join("jsns",jsnName))
@@ -262,6 +264,19 @@ def getDATAlist(type, year, skimType):
         files1 = findDIR("{0}/MET+Run2022B-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
     elif(year == 2022 and type == 1053):
         files1 = findDIR("{0}/MET+Run2022C-ReRecoNanoAODv11-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2023 and type == 1020):
+        files1 = findDIR("{0}/MuonEG+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2023 and type == 1030):
+        files1 = findDIR("{0}/EGamma0+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+    elif(year == 2023 and type == 1031):
+        files1 = findDIR("{0}/EGamma1+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2023 and type == 1040):
+        files1 = findDIR("{0}/Muon0+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+    elif(year == 2023 and type == 1041):
+        files1 = findDIR("{0}/Muon1+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
 
     elif(year == 2022 and type == 9999):
         files1 = findDIR("{0}".format(dirTest))
@@ -382,12 +397,14 @@ def SwitchSample(argument, skimType):
        103: (dirT2+"/WZ_TuneCP5_13p6TeV_pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",54.3*1000,plotCategory("kPlotWZ")),
        104: (dirT2+"/ZZ_TuneCP5_13p6TeV_pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",20.0*1000,plotCategory("kPlotZZ")),
        105: (dirT2+"/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*0.1086*0.1086*9*1000,plotCategory("kPlotTop")),
+       #105: (dirT2+"/TTto2L2Nu_TuneCP5CR2_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*0.1086*0.1086*9*1000,plotCategory("kPlotTop")),
        106: (dirT2+"/TTtoLNu2Q_MT-175p5_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*0.1086*3*(1-0.1086*3)*2*1000,plotCategory("kPlotTop")),
        107: (dirT2+"/TbarWplus_DR_AtLeastOneLepton_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",24.2*1000,plotCategory("kPlotTop")),
        108: (dirT2+"/TWminus_DR_AtLeastOneLepton_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",24.2*1000,plotCategory("kPlotTop")),
        109: (dirT2+"/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",63199.9*1000,plotCategory("kPlotOther")),
        110: (dirT2+"/TTto4Q_TuneCP5CR2_13p6TeV_powheg-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",923.6*(1-0.1086*3)*(1-0.1086*3)*1000,plotCategory("kPlotNonPrompt")),
        111: (dirT2+"/QCD_PT-80to120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",96545.52*1000,plotCategory("kPlotNonPrompt")),
-       112: (dirT2+"/QCD_PT-15_TuneCP5_Flat2018_13p6TeV_pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",1000*1000,plotCategory("kPlotNonPrompt")),
+       201: (dirT2+"/DYto2L-2Jets_MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",6221.3*1000,plotCategory("kPlotOther")),
+       205: (dirT2+"/TTto2L2Nu_TuneCP5CR2_13p6TeV_powheg-pythia8+Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1+NANOAODSIM",923.6*0.1086*0.1086*9*1000,plotCategory("kPlotOther")),
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")

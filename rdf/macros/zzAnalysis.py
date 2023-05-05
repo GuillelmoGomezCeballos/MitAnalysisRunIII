@@ -32,24 +32,12 @@ VBSSEL = jsonObject['VBSSEL']
 muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU0 = jsonObject['TIGHT_MU0']
-TIGHT_MU1 = jsonObject['TIGHT_MU1']
-TIGHT_MU2 = jsonObject['TIGHT_MU2']
 TIGHT_MU3 = jsonObject['TIGHT_MU3']
-TIGHT_MU4 = jsonObject['TIGHT_MU4']
-TIGHT_MU5 = jsonObject['TIGHT_MU5']
-TIGHT_MU6 = jsonObject['TIGHT_MU6']
-TIGHT_MU7 = jsonObject['TIGHT_MU7']
 
 elSelChoice = 0
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
-TIGHT_EL1 = jsonObject['TIGHT_EL1']
-TIGHT_EL2 = jsonObject['TIGHT_EL2']
 TIGHT_EL3 = jsonObject['TIGHT_EL3']
-TIGHT_EL4 = jsonObject['TIGHT_EL4']
-TIGHT_EL5 = jsonObject['TIGHT_EL5']
-TIGHT_EL6 = jsonObject['TIGHT_EL6']
-TIGHT_EL7 = jsonObject['TIGHT_EL7']
 
 def selectionLL(df,year,PDType,isData):
 

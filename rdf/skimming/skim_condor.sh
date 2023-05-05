@@ -1,5 +1,12 @@
 #!/bin/sh
 
+if [ $# -lt 1 ]; then
+   echo "TOO FEW PARAMETERS"
+   exit
+fi
+
+YEAR=$1
+
 USERPROXY=`id -u`
 echo ${USERPROXY}
 
@@ -8,8 +15,6 @@ echo ${USERPROXY}
 #transfer_output_remaps = "output_1l_${whichSample}_${whichJob}.root =  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/1l/${sampleName}/output_1l_${whichSample}_${whichJob}.root; output_2l_${whichSample}_${whichJob}.root =  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/2l/${sampleName}/output_2l_${whichSample}_${whichJob}.root; output_3l_${whichSample}_${whichJob}.root =  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/3l/${sampleName}/output_3l_${whichSample}_${whichJob}.root"
 
 voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
-
-touch skim_input_files.cfg skim_input_files_fromDAS.cfg;
 
 tar cvzf skim.tgz \
 skim.py skim_*.cfg \
@@ -36,7 +41,7 @@ fi
 cat << EOF > submit
 Universe   = vanilla
 Executable = skim.sh
-Arguments  = ${whichSample} ${whichJob} ${group} skim_input_samples_2022_fromDAS.cfg skim_input_files_fromDAS.cfg
+Arguments  = ${whichSample} ${whichJob} ${group} skim_input_samples_${YEAR}_fromDAS.cfg skim_input_files_fromDAS.cfg
 RequestMemory = 6000
 RequestCpus = 1
 RequestDisk = DiskUsage

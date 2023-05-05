@@ -135,6 +135,9 @@ if __name__ == "__main__":
     elif("Run2022" in sampleToSkim):
         year = 2022
         isSkimData = 1
+    elif("Run2023" in sampleToSkim):
+        year = 2023
+        isSkimData = 1
     elif("RunIISummer20UL18" in sampleToSkim):
         year = 2018
         isSkimData = 0
@@ -155,6 +158,8 @@ if __name__ == "__main__":
         jsnName = "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
     elif(year == 2022):
         jsnName = "Cert_Collisions2022_355100_362760_Golden.json"
+    elif(year == 2023):
+        jsnName = "Cert_Collisions2023_dummy_Golden.json"
 
     if os.path.exists(os.path.join("jsns",jsnName)):
         loadJSON(os.path.join("jsns",jsnName))
@@ -184,7 +189,7 @@ if __name__ == "__main__":
     sampleToFilter = [sampleToSkim, sampleToSkim]
     if("NANOAODSIM" in sampleToSkim):
         sampleToFilter[0] = sampleToSkim.split("+")[0]+"/"
-        sampleToFilter[1] = sampleToSkim.split("+")[0]
+        sampleToFilter[1] = sampleToSkim.split("+")[1].split("-")[0]
     elif("NANOAOD" in sampleToSkim):
         sampleToFilter[0] = sampleToSkim.split("+")[0]+"/"
         sampleToFilter[1] = sampleToSkim.split("+")[1].split("-")[0]
@@ -298,7 +303,9 @@ if __name__ == "__main__":
 
                 rdf = ROOT.RDataFrame("Events", inputSingleFileBase)\
                             .Define("isSkimData","{}".format(isSkimData))\
-                            .Define("applyDataJson","{}".format(JSON)).Filter("applyDataJson","pass JSON")
+                            .Define("applyDataJson","{}".format(JSON))
+                if(year != 2023):
+                    rdf = rdf.Filter("applyDataJson","pass JSON")
 
                 print("Processing({0}): {1} / {2}".format(nf,inputSingleFile,rdf.Count().GetValue()))
                 nonZeroEvents = True

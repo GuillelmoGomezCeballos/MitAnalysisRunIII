@@ -13,6 +13,7 @@ hadd -f ${output}/${path}_${year}_tightmu4_2d.root ${output}/${path}_${year}_5_2
 hadd -f ${output}/${path}_${year}_tightmu5_2d.root ${output}/${path}_${year}_6_2d.root ${output}/${path}_${year}_16_2d.root
 hadd -f ${output}/${path}_${year}_tightmu6_2d.root ${output}/${path}_${year}_7_2d.root ${output}/${path}_${year}_17_2d.root
 hadd -f ${output}/${path}_${year}_tightmu7_2d.root ${output}/${path}_${year}_8_2d.root ${output}/${path}_${year}_18_2d.root
+hadd -f ${output}/${path}_${year}_tightmu8_2d.root ${output}/${path}_${year}_9_2d.root ${output}/${path}_${year}_19_2d.root
 
 hadd -f ${output}/${path}_${year}_loose_el_2d.root ${output}/${path}_${year}_20_2d.root ${output}/${path}_${year}_30_2d.root
 hadd -f ${output}/${path}_${year}_tightel0_2d.root ${output}/${path}_${year}_21_2d.root ${output}/${path}_${year}_31_2d.root
@@ -23,5 +24,6 @@ hadd -f ${output}/${path}_${year}_tightel4_2d.root ${output}/${path}_${year}_25_
 hadd -f ${output}/${path}_${year}_tightel5_2d.root ${output}/${path}_${year}_26_2d.root ${output}/${path}_${year}_36_2d.root
 hadd -f ${output}/${path}_${year}_tightel6_2d.root ${output}/${path}_${year}_27_2d.root ${output}/${path}_${year}_37_2d.root
 hadd -f ${output}/${path}_${year}_tightel7_2d.root ${output}/${path}_${year}_28_2d.root ${output}/${path}_${year}_38_2d.root
+hadd -f ${output}/${path}_${year}_tightel8_2d.root ${output}/${path}_${year}_29_2d.root ${output}/${path}_${year}_39_2d.root
 
 python3 computeLeptonEff_2d.py --path=${path} --year=${year} --output=${output}
