@@ -44,8 +44,8 @@ TIGHT_MU8 = jsonObject['TIGHT_MU8']
 TIGHT_MU9 = jsonObject['TIGHT_MU9']
 
 elSelChoice = 0
-FAKE_EL0   = "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1 && abs(Electron_dxy) < 0.1 && abs(Electron_dz) < 0.2"
-FAKE_EL1   = "abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 1 && abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2"
+FAKE_EL0   = "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1 && abs(Electron_dxy) < 0.1 && abs(Electron_dz) < 0.2 && Electron_mvaIso > -0.99"
+FAKE_EL1   = "abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 1 && abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && fake_Electron_mvaIso > -0.99"
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 TIGHT_EL1 = jsonObject['TIGHT_EL1']
@@ -364,10 +364,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                     histo[2*ltype+ltag+168][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+168,x), "histo_{0}_{1}".format(2*ltype+ltag+168,x),100, 0.1,1.1), "probe_Electron_r9","weight")
                     histo[2*ltype+ltag+172][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+172,x), "histo_{0}_{1}".format(2*ltype+ltag+172,x),  90, 0, 0.3), "probe_Electron_pfRelIso03_chg","weight")
                     histo[2*ltype+ltag+176][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+176,x), "histo_{0}_{1}".format(2*ltype+ltag+176,x),  90, 0, 0.3), "probe_Electron_pfRelIso03_chg","weight")
-                    histo[2*ltype+ltag+180][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+180,x), "histo_{0}_{1}".format(2*ltype+ltag+180,x), 100,-1, 1.0), "probe_Electron_mvaIso","weight")
-                    histo[2*ltype+ltag+184][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+184,x), "histo_{0}_{1}".format(2*ltype+ltag+184,x), 100,-1, 1.0), "probe_Electron_mvaIso","weight")
-                    histo[2*ltype+ltag+188][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+188,x), "histo_{0}_{1}".format(2*ltype+ltag+188,x), 100,-1, 1.0), "probe_Electron_mvaNoIso","weight")
-                    histo[2*ltype+ltag+192][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+192,x), "histo_{0}_{1}".format(2*ltype+ltag+192,x), 100,-1, 1.0), "probe_Electron_mvaNoIso","weight")
+                    histo[2*ltype+ltag+180][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+180,x), "histo_{0}_{1}".format(2*ltype+ltag+180,x), 200,-1, 1.0), "probe_Electron_mvaIso","weight")
+                    histo[2*ltype+ltag+184][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+184,x), "histo_{0}_{1}".format(2*ltype+ltag+184,x), 200,-1, 1.0), "probe_Electron_mvaIso","weight")
+                    histo[2*ltype+ltag+188][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] > 30".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+188,x), "histo_{0}_{1}".format(2*ltype+ltag+188,x), 200,-1, 1.0), "probe_Electron_mvaNoIso","weight")
+                    histo[2*ltype+ltag+192][x] = dfzoscat[4*x+2*ltype+ltag].Filter("fake_Electron_pt[{0}] < 25".format(lprobe)).Histo1D(("histo_{0}_{1}".format(2*ltype+ltag+192,x), "histo_{0}_{1}".format(2*ltype+ltag+192,x), 200,-1, 1.0), "probe_Electron_mvaNoIso","weight")
 
                 # tighter ID to perform trigger efficiency measurements
                 dfzoscat[4*x+2*ltype+ltag] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}{1}[{2}] == true".format(lflavor,lepSelChoice,lprobe),"tight id({0}{1}[{2}])".format(lflavor,lepSelChoice,lprobe))
