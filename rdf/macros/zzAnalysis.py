@@ -39,7 +39,7 @@ FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 TIGHT_EL3 = jsonObject['TIGHT_EL3']
 
-def selectionLL(df,year,PDType,isData):
+def selectionLL(df,year,PDType,isData,count):
 
     overallTriggers = jsonObject['triggers']
     TRIGGERMUEG = getTriggerFromJson(overallTriggers, "TRIGGERMUEG", year)
@@ -69,7 +69,7 @@ def selectionLL(df,year,PDType,isData):
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
     dftag = selection4LVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("ptlmax > 25", "ptlmax > 25")
@@ -151,7 +151,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     variables = ROOT.model.GetVariableNames()
     print(variables)
 
-    dftag = selectionLL(df,year,PDType,isData)
+    dftag = selectionLL(df,year,PDType,isData,count)
 
     dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas)
 

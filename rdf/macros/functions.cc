@@ -298,14 +298,15 @@ float compute_JSON_TAU_SFs(const Vec_f& tau_pt, const Vec_f& tau_eta, const Vec_
   return sfTot;
 }
 
-Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_f& jet_rawFactor, const Vec_f& jet_area, const double rho, int type){
+Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_f& jet_rawFactor, const Vec_f& jet_area, const double rho, int type, int jetTypeCorr){
+  // jetTypeCorr == -1 (MC) 0/1/2/... A/B/C/... (DATA)
   bool debug = false;
   if(debug) printf("jes: %lu %f %d\n",jet_pt.size(),rho,type);
   Vec_f new_jet_pt(jet_pt.size(), 1.0);
 
   for (unsigned int idx = 0; idx < jet_pt.size(); ++idx) {
     if     (type ==  0) {
-      double sf = corrSFs.eval_jetCORR(jet_area[idx], jet_eta[idx], jet_pt[idx]*(1-jet_rawFactor[idx]), rho);
+      double sf = corrSFs.eval_jetCORR(jet_area[idx], jet_eta[idx], jet_pt[idx]*(1-jet_rawFactor[idx]), rho, jetTypeCorr);
       new_jet_pt[idx] = jet_pt[idx] * (1-jet_rawFactor[idx]) * sf;
       if(debug) printf("jes(%d): %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,jet_area[idx],jet_eta[idx],jet_pt[idx]*(1-jet_rawFactor[idx]), jet_pt[idx],1./(1-jet_rawFactor[idx]),sf,new_jet_pt[idx]);
     }
@@ -327,7 +328,7 @@ Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
 
   for (unsigned int idx = 0; idx < jet_pt.size(); ++idx) {
     if(jet_genJetIdx[idx] >= 0 && GenJet_pt.size() > (unsigned)jet_genJetIdx[idx]) {
-      double s_jer = max(corrSFs.eval_jerMethod1(jet_eta[idx], type)-1.0, 0.0);
+      double s_jer = max(corrSFs.eval_jerMethod1(jet_eta[idx], jet_pt[idx], type)-1.0, 0.0);
       double pt_diff_rel = (jet_pt[idx]-GenJet_pt[jet_genJetIdx[idx]])/jet_pt[idx];
       double sf = max(1 + s_jer*pt_diff_rel, 0.0);
       new_jet_pt[idx] = jet_pt[idx] * sf;
@@ -379,6 +380,23 @@ const Vec_f& Jet_pt_def, const Vec_f& Jet_pt_mod, const Vec_f& Jet_eta, const Ve
   else if(abs(type) == 2) return newMET.Phi(); 
   
   return 0;
+}
+
+Vec_b cleaningJetVetoMapMask(const Vec_f& jet_eta, const Vec_f& jet_phi, int jetTypeCorr) {
+  Vec_b jet_vetoMap_mask(jet_eta.size(), true);
+
+  if(jetTypeCorr == -1) return jet_vetoMap_mask;
+
+  bool debug = false;
+  if(debug) printf("cleaningJetVetoMapMask: %lu %d\n",jet_eta.size(),jetTypeCorr);
+
+  for (unsigned int idx = 0; idx < jet_eta.size(); ++idx) {
+    double jetVetoMap = corrSFs.eval_jetVetoMap(jet_eta[idx], jet_phi[idx], jetTypeCorr);
+    if(jetVetoMap > 0) jet_vetoMap_mask[idx] = false;
+    if(debug) printf("jetVetoMapMask(%d): %6.2f %6.2f %d\n",idx,jet_eta[idx],jet_phi[idx],jet_vetoMap_mask[idx]);
+  }
+
+  return jet_vetoMap_mask;
 }
 
 Vec_f compute_MUOPT_Unc(const Vec_f& mu_pt, const Vec_f& mu_eta, int type){

@@ -1,9 +1,14 @@
 #include "mysf.h"
 
-MyCorrections::MyCorrections(int year) {
+MyCorrections::MyCorrections(int the_input_year) {
+
+  year = the_input_year;
+  yearPrime = the_input_year;
 
   if(year == 2022) year = 2018;
   if(year == 2023) year = 2018;
+
+  if(year == 2023) yearPrime = 2022;
 
   std::string dirName = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/";
 
@@ -12,7 +17,15 @@ MyCorrections::MyCorrections(int year) {
   else if(year == 22016) subDirName += "2016postVFP_UL/";
   else if(year == 2017)  subDirName += "2017_UL/";
   else if(year == 2018)  subDirName += "2018_UL/";
-  
+  else if(year == 2022)  subDirName += "2022_Prompt/";
+
+  std::string subDirNamePrime = "";
+  if     (yearPrime == 12016) subDirNamePrime += "2016preVFP_UL/";  
+  else if(yearPrime == 22016) subDirNamePrime += "2016postVFP_UL/";
+  else if(yearPrime == 2017)  subDirNamePrime += "2017_UL/";
+  else if(yearPrime == 2018)  subDirNamePrime += "2018_UL/";
+  else if(yearPrime == 2022)  subDirNamePrime += "2022_Prompt/";
+
   std::string fileNameLUM = dirName+"LUM/"+subDirName+"puWeights.json.gz";
 
   std::string corrNameLUM = "";  
@@ -48,22 +61,49 @@ MyCorrections::MyCorrections(int year) {
   tauELESF_ = csetTAU->at("DeepTau2017v2p1VSe");
   tauMUOSF_ = csetTAU->at("DeepTau2017v2p1VSmu");
 
-  std::string fileNameJEC = dirName+"JME/"+subDirName+"jet_jerc.json.gz";
+  std::string fileNameJEC = dirName+"JME/"+subDirNamePrime+"jet_jerc.json.gz";
   auto csetJEC = correction::CorrectionSet::from_file(fileNameJEC);
-
-  std::string jecName = ""; std::string jerName = "";
-  if(year == 2018)  {jecName = "Summer19UL18_V5_MC";    jerName = "Summer19UL18_JRV2_MC";}
-  if(year == 2017)  {jecName = "Summer19UL17_V5_MC";    jerName = "Summer19UL17_JRV2_MC";}
-  if(year == 22016) {jecName = "Summer19UL16_V5_MC";    jerName = "Summer20UL16_JRV3";}
-  if(year == 12016) {jecName = "Summer19UL16APV_V5_MC"; jerName = "Summer20UL16APV_JRV3";}
 
   std::string algoName = "AK4PFchs";
 
-  std::string tagName = jecName + "_" + "L1L2L3Res" + "_" + algoName;
-  JEC_ = csetJEC->compound().at(tagName);
+  std::string jecMCName = ""; std::string jerName = "";
+  std::string jecDATAName[10]    = {"NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"};
+  std::string jetVetoMapName[10] = {"NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"};
+  if(yearPrime == 2022)  {
+    jecMCName = "Winter22Run3_V2_MC"; jerName = "JR_Winter22Run3_V1_MC";
+    jecDATAName[0] = "Winter22Run3_RunC_V2_DATA"; jetVetoMapName[0] = "Winter22Run3_RunCD_V1"; // A
+    jecDATAName[1] = "Winter22Run3_RunC_V2_DATA"; jetVetoMapName[1] = "Winter22Run3_RunCD_V1"; // B
+    jecDATAName[2] = "Winter22Run3_RunC_V2_DATA"; jetVetoMapName[2] = "Winter22Run3_RunCD_V1"; // C
+    jecDATAName[3] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[3] = "Winter22Run3_RunCD_V1"; // D
+    jecDATAName[4] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[4] = "Winter22Run3_RunE_V1"; // E
+    jecDATAName[5] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[5] = "Winter22Run3_RunE_V1"; // F
+    jecDATAName[6] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[6] = "Winter22Run3_RunE_V1"; // G
+    algoName = "AK4PFPuppi";
+  }
+  else if(yearPrime == 2018)  {
+    jecMCName = "Summer19UL18_V5_MC"; jerName = "Summer19UL18_JRV2_MC";
+    jecDATAName[0] = "Summer19UL18_RunA_V5_DATA"; jetVetoMapName[0] = "Summer19UL18_V1"; // A
+    jecDATAName[1] = "Summer19UL18_RunB_V5_DATA"; jetVetoMapName[1] = "Summer19UL18_V1"; // B
+    jecDATAName[2] = "Summer19UL18_RunC_V5_DATA"; jetVetoMapName[2] = "Summer19UL18_V1"; // C
+    jecDATAName[3] = "Summer19UL18_RunD_V5_DATA"; jetVetoMapName[3] = "Summer19UL18_V1"; // D
+  }
+  else if(yearPrime == 2017)  {jecMCName = "Summer19UL17_V5_MC";    jerName = "Summer19UL17_JRV2_MC";}
+  else if(yearPrime == 22016) {jecMCName = "Summer19UL16_V5_MC";    jerName = "Summer20UL16_JRV3";}
+  else if(yearPrime == 12016) {jecMCName = "Summer19UL16APV_V5_MC"; jerName = "Summer20UL16APV_JRV3";}
 
-  tagName = jecName + "_" + "Total" + "_" + algoName;
+  std::string tagName = jecMCName + "_" + "L1L2L3Res" + "_" + algoName;
+  JECMC_ = csetJEC->compound().at(tagName);
+
+  tagName = jecMCName + "_" + "Total" + "_" + algoName;
   jesUnc_ = csetJEC->at(tagName);
+
+  for(int i=0; i<10; i++){
+    if(jecDATAName[i].compare("NULL") == 0) continue;
+    tagName = jecDATAName[i] + "_" + "L1L2L3Res" + "_" + algoName;
+    JECDATA_[i] = csetJEC->compound().at(tagName);
+    tagName = jecDATAName[i] + "_" + "L2Relative" + "_" + algoName;
+    JECL2ResDATA_[i] = csetJEC->at(tagName);
+  }
 
   tagName = jerName + "_" + "ScaleFactor" + "_" + algoName;
   jerMethod1Unc_ = csetJEC->at(tagName);
@@ -75,43 +115,51 @@ MyCorrections::MyCorrections(int year) {
   auto csetPUJetID = correction::CorrectionSet::from_file(fileNamePUJetID);
   puJetIDSF_ = csetPUJetID->at("PUJetID_eff");
 
+  std::string fileNamejetVetoMap = dirName+"JME/"+subDirNamePrime+"jetvetomaps.json.gz";
+  auto csetJetVetoMap = correction::CorrectionSet::from_file(fileNamejetVetoMap);
+
+  for(int i=0; i<10; i++){
+    if(jetVetoMapName[i].compare("NULL") == 0) continue;
+    jetVetoMap_[i] = csetJetVetoMap->at(jetVetoMapName[i]);
+  }
+
 };
 
 double MyCorrections::eval_puSF(double int1, std::string str1) {
   return puSF_->evaluate({int1, str1});
 };
 
-double MyCorrections::eval_muonTRKSF(const char *year, const char *valType, const char *workingPoint, double eta, double pt) {
+double MyCorrections::eval_muonTRKSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt) {
   eta = std::min(std::abs(eta),2.399);
   pt = std::max(pt,15.001);
-  return muonTRKSF_->evaluate({year, eta, pt, valType});
+  return muonTRKSF_->evaluate({the_input_year, eta, pt, valType});
 };
 
-double MyCorrections::eval_muonIDSF(const char *year, const char *valType, const char *workingPoint, double eta, double pt) {
+double MyCorrections::eval_muonIDSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt) {
   eta = std::min(std::abs(eta),2.399);
   pt = std::max(pt,15.001);
-  return muonIDSF_->evaluate({year, eta, pt, valType});
+  return muonIDSF_->evaluate({the_input_year, eta, pt, valType});
 };
 
-double MyCorrections::eval_muonISOSF(const char *year, const char *valType, const char *workingPoint, double eta, double pt) {
+double MyCorrections::eval_muonISOSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt) {
   eta = std::min(std::abs(eta),2.399);
   pt = std::max(pt,15.001);
-  return muonISOSF_->evaluate({year, eta, pt, valType});
+  return muonISOSF_->evaluate({the_input_year, eta, pt, valType});
 };
 
-double MyCorrections::eval_electronSF(const char *year, const char *valType, const char *workingPoint, double eta, double pt) {
+double MyCorrections::eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt) {
   pt = std::max(pt,10.001);
-  return electronSF_->evaluate({year, valType, workingPoint, eta, pt});
+  return electronSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
 };
 
-double MyCorrections::eval_photonSF(const char *year, const char *valType, const char *workingPoint, double eta, double pt) {
+double MyCorrections::eval_photonSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt) {
   pt = std::max(pt,20.001);
-  return photonSF_->evaluate({year, valType, workingPoint, eta, pt});
+  return photonSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
 };
 
 double MyCorrections::eval_tauJETSF(double pt, int dm, int genmatch, const char *workingPoint, const char *valType) {
   pt = std::min(std::max(pt,20.001),1999.999);
-  return tauJETSF_->evaluate({pt, dm, genmatch, workingPoint, valType, "pt"});
+  return tauJETSF_->evaluate({pt, dm, genmatch, workingPoint, "VVLoose", valType, "pt"});
 };
 
 double MyCorrections::eval_tauELESF(double eta, int genmatch, const char *workingPoint, const char *valType) {
@@ -131,8 +179,10 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
     return btvLFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
 };
 
-double MyCorrections::eval_jetCORR(double area, double eta, double pt, double rho) {
-  return JEC_->evaluate({area, eta, pt, rho});
+double MyCorrections::eval_jetCORR(double area, double eta, double pt, double rho, int type) {
+  if(type >= 4 && yearPrime == 2022) return JECL2ResDATA_[type]->evaluate({eta, pt});
+  if(type >= 0) return JECDATA_[type]->evaluate({area, eta, pt, rho});
+  return JECMC_->evaluate({area, eta, pt, rho});
 };
 
 double MyCorrections::eval_jesUnc(double eta, double pt, int type) {
@@ -140,10 +190,16 @@ double MyCorrections::eval_jesUnc(double eta, double pt, int type) {
   return 0.0;
 };
 
-double MyCorrections::eval_jerMethod1(double eta, int type) {
-  if     (type ==  0) return jerMethod1Unc_->evaluate({eta,"nom"});
-  else if(type == +1) return jerMethod1Unc_->evaluate({eta,"up"});
-  else if(type == -1) return jerMethod1Unc_->evaluate({eta,"down"});
+double MyCorrections::eval_jerMethod1(double eta, double pt, int type) {
+  if(yearPrime < 2020){
+    if     (type ==  0) return jerMethod1Unc_->evaluate({eta,"nom"});
+    else if(type == +1) return jerMethod1Unc_->evaluate({eta,"up"});
+    else if(type == -1) return jerMethod1Unc_->evaluate({eta,"down"});
+  } else {
+    if     (type ==  0) return jerMethod1Unc_->evaluate({eta,pt,"nom"});
+    else if(type == +1) return jerMethod1Unc_->evaluate({eta,pt,"up"});
+    else if(type == -1) return jerMethod1Unc_->evaluate({eta,pt,"down"});
+  }
   return 0.0;
 };
 
@@ -153,4 +209,11 @@ double MyCorrections::eval_jerMethod2(double eta, double pt, double rho) {
 
 double MyCorrections::eval_puJetIDSF(char *valType, char *workingPoint, double eta, double pt) {
   return puJetIDSF_->evaluate({eta, pt, valType, workingPoint});
+};
+
+double MyCorrections::eval_jetVetoMap(double eta, double phi, int type) {
+  eta = std::min(std::max(eta,-5.18),5.18);
+  phi = std::min(std::max(phi,-3.1415),3.1415);
+  if(type >= 0) return jetVetoMap_[type]->evaluate({"jetvetomap", eta, phi});
+  return 0;
 };

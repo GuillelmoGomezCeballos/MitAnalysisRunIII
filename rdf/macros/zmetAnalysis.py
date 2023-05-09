@@ -34,7 +34,7 @@ TIGHT_MU0 = jsonObject['TIGHT_MU0']
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 
-def selectionLL(df,year,PDType,isData):
+def selectionLL(df,year,PDType,isData,count):
 
     overallTriggers = jsonObject['triggers']
     TRIGGERMUEG = getTriggerFromJson(overallTriggers, "TRIGGERMUEG", year)
@@ -55,7 +55,7 @@ def selectionLL(df,year,PDType,isData):
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
     dftag = selection2LVar  (dftag,year,isData)
     dftag = selectionLGVar  (dftag,year,isData)
 
@@ -116,7 +116,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
     ROOT.initJSONSFs(year)
 
-    dftag = selectionLL(df,year,PDType,isData)
+    dftag = selectionLL(df,year,PDType,isData,count)
 
     dfbase = selectionWeigths(dftag,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nPDFReplicas)
 

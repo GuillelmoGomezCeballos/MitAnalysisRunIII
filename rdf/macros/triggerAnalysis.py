@@ -58,7 +58,7 @@ TIGHT_EL7 = jsonObject['TIGHT_EL7']
 TIGHT_EL8 = jsonObject['TIGHT_EL8']
 TIGHT_EL9 = jsonObject['TIGHT_EL9']
 
-def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL):
+def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count):
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
@@ -95,7 +95,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
     dftag = selection2LVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("mll{0} > 80 && mll{0} < 100".format(altMass),"mll{0} cut".format(altMass))
@@ -104,7 +104,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
     return dftag
 
-def selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
+def selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count):
 
     dftag = selectionTrigger1L(df,year,PDType,JSON,isData,TRIGGERFAKEMU,TRIGGERFAKEEL)
 
@@ -118,7 +118,7 @@ def selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
     dftag = selection2LVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("mll{0} > 80 && mll{0} < 100".format(altMass),"mll{0} cut".format(altMass))
@@ -191,7 +191,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     list_TRIGGER.extend(list_TRIGGERSEL)
     print("Total number of lepton trigger paths: {0}".format(len(list_TRIGGER)))
 
-    dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL)
+    dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count)
 
     dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nPDFReplicas)
 
@@ -204,7 +204,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     list_TRIGGERFAKE.extend(list_TRIGGERFAKEEL)
     print("Total number of fake trigger paths: {0}".format(len(list_TRIGGERFAKE)))
 
-    dffake = selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL)
+    dffake = selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count)
 
     dffake = selectionWeigths(dffake,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nPDFReplicas)
     if(theCat == plotCategory("kPlotData")):

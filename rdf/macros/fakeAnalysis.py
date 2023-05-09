@@ -45,7 +45,7 @@ TIGHT_EL6 = jsonObject['TIGHT_EL6']
 TIGHT_EL7 = jsonObject['TIGHT_EL7']
 TIGHT_EL8 = jsonObject['TIGHT_EL8']
 
-def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
+def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count):
 
     dftag = selectionTrigger1L(df,year,PDType,JSON,isData,TRIGGERFAKEMU,TRIGGERFAKEEL)
 
@@ -82,7 +82,7 @@ def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL):
                  .Define("maxMETMT","max(PuppiMET_pt,mt)")
                 )
 
-    dftag = selectionJetMet(dftag,year,bTagSel,isData)
+    dftag = selectionJetMet(dftag,year,bTagSel,isData,count)
 
     return dftag
 
@@ -114,7 +114,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
     list_TRIGGERFAKE.extend(list_TRIGGERFAKEEL)
     print("Total number of fake trigger paths: {0}".format(len(list_TRIGGERFAKE)))
 
-    dfbase = selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL)
+    dfbase = selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count)
 
     if(theCat == plotCategory("kPlotData")):
         dfbase = (dfbase.Define("weight","1.0")
