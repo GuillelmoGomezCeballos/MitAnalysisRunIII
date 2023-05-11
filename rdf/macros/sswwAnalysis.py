@@ -32,11 +32,11 @@ VBSQCDSEL = jsonObject['VBSQCDSEL']
 
 muSelChoice = 6
 FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU6 = jsonObject['TIGHT_MU6']
+TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 
 elSelChoice = 7
 FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL7 = jsonObject['TIGHT_EL7']
+TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 
 def selectionLL(df,year,PDType,isData,count):
 
@@ -49,7 +49,7 @@ def selectionLL(df,year,PDType,isData,count):
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU6,FAKE_EL,TIGHT_EL7)
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 
     dftag =(dftag.Filter("nLoose == 2","Only two loose leptons")
                  .Filter("nFake == 2","Two fake leptons")
@@ -248,14 +248,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         BinF = 50
         minF = 500
         maxF = 2500
-        histo[startF+0][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj",startF,x,BinF,minF,maxF,0)
-        if(isData == False):
-            for nv in range(1,129):
-                histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj",startF,x,BinF,minF,maxF,nv)
-            histo[startF+129][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesUp"  ,startF,x,BinF,minF,maxF,129)
-            histo[startF+130][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesDown",startF,x,BinF,minF,maxF,130)
-            histo[startF+131][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerUp"  ,startF,x,BinF,minF,maxF,131)
-            histo[startF+132][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerDown",startF,x,BinF,minF,maxF,132)
+        histo[startF+0][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj",theCat,startF,x,BinF,minF,maxF,0)
+        for nv in range(1,129):
+            histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj"       ,theCat,startF,x,BinF,minF,maxF,nv)
+        histo[startF+129][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesUp"  ,theCat,startF,x,BinF,minF,maxF,129)
+        histo[startF+130][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesDown",theCat,startF,x,BinF,minF,maxF,130)
+        histo[startF+131][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerUp"  ,theCat,startF,x,BinF,minF,maxF,131)
+        histo[startF+132][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerDown",theCat,startF,x,BinF,minF,maxF,132)
 
     report = []
     for x in range(nCat):
@@ -346,7 +345,7 @@ if __name__ == "__main__":
     group = 10
 
     skimType = "3l"
-    year = 2018
+    year = 2022
     process = -1
     whichJob = -1
 

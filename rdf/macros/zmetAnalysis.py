@@ -28,11 +28,13 @@ JSON = jsonObject['JSON']
 
 VBSSEL = jsonObject['VBSSEL']
 
+muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU0 = jsonObject['TIGHT_MU0']
+TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 
+elSelChoice = 0
 FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL0 = jsonObject['TIGHT_EL0']
+TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 
 def selectionLL(df,year,PDType,isData,count):
 
@@ -45,7 +47,7 @@ def selectionLL(df,year,PDType,isData,count):
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 
     dftag =(dftag.Filter("nLoose == 2","Only two loose leptons")
                  .Filter("nFake == 2","Two fake leptons")
@@ -291,7 +293,7 @@ if __name__ == "__main__":
     group = 10
 
     skimType = "3l"
-    year = 2018
+    year = 2022
     process = -1
     whichJob = -1
 

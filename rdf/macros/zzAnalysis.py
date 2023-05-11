@@ -29,15 +29,15 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 
 VBSSEL = jsonObject['VBSSEL']
 
-muSelChoice = 0
+muSelChoice = 2
 FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU0 = jsonObject['TIGHT_MU0']
-TIGHT_MU3 = jsonObject['TIGHT_MU3']
+TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
+TIGHT_MU_TIGHT = jsonObject['TIGHT_MU5']
 
-elSelChoice = 0
+elSelChoice = 5
 FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL0 = jsonObject['TIGHT_EL0']
-TIGHT_EL3 = jsonObject['TIGHT_EL3']
+TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
+TIGHT_EL_TIGHT = jsonObject['TIGHT_EL4']
 
 def selectionLL(df,year,PDType,isData,count):
 
@@ -50,13 +50,13 @@ def selectionLL(df,year,PDType,isData,count):
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 
     dftag =(dftag.Filter("nLoose == 4","Only four loose leptons")
                  .Filter("nFake == 4","Four fake leptons")
                  .Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 0", "0 net charge")
-                 .Define("vtight_mu","{0}".format(TIGHT_MU3))
-                 .Define("vtight_el","{0}".format(TIGHT_EL3))
+                 .Define("vtight_mu","{0}".format(TIGHT_MU_TIGHT))
+                 .Define("vtight_el","{0}".format(TIGHT_EL_TIGHT))
                  .Define("eventNum", "event")
                  .Define("ptl1","30.0f")
                  .Define("ptl2","30.0f")
@@ -315,7 +315,7 @@ if __name__ == "__main__":
     group = 10
 
     skimType = "3l"
-    year = 2018
+    year = 2022
     process = -1
     whichJob = -1
 

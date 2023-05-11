@@ -1,5 +1,6 @@
 import ROOT
 import os, json
+from utilsCategory import plotCategory
 
 def getBTagCut(type):
 
@@ -47,7 +48,6 @@ def makeJES(df,year,postFix,bTagSel):
               .Define("good_Jet_mass{0}".format(postFix), "clean_Jet_mass[good_jet{0}]".format(postFix))
               .Define("good_Jet_area{0}".format(postFix), "clean_Jet_area[good_jet{0}]".format(postFix))
               .Define("good_Jet_rawFactor{0}".format(postFix), "clean_Jet_rawFactor[good_jet{0}]".format(postFix))
-              .Define("good_Jet_btagCSVV2{0}".format(postFix), "clean_Jet_btagCSVV2[good_jet{0}]".format(postFix))
               .Define("good_Jet_btagDeepB{0}".format(postFix), "clean_Jet_btagDeepB[good_jet{0}]".format(postFix))
               .Define("good_Jet_btagDeepFlavB{0}".format(postFix), "clean_Jet_btagDeepFlavB[good_jet{0}]".format(postFix))
               .Define("good_Jet_chEmEF{0}".format(postFix), "clean_Jet_chEmEF[good_jet{0}]".format(postFix))
@@ -119,7 +119,6 @@ def selectionJetMet(df,year,bTagSel,isData,count):
               .Define("clean_Jet_mass", "Jet_mass[clean_jet]")
               .Define("clean_Jet_area", "Jet_area[clean_jet]")
               .Define("clean_Jet_rawFactor", "Jet_rawFactor[clean_jet]")
-              .Define("clean_Jet_btagCSVV2", "Jet_btagCSVV2[clean_jet]")
               .Define("clean_Jet_btagDeepB", "Jet_btagDeepB[clean_jet]")
               .Define("clean_Jet_btagDeepFlavB", "Jet_btagDeepFlavB[clean_jet]")
               .Define("clean_Jet_muonSubtrFactor", "Jet_muonSubtrFactor[clean_jet]")
@@ -131,8 +130,8 @@ def selectionJetMet(df,year,bTagSel,isData,count):
 
     if(isData == "false"):
         dftag =(dftag.Define("clean_Jet_genJetIdx", "Jet_genJetIdx[clean_jet]")
-                     .Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,0,-1)")
-                     #.Define("clean_Jet_ptDef",  "clean_Jet_pt")
+                     #.Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,0,-1)")
+                     .Define("clean_Jet_ptDef",  "clean_Jet_pt")
                      #.Define("clean_Jet_ptDef"    , "compute_JSON_JER_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,0,{0})".format(jetTypeCorr))
                      .Define("clean_Jet_ptJesUp"  , "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,+1,{0})".format(jetTypeCorr))
                      .Define("clean_Jet_ptJesDown", "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,-1,{0})".format(jetTypeCorr))
@@ -143,15 +142,19 @@ def selectionJetMet(df,year,bTagSel,isData,count):
                      )
 
     else:
-        #dftag = dftag.Define("clean_Jet_ptDef","clean_Jet_pt")
-        dftag = dftag.Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,0,{0})".format(jetTypeCorr))
+        dftag =(dftag.Define("clean_Jet_ptDef","clean_Jet_pt")
+        #dftag = dftag.Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,0,{0})".format(jetTypeCorr))
+                     .Define("clean_Jet_ptJesUp"  , "clean_Jet_pt")
+                     .Define("clean_Jet_ptJesDown", "clean_Jet_pt")
+                     .Define("clean_Jet_ptJerUp"  , "clean_Jet_pt")
+                     .Define("clean_Jet_ptJerDown", "clean_Jet_pt")
+                     )
 
     dftag = makeJES(dftag,year,""       ,bTagSel)
-    if(isData == "false"):
-        dftag = makeJES(dftag,year,"JesUp"  ,bTagSel)
-        dftag = makeJES(dftag,year,"JesDown",bTagSel)
-        dftag = makeJES(dftag,year,"JerUp"  ,bTagSel)
-        dftag = makeJES(dftag,year,"JerDown",bTagSel)
+    dftag = makeJES(dftag,year,"JesUp"  ,bTagSel)
+    dftag = makeJES(dftag,year,"JesDown",bTagSel)
+    dftag = makeJES(dftag,year,"JerUp"  ,bTagSel)
+    dftag = makeJES(dftag,year,"JerDown",bTagSel)
 
     return dftag
 
@@ -363,10 +366,10 @@ def selection2LVar(df,year,isData):
                   )
 
     dftag =(dftag.Define("ptl3", "0.0f")
-                 .Define("muid1", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, fake_Muon_mediumId, 0)")
-                 .Define("muid2", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_mvaId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, fake_Muon_mediumId, 1)")
-                 .Define("elid1", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaNoIso_WP80, fake_Electron_mvaIso_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, fake_Electron_pfRelIso03_chg, fake_Electron_pfRelIso03_all, 0)")
-                 .Define("elid2", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaNoIso_WP80, fake_Electron_mvaIso_WP80, fake_Electron_tightCharge, fake_Electron_mvaTTH, fake_Electron_pfRelIso03_chg, fake_Electron_pfRelIso03_all, 1)")
+                 .Define("muid1", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, fake_Muon_mediumPromptId, 0)")
+                 .Define("muid2", "compute_muid_var(fake_Muon_mediumId, fake_Muon_tightId, fake_Muon_pfIsoId, fake_Muon_miniIsoId, fake_Muon_mvaTTH, fake_Muon_mediumPromptId, 1)")
+                 .Define("elid1", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaNoIso_WP80, fake_Electron_mvaIso_WP80, fake_Electron_mvaIso_WP90, fake_Electron_tightCharge, fake_Electron_mvaTTH, fake_Electron_pfRelIso03_chg, fake_Electron_pfRelIso03_all, 0)")
+                 .Define("elid2", "compute_elid_var(fake_Electron_cutBased, fake_Electron_mvaNoIso_WP80, fake_Electron_mvaIso_WP80, fake_Electron_mvaIso_WP90, fake_Electron_tightCharge, fake_Electron_mvaTTH, fake_Electron_pfRelIso03_chg, fake_Electron_pfRelIso03_all, 1)")
                  )
 
     dftag = make2LVar(dftag,"","")
@@ -409,13 +412,25 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
     elif(year == 2022):
         triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
 
+    elif(year == 2023 and PDType == "MuonEG"):
+        triggerLEP = "{0}".format(triggerMUEG)
+
+    elif(year == 2023 and PDType == "Muon"):
+        triggerLEP = "({0} or {1}) and not {2}".format(triggerDMU,triggerSMU,triggerMUEG)
+
+    elif(year == 2023 and PDType == "EGamma"):
+        triggerLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2023):
+        triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
     else:
         print("PROBLEM with triggers!!!")
 
     print("triggerLEP: {0}".format(triggerLEP))
 
     dftag =(df.Define("isData","{}".format(isData))
-              .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
+              .Define("applyJson","{}".format(JSON))
               .Define("trigger","{0}".format(triggerLEP))
               .Filter("trigger > 0","Passed trigger")
               .Define("triggerMUEG","{0}".format(triggerMUEG))
@@ -424,6 +439,9 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
               .Define("triggerDEL", "{0}".format(triggerDEL))
               .Define("triggerSEL", "{0}".format(triggerSEL))
               )
+
+    if(year != 2023):
+        dftag = dftag.Filter("applyJson","pass JSON")
 
     return dftag
 
@@ -441,11 +459,17 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
         triggerFAKE = triggerFAKEMU
     elif(year == 2022 and PDType == "EGamma"):
         triggerFAKE =  triggerFAKEEL
+    elif(year == 2023 and PDType == "Muon"):
+        triggerFAKE = triggerFAKEMU
+    elif(year == 2023 and PDType == "EGamma"):
+        triggerFAKE =  triggerFAKEEL
     elif(PDType == "MuonEG"):
         triggerFAKE =  "0"
     elif(year == 2018):
         triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     elif(year == 2022):
+        triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
+    elif(year == 2023):
         triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     else:
         print("PROBLEM with triggers!!!")
@@ -479,10 +503,11 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
               .Define("fake_Muon_mediumPromptId"  ,"Muon_mediumPromptId[fake_mu]")
               .Define("fake_Muon_tightId"         ,"Muon_tightId[fake_mu]")
               .Define("fake_Muon_pfIsoId"         ,"Muon_pfIsoId[fake_mu]")
-              .Define("fake_Muon_mvaId"           ,"Muon_mvaId[fake_mu]")
+              .Define("fake_Muon_mvaMuID"         ,"Muon_mvaMuID[fake_mu]")
               .Define("fake_Muon_miniIsoId"       ,"Muon_miniIsoId[fake_mu]")
               .Define("fake_Muon_mvaTTH"          ,"Muon_mvaTTH[fake_mu]")
               .Define("fake_Muon_mvaLowPt"        ,"Muon_mvaLowPt[fake_mu]")
+              .Define("fake_Muon_pfRelIso03_all"  ,"Muon_pfRelIso03_all[fake_mu]")
               .Define("fake_Muon_pfRelIso04_all"  ,"Muon_pfRelIso04_all[fake_mu]")
               .Define("fake_Muon_miniPFRelIso_all","Muon_miniPFRelIso_all[fake_mu]")
               .Define("fake_Muon_nStations"       ,"Muon_nStations[fake_mu]")
@@ -504,6 +529,7 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
               .Define("fake_Electron_cutBased"            ,"Electron_cutBased[fake_el]")
               .Define("fake_Electron_mvaNoIso_WP80"       ,"Electron_mvaNoIso_WP80[fake_el]")
               .Define("fake_Electron_mvaIso_WP80"         ,"Electron_mvaIso_WP80[fake_el]")
+              .Define("fake_Electron_mvaIso_WP90"         ,"Electron_mvaIso_WP90[fake_el]")
               .Define("fake_Electron_mvaIso_Fall17V2_WPL" ,"Electron_mvaIso_Fall17V2_WPL[fake_el]")
               .Define("fake_Electron_tightCharge"         ,"Electron_tightCharge[fake_el]")
               .Define("fake_Electron_mvaTTH"              ,"Electron_mvaTTH[fake_el]")
@@ -697,8 +723,11 @@ def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeight
     if(isData == "true"): return selectionDAWeigths(df,year,PDType)
     else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas)
 
-def makeFinalVariable(df,var,start,x,bin,min,max,type):
+def makeFinalVariable(df,var,theCat,start,x,bin,min,max,type):
     histoNumber = start+type
+    if(theCat == plotCategory("kPlotData")):
+        return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weight")
+
     if  (type ==  0): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weight")
     elif(type ==  1): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFBC_correlatedUp")
     elif(type ==  2): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFBC_correlatedDown")

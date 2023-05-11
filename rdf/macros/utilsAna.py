@@ -12,13 +12,14 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 20.0]
+    lumi = [36.1, 41.5, 60.0, 20.0, 0.1]
 
-    lumiBit = -1
-    if(lumiBit == 2016): lumiBit = 0
-    elif(lumiBit == 2017): lumiBit = 1
-    elif(lumiBit == 2018): lumiBit = 2
-    elif(lumiBit == 2022): lumiBit = 3
+    lumiBit = -999
+    if(year == 2016): lumiBit = 0
+    elif(year == 2017): lumiBit = 1
+    elif(year == 2018): lumiBit = 2
+    elif(year == 2022): lumiBit = 3
+    elif(year == 2023): lumiBit = 4
 
     return lumi[lumiBit]
 

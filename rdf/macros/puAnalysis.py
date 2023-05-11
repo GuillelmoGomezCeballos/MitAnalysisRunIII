@@ -20,11 +20,13 @@ JSON = jsonObject['JSON']
 
 VBSSEL = jsonObject['VBSSEL']
 
+muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU0 = jsonObject['TIGHT_MU0']
+TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 
+elSelChoice = 0
 FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL0 = jsonObject['TIGHT_EL0']
+TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 
 def analysis(df,count,category,weight,year,PDType,isData):
 
@@ -39,6 +41,8 @@ def analysis(df,count,category,weight,year,PDType,isData):
     nCat, nHisto = plotCategory("kPlotCategories"), 200
     histo   = [[0 for x in range(nCat)] for y in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
+
+    ROOT.initJSONSFs(year)
 
     dfcat = df.Define("PDType","\"{0}\"".format(PDType))\
               .Define("weight","{0}".format(1.0))\

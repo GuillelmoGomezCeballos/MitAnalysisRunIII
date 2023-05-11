@@ -34,7 +34,7 @@ def readDASample(sampleNOW, year, PDType, skimType):
 
 if __name__ == "__main__":
 
-    year = 2018
+    year = 2022
     skimType = "1l"
     process = 0
 

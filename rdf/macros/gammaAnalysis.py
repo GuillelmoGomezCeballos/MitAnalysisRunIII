@@ -22,11 +22,13 @@ JSON = jsonObject['JSON']
 
 VBSSEL = jsonObject['VBSSEL']
 
+muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU0 = jsonObject['TIGHT_MU0']
+TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 
+elSelChoice = 0
 FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL0 = jsonObject['TIGHT_EL0']
+TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 
 PHOTONSKIM = "Photon_pt > 20 && abs(Photon_eta) < 2.5 && Photon_electronVeto && Photon_pfChargedIsoPFPV*Photon_pt < 10 && cleaningBitmap(Photon_vidNestedWPBitmap,4,2) && cleaningBitmap(Photon_vidNestedWPBitmap,10,2) && cleaningBitmap(Photon_vidNestedWPBitmap,12,2)"
 
@@ -346,7 +348,7 @@ if __name__ == "__main__":
     group = 20
 
     skimType = "pho"
-    year = 2018
+    year = 2022
     process = -1
     whichJob = -1
 

@@ -20,11 +20,13 @@ JSON = jsonObject['JSON']
 
 VBSSEL = jsonObject['VBSSEL']
 
+muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU0 = jsonObject['TIGHT_MU0']
+TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 
+elSelChoice = 0
 FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL0 = jsonObject['TIGHT_EL0']
+TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 
 def selectionLL(df,year,PDType,isData):
 
@@ -45,7 +47,7 @@ def selectionLL(df,year,PDType,isData):
               .Filter("trigger > 0","Passed trigger")
               )
 
-    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 
     dftag = (dftag.Filter("Sum(fake_mu)+Sum(fake_el) >= 2 and Sum(fake_mu)+Sum(fake_el) <= 4","Between two and four tight leptons")
                   .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
@@ -80,6 +82,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
     nCat, nHisto = plotCategory("kPlotCategories"), 200
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
+
+    ROOT.initJSONSFs(year)
 
     dfbase = selectionLL(df,year,PDType,isData)
 
@@ -205,7 +209,7 @@ if __name__ == "__main__":
     group = 10
 
     skimType = "met"
-    year = 2018
+    year = 2022
     process = -1
     whichJob = -1
 

@@ -215,6 +215,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+42][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 100, 0, 200), "PuppiMET_pt","weight")
             histo[ltype+45][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 100, 0, 200), "TkMET_pt","weight")
             histo[ltype+48][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 80,-0.5,79.5), "Rho_fixedGridRhoFastjetAll","weight")
+            histo[ltype+51][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 100, -3.1416, 3.1416), "MET_phi","weight")
+            histo[ltype+54][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 100, -3.1416, 3.1416), "PuppiMET_phi","weight")
 
             if(ltype == 2):
                 dftightsscat.append(dfcat[3*x+ltype].Filter("Sum(fake_Electron_charge)==0 && DiLepton_flavor==2 && tight_el7[0]==true && tight_el7[1]==true && mll{0}>80 && mll{0}<100".format(altMass)))
@@ -512,7 +514,7 @@ if __name__ == "__main__":
     group = 20
 
     skimType = "2l"
-    year = 2018
+    year = 2022
     process = -1
     whichJob = -1
 

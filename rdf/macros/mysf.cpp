@@ -6,9 +6,9 @@ MyCorrections::MyCorrections(int the_input_year) {
   yearPrime = the_input_year;
 
   if(year == 2022) year = 2018;
-  if(year == 2023) year = 2018;
 
   if(year == 2023) yearPrime = 2022;
+  if(year == 2023) year = 2018;
 
   std::string dirName = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/";
 

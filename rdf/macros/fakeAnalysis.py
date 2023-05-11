@@ -104,6 +104,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
 
     ROOT.initHisto1D(puWeights,0)
 
+    ROOT.initJSONSFs(year)
+
     overallTriggers = jsonObject['triggers']
     TRIGGERFAKEMU = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
     TRIGGERFAKEEL = getTriggerFromJson(overallTriggers, "TRIGGERFAKEEL", year)
