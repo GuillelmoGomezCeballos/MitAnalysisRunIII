@@ -2,7 +2,7 @@ import ROOT
 import os, json
 from utilsCategory import plotCategory
 
-def getBTagCut(type):
+def getBTagCut(type,year):
 
     if(type < 0 or type > 2): return 100
     value = [0.7100, 0.2783, 0.0490]
@@ -48,7 +48,7 @@ def makeJES(df,year,postFix,bTagSel):
               .Define("good_Jet_mass{0}".format(postFix), "clean_Jet_mass[good_jet{0}]".format(postFix))
               .Define("good_Jet_area{0}".format(postFix), "clean_Jet_area[good_jet{0}]".format(postFix))
               .Define("good_Jet_rawFactor{0}".format(postFix), "clean_Jet_rawFactor[good_jet{0}]".format(postFix))
-              .Define("good_Jet_btagDeepB{0}".format(postFix), "clean_Jet_btagDeepB[good_jet{0}]".format(postFix))
+             #.Define("good_Jet_btagDeepB{0}".format(postFix), "clean_Jet_btagDeepB[good_jet{0}]".format(postFix))
               .Define("good_Jet_btagDeepFlavB{0}".format(postFix), "clean_Jet_btagDeepFlavB[good_jet{0}]".format(postFix))
               .Define("good_Jet_chEmEF{0}".format(postFix), "clean_Jet_chEmEF[good_jet{0}]".format(postFix))
               .Define("good_Jet_neEmEF{0}".format(postFix), "clean_Jet_neEmEF[good_jet{0}]".format(postFix))
@@ -68,8 +68,8 @@ def makeJES(df,year,postFix,bTagSel):
               .Define("goodbtag_Jet_pt{0}".format(postFix), "clean_Jet_pt{0}[goodbtag_jet{1}]".format(postFitDef,postFix))
               .Define("goodbtag_Jet_eta{0}".format(postFix), "abs(clean_Jet_eta[goodbtag_jet{0}])".format(postFix))
               .Define("goodbtag_Jet_phi{0}".format(postFix), "abs(clean_Jet_phi[goodbtag_jet{0}])".format(postFix))
-              .Define("goodbtag_Jet_btagDeepB{0}".format(postFix), "clean_Jet_btagDeepB[goodbtag_jet{0}]".format(postFix))
-              .Define("goodbtag_Jet_bjet{0}".format(postFix), "goodbtag_Jet_btagDeepB{0} > {1}".format(postFix,getBTagCut(bTagSel)))
+              .Define("goodbtag_Jet_btagDeepFlavB{0}".format(postFix), "clean_Jet_btagDeepFlavB[goodbtag_jet{0}]".format(postFix))
+              .Define("goodbtag_Jet_bjet{0}".format(postFix), "goodbtag_Jet_btagDeepFlavB{0} > {1}".format(postFix,getBTagCut(bTagSel,year)))
               .Define("nbtag_goodbtag_Jet_bjet{0}".format(postFix), "Sum(goodbtag_Jet_bjet{0})*1.0f".format(postFix))
 
               .Define("vbs_jet{0}".format(postFix), "abs(clean_Jet_eta) < 5.0 && clean_Jet_pt{0} > 50".format(postFitDef))
@@ -119,7 +119,7 @@ def selectionJetMet(df,year,bTagSel,isData,count):
               .Define("clean_Jet_mass", "Jet_mass[clean_jet]")
               .Define("clean_Jet_area", "Jet_area[clean_jet]")
               .Define("clean_Jet_rawFactor", "Jet_rawFactor[clean_jet]")
-              .Define("clean_Jet_btagDeepB", "Jet_btagDeepB[clean_jet]")
+             #.Define("clean_Jet_btagDeepB", "Jet_btagDeepB[clean_jet]")
               .Define("clean_Jet_btagDeepFlavB", "Jet_btagDeepFlavB[clean_jet]")
               .Define("clean_Jet_muonSubtrFactor", "Jet_muonSubtrFactor[clean_jet]")
               .Define("clean_Jet_chEmEF", "Jet_chEmEF[clean_jet]")
@@ -606,7 +606,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
 
               .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,fake_Electron_pt,fake_Electron_eta,tight_el)")
 
-              .Define("weightBtagSF","compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"central\",0,{0})".format(bTagSel))
+              .Define("weightBtagSF","compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"central\",0,{0})".format(bTagSel))
 
               .Define("weightMuoSFJSON","compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
 
@@ -639,15 +639,15 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
                  .Define("weight4","weight/weightLepSF")
                  .Define("weight5","weight/weightTriggerSF")
 
-                 .Define("weightBtagSFBC_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",1,{0})".format(bTagSel))
-                 .Define("weightBtagSFBC_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_correlated\",1,{0})".format(bTagSel))
-                 .Define("weightBtagSFBC_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",1,{0})".format(bTagSel))
-                 .Define("weightBtagSFBC_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",1,{0})".format(bTagSel))
+                 .Define("weightBtagSFBC_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"up_correlated\",1,{0})".format(bTagSel))
+                 .Define("weightBtagSFBC_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"down_correlated\",1,{0})".format(bTagSel))
+                 .Define("weightBtagSFBC_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",1,{0})".format(bTagSel))
+                 .Define("weightBtagSFBC_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",1,{0})".format(bTagSel))
 
-                 .Define("weightBtagSFLF_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_correlated\",-1,{0})".format(bTagSel))
-                 .Define("weightBtagSFLF_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_correlated\",-1,{0})".format(bTagSel))
-                 .Define("weightBtagSFLF_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",-1,{0})".format(bTagSel))
-                 .Define("weightBtagSFLF_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",-1,{0})".format(bTagSel))
+                 .Define("weightBtagSFLF_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"up_correlated\",-1,{0})".format(bTagSel))
+                 .Define("weightBtagSFLF_correlatedDown"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"down_correlated\",-1,{0})".format(bTagSel))
+                 .Define("weightBtagSFLF_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",-1,{0})".format(bTagSel))
+                 .Define("weightBtagSFLF_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",-1,{0})".format(bTagSel))
 
                  .Define("weightMuoSFTRKUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"systup\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
                  .Define("weightMuoSFIDUp" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"systup\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")

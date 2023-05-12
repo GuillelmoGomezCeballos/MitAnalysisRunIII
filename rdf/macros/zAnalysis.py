@@ -86,6 +86,8 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
                   .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
                   )
 
+    global useFR
+    if(year == 2023): useFR = 0
     if(useFR == 0):
         dftag = dftag.Filter("nTight == 2","Two tight leptons")
 
@@ -166,7 +168,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
     dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count)
 
+    global useFR
+    if(year == 2023): useFR = 0
     dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas)
+
+    overallMETFilters = jsonObject['met_filters']
+    METFILTERS = getTriggerFromJson(overallMETFilters, "All", year)
+    dfbase = dfbase.Define("METFILTERS", "{0}".format(METFILTERS))
 
     xMllMin = [91.1876-15,  30, 91.1876-15]
     xMllMax = [91.1876+15, 330, 91.1876+15]
@@ -251,7 +259,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                         coutWSStudy = coutWSStudy + 2
 
             dfjetcat.append(dfzllcat[3*x+ltype].Filter("ngood_jets >= 1", "At least one jet"))
-            histo[ltype+110][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+110,x), "histo_{0}_{1}".format(ltype+110,x), 50,0,1), "good_Jet_btagDeepB","weightBTag")
+            histo[ltype+110][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+110,x), "histo_{0}_{1}".format(ltype+110,x), 50,0,1), "good_Jet_btagDeepFlavB","weightBTag")
             histo[ltype+113][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+113,x), "histo_{0}_{1}".format(ltype+113,x), 6,-0.5,5.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
 
             dfjetcat[3*x+ltype] = dfjetcat[3*x+ltype].Filter("DiLepton_flavor != 1 || nbtag_goodbtag_Jet_bjet >= 1", "At least one b-jet")
@@ -286,6 +294,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+157][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+157,x), "histo_{0}_{1}".format(ltype+157,x), 50,0,2000), "mjj","weight")
             histo[ltype+160][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+160,x), "histo_{0}_{1}".format(ltype+160,x), 50,0,400), "ptjj","weight")
             histo[ltype+163][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+163,x), "histo_{0}_{1}".format(ltype+163,x), 50,0,3.1416), "dphijj","weight")
+
+            histo[ltype+166][x] = dfzllcat[3*x+ltype].Filter("METFILTERS > 0").Histo1D(("histo_{0}_{1}".format(ltype+166,x), "histo_{0}_{1}".format(ltype+166,x), 100, 0, 200), "PuppiMET_pt","weight")
+            histo[ltype+169][x] = dfzllcat[3*x+ltype].Filter("METFILTERS ==0").Histo1D(("histo_{0}_{1}".format(ltype+169,x), "histo_{0}_{1}".format(ltype+169,x), 100, 0, 200), "PuppiMET_pt","weight")
 
             histo[ltype+179][x] = dfzllcat[3*x+ltype].Filter("triggerMUEG> 0").Histo1D(("histo_{0}_{1}".format(ltype+179,x), "histo_{0}_{1}".format(ltype+179,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
             histo[ltype+182][x] = dfzllcat[3*x+ltype].Filter("triggerDMU > 0").Histo1D(("histo_{0}_{1}".format(ltype+182,x), "histo_{0}_{1}".format(ltype+182,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
