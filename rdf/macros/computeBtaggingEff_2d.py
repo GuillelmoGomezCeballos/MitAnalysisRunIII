@@ -6,7 +6,7 @@ from utilsCategory import plotCategory
 
 if __name__ == "__main__":
     path = "fillhisto_puAnalysis"
-    year = 2018
+    year = 2022
     output = "anaZ"
 
     valid = ['path=', "year=", 'output=', 'help']

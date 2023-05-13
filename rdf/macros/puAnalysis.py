@@ -85,15 +85,15 @@ def analysis(df,count,category,weight,year,PDType,isData):
           .Define("goodloosejet_lf",   "goodloosejet_hadronFlavour == 0")
           .Define("goodloosejet_cj",   "goodloosejet_hadronFlavour == 4")
           .Define("goodloosejet_bj",   "goodloosejet_hadronFlavour == 5")
-          .Define("goodloosejet_lf_t", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(0)))
-          .Define("goodloosejet_cj_t", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(0)))
-          .Define("goodloosejet_bj_t", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(0)))
-          .Define("goodloosejet_lf_m", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(1)))
-          .Define("goodloosejet_cj_m", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(1)))
-          .Define("goodloosejet_bj_m", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(1)))
-          .Define("goodloosejet_lf_l", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(2)))
-          .Define("goodloosejet_cj_l", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(2)))
-          .Define("goodloosejet_bj_l", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(2)))
+          .Define("goodloosejet_lf_t", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(0,year)))
+          .Define("goodloosejet_cj_t", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(0,year)))
+          .Define("goodloosejet_bj_t", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(0,year)))
+          .Define("goodloosejet_lf_m", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(1,year)))
+          .Define("goodloosejet_cj_m", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(1,year)))
+          .Define("goodloosejet_bj_m", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(1,year)))
+          .Define("goodloosejet_lf_l", "goodloosejet_hadronFlavour == 0 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(2,year)))
+          .Define("goodloosejet_cj_l", "goodloosejet_hadronFlavour == 4 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(2,year)))
+          .Define("goodloosejet_bj_l", "goodloosejet_hadronFlavour == 5 && goodloosejet_btagDeepFlavB > {0}".format(getBTagCut(2,year)))
           .Define("goodloosejet_pt_lf",   "goodloosejet_pt[goodloosejet_lf]")
           .Define("goodloosejet_pt_cj",   "goodloosejet_pt[goodloosejet_cj]")
           .Define("goodloosejet_pt_bj",   "goodloosejet_pt[goodloosejet_bj]")
@@ -168,7 +168,7 @@ def analysis(df,count,category,weight,year,PDType,isData):
     report0.Print()
     report1.Print()
 
-    myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}.root".format(count,year),'RECREATE')
+    myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}_job-1.root".format(count,year),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue
