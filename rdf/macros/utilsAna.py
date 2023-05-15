@@ -12,7 +12,7 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 20.0, 0.1]
+    lumi = [36.1, 41.5, 60.0, 20.0, 1.0]
 
     lumiBit = -999
     if(year == 2016): lumiBit = 0
@@ -171,7 +171,7 @@ def getDATAlist(type, year, skimType):
     elif(year == 2022):
         jsnName = "Cert_Collisions2022_355100_362760_Golden.json"
     elif(year == 2023):
-        jsnName = "Cert_Collisions2023_dummy_Golden.json"
+        jsnName = "Collisions23_13p6TeV_DCSOnly_TkPx.json"
 
     if os.path.exists(os.path.join("jsns",jsnName)):
         loadJSON(os.path.join("jsns",jsnName))
@@ -266,18 +266,42 @@ def getDATAlist(type, year, skimType):
     elif(year == 2022 and type == 1056):
         filesL = findDIR("{0}/JetMET+Run2022G-PromptNanoAODv11_v1-v2+NANOAOD".format(dirT2))
 
+    ##### 2023 ####
     elif(year == 2023 and type == 1021):
         filesL = findDIR("{0}/MuonEG+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+    elif(year == 2023 and type == 1022):
+        filesL = findDIR("{0}/MuonEG+Run2023C-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
 
     elif(year == 2023 and type == 1031):
         filesL   = findDIR("{0}/EGamma0+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
         filesAux = findDIR("{0}/EGamma1+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
         for x in filesAux: 
             filesL.push_back(x)
+    elif(year == 2023 and type == 1032):
+        filesL   = findDIR("{0}/EGamma0+Run2023C-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/EGamma1+Run2023C-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+        for x in filesAux: 
+            filesL.push_back(x)
 
     elif(year == 2023 and type == 1041):
-        filesL   = findDIR("{0}/Muon0+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
-        filesAux = findDIR("{0}/Muon1+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+        filesL   = findDIR("{0}/Muon0+Run2023B-PromptNanoAODv11p9_v1-v2+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/Muon1+Run2023B-PromptNanoAODv11p9_v1-v2+NANOAOD".format(dirT2))
+        for x in filesAux: 
+            filesL.push_back(x)
+    elif(year == 2023 and type == 1042):
+        filesL   = findDIR("{0}/Muon0+Run2023C-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/Muon1+Run2023C-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+        for x in filesAux: 
+            filesL.push_back(x)
+
+    elif(year == 2023 and type == 1051):
+        filesL   = findDIR("{0}/JetMET0+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/JetMET1+Run2023B-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+        for x in filesAux: 
+            filesL.push_back(x)
+    elif(year == 2023 and type == 1052):
+        filesL   = findDIR("{0}/JetMET0+Run2023C-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/JetMET1+Run2023C-PromptNanoAODv11p9_v1-v1+NANOAOD".format(dirT2))
         for x in filesAux: 
             filesL.push_back(x)
 

@@ -159,7 +159,7 @@ if __name__ == "__main__":
     elif(year == 2022):
         jsnName = "Cert_Collisions2022_355100_362760_Golden.json"
     elif(year == 2023):
-        jsnName = "Cert_Collisions2023_dummy_Golden.json"
+        jsnName = "Collisions23_13p6TeV_DCSOnly_TkPx.json"
 
     if os.path.exists(os.path.join("jsns",jsnName)):
         loadJSON(os.path.join("jsns",jsnName))
@@ -303,9 +303,7 @@ if __name__ == "__main__":
 
                 rdf = ROOT.RDataFrame("Events", inputSingleFileBase)\
                             .Define("isSkimData","{}".format(isSkimData))\
-                            .Define("applyDataJson","{}".format(JSON))
-                if(year != 2023):
-                    rdf = rdf.Filter("applyDataJson","pass JSON")
+                            .Define("applyDataJson","{}".format(JSON)).Filter("applyDataJson","pass JSON")
 
                 print("Processing({0}): {1} / {2}".format(nf,inputSingleFile,rdf.Count().GetValue()))
                 nonZeroEvents = True

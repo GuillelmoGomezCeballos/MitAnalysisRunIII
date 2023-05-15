@@ -430,7 +430,7 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
     print("triggerLEP: {0}".format(triggerLEP))
 
     dftag =(df.Define("isData","{}".format(isData))
-              .Define("applyJson","{}".format(JSON))
+              .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
               .Define("trigger","{0}".format(triggerLEP))
               .Filter("trigger > 0","Passed trigger")
               .Define("triggerMUEG","{0}".format(triggerMUEG))
@@ -439,9 +439,6 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
               .Define("triggerDEL", "{0}".format(triggerDEL))
               .Define("triggerSEL", "{0}".format(triggerSEL))
               )
-
-    if(year != 2023):
-        dftag = dftag.Filter("applyJson","pass JSON")
 
     return dftag
 

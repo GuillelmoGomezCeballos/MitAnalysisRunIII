@@ -329,7 +329,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"H/E","",Form("anaZ/fillhisto_triggerAnalysis%d_%d_362.root",whichCondorJob,year),"trigger_zsel_lowpt_hoee"                           ,0,year,legendBSM.Data(),1.0,isBlinded,"p_{T}^{e} < 25 GeV"  ,1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"Number of tracker layers","",Form("anaZ/fillhisto_triggerAnalysis%d_%d_364.root",whichCondorJob,year),"trigger_zsel_highpt_trackinglayersm",0,year,legendBSM.Data(),1.0,isBlinded,"p_{T}^{#mu} > 30 GeV",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"R9","",Form("anaZ/fillhisto_triggerAnalysis%d_%d_366.root",whichCondorJob,year),"trigger_highpt_zsel_r9e"                                  ,0,year,legendBSM.Data(),1.0,isBlinded,"p_{T}^{e} > 30 GeV"  ,1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"R9","",Form("anaZ/fillhisto_triggerAnalysis%d_%d_366.root",whichCondorJob,year),"trigger_zel_highpt_r9e"                                  ,0,year,legendBSM.Data(),1.0,isBlinded,"p_{T}^{e} > 30 GeV"  ,1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Number of tracker layers","",Form("anaZ/fillhisto_triggerAnalysis%d_%d_368.root",whichCondorJob,year),"trigger_zsel_lowpt_trackinglayersm" ,0,year,legendBSM.Data(),1.0,isBlinded,"p_{T}^{#mu} < 25 GeV",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"R9","",Form("anaZ/fillhisto_triggerAnalysis%d_%d_370.root",whichCondorJob,year),"trigger_zsel_lowpt_r9e"                                   ,0,year,legendBSM.Data(),1.0,isBlinded,"p_{T}^{e} < 25 GeV"  ,1,applyScaling,mlfitResult.Data(),channelName.Data());
 
