@@ -20,6 +20,8 @@ JSON = jsonObject['JSON']
 
 VBSSEL = jsonObject['VBSSEL']
 
+applyTightLepSel = 1
+
 muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
@@ -61,6 +63,9 @@ def selectionLL(df,year,PDType,isData):
                   .Define("etalmax","compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, PuppiMET_pt, PuppiMET_phi,5)")
                   .Define("etalmin","compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, PuppiMET_pt, PuppiMET_phi,6)")
                   )
+
+    if(applyTightLepSel == 1):
+        dftag = dftag.Filter("nTight == nFake","Tight lepton selection")
 
     dftag = selection2LVar(dftag,year,isData)
 

@@ -36,6 +36,8 @@ if __name__ == "__main__":
     numberOfLep = 6
     numberOfSel = 5
     histoTriggerSFEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
+    histoTriggerDAEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
+    histoTriggerMCEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepDenDA = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepDenDY = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepNumDA = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
@@ -47,6 +49,8 @@ if __name__ == "__main__":
             fileTriggerDEN.cd()
 
             histoTriggerSFEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoTriggerDAEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoTriggerMCEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
 
             histoLepDenDA[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
             histoLepDenDY[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotDY")))).Clone()
@@ -55,6 +59,8 @@ if __name__ == "__main__":
                 histoLepDenDY[nlep][nsel].Add(ROOT.gROOT.FindObject("histo2d{0}".format(nc)),1.0)
 
             histoTriggerSFEtaPt[nlep][nsel].SetDirectory(0)
+            histoTriggerDAEtaPt[nlep][nsel].SetDirectory(0)
+            histoTriggerMCEtaPt[nlep][nsel].SetDirectory(0)
             histoLepDenDA[nlep][nsel].SetDirectory(0)
             histoLepDenDY[nlep][nsel].SetDirectory(0)
 
@@ -74,7 +80,7 @@ if __name__ == "__main__":
 
             fileTriggerNUM.Close()
 
-            print("({0},{1}) = {2}/{3} = {4}".format(nlep,nsel,
+            print("Average({0},{1}) = {2} / {3} = {4}".format(nlep,nsel,
                   histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights(),
                   histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights(),
                  (histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights())/
@@ -115,8 +121,12 @@ if __name__ == "__main__":
 
                     histoTriggerSFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
                     histoTriggerSFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
+                    histoTriggerDAEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff0)
+                    histoTriggerDAEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc0)
+                    histoTriggerMCEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff1)
+                    histoTriggerMCEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc1)
 
-                    print("({0:2d},{1:2d}): ({2:.3f} +/- {3:.3f}) / ({4:.3f} - {5:.3f}) = {6:.3f} / {7:.3f}".format(i+1,j+1,
+                    print("Bin({0:2d},{1:2d}): ( {2:.3f} +/- {3:.3f} ) / ( {4:.3f} - {5:.3f} ) = {6:.3f} / {7:.3f}".format(i+1,j+1,
                           eff0,unc0,eff1,unc1,sf,sfe))
 
     fileTriggerEffName = "histoTriggerSFEtaPt_{0}.root".format(year)
@@ -124,6 +134,10 @@ if __name__ == "__main__":
     outfileTriggerEff.cd()
     for nlep in range(numberOfLep):
         for nsel in range(numberOfSel):
-            histoTriggerSFEtaPt[nlep][nsel].SetNameTitle("histoTriggerSFEtaPt_{0}_{1}".format(nlep,nsel),      "histoTriggerSFEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerSFEtaPt[nlep][nsel].SetNameTitle("histoTriggerSFEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerSFEtaPt_{0}_{1}".format(nlep,nsel))
             histoTriggerSFEtaPt[nlep][nsel].Write()
+            histoTriggerDAEtaPt[nlep][nsel].SetNameTitle("histoTriggerDAEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerDAEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerDAEtaPt[nlep][nsel].Write()
+            histoTriggerMCEtaPt[nlep][nsel].SetNameTitle("histoTriggerMCEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerMCEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerMCEtaPt[nlep][nsel].Write()
     outfileTriggerEff.Close()
