@@ -6,7 +6,7 @@ from utilsCategory import plotCategory
 
 if __name__ == "__main__":
     path = "fillhisto_sswwAnalysis1001"
-    year = 2018
+    year = 2022
     output = "anaZ"
 
     valid = ['path=', "year=", 'output=', 'help']
@@ -53,6 +53,15 @@ if __name__ == "__main__":
         signalDict.append(plotCategory("kPlotZZ"))
         histo.append(26)
         signalDict.append(plotCategory("kPlotZZ"))
+    elif('ww' in path):
+        histo.append(30)
+        signalDict.append(plotCategory("kPlotqqWW"))
+        histo.append(31)
+        signalDict.append(plotCategory("kPlotqqWW"))
+        histo.append(32)
+        signalDict.append(plotCategory("kPlotqqWW"))
+        histo.append(33)
+        signalDict.append(plotCategory("kPlotqqWW"))
 
     nCat = plotCategory("kPlotCategories")
     for nh in range(len(histo)):
@@ -70,7 +79,7 @@ if __name__ == "__main__":
             processesWithEvents = []
             for i in range(nCat):
                 if(histoSel[i].GetSumOfWeights() > 0 or i == plotCategory("kPlotData")):
-                    streamYield += " {0:6.1f}".format(histoSel[i].GetBinContent(nb))
+                    streamYield += " {0:7.1f}".format(histoSel[i].GetBinContent(nb))
                     processesWithEvents.append(i)
                 theYieldsProcess[i]  += histoSel[i].GetBinContent(nb)
                 if(i == plotCategory("kPlotData")):
@@ -84,23 +93,23 @@ if __name__ == "__main__":
                     theYields[2]  += histoSel[i].GetBinContent(nb)
                     theYieldsE[2] += histoSel[i].GetBinError(nb)*histoSel[i].GetBinError(nb)
                     mcYield += histoSel[i].GetBinContent(nb)
-            streamYield = "({0:2d}) {1:6.1f}".format(nb,mcYield) + streamYield
+            streamYield = "({0:2d}) {1:7.1f}".format(nb,mcYield) + streamYield
             if(nb == 1):
                 streamProcess = "         "
                 for pr in range(len(processesWithEvents)):
-                    streamProcess += " {0:6d}".format(processesWithEvents[pr])
+                    streamProcess += " {0:7d}".format(processesWithEvents[pr])
                 print(streamProcess)
             print(streamYield)
 
         streamYield = ""
         for i in range(nCat):
             if(histoSel[i].GetSumOfWeights() > 0 or i == plotCategory("kPlotData")):
-                streamYield += " {0:6.1f}".format(theYieldsProcess[i])
+                streamYield += " {0:7.1f}".format(theYieldsProcess[i])
         for i in range(3):
             theYieldsE[i] = pow(theYieldsE[i],0.5)
-        streamYield = "(xx) {0:6.1f}".format(theYields[1]+theYields[2]) + streamYield
+        streamYield = "(xx) {0:7.1f}".format(theYields[1]+theYields[2]) + streamYield
         print(streamYield)
-        print("DA: {0:6.1f} +/- {1:4.1f} / SIG: {2:6.1f} +/- {3:4.1f} / BG: {4:6.1f} +/- {5:4.1f}".format(theYields[0],theYieldsE[0],theYields[1],theYieldsE[1],theYields[2],theYieldsE[2]))
+        print("DA: {0:7.1f} +/- {1:4.1f} / SIG: {2:7.1f} +/- {3:4.1f} / BG: {4:7.1f} +/- {5:4.1f}".format(theYields[0],theYieldsE[0],theYields[1],theYieldsE[1],theYields[2],theYieldsE[2]))
         SB = theYields[1]/theYields[2]
         DataVsPred = theYields[0]/(theYields[1]+theYields[2])
         DataVsPredE = DataVsPred*pow(pow(theYieldsE[0]/theYields[0],2)+pow(theYieldsE[1]/(theYields[1]+theYields[2]),2)+pow(theYieldsE[2]/(theYields[1]+theYields[2]),2),0.5)

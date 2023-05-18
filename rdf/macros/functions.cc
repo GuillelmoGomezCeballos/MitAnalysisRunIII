@@ -1444,6 +1444,17 @@ float compute_nl_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      else if(var ==  4) theVar = p4mom[p4mom.size()-1].Pt();
      else if(var ==  5) theVar = abs(p4mom[0].Eta());
      else if(var ==  6) theVar = abs(p4mom[p4mom.size()-1].Eta());
+     else if(var ==  7 || var == 8) {
+       double dPhilMETMin = deltaPhi(p4mom[0].Phi(),met_phi);
+       for(unsigned int i=1; i<p4mom.size(); i++){
+         if(deltaPhi(p4mom[i].Phi(),met_phi) < dPhilMETMin) dPhilMETMin = deltaPhi(p4mom[i].Phi(),met_phi);
+       }
+       if(var == 7) theVar = dPhilMETMin;
+       else {
+         if(dPhilMETMin > TMath::Pi()/2) theVar = met_pt;
+	 else theVar = met_pt*sin(dPhilMETMin);
+       }
+     }
    }
    return theVar;
 }

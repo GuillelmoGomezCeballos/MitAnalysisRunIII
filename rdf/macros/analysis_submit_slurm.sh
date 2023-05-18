@@ -42,6 +42,9 @@ elif [ $theAna -eq 6 ]; then
 elif [ $theAna -eq 7 ]; then
  whichAna="metAnalysis"
 
+elif [ $theAna -eq 8 ]; then
+ whichAna="wwAnalysis"
+
 fi
 
 if [ ${whichAna} = "DUMMY" ]; then
