@@ -20,8 +20,6 @@ JSON = jsonObject['JSON']
 
 VBSSEL = jsonObject['VBSSEL']
 
-applyTightLepSel = 1
-
 muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
@@ -63,9 +61,6 @@ def selectionLL(df,year,PDType,isData):
                   .Define("etalmax","compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, PuppiMET_pt, PuppiMET_phi,5)")
                   .Define("etalmin","compute_nl_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, PuppiMET_pt, PuppiMET_phi,6)")
                   )
-
-    if(applyTightLepSel == 1):
-        dftag = dftag.Filter("nTight == nFake","Tight lepton selection")
 
     dftag = selection2LVar(dftag,year,isData)
 
@@ -109,20 +104,39 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
             histo[ltype+ 0][x] = dfcat[6*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 100,  0, 500), "mtot","weight")
             histo[ltype+ 6][x] = dfcat[6*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 6,x), "histo_{0}_{1}".format(ltype+ 6,x), 100,  0, 200), "mllmin","weight")
 
-            histo2D[ltype+ 0][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin <= 1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+ 0, x), "histo2d_{0}_{1}".format(ltype+ 0, x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
-            histo2D[ltype+ 6][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin <= 1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+ 6, x), "histo2d_{0}_{1}".format(ltype+ 6, x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            iniHisto = 0
+            histo2D[ltype+ 0+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin <= 1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+ 0+iniHisto,x), "histo2d_{0}_{1}".format(ltype+ 0+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+ 6+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin <= 1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+ 6+iniHisto,x), "histo2d_{0}_{1}".format(ltype+ 6+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
 
-            histo2D[ltype+12][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin <= 1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+12, x), "histo2d_{0}_{1}".format(ltype+12, x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
-            histo2D[ltype+18][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin <= 1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+18, x), "histo2d_{0}_{1}".format(ltype+18, x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+12+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin <= 1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+12+iniHisto,x), "histo2d_{0}_{1}".format(ltype+12+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+18+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin <= 1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+18+iniHisto,x), "histo2d_{0}_{1}".format(ltype+18+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
 
-            histo2D[ltype+24][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin >  1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+24, x), "histo2d_{0}_{1}".format(ltype+24, x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
-            histo2D[ltype+30][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin >  1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+30, x), "histo2d_{0}_{1}".format(ltype+30, x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+24+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin >  1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+24+iniHisto,x), "histo2d_{0}_{1}".format(ltype+24+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+30+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin >  1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+30+iniHisto,x), "histo2d_{0}_{1}".format(ltype+30+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
 
-            histo2D[ltype+36][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin >  1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+36, x), "histo2d_{0}_{1}".format(ltype+36, x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
-            histo2D[ltype+42][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin >  1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+42, x), "histo2d_{0}_{1}".format(ltype+42, x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+36+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin >  1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+36+iniHisto,x), "histo2d_{0}_{1}".format(ltype+36+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+42+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin >  1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+42+iniHisto,x), "histo2d_{0}_{1}".format(ltype+42+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
 
-            histo2D[ltype+48][x] = dfcat[6*x+ltype]                       .Histo2D(("histo2d_{0}_{1}".format(ltype+48, x), "histo2d_{0}_{1}".format(ltype+48, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etalmin", "ptlmin","weight")
-            histo2D[ltype+54][x] = dfcat[6*x+ltype].Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+54, x), "histo2d_{0}_{1}".format(ltype+54, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etalmin", "ptlmin","weight")
+            histo2D[ltype+48+iniHisto][x] = dfcat[6*x+ltype]                       .Histo2D(("histo2d_{0}_{1}".format(ltype+48+iniHisto, x), "histo2d_{0}_{1}".format(ltype+48+iniHisto, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etalmin", "ptlmin","weight")
+            histo2D[ltype+54+iniHisto][x] = dfcat[6*x+ltype].Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+54+iniHisto, x), "histo2d_{0}_{1}".format(ltype+54+iniHisto, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etalmin", "ptlmin","weight")
+
+            dfcat[6*x+ltype] = dfcat[6*x+ltype].Filter("nTight == nFake","Tight lepton selection")
+
+            iniHisto = 100
+            histo2D[ltype+ 0+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin <= 1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+ 0+iniHisto,x), "histo2d_{0}_{1}".format(ltype+ 0+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+ 6+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin <= 1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+ 6+iniHisto,x), "histo2d_{0}_{1}".format(ltype+ 6+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+
+            histo2D[ltype+12+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin <= 1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+12+iniHisto,x), "histo2d_{0}_{1}".format(ltype+12+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+18+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin <= 1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+18+iniHisto,x), "histo2d_{0}_{1}".format(ltype+18+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+
+            histo2D[ltype+24+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin >  1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+24+iniHisto,x), "histo2d_{0}_{1}".format(ltype+24+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+30+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax <= 1.5 && etalmin >  1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+30+iniHisto,x), "histo2d_{0}_{1}".format(ltype+30+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+
+            histo2D[ltype+36+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin >  1.5")                       .Histo2D(("histo2d_{0}_{1}".format(ltype+36+iniHisto,x), "histo2d_{0}_{1}".format(ltype+36+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+            histo2D[ltype+42+iniHisto][x] = dfcat[6*x+ltype].Filter("etalmax >  1.5 && etalmin >  1.5").Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+42+iniHisto,x), "histo2d_{0}_{1}".format(ltype+42+iniHisto,x), len(xPtMaxBins)-1, xPtMaxBins, len(xPtMinBins)-1, xPtMinBins), "ptlmax", "ptlmin","weight")
+
+            histo2D[ltype+48+iniHisto][x] = dfcat[6*x+ltype]                       .Histo2D(("histo2d_{0}_{1}".format(ltype+48+iniHisto, x), "histo2d_{0}_{1}".format(ltype+48+iniHisto, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etalmin", "ptlmin","weight")
+            histo2D[ltype+54+iniHisto][x] = dfcat[6*x+ltype].Filter("triggerl > 0").Histo2D(("histo2d_{0}_{1}".format(ltype+54+iniHisto, x), "histo2d_{0}_{1}".format(ltype+54+iniHisto, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etalmin", "ptlmin","weight")
 
     report = []
     for x in range(nCat):
