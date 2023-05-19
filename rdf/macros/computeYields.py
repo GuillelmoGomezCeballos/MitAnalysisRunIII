@@ -33,27 +33,27 @@ if __name__ == "__main__":
 
     histo = []
     signalDict = []
-    if('ssww' in path):
+    if('sswwAna' in path):
         histo.append(20)
         signalDict.append(plotCategory("kPlotEWKSSWW"))
         histo.append(21)
         signalDict.append(plotCategory("kPlotEWKSSWW"))
-    elif('zz' in path):
+    elif('zzAna' in path):
         histo.append(8)
         signalDict.append(plotCategory("kPlotZZ"))
-    elif('wz' in path):
+    elif('wzAna' in path):
         histo.append(11)
         signalDict.append(plotCategory("kPlotWZ"))
         histo.append(12)
         signalDict.append(plotCategory("kPlotWZ"))
-    elif('zmet' in path):
+    elif('zmetAna' in path):
         histo.append(24)
         signalDict.append(plotCategory("kPlotZZ"))
         histo.append(25)
         signalDict.append(plotCategory("kPlotZZ"))
         histo.append(26)
         signalDict.append(plotCategory("kPlotZZ"))
-    elif('ww' in path):
+    elif('wwAna' in path):
         histo.append(30)
         signalDict.append(plotCategory("kPlotqqWW"))
         histo.append(31)
@@ -62,6 +62,9 @@ if __name__ == "__main__":
         signalDict.append(plotCategory("kPlotqqWW"))
         histo.append(33)
         signalDict.append(plotCategory("kPlotqqWW"))
+    elif('zAna' in path):
+        histo.append(28)
+        signalDict.append(plotCategory("kPlotDY"))
 
     nCat = plotCategory("kPlotCategories")
     for nh in range(len(histo)):

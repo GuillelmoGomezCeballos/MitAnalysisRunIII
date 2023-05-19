@@ -215,7 +215,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+18][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+18,x), "histo_{0}_{1}".format(ltype+18,x), 25,  0,2.5), "etal1","weight")
             histo[ltype+21][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+21,x), "histo_{0}_{1}".format(ltype+21,x), 25,  0,2.5), "etal2","weight")
             histo[ltype+24][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+24,x), "histo_{0}_{1}".format(ltype+24,x), 6,-0.5,5.5), "ngood_jets","weight")
-            histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 6,-0.5,5.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
+            histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
             histo[ltype+30][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+30,x), "histo_{0}_{1}".format(ltype+30,x), 80,-0.5,79.5), "PV_npvsGood","weight")
             histo[ltype+33][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+33,x), "histo_{0}_{1}".format(ltype+33,x), 100, 0, 200), "CaloMET_pt","weight")
             histo[ltype+36][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 100, 0, 200), "ChsMET_pt","weight")
@@ -439,6 +439,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             print("---------------- SUMMARY 3*{0}+{1} = {2} -------------".format(x,ltype,3*x+ltype))
             report[3*x+ltype].Print()
 
+    #for i in range(nCat):
+    #    if(histo[28][i].GetSumOfWeights() != 0): print("AAA({0}) {1}".format(i,histo[28][i].GetSumOfWeights()))
     myfile = ROOT.TFile("fillhisto_zAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):

@@ -157,9 +157,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         		   )
 
         if(x == plotCategory("kPlotTop")):
-            dfcat[x] = dfcat[x].Define("weightWW", "weight*1.15")
-        elif(x == plotCategory("kPlotDY")):
-            dfcat[x] = dfcat[x].Define("weightWW", "weight*1.50")
+            dfcat[x] = dfcat[x].Define("weightWW", "weight*0.90")
         else:
             dfcat[x] = dfcat[x].Define("weightWW", "weight")
 
@@ -254,6 +252,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         print("---------------- SUMMARY {0} -------------".format(x))
         report[x].Print()
 
+    #for i in range(nCat):
+    #    if(histo[5][i].GetSumOfWeights() != 0): print("AAA({0}) {1}".format(i,histo[5][i].GetSumOfWeights()))
     myfile = ROOT.TFile("fillhisto_wwAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
@@ -337,7 +337,7 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
 
 if __name__ == "__main__":
 
-    group = 20
+    group = 10
 
     skimType = "2l"
     year = 2022
