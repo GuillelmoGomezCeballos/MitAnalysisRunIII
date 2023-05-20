@@ -235,10 +235,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         histo[28][x] = dfzttcat[x].Histo1D(("histo_{0}_{1}".format(28,x), "histo_{0}_{1}".format(28,x), 25,  0,2.5), "etal2","weightWW")
         histo[29][x] = dftopcat[x].Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x), 25,  0,2.5), "etal2","weightWW")
 
-        histo[30][x] = dfssxcat[x].Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x), 6,-0.5,5.5), "ngood_jets","weightWW")
-        histo[31][x] = dfwwxcat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x), 6,-0.5,5.5), "ngood_jets","weightWW")
-        histo[32][x] = dfzttcat[x].Histo1D(("histo_{0}_{1}".format(32,x), "histo_{0}_{1}".format(32,x), 6,-0.5,5.5), "ngood_jets","weightWW")
-        histo[33][x] = dftopcat[x].Histo1D(("histo_{0}_{1}".format(33,x), "histo_{0}_{1}".format(33,x), 6,-0.5,5.5), "ngood_jets","weightWW")
+        histo[30][x] = dfssxcat[x].Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x), 4,-0.5,3.5), "ngood_jets","weightWW")
+        histo[31][x] = dfwwxcat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x), 4,-0.5,3.5), "ngood_jets","weightWW")
+        histo[32][x] = dfzttcat[x].Histo1D(("histo_{0}_{1}".format(32,x), "histo_{0}_{1}".format(32,x), 4,-0.5,3.5), "ngood_jets","weightWW")
+        histo[33][x] = dftopcat[x].Histo1D(("histo_{0}_{1}".format(33,x), "histo_{0}_{1}".format(33,x), 4,-0.5,3.5), "ngood_jets","weightWW")
 
         histo[46][x] = dfssxcat[x].Histo1D(("histo_{0}_{1}".format(46,x), "histo_{0}_{1}".format(46,x), 60, 20, 320), "mll","weightWW")
         histo[47][x] = dfwwxcat[x].Histo1D(("histo_{0}_{1}".format(47,x), "histo_{0}_{1}".format(47,x), 60, 20, 320), "mll","weightWW")
