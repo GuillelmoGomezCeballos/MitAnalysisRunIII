@@ -32,6 +32,8 @@ elif [ $theAna -eq 4 ]; then
 
 elif [ $theAna -eq 5 ]; then
  whichAna="fakeAnalysis"
+ nohup ./analysis_slurm.sh 110 2022 -1 1002 fakeAnalysis >& logs/log_110 &
+ nohup ./analysis_slurm.sh 111 2022 -1 1003 fakeAnalysis >& logs/log_111 &
 
 elif [ $theAna -eq 6 ]; then
  whichAna="triggerAnalysis"
@@ -39,6 +41,9 @@ elif [ $theAna -eq 6 ]; then
 
 elif [ $theAna -eq 7 ]; then
  whichAna="metAnalysis"
+
+elif [ $theAna -eq 8 ]; then
+ whichAna="wwAnalysis"
 
 fi
 
@@ -89,7 +94,7 @@ use_x509userproxy = True
 x509userproxy = /tmp/x509up_u${USERPROXY}
 Requirements = ( BOSCOCluster =!= "t3serv008.mit.edu" && BOSCOCluster =!= "ce03.cmsaf.mit.edu" && BOSCOCluster =!= "eofe8.mit.edu") && (Machine != "t3btch086.mit.edu")
 +REQUIRED_OS = "rhel7"
-+DESIRED_Sites = "mit_tier2,mit_tier3"
++DESIRED_Sites = "mit_tier3"
 Queue
 EOF
 
