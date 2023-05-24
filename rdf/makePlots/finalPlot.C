@@ -406,7 +406,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   Double_t dy = TMath::Max(TMath::Abs(hRatio->GetMaximum()),
                            TMath::Abs(hRatio->GetMinimum())) + theLines[1];
   minRatio = TMath::Min(TMath::Max(minRatio-0.10,0.000),0.501);
-  maxRatio = TMath::Min(TMath::Max(maxRatio+0.10,1.400),4.999);
+  maxRatio = TMath::Min(TMath::Max(maxRatio+0.10,1.400),2.999);
   if(showPulls) hBand->GetYaxis()->SetRangeUser(-dy, +dy);
   else          hBand->GetYaxis()->SetRangeUser(minRatio,maxRatio);
   hRatio->GetYaxis()->CenterTitle();
