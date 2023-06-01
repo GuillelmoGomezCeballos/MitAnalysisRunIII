@@ -6,8 +6,10 @@ ROOT.ROOT.EnableImplicitMT(4)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariable2D
 #from utilsAna import loadCorrectionSet
+
+makeDataCards = True
 
 # 0 = T, 1 = M, 2 = L
 bTagSel = 2
@@ -70,7 +72,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
     return dftag
 
 
-def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
+def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,puWeights,puWeightsUp,puWeightsDown,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
@@ -82,9 +84,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 500
-    histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
-    histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
+    nCat, nHisto, nHistoMVA = plotCategory("kPlotCategories"), 500, 650
+    histo    = [[0 for y in range(nCat)] for x in range(nHisto)]
+    histo2D  = [[0 for y in range(nCat)] for x in range(nHistoMVA)]
+    histoMVA = [[0 for y in range(nCat)] for x in range(nHistoMVA)]
 
     ROOT.initHisto2D(histoFakeEtaPt_mu,0)
     ROOT.initHisto2D(histoFakeEtaPt_el,1)
@@ -111,6 +114,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     ROOT.initHisto2F(histoMuIDSF,2)
     ROOT.initHisto2F(histoMuISOSF,3)
     ROOT.initHisto1D(puWeights,0)
+    ROOT.initHisto1D(puWeightsUp,1)
+    ROOT.initHisto1D(puWeightsDown,2)
     ROOT.initHisto2D(histoBTVEffEtaPtLF,20)
     ROOT.initHisto2D(histoBTVEffEtaPtCJ,21)
     ROOT.initHisto2D(histoBTVEffEtaPtBJ,22)
@@ -157,6 +162,24 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     dfztt1cat = []
     dftop1cat = []
     dfhwwxcat = []
+
+    dfssx1catMuonMomUp       = []    
+    dfssx1catMuonMomDown     = []  
+    dfssx1catElectronMomUp   = []
+    dfssx1catElectronMomDown = []
+    dfwwx1catMuonMomUp       = []    
+    dfwwx1catMuonMomDown     = []  
+    dfwwx1catElectronMomUp   = []
+    dfwwx1catElectronMomDown = []
+    dfztt1catMuonMomUp       = []    
+    dfztt1catMuonMomDown     = []  
+    dfztt1catElectronMomUp   = []
+    dfztt1catElectronMomDown = []
+    dftop1catMuonMomUp       = []    
+    dftop1catMuonMomDown     = []  
+    dftop1catElectronMomUp   = []
+    dftop1catElectronMomDown = []
+
     for x in range(nCat):
         dfcat.append(dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
         		   .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
@@ -167,6 +190,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             dfcat[x] = dfcat[x].Define("weightWW", "weight*0.90")
         else:
             dfcat[x] = dfcat[x].Define("weightWW", "weight")
+
+        if((x == plotCategory("kPlotqqWW") or x == plotCategory("kPlotggWW")) and isData == "false"):
+            dfcat[x] = selectionGenLepJet(dfcat[x],20,30)
+            dfcat[x] = (dfcat[x].Define("kPlotSignal0", "{0}".format(plotCategory("kPlotSignal0")))
+        		        .Define("kPlotSignal1", "{0}".format(plotCategory("kPlotSignal1")))
+        		        .Define("kPlotSignal2", "{0}".format(plotCategory("kPlotSignal2")))
+        		        .Define("kPlotSignal3", "{0}".format(plotCategory("kPlotSignal3")))
+        		        .Define("theGenCat", "compute_gen_category({0},kPlotSignal0,kPlotSignal1,kPlotSignal2,kPlotSignal3,ngood_GenJets)".format(x))
+                                )
+        else:
+            dfcat[x] = dfcat[x].Define("theGenCat", "{0}".format(0))
 
         dfssx0cat.append(dfcat[x].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0", "Same-sign leptons"))
 
@@ -182,11 +216,31 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
         dfssx0cat[x] = dfssx0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
         dfssx1cat.append(dfssx0cat[x])
+        dfssx1catMuonMomUp      .append(dfssx0cat[x])
+        dfssx1catMuonMomDown    .append(dfssx0cat[x])
+        dfssx1catElectronMomUp  .append(dfssx0cat[x])
+        dfssx1catElectronMomDown.append(dfssx0cat[x])
+
+        dfssx1catMuonMomUp      [x] = dfssx1catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
+        dfssx1catMuonMomDown    [x] = dfssx1catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
+        dfssx1catElectronMomUp  [x] = dfssx1catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dfssx1catElectronMomDown[x] = dfssx1catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
+
         dfssx0cat[x] = dfssx0cat[x].Filter("ptll > 30", "ptll > 30")
         dfssx1cat[x] = dfssx1cat[x].Filter("mll > 85", "mll > 85")
 
         dfwwx0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets"))
         dfwwx1cat.append(dfwwx0cat[x])
+        dfwwx1catMuonMomUp      .append(dfwwx0cat[x])
+        dfwwx1catMuonMomDown    .append(dfwwx0cat[x])
+        dfwwx1catElectronMomUp  .append(dfwwx0cat[x])
+        dfwwx1catElectronMomDown.append(dfwwx0cat[x])
+
+        dfwwx1catMuonMomUp      [x] = dfwwx1catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
+        dfwwx1catMuonMomDown    [x] = dfwwx1catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
+        dfwwx1catElectronMomUp  [x] = dfwwx1catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dfwwx1catElectronMomDown[x] = dfwwx1catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
+
         dfwwx0cat[x] = dfwwx0cat[x].Filter("ptll > 30", "ptll > 30")
         dfwwx1cat[x] = dfwwx1cat[x].Filter("mll > 85", "mll > 85")
 
@@ -195,9 +249,28 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                                  .Filter("mll < 85", "mll < 85")
                                  )
         dfztt1cat.append(dfztt0cat[x])
+        dfztt1catMuonMomUp      .append(dfztt0cat[x])
+        dfztt1catMuonMomDown    .append(dfztt0cat[x])
+        dfztt1catElectronMomUp  .append(dfztt0cat[x])
+        dfztt1catElectronMomDown.append(dfztt0cat[x])
+
+        dfztt1catMuonMomUp      [x] = dfztt1catMuonMomUp      [x].Filter("ptllMuonMomUp       < 30 && mllMuonMomUp	 < 85 && ptl1MuonMomUp       > 25 && ptl2MuonMomUp      > 20")
+        dfztt1catMuonMomDown    [x] = dfztt1catMuonMomDown    [x].Filter("ptllMuonMomDown     < 30 && mllMuonMomDown	 < 85 && ptl1MuonMomDown     > 25 && ptl2MuonMomDown    > 20")
+        dfztt1catElectronMomUp  [x] = dfztt1catElectronMomUp  [x].Filter("ptllElectronMomUp   < 30 && mllElectronMomUp 	 < 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dfztt1catElectronMomDown[x] = dfztt1catElectronMomDown[x].Filter("ptllElectronMomDown < 30 && mllElectronMomDown < 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
 
         dftop0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet != 0", "b-jets"))
         dftop1cat.append(dftop0cat[x])
+        dftop1catMuonMomUp      .append(dftop0cat[x])
+        dftop1catMuonMomDown    .append(dftop0cat[x])
+        dftop1catElectronMomUp  .append(dftop0cat[x])
+        dftop1catElectronMomDown.append(dftop0cat[x])
+
+        dftop1catMuonMomUp      [x] = dftop1catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
+        dftop1catMuonMomDown    [x] = dftop1catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
+        dftop1catElectronMomUp  [x] = dftop1catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dftop1catElectronMomDown[x] = dftop1catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
+
         dftop0cat[x] = dftop0cat[x].Filter("ptll > 30", "ptll > 30")
         dftop1cat[x] = dftop1cat[x].Filter("mll > 85", "mll > 85")
 
@@ -290,12 +363,107 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         histo[68][x] = dftop1cat[x].Histo1D(("histo_{0}_{1}".format(68,x), "histo_{0}_{1}".format(68,x), 50,  0, 3.1416), "dphill","weightWW")
         histo[69][x] = dfhwwxcat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), 50,  0, 3.1416), "dphill","weightWW")
 
+        if(makeDataCards == True):
+            BinXF = 4
+            minXF = -0.5
+            maxXF = 3.5
+            BinYF = 4
+            minYF = -0.5
+            maxYF = 3.5
+
+            startF = 0
+            for nv in range(0,134):
+                histo2D[startF+nv][x] = makeFinalVariable2D(dfssx1cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+134][x]    = makeFinalVariable2D(dfssx1cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dfssx1cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dfssx1cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dfssx1cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dfssx1catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dfssx1catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dfssx1catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dfssx1catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+
+            startF = 150
+            for nv in range(0,134):
+                histo2D[startF+nv][x] = makeFinalVariable2D(dfwwx1cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+134][x]    = makeFinalVariable2D(dfwwx1cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dfwwx1cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dfwwx1cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dfwwx1cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dfwwx1catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dfwwx1catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dfwwx1catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dfwwx1catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+
+            startF = 300
+            for nv in range(0,134):
+                histo2D[startF+nv][x] = makeFinalVariable2D(dfztt1cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+134][x]    = makeFinalVariable2D(dfztt1cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dfztt1cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dfztt1cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dfztt1cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dfztt1catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dfztt1catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dfztt1catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dfztt1catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+
+            startF = 450
+            for nv in range(0,134):
+                histo2D[startF+nv][x] = makeFinalVariable2D(dftop1cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+134][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dftop1catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dftop1catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dftop1catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dftop1catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+
     report = []
     for x in range(nCat):
-        report.append(dfwwx0cat[x].Report())
+        report.append(dfwwx1cat[x].Report())
         if(x != theCat): continue
         print("---------------- SUMMARY {0} -------------".format(x))
         report[x].Print()
+
+    if(makeDataCards == True):
+        for j in range(nHistoMVA):
+            for x in range(nCat):
+                histoMVA[j][x] = ROOT.TH1D("histoMVA_{0}_{1}".format(j,x), "histoMVA_{0}_{1}".format(j,x), BinXF,minXF,maxXF)
+
+    for j in range(nHistoMVA):
+        for x in range(nCat):
+            if(histo2D[j][x] == 0): continue
+            for i in range(histo2D[j][x].GetNbinsX()):
+            	histo2D[j][x].SetBinContent(i+1,histo2D[j][x].GetNbinsY(),histo2D[j][x].GetBinContent(i+1,histo2D[j][x].GetNbinsY())+histo2D[j][x].GetBinContent(i+1,histo2D[j][x].GetNbinsY()+1))
+            	histo2D[j][x].SetBinError  (i+1,histo2D[j][x].GetNbinsY(),pow(pow(histo2D[j][x].GetBinError(i+1,histo2D[j][x].GetNbinsY()),2)+pow(histo2D[j][x].GetBinError(i+1,histo2D[j][x].GetNbinsY()+1),2),0.5))
+            	histo2D[j][x].SetBinContent(i+1,histo2D[j][x].GetNbinsY()+1,0.0)
+            	histo2D[j][x].SetBinError  (i+1,histo2D[j][x].GetNbinsY()+1,0.0)
+
+            for i in range(histo2D[j][x].GetNbinsY()):
+            	histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX(),i+1,histo2D[j][x].GetBinContent(histo2D[j][x].GetNbinsX(),i+1)+histo2D[j][x].GetBinContent(histo2D[j][x].GetNbinsX()+1,i+1))
+            	histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX(),i+1,pow(pow(histo2D[j][x].GetBinError(histo2D[j][x].GetNbinsX(),i+1),2)+pow(histo2D[j][x].GetBinError(histo2D[j][x].GetNbinsX()+1,i+1),2),0.5))
+            	histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX()+1,i+1,0.0)
+            	histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX()+1,i+1,0.0)
+
+            if(x == plotCategory("kPlotqqWW") or x == plotCategory("kPlotggWW")):
+                for i in range(histoMVA[j][x].GetNbinsX()):
+                    histoMVA[j][plotCategory("kPlotqqWW")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotqqWW")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,1))
+                    histoMVA[j][plotCategory("kPlotqqWW")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotqqWW")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,1),2),0.5))
+
+                    histoMVA[j][plotCategory("kPlotSignal0")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal0")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,2))
+                    histoMVA[j][plotCategory("kPlotSignal0")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal0")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,2),2),0.5))
+
+                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal1")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,3))
+                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal1")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,4),2),0.5))
+
+                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal2")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,4))
+                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal2")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,5),2),0.5))
+
+            else:
+                for i in range(histoMVA[j][x].GetNbinsX()):
+                    histoMVA[j][x].SetBinContent(i+1,histoMVA[j][x].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,1))
+                    histoMVA[j][x].SetBinError  (i+1,pow(pow(histoMVA[j][x].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,1),2),0.5))
 
     for i in range(nCat):
         if(histo[43][i].GetSumOfWeights() != 0): print("AAA({0}) {1}".format(i,histo[43][i].GetSumOfWeights()))
@@ -305,13 +473,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         for j in range(nHisto):
             if(histo[j][i] == 0): continue
             histo[j][i].Write()
-        for j in range(nHisto):
-            if(histo2D[j][i] == 0): continue
-            #if(histo2D[j][i].GetSumOfWeights() > 0): print("({0},{1}): {2}".format(j,i,histo2D[j][i].GetSumOfWeights()))
-            histo2D[j][i].Write()
+        for j in range(nHistoMVA):
+            if(histoMVA[j][i] == 0): continue
+            histoMVA[j][i].Write()
     myfile.Close()
 
-def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
+def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,puWeightsUp,puWeightsDown,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
@@ -350,9 +517,9 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
 
     PDType = os.path.basename(SwitchSample(sampleNOW, skimType)[0]).split('+')[0]
 
-    analysis(df,sampleNOW,SwitchSample(sampleNOW,skimType)[2],weight,year,PDType,"false",whichJob,nPDFReplicas,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    analysis(df,sampleNOW,SwitchSample(sampleNOW,skimType)[2],weight,year,PDType,"false",whichJob,nPDFReplicas,puWeights,puWeightsUp,puWeightsDown,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
 
-def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
+def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,puWeightsUp,puWeightsDown,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     PDType = "0"
     if  (sampleNOW >= 1000 and sampleNOW <= 1009): PDType = "SingleMuon"
@@ -379,7 +546,7 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
     nevents = df.Count().GetValue()
     print("%s entries in the dataset" %nevents)
 
-    analysis(df,sampleNOW,sampleNOW,weight,year,PDType,"true",whichJob,0,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    analysis(df,sampleNOW,sampleNOW,weight,year,PDType,"true",whichJob,0,puWeights,puWeightsUp,puWeightsDown,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
 
 if __name__ == "__main__":
 
@@ -416,6 +583,10 @@ if __name__ == "__main__":
     fPuFile = ROOT.TFile(puPath)
     puWeights = fPuFile.Get("puWeights")
     puWeights.SetDirectory(0)
+    puWeightsUp = fPuFile.Get("puWeightsUp")
+    puWeightsUp.SetDirectory(0)
+    puWeightsDown = fPuFile.Get("puWeightsDown")
+    puWeightsDown.SetDirectory(0)
     fPuFile.Close()
 
     recoElPath = "data/electronReco_UL_{0}.root".format(year)
@@ -506,8 +677,8 @@ if __name__ == "__main__":
 
     try:
         if(process >= 0 and process < 1000):
-            readMCSample(process,year,skimType,whichJob,group,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+            readMCSample(process,year,skimType,whichJob,group,puWeights,puWeightsUp,puWeightsDown,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
         elif(process >= 1000):
-            readDASample(process,year,skimType,whichJob,group,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+            readDASample(process,year,skimType,whichJob,group,puWeights,puWeightsUp,puWeightsDown,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoElRecoSF,histoElSelSF,histoMuIDSF,histoMuISOSF,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
     except Exception as e:
         print("Error sample: {0}".format(e))

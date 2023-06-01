@@ -171,7 +171,7 @@ def getDATAlist(type, year, skimType):
     elif(year == 2022):
         jsnName = "Cert_Collisions2022_355100_362760_Golden.json"
     elif(year == 2023):
-        jsnName = "Collisions23_13p6TeV_DCSOnly_TkPx.json"
+        jsnName = "Cert_Collisions2023_366442_367554_Golden.json"
 
     if os.path.exists(os.path.join("jsns",jsnName)):
         loadJSON(os.path.join("jsns",jsnName))

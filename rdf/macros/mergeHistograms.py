@@ -36,7 +36,7 @@ if __name__ == "__main__":
     inputDataFolders = glob.glob(paths_to_watch)
     print("Total found files: {0}".format(len(inputDataFolders)))
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 500
+    nCat, nHisto = plotCategory("kPlotCategories"), 700
 
     myfile = [0 for x in range(len(inputDataFolders))]
     for nf in range(len(inputDataFolders)):
@@ -66,6 +66,28 @@ if __name__ == "__main__":
                 histo[nc].SetBinContent(histo[nc].GetNbinsX()+1,0.0)
                 histo[nc].SetBinError  (histo[nc].GetNbinsX()+1,0.0)
                 histo[nc].Write()
+            outputFile.Close()
+
+        # 1DMVA
+        histoMVA = [0 for x in range(nCat)]
+        for nc in range(nCat):
+            histoMVA[nc] = myfile[0].Get("histoMVA_{0}_{1}".format(nh,nc))
+            for nf in range(1,len(inputDataFolders)):
+                if(histoMVA[nc]):
+                    histoMVA[nc].Add(myfile[nf].Get("histoMVA_{0}_{1}".format(nh,nc)))
+
+        if(histoMVA[0]):
+            outputFileName = "{0}/{1}_{2}_{3}_mva.root".format(output,os.path.basename(path),year,nh)
+            print("Making 1D {0}".format(outputFileName))
+            outputFile = TFile(outputFileName, "RECREATE")
+            outputFile.cd()
+            for nc in range(nCat):
+                histoMVA[nc].SetNameTitle("histoMVA{0}".format(nc),"histoMVA{0}".format(nc))
+                histoMVA[nc].SetBinContent(histoMVA[nc].GetNbinsX(),histoMVA[nc].GetBinContent(histoMVA[nc].GetNbinsX())+histoMVA[nc].GetBinContent(histoMVA[nc].GetNbinsX()+1))
+                histoMVA[nc].SetBinError  (histoMVA[nc].GetNbinsX(),pow(pow(histoMVA[nc].GetBinError(histoMVA[nc].GetNbinsX()),2)+pow(histoMVA[nc].GetBinError(histoMVA[nc].GetNbinsX()+1),2),0.5))
+                histoMVA[nc].SetBinContent(histoMVA[nc].GetNbinsX()+1,0.0)
+                histoMVA[nc].SetBinError  (histoMVA[nc].GetNbinsX()+1,0.0)
+                histoMVA[nc].Write()
             outputFile.Close()
 
         # 2D

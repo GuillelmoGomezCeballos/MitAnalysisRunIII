@@ -76,6 +76,8 @@ TH2F histoElSelSF;
 TH2F histoMuIDSF;
 TH2F histoMuISOSF;
 TH1D puWeights;
+TH1D puWeightsUp;
+TH1D puWeightsDown;
 auto corrSFs = MyCorrections(2018);
 
 void initHisto2F(TH2F h, int nsel){
@@ -112,7 +114,9 @@ void initHisto2D(TH2D h, int nsel){
 }
 
 void initHisto1D(TH1D h, int nsel){
-  if(nsel == 0) puWeights = h;
+  if     (nsel == 0) puWeights = h;
+  else if(nsel == 1) puWeightsUp = h;
+  else if(nsel == 2) puWeightsDown = h;
 }
 
 float getValFromTH1(const TH1& h, const float& x, const float& sumError=0.0) {
@@ -551,7 +555,7 @@ float compute_LepSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
 
 float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
                        const Vec_f& el_pt, const Vec_f& el_eta,
-		       const float nPU){
+		       const float nPU, const int type){
   bool debug = false;
   if(debug) printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
   double sfTot = 1.0;
@@ -574,8 +578,22 @@ float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
     if(debug) printf("leprecoel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf0,sf1,sfTot);
   }
   */
-  const TH1D& hcorr = puWeights;
-  double sf = getValFromTH1(hcorr, nPU);
+  double sf = 1.0;
+  if     (type == 0){
+    const TH1D& hcorr = puWeights;
+    sf = getValFromTH1(hcorr, std::min(nPU,74.999f));
+  }
+  else if(type == 1){
+    const TH1D& hcorr = puWeightsUp;
+    sf = getValFromTH1(hcorr, std::min(nPU,74.999f));
+  }
+  else if(type == 2){
+    const TH1D& hcorr = puWeightsDown;
+    sf = getValFromTH1(hcorr, std::min(nPU,74.999f));
+  }
+  else {
+    printf("Wrong type %d\n",type);
+  }
   sfTot = sfTot*sf;
   if(debug) printf("pu %.3f %.3f %.3f\n",nPU,sf,sfTot);
 
@@ -1559,6 +1577,18 @@ Vec_b cleaningJetFromMeson(Vec_f & Jeta, Vec_f & Jphi, float & eta, float & phi)
   return mask;
 }
 
+// cleaning jets close-by to the leptons
+Vec_b cleaningJetFromLepton(Vec_f & Jeta, Vec_f & Jphi, Vec_f & Leta, Vec_f & Lphi) {
+
+  Vec_b mask(Jeta.size(), true);
+  for (unsigned int jdx = 0; jdx < Jeta.size(); ++jdx) {
+    for (unsigned int ldx = 0; ldx < Leta.size(); ++ldx) {
+      if(deltaR(Jeta[jdx], Jphi[jdx], Leta[ldx], Lphi[ldx]) < 0.3) {mask[jdx] = false; break;}
+    }
+  }
+  return mask;
+}
+
 // Minv2
 std::pair<float, float>  Minv2(const float& pt, const float& eta, const float& phi, const float& m,
                                const float& ph_pt, const float& ph_eta, const float& ph_phi) {
@@ -1579,6 +1609,14 @@ int compute_category(const int mc, const int typeFake, const int nFake, const in
   if     (nFake > nTight) return typeFake;
   else if(nFake < nTight) {printf("IMPOSSIBLE compute_category\n"); return -1;}
   return mc;
+}
+
+// compute gen category
+int compute_gen_category(const int mc, const int kPlotSignal0, const int kPlotSignal1, const int kPlotSignal2, const int kPlotSignal3, const int ngood_GenJets){
+  if     (ngood_GenJets == 0) return 1;
+  else if(ngood_GenJets == 1) return 2;
+  else if(ngood_GenJets >= 2) return 3;
+  return 0;
 }
 
 // compute category
