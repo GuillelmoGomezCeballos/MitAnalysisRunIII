@@ -341,7 +341,7 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		 newcardShape << Form("1.0 ");
+    else		     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
  
@@ -349,8 +349,10 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else if(ic == kPlotTop)       newcardShape << Form("- ");
+    else if(ic == kPlotDY)        newcardShape << Form("- ");
+    else                          newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
  
