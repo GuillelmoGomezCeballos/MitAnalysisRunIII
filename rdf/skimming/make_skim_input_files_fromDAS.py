@@ -8,7 +8,9 @@ def findDataset(name):
     cmd= DASclient%{'query':'file dataset=%s'%name}
     print(cmd)
     check_output(cmd,shell=True)
-    fileList=[ 'root://xrootd-cms.infn.it//'+ str(x) for x in check_output(cmd,shell=True).decode('utf8').split() ]
+    #fileList=[ 'root://xrootd-cms.infn.it//'+ str(x) for x in check_output(cmd,shell=True).decode('utf8').split() ]
+    #fileList=[ 'root://cmsxrootd.fnal.gov//'+ str(x) for x in check_output(cmd,shell=True).decode('utf8').split() ]
+    fileList=[ 'root://cms-xrd-global.cern.ch//'+ str(x) for x in check_output(cmd,shell=True).decode('utf8').split() ]
 
     files_ROOT = ROOT.vector('string')()
     for f in fileList: files_ROOT.push_back(f)
