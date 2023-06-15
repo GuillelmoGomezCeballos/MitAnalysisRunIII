@@ -63,7 +63,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
     dftag = selection2LVar  (dftag,year,isData)
                   
-    dftag = dftag.Filter("mll > 20 && ptl1 > 25 && ptl2 > 20","mll > 20 && ptl1 > 25 && ptl2 > 20")
+    dftag = dftag.Filter("mll > 20","mll > 20")
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
@@ -157,28 +157,24 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     dfwwx0cat = []
     dfztt0cat = []
     dftop0cat = []
-    dfssx1cat = []
-    dfwwx1cat = []
-    dfztt1cat = []
-    dftop1cat = []
     dfhwwxcat = []
 
-    dfssx1catMuonMomUp       = []    
-    dfssx1catMuonMomDown     = []  
-    dfssx1catElectronMomUp   = []
-    dfssx1catElectronMomDown = []
-    dfwwx1catMuonMomUp       = []    
-    dfwwx1catMuonMomDown     = []  
-    dfwwx1catElectronMomUp   = []
-    dfwwx1catElectronMomDown = []
-    dfztt1catMuonMomUp       = []    
-    dfztt1catMuonMomDown     = []  
-    dfztt1catElectronMomUp   = []
-    dfztt1catElectronMomDown = []
-    dftop1catMuonMomUp       = []    
-    dftop1catMuonMomDown     = []  
-    dftop1catElectronMomUp   = []
-    dftop1catElectronMomDown = []
+    dfssx0catMuonMomUp       = []    
+    dfssx0catMuonMomDown     = []  
+    dfssx0catElectronMomUp   = []
+    dfssx0catElectronMomDown = []
+    dfwwx0catMuonMomUp       = []    
+    dfwwx0catMuonMomDown     = []  
+    dfwwx0catElectronMomUp   = []
+    dfwwx0catElectronMomDown = []
+    dfztt0catMuonMomUp       = []    
+    dfztt0catMuonMomDown     = []  
+    dfztt0catElectronMomUp   = []
+    dfztt0catElectronMomDown = []
+    dftop0catMuonMomUp       = []    
+    dftop0catMuonMomDown     = []  
+    dftop0catElectronMomUp   = []
+    dftop0catElectronMomDown = []
 
     for x in range(nCat):
         dfcat.append(dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
@@ -215,67 +211,59 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         histo[ 5][x] = dfcat[x].Histo1D(("histo_{0}_{1}".format( 5,x), "histo_{0}_{1}".format( 5,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjet","weightWW")
 
         dfssx0cat[x] = dfssx0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
-        dfssx1cat.append(dfssx0cat[x])
-        dfssx1catMuonMomUp      .append(dfssx0cat[x])
-        dfssx1catMuonMomDown    .append(dfssx0cat[x])
-        dfssx1catElectronMomUp  .append(dfssx0cat[x])
-        dfssx1catElectronMomDown.append(dfssx0cat[x])
+        dfssx0catMuonMomUp      .append(dfssx0cat[x])
+        dfssx0catMuonMomDown    .append(dfssx0cat[x])
+        dfssx0catElectronMomUp  .append(dfssx0cat[x])
+        dfssx0catElectronMomDown.append(dfssx0cat[x])
 
-        dfssx1catMuonMomUp      [x] = dfssx1catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
-        dfssx1catMuonMomDown    [x] = dfssx1catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
-        dfssx1catElectronMomUp  [x] = dfssx1catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
-        dfssx1catElectronMomDown[x] = dfssx1catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
+        dfssx0catMuonMomUp      [x] = dfssx0catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
+        dfssx0catMuonMomDown    [x] = dfssx0catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
+        dfssx0catElectronMomUp  [x] = dfssx0catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dfssx0catElectronMomDown[x] = dfssx0catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
 
-        dfssx0cat[x] = dfssx0cat[x].Filter("ptll > 30", "ptll > 30")
-        dfssx1cat[x] = dfssx1cat[x].Filter("mll > 85", "mll > 85")
+        dfssx0cat[x] = dfssx0cat[x].Filter("mll > 85 && ptl1 > 25 && ptl2 > 20", "mll > 85 && ptl1 > 25 && ptl2 > 20")
 
         dfwwx0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets"))
-        dfwwx1cat.append(dfwwx0cat[x])
-        dfwwx1catMuonMomUp      .append(dfwwx0cat[x])
-        dfwwx1catMuonMomDown    .append(dfwwx0cat[x])
-        dfwwx1catElectronMomUp  .append(dfwwx0cat[x])
-        dfwwx1catElectronMomDown.append(dfwwx0cat[x])
+        dfwwx0catMuonMomUp      .append(dfwwx0cat[x])
+        dfwwx0catMuonMomDown    .append(dfwwx0cat[x])
+        dfwwx0catElectronMomUp  .append(dfwwx0cat[x])
+        dfwwx0catElectronMomDown.append(dfwwx0cat[x])
 
-        dfwwx1catMuonMomUp      [x] = dfwwx1catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
-        dfwwx1catMuonMomDown    [x] = dfwwx1catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
-        dfwwx1catElectronMomUp  [x] = dfwwx1catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
-        dfwwx1catElectronMomDown[x] = dfwwx1catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
+        dfwwx0catMuonMomUp      [x] = dfwwx0catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
+        dfwwx0catMuonMomDown    [x] = dfwwx0catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
+        dfwwx0catElectronMomUp  [x] = dfwwx0catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dfwwx0catElectronMomDown[x] = dfwwx0catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
 
-        dfwwx0cat[x] = dfwwx0cat[x].Filter("ptll > 30", "ptll > 30")
-        dfwwx1cat[x] = dfwwx1cat[x].Filter("mll > 85", "mll > 85")
+        dfwwx0cat[x] = dfwwx0cat[x].Filter("mll > 85 && ptl1 > 25 && ptl2 > 20", "mll > 85 && ptl1 > 25 && ptl2 > 20")
 
-        dfztt0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
-                                 .Filter("ptll < 30", "ptll < 30")
-                                 .Filter("mll < 85", "mll < 85")
-                                 )
-        dfztt1cat.append(dfztt0cat[x])
-        dfztt1catMuonMomUp      .append(dfztt0cat[x])
-        dfztt1catMuonMomDown    .append(dfztt0cat[x])
-        dfztt1catElectronMomUp  .append(dfztt0cat[x])
-        dfztt1catElectronMomDown.append(dfztt0cat[x])
+        dfztt0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets"))
+        dfztt0catMuonMomUp	.append(dfztt0cat[x])
+        dfztt0catMuonMomDown	.append(dfztt0cat[x])
+        dfztt0catElectronMomUp  .append(dfztt0cat[x])
+        dfztt0catElectronMomDown.append(dfztt0cat[x])
 
-        dfztt1catMuonMomUp      [x] = dfztt1catMuonMomUp      [x].Filter("ptllMuonMomUp       < 30 && mllMuonMomUp	 < 85 && ptl1MuonMomUp       > 25 && ptl2MuonMomUp      > 20")
-        dfztt1catMuonMomDown    [x] = dfztt1catMuonMomDown    [x].Filter("ptllMuonMomDown     < 30 && mllMuonMomDown	 < 85 && ptl1MuonMomDown     > 25 && ptl2MuonMomDown    > 20")
-        dfztt1catElectronMomUp  [x] = dfztt1catElectronMomUp  [x].Filter("ptllElectronMomUp   < 30 && mllElectronMomUp 	 < 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
-        dfztt1catElectronMomDown[x] = dfztt1catElectronMomDown[x].Filter("ptllElectronMomDown < 30 && mllElectronMomDown < 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
+        dfztt0catMuonMomUp	[x] = dfztt0catMuonMomUp      [x].Filter("ptllMuonMomUp       < 30 && mllMuonMomUp	 < 85 && ptl1MuonMomUp       > 25 && ptl2MuonMomUp	> 20")
+        dfztt0catMuonMomDown	[x] = dfztt0catMuonMomDown    [x].Filter("ptllMuonMomDown     < 30 && mllMuonMomDown	 < 85 && ptl1MuonMomDown     > 25 && ptl2MuonMomDown	> 20")
+        dfztt0catElectronMomUp  [x] = dfztt0catElectronMomUp  [x].Filter("ptllElectronMomUp   < 30 && mllElectronMomUp   < 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dfztt0catElectronMomDown[x] = dfztt0catElectronMomDown[x].Filter("ptllElectronMomDown < 30 && mllElectronMomDown < 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
+
+        dfztt0cat[x] = dfztt0cat[x].Filter("ptll < 30 && mll < 85 && ptl1 > 25 && ptl2 > 20", "ptll < 30 && mll < 85 && ptl1 > 25 && ptl2 > 20")
 
         dftop0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet != 0", "b-jets"))
-        dftop1cat.append(dftop0cat[x])
-        dftop1catMuonMomUp      .append(dftop0cat[x])
-        dftop1catMuonMomDown    .append(dftop0cat[x])
-        dftop1catElectronMomUp  .append(dftop0cat[x])
-        dftop1catElectronMomDown.append(dftop0cat[x])
+        dftop0catMuonMomUp	.append(dftop0cat[x])
+        dftop0catMuonMomDown	.append(dftop0cat[x])
+        dftop0catElectronMomUp  .append(dftop0cat[x])
+        dftop0catElectronMomDown.append(dftop0cat[x])
 
-        dftop1catMuonMomUp      [x] = dftop1catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
-        dftop1catMuonMomDown    [x] = dftop1catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
-        dftop1catElectronMomUp  [x] = dftop1catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
-        dftop1catElectronMomDown[x] = dftop1catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
+        dftop0catMuonMomUp	[x] = dftop0catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
+        dftop0catMuonMomDown	[x] = dftop0catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
+        dftop0catElectronMomUp  [x] = dftop0catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dftop0catElectronMomDown[x] = dftop0catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
 
-        dftop0cat[x] = dftop0cat[x].Filter("ptll > 30", "ptll > 30")
-        dftop1cat[x] = dftop1cat[x].Filter("mll > 85", "mll > 85")
+        dftop0cat[x] = dftop0cat[x].Filter("mll > 85 && ptl1 > 25 && ptl2 > 20", "mll > 85 && ptl1 > 25 && ptl2 > 20")
 
         dfhwwxcat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
-                                 .Filter("ptll > 30 && mll < 85", "ptll > 30 && mll < 85")
+                                 .Filter("ptll > 30 && mll < 85 && minPMET > 20", "ptll > 30 && mll < 85 && minPMET > 20")
                                  )
 
         histo[ 6][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format( 6,x), "histo_{0}_{1}".format( 6,x), 50,  0, 3.1416), "dPhilMETMin","weightWW")
@@ -292,10 +280,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         histo[15][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 100, 0, 200), "PuppiMET_pt","weightWW")
         histo[16][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 100, 0, 200), "PuppiMET_pt","weightWW")
         histo[17][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 100, 0, 200), "PuppiMET_pt","weightWW")
-
-        dfssx0cat[x] = dfssx0cat[x].Filter("minPMET > 20", "minPMET > 20")
-        dfwwx0cat[x] = dfwwx0cat[x].Filter("minPMET > 20", "minPMET > 20")
-        dftop0cat[x] = dftop0cat[x].Filter("minPMET > 20", "minPMET > 20")
 
         histo[18][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 50,  0, 5), "drll","weightWW")
         histo[19][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 50,  0, 5), "drll","weightWW")
@@ -332,36 +316,22 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
         histo[44][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(44,x), "histo_{0}_{1}".format(44,x), 4,-0.5,3.5), "ngood_jets","weightWW")
         histo[45][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(45,x), "histo_{0}_{1}".format(45,x), 4,-0.5,3.5), "ngood_jets","weightWW")
 
-        histo[46][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(46,x), "histo_{0}_{1}".format(46,x), 60, 20, 320), "mll","weightWW")
-        histo[47][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(47,x), "histo_{0}_{1}".format(47,x), 60, 20, 320), "mll","weightWW")
+        histo[46][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(46,x), "histo_{0}_{1}".format(46,x), 50, 85, 385), "mll","weightWW")
+        histo[47][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(47,x), "histo_{0}_{1}".format(47,x), 50, 85, 385), "mll","weightWW")
         histo[48][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(48,x), "histo_{0}_{1}".format(48,x), 50, 35,  85), "mll","weightWW")
-        histo[49][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(49,x), "histo_{0}_{1}".format(49,x), 60, 20, 320), "mll","weightWW")
+        histo[49][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(49,x), "histo_{0}_{1}".format(49,x), 50, 85, 385), "mll","weightWW")
 
-        histo[50][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(50,x), "histo_{0}_{1}".format(50,x), 100, 0, 200), "minPMET","weightWW")
-        histo[51][x] = dfwwx1cat[x].Histo1D(("histo_{0}_{1}".format(51,x), "histo_{0}_{1}".format(51,x), 100, 0, 200), "minPMET","weightWW")
-        histo[52][x] = dfztt1cat[x].Histo1D(("histo_{0}_{1}".format(52,x), "histo_{0}_{1}".format(52,x), 100, 0, 200), "minPMET","weightWW")
-        histo[53][x] = dftop1cat[x].Histo1D(("histo_{0}_{1}".format(53,x), "histo_{0}_{1}".format(53,x), 100, 0, 200), "minPMET","weightWW")
-        histo[54][x] = dfhwwxcat[x].Histo1D(("histo_{0}_{1}".format(54,x), "histo_{0}_{1}".format(54,x), 100, 0, 200), "minPMET","weightWW")
+        histo[50][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(50,x), "histo_{0}_{1}".format(50,x), 50,  0, 200), "ptll","weightWW")
+        histo[51][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(51,x), "histo_{0}_{1}".format(51,x), 50,  0, 200), "ptll","weightWW")
+        histo[52][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(52,x), "histo_{0}_{1}".format(52,x), 30,  0,  30), "ptll","weightWW")
+        histo[53][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(53,x), "histo_{0}_{1}".format(53,x), 50,  0, 200), "ptll","weightWW")
 
-        histo[55][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(55,x), "histo_{0}_{1}".format(55,x), 50,  0, 200), "ptll","weightWW")
-        histo[56][x] = dfwwx1cat[x].Histo1D(("histo_{0}_{1}".format(56,x), "histo_{0}_{1}".format(56,x), 50,  0, 200), "ptll","weightWW")
-        histo[57][x] = dfztt1cat[x].Histo1D(("histo_{0}_{1}".format(57,x), "histo_{0}_{1}".format(57,x), 30,  0,  30), "ptll","weightWW")
-        histo[58][x] = dftop1cat[x].Histo1D(("histo_{0}_{1}".format(58,x), "histo_{0}_{1}".format(58,x), 50,  0, 200), "ptll","weightWW")
-        histo[59][x] = dfhwwxcat[x].Histo1D(("histo_{0}_{1}".format(59,x), "histo_{0}_{1}".format(59,x), 40, 30, 190), "ptll","weightWW")
-
-        dfhwwxcat[x] = dfhwwxcat[x].Filter("minPMET > 20", "minPMET > 20")
-
-        histo[60][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(60,x), "histo_{0}_{1}".format(60,x), 4,-0.5,3.5), "ngood_jets","weightWW")
-        histo[61][x] = dfwwx1cat[x].Histo1D(("histo_{0}_{1}".format(61,x), "histo_{0}_{1}".format(61,x), 4,-0.5,3.5), "ngood_jets","weightWW")
-        histo[62][x] = dfztt1cat[x].Histo1D(("histo_{0}_{1}".format(62,x), "histo_{0}_{1}".format(62,x), 4,-0.5,3.5), "ngood_jets","weightWW")
-        histo[63][x] = dftop1cat[x].Histo1D(("histo_{0}_{1}".format(63,x), "histo_{0}_{1}".format(63,x), 4,-0.5,3.5), "ngood_jets","weightWW")
-        histo[64][x] = dfhwwxcat[x].Histo1D(("histo_{0}_{1}".format(64,x), "histo_{0}_{1}".format(64,x), 4,-0.5,3.5), "ngood_jets","weightWW")
-
-        histo[65][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), 50,  0, 3.1416), "dphill","weightWW")
-        histo[66][x] = dfwwx1cat[x].Histo1D(("histo_{0}_{1}".format(66,x), "histo_{0}_{1}".format(66,x), 50,  0, 3.1416), "dphill","weightWW")
-        histo[67][x] = dfztt1cat[x].Histo1D(("histo_{0}_{1}".format(67,x), "histo_{0}_{1}".format(67,x), 50,  0, 3.1416), "dphill","weightWW")
-        histo[68][x] = dftop1cat[x].Histo1D(("histo_{0}_{1}".format(68,x), "histo_{0}_{1}".format(68,x), 50,  0, 3.1416), "dphill","weightWW")
-        histo[69][x] = dfhwwxcat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), 50,  0, 3.1416), "dphill","weightWW")
+        histo[54][x] = dfhwwxcat[x].Histo1D(("histo_{0}_{1}".format(54,x), "histo_{0}_{1}".format(54,x), 40, 30, 190), "ptll","weightWW")
+        histo[55][x] = dfhwwxcat[x].Histo1D(("histo_{0}_{1}".format(55,x), "histo_{0}_{1}".format(55,x), 100,20, 220), "minPMET","weightWW")
+        histo[56][x] = dfhwwxcat[x].Histo1D(("histo_{0}_{1}".format(56,x), "histo_{0}_{1}".format(56,x), 50,  0, 3.1416), "dphill","weightWW")
+        histo[57][x] = dfhwwxcat[x].Histo1D(("histo_{0}_{1}".format(57,x), "histo_{0}_{1}".format(57,x), 4,-0.5,3.5), "ngood_jets","weightWW")
+        histo[58][x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 1").Histo1D(("histo_{0}_{1}".format(58,x), "histo_{0}_{1}".format(58,x), 4,-0.5,3.5), "ngood_jets","weightWW")
+        histo[59][x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 2").Histo1D(("histo_{0}_{1}".format(59,x), "histo_{0}_{1}".format(59,x), 4,-0.5,3.5), "ngood_jets","weightWW")
 
         if(makeDataCards == True):
             BinXF = 4
@@ -373,55 +343,55 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
             startF = 0
             for nv in range(0,134):
-                histo2D[startF+nv][x] = makeFinalVariable2D(dfssx1cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
-            histo2D[startF+134][x]    = makeFinalVariable2D(dfssx1cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
-            histo2D[startF+135][x]    = makeFinalVariable2D(dfssx1cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
-            histo2D[startF+136][x]    = makeFinalVariable2D(dfssx1cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
-            histo2D[startF+137][x]    = makeFinalVariable2D(dfssx1cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
-            histo2D[startF+138][x]    = makeFinalVariable2D(dfssx1catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
-            histo2D[startF+139][x]    = makeFinalVariable2D(dfssx1catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
-            histo2D[startF+140][x]    = makeFinalVariable2D(dfssx1catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
-            histo2D[startF+141][x]    = makeFinalVariable2D(dfssx1catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+                histo2D[startF+nv][x] = makeFinalVariable2D(dfssx0cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+134][x]    = makeFinalVariable2D(dfssx0cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dfssx0cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dfssx0cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dfssx0cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dfssx0catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dfssx0catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dfssx0catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dfssx0catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
 
             startF = 150
             for nv in range(0,134):
-                histo2D[startF+nv][x] = makeFinalVariable2D(dfwwx1cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
-            histo2D[startF+134][x]    = makeFinalVariable2D(dfwwx1cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
-            histo2D[startF+135][x]    = makeFinalVariable2D(dfwwx1cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
-            histo2D[startF+136][x]    = makeFinalVariable2D(dfwwx1cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
-            histo2D[startF+137][x]    = makeFinalVariable2D(dfwwx1cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
-            histo2D[startF+138][x]    = makeFinalVariable2D(dfwwx1catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
-            histo2D[startF+139][x]    = makeFinalVariable2D(dfwwx1catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
-            histo2D[startF+140][x]    = makeFinalVariable2D(dfwwx1catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
-            histo2D[startF+141][x]    = makeFinalVariable2D(dfwwx1catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+                histo2D[startF+nv][x] = makeFinalVariable2D(dfwwx0cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+134][x]    = makeFinalVariable2D(dfwwx0cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dfwwx0cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dfwwx0cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dfwwx0cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dfwwx0catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dfwwx0catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dfwwx0catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dfwwx0catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
 
             startF = 300
             for nv in range(0,134):
-                histo2D[startF+nv][x] = makeFinalVariable2D(dfztt1cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
-            histo2D[startF+134][x]    = makeFinalVariable2D(dfztt1cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
-            histo2D[startF+135][x]    = makeFinalVariable2D(dfztt1cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
-            histo2D[startF+136][x]    = makeFinalVariable2D(dfztt1cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
-            histo2D[startF+137][x]    = makeFinalVariable2D(dfztt1cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
-            histo2D[startF+138][x]    = makeFinalVariable2D(dfztt1catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
-            histo2D[startF+139][x]    = makeFinalVariable2D(dfztt1catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
-            histo2D[startF+140][x]    = makeFinalVariable2D(dfztt1catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
-            histo2D[startF+141][x]    = makeFinalVariable2D(dfztt1catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+                histo2D[startF+nv][x] = makeFinalVariable2D(dfztt0cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+134][x]    = makeFinalVariable2D(dfztt0cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dfztt0cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dfztt0cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dfztt0cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dfztt0catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dfztt0catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dfztt0catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dfztt0catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
 
             startF = 450
             for nv in range(0,134):
-                histo2D[startF+nv][x] = makeFinalVariable2D(dftop1cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
-            histo2D[startF+134][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
-            histo2D[startF+135][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
-            histo2D[startF+136][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
-            histo2D[startF+137][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
-            histo2D[startF+138][x]    = makeFinalVariable2D(dftop1catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
-            histo2D[startF+139][x]    = makeFinalVariable2D(dftop1catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
-            histo2D[startF+140][x]    = makeFinalVariable2D(dftop1catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
-            histo2D[startF+141][x]    = makeFinalVariable2D(dftop1catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+                histo2D[startF+nv][x] = makeFinalVariable2D(dftop0cat[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+134][x]    = makeFinalVariable2D(dftop0cat[x],"ngood_jetsJesUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,134)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dftop0cat[x],"ngood_jetsJesDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dftop0cat[x],"ngood_jetsJerUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dftop0cat[x],"ngood_jetsJerDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dftop0catMuonMomUp      [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dftop0catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dftop0catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dftop0catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
 
     report = []
     for x in range(nCat):
-        report.append(dfwwx1cat[x].Report())
+        report.append(dfwwx0cat[x].Report())
         if(x != theCat): continue
         print("---------------- SUMMARY {0} -------------".format(x))
         report[x].Print()
@@ -465,9 +435,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                     histoMVA[j][x].SetBinContent(i+1,histoMVA[j][x].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,1))
                     histoMVA[j][x].SetBinError  (i+1,pow(pow(histoMVA[j][x].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,1),2),0.5))
 
-    for i in range(nCat):
-        if(histo[43][i].GetSumOfWeights() != 0): print("AAA({0}) {1}".format(i,histo[43][i].GetSumOfWeights()))
-        if(histo[61][i].GetSumOfWeights() != 0): print("AAA({0}) {1}".format(i,histo[61][i].GetSumOfWeights()))
     myfile = ROOT.TFile("fillhisto_wwAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):

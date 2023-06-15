@@ -186,13 +186,15 @@ if __name__ == "__main__":
     rootFiles = ROOT.vector('string')()
     inputFilesFile = open(inputFilesCfg, 'r')
     #trick to deal with official samples
-    sampleToFilter = [sampleToSkim, sampleToSkim]
+    sampleToFilter = [sampleToSkim, sampleToSkim, sampleToSkim]
     if("NANOAODSIM" in sampleToSkim):
         sampleToFilter[0] = sampleToSkim.split("+")[0]+"/"
         sampleToFilter[1] = sampleToSkim.split("+")[1].split("-")[0]
+        sampleToFilter[2] = sampleToSkim.split("+")[1].split("-")[1]
     elif("NANOAOD" in sampleToSkim):
         sampleToFilter[0] = sampleToSkim.split("+")[0]+"/"
         sampleToFilter[1] = sampleToSkim.split("+")[1].split("-")[0]
+        sampleToFilter[2] = sampleToSkim.split("+")[1].split("-")[1]
     while True:
         line = inputFilesFile.readline().strip()
         if not line:
@@ -200,6 +202,8 @@ if __name__ == "__main__":
         if(sampleToFilter[0] not in line):
             continue
         if(sampleToFilter[1] not in line):
+            continue
+        if(sampleToFilter[2] not in line):
             continue
         rootFiles.push_back(line)
 
@@ -213,33 +217,6 @@ if __name__ == "__main__":
 
     TRIGGERLEP    = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
     TRIGGERALLLEP = "{0} or {1} or {2} or {3} or {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-
-    if("MuonEG+Run" in sampleToSkim):
-        TRIGGERLEP = "{0}".format(TRIGGERMUEG)
-
-    elif("DoubleMuon+Run" in sampleToSkim):
-        TRIGGERLEP = "{0} and not {1}".format(TRIGGERDMU,TRIGGERMUEG)
-
-    elif("SingleMuon+Run" in sampleToSkim):
-        TRIGGERLEP = "{0} and not {1} and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-
-    elif("Muon+Run" in sampleToSkim):
-        TRIGGERLEP = "({0} or {1}) and not {2}".format(TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-
-    elif("EGamma+Run" in sampleToSkim):
-        TRIGGERLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-
-    elif("DoubleEG+Run" in sampleToSkim):
-        TRIGGERLEP = "{0} and not {1} and not {2} and not {3}".format(TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-
-    elif("SingleElectron+Run" in sampleToSkim):
-        TRIGGERLEP = "{0} and not {1} and not {2} and not {3} and not {4}".format(TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
-
-    elif("MET+Run" in sampleToSkim):
-        TRIGGERLEP = TRIGGERLEP
-
-    elif("+Run20" in sampleToSkim):
-        print("PROBLEM with triggers!!!")
 
     print("TRIGGERLEP: {0}".format(TRIGGERLEP))
 
