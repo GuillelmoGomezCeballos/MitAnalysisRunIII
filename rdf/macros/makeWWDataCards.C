@@ -17,7 +17,7 @@
 void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1003", int year = 2022){
   TFile *inputFile;
   TFile *outputFile;
-  const int nSelTotal = 4;
+  const int nSelTotal = 5;
   const int nSystTotal = 141;
 
   TH1D *histo_Auxiliar[nSelTotal][nPlotCategories];
@@ -28,7 +28,7 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
   TH1D *histo_PSDown[nPlotCategories];
 
   for(int ic=0; ic<nPlotCategories; ic++) {
-    histo_Baseline[ic] = new TH1D(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()), 4, -0.5, 3.5);
+    histo_Baseline[ic] = new TH1D(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()), nSelTotal, -0.5, nSelTotal-0.5);
     TString plotBaseNamesTemp =  plotBaseNames[ic];
     if(ic == kPlotSignal0 || ic == kPlotSignal1 ||
        ic == kPlotSignal2 || ic == kPlotSignal3) plotBaseNamesTemp = "WW";
@@ -81,7 +81,7 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
 
   TH1D *histo_Syst[nSystTotal][nPlotCategories];
   for(int j=0; j<nSystTotal; j++){
-    for(int ic=0; ic<nPlotCategories; ic++) histo_Syst[j][ic] = new TH1D(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()), 4, -0.5, 3.5);
+    for(int ic=0; ic<nPlotCategories; ic++) histo_Syst[j][ic] = new TH1D(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()), nSelTotal, -0.5, nSelTotal-0.5);
   }
 
   // same-sign / WW / DY / Top1 / Top2
