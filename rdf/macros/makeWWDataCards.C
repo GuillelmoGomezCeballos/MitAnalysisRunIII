@@ -14,7 +14,7 @@
 
 #include "../makePlots/common.h"
 
-void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1005", int year = 2022){
+void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1003", int year = 2022){
   TFile *inputFile;
   TFile *outputFile;
   const int nSelTotal = 4;
@@ -84,7 +84,7 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
     for(int ic=0; ic<nPlotCategories; ic++) histo_Syst[j][ic] = new TH1D(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()), 4, -0.5, 3.5);
   }
 
-  // same-sign / WW / DY / Top
+  // same-sign / WW / DY / Top1 / Top2
   for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*150), "read");
     for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
