@@ -289,6 +289,25 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
             histo[ltype+148][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.6 && etaj1 < 2.8").Histo1D(("histo_{0}_{1}".format(ltype+148,x), "histo_{0}_{1}".format(ltype+148,x),40,0.0,1.0), "good_Jet_neEmEF0","weight")
             histo[ltype+151][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.6 && etaj1 < 2.8").Histo1D(("histo_{0}_{1}".format(ltype+151,x), "histo_{0}_{1}".format(ltype+151,x),40,0.0,1.0), "good_Jet_neHEF0","weight")
             histo[ltype+154][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.6 && etaj1 < 2.8").Histo1D(("histo_{0}_{1}".format(ltype+154,x), "histo_{0}_{1}".format(ltype+154,x),40,0.0,1.0), "good_Jet_chEF0","weight")
+            if(ltype != 2):
+              histo[ltype+264][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 0.0 && etaj1 < 1.3 && ptj1 >  30").Histo1D(("histo_{0}_{1}".format(ltype+264,x), "histo_{0}_{1}".format(ltype+264,x),40,0.0,1.0), "good_Jet_neEmEF0","weight")
+              histo[ltype+266][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 0.0 && etaj1 < 1.3 && ptj1 >  30").Histo1D(("histo_{0}_{1}".format(ltype+266,x), "histo_{0}_{1}".format(ltype+266,x),40,0.0,1.0), "good_Jet_neHEF0","weight")
+              histo[ltype+268][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 0.0 && etaj1 < 1.3 && ptj1 >  30").Histo1D(("histo_{0}_{1}".format(ltype+268,x), "histo_{0}_{1}".format(ltype+268,x),40,0.0,1.0), "good_Jet_chEF0","weight")
+              histo[ltype+270][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 1.3 && etaj1 < 2.5 && ptj1 >  30").Histo1D(("histo_{0}_{1}".format(ltype+270,x), "histo_{0}_{1}".format(ltype+270,x),40,0.0,1.0), "good_Jet_neEmEF0","weight")
+              histo[ltype+272][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 1.3 && etaj1 < 2.5 && ptj1 >  30").Histo1D(("histo_{0}_{1}".format(ltype+272,x), "histo_{0}_{1}".format(ltype+272,x),40,0.0,1.0), "good_Jet_neHEF0","weight")
+              histo[ltype+274][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 1.3 && etaj1 < 2.5 && ptj1 >  30").Histo1D(("histo_{0}_{1}".format(ltype+274,x), "histo_{0}_{1}".format(ltype+274,x),40,0.0,1.0), "good_Jet_chEF0","weight")
+              histo[ltype+276][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.5 && etaj1 < 3.5 && ptj1 >  30").Histo1D(("histo_{0}_{1}".format(ltype+276,x), "histo_{0}_{1}".format(ltype+276,x),40,0.0,1.0), "good_Jet_neEmEF0","weight")
+              histo[ltype+278][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.5 && etaj1 < 3.5 && ptj1 >  30").Histo1D(("histo_{0}_{1}".format(ltype+278,x), "histo_{0}_{1}".format(ltype+278,x),40,0.0,1.0), "good_Jet_neHEF0","weight")
+              histo[ltype+280][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.5 && etaj1 < 3.5 && ptj1 >  30").Histo1D(("histo_{0}_{1}".format(ltype+280,x), "histo_{0}_{1}".format(ltype+280,x),40,0.0,1.0), "good_Jet_chEF0","weight")
+              histo[ltype+282][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 0.0 && etaj1 < 1.3 && ptj1 > 100").Histo1D(("histo_{0}_{1}".format(ltype+282,x), "histo_{0}_{1}".format(ltype+282,x),40,0.0,1.0), "good_Jet_neEmEF0","weight")
+              histo[ltype+284][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 0.0 && etaj1 < 1.3 && ptj1 > 100").Histo1D(("histo_{0}_{1}".format(ltype+284,x), "histo_{0}_{1}".format(ltype+284,x),40,0.0,1.0), "good_Jet_neHEF0","weight")
+              histo[ltype+286][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 0.0 && etaj1 < 1.3 && ptj1 > 100").Histo1D(("histo_{0}_{1}".format(ltype+286,x), "histo_{0}_{1}".format(ltype+286,x),40,0.0,1.0), "good_Jet_chEF0","weight")
+              histo[ltype+288][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 1.3 && etaj1 < 2.5 && ptj1 > 100").Histo1D(("histo_{0}_{1}".format(ltype+288,x), "histo_{0}_{1}".format(ltype+288,x),40,0.0,1.0), "good_Jet_neEmEF0","weight")
+              histo[ltype+290][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 1.3 && etaj1 < 2.5 && ptj1 > 100").Histo1D(("histo_{0}_{1}".format(ltype+290,x), "histo_{0}_{1}".format(ltype+290,x),40,0.0,1.0), "good_Jet_neHEF0","weight")
+              histo[ltype+292][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 1.3 && etaj1 < 2.5 && ptj1 > 100").Histo1D(("histo_{0}_{1}".format(ltype+292,x), "histo_{0}_{1}".format(ltype+292,x),40,0.0,1.0), "good_Jet_chEF0","weight")
+              histo[ltype+294][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.5 && etaj1 < 3.5 && ptj1 > 100").Histo1D(("histo_{0}_{1}".format(ltype+294,x), "histo_{0}_{1}".format(ltype+294,x),40,0.0,1.0), "good_Jet_neEmEF0","weight")
+              histo[ltype+296][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.5 && etaj1 < 3.5 && ptj1 > 100").Histo1D(("histo_{0}_{1}".format(ltype+296,x), "histo_{0}_{1}".format(ltype+296,x),40,0.0,1.0), "good_Jet_neHEF0","weight")
+              histo[ltype+298][x] = dfjetcat[3*x+ltype].Filter("etaj1 > 2.5 && etaj1 < 3.5 && ptj1 > 100").Histo1D(("histo_{0}_{1}".format(ltype+298,x), "histo_{0}_{1}".format(ltype+298,x),40,0.0,1.0), "good_Jet_chEF0","weight")
 
             dfjetcat[3*x+ltype] = dfjetcat[3*x+ltype].Filter("ngood_jets >= 2", "At least two jets")
             histo[ltype+157][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+157,x), "histo_{0}_{1}".format(ltype+157,x), 50,0,2000), "mjj","weight")
@@ -427,9 +446,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
                 histo2D[39][x] = dfzllcat[3*x+ltype].Filter("tight_el8[1] == true").Histo2D(("histo2d_{0}_{1}".format(39, x), "histo2d_{0}_{1}".format(39, x), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins), "etal2", "ptl2","weight")
 
             dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("ptl1 > 25 && ptl2 > 25")
-            histo[ltype+297][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+297,x), "histo_{0}_{1}".format(ltype+297,x), 20, 25, 125), "ptl2","weight")
+            histo[ltype+300][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+300,x), "histo_{0}_{1}".format(ltype+300,x), 20, 25, 125), "ptl2","weight")
             for nTrg in range(len(list_TRIGGER)):
-                histo[3*nTrg+ltype+300][x] = dfzllcat[3*x+ltype].Filter("{0} > 0".format(list_TRIGGER[nTrg])).Histo1D(("histo_{0}_{1}".format(3*nTrg+ltype+300,x), "histo_{0}_{1}".format(3*nTrg+ltype+300,x), 20, 25, 125), "ptl2","weight")
+                histo[3*nTrg+ltype+303][x] = dfzllcat[3*x+ltype].Filter("{0} > 0".format(list_TRIGGER[nTrg])).Histo1D(("histo_{0}_{1}".format(3*nTrg+ltype+303,x), "histo_{0}_{1}".format(3*nTrg+ltype+303,x), 20, 25, 125), "ptl2","weight")
 
     report = []
     for x in range(nCat):
