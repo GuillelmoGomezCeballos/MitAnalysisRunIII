@@ -479,7 +479,8 @@ def SwitchSample(argument, skimType):
         99:(dirLocal+"/2018/vbf-hphigamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        199:(dirLocal+"/2018/vbf-hrhogamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        299:(dirLocal+"/2018/vbf-hphiKLKSgamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
-       399:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2022_postEE",1.0*1000,plotCategory("kPlotBSM")),
+       398:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2022_postEE",1.0*1000,plotCategory("kPlotBSM")),
+       399:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2016_preVFP",1.0*1000,plotCategory("kPlotBSM")),
 
        100: (dirT2+"/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",19982.5*1000,plotCategory("kPlotDY")),
        101: (dirT2+"/DYto2L-2Jets_MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1+NANOAODSIM",6345.99*1000,plotCategory("kPlotDY")),
