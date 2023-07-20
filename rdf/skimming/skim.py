@@ -144,6 +144,9 @@ if __name__ == "__main__":
     elif("Run3Summer22" in sampleToSkim):
         year = 2022
         isSkimData = 0
+    elif("Run3Winter23" in sampleToSkim):
+        year = 2023
+        isSkimData = 0
 
     if(year == -1 or isSkimData == -1):
         print("Incorrect year/isSkimData: {0} / {1}".format(year, isSkimData))

@@ -4,9 +4,10 @@ from array import array
 
 ROOT.ROOT.EnableImplicitMT(5)
 from utilsCategory import plotCategory
-from utilsAna import getMClist, getDATAlist, getLumi
+from utilsAna import getMClist, getDATAlist, getTriggerFromJson, getLumi
 from utilsAna import SwitchSample
 from utilsSelection import getBTagCut
+from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -20,13 +21,44 @@ JSON = jsonObject['JSON']
 
 VBSSEL = jsonObject['VBSSEL']
 
-muSelChoice = 0
+# 0 = T, 1 = M, 2 = L
+bTagSel = 2
+useBTaggingWeights = 1
+
+muSelChoice = 1
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 
-elSelChoice = 0
+elSelChoice = 1
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
+
+def selectionWW(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count):
+
+    dftag = selectionElMu(df,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
+    dftag = (dftag.Filter("nLoose >= 2","At least two loose leptons")
+                  .Filter("nLoose == 2","Only two loose leptons")
+                  .Filter("Sum(fake_mu) == 1 && Sum(fake_el) == 1","e-mu events")
+                  .Filter("nTight == 2","Two tight leptons")
+                  .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons")
+                  )
+
+    dftag = selection2LVar  (dftag,year,isData)
+    dftag = (dftag.Filter("ptl1 > 25", "ptl1 > 25")
+                  .Filter("ptl2 > 20", "ptl2 > 20")
+                  .Filter("mll > 20","mll > 20")
+                  .Filter("ptll > 30","ptll > 30")
+                  )
+
+    dftag = selectionTrigger2L(dftag,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
+    dftag = (dftag.Filter("PuppiMET_pt > 20", "PuppiMET_pt > 20")
+                  .Filter("minPMET > 20", "minPMET > 20")
+                  .Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
+                  )
+
+    return dftag
 
 def analysis(df,count,category,weight,year,PDType,isData):
 
@@ -62,6 +94,15 @@ def analysis(df,count,category,weight,year,PDType,isData):
           .Filter("abs(Zmass[0]-91.1876) < 15","abs(Zmass[0]-91.1876) < 15")
           .Define("Zrap", "abs(makeRapidity(Zpt[0],Zeta[0],Zphi[0],Zmass[0]))")
             )
+
+    overallTriggers = jsonObject['triggers']
+    TRIGGERMUEG = getTriggerFromJson(overallTriggers, "TRIGGERMUEG", year)
+    TRIGGERDMU  = getTriggerFromJson(overallTriggers, "TRIGGERDMU", year)
+    TRIGGERSMU  = getTriggerFromJson(overallTriggers, "TRIGGERSMU", year)
+    TRIGGERDEL  = getTriggerFromJson(overallTriggers, "TRIGGERDEL", year)
+    TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
+
+    dfww = selectionWW(dfcat,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count)
 
     dfcat = (dfcat
           .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
@@ -159,14 +200,18 @@ def analysis(df,count,category,weight,year,PDType,isData):
     histo[16][x] = dfgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 50, 0., 5.0), "Zrap","weight")
     histo2D[101][x] = dfgen.Histo2D(("histo2d_{0}_{1}".format(101,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 101),"Zrap","Zpt","weight")
 
+    histo[17][x] = dfww.Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 4,-0.5,3.5), "ngood_jets","weight")
+
     #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "PuppiMET_pt", "nbtag"]
     #dfcat.Snapshot("Events", "test.root", branches)
 
     report0 = dfcat.Report()
     report1 = dfgen.Report()
+    report2 = dfww.Report()
     print("---------------- SUMMARY -------------")
     report0.Print()
     report1.Print()
+    report2.Print()
 
     myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}_job-1.root".format(count,year),'RECREATE')
     for i in range(nCat):

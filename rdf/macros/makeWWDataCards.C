@@ -14,7 +14,7 @@
 
 #include "../makePlots/common.h"
 
-void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1003", int year = 2022){
+void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1009", int year = 2022){
   TFile *inputFile;
   TFile *outputFile;
   const int nSelTotal = 5;
