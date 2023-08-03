@@ -28,7 +28,8 @@ public:
     if (it != lumimap_->end()) {
       return it->second;
     }
-    throw std::runtime_error("lumi not found");
+    std::cout << "run/lumi not found! " << run << " " << lumi << std::endl;
+    //throw std::runtime_error("lumi not found");
     
     return 0.;
   }

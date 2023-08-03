@@ -21,10 +21,7 @@ echo $PWD
 python3 skim.py --whichSample=$1 --whichJob=$2 --group=$3 --inputSamplesCfg=$4 --inputFilesCfg=$5
 status=$?
 
-rm -rf functions_skim_cc* skim.tgz \
-skim.py skim_*.cfg \
-functions_skim.cc haddnanoaod.py \
-jsns config
+rm -rf functions_skim_cc* skim.tgz skim.py skim_*.cfg functions_skim.cc haddnanoaod.py jsns config
 
 if [ $status -eq 0 ]; then
   echo "SUCCESS"

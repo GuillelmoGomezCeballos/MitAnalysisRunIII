@@ -6,10 +6,10 @@ ROOT.ROOT.EnableImplicitMT(5)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist, getTriggerFromJson, getLumi
 from utilsAna import SwitchSample
-#from utilsSelectionNanoV9 import getBTagCut
-#from utilsSelectionNanoV9 import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
-from utilsSelection import getBTagCut
-from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
+from utilsSelectionNanoV9 import getBTagCut
+from utilsSelectionNanoV9 import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
+#from utilsSelection import getBTagCut
+#from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
 
 selectionJsonPath = "config/selectionNanoV9.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -40,7 +40,10 @@ def selectionWW(df,year,PDType,isData,count):
     dftag = selectionElMu(df,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
     dftag = (dftag.Filter("nLoose >= 2","At least two loose leptons")
                   .Filter("nLoose == 2","Only two loose leptons")
-                  .Filter("Sum(fake_mu) == 1 && Sum(fake_el) == 1","e-mu events")
+                  .Define("loose_Muon_pt" ,"Muon_pt[loose_mu]")
+                  .Define("loose_Electron_pt" ,"Electron_pt[loose_el]")
+                  .Filter("(Sum(loose_mu) == 2 && loose_Muon_pt[0] > 20 && loose_Muon_pt[1] > 20)||(Sum(loose_el) == 2 && loose_Electron_pt[0] > 20 && loose_Electron_pt[1] > 20)||(Sum(loose_mu) == 1 && Sum(loose_el) == 1 && loose_Muon_pt[0] > 20 && loose_Electron_pt[0] > 20)","ptl1/2 > 20")
+                  .Filter("Sum(loose_mu) == 1 && Sum(loose_el) == 1","e-mu events")
                   .Filter("nTight == 2","Two tight leptons")
                   .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons")
                   )

@@ -274,7 +274,7 @@ if __name__ == "__main__":
                     else:
                         print("Copying file {0} failed ({1}), retrying".format(inputSingleFileBase,returncode))
                         n_retries+=1
-                        time.sleep(15)
+                        time.sleep(0.1)
 
                 if(copy_result == False):
                     print("Copying file {0} failed completely, exiting the loop".format(inputSingleFileBase))
@@ -462,7 +462,7 @@ if __name__ == "__main__":
                 else:
                     print("haddnanoaod output file1 {0} failed ({1}), retrying".format(fOutName1,returncode))
                     n_retries+=1
-                    time.sleep(15)
+                    time.sleep(0.1)
             if(copy_result == False):
                 print("haddnanoaod output file1 {0} failed completely, exiting the loop".format(fOutName1))
                 os.remove(fOutName1)
@@ -489,7 +489,7 @@ if __name__ == "__main__":
                 else:
                     print("haddnanoaod output file2 {0} failed ({1}), retrying".format(fOutName2,returncode))
                     n_retries+=1
-                    time.sleep(15)
+                    time.sleep(0.1)
             if(copy_result == False):
                 print("haddnanoaod output file2 {0} failed completely, exiting the loop".format(fOutName2))
                 os.remove(fOutName2)
@@ -516,7 +516,7 @@ if __name__ == "__main__":
                 else:
                     print("haddnanoaod output file3 {0} failed ({1}), retrying".format(fOutName3,returncode))
                     n_retries+=1
-                    time.sleep(15)
+                    time.sleep(0.1)
             if(copy_result == False):
                 print("haddnanoaod output file3 {0} failed completely, exiting the loop".format(fOutName3))
                 os.remove(fOutName3)
@@ -543,7 +543,7 @@ if __name__ == "__main__":
                 else:
                     print("haddnanoaod output file4 {0} failed ({1}), retrying".format(fOutName4,returncode))
                     n_retries+=1
-                    time.sleep(15)
+                    time.sleep(0.1)
             if(copy_result == False):
                 print("haddnanoaod output file4 {0} failed completely, exiting the loop".format(fOutName4))
                 os.remove(fOutName4)
@@ -571,7 +571,7 @@ if __name__ == "__main__":
                 else:
                     print("haddnanoaod output file5 {0} failed ({1}), retrying".format(fOutName5,returncode))
                     n_retries+=1
-                    time.sleep(15)
+                    time.sleep(0.1)
             if(copy_result == False):
                 print("haddnanoaod output file5 {0} failed completely, exiting the loop".format(fOutName5))
                 os.remove(fOutName5)
@@ -592,7 +592,7 @@ if __name__ == "__main__":
                     else:
                         print("Copying output file1 {0} failed ({1}), retrying".format(fOutName1,returncode))
                         n_retries+=1
-                        time.sleep(15)
+                        time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file1 {0} failed completely, exiting the loop".format(fOutName1))
 
@@ -614,7 +614,7 @@ if __name__ == "__main__":
                     else:
                         print("Copying output file2 {0} failed ({1}), retrying".format(fOutName2,returncode))
                         n_retries+=1
-                        time.sleep(15)
+                        time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file2 {0} failed completely, exiting the loop".format(fOutName2))
 
@@ -636,7 +636,7 @@ if __name__ == "__main__":
                     else:
                         print("Copying output file3 {0} failed ({1}), retrying".format(fOutName3,returncode))
                         n_retries+=1
-                        time.sleep(15)
+                        time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file3 {0} failed completely, exiting the loop".format(fOutName3))
 
@@ -658,7 +658,7 @@ if __name__ == "__main__":
                     else:
                         print("Copying output file4 {0} failed ({1}), retrying".format(fOutName4,returncode))
                         n_retries+=1
-                        time.sleep(15)
+                        time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file4 {0} failed completely, exiting the loop".format(fOutName4))
 
@@ -680,7 +680,7 @@ if __name__ == "__main__":
                     else:
                         print("Copying output file4 {0} failed ({1}), retrying".format(fOutName5,returncode))
                         n_retries+=1
-                        time.sleep(15)
+                        time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file5 {0} failed completely, exiting the loop".format(fOutName5))
 

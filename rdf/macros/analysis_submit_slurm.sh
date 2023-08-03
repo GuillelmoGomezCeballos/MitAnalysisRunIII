@@ -32,8 +32,8 @@ elif [ $theAna -eq 4 ]; then
 
 elif [ $theAna -eq 5 ]; then
  whichAna="fakeAnalysis"
- nohup ./analysis_slurm.sh 130 2022 -1 1002 fakeAnalysis >& logs/log_130 &
- nohup ./analysis_slurm.sh 131 2022 -1 1003 fakeAnalysis >& logs/log_131 &
+ nohup ./analysis_slurm.sh 110 2022 -1 1002 fakeAnalysis >& logs/log_110 &
+ nohup ./analysis_slurm.sh 123 2022 -1 1003 fakeAnalysis >& logs/log_123 &
 
 elif [ $theAna -eq 6 ]; then
  whichAna="triggerAnalysis"
