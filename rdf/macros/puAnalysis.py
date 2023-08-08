@@ -58,7 +58,6 @@ def selectionWW(df,year,PDType,isData,count):
     dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
     dftag = (dftag.Filter("PuppiMET_pt > 20", "PuppiMET_pt > 20")
                   .Filter("minPMET > 20", "minPMET > 20")
-                  .Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
                   )
 
     return dftag
@@ -196,7 +195,10 @@ def analysis(df,count,category,weight,year,PDType,isData):
     histo[16][x] = dfgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 50, 0., 5.0), "Zrap","weight")
     histo2D[101][x] = dfgen.Histo2D(("histo2d_{0}_{1}".format(101,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 101),"Zrap","Zpt","weight")
 
-    histo[17][x] = dfww.Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 4,-0.5,3.5), "ngood_jets","weight")
+    histo[17][x] = dfww.Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x),3,-0.5,2.5), "ngood_jets","weight")
+
+    dfww = dfww.Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
+    histo[18][x] = dfww.Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x),3,-0.5,2.5), "ngood_jets","weight")
 
     #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "PuppiMET_pt", "nbtag"]
     #dfcat.Snapshot("Events", "test.root", branches)
