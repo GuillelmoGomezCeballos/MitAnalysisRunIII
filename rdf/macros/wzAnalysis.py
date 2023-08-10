@@ -7,6 +7,7 @@ from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection3LVar, selectionTrigger2L, selectionElMu, selectionWeigths, makeFinalVariable
+import tmva_helper_xml
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
@@ -137,13 +138,16 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
     ]:
         branchList.push_back(branchName)
 
-    ROOT.gInterpreter.ProcessLine('''
-    TMVA::Experimental::RReader model("weights_mva/bdt_BDTG_vbfinc_v0.weights.xml");
-    computeModel = TMVA::Experimental::Compute<15, float>(model);
-    ''')
+    #ROOT.gInterpreter.ProcessLine('''
+    #TMVA::Experimental::RReader model("weights_mva/bdt_BDTG_vbfinc_v0.weights.xml");
+    #computeModel = TMVA::Experimental::Compute<15, float>(model);
+    #''')
+    #variables = ROOT.model.GetVariableNames()
+    #print(variables)
 
-    variables = ROOT.model.GetVariableNames()
-    print(variables)
+    MVAweights = "weights_mva/bdt_BDTG_vbfinc_v0.weights.xml"
+    tmva_helper = tmva_helper_xml.TMVAHelperXML(MVAweights)
+    print(tmva_helper.variables)
 
     dftag = selectionLL(df,year,PDType,isData,count)
 
@@ -151,8 +155,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,p
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("theCat","compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
-		    .Define("bdt_vbfinc", ROOT.computeModel, ROOT.model.GetVariableNames())
+		    #.Define("bdt_vbfinc", ROOT.computeModel, ROOT.model.GetVariableNames())
                     )
+
+    dfbase = tmva_helper.run_inference(dfbase,"bdt_vbfinc")
 
     dfwzcat = []
     dfwzbcat = []
