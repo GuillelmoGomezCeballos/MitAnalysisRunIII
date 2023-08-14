@@ -12,14 +12,18 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 20.0, 10.0]
+    lumi = [36.1, 41.5, 60.0, 9.6, 27.7, 17.6, 9.5]
 
     lumiBit = -999
     if(year == 2016): lumiBit = 0
     elif(year == 2017): lumiBit = 1
     elif(year == 2018): lumiBit = 2
-    elif(year == 2022): lumiBit = 3
-    elif(year == 2023): lumiBit = 4
+    elif(year == 20220): lumiBit = 3
+    elif(year == 20221): lumiBit = 4
+    elif(year == 20230): lumiBit = 5
+    elif(year == 20231): lumiBit = 6
+
+    print("lumi({0}/{1}) = {2}".format(year,lumiBit,lumi[lumiBit]))
 
     return lumi[lumiBit]
 
@@ -52,6 +56,8 @@ def loadJSON(fIn):
             ROOT.jsonMap[int(k)] = vec
 
 def getTriggerFromJson(overall, type, year ):
+
+    if(year > 10000): year = year // 10
 
     for trigger in overall:
         if(trigger['name'] == type and trigger['year'] == year): return trigger['definition']
@@ -155,6 +161,8 @@ def getMClist(sampleNOW, skimType):
     return files
 
 def getDATAlist(type, year, skimType):
+
+    if(year > 10000): year = year // 10
 
     #dirT2 = "/mnt/T2_US_MIT/hadoop/cms/store/user/paus/nanohr/D00/"
     #dirT2 = "/mnt/T3_US_MIT/hadoop/scratch/ceballos/nanoaod/skims_submit/" + skimType

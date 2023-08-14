@@ -2,7 +2,7 @@ import ROOT
 import os, sys, getopt, json
 from array import array
 
-ROOT.ROOT.EnableImplicitMT(5)
+ROOT.ROOT.EnableImplicitMT()
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist, getTriggerFromJson, getLumi
 from utilsAna import SwitchSample
@@ -44,6 +44,7 @@ def selectionWW(df,year,PDType,isData,count):
                   .Define("loose_Electron_pt" ,"Electron_pt[loose_el]")
                   .Filter("(Sum(loose_mu) == 2 && loose_Muon_pt[0] > 20 && loose_Muon_pt[1] > 20)||(Sum(loose_el) == 2 && loose_Electron_pt[0] > 20 && loose_Electron_pt[1] > 20)||(Sum(loose_mu) == 1 && Sum(loose_el) == 1 && loose_Muon_pt[0] > 20 && loose_Electron_pt[0] > 20)","ptl1/2 > 20")
                   .Filter("Sum(loose_mu) == 1 && Sum(loose_el) == 1","e-mu events")
+                  .Filter("nFake == 2","Two fake leptons")
                   .Filter("nTight == 2","Two tight leptons")
                   .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons")
                   )

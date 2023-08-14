@@ -2,6 +2,8 @@
 
 MyCorrections::MyCorrections(int the_input_year) {
 
+  if(the_input_year == 20221) the_input_year = 2022;
+
   year = the_input_year;
   yearPrime = the_input_year;
 

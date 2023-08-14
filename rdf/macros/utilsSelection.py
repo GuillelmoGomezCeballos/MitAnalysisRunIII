@@ -6,6 +6,15 @@ def getBTagCut(type,year):
 
     if(type < 0 or type > 2): return 100
     value = [0.7100, 0.2783, 0.0490]
+    if(year == 20220):
+       value[0] = 0.7183
+       value[1] = 0.3086
+       value[2] = 0.0583
+    elif(year == 20221):
+       value[0] = 0.7300
+       value[1] = 0.3196
+       value[2] = 0.0614
+
     return value[type]
 
 def selectionGenLepJet(df,ptlcut,ptjcut):
@@ -403,6 +412,8 @@ def selection2LVar(df,year,isData):
 
 def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG):
 
+    if(year > 10000): year = year // 10
+
     triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
 
     if(year == 2018 and PDType == "MuonEG"):
@@ -463,6 +474,8 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
     return dftag
 
 def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
+
+    if(year > 10000): year = year // 10
 
     triggerFAKE = "0"
 

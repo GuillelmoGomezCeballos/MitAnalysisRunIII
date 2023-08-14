@@ -4,7 +4,7 @@ import correctionlib
 correctionlib.register_pyroot_binding()
 ROOT.gInterpreter.Declare('#include "mysf.h"')
 ROOT.gInterpreter.Load("mysf.so")
-ROOT.gInterpreter.ProcessLine('auto corr = MyCorrections(2023);')
+ROOT.gInterpreter.ProcessLine('auto corr = MyCorrections(20221);')
 ROOT.gInterpreter.ProcessLine('corr.eval_electronSF((char*)"2018", (char*)"sf", (char*)"Medium", 1.1, 34.0)')
 ROOT.gInterpreter.ProcessLine('corr.eval_electronSF((char*)"2018", (char*)"sf", (char*)"RecoAbove20", 1.1, 20.0)')
 ROOT.gInterpreter.ProcessLine('corr.eval_electronSF((char*)"2018", (char*)"sf", (char*)"RecoBelow20", 1.1, 19.999)')
