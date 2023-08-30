@@ -6,14 +6,13 @@ ROOT.ROOT.EnableImplicitMT()
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist, getTriggerFromJson, getLumi
 from utilsAna import SwitchSample
-from utilsSelectionNanoV9 import getBTagCut
-from utilsSelectionNanoV9 import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
-#from utilsSelection import getBTagCut
-#from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
+#from utilsSelectionNanoV9 import getBTagCut
+#from utilsSelectionNanoV9 import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
+from utilsSelection import getBTagCut
+from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
 
-selectionJsonPath = "config/selectionNanoV9.json"
-if(not os.path.exists(selectionJsonPath)):
-    selectionJsonPath = "selectionNanoV9.json"
+#selectionJsonPath = "config/selectionNanoV9.json"
+selectionJsonPath = "config/selection.json"
 
 with open(selectionJsonPath) as jsonFile:
     jsonObject = json.load(jsonFile)
@@ -77,6 +76,7 @@ def analysis(df,count,category,weight,year,PDType,isData):
     histo   = [[0 for x in range(nCat)] for y in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
 
+    if(year > 10000): year = year // 10
     ROOT.initJSONSFs(year)
 
     dfcat = df.Define("PDType","\"{0}\"".format(PDType))\

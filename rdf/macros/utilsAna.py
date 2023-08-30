@@ -579,6 +579,8 @@ def SwitchSample(argument, skimType):
         99:(dirLocal+"/2018/vbf-hphigamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        199:(dirLocal+"/2018/vbf-hrhogamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        299:(dirLocal+"/2018/vbf-hphiKLKSgamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
+       396:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_preEE",1.0*1000,plotCategory("kPlotDY")),
+       397:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_postEE",1.0*1000,plotCategory("kPlotDY")),
        398:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2022_postEE",1.0*1000,plotCategory("kPlotBSM")),
        399:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2016_preVFP",1.0*1000,plotCategory("kPlotBSM")),
 
