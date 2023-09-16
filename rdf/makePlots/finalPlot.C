@@ -124,6 +124,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
 
   int isVBS[2] = {0, 0};
   if     (plotName.Contains("fiducial6"))                                    isVBS[0] = 2;
+  else if(plotName.Contains("ww_output"))                                    isVBS[0] = 3;
   else if(_hist[kPlotEWKSSWW] && _hist[kPlotEWKSSWW]->GetSumOfWeights() > 0) isVBS[0] = 1;
   else if(_hist[kPlotSignal1] && _hist[kPlotSignal1]->GetSumOfWeights() > 0) isVBS[0] = 1;
   else if(_hist[kPlotSignal2] && _hist[kPlotSignal2]->GetSumOfWeights() > 0) isVBS[0] = 1;
@@ -132,6 +133,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
 
   for(int ic=0; ic<nPlotCategories; ic++){
     if(!_hist[ic]) continue;
+    //printf("DEBUG0 %d %d %d\n",ic,isVBS[0],isVBS[1]);
     //for(int i=1; i<=_hist[ic]->GetNbinsX(); i++) if(_hist[ic]->GetSumOfWeights() > 0) printf("%10s(%2d): %.1f\n",plotBaseNames[ic].Data(),i,_hist[ic]->GetBinContent(i));
     // begin btaging study
     //_hist[ic]->SetBinContent(1,0);
@@ -190,6 +192,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
       }
     } // mltFit result
 
+    //printf("DEBUG1 %d\n",ic);
     if(ic != kPlotData) _hist[ic]->Scale(lumi);
 
     if(printYieldsBinByBin && _hist[ic]->GetSumOfWeights() > 0){
@@ -197,6 +200,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
       for(int i=1; i<=_hist[ic]->GetNbinsX(); i++) printf("%7.3f +/- %.3f\n",_hist[ic]->GetBinContent(i),_hist[ic]->GetBinError(i));
     }
 
+    //printf("DEBUG2 %d\n",ic);
     if     (isRemoveBSM && ic == kPlotBSM) _hist[ic]->Scale(0);
 
     else if(isVBS[0] == 2 && ic == kPlotSignal1)                  {_hist[kPlotBSM]->Add(_hist[ic]);_hist[ic]->Scale(0);}
@@ -207,10 +211,16 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
     else if(isVBS[0] == 1 && ic == kPlotSignal3 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); /*_hist[ic]->Scale(0);*/}
 
     else if(isVBS[1] == 1 && ic == kPlotggWW)    {_hist[kPlotEWKWZ]  ->Add(_hist[ic]); _hist[ic]->Scale(0);}
+
+    else if(isVBS[0] == 3 && ic == kPlotSignal0)                  {_hist[kPlotqqWW] = (TH1F*) _hist[ic]->Clone(); _hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic == kPlotSignal1)                  {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic == kPlotSignal2)                  {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
+    //printf("DEBUG3 %d\n",ic);
   }
   
   for(int ic=0; ic<nPlotCategories; ic++){
     if(!_hist[ic]) continue;
+    //printf("DEBUG4 %d\n",ic);
     if(ic != kPlotData && ic != kPlotBSM && ic != kPlotSignal0 && ic != kPlotSignal1 && ic != kPlotSignal2 && ic != kPlotSignal3) {
       hBck->Add(_hist[ic]);
       if(mlfitResult==""){

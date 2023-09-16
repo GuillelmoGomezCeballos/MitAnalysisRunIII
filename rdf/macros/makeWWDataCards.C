@@ -14,7 +14,7 @@
 
 #include "../makePlots/common.h"
 
-void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1009", int year = 2022){
+void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1001", int year = 20221){
   TFile *inputFile;
   TFile *outputFile;
   const int nSelTotal = 5;
@@ -27,16 +27,9 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
   TH1D *histo_PSUp[nPlotCategories];
   TH1D *histo_PSDown[nPlotCategories];
 
-  for(int ic=0; ic<nPlotCategories; ic++) {
-    histo_Baseline[ic] = new TH1D(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()), nSelTotal, -0.5, nSelTotal-0.5);
-    TString plotBaseNamesTemp =  plotBaseNames[ic];
-    if(ic == kPlotSignal0 || ic == kPlotSignal1 ||
-       ic == kPlotSignal2 || ic == kPlotSignal3) plotBaseNamesTemp = "WW";
-    histo_QCDScaleUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTUp"   , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
-    histo_QCDScaleDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTDown" , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
-    histo_PSUp  [ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTUp"   , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
-    histo_PSDown[ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTDown" , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
-  }
+  TH1D *histo_Syst[nSystTotal][nPlotCategories];
+  TH1D *histo_PDFUp  [101][nPlotCategories];
+  TH1D *histo_PDFDown[101][nPlotCategories];
 
   TString nameSyst[nSystTotal];
   nameSyst[ 0] = "BtagSFBC_correlatedUp";
@@ -79,33 +72,75 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
   nameSyst[139] = "ElectronMomUp";
   nameSyst[140] = "ElectronMomDown";
 
-  TH1D *histo_Syst[nSystTotal][nPlotCategories];
-  for(int j=0; j<nSystTotal; j++){
-    for(int ic=0; ic<nPlotCategories; ic++) histo_Syst[j][ic] = new TH1D(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()), nSelTotal, -0.5, nSelTotal-0.5);
+
+  int BinXF = nSelTotal; double minXF = -0.5; double maxXF = nSelTotal-0.5;    
+  if(whichAna != 0){
+    BinXF = 25; minXF = 85; maxXF = 385;    
   }
 
-  // same-sign / WW / DY / Top1 / Top2
-  for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
-    inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*150), "read");
-    for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
-      histo_Auxiliar[nSel][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Auxiliar[nSel][ic]);
-      histo_Baseline[ic]->SetBinContent(nSel+1,histo_Auxiliar[nSel][ic]->GetBinContent(fidAna));
-      histo_Baseline[ic]->SetBinError  (nSel+1,histo_Auxiliar[nSel][ic]->GetBinError  (fidAna));
-    }
-    delete inputFile;
+  for(int ic=0; ic<nPlotCategories; ic++) {
+    histo_Baseline[ic] = new TH1D(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()), BinXF, minXF, maxXF);
+    TString plotBaseNamesTemp =  plotBaseNames[ic];
+    if(ic == kPlotSignal0 || ic == kPlotSignal1 ||
+       ic == kPlotSignal2 || ic == kPlotSignal3) plotBaseNamesTemp = "WW";
+    histo_QCDScaleUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTUp"   , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+    histo_QCDScaleDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTDown" , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+    histo_PSUp  [ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTUp"   , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+    histo_PSDown[ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTDown" , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+
   }
 
   for(int j=0; j<nSystTotal; j++){
+    for(int ic=0; ic<nPlotCategories; ic++) histo_Syst[j][ic] = new TH1D(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()), BinXF, minXF, maxXF);
+  }
+  for(int j=0; j<101; j++){
+    for(int ic=0; ic<nPlotCategories; ic++) histo_PDFUp  [j][ic] = new TH1D(Form("histo_%s_PDF%dUp"  ,plotBaseNames[ic].Data(),j),Form("histo_%s_PDF%dUp"  ,plotBaseNames[ic].Data(),j), BinXF, minXF, maxXF);
+    for(int ic=0; ic<nPlotCategories; ic++) histo_PDFDown[j][ic] = new TH1D(Form("histo_%s_PDF%dDown",plotBaseNames[ic].Data(),j),Form("histo_%s_PDF%dDown",plotBaseNames[ic].Data(),j), BinXF, minXF, maxXF);
+  }
+
+  if(whichAna == 0){
+    // same-sign / WW / DY / Top1 / Top2
     for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
-      inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*150+1+j), "read");
+      inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*150), "read");
       for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
-        histo_Auxiliar[nSel][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Auxiliar[nSel][ic]);
-        histo_Syst[j][ic]->SetBinContent(nSel+1,histo_Auxiliar[nSel][ic]->GetBinContent(fidAna));
-        histo_Syst[j][ic]->SetBinError  (nSel+1,histo_Auxiliar[nSel][ic]->GetBinError  (fidAna));
+	histo_Auxiliar[nSel][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Auxiliar[nSel][ic]);
+	histo_Baseline[ic]->SetBinContent(nSel+1,histo_Auxiliar[nSel][ic]->GetBinContent(fidAna));
+	histo_Baseline[ic]->SetBinError  (nSel+1,histo_Auxiliar[nSel][ic]->GetBinError  (fidAna));
       }
       delete inputFile;
     }
-  }
+
+    for(int j=0; j<nSystTotal; j++){
+      for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
+	inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*150+1+j), "read");
+	for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
+          histo_Auxiliar[nSel][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Auxiliar[nSel][ic]);
+          histo_Syst[j][ic]->SetBinContent(nSel+1,histo_Auxiliar[nSel][ic]->GetBinContent(fidAna));
+          histo_Syst[j][ic]->SetBinError  (nSel+1,histo_Auxiliar[nSel][ic]->GetBinError  (fidAna));
+	}
+	delete inputFile;
+      }
+    }
+
+  } // Default analysis
+  else if(whichAna != 0){
+    inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,600+fidAna*150), "read");
+    for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
+      histo_Baseline[ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Baseline[ic]); histo_Baseline[ic]->SetDirectory(0);
+      histo_Baseline[ic]->SetNameTitle(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()));
+    }
+    delete inputFile;
+
+    for(int j=0; j<nSystTotal; j++){
+      inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,600+fidAna*150+1+j), "read");
+      for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
+        histo_Syst[j][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Syst[j][ic]); histo_Syst[j][ic]->SetDirectory(0);
+        histo_Syst[j][ic]->SetNameTitle(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()));
+      }
+      delete inputFile;
+    }
+
+  } // Alternative distributions
 
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -158,10 +193,27 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
       histo_PSUp        [ic]->SetBinContent(nb, TMath::Max((float)histo_PSUp        [ic]->GetBinContent(nb),0.0f));
       histo_PSDown      [ic]->SetBinContent(nb, TMath::Max((float)histo_PSDown      [ic]->GetBinContent(nb),0.0f));
       for(int j=0; j<nSystTotal; j++) histo_Syst[j][ic]->SetBinContent(nb, TMath::Max((float)histo_Syst[j][ic]->GetBinContent(nb),0.0f));
+
+      // compute PDF uncertainties
+      if(histo_Baseline[ic]->GetBinContent(nb) > 0 && TMath::Abs(histo_Baseline[ic]->GetBinContent(nb)-histo_Syst[30][ic]->GetBinContent(nb))/histo_Baseline[ic]->GetBinContent(nb) > 0.001) printf("PDF problem %f %f %f\n",histo_Baseline[ic]->GetBinContent(nb),histo_Syst[30][ic]->GetBinContent(nb),TMath::Abs(histo_Baseline[ic]->GetBinContent(nb)-histo_Syst[30][ic]->GetBinContent(nb)));
+      for(int npdf=0; npdf<100; npdf++){
+        double diff = 0;
+	if(histo_Baseline[ic]->GetBinContent(nb) > 0) diff = TMath::Abs(histo_Syst[npdf+31][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/histo_Baseline[ic]->GetBinContent(nb);
+        if(diff > 0.05) printf("Large PDFUnc(%d) %d %d %f\n",npdf,ic,nb,diff);
+        histo_PDFUp  [npdf][ic]->SetBinContent(nb, histo_Baseline[ic]->GetBinContent(nb)*(1.0+diff));
+        histo_PDFDown[npdf][ic]->SetBinContent(nb, histo_Baseline[ic]->GetBinContent(nb)/(1.0+diff));
+      }
+      histo_PDFUp  [100][ic]->SetBinContent(nb, histo_Syst[131][ic]->GetBinContent(nb));
+      histo_PDFDown[100][ic]->SetBinContent(nb, histo_Syst[132][ic]->GetBinContent(nb));
     }
   }
 
-  TString outputLimits = Form("output_%s_%d_bin%d.root",anaSel.Data(),year,fidAna);
+  TString additionalSuffix = "";
+  if(whichAna != 0){ 
+    additionalSuffix = "_alt";
+  }
+
+  TString outputLimits = Form("output_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna,additionalSuffix.Data());
   outputFile = new TFile(outputLimits, "RECREATE");
   outputFile->cd();
   for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
@@ -179,12 +231,16 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
     histo_QCDScaleDown[ic]->Write();
     histo_PSUp        [ic]->Write();
     histo_PSDown      [ic]->Write();
+    for(int npdf=0; npdf<101; npdf++){
+      histo_PDFUp  [npdf][ic]->Write();
+      histo_PDFDown[npdf][ic]->Write();
+    }
   }
   outputFile->Close();
 
   // Filling datacards txt file
   char outputLimitsCard[200];  					  
-  sprintf(outputLimitsCard,"datacard_%s_%d_bin%d.txt",anaSel.Data(),year,fidAna);
+  sprintf(outputLimitsCard,"datacard_%s_%d_bin%d%s.txt",anaSel.Data(),year,fidAna,additionalSuffix.Data());
   ofstream newcardShape;
   newcardShape.open(outputLimitsCard);
   newcardShape << Form("imax * number of channels\n");
@@ -356,14 +412,14 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
   }
   newcardShape << Form("\n");
  
-  //newcardShape << Form("Jer shape ");
-  //for (int ic=0; ic<nPlotCategories; ic++){
-  //  if(!histo_Baseline[ic]) continue;
-  //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-  //  if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-  //  else		       newcardShape << Form("1.0 ");
-  //}
-  //newcardShape << Form("\n");
+  newcardShape << Form("Jer shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else		     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
  
   newcardShape << Form("MuonMom shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
@@ -432,6 +488,17 @@ void makeWWDataCards(int fidAna = 1, TString InputDir = "anaZ", TString anaSel =
     else      newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
+
+  for(int npdf=0; npdf<=100; npdf++){
+    newcardShape << Form("PDF%d shape ",npdf);
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else                     newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
+  }
 
   newcardShape << Form("CMS_ww_fakenorm_bin%d_%d  rateParam * %s 1 [0.1,3.9]\n",fidAna,year,plotBaseNames[kPlotNonPrompt].Data());
   newcardShape << Form("CMS_ww_dytautaunorm_bin%d_%d  rateParam * %s 1 [0.1,1.9]\n",fidAna,year,plotBaseNames[kPlotDY].Data());

@@ -85,7 +85,7 @@ std::map<int, int> plotColors={
 
 std::map<int, TString> plotNames={
     { kPlotData        , "Data"},
-    { kPlotqqWW        , "qq #rightarrow WW"},
+    { kPlotqqWW        , "WW"},
     { kPlotggWW        , "gg #rightarrow WW"},
     { kPlotTop         , "Top quark"},
     { kPlotDY	       , "Drell-Yan"},

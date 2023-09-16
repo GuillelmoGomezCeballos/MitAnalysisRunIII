@@ -19,14 +19,14 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 22016) subDirName += "2016postVFP_UL/";
   else if(year == 2017)  subDirName += "2017_UL/";
   else if(year == 2018)  subDirName += "2018_UL/";
-  else if(year == 2022)  subDirName += "2022_Prompt/";
+  else if(year == 2022)  subDirName += "2022_Summer22EE/";
 
-  std::string subDirNamePrime = "";
-  if     (yearPrime == 12016) subDirNamePrime += "2016preVFP_UL/";  
-  else if(yearPrime == 22016) subDirNamePrime += "2016postVFP_UL/";
-  else if(yearPrime == 2017)  subDirNamePrime += "2017_UL/";
-  else if(yearPrime == 2018)  subDirNamePrime += "2018_UL/";
-  else if(yearPrime == 2022)  subDirNamePrime += "2022_Prompt/";
+  std::string subDirNamePrime0 = ""; std::string subDirNamePrime1 = "";
+  if     (yearPrime == 12016) {subDirNamePrime0 += "2016preVFP_UL/";   subDirNamePrime1 += "2016preVFP_UL/";}  
+  else if(yearPrime == 22016) {subDirNamePrime0 += "2016postVFP_UL/";  subDirNamePrime1 += "2016postVFP_UL/";}
+  else if(yearPrime == 2017)  {subDirNamePrime0 += "2017_UL/";	       subDirNamePrime1 += "2017_UL/";}
+  else if(yearPrime == 2018)  {subDirNamePrime0 += "2018_UL/";	       subDirNamePrime1 += "2018_UL/";}
+  else if(yearPrime == 2022)  {subDirNamePrime0 += "2022_Summer22EE/"; subDirNamePrime1 += "2022_Prompt/";}
 
   std::string fileNameLUM = dirName+"LUM/"+subDirName+"puWeights.json.gz";
 
@@ -63,7 +63,8 @@ MyCorrections::MyCorrections(int the_input_year) {
   tauELESF_ = csetTAU->at("DeepTau2017v2p1VSe");
   tauMUOSF_ = csetTAU->at("DeepTau2017v2p1VSmu");
 
-  std::string fileNameJEC = dirName+"JME/"+subDirNamePrime+"jet_jerc.json.gz";
+  std::string fileNameJEC = dirName+"JME/"+subDirNamePrime0+"jet_jerc.json.gz";
+  //std::cout << fileNameJEC << std::endl;
   auto csetJEC = correction::CorrectionSet::from_file(fileNameJEC);
 
   std::string algoName = "AK4PFchs";
@@ -72,14 +73,14 @@ MyCorrections::MyCorrections(int the_input_year) {
   std::string jecDATAName[10]    = {"NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"};
   std::string jetVetoMapName[10] = {"NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"};
   if(yearPrime == 2022)  {
-    jecMCName = "Winter22Run3_V2_MC"; jerName = "JR_Winter22Run3_V1_MC";
-    jecDATAName[0] = "Winter22Run3_RunC_V2_DATA"; jetVetoMapName[0] = "Winter22Run3_RunCD_V1"; // A
-    jecDATAName[1] = "Winter22Run3_RunC_V2_DATA"; jetVetoMapName[1] = "Winter22Run3_RunCD_V1"; // B
-    jecDATAName[2] = "Winter22Run3_RunC_V2_DATA"; jetVetoMapName[2] = "Winter22Run3_RunCD_V1"; // C
-    jecDATAName[3] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[3] = "Winter22Run3_RunCD_V1"; // D
-    jecDATAName[4] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[4] = "Winter22Run3_RunE_V1"; // E
-    jecDATAName[5] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[5] = "Winter22Run3_RunE_V1"; // F
-    jecDATAName[6] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[6] = "Winter22Run3_RunE_V1"; // G
+    jecMCName = "Summer22EEPrompt22_V1_MC"; jerName = "Summer22EEPrompt22_JRV1_MC";
+    jecDATAName[0] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[0] = "Winter22Run3_RunCD_V1"; // A
+    jecDATAName[1] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[1] = "Winter22Run3_RunCD_V1"; // B
+    jecDATAName[2] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[2] = "Winter22Run3_RunCD_V1"; // C
+    jecDATAName[3] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[3] = "Winter22Run3_RunCD_V1"; // D
+    jecDATAName[4] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[4] = "Winter22Run3_RunE_V1"; // E
+    jecDATAName[5] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[5] = "Winter22Run3_RunE_V1"; // F
+    jecDATAName[6] = "Summer22EEPrompt22_RunG_V1_DATA"; jetVetoMapName[6] = "Winter22Run3_RunE_V1"; // G
     algoName = "AK4PFPuppi";
   }
   else if(yearPrime == 2018)  {
@@ -108,6 +109,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   }
 
   tagName = jerName + "_" + "ScaleFactor" + "_" + algoName;
+  //std::cout << tagName << std::endl;
   jerMethod1Unc_ = csetJEC->at(tagName);
 
   tagName = jerName + "_" + "PtResolution" + "_" + algoName;
@@ -117,7 +119,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetPUJetID = correction::CorrectionSet::from_file(fileNamePUJetID);
   puJetIDSF_ = csetPUJetID->at("PUJetID_eff");
 
-  std::string fileNamejetVetoMap = dirName+"JME/"+subDirNamePrime+"jetvetomaps.json.gz";
+  std::string fileNamejetVetoMap = dirName+"JME/"+subDirNamePrime1+"jetvetomaps.json.gz";
   auto csetJetVetoMap = correction::CorrectionSet::from_file(fileNamejetVetoMap);
 
   for(int i=0; i<10; i++){
@@ -198,9 +200,9 @@ double MyCorrections::eval_jerMethod1(double eta, double pt, int type) {
     else if(type == +1) return jerMethod1Unc_->evaluate({eta,"up"});
     else if(type == -1) return jerMethod1Unc_->evaluate({eta,"down"});
   } else {
-    if     (type ==  0) return jerMethod1Unc_->evaluate({eta,pt,"nom"});
-    else if(type == +1) return jerMethod1Unc_->evaluate({eta,pt,"up"});
-    else if(type == -1) return jerMethod1Unc_->evaluate({eta,pt,"down"});
+    if     (type ==  0) return jerMethod1Unc_->evaluate({eta,"nom"});
+    else if(type == +1) return jerMethod1Unc_->evaluate({eta,"up"});
+    else if(type == -1) return jerMethod1Unc_->evaluate({eta,"down"});
   }
   return 0.0;
 };
