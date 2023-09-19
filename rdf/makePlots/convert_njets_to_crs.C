@@ -10,7 +10,7 @@ void convert_njets_to_crs(){
 
   TFile *fileInput[njets];
   for(int nj=0; nj<njets; nj++) {
-    fileInput[nj] = new TFile(Form("ww_output_bin%d.root",nj+1), "read");
+    fileInput[nj] = new TFile(Form("ww_output_bin%d.root",nj), "read");
   }
 
   TH1F* histo[njets][nPlotCategories];

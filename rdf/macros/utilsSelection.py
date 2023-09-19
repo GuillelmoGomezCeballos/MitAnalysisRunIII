@@ -596,7 +596,7 @@ def selectionDAWeigths(df,year,PDType):
 
     return dftag
 
-def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas):
+def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
     hasTheoryColumnName = [True, True, True]
     theoryColumnName = ["PSWeight", "LHEScaleWeight", "LHEPdfWeight"]
@@ -708,10 +708,10 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
                  )
 
     if(hasTheoryColumnName[0] == True):
-        dftag =(dftag.Define("weightPS0" ,"weight*PSWeight[0]")
-                     .Define("weightPS1" ,"weight*PSWeight[1]")
-                     .Define("weightPS2" ,"weight*PSWeight[2]")
-                     .Define("weightPS3" ,"weight*PSWeight[3]")
+        dftag =(dftag.Define("weightPS0" ,"weight*PSWeight[0]/{0}".format(genEventSumPSRenorm[0]))
+                     .Define("weightPS1" ,"weight*PSWeight[1]/{0}".format(genEventSumPSRenorm[1]))
+                     .Define("weightPS2" ,"weight*PSWeight[2]/{0}".format(genEventSumPSRenorm[2]))
+                     .Define("weightPS3" ,"weight*PSWeight[3]/{0}".format(genEventSumPSRenorm[3]))
                      )
     else:
         dftag =(dftag.Define("weightPS0" ,"weight*1.0")
@@ -722,12 +722,12 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
 
     if(hasTheoryColumnName[1] == True):
         #LHEScaleWeight 2 / 4 / 6 not used
-        dftag =(dftag.Define("weightQCDScale0" ,"weight*LHEScaleWeight[0]")
-                     .Define("weightQCDScale1" ,"weight*LHEScaleWeight[1]")
-                     .Define("weightQCDScale2" ,"weight*LHEScaleWeight[3]")
-                     .Define("weightQCDScale3" ,"weight*LHEScaleWeight[5]")
-                     .Define("weightQCDScale4" ,"weight*LHEScaleWeight[7]")
-                     .Define("weightQCDScale5" ,"weight*LHEScaleWeight[8]")
+        dftag =(dftag.Define("weightQCDScale0" ,"weight*LHEScaleWeight[0]/{0}".format(genEventSumLHEScaleRenorm[0]))
+                     .Define("weightQCDScale1" ,"weight*LHEScaleWeight[1]/{0}".format(genEventSumLHEScaleRenorm[1]))
+                     .Define("weightQCDScale2" ,"weight*LHEScaleWeight[3]/{0}".format(genEventSumLHEScaleRenorm[2]))
+                     .Define("weightQCDScale3" ,"weight*LHEScaleWeight[5]/{0}".format(genEventSumLHEScaleRenorm[3]))
+                     .Define("weightQCDScale4" ,"weight*LHEScaleWeight[7]/{0}".format(genEventSumLHEScaleRenorm[4]))
+                     .Define("weightQCDScale5" ,"weight*LHEScaleWeight[8]/{0}".format(genEventSumLHEScaleRenorm[5]))
                      )
     else:
         dftag =(dftag.Define("weightQCDScale0" ,"weight*1.0")
@@ -751,9 +751,9 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
 
     return dftag
 
-def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas):
+def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
     if(isData == "true"): return selectionDAWeigths(df,year,PDType)
-    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas)
+    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
 
 def makeFinalVariable(df,var,theCat,start,x,bin,min,max,type):
     histoNumber = start+type

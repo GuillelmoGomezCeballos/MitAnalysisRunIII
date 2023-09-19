@@ -15,6 +15,11 @@
 #include "../makePlots/common.h"
 
 void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1001", int year = 20221){
+  double WWNNLO_resumSyst[4] = {0.986466,1.034869,1.015661,1.015661};
+  double WWNNLO_scaleSyst[4] = {1.027886,0.955565,0.939845,0.939845};
+
+  if(fidAna <= 0 || fidAna >= 5) printf("Wrong fidAna(%d)\n",fidAna);
+
   TFile *inputFile;
   TFile *outputFile;
   const int nSelTotal = 5;
@@ -26,6 +31,10 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   TH1D *histo_QCDScaleDown[nPlotCategories];
   TH1D *histo_PSUp[nPlotCategories];
   TH1D *histo_PSDown[nPlotCategories];
+  TH1D *histo_WWNNLO_resumUp[nPlotCategories];
+  TH1D *histo_WWNNLO_resumDown[nPlotCategories];
+  TH1D *histo_WWNNLO_scaleUp[nPlotCategories];
+  TH1D *histo_WWNNLO_scaleDown[nPlotCategories];
 
   TH1D *histo_Syst[nSystTotal][nPlotCategories];
   TH1D *histo_PDFUp  [101][nPlotCategories];
@@ -83,11 +92,14 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     TString plotBaseNamesTemp =  plotBaseNames[ic];
     if(ic == kPlotSignal0 || ic == kPlotSignal1 ||
        ic == kPlotSignal2 || ic == kPlotSignal3) plotBaseNamesTemp = "WW";
-    histo_QCDScaleUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTUp"   , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
-    histo_QCDScaleDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTDown" , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
-    histo_PSUp  [ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTUp"   , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
-    histo_PSDown[ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTDown" , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
-
+    histo_QCDScaleUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTUp"  , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+    histo_QCDScaleDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTDown", plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+    histo_PSUp  [ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTUp"  , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+    histo_PSDown[ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTDown", plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+    histo_WWNNLO_resumUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_resumUp"  , plotBaseNames[ic].Data()));
+    histo_WWNNLO_resumDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_resumDown", plotBaseNames[ic].Data()));
+    histo_WWNNLO_scaleUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_scaleUp"  , plotBaseNames[ic].Data()));
+    histo_WWNNLO_scaleDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_scaleDown", plotBaseNames[ic].Data()));
   }
 
   for(int j=0; j<nSystTotal; j++){
@@ -144,6 +156,10 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    histo_WWNNLO_resumUp  [ic]->Add(histo_Baseline[ic]); histo_WWNNLO_resumUp  [ic]->Scale(WWNNLO_resumSyst[fidAna-1]);
+    histo_WWNNLO_resumDown[ic]->Add(histo_Baseline[ic]); histo_WWNNLO_resumDown[ic]->Scale(1./WWNNLO_resumSyst[fidAna-1]);
+    histo_WWNNLO_scaleUp  [ic]->Add(histo_Baseline[ic]); histo_WWNNLO_scaleUp  [ic]->Scale(WWNNLO_scaleSyst[fidAna-1]);
+    histo_WWNNLO_scaleDown[ic]->Add(histo_Baseline[ic]); histo_WWNNLO_scaleDown[ic]->Scale(1./WWNNLO_scaleSyst[fidAna-1]);
     for(int nb=1; nb<=histo_Baseline[ic]->GetNbinsX(); nb++){
       histo_Baseline[ic]->SetBinContent(nb, TMath::Max((float)histo_Baseline[ic]->GetBinContent(nb),0.0f));
 
@@ -213,7 +229,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     additionalSuffix = "_alt";
   }
 
-  TString outputLimits = Form("output_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna,additionalSuffix.Data());
+  TString outputLimits = Form("output_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna-1,additionalSuffix.Data());
   outputFile = new TFile(outputLimits, "RECREATE");
   outputFile->cd();
   for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
@@ -221,12 +237,10 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     histo_Baseline[ic]->Write();
     for(int j=0; j<nSystTotal; j++) histo_Syst[j][ic]->Write();
 
-    if(ic == kPlotqqWW || ic == kPlotggWW || ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2 || ic == kPlotSignal3) {
-      histo_QCDScaleUp  [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleUp  [ic]->GetSumOfWeights());
-      histo_QCDScaleDown[ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleDown[ic]->GetSumOfWeights());
-      histo_PSUp        [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSUp        [ic]->GetSumOfWeights());
-      histo_PSDown      [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSDown      [ic]->GetSumOfWeights());
-    }
+    histo_WWNNLO_resumUp  [ic]->Write();
+    histo_WWNNLO_resumDown[ic]->Write();
+    histo_WWNNLO_scaleUp  [ic]->Write();
+    histo_WWNNLO_scaleDown[ic]->Write();
     histo_QCDScaleUp  [ic]->Write();
     histo_QCDScaleDown[ic]->Write();
     histo_PSUp        [ic]->Write();
@@ -240,7 +254,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
   // Filling datacards txt file
   char outputLimitsCard[200];  					  
-  sprintf(outputLimitsCard,"datacard_%s_%d_bin%d%s.txt",anaSel.Data(),year,fidAna,additionalSuffix.Data());
+  sprintf(outputLimitsCard,"datacard_%s_%d_bin%d%s.txt",anaSel.Data(),year,fidAna-1,additionalSuffix.Data());
   ofstream newcardShape;
   newcardShape.open(outputLimitsCard);
   newcardShape << Form("imax * number of channels\n");
@@ -256,7 +270,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    newcardShape << Form("ch%d ",fidAna);
+    newcardShape << Form("ch%d ",fidAna-1);
 
   }
   newcardShape << Form("\n");
@@ -489,6 +503,36 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
+  newcardShape << Form("WWNNLO_resum shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic != kPlotqqWW &&
+            ic != kPlotggWW &&
+            ic != kPlotSignal0 &&
+            ic != kPlotSignal1 &&
+            ic != kPlotSignal2 &&
+            ic != kPlotSignal3
+            ) newcardShape << Form("- ");
+    else      newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("WWNNLO_scale shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic != kPlotqqWW &&
+            ic != kPlotggWW &&
+            ic != kPlotSignal0 &&
+            ic != kPlotSignal1 &&
+            ic != kPlotSignal2 &&
+            ic != kPlotSignal3
+            ) newcardShape << Form("- ");
+    else      newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
   for(int npdf=0; npdf<=100; npdf++){
     newcardShape << Form("PDF%d shape ",npdf);
     for (int ic=0; ic<nPlotCategories; ic++){
@@ -500,11 +544,11 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     newcardShape << Form("\n");
   }
 
-  newcardShape << Form("CMS_ww_fakenorm_bin%d_%d  rateParam * %s 1 [0.1,3.9]\n",fidAna,year,plotBaseNames[kPlotNonPrompt].Data());
-  newcardShape << Form("CMS_ww_dytautaunorm_bin%d_%d  rateParam * %s 1 [0.1,1.9]\n",fidAna,year,plotBaseNames[kPlotDY].Data());
-  newcardShape << Form("CMS_ww_topnorm_bin%d_%d  rateParam * %s 1 [0.1,1.9]\n",fidAna,year,plotBaseNames[kPlotTop].Data());
+  newcardShape << Form("CMS_ww_fakenorm_bin%d_%d  rateParam * %s 1 [0.1,3.9]\n",fidAna-1,year,plotBaseNames[kPlotNonPrompt].Data());
+  newcardShape << Form("CMS_ww_dytautaunorm_bin%d_%d  rateParam * %s 1 [0.1,1.9]\n",fidAna-1,year,plotBaseNames[kPlotDY].Data());
+  newcardShape << Form("CMS_ww_topnorm_bin%d_%d  rateParam * %s 1 [0.1,1.9]\n",fidAna-1,year,plotBaseNames[kPlotTop].Data());
 
-  newcardShape << Form("ch%d autoMCStats 0\n",fidAna);
+  newcardShape << Form("ch%d autoMCStats 0\n",fidAna-1);
 
   newcardShape.close();
 

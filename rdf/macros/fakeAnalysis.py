@@ -6,7 +6,7 @@ ROOT.ROOT.EnableImplicitMT(3)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionJetMet, selectionElMu, selectionWeigths, selectionTrigger1L
+from utilsSelection import selectionJetMet, selectionElMu, selectionTrigger1L
 
 # 0 = T, 1 = M, 2 = L
 bTagSel = 1
