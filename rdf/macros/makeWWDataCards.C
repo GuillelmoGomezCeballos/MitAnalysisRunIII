@@ -307,12 +307,21 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_fake_norn	 lnN	 ");
+  newcardShape << Form("CMS_fakee_norm	 lnN	 ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.20);
+    if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
     else		     newcardShape << Form("- "); 
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("CMS_fakem_norm   lnN     ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
+    else                     newcardShape << Form("- ");
   }
   newcardShape << Form("\n");
 
