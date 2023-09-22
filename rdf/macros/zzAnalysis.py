@@ -33,11 +33,33 @@ muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 TIGHT_MU_TIGHT = jsonObject['TIGHT_MU5']
+MUOWP = "Medium"
 
 elSelChoice = 0
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 TIGHT_EL_TIGHT = jsonObject['TIGHT_EL4']
+ELEWP = "DUMMY"
+if(elSelChoice == 0):
+    ELEWP = "Medium"
+elif(elSelChoice == 1):
+    ELEWP = "Tight"
+elif(elSelChoice == 2):
+    ELEWP = "wp80noiso"
+elif(elSelChoice == 3):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 4):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 5):
+    ELEWP = "wp90iso"
+elif(elSelChoice == 6):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 7):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 8):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 9):
+    ELEWP = "Veto"
 
 def selectionLL(df,year,PDType,isData,count):
 
@@ -153,7 +175,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,g
 
     dftag = selectionLL(df,year,PDType,isData,count)
 
-    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP)
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("theCat","compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))

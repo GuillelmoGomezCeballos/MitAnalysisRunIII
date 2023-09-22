@@ -41,6 +41,7 @@ TIGHT_MU5 = jsonObject['TIGHT_MU5']
 TIGHT_MU6 = jsonObject['TIGHT_MU6']
 TIGHT_MU7 = jsonObject['TIGHT_MU7']
 TIGHT_MU8 = jsonObject['TIGHT_MU8']
+MUOWP = "Medium"
 
 elSelChoice = 1
 FAKE_EL   = jsonObject['FAKE_EL']
@@ -53,6 +54,27 @@ TIGHT_EL5 = jsonObject['TIGHT_EL5']
 TIGHT_EL6 = jsonObject['TIGHT_EL6']
 TIGHT_EL7 = jsonObject['TIGHT_EL7']
 TIGHT_EL8 = jsonObject['TIGHT_EL8']
+ELEWP = "DUMMY"
+if(elSelChoice == 0):
+    ELEWP = "Medium"
+elif(elSelChoice == 1):
+    ELEWP = "Tight"
+elif(elSelChoice == 2):
+    ELEWP = "wp80noiso"
+elif(elSelChoice == 3):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 4):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 5):
+    ELEWP = "wp90iso"
+elif(elSelChoice == 6):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 7):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 8):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 9):
+    ELEWP = "Veto"
 
 def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count):
 
@@ -170,7 +192,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,g
 
     global useFR
     if(year == 2023): useFR = 0
-    dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
+    dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP)
 
     overallMETFilters = jsonObject['met_filters']
     METFILTERS = getTriggerFromJson(overallMETFilters, "All", year)

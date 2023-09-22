@@ -596,7 +596,7 @@ def selectionDAWeigths(df,year,PDType):
 
     return dftag
 
-def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
+def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP):
 
     hasTheoryColumnName = [True, True, True]
     theoryColumnName = ["PSWeight", "LHEScaleWeight", "LHEPdfWeight"]
@@ -610,9 +610,10 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     MUOYEAR = "2018_UL"
     #if(year == 2022): MUOYEAR = "2022"
     ELEYEAR = "2018"
-    #if(year == 2022): ELEYEAR = "2022"
+    if(year == 20221): ELEYEAR = "2022FG"
     PHOYEAR = "2018"
     #if(year == 2022): PHOYEAR = "2022"
+    print("MUOYEAR/ELEYEAR/PHOYEAR/MUOWP/ELEWP: {0}/{1}/{2}/{3}/{4}".format(MUOYEAR,ELEYEAR,PHOYEAR,MUOWP,ELEWP))
 
     dftag =(df.Define("PDType","\"{0}\"".format(PDType))
               .Define("clean_Jet_hadronFlavour", "Jet_hadronFlavour[clean_jet]")
@@ -621,7 +622,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
               .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
               .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,0)")
               #.Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,PV_npvsGood)")
-              .Define("weightLepSF","compute_LepSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta)")
+              .Define("weightMuonSF","compute_MuonSF(fake_Muon_pt,fake_Muon_eta)")
+              .Define("weightElectronSF","compute_ElectronSF(fake_Electron_pt,fake_Electron_eta)")
               .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype)")
 
               .Define("weightMC","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})".format(weight,type))
@@ -630,8 +632,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
               .Define("MUOYEAR","\"{0}\"".format(MUOYEAR))
               .Define("ELEYEAR","\"{0}\"".format(ELEYEAR))
               .Define("PHOYEAR","\"{0}\"".format(PHOYEAR))
-              .Define("MUOWP","\"Medium\"")
-              .Define("ELEWP","\"Medium\"")
+              .Define("MUOWP","\"{0}\"".format(MUOWP))
+              .Define("ELEWP","\"{0}\"".format(ELEWP))
               .Define("PHOWP","\"Medium\"")
 
               .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,fake_Electron_pt,fake_Electron_eta,tight_el)")
@@ -648,7 +650,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     if(useBTaggingWeights == 1):
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightLepSF*weightTriggerSF")
+                 #.Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightMuonSF*weightElectronSF*weightTriggerSF")
+                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightMuonSF*weightEleSFJSON*weightTriggerSF")
                  .Define("weightNoLepSF","weightMC*weightFake*weightBtagSF*weightPURecoSF")
                  .Define("weightBTag","weight")
                  .Define("weightNoBTag","weight/weightBtagSF")
@@ -656,7 +659,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     else:
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightLepSF*weightTriggerSF")
+                 #.Define("weight",       "weightMC*weightFake*weightPURecoSF*weightMuonSF*weightElectronSF*weightTriggerSF")
+                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightMuonSF*weightEleSFJSON*weightTriggerSF")
                  .Define("weightNoLepSF","weightMC*weightFake*weightPURecoSF")
                  .Define("weightBTag","weight*weightBtagSF")
                  .Define("weightNoBTag","weight")
@@ -666,7 +670,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
                  .Define("weight1","weightMC*weightFake*weightMuoSFJSON")
                  .Define("weight2","weightMC*weightFake*weightEleSFJSON")
                  .Define("weight3","weight/weightPURecoSF")
-                 .Define("weight4","weight/weightLepSF")
+                 .Define("weight4","weight/weightMuonSF/weightElectronSF")
                  .Define("weight5","weight/weightTriggerSF")
 
                  .Define("weightBtagSFBC_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"up_correlated\",1,{0})".format(bTagSel))
@@ -751,9 +755,9 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
 
     return dftag
 
-def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
+def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP):
     if(isData == "true"): return selectionDAWeigths(df,year,PDType)
-    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
+    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP)
 
 def makeFinalVariable(df,var,theCat,start,x,bin,min,max,type):
     histoNumber = start+type

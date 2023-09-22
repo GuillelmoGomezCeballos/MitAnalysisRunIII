@@ -36,11 +36,33 @@ VBSSEL = jsonObject['VBSSEL']
 muSelChoice = 8
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
+MUOWP = "Medium"
 
 #1/3/4/8
 elSelChoice = 8
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
+ELEWP = "DUMMY"
+if(elSelChoice == 0):
+    ELEWP = "Medium"
+elif(elSelChoice == 1):
+    ELEWP = "Tight"
+elif(elSelChoice == 2):
+    ELEWP = "wp80noiso"
+elif(elSelChoice == 3):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 4):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 5):
+    ELEWP = "wp90iso"
+elif(elSelChoice == 6):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 7):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 8):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 9):
+    ELEWP = "Veto"
 
 def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count):
 
@@ -146,7 +168,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,g
 
     global useFR
     if(year == 2023): useFR = 0
-    dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
+    dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP)
 
     overallMETFilters = jsonObject['met_filters']
     METFILTERS = getTriggerFromJson(overallMETFilters, "All", year)
@@ -351,6 +373,16 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,g
         histo[58][x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 1").Histo1D(("histo_{0}_{1}".format(58,x), "histo_{0}_{1}".format(58,x), 4,-0.5,3.5), "ngood_jets","weightWW")
         histo[59][x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 2").Histo1D(("histo_{0}_{1}".format(59,x), "histo_{0}_{1}".format(59,x), 4,-0.5,3.5), "ngood_jets","weightWW")
 
+        histo[60][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(60,x), "histo_{0}_{1}".format(60,x), 50,-5.0,5.0), "good_Jet_eta","weightWW")
+        histo[61][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(61,x), "histo_{0}_{1}".format(61,x), 50,-5.0,5.0), "good_Jet_etaJesUp","weightWW")
+        histo[62][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(62,x), "histo_{0}_{1}".format(62,x), 50,-5.0,5.0), "good_Jet_etaJesDown","weightWW")
+        histo[63][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(63,x), "histo_{0}_{1}".format(63,x), 50,-5.0,5.0), "good_Jet_eta","weightWW")
+        histo[64][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(64,x), "histo_{0}_{1}".format(64,x), 50,-5.0,5.0), "good_Jet_etaJesUp","weightWW")
+        histo[65][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), 50,-5.0,5.0), "good_Jet_etaJesDown","weightWW")
+        histo[66][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(66,x), "histo_{0}_{1}".format(66,x), 50,-5.0,5.0), "good_Jet_eta","weightWW")
+        histo[67][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(67,x), "histo_{0}_{1}".format(67,x), 50,-5.0,5.0), "good_Jet_etaJesUp","weightWW")
+        histo[68][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(68,x), "histo_{0}_{1}".format(68,x), 50,-5.0,5.0), "good_Jet_etaJesDown","weightWW")
+
         dftop0cat[x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 1")
         dftop0catMuonMomUp      [x] = dftop0catMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
         dftop0catMuonMomDown    [x] = dftop0catMuonMomDown    [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
@@ -424,7 +456,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,g
             histo2D[startF+139][x]    = makeFinalVariable2D(dftop1catMuonMomDown    [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
             histo2D[startF+140][x]    = makeFinalVariable2D(dftop1catElectronMomUp  [x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
             histo2D[startF+141][x]    = makeFinalVariable2D(dftop1catElectronMomDown[x],"ngood_jets","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
-
+            """
             BinXF = 25
             minXF = 85
             maxXF = 385
@@ -463,6 +495,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,g
             histo2D[startF+139][x]    = makeFinalVariable2D(dfwwx0catMuonMomDown    [x].Filter("ngood_jets>=2"),"mllMuonMomDown"    ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
             histo2D[startF+140][x]    = makeFinalVariable2D(dfwwx0catElectronMomUp  [x].Filter("ngood_jets>=2"),"mllElectronMomUp"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
             histo2D[startF+141][x]    = makeFinalVariable2D(dfwwx0catElectronMomDown[x].Filter("ngood_jets>=2"),"mllElectronMomDown","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+            """
 
     report = []
     for x in range(nCat):
@@ -509,6 +542,23 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,g
                 for i in range(histoMVA[j][x].GetNbinsX()):
                     histoMVA[j][x].SetBinContent(i+1,histoMVA[j][x].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,1))
                     histoMVA[j][x].SetBinError  (i+1,pow(pow(histoMVA[j][x].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,1),2),0.5))
+
+    for x in range(nCat):
+        for i in range(histo[60][x].GetNbinsX()):
+            diff = abs(histo[61][x].GetBinContent(i+1)-histo[62][x].GetBinContent(i+1))/2.
+            histo[60][x].SetBinError(i+1,pow(pow(histo[60][x].GetBinError(i+1),2)+pow(diff,2),0.5))
+        histo[61][x] = 0
+        histo[62][x] = 0
+        for i in range(histo[63][x].GetNbinsX()):
+            diff = abs(histo[64][x].GetBinContent(i+1)-histo[65][x].GetBinContent(i+1))/2.
+            histo[63][x].SetBinError(i+1,pow(pow(histo[63][x].GetBinError(i+1),2)+pow(diff,2),0.5))
+        histo[64][x] = 0
+        histo[65][x] = 0
+        for i in range(histo[66][x].GetNbinsX()):
+            diff = abs(histo[67][x].GetBinContent(i+1)-histo[68][x].GetBinContent(i+1))/2.
+            histo[66][x].SetBinError(i+1,pow(pow(histo[66][x].GetBinError(i+1),2)+pow(diff,2),0.5))
+        histo[67][x] = 0
+        histo[68][x] = 0
 
     myfile = ROOT.TFile("fillhisto_wwAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):

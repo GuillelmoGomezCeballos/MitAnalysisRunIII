@@ -12,7 +12,9 @@ MyCorrections::MyCorrections(int the_input_year) {
   if(year == 2023) yearPrime = 2022;
   if(year == 2023) year = 2018;
 
-  std::string dirName = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/";
+  std::string dirName    = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/";
+  std::string dirNameAux = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/";
+  if(yearPrime == 2022) dirNameAux = "jsonpog-integration/POG/";
 
   std::string subDirName = "";
   if     (year == 12016) subDirName += "2016preVFP_UL/";  
@@ -53,9 +55,10 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetPH = correction::CorrectionSet::from_file(fileNamePH);
   photonSF_ = csetPH->at("UL-Photon-ID-SF");
 
-  std::string fileNameELE = dirName+"EGM/"+subDirName+"electron.json.gz";
+  std::string fileNameELE = dirNameAux+"EGM/"+subDirNamePrime0+"electron.json.gz";
   auto csetELE = correction::CorrectionSet::from_file(fileNameELE);
-  electronSF_ = csetELE->at("UL-Electron-ID-SF");
+  if(yearPrime < 2022) electronSF_ = csetELE->at("UL-Electron-ID-SF");
+  else                 electronSF_ = csetELE->at("PromptReco-Electron-ID-SF");
 
   std::string fileNameTAU = dirName+"TAU/"+subDirName+"tau.json.gz";
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);

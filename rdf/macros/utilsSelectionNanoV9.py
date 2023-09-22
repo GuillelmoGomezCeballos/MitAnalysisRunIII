@@ -6,6 +6,14 @@ def getBTagCut(type,year):
 
     if(type < 0 or type > 2): return 100
     value = [0.7100, 0.2783, 0.0490]
+    if(year == 20220):
+       value[0] = 0.7183
+       value[1] = 0.3086
+       value[2] = 0.0583
+    elif(year == 20221):
+       value[0] = 0.7300
+       value[1] = 0.3196
+       value[2] = 0.0614
     return value[type]
 
 def selectionGenLepJet(df,ptlcut,ptjcut):
@@ -148,24 +156,24 @@ def selectionJetMet(df,year,bTagSel,isData,count):
 
     if(isData == "false"):
         dftag =(dftag.Define("clean_Jet_genJetIdx", "Jet_genJetIdx[clean_jet]")
-                     #.Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,fixedGridRhoFastjetAll,0,-1)")
-                     .Define("clean_Jet_ptDef",  "clean_Jet_pt")
-                     #.Define("clean_Jet_ptDef"    , "compute_JSON_JER_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,fixedGridRhoFastjetAll,0,{0})".format(jetTypeCorr))
-                     .Define("clean_Jet_ptJesUp"  , "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,fixedGridRhoFastjetAll,+1,{0})".format(jetTypeCorr))
-                     .Define("clean_Jet_ptJesDown", "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,fixedGridRhoFastjetAll,-1,{0})".format(jetTypeCorr))
-                     .Define("clean_Jet_ptJerUp"  , "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,fixedGridRhoFastjetAll,+1)")
-                     .Define("clean_Jet_ptJerDown", "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,fixedGridRhoFastjetAll,-1)")
+                     .Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,0,-1)")
+                     #.Define("clean_Jet_ptDef",  "clean_Jet_pt")
+                     #.Define("clean_Jet_ptDef"    , "compute_JSON_JER_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,0,{0})".format(jetTypeCorr))
+                     .Define("clean_Jet_ptJesUp"  , "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,+1,{0})".format(jetTypeCorr))
+                     .Define("clean_Jet_ptJesDown", "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,-1,{0})".format(jetTypeCorr))
+                     .Define("clean_Jet_ptJerUp"  , "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,+1)")
+                     .Define("clean_Jet_ptJerDown", "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,-1)")
                      .Define("newMET", "compute_JSON_MET_Unc(MET_pt,MET_phi,RawMET_pt,RawMET_phi,clean_Jet_chEmEF,clean_Jet_neEmEF,clean_Jet_muonSubtrFactor,clean_Jet_rawFactor,clean_Jet_pt,clean_Jet_ptDef,clean_Jet_eta,clean_Jet_phi,clean_Jet_mass,-1)")
                      .Filter("newMET > 0","Good newMET")
                      )
 
     else:
-        dftag =(dftag.Define("clean_Jet_ptDef","clean_Jet_pt")
-        #dftag = dftag.Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,fixedGridRhoFastjetAll,0,{0})".format(jetTypeCorr))
-                     .Define("clean_Jet_ptJesUp"  , "clean_Jet_pt")
-                     .Define("clean_Jet_ptJesDown", "clean_Jet_pt")
-                     .Define("clean_Jet_ptJerUp"  , "clean_Jet_pt")
-                     .Define("clean_Jet_ptJerDown", "clean_Jet_pt")
+        #dftag =(dftag.Define("clean_Jet_ptDef","clean_Jet_pt")
+        dftag =(dftag.Define("clean_Jet_ptDef",  "compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,0,{0})".format(jetTypeCorr))
+                     .Define("clean_Jet_ptJesUp"  , "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJesDown", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJerUp"  , "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJerDown", "clean_Jet_ptDef")
                      )
 
     dftag = makeJES(dftag,year,""       ,bTagSel)
@@ -597,7 +605,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     MUOYEAR = "2018_UL"
     #if(year == 2022): MUOYEAR = "2022"
     ELEYEAR = "2018"
-    #if(year == 2022): ELEYEAR = "2022"
+    if(year == 20221): ELEYEAR = "2022FG"
     PHOYEAR = "2018"
     #if(year == 2022): PHOYEAR = "2022"
 
@@ -608,7 +616,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
               .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
               .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,0)")
               #.Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,PV_npvsGood)")
-              .Define("weightLepSF","compute_LepSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta)")
+              .Define("weightMuonSF","compute_MuonSF(fake_Muon_pt,fake_Muon_eta)")
+              .Define("weightElectronSF","compute_ElectronSF(fake_Electron_pt,fake_Electron_eta)")
               .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype)")
 
               .Define("weightMC","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})".format(weight,type))
@@ -618,7 +627,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
               .Define("ELEYEAR","\"{0}\"".format(ELEYEAR))
               .Define("PHOYEAR","\"{0}\"".format(PHOYEAR))
               .Define("MUOWP","\"Medium\"")
-              .Define("ELEWP","\"Medium\"")
+              .Define("ELEWP","\"wp80iso\"")
               .Define("PHOWP","\"Medium\"")
 
               .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,fake_Electron_pt,fake_Electron_eta,tight_el)")
@@ -635,7 +644,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     if(useBTaggingWeights == 1):
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightLepSF*weightTriggerSF")
+                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightMuonSF*weightElectronSF*weightTriggerSF")
                  .Define("weightNoLepSF","weightMC*weightFake*weightBtagSF*weightPURecoSF")
                  .Define("weightBTag","weight")
                  .Define("weightNoBTag","weight/weightBtagSF")
@@ -643,7 +652,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     else:
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightLepSF*weightTriggerSF")
+                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightMuonSF*weightElectronSF*weightTriggerSF")
                  .Define("weightNoLepSF","weightMC*weightFake*weightPURecoSF")
                  .Define("weightBTag","weight*weightBtagSF")
                  .Define("weightNoBTag","weight")
@@ -653,7 +662,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
                  .Define("weight1","weightMC*weightFake*weightMuoSFJSON")
                  .Define("weight2","weightMC*weightFake*weightEleSFJSON")
                  .Define("weight3","weight/weightPURecoSF")
-                 .Define("weight4","weight/weightLepSF")
+                 .Define("weight4","weight/weightMuonSF/weightElectronSF")
                  .Define("weight5","weight/weightTriggerSF")
 
                  .Define("weightBtagSFBC_correlatedUp"    ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"up_correlated\",1,{0})".format(bTagSel))

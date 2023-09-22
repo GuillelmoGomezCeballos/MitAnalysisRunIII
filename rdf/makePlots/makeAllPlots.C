@@ -940,6 +940,10 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"N_{j}","",Form("anaZ/fillhisto_wwAnalysis%d_%d_57.root",whichCondorJob,year),"ww_sel0_hww_njets",0,year,legendBSM.Data(),1.0,isBlinded,"H #rightarrow WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("anaZ/fillhisto_wwAnalysis%d_%d_58.root",whichCondorJob,year),"ww_sel0_top_nbjet1_njets",0,year,legendBSM.Data(),1.0,isBlinded,"Top region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("anaZ/fillhisto_wwAnalysis%d_%d_59.root",whichCondorJob,year),"ww_sel0_top_nbjet2_njets",0,year,legendBSM.Data(),1.0,isBlinded,"Top region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+
+    finalPlot(0,1,"#eta_{j}","",Form("anaZ/fillhisto_wwAnalysis%d_%d_60.root",whichCondorJob,year),"ww_sel0_wwx_etaj",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"#eta_{j}","",Form("anaZ/fillhisto_wwAnalysis%d_%d_63.root",whichCondorJob,year),"ww_sel0_ztt_etaj",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"#eta_{j}","",Form("anaZ/fillhisto_wwAnalysis%d_%d_66.root",whichCondorJob,year),"ww_sel0_top_etaj",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
   }
   else if(nsel == "combine"){
     legendBSM="";

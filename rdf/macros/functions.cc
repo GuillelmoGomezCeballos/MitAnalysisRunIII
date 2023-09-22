@@ -530,11 +530,10 @@ float compute_fakeRate(const bool isData,
   return sfTot;
 }
 
-float compute_LepSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
-                    const Vec_f& el_pt, const Vec_f& el_eta){
+float compute_MuonSF(const Vec_f& mu_pt, const Vec_f& mu_eta){
 
   bool debug = false;
-  if(debug) printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
+  if(debug) printf("mueff: %lu\n",mu_pt.size());
   double sfTot = 1.0;
   for(unsigned int i=0;i<mu_pt.size();i++) {
     const TH2D& hcorr = histoLepSFEtaPt_mu;
@@ -542,7 +541,15 @@ float compute_LepSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
     sfTot = sfTot*sf;
     if(debug) printf("lepmu(%d) %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sfTot);
   }
+      
+  return sfTot;
+}
 
+float compute_ElectronSF(const Vec_f& el_pt, const Vec_f& el_eta){
+
+  bool debug = false;
+  if(debug) printf("eleff: %lu\n",el_pt.size());
+  double sfTot = 1.0;
   for(unsigned int i=0;i<el_pt.size();i++) {
     const TH2D& hcorr = histoLepSFEtaPt_el;
     double sf = getValFromTH2(hcorr, fabs(el_eta[i]), el_pt[i]);

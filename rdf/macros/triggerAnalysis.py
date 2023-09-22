@@ -42,6 +42,7 @@ TIGHT_MU6 = jsonObject['TIGHT_MU6']
 TIGHT_MU7 = jsonObject['TIGHT_MU7']
 TIGHT_MU8 = jsonObject['TIGHT_MU8']
 TIGHT_MU9 = jsonObject['TIGHT_MU9']
+MUOWP = "Medium"
 
 elSelChoice = 0
 FAKE_EL0   = "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1 && abs(Electron_dxy) < 0.1 && abs(Electron_dz) < 0.2 && Electron_mvaIso > -0.99"
@@ -57,6 +58,27 @@ TIGHT_EL6 = jsonObject['TIGHT_EL6']
 TIGHT_EL7 = jsonObject['TIGHT_EL7']
 TIGHT_EL8 = jsonObject['TIGHT_EL8']
 TIGHT_EL9 = jsonObject['TIGHT_EL9']
+ELEWP = "DUMMY"
+if(elSelChoice == 0):
+    ELEWP = "Medium"
+elif(elSelChoice == 1):
+    ELEWP = "Tight"
+elif(elSelChoice == 2):
+    ELEWP = "wp80noiso"
+elif(elSelChoice == 3):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 4):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 5):
+    ELEWP = "wp90iso"
+elif(elSelChoice == 6):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 7):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 8):
+    ELEWP = "wp80iso"
+elif(elSelChoice == 9):
+    ELEWP = "Veto"
 
 def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count):
 
@@ -193,7 +215,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,g
 
     dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count)
 
-    dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
+    dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP)
 
     TRIGGERFAKEMU = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
     TRIGGERFAKEEL = getTriggerFromJson(overallTriggers, "TRIGGERFAKEEL", year)
@@ -206,7 +228,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nPDFReplicas,g
 
     dffake = selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count)
 
-    dffake = selectionWeigths(dffake,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
+    dffake = selectionWeigths(dffake,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nPDFReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP)
     if(theCat == plotCategory("kPlotData")):
         dffake = (dffake.Define("weightFakeSel0", "weight")
                         .Define("weightFakeSel1", "weight")
