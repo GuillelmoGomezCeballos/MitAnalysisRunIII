@@ -71,21 +71,10 @@ TH2D histoTriggerSFEtaPt_3_3;
 TH2D histoBTVEffEtaPtLF;
 TH2D histoBTVEffEtaPtCJ;
 TH2D histoBTVEffEtaPtBJ;
-TH2F histoElRecoSF;
-TH2F histoElSelSF;
-TH2F histoMuIDSF;
-TH2F histoMuISOSF;
 TH1D puWeights;
 TH1D puWeightsUp;
 TH1D puWeightsDown;
 auto corrSFs = MyCorrections(2018);
-
-void initHisto2F(TH2F h, int nsel){
-  if     (nsel == 0) histoElRecoSF = h;
-  else if(nsel == 1) histoElSelSF = h;
-  else if(nsel == 2) histoMuIDSF = h;
-  else if(nsel == 3) histoMuISOSF = h;
-}
 
 void initHisto2D(TH2D h, int nsel){
   if     (nsel ==  0) histoFakeEtaPt_mu = h;
@@ -214,23 +203,21 @@ float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet
   return 1.0;
 }
 
-float compute_JSON_MUO_SFs(std::string yearS, std::string valType0S, std::string valType1S, std::string valType2S, 
-                           std::string workingPointS, const Vec_f& mu_pt, const Vec_f& mu_eta){
+float compute_JSON_MUO_SFs(std::string valType0S, std::string valType1S, std::string valType2S, 
+                           const Vec_f& mu_pt, const Vec_f& mu_eta){
   if(mu_pt.size() == 0) return 1.0;
   bool debug = false;
   if(debug) printf("muoeff: %lu\n",mu_pt.size());
   double sfTot = 1.0;
 
-  const char *year = yearS.c_str();
   const char *valType0 = valType0S.c_str();
   const char *valType1 = valType1S.c_str();
   const char *valType2 = valType2S.c_str();
-  const char *workingPoint = workingPointS.c_str();
 
   for(unsigned int i=0;i<mu_pt.size();i++) {
-    double sf0 = corrSFs.eval_muonTRKSF(year,valType0,workingPoint,mu_eta[i],mu_pt[i]);
-    double sf1 = corrSFs.eval_muonIDSF (year,valType1,workingPoint,mu_eta[i],mu_pt[i]);
-    double sf2 = corrSFs.eval_muonISOSF(year,valType2,workingPoint,mu_eta[i],mu_pt[i]);
+    double sf0 = 1.0;//corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],"nominal"); if(valType0S != "nominal") sf0 = sf0 + corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],valType0);
+    double sf1 = corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i],"nominal"); if(valType1S != "nominal") sf1 = sf1 + corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i],valType1);
+    double sf2 = corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i],"nominal"); if(valType2S != "nominal") sf2 = sf2 + corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i],valType2);
     sfTot = sfTot*sf0*sf1*sf2;
     if(debug) printf("muoeff(%d-%s/%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,valType2,mu_pt[i],mu_eta[i],sf0,sf1,sf2,sf0*sf1*sf2,sfTot);
   }
@@ -251,8 +238,9 @@ float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string
   const char *workingPoint = workingPointS.c_str();
 
   for(unsigned int i=0;i<el_pt.size();i++) {
-    char *recoNameAux = (char*)"RecoAbove20";
-    if(el_pt[i] < 20) recoNameAux = (char*)"RecoBelow20";
+    char *recoNameAux = (char*)"RecoAbove75";
+    if     (el_pt[i] < 20) recoNameAux = (char*)"RecoBelow20";
+    else if(el_pt[i] < 75) recoNameAux = (char*)"Reco20to75";
     const char *recoName = recoNameAux;
     double sf0 = corrSFs.eval_electronSF(year,valType0,    recoName,el_eta[i],el_pt[i]);
     double sf1 = corrSFs.eval_electronSF(year,valType1,workingPoint,el_eta[i],el_pt[i]);
@@ -566,25 +554,7 @@ float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
   bool debug = false;
   if(debug) printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
   double sfTot = 1.0;
-  /*
-  for(unsigned int i=0;i<mu_pt.size();i++) {
-    const TH2F& hcorr0 = histoMuIDSF;
-    double sf0 = getValFromTH2(hcorr0, fabs(mu_eta[i]),mu_pt[i]);
-    const TH2F& hcorr1 = histoMuISOSF;
-    double sf1 = getValFromTH2(hcorr1, fabs(mu_eta[i]),mu_pt[i]);
-    sfTot = sfTot*sf0*sf1;
-    if(debug) printf("leprecomu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf0,sf1,sfTot);
-  }
 
-  for(unsigned int i=0;i<el_pt.size();i++) {
-    const TH2F& hcorr0 = histoElRecoSF;
-    double sf0 = getValFromTH2(hcorr0, el_eta[i], el_pt[i]);
-    const TH2F& hcorr1 = histoElSelSF;
-    double sf1 = getValFromTH2(hcorr1, el_eta[i], el_pt[i]);
-    sfTot = sfTot*sf0*sf1;
-    if(debug) printf("leprecoel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf0,sf1,sfTot);
-  }
-  */
   double sf = 1.0;
   if     (type == 0){
     const TH1D& hcorr = puWeights;

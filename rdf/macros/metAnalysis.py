@@ -1,5 +1,5 @@
 import ROOT
-import os, sys, getopt, json
+import os, sys, getopt, json, time
 from array import array
 
 ROOT.ROOT.EnableImplicitMT(3)
@@ -160,6 +160,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
 def readMCSample(sampleNOW, year, skimType, whichJob, group):
 
     files = getMClist(sampleNOW, skimType)
+    if(len(files) == 0):
+        time.sleep(10)
+        files = getMClist(sampleNOW, skimType)
+    if(len(files) == 0):
+        time.sleep(10)
+        files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
 
     runTree = ROOT.TChain("Runs")
@@ -260,4 +266,4 @@ if __name__ == "__main__":
         elif(process >= 1000):
             readDASample(process,year,skimType,whichJob,group)
     except Exception as e:
-        print("Error sample: {0}".format(e))
+        print("FAILED {0}".format(e))

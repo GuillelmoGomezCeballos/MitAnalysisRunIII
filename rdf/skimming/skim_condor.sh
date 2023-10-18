@@ -54,7 +54,7 @@ Error  = logs/simple_skim_${whichSample}_${whichJob}.error
 transfer_input_files = skim.tgz
 use_x509userproxy = True
 x509userproxy = /tmp/x509up_u${USERPROXY}
-Requirements = ( BOSCOCluster =!= "t3serv008.mit.edu" && BOSCOCluster =!= "ce03.cmsaf.mit.edu" && BOSCOCluster =!= "eofe8.mit.edu")
+Requirements = ( BOSCOCluster =!= "t3serv008.mit.edu" && BOSCOCluster =!= "ce03.cmsaf.mit.edu" && BOSCOCluster =!= "eofe8.mit.edu") && (Machine != "submit81.mit.edu")
 +REQUIRED_OS = "rhel7"
 +DESIRED_Sites = "mit_tier2,mit_tier3"
 Queue

@@ -4,6 +4,13 @@ export path="fillhisto_triggerAnalysis1001"
 export year=2022
 export output="anaZ"
 
+if [ $# -lt 1 ]; then
+   echo "TOO FEW PARAMETERS"
+   exit
+fi
+
+export year=$1
+
 hadd -f ${output}/${path}_${year}_loose_mu_2d.root ${output}/${path}_${year}_0_2d.root  ${output}/${path}_${year}_1_2d.root
 hadd -f ${output}/${path}_${year}_tightmu0_2d.root ${output}/${path}_${year}_4_2d.root  ${output}/${path}_${year}_5_2d.root
 hadd -f ${output}/${path}_${year}_tightmu1_2d.root ${output}/${path}_${year}_8_2d.root  ${output}/${path}_${year}_9_2d.root

@@ -32,8 +32,10 @@ elif [ $theAna -eq 4 ]; then
 
 elif [ $theAna -eq 5 ]; then
  whichAna="fakeAnalysis"
- nohup ./analysis_slurm.sh 110 2022 -1 1002 fakeAnalysis >& logs/log_110 &
- nohup ./analysis_slurm.sh 123 2022 -1 1003 fakeAnalysis >& logs/log_123 &
+ nohup ./analysis_slurm.sh 110 20220 -1 1002 fakeAnalysis >& logs/log_110 &
+ nohup ./analysis_slurm.sh 136 20220 -1 1003 fakeAnalysis >& logs/log_136 &
+ nohup ./analysis_slurm.sh 210 20221 -1 1002 fakeAnalysis >& logs/log_210 &
+ nohup ./analysis_slurm.sh 236 20221 -1 1003 fakeAnalysis >& logs/log_236 &
 
 elif [ $theAna -eq 6 ]; then
  whichAna="triggerAnalysis"
@@ -75,6 +77,8 @@ EOF
 
 sbatch submit
 
+sleep 0.1
+
 done
 
 fi
@@ -82,3 +86,5 @@ fi
 done < ${whichAna}_input_condor_jobs.cfg
 
 rm -f submit
+#SBATCH --exclude=submit[52-59]
+#scontrol show jobid -dd 644285

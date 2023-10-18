@@ -76,7 +76,6 @@ def analysis(df,count,category,weight,year,PDType,isData):
     histo   = [[0 for x in range(nCat)] for y in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
 
-    if(year > 10000): year = year // 10
     ROOT.initJSONSFs(year)
 
     dfcat = df.Define("PDType","\"{0}\"".format(PDType))\
@@ -278,4 +277,4 @@ if __name__ == "__main__":
     try:
         readMCSample(process,year,"All", skimType)
     except Exception as e:
-        print("Error sample: {0}".format(e))
+        print("FAILED {0}".format(e))

@@ -437,6 +437,12 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
     elif(year == 2022 and PDType == "Muon"):
         triggerLEP = "({0} or {1}) and not {2}".format(triggerDMU,triggerSMU,triggerMUEG)
 
+    elif(year == 2022 and PDType == "DoubleMuon"):
+        triggerLEP = "{0} and not {1}".format(triggerDMU,triggerMUEG)
+
+    elif(year == 2022 and PDType == "SingleMuon"):
+        triggerLEP = "{0} and not {1} and not {2}".format(triggerSMU,triggerDMU,triggerMUEG)
+
     elif(year == 2022 and PDType == "EGamma"):
         triggerLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
 
@@ -560,7 +566,6 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
               .Define("fake_Electron_mvaNoIso_WP80"       ,"Electron_mvaNoIso_WP80[fake_el]")
               .Define("fake_Electron_mvaIso_WP80"         ,"Electron_mvaIso_WP80[fake_el]")
               .Define("fake_Electron_mvaIso_WP90"         ,"Electron_mvaIso_WP90[fake_el]")
-              .Define("fake_Electron_mvaIso_Fall17V2_WPL" ,"Electron_mvaIso_Fall17V2_WPL[fake_el]")
               .Define("fake_Electron_tightCharge"         ,"Electron_tightCharge[fake_el]")
               .Define("fake_Electron_mvaTTH"              ,"Electron_mvaTTH[fake_el]")
               .Define("fake_Electron_mvaIso"              ,"Electron_mvaIso[fake_el]")
@@ -607,12 +612,13 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
             print("No {0} weights: {1}".format(theoryColumnName[x],e))
             hasTheoryColumnName[x] = False
 
-    MUOYEAR = "2018_UL"
-    #if(year == 2022): MUOYEAR = "2022"
-    ELEYEAR = "2018"
-    if(year == 20221): ELEYEAR = "2022FG"
-    PHOYEAR = "2018"
-    #if(year == 2022): PHOYEAR = "2022"
+    MUOYEAR = year
+    ELEYEAR = "NULL"
+    if  (year == 20220): ELEYEAR = "2022FG"
+    elif(year == 20221): ELEYEAR = "2022FG"
+    PHOYEAR = "NULL"
+    if  (year == 20220): PHOYEAR = "2022FG"
+    elif(year == 20221): PHOYEAR = "2022FG"
     print("MUOYEAR/ELEYEAR/PHOYEAR/MUOWP/ELEWP: {0}/{1}/{2}/{3}/{4}".format(MUOYEAR,ELEYEAR,PHOYEAR,MUOWP,ELEWP))
 
     dftag =(df.Define("PDType","\"{0}\"".format(PDType))
@@ -621,7 +627,6 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
               .Define("fake_Muon_genPartFlav","Muon_genPartFlav[fake_mu]")
               .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
               .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,0)")
-              #.Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,PV_npvsGood)")
               .Define("weightMuonSF","compute_MuonSF(fake_Muon_pt,fake_Muon_eta)")
               .Define("weightElectronSF","compute_ElectronSF(fake_Electron_pt,fake_Electron_eta)")
               .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype)")
@@ -640,7 +645,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
 
               .Define("weightBtagSF","compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"central\",0,{0})".format(bTagSel))
 
-              .Define("weightMuoSFJSON","compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+              .Define("weightMuoSFJSON","compute_JSON_MUO_SFs(\"nominal\",\"nominal\",\"nominal\",fake_Muon_pt,fake_Muon_eta)")
 
               .Define("weightEleSFJSON","compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
 
@@ -650,18 +655,18 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
     if(useBTaggingWeights == 1):
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 #.Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightMuonSF*weightElectronSF*weightTriggerSF")
-                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightMuonSF*weightEleSFJSON*weightTriggerSF")
-                 .Define("weightNoLepSF","weightMC*weightFake*weightBtagSF*weightPURecoSF")
+                 #.Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuonSF*weightElectronSF")
+                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
+                 .Define("weightNoLepSF","weightMC*weightFake*weightBtagSF*weightPURecoSF*weightTriggerSF")
                  .Define("weightBTag","weight")
                  .Define("weightNoBTag","weight/weightBtagSF")
                 )
     else:
         dftag = (dftag
                  #.Define("weight","weightMC*weightFake*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 #.Define("weight",       "weightMC*weightFake*weightPURecoSF*weightMuonSF*weightElectronSF*weightTriggerSF")
-                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightMuonSF*weightEleSFJSON*weightTriggerSF")
-                 .Define("weightNoLepSF","weightMC*weightFake*weightPURecoSF")
+                 #.Define("weight",       "weightMC*weightFake*weightPURecoSF*weightTriggerSF*weightMuonSF*weightElectronSF")
+                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
+                 .Define("weightNoLepSF","weightMC*weightFake*weightPURecoSF*weightTriggerSF")
                  .Define("weightBTag","weight*weightBtagSF")
                  .Define("weightNoBTag","weight")
                 )
@@ -683,13 +688,13 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nPD
                  .Define("weightBtagSFLF_uncorrelatedUp"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"up_uncorrelated\",-1,{0})".format(bTagSel))
                  .Define("weightBtagSFLF_uncorrelatedDown","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"down_uncorrelated\",-1,{0})".format(bTagSel))
 
-                 .Define("weightMuoSFTRKUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"systup\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-                 .Define("weightMuoSFIDUp" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"systup\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-                 .Define("weightMuoSFISOUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"systup\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFTRKUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(\"syst\",\"nominal\",\"nominal\",fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFIDUp" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(\"nominal\",\"syst\",\"nominal\",fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFISOUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(\"nominal\",\"nominal\",\"syst\",fake_Muon_pt,fake_Muon_eta)")
 
-                 .Define("weightMuoSFTRKDown","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"systdown\",\"sf\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-                 .Define("weightMuoSFIDDown" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"systdown\",\"sf\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
-                 .Define("weightMuoSFISODown","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(MUOYEAR,\"sf\",\"sf\",\"systdown\",MUOWP,fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFTRKDown","weight/weightMuoSFJSON/compute_JSON_MUO_SFs(\"syst\",\"nominal\",\"nominal\",fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFIDDown" ,"weight/weightMuoSFJSON/compute_JSON_MUO_SFs(\"nominal\",\"syst\",\"nominal\",fake_Muon_pt,fake_Muon_eta)")
+                 .Define("weightMuoSFISODown","weight/weightMuoSFJSON/compute_JSON_MUO_SFs(\"nominal\",\"nominal\",\"syst\",fake_Muon_pt,fake_Muon_eta)")
 
                  .Define("weightEleSFTRKUp","weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sfup\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta)")
                  .Define("weightEleSFIDUp" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sfup\",ELEWP,fake_Electron_pt,fake_Electron_eta)")

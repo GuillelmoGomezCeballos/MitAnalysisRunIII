@@ -83,12 +83,13 @@ if __name__ == "__main__":
 
             fileTriggerNUM.Close()
 
-            print("AverageLoose({0},{1}) = {2} / {3} = {4}".format(nlep,nsel,
-                  histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights(),
-                  histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights(),
-                 (histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights())/
-                 (histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights())
-                 ))
+            if(histoLepDenDA[nlep][nsel].GetSumOfWeights() > 0 and histoLepDenDY[nlep][nsel].GetSumOfWeights() > 0):
+                print("AverageLoose({0},{1}) = {2} / {3} = {4}".format(nlep,nsel,
+                      histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights(),
+                      histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights(),
+                     (histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights())/
+                     (histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights())
+                     ))
 
             for i in range(histoLepDenDA[nlep][nsel].GetNbinsX()):
                 for j in range(histoLepDenDA[nlep][nsel].GetNbinsY()):
@@ -170,12 +171,13 @@ if __name__ == "__main__":
 
             fileTriggerNUM.Close()
 
-            print("AverageTight({0},{1}) = {2} / {3} = {4}".format(nlep,nsel,
-                  histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights(),
-                  histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights(),
-                 (histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights())/
-                 (histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights())
-                 ))
+            if(histoLepDenDA[nlep][nsel].GetSumOfWeights() > 0 and histoLepDenDY[nlep][nsel].GetSumOfWeights() > 0):
+                print("AverageTight({0},{1}) = {2} / {3} = {4}".format(nlep,nsel,
+                      histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights(),
+                      histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights(),
+                     (histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights())/
+                     (histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights())
+                     ))
 
             for i in range(histoLepDenDA[nlep][nsel].GetNbinsX()):
                 for j in range(histoLepDenDA[nlep][nsel].GetNbinsY()):

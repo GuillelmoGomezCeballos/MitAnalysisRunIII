@@ -9,7 +9,7 @@ cd ../..
 
 voms-proxy-info
 
-tar xvzf $5.tgz
+tar xzf $5.tgz
 
 echo $PWD
 
@@ -19,8 +19,8 @@ g++ $(correction config --cflags --ldflags) mysf.cpp -shared -fPIC -o mysf.so
 
 rm -rf functions* *.pyc $5.tgz \
 *Analysis.py analysis_slurm.sh functions.cc utils*.py \
-data weights_mva \
+data weights_mva tmva_helper_xml.* \
 mysf.* \
-jsns config
+jsns config jsonpog-integration 
 
 ls -l

@@ -8,22 +8,29 @@
 class MyCorrections {
   public:
     MyCorrections(int the_input_year);
+
     double eval_puSF      (double NumTrueInteractions, std::string weights);
-    double eval_muonTRKSF (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
-    double eval_muonIDSF  (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
-    double eval_muonISOSF (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
+
+    double eval_muonTRKSF (double eta, double pt, const char *valType);
+    double eval_muonIDSF  (double eta, double pt, const char *valType);
+    double eval_muonISOSF (double eta, double pt, const char *valType);
+
     double eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
     double eval_photonSF  (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
+
     double eval_tauJETSF  (double pt, int dm, int genmatch, const char *workingPoint, const char *valType);
     double eval_tauELESF  (double eta, int genmatch, const char *workingPoint, const char *valType);
     double eval_tauMUOSF  (double eta, int genmatch, const char *workingPoint, const char *valType);
+
     double eval_btvSF     (const char *valType, char *workingPoint, double eta, double pt, int flavor);
+
     double eval_jetCORR   (double area, double eta, double pt, double rho, int type);
     double eval_jesUnc    (double eta, double pt, int type);
     double eval_jerMethod1(double eta, double pt, int type);
     double eval_jerMethod2(double eta, double pt, double rho);
     double eval_puJetIDSF (char *valType, char *workingPoint, double eta, double pt);
     double eval_jetVetoMap(double eta, double phi, int type);
+
   private:
     correction::Correction::Ref puSF_;
     correction::Correction::Ref muonTRKSF_;
@@ -45,5 +52,4 @@ class MyCorrections {
     correction::Correction::Ref jerMethod2Unc_;
     correction::Correction::Ref puJetIDSF_;
     int year;
-    int yearPrime;
 };

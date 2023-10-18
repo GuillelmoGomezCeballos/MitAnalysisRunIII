@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#./checkJobs.sh fake 1001 20220 condor_q|grep FAI|awk '{split($1,a,"_");split(a[6],b,".");print"nohup ./analysis_slurm.sh "a[4]" "a[5]" "b[1]" "a[3]" "a[2]" >& logs/log_"a[2]"_"a[4]"_"b[1]" &"}'
+
 if [ $# -lt 1 ]; then
    echo "TOO FEW PARAMETERS"
    exit
@@ -32,8 +34,10 @@ elif [ $theAna -eq 4 ]; then
 
 elif [ $theAna -eq 5 ]; then
  whichAna="fakeAnalysis"
- nohup ./analysis_slurm.sh 110 2022 -1 1002 fakeAnalysis >& logs/log_110 &
- nohup ./analysis_slurm.sh 123 2022 -1 1003 fakeAnalysis >& logs/log_123 &
+ nohup ./analysis_slurm.sh 110 20220 -1 1002 fakeAnalysis >& logs/log_110 &
+ nohup ./analysis_slurm.sh 136 20220 -1 1003 fakeAnalysis >& logs/log_136 &
+ nohup ./analysis_slurm.sh 210 20221 -1 1002 fakeAnalysis >& logs/log_210 &
+ nohup ./analysis_slurm.sh 236 20221 -1 1003 fakeAnalysis >& logs/log_236 &
 
 elif [ $theAna -eq 6 ]; then
  whichAna="triggerAnalysis"
@@ -59,9 +63,9 @@ voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 
 tar cvzf ${whichAna}.tgz \
 *Analysis.py analysis_slurm.sh functions.cc utils*.py \
-data/* weights_mva/* \
+data/* weights_mva/* tmva_helper_xml.* \
 mysf.cpp mysf.h \
-jsns/* config/*
+jsns/* config/* jsonpog-integration/*
 
 while IFS= read -r line; do
 
@@ -92,7 +96,7 @@ Error  = logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whic
 transfer_input_files = ${whichAna}.tgz
 use_x509userproxy = True
 x509userproxy = /tmp/x509up_u${USERPROXY}
-Requirements = ( BOSCOCluster =!= "t3serv008.mit.edu" && BOSCOCluster =!= "ce03.cmsaf.mit.edu" && BOSCOCluster =!= "eofe8.mit.edu") && (Machine != "t3btch086.mit.edu")
+Requirements = ( BOSCOCluster =!= "t3serv008.mit.edu" && BOSCOCluster =!= "ce03.cmsaf.mit.edu" && BOSCOCluster =!= "eofe8.mit.edu") && (Machine != "t3btch003.mit.edu")
 +REQUIRED_OS = "rhel7"
 +DESIRED_Sites = "mit_tier3"
 Queue

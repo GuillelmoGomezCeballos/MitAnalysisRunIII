@@ -128,7 +128,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
         dfbase =(dfbase.Define("PDType","\"{0}\"".format(PDType))
                        .Define("fake_Muon_genPartFlav","Muon_genPartFlav[fake_mu]")
                        .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
-                       .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt)")
+                       .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,0)")
                        .Define("weight","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,-1)*weightPURecoSF".format(weight,0))
                        .Filter("weight != 0","good weight")
                        .Define("weightFakeSel0", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,0)*weightPURecoSF".format(weight,0))
@@ -139,7 +139,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
         dfbase =(dfbase.Define("PDType","\"{0}\"".format(PDType))
                        .Define("fake_Muon_genPartFlav","Muon_genPartFlav[fake_mu]")
                        .Define("fake_Electron_genPartFlav","Electron_genPartFlav[fake_el]")
-                       .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt)")
+                       .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,0)")
                        .Define("weight","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,-1)*weightPURecoSF".format(weight,useFR))
                        .Filter("weight != 0","good weight")
                        .Define("weightFakeSel0", "compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,0)*weightPURecoSF".format(weight,useFR))
@@ -414,4 +414,4 @@ if __name__ == "__main__":
         elif(process >= 1000):
             readDASample(process,year,skimType,whichJob,group, puWeights)
     except Exception as e:
-        print("Error sample: {0}".format(e))
+        print("FAILED {0}".format(e))
