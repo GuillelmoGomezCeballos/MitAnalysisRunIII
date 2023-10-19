@@ -1,10 +1,17 @@
 #!/bin/sh
 
-export path="fillhisto_zAnalysis1002"
+export path="fillhisto_zAnalysis1001"
 export year=2022
 export output="anaZ"
 
-if [ $# -eq 1 ]; then
+if [ $# -lt 1 ]; then
+   echo "TOO FEW PARAMETERS"
+   exit
+fi
+
+export year=$1
+
+if [ $# -eq 2 ]; then
   export path=$1
 fi
 

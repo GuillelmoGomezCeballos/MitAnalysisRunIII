@@ -4,6 +4,17 @@ export path="fillhisto_zAnalysis1001"
 export year=2018
 export output="anaZ"
 
+if [ $# -lt 1 ]; then
+   echo "TOO FEW PARAMETERS"
+   exit
+fi
+
+export year=$1
+
+if [ $# -eq 2 ]; then
+  export path=$1
+fi
+
 hadd -f ${output}/${path}_${year}_loose_mu_2d.root ${output}/${path}_${year}_0_2d.root ${output}/${path}_${year}_10_2d.root
 hadd -f ${output}/${path}_${year}_tightmu0_2d.root ${output}/${path}_${year}_1_2d.root ${output}/${path}_${year}_11_2d.root
 hadd -f ${output}/${path}_${year}_tightmu1_2d.root ${output}/${path}_${year}_2_2d.root ${output}/${path}_${year}_12_2d.root
