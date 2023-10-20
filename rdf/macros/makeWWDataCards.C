@@ -20,6 +20,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
   if(fidAna <= 0 || fidAna >= 5) printf("Wrong fidAna(%d)\n",fidAna);
 
+  double systValue;
   TFile *inputFile;
   TFile *outputFile;
   const int nSelTotal = 5;
@@ -221,8 +222,27 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
       }
       histo_PDFUp  [100][ic]->SetBinContent(nb, histo_Syst[131][ic]->GetBinContent(nb));
       histo_PDFDown[100][ic]->SetBinContent(nb, histo_Syst[132][ic]->GetBinContent(nb));
-    }
-  }
+
+      // making symmetric uncertainties
+      if(histo_Baseline[ic]->GetBinContent(nb) > 0) {
+        // PU
+        systValue = histo_Syst[19][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[18][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // Jes
+        systValue = histo_Syst[134][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[133][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // Jer
+        systValue = histo_Syst[136][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[135][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // MuonMom
+        systValue = histo_Syst[138][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[137][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // ElectronMom
+        systValue = histo_Syst[140][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[139][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+      }
+    } // loop over bins
+  } // loop over categories
 
   TString additionalSuffix = "";
   if(whichAna != 0){ 
