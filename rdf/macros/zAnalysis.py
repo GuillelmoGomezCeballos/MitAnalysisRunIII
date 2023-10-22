@@ -498,7 +498,7 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
     for f in range(len(files)):
         runTree.AddFile(files[f])
 
-     genEventSumWeight = 0
+    genEventSumWeight = 0
     genEventSumNoWeight = 0
     nTheoryReplicas = [103, 9, 4]
     genEventSumLHEScaleWeight = [0, 0, 0, 0, 0, 0, 0, 0, 0]
