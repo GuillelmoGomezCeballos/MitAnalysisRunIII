@@ -7,6 +7,8 @@ from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, makeFinalVariable
 
+correctionString = "_correction"
+
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 1
@@ -166,7 +168,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     dftag = selectionLL(df,year,PDType,isData,count)
 
-    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP)
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString)
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("theCat","compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
@@ -428,8 +430,6 @@ if __name__ == "__main__":
     fPuFile.Close()
 
     fakePath = "data/histoFakeEtaPt_{0}_anaType3.root".format(year)
-    if(not os.path.exists(fakePath)):
-        fakePath = "histoFakeEtaPt_{0}_anaType3.root".format(year)
     fFakeFile = ROOT.TFile(fakePath)
     histoFakeEtaPt_mu = fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}".format(muSelChoice))
     histoFakeEtaPt_el = fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}".format(elSelChoice))
@@ -437,9 +437,7 @@ if __name__ == "__main__":
     histoFakeEtaPt_el.SetDirectory(0)
     fFakeFile.Close()
 
-    lepSFPath = "data/histoLepSFEtaPt_{0}.root".format(year)
-    if(not os.path.exists(lepSFPath)):
-        lepSFPath = "histoLepSFEtaPt_{0}.root".format(year)
+    lepSFPath = "data/histoLepSFEtaPt_{0}{1}.root".format(year,correctionString)
     fLepSFFile = ROOT.TFile(lepSFPath)
     histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(muSelChoice))
     histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_{0}".format(elSelChoice))
@@ -448,8 +446,6 @@ if __name__ == "__main__":
     fLepSFFile.Close()
 
     triggerSFPath = "data/histoTriggerSFEtaPt_{0}.root".format(year)
-    if(not os.path.exists(triggerSFPath)):
-        triggerSFPath = "histoTriggerSFEtaPt_{0}.root".format(year)
     fTriggerSFFile = ROOT.TFile(triggerSFPath)
     histoTriggerSFEtaPt_0_0 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_0")
     histoTriggerSFEtaPt_0_1 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_1")
@@ -486,8 +482,6 @@ if __name__ == "__main__":
     fTriggerSFFile.Close()
 
     BTVEffPath = "data/histoBtagEffSelEtaPt_{0}.root".format(year)
-    if(not os.path.exists(BTVEffPath)):
-        BTVEffPath = "histoBtagEffSelEtaPt_{0}.root".format(year)
     fBTVEffPathFile = ROOT.TFile(BTVEffPath)
     histoBTVEffEtaPtLF = fBTVEffPathFile.Get("histoBtagEffSelEtaPt_{0}".format(0+3*bTagSel))
     histoBTVEffEtaPtCJ = fBTVEffPathFile.Get("histoBtagEffSelEtaPt_{0}".format(1+3*bTagSel))

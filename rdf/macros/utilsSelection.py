@@ -601,7 +601,7 @@ def selectionDAWeigths(df,year,PDType):
 
     return dftag
 
-def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP):
+def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString):
 
     hasTheoryColumnName = [True, True, True]
     theoryColumnName = ["PSWeight", "LHEScaleWeight", "LHEPdfWeight"]
@@ -619,6 +619,9 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
     PHOYEAR = "NULL"
     if  (year == 20220): PHOYEAR = "2022FG"
     elif(year == 20221): PHOYEAR = "2022FG"
+    if(correctionString == "_correction"):
+        MUOWP = "Medium"
+        ELEWP = "Medium"
     print("MUOYEAR/ELEYEAR/PHOYEAR/MUOWP/ELEWP: {0}/{1}/{2}/{3}/{4}".format(MUOYEAR,ELEYEAR,PHOYEAR,MUOWP,ELEWP))
 
     dftag =(df.Define("PDType","\"{0}\"".format(PDType))
@@ -652,20 +655,38 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
               .Define("weightPUSF_Nom","compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
               )
 
+    if(correctionString == "_correction"):
+        if(useBTaggingWeights == 1):
+            print("BtagCorr/AddCorr: 1/1")
+            dftag = (dftag
+                     .Define("weight","weightMC*weightFake*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
+                    )
+        else:
+            print("BtagCorr/AddCorr: 0/1")
+            dftag = (dftag
+                     .Define("weight","weightMC*weightFake*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
+                    )
+
+    else:
+        if(useBTaggingWeights == 1):
+            print("BtagCorr/AddCorr: 1/0")
+            dftag = (dftag
+                     .Define("weight","weightMC*weightFake*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
+                    )
+        else:
+            print("BtagCorr/AddCorr: 0/0")
+            dftag = (dftag
+                     .Define("weight","weightMC*weightFake*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
+                    )
+
     if(useBTaggingWeights == 1):
         dftag = (dftag
-                 #.Define("weight","weightMC*weightFake*weightBtagSF*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 #.Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
-                 .Define("weight",       "weightMC*weightFake*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
                  .Define("weightNoLepSF","weightMC*weightFake*weightBtagSF*weightPURecoSF*weightTriggerSF")
                  .Define("weightBTag","weight")
                  .Define("weightNoBTag","weight/weightBtagSF")
                 )
     else:
         dftag = (dftag
-                 #.Define("weight","weightMC*weightFake*weightMuoSFJSON*weightEleSFJSON*weightPUSF_Nom*weightPURecoSF")
-                 #.Define("weight",       "weightMC*weightFake*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
-                 .Define("weight",       "weightMC*weightFake*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
                  .Define("weightNoLepSF","weightMC*weightFake*weightPURecoSF*weightTriggerSF")
                  .Define("weightBTag","weight*weightBtagSF")
                  .Define("weightNoBTag","weight")
@@ -760,9 +781,9 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
 
     return dftag
 
-def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP):
+def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString):
     if(isData == "true"): return selectionDAWeigths(df,year,PDType)
-    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP)
+    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString)
 
 def makeFinalVariable(df,var,theCat,start,x,bin,min,max,type):
     histoNumber = start+type
