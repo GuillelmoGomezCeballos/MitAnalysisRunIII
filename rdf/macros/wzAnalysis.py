@@ -10,6 +10,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 import tmva_helper_xml
 
 makeDataCards = True
+correctionString = ""
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
@@ -605,7 +606,7 @@ if __name__ == "__main__":
     histoFakeEtaPt_el.SetDirectory(0)
     fFakeFile.Close()
 
-    lepSFPath = "data/histoLepSFEtaPt_{0}.root".format(year)
+    lepSFPath = "data/histoLepSFEtaPt_{0}{1}.root".format(year,correctionString)
     fLepSFFile = ROOT.TFile(lepSFPath)
     histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(muSelChoice))
     histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_{0}".format(elSelChoice))

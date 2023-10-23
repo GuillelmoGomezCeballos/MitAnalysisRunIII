@@ -10,6 +10,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 #from utilsAna import loadCorrectionSet
 
 makeDataCards = True
+correctionString = ""
 
 # 0 = T, 1 = M, 2 = L
 bTagSel = 2
@@ -206,7 +207,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         		   )
 
         if(x == plotCategory("kPlotTop")):
-            dfcat[x] = dfcat[x].Define("weightWW", "weight*0.90")
+            dfcat[x] = dfcat[x].Define("weightWW", "weight")
         else:
             dfcat[x] = dfcat[x].Define("weightWW", "weight")
 
@@ -718,7 +719,7 @@ if __name__ == "__main__":
     histoFakeEtaPt_el.SetDirectory(0)
     fFakeFile.Close()
 
-    lepSFPath = "data/histoLepSFEtaPt_{0}.root".format(year)
+    lepSFPath = "data/histoLepSFEtaPt_{0}{1}.root".format(year,correctionString)
     fLepSFFile = ROOT.TFile(lepSFPath)
     histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(muSelChoice))
     histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_{0}".format(elSelChoice))

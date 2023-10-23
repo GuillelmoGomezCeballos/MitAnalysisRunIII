@@ -68,7 +68,7 @@ if __name__ == "__main__":
     histoLepEffSelDYEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
     histoLepSFEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
 
-    fileLepEffName = "histoLepSFEtaPt_{0}_corr.root".format(year)
+    fileLepEffName = "histoLepSFEtaPt_{0}_correction.root".format(year)
     outFileLepEff = TFile(fileLepEffName,"recreate")
     outFileLepEff.cd()
 
