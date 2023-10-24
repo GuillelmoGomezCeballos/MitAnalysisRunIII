@@ -91,12 +91,12 @@ def findDIR(directory):
     rootFiles = ROOT.vector('string')()
 
     if(useXROOTD == True and "/data/submit/cms" in directory):
-        xrd = "root://submit50.mit.edu"
+        xrd = "root://submit50.mit.edu/"
         xrdpath = directory.replace("/data/submit/cms","")
         f = check_output(['xrdfs', f'{xrd}', 'ls', xrdpath]).decode(sys.stdout.encoding)
         stringFiles = f.split()
         for e in range(len(stringFiles)):
-            filePath = os.path.join(xrd,stringFiles[e])
+            filePath = xrd + stringFiles[e]
             if "failed/" in filePath: continue
             if "log/" in filePath: continue
             if ".txt" in filePath: continue
@@ -608,7 +608,7 @@ def SwitchSample(argument, skimType):
         81: (dirT2+"/GJets_DR-0p4_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",40.685*1000,plotCategory("kPlotOther")),
         82: (dirT2+"/QCD_Pt-15to7000_TuneCP5_Flat2018_13TeV_pythia8+RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1+NANOAODSIM",1000*1000,plotCategory("kPlotNonPrompt")),
 
-        99:(dirLocal+"/2018/vbf-hphigamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
+        99:("/data/submit/cms/store/user/mariadlf/nano/D02/GluGlu_HToRhoGamma_M125_TuneCP5_PSWeights_13TeV_powheg_pythia8+RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v3+MINIAODSIM",1.0*1000,plotCategory("kPlotBSM")),
        199:(dirLocal+"/2018/vbf-hrhogamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        299:(dirLocal+"/2018/vbf-hphiKLKSgamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        396:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_preEE",1.0*1000,plotCategory("kPlotDY")),
