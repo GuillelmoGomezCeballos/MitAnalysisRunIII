@@ -18,7 +18,7 @@ if __name__ == "__main__":
     format = "pdf"
     isPseudoData = 0
 
-    valid = ['path=', "year=", 'inputDir=', 'anaType=', 'isPseudoData=', 'help']
+    valid = ['path=', "year=", 'inputDir=', 'anaType=', 'isPseudoData=', 'format=', 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
     usage +=  "              --inputDir=<{0}>\n".format(inputDir)
@@ -46,6 +46,8 @@ if __name__ == "__main__":
             anaType = int(arg)
         if opt == "--isPseudoData":
             isPseudoData = int(arg)
+        if opt == "--format":
+            format = str(arg)
 
     startHisto = [0, 0]
     # no jet requirements / no jet requirements
