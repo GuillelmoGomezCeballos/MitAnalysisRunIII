@@ -9,7 +9,7 @@ from utilsAna import SwitchSample
 #from utilsSelectionNanoV9 import getBTagCut
 #from utilsSelectionNanoV9 import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
 from utilsSelection import getBTagCut
-from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
+from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet, selectionGenLepJet
 
 #selectionJsonPath = "config/selectionNanoV9.json"
 selectionJsonPath = "config/selection.json"
@@ -80,6 +80,7 @@ def analysis(df,count,category,weight,year,PDType,isData):
 
     dfcat = df.Define("PDType","\"{0}\"".format(PDType))\
               .Define("weight","{0}".format(1.0))\
+              .Define("weightTotal","{0}*genWeight".format(weight/getLumi(year)))\
               .Filter("weight != 0","good weight")
 
     x = 0
@@ -98,6 +99,14 @@ def analysis(df,count,category,weight,year,PDType,isData):
             )
 
     dfww = selectionWW(dfcat,year,PDType,isData,count)
+
+    dfwwgen = selectionGenLepJet(dfcat,20,30).Filter("ngood_GenDressedLeptons >= 2", "ngood_GenDressedLeptons >= 2")
+    dfwwgen = (dfwwgen.Define("kPlotSignal0", "{0}".format(plotCategory("kPlotSignal0")))
+    		      .Define("kPlotSignal1", "{0}".format(plotCategory("kPlotSignal1")))
+    		      .Define("kPlotSignal2", "{0}".format(plotCategory("kPlotSignal2")))
+    		      .Define("kPlotSignal3", "{0}".format(plotCategory("kPlotSignal3")))
+    		      .Define("theGenCat", "compute_gen_category({0},kPlotSignal0,kPlotSignal1,kPlotSignal2,kPlotSignal3,ngood_GenJets,ngood_GenDressedLeptons)".format(0))
+                      )
 
     dfcat = (dfcat
           .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
@@ -200,16 +209,20 @@ def analysis(df,count,category,weight,year,PDType,isData):
     dfww = dfww.Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
     histo[18][x] = dfww.Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x),3,-0.5,2.5), "ngood_jets","weight")
 
+    histo[19][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x),4,-0.5,3.5), "theGenCat","weightTotal")
+
     #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "PuppiMET_pt", "nbtag"]
     #dfcat.Snapshot("Events", "test.root", branches)
 
     report0 = dfcat.Report()
     report1 = dfgen.Report()
     report2 = dfww.Report()
+    report3 = dfwwgen.Report()
     print("---------------- SUMMARY -------------")
     report0.Print()
     report1.Print()
     report2.Print()
+    report3.Print()
 
     myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}_job-1.root".format(count,year),'RECREATE')
     for i in range(nCat):
@@ -235,16 +248,16 @@ def readMCSample(sampleNOW, year, PDType, skimType):
     for f in range(len(files)):
         runTree.AddFile(files[f])
 
-    genEventSum = 0
+    genEventSumWeight = 0
     for i in range(runTree.GetEntries()):
         runTree.GetEntry(i)
-        genEventSum += runTree.genEventSumw
+        genEventSumWeight += runTree.genEventSumw
 
-    weight = (SwitchSample(sampleNOW,skimType)[1] / genEventSum)*getLumi(year)
+    weight = (SwitchSample(sampleNOW,skimType)[1] / genEventSumWeight)*getLumi(year)
 
     nevents = df.Count().GetValue()
 
-    print("genEventSum({0}): {1} / Events: {2}".format(runTree.GetEntries(),genEventSum,nevents))
+    print("genEventSum({0}): {1} / Events: {2}".format(runTree.GetEntries(),genEventSumWeight,nevents))
     print("Weight %f / Cross section: %f" %(weight,SwitchSample(sampleNOW,skimType)[1]))
 
     analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false")

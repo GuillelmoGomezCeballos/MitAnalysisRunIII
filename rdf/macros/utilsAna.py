@@ -613,8 +613,12 @@ def SwitchSample(argument, skimType):
        299:(dirLocal+"/2018/vbf-hphiKLKSgamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
        396:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_preEE",1.0*1000,plotCategory("kPlotDY")),
        397:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_postEE",1.0*1000,plotCategory("kPlotDY")),
-       398:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2022_postEE",1.0*1000,plotCategory("kPlotBSM")),
-       399:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2016_preVFP",1.0*1000,plotCategory("kPlotBSM")),
+       400:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2016_preVFP",1.0*1000,plotCategory("kPlotBSM")),
+       401:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2022_postEE",(118.7*1.06-3.51313)*0.1086*0.1086*9*1000,plotCategory("kPlotqqWW")),
+       402:("/data/submit/cms/store/user/ceballos/test_samples/ggWWto2L2Nu_OS_PolarizationLL_postEE",0.24053*1.4*1000,plotCategory("kPlotqqWW")),
+       403:("/data/submit/cms/store/user/ceballos/test_samples/ggWWto2L2Nu_OS_PolarizationLT_postEE",0.08268*1.4*1000,plotCategory("kPlotqqWW")),
+       404:("/data/submit/cms/store/user/ceballos/test_samples/ggWWto2L2Nu_OS_PolarizationTL_postEE",0.08268*1.4*1000,plotCategory("kPlotqqWW")),
+       405:("/data/submit/cms/store/user/ceballos/test_samples/ggWWto2L2Nu_OS_PolarizationTT_postEE",3.10724*1.4*1000,plotCategory("kPlotqqWW")),
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")

@@ -1589,7 +1589,8 @@ int compute_category(const int mc, const int typeFake, const int nFake, const in
 }
 
 // compute gen category
-int compute_gen_category(const int mc, const int kPlotSignal0, const int kPlotSignal1, const int kPlotSignal2, const int kPlotSignal3, const int ngood_GenJets){
+int compute_gen_category(const int mc, const int kPlotSignal0, const int kPlotSignal1, const int kPlotSignal2, const int kPlotSignal3, const int ngood_GenJets, const int ngood_GenDressedLeptons){
+  if(ngood_GenDressedLeptons <= 1) return 0;
   if     (ngood_GenJets == 0) return 1;
   else if(ngood_GenJets == 1) return 2;
   else if(ngood_GenJets >= 2) return 3;

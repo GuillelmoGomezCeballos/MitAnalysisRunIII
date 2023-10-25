@@ -217,7 +217,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         		        .Define("kPlotSignal1", "{0}".format(plotCategory("kPlotSignal1")))
         		        .Define("kPlotSignal2", "{0}".format(plotCategory("kPlotSignal2")))
         		        .Define("kPlotSignal3", "{0}".format(plotCategory("kPlotSignal3")))
-        		        .Define("theGenCat", "compute_gen_category({0},kPlotSignal0,kPlotSignal1,kPlotSignal2,kPlotSignal3,ngood_GenJets)".format(x))
+        		        .Define("theGenCat", "compute_gen_category({0},kPlotSignal0,kPlotSignal1,kPlotSignal2,kPlotSignal3,ngood_GenJets,ngood_GenDressedLeptons)".format(x))
                                 )
         else:
             dfcat[x] = dfcat[x].Define("theGenCat", "{0}".format(0))
