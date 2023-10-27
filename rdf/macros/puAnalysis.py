@@ -9,7 +9,7 @@ from utilsAna import SwitchSample
 #from utilsSelectionNanoV9 import getBTagCut
 #from utilsSelectionNanoV9 import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
 from utilsSelection import getBTagCut
-from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet, selectionGenLepJet
+from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet, selectionGenLepJet, selectionTheoryWeigths, makeFinalVariable
 
 #selectionJsonPath = "config/selectionNanoV9.json"
 selectionJsonPath = "config/selection.json"
@@ -62,7 +62,7 @@ def selectionWW(df,year,PDType,isData,count):
 
     return dftag
 
-def analysis(df,count,category,weight,year,PDType,isData):
+def analysis(df,count,category,weight,year,PDType,isData,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
     xPtbins = array('d', [20,25,30,35,40,50,60,70,80,90,100,125,150,175,200,300,400,500,1000])
     xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
@@ -79,9 +79,10 @@ def analysis(df,count,category,weight,year,PDType,isData):
     ROOT.initJSONSFs(year)
 
     dfcat = df.Define("PDType","\"{0}\"".format(PDType))\
-              .Define("weight","{0}".format(1.0))\
-              .Define("weightTotal","{0}*genWeight".format(weight/getLumi(year)))\
+              .Define("weight","{0}*genWeight".format(weight/getLumi(year)))\
               .Filter("weight != 0","good weight")
+
+    dfcat = selectionTheoryWeigths(dfcat,weight,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
 
     x = 0
     histo[ 0][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x), 100,  0, 100), "Pileup_nTrueInt","weight")
@@ -209,7 +210,14 @@ def analysis(df,count,category,weight,year,PDType,isData):
     dfww = dfww.Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
     histo[18][x] = dfww.Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x),3,-0.5,2.5), "ngood_jets","weight")
 
-    histo[19][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x),4,-0.5,3.5), "theGenCat","weightTotal")
+    BinXF = 3
+    minXF = 0.5
+    maxXF = 3.5
+    startF = 0
+    histo[startF+20][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(startF+20,x), "histo_{0}_{1}".format(startF+20,x),BinXF,minXF,maxXF),"theGenCat","weight")
+    for nv in range(21,134):
+        histo[startF+nv][x] = makeFinalVariable(dfwwgen,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,nv)
+
 
     #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "PuppiMET_pt", "nbtag"]
     #dfcat.Snapshot("Events", "test.root", branches)
@@ -249,18 +257,55 @@ def readMCSample(sampleNOW, year, PDType, skimType):
         runTree.AddFile(files[f])
 
     genEventSumWeight = 0
+    genEventSumNoWeight = 0
+    nTheoryReplicas = [103, 9, 4]
+    genEventSumLHEScaleWeight = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    genEventSumPSWeight = [0, 0, 0, 0, 0]
     for i in range(runTree.GetEntries()):
         runTree.GetEntry(i)
         genEventSumWeight += runTree.genEventSumw
+        genEventSumNoWeight += runTree.genEventCount
+        if(runTree.FindBranch("nLHEPdfSumw") and runTree.nLHEPdfSumw < nTheoryReplicas[0]):
+            nTheoryReplicas[0] = runTree.nLHEPdfSumw
+        for n in range(9):
+            if(n < runTree.nLHEScaleSumw):
+                genEventSumLHEScaleWeight[n] += runTree.LHEScaleSumw[n]
+            else:
+                genEventSumLHEScaleWeight[n] += 1.0
+                nTheoryReplicas[1] = runTree.nLHEScaleSumw
+        for n in range(4):
+            if(n < runTree.nPSSumw):
+                genEventSumPSWeight[n] += runTree.PSSumw[n]
+            else:
+                genEventSumPSWeight[n] += 1.0
+                nTheoryReplicas[2] = runTree.nPSSumw
+        genEventSumPSWeight[4] += 1
+    print("Number of Theory replicas: {0} / {1} / {2}".format(nTheoryReplicas[0],nTheoryReplicas[1],nTheoryReplicas[2]))
 
-    weight = (SwitchSample(sampleNOW,skimType)[1] / genEventSumWeight)*getLumi(year)
+    genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]
+    genEventSumPSRenorm = [1, 1, 1, 1]
+    if(SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotWZ") or
+       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKWZ")):
+        genEventSumLHEScaleRenorm[0] = genEventSumLHEScaleWeight[0] / genEventSumLHEScaleWeight[4]
+        genEventSumLHEScaleRenorm[1] = genEventSumLHEScaleWeight[1] / genEventSumLHEScaleWeight[4]
+        genEventSumLHEScaleRenorm[2] = genEventSumLHEScaleWeight[3] / genEventSumLHEScaleWeight[4]
+        genEventSumLHEScaleRenorm[3] = genEventSumLHEScaleWeight[5] / genEventSumLHEScaleWeight[4]
+        genEventSumLHEScaleRenorm[4] = genEventSumLHEScaleWeight[7] / genEventSumLHEScaleWeight[4]
+        genEventSumLHEScaleRenorm[5] = genEventSumLHEScaleWeight[8] / genEventSumLHEScaleWeight[4]
+        for n in range(4):
+            genEventSumPSRenorm[n] = genEventSumPSWeight[n] / genEventSumPSWeight[4]
+    print("genEventSumLHEScaleRenorm: ",genEventSumLHEScaleRenorm)
+    print("genEventSumPSRenorm: ",genEventSumPSRenorm)
+
+    weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)
+    weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)
 
     nevents = df.Count().GetValue()
 
-    print("genEventSum({0}): {1} / Events: {2}".format(runTree.GetEntries(),genEventSumWeight,nevents))
-    print("Weight %f / Cross section: %f" %(weight,SwitchSample(sampleNOW,skimType)[1]))
+    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
+    print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
-    analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false")
+    analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false",nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
 
 if __name__ == "__main__":
 

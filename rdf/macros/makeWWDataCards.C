@@ -348,7 +348,9 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_lumi_%d   lnN     ",year);
+  int yearLumi = year;
+  if(year == 20220 || year == 20221) yearLumi = 2022;
+  newcardShape << Form("CMS_lumi_%d   lnN     ",yearLumi);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
