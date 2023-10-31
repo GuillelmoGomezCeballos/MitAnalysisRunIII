@@ -7,6 +7,9 @@
 #include "finalPlot.C"
 
 void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob = 1001){
+  if(year == 2022) {
+    gSystem->Exec(Form("./MitAnalysisRunIII/rdf/makePlots/merge_histograms_year.sh %s %d %d",Form("fillhisto_%sAnalysis",nsel.Data()),whichCondorJob,year));    
+  }
   TString legendBSM="";
   int isNeverBlinded=0;
   int isBlinded=0;

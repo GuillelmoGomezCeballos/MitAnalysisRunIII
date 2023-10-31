@@ -106,7 +106,7 @@ def analysis(df,count,category,weight,year,PDType,isData,nTheoryReplicas,genEven
     		      .Define("kPlotSignal1", "{0}".format(plotCategory("kPlotSignal1")))
     		      .Define("kPlotSignal2", "{0}".format(plotCategory("kPlotSignal2")))
     		      .Define("kPlotSignal3", "{0}".format(plotCategory("kPlotSignal3")))
-    		      .Define("theGenCat", "compute_gen_category({0},kPlotSignal0,kPlotSignal1,kPlotSignal2,kPlotSignal3,ngood_GenJets,ngood_GenDressedLeptons)".format(0))
+    		      .Define("theGenCat", "compute_gen_category({0},kPlotSignal0,kPlotSignal1,kPlotSignal2,kPlotSignal3,ngood_GenJets,ngood_GenDressedLeptons)-1.0".format(0))
                       )
 
     dfcat = (dfcat
@@ -211,8 +211,8 @@ def analysis(df,count,category,weight,year,PDType,isData,nTheoryReplicas,genEven
     histo[18][x] = dfww.Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x),3,-0.5,2.5), "ngood_jets","weight")
 
     BinXF = 3
-    minXF = 0.5
-    maxXF = 3.5
+    minXF = -0.5
+    maxXF = 2.5
     startF = 0
     histo[startF+20][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(startF+20,x), "histo_{0}_{1}".format(startF+20,x),BinXF,minXF,maxXF),"theGenCat","weight")
     for nv in range(21,134):

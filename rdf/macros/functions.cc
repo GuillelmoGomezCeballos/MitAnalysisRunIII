@@ -502,7 +502,7 @@ float compute_fakeRate(const bool isData,
     if(tight_mu[i] == 1) continue;
     const TH2D& hcorr = histoFakeEtaPt_mu;
     double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),mu_pt[i]);
-    sfTot = -sfTot*sf/(1-sf)*0.5;
+    sfTot = -sfTot*sf/(1-sf);
     //printf("fakemu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sf/(1-sf),sfTot);
   }
 

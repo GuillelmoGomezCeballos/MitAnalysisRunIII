@@ -36,10 +36,10 @@ void computeGenWWXS(TString input = "", TString output = "output.root"){
   histo_PS_unc       = (TH1D*)histo_Baseline->Clone();
   histo_QCDScale_unc = (TH1D*)histo_Baseline->Clone();
   histo_PDF_unc      = (TH1D*)histo_Baseline->Clone();
-  histo_Baseline    ->SetNameTitle("histo_WW_NJET"         ,"histo_WW_NJET"         );
-  histo_PS_unc      ->SetNameTitle("histo_WW_NJET_PS"      ,"histo_WW_NJET_PS"      );
-  histo_QCDScale_unc->SetNameTitle("histo_WW_NJET_QCDScale","histo_WW_NJET_QCDScale");
-  histo_PDF_unc     ->SetNameTitle("histo_WW_NJET_PDF"     ,"histo_WW_NJET_PDF"     );
+  histo_Baseline    ->SetNameTitle("hDWWNJETS"    ,"hDWWNJETS"    );
+  histo_PS_unc      ->SetNameTitle("hDWWNJETS_PS" ,"hDWWNJETS_PS" );
+  histo_QCDScale_unc->SetNameTitle("hDWWNJETS_QCD","hDWWNJETS_QCD");
+  histo_PDF_unc     ->SetNameTitle("hDWWNJETS_PDF","hDWWNJETS_PDF");
 
 
   for(int nb=1; nb<=histo_Baseline->GetNbinsX(); nb++){
