@@ -9,7 +9,7 @@ from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariable2D
 #from utilsAna import loadCorrectionSet
 
-makeDataCards = False
+makeDataCards = True
 correctionString = ""
 
 # 0 = T, 1 = M, 2 = L
