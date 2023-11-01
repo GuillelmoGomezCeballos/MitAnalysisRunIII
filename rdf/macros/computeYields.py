@@ -56,6 +56,10 @@ if __name__ == "__main__":
     elif('wwAna' in path):
         histo.append(42)
         signalDict.append(plotCategory("kPlotNonPrompt"))
+        histo.append(71)
+        signalDict.append(plotCategory("kPlotNonPrompt"))
+        histo.append(72)
+        signalDict.append(plotCategory("kPlotNonPrompt"))
         histo.append(43)
         signalDict.append(plotCategory("kPlotqqWW"))
         histo.append(44)

@@ -253,8 +253,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfssx0catElectronMomDown[x] = dfssx0catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
 
         dfssx0cat[x] = dfssx0cat[x].Filter("mll > 85 && ptl1 > 25 && ptl2 > 20", "mll > 85 && ptl1 > 25 && ptl2 > 20")
-        dfssx1cat[x] = dfssx1cat[x].Filter("mll > 85 && ptl1 > 25 && ptl2 > 20", "mll > 85 && ptl1 > 25 && ptl2 > 20")
-        dfssx2cat[x] = dfssx2cat[x].Filter("mll > 85 && ptl1 > 25 && ptl2 > 20", "mll > 85 && ptl1 > 25 && ptl2 > 20")
+        dfssx1cat[x] = dfssx1cat[x].Filter("mll > 25 && ptl1 > 25 && ptl2 > 20", "mll > 25 && ptl1 > 25 && ptl2 > 20")
+        dfssx2cat[x] = dfssx2cat[x].Filter("mll > 25 && ptl1 > 25 && ptl2 > 20", "mll > 25 && ptl1 > 25 && ptl2 > 20")
 
         dfwwx0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets"))
         dfwwx0catMuonMomUp      .append(dfwwx0cat[x])
@@ -395,8 +395,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dftop0catElectronMomUp  [x] = dftop0catElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
         dftop0catElectronMomDown[x] = dftop0catElectronMomDown[x].Filter("nbtag_goodbtag_Jet_bjet == 1")
 
-        histo[69][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), 50, 85, 385), "mll","weightWW")
-        histo[70][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), 50, 85, 385), "mll","weightWW")
+        histo[69][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), 60, 25, 385), "mll","weightWW")
+        histo[70][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), 60, 25, 385), "mll","weightWW")
+        dfssx1cat[x] = dfssx1cat[x].Filter("mll > 115", "mll > 115")
+        dfssx2cat[x] = dfssx2cat[x].Filter("mll > 115", "mll > 115")
         histo[71][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(71,x), "histo_{0}_{1}".format(71,x), 4,-0.5,3.5), "ngood_jets","weightWW")
         histo[72][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(72,x), "histo_{0}_{1}".format(72,x), 4,-0.5,3.5), "ngood_jets","weightWW")
 
