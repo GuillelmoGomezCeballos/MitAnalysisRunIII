@@ -75,7 +75,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
                   .Filter("nLoose == 2","Only two loose leptons")
                   .Filter("nFake == 2","Two fake leptons")
 
-                  .Filter("Sum(fake_mu) == 1 && Sum(fake_el) == 1","e-mu events")
+                  .Filter("(Sum(fake_mu) == 1 && Sum(fake_el) == 1) or (Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0)","e-mu events")
 
                   )
 
@@ -179,6 +179,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfhwwxcat = []
     dftop1cat = []
 
+    dfssx1cat = []
+    dfssx2cat = []
+
     dfssx0catMuonMomUp       = []
     dfssx0catMuonMomDown     = []
     dfssx0catElectronMomUp   = []
@@ -222,13 +225,15 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         else:
             dfcat[x] = dfcat[x].Define("theGenCat", "{0}".format(0))
 
-        dfssx0cat.append(dfcat[x].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0", "Same-sign leptons"))
+        dfssx0cat.append(dfcat[x].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0 && Sum(fake_mu) == 1 && Sum(fake_el) == 1", "Same-sign leptons"))
+        dfssx1cat.append(dfcat[x].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0 && Sum(fake_mu) == 2 && Sum(fake_el) == 0", "Same-sign muons"))
+        dfssx2cat.append(dfcat[x].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0 && Sum(fake_mu) == 0 && Sum(fake_el) == 2", "Same-sign electrons"))
 
         histo[ 0][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x), 60, 20, 320), "mll","weightWW")
         histo[ 1][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format( 1,x), "histo_{0}_{1}".format( 1,x), 50,  0, 200), "ptll","weightWW")
         histo[ 2][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format( 2,x), "histo_{0}_{1}".format( 2,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjet","weightWW")
 
-        dfcat[x] = dfcat[x].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons")
+        dfcat[x] = dfcat[x].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && Sum(fake_mu) == 1 && Sum(fake_el) == 1", "Opposite-sign leptons")
 
         histo[ 3][x] = dfcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 60, 20, 320), "mll","weightWW")
         histo[ 4][x] = dfcat[x].Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 50,  0, 200), "ptll","weightWW")
@@ -239,6 +244,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfssx0catMuonMomDown    .append(dfssx0cat[x])
         dfssx0catElectronMomUp  .append(dfssx0cat[x])
         dfssx0catElectronMomDown.append(dfssx0cat[x])
+        dfssx1cat[x] = dfssx1cat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
+        dfssx2cat[x] = dfssx2cat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
 
         dfssx0catMuonMomUp      [x] = dfssx0catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp	 > 25 && ptl2MuonMomUp      > 20")
         dfssx0catMuonMomDown    [x] = dfssx0catMuonMomDown    [x].Filter("mllMuonMomDown     > 85 && ptl1MuonMomDown	 > 25 && ptl2MuonMomDown    > 20")
@@ -246,6 +253,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfssx0catElectronMomDown[x] = dfssx0catElectronMomDown[x].Filter("mllElectronMomDown > 85 && ptl1ElectronMomDown > 25 && ptl2ElectronMomDown> 20")
 
         dfssx0cat[x] = dfssx0cat[x].Filter("mll > 85 && ptl1 > 25 && ptl2 > 20", "mll > 85 && ptl1 > 25 && ptl2 > 20")
+        dfssx1cat[x] = dfssx1cat[x].Filter("mll > 85 && ptl1 > 25 && ptl2 > 20", "mll > 85 && ptl1 > 25 && ptl2 > 20")
+        dfssx2cat[x] = dfssx2cat[x].Filter("mll > 85 && ptl1 > 25 && ptl2 > 20", "mll > 85 && ptl1 > 25 && ptl2 > 20")
 
         dfwwx0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets"))
         dfwwx0catMuonMomUp      .append(dfwwx0cat[x])
@@ -385,6 +394,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dftop0catMuonMomDown    [x] = dftop0catMuonMomDown    [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
         dftop0catElectronMomUp  [x] = dftop0catElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
         dftop0catElectronMomDown[x] = dftop0catElectronMomDown[x].Filter("nbtag_goodbtag_Jet_bjet == 1")
+
+        histo[69][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), 50, 85, 385), "mll","weightWW")
+        histo[70][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), 50, 85, 385), "mll","weightWW")
+        histo[71][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(71,x), "histo_{0}_{1}".format(71,x), 4,-0.5,3.5), "ngood_jets","weightWW")
+        histo[72][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(72,x), "histo_{0}_{1}".format(72,x), 4,-0.5,3.5), "ngood_jets","weightWW")
 
         if(makeDataCards == True):
             BinXF = 4
