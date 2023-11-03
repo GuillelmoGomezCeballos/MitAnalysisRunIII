@@ -166,7 +166,20 @@ def selectionJetMet(df,year,bTagSel,isData,count):
                      .Define("clean_Jet_ptJerUp"  , "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,+1)")
                      .Define("clean_Jet_ptJerDown", "compute_JSON_JER_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_genJetIdx,GenJet_pt,Rho_fixedGridRhoFastjetAll,-1)")
                      .Define("newMET", "compute_JSON_MET_Unc(MET_pt,MET_phi,RawMET_pt,RawMET_phi,clean_Jet_chEmEF,clean_Jet_neEmEF,clean_Jet_muonSubtrFactor,clean_Jet_rawFactor,clean_Jet_pt,clean_Jet_ptDef,clean_Jet_eta,clean_Jet_phi,clean_Jet_mass,-1)")
-                     .Filter("newMET > 0","Good newMET")
+                     .Define("thePuppiMET_phi"               ,"PuppiMET_phi")
+                     .Define("thePuppiMET_phiJERUp"          ,"PuppiMET_phiJERUp")
+                     .Define("thePuppiMET_phiJERDown"        ,"PuppiMET_phiJERDown")
+                     .Define("thePuppiMET_phiJESUp"          ,"PuppiMET_phiJESUp")
+                     .Define("thePuppiMET_phiJESDown"        ,"PuppiMET_phiJESDown")
+                     .Define("thePuppiMET_phiUnclusteredUp"  ,"PuppiMET_phiUnclusteredUp")
+                     .Define("thePuppiMET_phiUnclusteredDown","PuppiMET_phiUnclusteredDown")
+                     .Define("thePuppiMET_pt"                ,"PuppiMET_pt")
+                     .Define("thePuppiMET_ptJERUp"           ,"PuppiMET_ptJERUp")
+                     .Define("thePuppiMET_ptJERDown"         ,"PuppiMET_ptJERDown")
+                     .Define("thePuppiMET_ptJESUp"           ,"PuppiMET_ptJESUp")
+                     .Define("thePuppiMET_ptJESDown"         ,"PuppiMET_ptJESDown")
+                     .Define("thePuppiMET_ptUnclusteredUp"   ,"PuppiMET_ptUnclusteredUp")
+                     .Define("thePuppiMET_ptUnclusteredDown" ,"PuppiMET_ptUnclusteredDown")
                      )
 
     else:
@@ -176,6 +189,20 @@ def selectionJetMet(df,year,bTagSel,isData,count):
                      .Define("clean_Jet_ptJesDown", "clean_Jet_ptDef")
                      .Define("clean_Jet_ptJerUp"  , "clean_Jet_ptDef")
                      .Define("clean_Jet_ptJerDown", "clean_Jet_ptDef")
+                     .Define("thePuppiMET_phi"               ,"PuppiMET_phi")
+                     .Define("thePuppiMET_phiJERUp"          ,"PuppiMET_phi")
+                     .Define("thePuppiMET_phiJERDown"        ,"PuppiMET_phi")
+                     .Define("thePuppiMET_phiJESUp"          ,"PuppiMET_phi")
+                     .Define("thePuppiMET_phiJESDown"        ,"PuppiMET_phi")
+                     .Define("thePuppiMET_phiUnclusteredUp"  ,"PuppiMET_phi")
+                     .Define("thePuppiMET_phiUnclusteredDown","PuppiMET_phi")
+                     .Define("thePuppiMET_pt"                ,"PuppiMET_pt")
+                     .Define("thePuppiMET_ptJERUp"           ,"PuppiMET_pt")
+                     .Define("thePuppiMET_ptJERDown"         ,"PuppiMET_pt")
+                     .Define("thePuppiMET_ptJESUp"           ,"PuppiMET_pt")
+                     .Define("thePuppiMET_ptJESDown"         ,"PuppiMET_pt")
+                     .Define("thePuppiMET_ptUnclusteredUp"   ,"PuppiMET_pt")
+                     .Define("thePuppiMET_ptUnclusteredDown" ,"PuppiMET_pt")
                      )
 
     dftag = makeJES(dftag,year,""       ,bTagSel)
@@ -587,7 +614,7 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
 
 def selectionDAWeigths(df,year,PDType):
     dftag =(df.Define("PDType","\"{0}\"".format(PDType))
-              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,fake_Electron_pt,fake_Electron_eta,tight_el)")
+              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
               .Define("weight","weightFake*1.0")
               .Define("weight0","1.0")
               .Define("weight1","weightFake*1.0")
@@ -598,6 +625,10 @@ def selectionDAWeigths(df,year,PDType):
               .Define("weightNoLepSF","weightFake*1.0")
               .Define("weightBTag","weight")
               .Define("weightNoBTag","weight")
+              .Define("weightFakeAltm0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,5,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
+              .Define("weightFakeAltm1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,1,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
+              .Define("weightFakeAlte0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,5)")
+              .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,1)")
               )
 
     return dftag
@@ -645,7 +676,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
               .Define("ELEWP","\"{0}\"".format(ELEWP))
               .Define("PHOWP","\"Medium\"")
 
-              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,fake_Electron_pt,fake_Electron_eta,tight_el)")
+              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
 
               .Define("weightBtagSF","compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"central\",0,{0})".format(bTagSel))
 
@@ -729,12 +760,16 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weightPUSF_Up"  ,"weight/weightPURecoSF*compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,1)")
                  .Define("weightPUSF_Down","weight/weightPURecoSF*compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,2)")
 
-
                  .Define("weightPhoSFJSON","compute_JSON_PHO_SFs(PHOYEAR,\"sf\",PHOWP,good_Photons_pt,good_Photons_eta)")
                  .Filter("weightPhoSFJSON > 0","weightPhoSFJSON > 0")
 
                  .Define("weightTauSFJSON","compute_JSON_TAU_SFs(good_Tau_pt,good_Tau_eta,good_Tau_decayMode,good_Tau_genPartFlav,\"nom\")")
                  .Filter("weightTauSFJSON > 0","weightTauSFJSON > 0")
+
+                 .Define("weightFakeAltm0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,5,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
+                 .Define("weightFakeAltm1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,1,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
+                 .Define("weightFakeAlte0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,5)")
+                 .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,1)")
 
                  )
 

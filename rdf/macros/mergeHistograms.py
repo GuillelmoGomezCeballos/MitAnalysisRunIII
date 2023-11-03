@@ -36,7 +36,7 @@ if __name__ == "__main__":
     inputDataFolders = glob.glob(paths_to_watch)
     print("Total found files: {0}".format(len(inputDataFolders)))
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 1200
+    nCat, nHisto, nhistoNonPrompt = plotCategory("kPlotCategories"), 1200, 50
 
     myfile = [0 for x in range(len(inputDataFolders))]
     for nf in range(len(inputDataFolders)):
@@ -44,6 +44,26 @@ if __name__ == "__main__":
 
     if(not os.path.exists(output)):
         os.makedirs(output)
+
+    # 1DNonPrompt
+    outputFileName = "{0}/{1}_{2}_{3}.root".format(output,os.path.basename(path),year,"nonprompt")
+    print("Making 1D {0}".format(outputFileName))
+    outputFile = TFile(outputFileName, "RECREATE")
+    outputFile.cd()
+    histo = [0 for x in range(nhistoNonPrompt)]
+    for nc in range(nhistoNonPrompt):
+        histo[nc] = myfile[0].Get("histoNonPrompt_{0}".format(nc))
+        for nf in range(1,len(inputDataFolders)):
+            if(histo[nc]):
+                histo[nc].Add(myfile[nf].Get("histoNonPrompt_{0}".format(nc)))
+        if(histo[nc]):
+            histo[nc].SetNameTitle("histoNonPrompt_{0}".format(nc),"histoNonPrompt_{0}".format(nc))
+            histo[nc].SetBinContent(histo[nc].GetNbinsX(),histo[nc].GetBinContent(histo[nc].GetNbinsX())+histo[nc].GetBinContent(histo[nc].GetNbinsX()+1))
+            histo[nc].SetBinError  (histo[nc].GetNbinsX(),pow(pow(histo[nc].GetBinError(histo[nc].GetNbinsX()),2)+pow(histo[nc].GetBinError(histo[nc].GetNbinsX()+1),2),0.5))
+            histo[nc].SetBinContent(histo[nc].GetNbinsX()+1,0.0)
+            histo[nc].SetBinError  (histo[nc].GetNbinsX()+1,0.0)
+            histo[nc].Write()
+    outputFile.Close()
 
     for nh in range(nHisto):
         # 1D

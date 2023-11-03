@@ -18,6 +18,8 @@ if __name__ == "__main__":
     format = "pdf"
     isPseudoData = 0
 
+    doSavePtEtaHist = False
+
     valid = ['path=', "year=", 'inputDir=', 'anaType=', 'isPseudoData=', 'format=', 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
@@ -116,11 +118,11 @@ if __name__ == "__main__":
 
     for thePlot in range(2):
         for j in range(numberOfSel):
-            histoFakeEffSelEtaPt[thePlot][j] = TH2D("histoFakeEffSelEtaPt_{0}_{1}".format(thePlot,j), "histoFakeEffSelEtaPt_{0}_{1}".format(thePlot,j), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins)
+            histoFakeEffSelEtaPt[thePlot][j] = TH2D("histoFakeEffSelEtaPt_{0}_{1}_{2}_anaType{3}".format(thePlot,j,path.split("fillhisto_")[1],anaType), "histoFakeEffSelEtaPt_{0}_{1}".format(thePlot,j), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins)
             for neta in range(len(xEtabins)-1):
-                histoFakeEffSelPt[thePlot][j][neta] = TH1D("histoFakeEffSelPt_{0}_{1}_{2}".format(thePlot,j,neta), "histoFakeEffSelPt_{0}_{1}_{2}".format(thePlot,j,neta), len(xPtbins)-1, xPtbins)
+                histoFakeEffSelPt[thePlot][j][neta] = TH1D("histoFakeEffSelPt_{0}_{1}_{2}_{3}_anaType{4}".format(thePlot,j,neta,path.split("fillhisto_")[1],anaType), "histoFakeEffSelPt_{0}_{1}_{2}".format(thePlot,j,neta), len(xPtbins)-1, xPtbins)
             for npt in range(len(xPtbins)-1):
-                histoFakeEffSelEta[thePlot][j][npt] = TH1D("histoFakeEffSelEta_{0}_{1}_{2}".format(thePlot,j,npt), "histoFakeEffSelEta_{0}_{1}_{2}".format(thePlot,j,npt), len(xEtabins)-1, xEtabins)
+                histoFakeEffSelEta[thePlot][j][npt] = TH1D("histoFakeEffSelEta_{0}_{1}_{2}_{3}_anaType{4}".format(thePlot,j,npt,path.split("fillhisto_")[1],anaType), "histoFakeEffSelEta_{0}_{1}_{2}".format(thePlot,j,npt), len(xEtabins)-1, xEtabins)
 
     fileFakeRateName = "histoFakeEtaPt_{0}_{1}_anaType{2}.root".format(path.split("fillhisto_")[1],year,anaType)
     outFileFakeRate = TFile(fileFakeRateName,"recreate")
@@ -167,16 +169,13 @@ if __name__ == "__main__":
 
             histoFakeEffSelEtaPt[thePlot][nsel].Write()
             histoFakeEffSelEtaPt[thePlot][nsel].SetDirectory(0)
-            for neta in range(len(xEtabins)-1):
-                histoFakeEffSelPt[thePlot][nsel][neta].Write()
-                histoFakeEffSelPt[thePlot][nsel][neta].SetDirectory(0)
-            for npt in range(len(xEtabins)-1):
-                histoFakeEffSelEta[thePlot][nsel][npt].Write()
-                histoFakeEffSelEta[thePlot][nsel][npt].SetDirectory(0)
-            #json = ROOT.TBufferJSON.ConvertToJSON(histoFakeEffSelEtaPt[thePlot][nsel])
-            #f = open("fakeRate_{0}_{1}.json".format(thePlot,nsel), "w")
-            #f.write(json.Data())
-            #f.close()
+            if(doSavePtEtaHist == True):
+              for neta in range(len(xEtabins)-1):
+                  histoFakeEffSelPt[thePlot][nsel][neta].Write()
+                  histoFakeEffSelPt[thePlot][nsel][neta].SetDirectory(0)
+              for npt in range(len(xEtabins)-1):
+                  histoFakeEffSelEta[thePlot][nsel][npt].Write()
+                  histoFakeEffSelEta[thePlot][nsel][npt].SetDirectory(0)
     outFileFakeRate.Close()
 
     canvasEta = [0 for y in range(numberOfSel)]
