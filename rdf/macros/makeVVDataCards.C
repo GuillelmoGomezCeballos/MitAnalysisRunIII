@@ -21,9 +21,10 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
 
   if(fidAna < 0 || fidAna > 2) printf("Wrong fidAna(%d)\n",fidAna);
 
+  double systValue;
   TFile *inputFile;
   TFile *outputFile;
-  const int nSystTotal = 141;
+  const int nSystTotal = 147;
 
   TH1D *histo_Baseline[nPlotCategories];
   TH1D *histo_QCDScaleUp[nPlotCategories];
@@ -75,7 +76,12 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   nameSyst[138] = "MuonMomDown";
   nameSyst[139] = "ElectronMomUp";
   nameSyst[140] = "ElectronMomDown";
-
+  nameSyst[141] = "metJERUp";
+  nameSyst[142] = "metJERDown";
+  nameSyst[143] = "metJESUp";
+  nameSyst[144] = "metJESDown";
+  nameSyst[145] = "metUnclusteredUp";
+  nameSyst[146] = "metUnclusteredDown";
 
   int BinXF = 4; double minXF = -0.5; double maxXF = 3.5;    
 
@@ -185,6 +191,8 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
         systValue = histo_Syst[134][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[133][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
         // Jer
+        systValue = (histo_Syst[136][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/5.0;
+        histo_Syst[136][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)+systValue);
         systValue = histo_Syst[136][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[135][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
         // MuonMom
@@ -193,9 +201,53 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
         // ElectronMom
         systValue = histo_Syst[140][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[139][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // metJER
+        systValue = histo_Syst[142][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[141][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // metJES
+        systValue = histo_Syst[144][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[143][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // metUnclustered
+        systValue = histo_Syst[146][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[145][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
       }
     } // loop over bins
   } // loop over categories
+
+  // Begin Nonprompt study
+  const int nNonPromptSyst = 8;
+  TString namenonPromptSyst[nSystTotal];
+  namenonPromptSyst[ 0] = "nonPromptMuonAlt0Up";
+  namenonPromptSyst[ 1] = "nonPromptMuonAlt1Up";
+  namenonPromptSyst[ 2] = "nonPromptElectronAlt0Up";
+  namenonPromptSyst[ 3] = "nonPromptElectronAlt1Up";
+  namenonPromptSyst[ 4] = "nonPromptMuonAlt0Down";
+  namenonPromptSyst[ 5] = "nonPromptMuonAlt1Down";
+  namenonPromptSyst[ 6] = "nonPromptElectronAlt0Down";
+  namenonPromptSyst[ 7] = "nonPromptElectronAlt1Down";
+  TH1D *histo_InputNonPromtUnc[4];
+  TH1D *histo_NonPromtUnc[nNonPromptSyst];
+  if(anaSel.Contains("wzAnalysis")){
+    inputFile = new TFile(Form("%s/fillhisto_%s_%d_nonprompt.root",InputDir.Data(),anaSel.Data(),year), "read");
+    int startH = 0; if(fidAna == 1) startH = 4;
+    for(int j=0; j<4; j++){
+      histo_InputNonPromtUnc[j] = (TH1D*)inputFile->Get(Form("histoNonPrompt_%d", j+startH));
+      histo_NonPromtUnc[j+0] = (TH1D*)histo_InputNonPromtUnc[j]->Clone(Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j+0].Data())); histo_NonPromtUnc[j+0]->SetDirectory(0);
+      histo_NonPromtUnc[j+4] = (TH1D*)histo_InputNonPromtUnc[j]->Clone(Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j+4].Data())); histo_NonPromtUnc[j+4]->SetDirectory(0);
+    }
+    delete inputFile;
+
+    for(int j=0; j<4; j++){
+      for(int nb=1; nb<=histo_Baseline[kPlotNonPrompt]->GetNbinsX(); nb++){
+        if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
+          systValue = histo_NonPromtUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotNonPrompt]->GetBinContent(nb);
+          printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
+          if(systValue > 0) histo_NonPromtUnc[j+4]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
+        }
+      }
+    }
+  }
+  // End Nonprompt study
 
   TString additionalSuffix = "";
   if(whichAna != 0){ 
@@ -219,6 +271,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
       histo_PDFDown[npdf][ic]->Write();
     }
   }
+  if(anaSel.Contains("wzAnalysis")) for(int j=0; j<8; j++) histo_NonPromtUnc[j]->Write();
   outputFile->Close();
 
   // Filling datacards txt file
@@ -272,23 +325,61 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_fakee_norm	 lnN	 ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
-    else		     newcardShape << Form("- "); 
-  }
-  newcardShape << Form("\n");
+  if(anaSel.Contains("wzAnalysis")){
+    //newcardShape << Form("CMS_fakee_norm	 lnN	 ");
+    //for (int ic=0; ic<nPlotCategories; ic++){
+    //  if(!histo_Baseline[ic]) continue;
+    //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    //  if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
+    //  else		     newcardShape << Form("- "); 
+    //}
+    //newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_fakem_norm   lnN     ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
-    else                     newcardShape << Form("- ");
+    //newcardShape << Form("CMS_fakem_norm   lnN     ");
+    //for (int ic=0; ic<nPlotCategories; ic++){
+    //  if(!histo_Baseline[ic]) continue;
+    //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    //  if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
+    //  else                     newcardShape << Form("- ");
+    //}
+    //newcardShape << Form("\n");
+
+    newcardShape << Form("nonPromptMuonAlt0 shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+      else                     newcardShape << Form("- "); 
+    }
+    newcardShape << Form("\n");
+
+    newcardShape << Form("nonPromptMuonAlt1 shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+      else                     newcardShape << Form("- "); 
+    }
+    newcardShape << Form("\n");
+
+    newcardShape << Form("nonPromptElectronAlt0 shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+      else                     newcardShape << Form("- "); 
+    }
+    newcardShape << Form("\n");
+
+    newcardShape << Form("nonPromptElectronAlt1 shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+      else                     newcardShape << Form("- "); 
+    }
+    newcardShape << Form("\n");
   }
-  newcardShape << Form("\n");
 
   int yearLumi = year;
   if(year == 20220 || year == 20221) yearLumi = 2022;
@@ -429,6 +520,35 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
+  if(anaSel.Contains("wzAnalysis")){
+    newcardShape << Form("metJER shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else		     newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
+
+    newcardShape << Form("metJES shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else		     newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
+
+    newcardShape << Form("metUnclustered shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else		     newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
+  }
+
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic== kPlotData || ic == kPlotNonPrompt || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     newcardShape << Form("QCDScale_%s_ACCEPT	shape	",plotBaseNames[ic].Data());
@@ -462,9 +582,9 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     newcardShape << Form("\n");
   }
 
-  newcardShape << Form("CMS_ww_wznorm  rateParam * %s 1 [0.1,3.9]\n",plotBaseNames[kPlotWZ].Data());
-  newcardShape << Form("CMS_ww_zznorm  rateParam * %s 1 [0.1,1.9]\n",plotBaseNames[kPlotZZ].Data());
-  newcardShape << Form("CMS_ww_wzbnorm rateParam * %s 1 [0.1,1.9]\n",plotBaseNames[kPlotTVX].Data());
+  //newcardShape << Form("CMS_ww_wznorm  rateParam * %s 1 [0.1,3.9]\n",plotBaseNames[kPlotWZ].Data());
+  //newcardShape << Form("CMS_ww_zznorm  rateParam * %s 1 [0.1,1.9]\n",plotBaseNames[kPlotZZ].Data());
+  //newcardShape << Form("CMS_ww_wzbnorm rateParam * %s 1 [0.1,1.9]\n",plotBaseNames[kPlotTVX].Data());
 
   newcardShape << Form("ch%d autoMCStats 0\n",fidAna);
 

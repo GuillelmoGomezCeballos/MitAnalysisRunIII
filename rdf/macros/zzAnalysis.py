@@ -287,6 +287,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[startF+139][x]    = makeFinalVariable(dfzzcatMuonMomDown   [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,139)
             histo[startF+140][x]    = makeFinalVariable(dfzzcatElectronMomUp  [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,140)
             histo[startF+141][x]    = makeFinalVariable(dfzzcatElectronMomDown[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,141)
+            histo[startF+142][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,142)
+            histo[startF+143][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,143)
+            histo[startF+144][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,144)
+            histo[startF+145][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,145)
+            histo[startF+146][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,146)
+            histo[startF+147][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,147)
 
     report = []
     for x in range(nCat):

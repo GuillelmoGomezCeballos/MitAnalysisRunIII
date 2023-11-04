@@ -46,6 +46,7 @@ if __name__ == "__main__":
         os.makedirs(output)
 
     # 1DNonPrompt
+    isHistoNonPromptUsed = False
     outputFileName = "{0}/{1}_{2}_{3}.root".format(output,os.path.basename(path),year,"nonprompt")
     print("Making 1D {0}".format(outputFileName))
     outputFile = TFile(outputFileName, "RECREATE")
@@ -57,6 +58,7 @@ if __name__ == "__main__":
             if(histo[nc]):
                 histo[nc].Add(myfile[nf].Get("histoNonPrompt_{0}".format(nc)))
         if(histo[nc]):
+            isHistoNonPromptUsed = True
             histo[nc].SetNameTitle("histoNonPrompt_{0}".format(nc),"histoNonPrompt_{0}".format(nc))
             histo[nc].SetBinContent(histo[nc].GetNbinsX(),histo[nc].GetBinContent(histo[nc].GetNbinsX())+histo[nc].GetBinContent(histo[nc].GetNbinsX()+1))
             histo[nc].SetBinError  (histo[nc].GetNbinsX(),pow(pow(histo[nc].GetBinError(histo[nc].GetNbinsX()),2)+pow(histo[nc].GetBinError(histo[nc].GetNbinsX()+1),2),0.5))
@@ -64,6 +66,8 @@ if __name__ == "__main__":
             histo[nc].SetBinError  (histo[nc].GetNbinsX()+1,0.0)
             histo[nc].Write()
     outputFile.Close()
+    if(isHistoNonPromptUsed == False):
+        os.remove(outputFileName)
 
     for nh in range(nHisto):
         # 1D
