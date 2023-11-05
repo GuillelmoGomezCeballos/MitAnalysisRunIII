@@ -251,11 +251,11 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   const int nNonPromptSyst = 8;
   TString namenonPromptSyst[nSystTotal];
   namenonPromptSyst[ 0] = "nonPromptMuonAlt0Up";
-  namenonPromptSyst[ 1] = "nonPromptMuonAlt1Up";
+  namenonPromptSyst[ 1] = "nonPromptMuonAlt1Down";
   namenonPromptSyst[ 2] = "nonPromptElectronAlt0Up";
   namenonPromptSyst[ 3] = "nonPromptElectronAlt1Up";
   namenonPromptSyst[ 4] = "nonPromptMuonAlt0Down";
-  namenonPromptSyst[ 5] = "nonPromptMuonAlt1Down";
+  namenonPromptSyst[ 5] = "nonPromptMuonAlt1Up";
   namenonPromptSyst[ 6] = "nonPromptElectronAlt0Down";
   namenonPromptSyst[ 7] = "nonPromptElectronAlt1Down";
   TH1D *histo_NonPromtUnc[nNonPromptSyst];
