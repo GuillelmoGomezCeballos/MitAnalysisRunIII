@@ -14,11 +14,14 @@
 
 #include "../makePlots/common.h"
 
-void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1001", int year = 20221){
+void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1001", int year = 20221, bool isFiducial = false){
   double WWNNLO_resumSyst[4] = {0.986466,1.034869,1.015661,1.015661};
   double WWNNLO_scaleSyst[4] = {1.027886,0.955565,0.939845,0.939845};
 
   if(fidAna <= 0 || fidAna >= 5) printf("Wrong fidAna(%d)\n",fidAna);
+
+  TString addFiducialName = "";
+  if(isFiducial == true) addFiducialName = "_isFiducial";
 
   double systValue;
   TFile *inputFile;
@@ -291,7 +294,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     additionalSuffix = "_alt";
   }
 
-  TString outputLimits = Form("output_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna-1,additionalSuffix.Data());
+  TString outputLimits = Form("output_%s_%d_bin%d%s%s.root",anaSel.Data(),year,fidAna-1,additionalSuffix.Data(),addFiducialName.Data());
   outputFile = new TFile(outputLimits, "RECREATE");
   outputFile->cd();
   for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
@@ -317,7 +320,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
   // Filling datacards txt file
   char outputLimitsCard[200];  					  
-  sprintf(outputLimitsCard,"datacard_%s_%d_bin%d%s.txt",anaSel.Data(),year,fidAna-1,additionalSuffix.Data());
+  sprintf(outputLimitsCard,"datacard_%s_%d_bin%d%s%s.txt",anaSel.Data(),year,fidAna-1,additionalSuffix.Data(),addFiducialName.Data());
   ofstream newcardShape;
   newcardShape.open(outputLimitsCard);
   newcardShape << Form("imax * number of channels\n");
@@ -577,19 +580,21 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
       newcardShape << Form("\n");
   } 
 
-  newcardShape << Form("QCDScale_WW_ACCEPT shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic != kPlotSignal0 &&
-            ic != kPlotSignal1 &&
-            ic != kPlotSignal2 &&
-            ic != kPlotSignal3 &&
-            ic != kPlotqqWW
-            ) newcardShape << Form("- ");
-    else      newcardShape << Form("1.0 ");
+  if(isFiducial == false){
+    newcardShape << Form("QCDScale_WW_ACCEPT shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if     (ic != kPlotSignal0 &&
+              ic != kPlotSignal1 &&
+              ic != kPlotSignal2 &&
+              ic != kPlotSignal3 &&
+              ic != kPlotqqWW
+              ) newcardShape << Form("- ");
+      else      newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
   }
-  newcardShape << Form("\n");
 
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic== kPlotData || ic == kPlotNonPrompt || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -603,19 +608,21 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
       newcardShape << Form("\n");
   } 
 
-  newcardShape << Form("PS_WW_ACCEPT shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic != kPlotSignal0 &&
-            ic != kPlotSignal1 &&
-            ic != kPlotSignal2 &&
-            ic != kPlotSignal3 &&
-            ic != kPlotqqWW
-            ) newcardShape << Form("- ");
-    else      newcardShape << Form("1.0 ");
+  if(isFiducial == false){
+    newcardShape << Form("PS_WW_ACCEPT shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if     (ic != kPlotSignal0 &&
+              ic != kPlotSignal1 &&
+              ic != kPlotSignal2 &&
+              ic != kPlotSignal3 &&
+              ic != kPlotqqWW
+              ) newcardShape << Form("- ");
+      else      newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
   }
-  newcardShape << Form("\n");
 
   newcardShape << Form("WWNNLO_resum shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
@@ -653,6 +660,14 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
       if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else if(isFiducial == true && 
+           (ic == kPlotqqWW ||
+            ic == kPlotggWW ||
+            ic == kPlotSignal0 ||
+            ic == kPlotSignal1 ||
+            ic == kPlotSignal2 ||
+            ic == kPlotSignal3
+            ))                 newcardShape << Form("- ");
       else                     newcardShape << Form("1.0 ");
     }
     newcardShape << Form("\n");
