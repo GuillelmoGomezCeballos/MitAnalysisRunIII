@@ -527,10 +527,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo2D[startF+141][x]    = makeFinalVariable2D(dfwwx0catElectronMomDown[x].Filter("ngood_jets==0"),"mllElectronMomDown","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,141)
             if(x == plotCategory("kPlotNonPrompt")):
                 startNonPrompt = 20
-                histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAltm0")
-                histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAltm0")
+                histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAltm1")
+                histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAlte0")
+                histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAlte1")
 
             startF = 900
             for nv in range(0,134):
@@ -545,10 +545,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo2D[startF+141][x]    = makeFinalVariable2D(dfwwx0catElectronMomDown[x].Filter("ngood_jets==1"),"mllElectronMomDown","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,141)
             if(x == plotCategory("kPlotNonPrompt")):
                 startNonPrompt = 24
-                histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAltm0")
-                histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAltm0")
+                histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAltm1")
+                histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAlte0")
+                histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAlte1")
 
             startF = 1050
             for nv in range(0,134):
@@ -563,10 +563,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo2D[startF+141][x]    = makeFinalVariable2D(dfwwx0catElectronMomDown[x].Filter("ngood_jets>=2"),"mllElectronMomDown","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,141)
             if(x == plotCategory("kPlotNonPrompt")):
                 startNonPrompt = 28
-                histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAltm0")
-                histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAltm0")
+                histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAltm1")
+                histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAlte0")
+                histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAlte1")
             """
 
     report = []

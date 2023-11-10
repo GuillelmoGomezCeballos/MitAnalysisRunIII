@@ -265,18 +265,33 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   for(int j=0; j<nNonPromptSyst; j++){
     histo_NonPromtUnc[j] = new TH1D(Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j].Data()), Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j].Data()), BinXF, minXF, maxXF);
   }
-  TH1D *histo_InputNonPromtUnc[20];
-  inputFile = new TFile(Form("%s/fillhisto_%s_%d_nonprompt.root",InputDir.Data(),anaSel.Data(),year), "read");
-  for(int j=0; j<20; j++){
-    histo_InputNonPromtUnc[j] = (TH1D*)inputFile->Get(Form("histoNonPrompt_%d", j));
-  }
-  for(int j=0; j<4; j++){
-    for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
-      histo_NonPromtUnc[j]->SetBinContent(nSel+1,histo_InputNonPromtUnc[j+nSel*4]->GetBinContent(fidAna));
-      histo_NonPromtUnc[j]->SetBinError  (nSel+1,histo_InputNonPromtUnc[j+nSel*4]->GetBinError  (fidAna));
+
+  if(whichAna == 0){ 
+    TH1D *histo_InputNonPromtUnc[20];
+    inputFile = new TFile(Form("%s/fillhisto_%s_%d_nonprompt.root",InputDir.Data(),anaSel.Data(),year), "read");
+    for(int j=0; j<20; j++){
+      histo_InputNonPromtUnc[j] = (TH1D*)inputFile->Get(Form("histoNonPrompt_%d", j));
+    }
+    for(int j=0; j<4; j++){
+      for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
+        histo_NonPromtUnc[j]->SetBinContent(nSel+1,histo_InputNonPromtUnc[j+nSel*4]->GetBinContent(fidAna));
+        histo_NonPromtUnc[j]->SetBinError  (nSel+1,histo_InputNonPromtUnc[j+nSel*4]->GetBinError  (fidAna));
+      }
+    }
+    delete inputFile;
+  } else {
+    TH1D *histo_InputNonPromtUnc[12];
+    inputFile = new TFile(Form("%s/fillhisto_%s_%d_nonprompt.root",InputDir.Data(),anaSel.Data(),year), "read");
+    for(int j=0; j<12; j++){
+      histo_InputNonPromtUnc[j] = (TH1D*)inputFile->Get(Form("histoNonPrompt_%d", 20+j));
+    }
+    for(int j=0; j<4; j++){
+      for(int nb=1; nb<=histo_InputNonPromtUnc[j]->GetNbinsX(); nb++){
+        histo_NonPromtUnc[j]->SetBinContent(nb,histo_InputNonPromtUnc[j+(fidAna-1)*4]->GetBinContent(nb));
+        histo_NonPromtUnc[j]->SetBinError  (nb,histo_InputNonPromtUnc[j+(fidAna-1)*4]->GetBinError  (nb));
+      }
     }
   }
-  delete inputFile;
 
   for(int j=0; j<4; j++){
     for(int nb=1; nb<=histo_Baseline[kPlotNonPrompt]->GetNbinsX(); nb++){
