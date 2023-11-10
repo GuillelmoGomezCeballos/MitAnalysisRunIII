@@ -952,6 +952,11 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"m_{ll}","GeV",Form("anaZ/fillhisto_wwAnalysis%d_%d_70.root",whichCondorJob,year),"ww_sel0_sse_mll",0,year,legendBSM.Data(),1.0,isBlinded,"Same-sign 2e region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("anaZ/fillhisto_wwAnalysis%d_%d_71.root",whichCondorJob,year),"ww_sel0_ssm_njets",0,year,legendBSM.Data(),1.0,isBlinded,"Same-sign 2#mu region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("anaZ/fillhisto_wwAnalysis%d_%d_72.root",whichCondorJob,year),"ww_sel0_sse_njets",0,year,legendBSM.Data(),1.0,isBlinded,"Same-sign 2e region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+
+    finalPlot(0,1,"p_{T}^{llp_{T}^{miss}}","GeV",Form("anaZ/fillhisto_wwAnalysis%d_%d_73.root",whichCondorJob,year),"ww_sel0_ssx_ptww",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{llp_{T}^{miss}}","GeV",Form("anaZ/fillhisto_wwAnalysis%d_%d_74.root",whichCondorJob,year),"ww_sel0_wwx_ptww",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{llp_{T}^{miss}}","GeV",Form("anaZ/fillhisto_wwAnalysis%d_%d_75.root",whichCondorJob,year),"ww_sel0_ztt_ptww",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{llp_{T}^{miss}}","GeV",Form("anaZ/fillhisto_wwAnalysis%d_%d_76.root",whichCondorJob,year),"ww_sel0_top_ptww",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
   }
   else if(nsel == "combine"){
     legendBSM="";

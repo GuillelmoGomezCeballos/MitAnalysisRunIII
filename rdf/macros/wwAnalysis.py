@@ -412,6 +412,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[71][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(71,x), "histo_{0}_{1}".format(71,x), 4,-0.5,3.5), "ngood_jets","weightWW")
         histo[72][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(72,x), "histo_{0}_{1}".format(72,x), 4,-0.5,3.5), "ngood_jets","weightWW")
 
+        histo[73][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(73,x), "histo_{0}_{1}".format(73,x), 50,  0, 200), "ptww","weightWW")
+        histo[74][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(74,x), "histo_{0}_{1}".format(74,x), 50,  0, 200), "ptww","weightWW")
+        histo[75][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(75,x), "histo_{0}_{1}".format(75,x), 30,  0, 200), "ptww","weightWW")
+        histo[76][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(76,x), "histo_{0}_{1}".format(76,x), 50,  0, 200), "ptww","weightWW")
+
         if(makeDataCards == True):
             BinXF = 4
             minXF = -0.5
@@ -513,7 +518,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             BinXF1 = 25
             minXF1 = 85
             maxXF1 = 385
-            """
+
             startF = 750
             for nv in range(0,134):
                 histo2D[startF+nv][x] = makeFinalVariable2D(dfwwx0cat[x].Filter("ngood_jets==0")       ,"mll","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,nv)
@@ -567,7 +572,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAltm1")
                 histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAlte0")
                 histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll","weightFakeAlte1")
-            """
 
     report = []
     for x in range(nCat):

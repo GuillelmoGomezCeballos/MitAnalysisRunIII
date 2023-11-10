@@ -1463,6 +1463,11 @@ float compute_nl_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
 	 else theVar = met_pt*sin(dPhilMETMin);
        }
      }
+     else if(var ==  9) {
+       PtEtaPhiMVector p4metmom = PtEtaPhiMVector(met_pt,0.0,met_phi,0.0);
+       p4metmom = p4metmom + p4momTot;
+       theVar = p4metmom.Pt();
+     }
    }
    return theVar;
 }
