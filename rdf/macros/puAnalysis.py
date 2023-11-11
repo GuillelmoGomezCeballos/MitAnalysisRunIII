@@ -62,7 +62,7 @@ def selectionWW(df,year,PDType,isData,count):
 
     return dftag
 
-def analysis(df,count,category,weight,year,PDType,isData,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
+def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
     xPtbins = array('d', [20,25,30,35,40,50,60,70,80,90,100,125,150,175,200,300,400,500,1000])
     xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
@@ -75,6 +75,12 @@ def analysis(df,count,category,weight,year,PDType,isData,nTheoryReplicas,genEven
     nCat, nHisto = plotCategory("kPlotCategories"), 200
     histo   = [[0 for x in range(nCat)] for y in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
+
+    ROOT.initHisto1D(histo_wwpt[0],3)
+    ROOT.initHisto1D(histo_wwpt[1],4)
+    ROOT.initHisto1D(histo_wwpt[2],5)
+    ROOT.initHisto1D(histo_wwpt[3],6)
+    ROOT.initHisto1D(histo_wwpt[4],7)
 
     ROOT.initJSONSFs(year)
 
@@ -107,6 +113,11 @@ def analysis(df,count,category,weight,year,PDType,isData,nTheoryReplicas,genEven
     		      .Define("kPlotSignal2", "{0}".format(plotCategory("kPlotSignal2")))
     		      .Define("kPlotSignal3", "{0}".format(plotCategory("kPlotSignal3")))
     		      .Define("theGenCat", "compute_gen_category({0},kPlotSignal0,kPlotSignal1,kPlotSignal2,kPlotSignal3,ngood_GenJets,ngood_GenDressedLeptons)-1.0".format(0))
+    		      .Define("theNNLOWeight0", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,0)")
+    		      .Define("theNNLOWeight1", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,1)")
+    		      .Define("theNNLOWeight2", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,2)")
+    		      .Define("theNNLOWeight3", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,3)")
+    		      .Define("theNNLOWeight4", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,4)")
                       )
 
     dfcat = (dfcat
@@ -218,6 +229,11 @@ def analysis(df,count,category,weight,year,PDType,isData,nTheoryReplicas,genEven
     for nv in range(21,134):
         histo[startF+nv][x] = makeFinalVariable(dfwwgen,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,nv)
 
+    histo[134][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(134,x), "histo_{0}_{1}".format(134,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight0")
+    histo[135][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(135,x), "histo_{0}_{1}".format(135,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight1")
+    histo[136][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(136,x), "histo_{0}_{1}".format(136,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight2")
+    histo[137][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(137,x), "histo_{0}_{1}".format(137,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight3")
+    histo[138][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(138,x), "histo_{0}_{1}".format(138,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight4")
 
     #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "PuppiMET_pt", "nbtag"]
     #dfcat.Snapshot("Events", "test.root", branches)
@@ -245,7 +261,7 @@ def analysis(df,count,category,weight,year,PDType,isData,nTheoryReplicas,genEven
 
     print("ending {0} / {1} / {2} / {3} / {4} / {5}".format(count,category,weight,year,PDType,isData))
 
-def readMCSample(sampleNOW, year, PDType, skimType):
+def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt):
 
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
@@ -284,8 +300,7 @@ def readMCSample(sampleNOW, year, PDType, skimType):
 
     genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]
     genEventSumPSRenorm = [1, 1, 1, 1]
-    if(SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotWZ") or
-       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKWZ")):
+    if(0):
         genEventSumLHEScaleRenorm[0] = genEventSumLHEScaleWeight[0] / genEventSumLHEScaleWeight[4]
         genEventSumLHEScaleRenorm[1] = genEventSumLHEScaleWeight[1] / genEventSumLHEScaleWeight[4]
         genEventSumLHEScaleRenorm[2] = genEventSumLHEScaleWeight[3] / genEventSumLHEScaleWeight[4]
@@ -305,7 +320,7 @@ def readMCSample(sampleNOW, year, PDType, skimType):
     print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
     print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
-    analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false",nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
+    analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false",histo_wwpt,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
 
 if __name__ == "__main__":
 
@@ -332,7 +347,18 @@ if __name__ == "__main__":
         if opt == "--process":
             process = int(arg)
 
+    histo_wwpt = []
+    fPtwwWeightPath = ROOT.TFile("data/MyRatioWWpTHistogramAll.root")
+    histo_wwpt.append(fPtwwWeightPath.Get("wwpt"))
+    histo_wwpt.append(fPtwwWeightPath.Get("wwpt_scaleup"))
+    histo_wwpt.append(fPtwwWeightPath.Get("wwpt_scaledown"))
+    histo_wwpt.append(fPtwwWeightPath.Get("wwpt_resumup"))
+    histo_wwpt.append(fPtwwWeightPath.Get("wwpt_resumdown"))
+    for x in range(5):
+        histo_wwpt[x].SetDirectory(0)
+    fPtwwWeightPath.Close()
+
     try:
-        readMCSample(process,year,"All", skimType)
+        readMCSample(process,year,"All", skimType, histo_wwpt)
     except Exception as e:
         print("FAILED {0}".format(e))

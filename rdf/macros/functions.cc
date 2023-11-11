@@ -74,6 +74,11 @@ TH2D histoBTVEffEtaPtBJ;
 TH1D puWeights;
 TH1D puWeightsUp;
 TH1D puWeightsDown;
+TH1D histo_wwpt;
+TH1D histo_wwpt_scaleup;
+TH1D histo_wwpt_scaledown;
+TH1D histo_wwpt_resumup;
+TH1D histo_wwpt_resumdown;
 auto corrSFs = MyCorrections(2018);
 
 void initHisto2D(TH2D h, int nsel){
@@ -116,6 +121,11 @@ void initHisto1D(TH1D h, int nsel){
   if     (nsel == 0) puWeights = h;
   else if(nsel == 1) puWeightsUp = h;
   else if(nsel == 2) puWeightsDown = h;
+  else if(nsel == 3) histo_wwpt = h;
+  else if(nsel == 4) histo_wwpt_scaleup = h;
+  else if(nsel == 5) histo_wwpt_scaledown = h;
+  else if(nsel == 6) histo_wwpt_resumup = h;
+  else if(nsel == 7) histo_wwpt_resumdown = h;
 }
 
 float getValFromTH1(const TH1& h, const float& x, const float& sumError=0.0) {
@@ -1597,6 +1607,45 @@ std::pair<float, float>  Minv2(const float& pt, const float& eta, const float& p
   std::pair<float, float> pairRECO = std::make_pair(Minv , ptPair);
   return pairRECO;
 
+}
+
+float compute_ptww_weight(const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_phi, const float met_pt, const float met_phi, int nsel){
+
+  if(GenDressedLepton_pt.size() < 2) return 1.0;
+
+  PtEtaPhiMVector p4mom = PtEtaPhiMVector(met_pt,0.0,met_phi,0.0);
+  for(unsigned int i=1; i<GenDressedLepton_pt.size(); i++){
+    p4mom = p4mom + PtEtaPhiMVector(GenDressedLepton_pt[i],0.0,GenDressedLepton_phi[i],0.0);
+  }
+  double ptww = std::min(p4mom.Pt(),499.999);
+
+  double sf = 1.0;
+  if     (nsel == 0){
+    const TH1D& hcorr = histo_wwpt;
+    sf = getValFromTH1(hcorr, ptww);
+  }
+  else if(nsel == 1){
+    const TH1D& hcorr = histo_wwpt_scaleup;
+    sf = getValFromTH1(hcorr, ptww);
+  }
+  else if(nsel == 2){
+    const TH1D& hcorr = histo_wwpt_scaledown;
+    sf = getValFromTH1(hcorr, ptww);
+  }
+  else if(nsel == 3){
+    const TH1D& hcorr = histo_wwpt_resumup;
+    sf = getValFromTH1(hcorr, ptww);
+  }
+  else if(nsel == 4){
+    const TH1D& hcorr = histo_wwpt_resumdown;
+    sf = getValFromTH1(hcorr, ptww);
+  }
+  else {
+    printf("WRONG option!\n");
+  }
+  bool debug = false;
+  if(debug) printf("ptww_weights(%lu): %f %f\n",GenDressedLepton_pt.size(),ptww,sf);
+  return sf;
 }
 
 // compute category
