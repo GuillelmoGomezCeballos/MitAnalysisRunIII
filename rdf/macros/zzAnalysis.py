@@ -108,7 +108,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 450
+    nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo    = [[0 for y in range(nCat)] for x in range(nHisto)]
 
     ROOT.initHisto2D(histoFakeEtaPt_mu[0],0)
@@ -279,8 +279,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             startF = 300
             for nv in range(0,134):
                 histo[startF+nv][x] = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,nv)
-            histo[startF+134][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJesUp"  ,theCat,startF,x,BinXF,minXF,maxXF,134)
-            histo[startF+135][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJesDown",theCat,startF,x,BinXF,minXF,maxXF,135)
+            histo[startF+134][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes0Up"  ,theCat,startF,x,BinXF,minXF,maxXF,134)
+            histo[startF+135][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes0Down",theCat,startF,x,BinXF,minXF,maxXF,135)
             histo[startF+136][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJerUp"  ,theCat,startF,x,BinXF,minXF,maxXF,136)
             histo[startF+137][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJerDown",theCat,startF,x,BinXF,minXF,maxXF,137)
             histo[startF+138][x]    = makeFinalVariable(dfzzcatMuonMomUp     [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,138)
@@ -293,6 +293,18 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[startF+145][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,145)
             histo[startF+146][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,146)
             histo[startF+147][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,147)
+            histo[startF+148][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes1Up"  ,theCat,startF,x,BinXF,minXF,maxXF,148)
+            histo[startF+149][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes1Down",theCat,startF,x,BinXF,minXF,maxXF,149)
+            histo[startF+150][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes2Up"  ,theCat,startF,x,BinXF,minXF,maxXF,150)
+            histo[startF+151][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes2Down",theCat,startF,x,BinXF,minXF,maxXF,151)
+            histo[startF+152][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes3Up"  ,theCat,startF,x,BinXF,minXF,maxXF,152)
+            histo[startF+153][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes3Down",theCat,startF,x,BinXF,minXF,maxXF,153)
+            histo[startF+154][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes4Up"  ,theCat,startF,x,BinXF,minXF,maxXF,154)
+            histo[startF+155][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes4Down",theCat,startF,x,BinXF,minXF,maxXF,155)
+            histo[startF+156][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes5Up"  ,theCat,startF,x,BinXF,minXF,maxXF,156)
+            histo[startF+157][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes5Down",theCat,startF,x,BinXF,minXF,maxXF,157)
+            histo[startF+158][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes6Up"  ,theCat,startF,x,BinXF,minXF,maxXF,158)
+            histo[startF+159][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes6Down",theCat,startF,x,BinXF,minXF,maxXF,159)
 
     report = []
     for x in range(nCat):

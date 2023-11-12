@@ -20,6 +20,8 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
   if(fidAna <= 0 || fidAna >= 5) printf("Wrong fidAna(%d)\n",fidAna);
 
+  int jumpValue = 200;
+
   TString addFiducialName = "";
   if(isFiducial == true) addFiducialName = "_isFiducial";
 
@@ -27,7 +29,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   TFile *inputFile;
   TFile *outputFile;
   const int nSelTotal = 5;
-  const int nSystTotal = 141;
+  const int nSystTotal = 159;
 
   TH1D *histo_Auxiliar[nSelTotal][nPlotCategories];
   TH1D *histo_Baseline[nPlotCategories];
@@ -84,6 +86,24 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   nameSyst[138] = "MuonMomDown";
   nameSyst[139] = "ElectronMomUp";
   nameSyst[140] = "ElectronMomDown";
+  nameSyst[141] = "metJERUp";
+  nameSyst[142] = "metJERDown";
+  nameSyst[143] = "metJESUp";
+  nameSyst[144] = "metJESDown";
+  nameSyst[145] = "metUnclusteredUp";
+  nameSyst[146] = "metUnclusteredDown";
+  nameSyst[147] = "JesSubTotalPileUpUp";
+  nameSyst[148] = "JesSubTotalPileUpDown";
+  nameSyst[149] = "JesSubTotalRelativeUp";
+  nameSyst[150] = "JesSubTotalRelativeDown";
+  nameSyst[151] = "JesSubTotalPtUp";
+  nameSyst[152] = "JesSubTotalPtDown";
+  nameSyst[153] = "JesSubTotalScaleUp";
+  nameSyst[154] = "JesSubTotalScaleDown";
+  nameSyst[155] = "JesFlavorQCDUp";
+  nameSyst[156] = "JesFlavorQCDDown";
+  nameSyst[157] = "JesTimePtEtaUp";
+  nameSyst[158] = "JesTimePtEtaDown";
 
   double scaleFactorFiducial[nSelTotal][nPlotCategories];
  for(unsigned nSel=0; nSel<nSelTotal; nSel++) for(int ic=0; ic<nPlotCategories; ic++) scaleFactorFiducial[nSel][ic] = 0.0;
@@ -120,7 +140,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   if(whichAna == 0){
     // same-sign / WW / DY / Top1 / Top2
     for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
-      inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*150), "read");
+      inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*jumpValue), "read");
       for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
 	histo_Auxiliar[nSel][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Auxiliar[nSel][ic]);
       if((ic == kPlotSignal0 || ic == kPlotSignal1 ||
@@ -134,7 +154,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
     for(int j=0; j<nSystTotal; j++){
       for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
-	inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*150+1+j), "read");
+	inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*jumpValue+1+j), "read");
 	for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
           histo_Auxiliar[nSel][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Auxiliar[nSel][ic]);
 
@@ -159,7 +179,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
   } // Default analysis
   else if(whichAna != 0){
-    inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,600+fidAna*150), "read");
+    inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,600+fidAna*jumpValue), "read");
     for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
       histo_Baseline[ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Baseline[ic]); histo_Baseline[ic]->SetDirectory(0);
       histo_Baseline[ic]->SetNameTitle(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()));
@@ -167,7 +187,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     delete inputFile;
 
     for(int j=0; j<nSystTotal; j++){
-      inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,600+fidAna*150+1+j), "read");
+      inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,600+fidAna*jumpValue+1+j), "read");
       for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
         histo_Syst[j][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Syst[j][ic]); histo_Syst[j][ic]->SetDirectory(0);
         histo_Syst[j][ic]->SetNameTitle(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()));
@@ -264,6 +284,33 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
         // ElectronMom
         systValue = histo_Syst[140][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[139][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // metJER
+        systValue = histo_Syst[142][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[141][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // metJES
+        systValue = histo_Syst[144][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[143][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // metUnclustered
+        systValue = histo_Syst[146][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[145][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesSubTotalPileUp
+        systValue = histo_Syst[148][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[147][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesSubTotalRelative
+        systValue = histo_Syst[150][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[149][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesSubTotalPt
+        systValue = histo_Syst[152][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[151][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesSubTotalScale
+        systValue = histo_Syst[154][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[153][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesFlavorQCD
+        systValue = histo_Syst[156][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[155][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesTimePtEta
+        systValue = histo_Syst[158][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[157][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
       }
     } // loop over bins
   } // loop over categories
@@ -563,7 +610,62 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
  
-  newcardShape << Form("Jes shape ");
+  newcardShape << Form("JesSubTotalPileUp shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else if(ic == kPlotTop)       newcardShape << Form("- ");
+    else if(ic == kPlotDY)        newcardShape << Form("- ");
+    else                          newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+ 
+  newcardShape << Form("JesSubTotalRelative shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else if(ic == kPlotTop)       newcardShape << Form("- ");
+    else if(ic == kPlotDY)        newcardShape << Form("- ");
+    else                          newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+ 
+  newcardShape << Form("JesSubTotalPt shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else if(ic == kPlotTop)       newcardShape << Form("- ");
+    else if(ic == kPlotDY)        newcardShape << Form("- ");
+    else                          newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+ 
+  newcardShape << Form("JesSubTotalScale shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else if(ic == kPlotTop)       newcardShape << Form("- ");
+    else if(ic == kPlotDY)        newcardShape << Form("- ");
+    else                          newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+ 
+  newcardShape << Form("JesFlavorQCD shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else if(ic == kPlotTop)       newcardShape << Form("- ");
+    else if(ic == kPlotDY)        newcardShape << Form("- ");
+    else                          newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+ 
+  newcardShape << Form("JesTimePtEta shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;

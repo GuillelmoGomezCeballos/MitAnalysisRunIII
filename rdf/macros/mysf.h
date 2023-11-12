@@ -47,7 +47,7 @@ class MyCorrections {
     correction::CompoundCorrection::Ref JECDATA_[10];
     correction::Correction::Ref JECL2ResDATA_[10];
     correction::Correction::Ref jetVetoMap_[10];
-    correction::Correction::Ref jesUnc_;
+    correction::Correction::Ref jesSourcesUnc_[7];
     correction::Correction::Ref jerMethod1Unc_;
     correction::Correction::Ref jerMethod2Unc_;
     correction::Correction::Ref puJetIDSF_;

@@ -95,7 +95,25 @@ MyCorrections::MyCorrections(int the_input_year) {
   JECMC_ = csetJEC->compound().at(tagName);
 
   tagName = jecMCName + "_" + "Total" + "_" + algoName;
-  jesUnc_ = csetJEC->at(tagName);
+  jesSourcesUnc_[0] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "SubTotalPileUp" + "_" + algoName;
+  jesSourcesUnc_[1] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "SubTotalRelative" + "_" + algoName;
+  jesSourcesUnc_[2] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "SubTotalPt" + "_" + algoName;
+  jesSourcesUnc_[3] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "SubTotalScale" + "_" + algoName;
+  jesSourcesUnc_[4] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "FlavorQCD" + "_" + algoName;
+  jesSourcesUnc_[5] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "TimePtEta" + "_" + algoName;
+  jesSourcesUnc_[6] = csetJEC->at(tagName);
 
   for(int i=0; i<10; i++){
     if(jecDATAName[i].compare("NULL") == 0) continue;
@@ -187,8 +205,7 @@ double MyCorrections::eval_jetCORR(double area, double eta, double pt, double rh
 };
 
 double MyCorrections::eval_jesUnc(double eta, double pt, int type) {
-  if(type == 0) return jesUnc_->evaluate({eta, pt});
-  return 0.0;
+  return std::abs(jesSourcesUnc_[type]->evaluate({eta, pt}));
 };
 
 double MyCorrections::eval_jerMethod1(double eta, double pt, int type) {

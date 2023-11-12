@@ -283,8 +283,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[startF+0][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj",theCat,startF,x,BinF,minF,maxF,0)
         for nv in range(1,129):
             histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj"       ,theCat,startF,x,BinF,minF,maxF,nv)
-        histo[startF+129][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesUp"  ,theCat,startF,x,BinF,minF,maxF,129)
-        histo[startF+130][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJesDown",theCat,startF,x,BinF,minF,maxF,130)
+        histo[startF+129][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJes0Up"  ,theCat,startF,x,BinF,minF,maxF,129)
+        histo[startF+130][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJes0Down",theCat,startF,x,BinF,minF,maxF,130)
         histo[startF+131][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerUp"  ,theCat,startF,x,BinF,minF,maxF,131)
         histo[startF+132][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerDown",theCat,startF,x,BinF,minF,maxF,132)
 

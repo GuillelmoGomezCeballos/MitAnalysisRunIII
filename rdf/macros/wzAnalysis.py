@@ -104,7 +104,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     xPtTrgbins = array('d', [10,15,20,25,30,35,40,50,60,70,80,90,105,120,150,200])
 
-    nCat, nHisto, nhistoNonPrompt = plotCategory("kPlotCategories"), 600, 50
+    nCat, nHisto, nhistoNonPrompt = plotCategory("kPlotCategories"), 700, 50
     histo    = [[0 for y in range(nCat)] for x in range(nHisto)]
     histoNonPrompt = [0 for y in range(nhistoNonPrompt)]
 
@@ -454,9 +454,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[59][x] = dfwzcat[x].Filter("TriLepton_flavor==2").Histo1D(("histo_{0}_{1}".format(59,x), "histo_{0}_{1}".format(59,x), 6,-0.5, 5.5), "ngood_jets","weight")
         histo[60][x] = dfwzcat[x].Filter("TriLepton_flavor==3").Histo1D(("histo_{0}_{1}".format(60,x), "histo_{0}_{1}".format(60,x), 6,-0.5, 5.5), "ngood_jets","weight")
 
-        #dfwzvbscat[x] = (dfwzvbscat[x].Redefine("vbs_mjj","vbs_mjjJesUp")
-	#	                      .Define("bdt_vbfincJesUp", ROOT.computeModel, ROOT.model.GetVariableNames()))
-        #histo[91][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 20,-1,1), "bdt_vbfincJesUp","weight")
+        #dfwzvbscat[x] = (dfwzvbscat[x].Redefine("vbs_mjj","vbs_mjjJes0Up")
+	#	                      .Define("bdt_vbfincJes0Up", ROOT.computeModel, ROOT.model.GetVariableNames()))
+        #histo[91][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 20,-1,1), "bdt_vbfincJes0Up","weight")
 
         histo[91][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 4,-0.5, 3.5), "TriLepton_flavor","weight3")
         histo[92][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x), 4,-0.5, 3.5), "TriLepton_flavor","weight4")
@@ -474,8 +474,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             startF = 300
             for nv in range(0,134):
                 histo[startF+nv][x] = makeFinalVariable(dfwzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,nv)
-            histo[startF+134][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJesUp"  ,theCat,startF,x,BinXF,minXF,maxXF,134)
-            histo[startF+135][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJesDown",theCat,startF,x,BinXF,minXF,maxXF,135)
+            histo[startF+134][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes0Up"  ,theCat,startF,x,BinXF,minXF,maxXF,134)
+            histo[startF+135][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes0Down",theCat,startF,x,BinXF,minXF,maxXF,135)
             histo[startF+136][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJerUp"  ,theCat,startF,x,BinXF,minXF,maxXF,136)
             histo[startF+137][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJerDown",theCat,startF,x,BinXF,minXF,maxXF,137)
             histo[startF+138][x]    = makeFinalVariable(dfwzcatMuonMomUp      [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,138)
@@ -488,6 +488,18 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[startF+145][x]    = makeFinalVariable(dfwzcatJESDown        [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,145)
             histo[startF+146][x]    = makeFinalVariable(dfwzcatUnclusteredUp  [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,146)
             histo[startF+147][x]    = makeFinalVariable(dfwzcatUnclusteredDown[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,147)
+            histo[startF+148][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes1Up"  ,theCat,startF,x,BinXF,minXF,maxXF,148)
+            histo[startF+149][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes1Down",theCat,startF,x,BinXF,minXF,maxXF,149)
+            histo[startF+150][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes2Up"  ,theCat,startF,x,BinXF,minXF,maxXF,150)
+            histo[startF+151][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes2Down",theCat,startF,x,BinXF,minXF,maxXF,151)
+            histo[startF+152][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes3Up"  ,theCat,startF,x,BinXF,minXF,maxXF,152)
+            histo[startF+153][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes3Down",theCat,startF,x,BinXF,minXF,maxXF,153)
+            histo[startF+154][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes4Up"  ,theCat,startF,x,BinXF,minXF,maxXF,154)
+            histo[startF+155][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes4Down",theCat,startF,x,BinXF,minXF,maxXF,155)
+            histo[startF+156][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes5Up"  ,theCat,startF,x,BinXF,minXF,maxXF,156)
+            histo[startF+157][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes5Down",theCat,startF,x,BinXF,minXF,maxXF,157)
+            histo[startF+158][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes6Up"  ,theCat,startF,x,BinXF,minXF,maxXF,158)
+            histo[startF+159][x]    = makeFinalVariable(dfwzcat[x],"ngood_jetsJes6Down",theCat,startF,x,BinXF,minXF,maxXF,159)
             if(x == plotCategory("kPlotNonPrompt")):
                 startNonPrompt = 0
                 histoNonPrompt[0+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm0")
@@ -495,11 +507,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histoNonPrompt[2+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
                 histoNonPrompt[3+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
 
-            startF = 450
+            startF = 500
             for nv in range(0,134):
                 histo[startF+nv][x] = makeFinalVariable(dfwzbcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,nv)
-            histo[startF+134][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJesUp"  ,theCat,startF,x,BinXF,minXF,maxXF,134)
-            histo[startF+135][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJesDown",theCat,startF,x,BinXF,minXF,maxXF,135)
+            histo[startF+134][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes0Up"  ,theCat,startF,x,BinXF,minXF,maxXF,134)
+            histo[startF+135][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes0Down",theCat,startF,x,BinXF,minXF,maxXF,135)
             histo[startF+136][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJerUp"  ,theCat,startF,x,BinXF,minXF,maxXF,136)
             histo[startF+137][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJerDown",theCat,startF,x,BinXF,minXF,maxXF,137)
             histo[startF+138][x]    = makeFinalVariable(dfwzbcatMuonMomUp      [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,138)
@@ -512,6 +524,18 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[startF+145][x]    = makeFinalVariable(dfwzbcatJESDown        [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,145)
             histo[startF+146][x]    = makeFinalVariable(dfwzbcatUnclusteredUp  [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,146)
             histo[startF+147][x]    = makeFinalVariable(dfwzbcatUnclusteredDown[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,147)
+            histo[startF+148][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes1Up"  ,theCat,startF,x,BinXF,minXF,maxXF,148)
+            histo[startF+149][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes1Down",theCat,startF,x,BinXF,minXF,maxXF,149)
+            histo[startF+150][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes2Up"  ,theCat,startF,x,BinXF,minXF,maxXF,150)
+            histo[startF+151][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes2Down",theCat,startF,x,BinXF,minXF,maxXF,151)
+            histo[startF+152][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes3Up"  ,theCat,startF,x,BinXF,minXF,maxXF,152)
+            histo[startF+153][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes3Down",theCat,startF,x,BinXF,minXF,maxXF,153)
+            histo[startF+154][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes4Up"  ,theCat,startF,x,BinXF,minXF,maxXF,154)
+            histo[startF+155][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes4Down",theCat,startF,x,BinXF,minXF,maxXF,155)
+            histo[startF+156][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes5Up"  ,theCat,startF,x,BinXF,minXF,maxXF,156)
+            histo[startF+157][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes5Down",theCat,startF,x,BinXF,minXF,maxXF,157)
+            histo[startF+158][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes6Up"  ,theCat,startF,x,BinXF,minXF,maxXF,158)
+            histo[startF+159][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes6Down",theCat,startF,x,BinXF,minXF,maxXF,159)
             if(x == plotCategory("kPlotNonPrompt")):
                 startNonPrompt = 4
                 histoNonPrompt[0+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm0")
