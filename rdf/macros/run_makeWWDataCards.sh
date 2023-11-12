@@ -5,10 +5,11 @@ if [ $# -lt 2 ]; then
    exit
 fi
 
-export theAna=wwAnalysis$1
 export theOption=$2
 
 if [ $theOption -eq 0 ]; then
+
+  export theAna=wwAnalysis$1
 
   root -l -q -b makeWWDataCards.C'(0,1,"anaZ","'${theAna}'",20220,0)'
   root -l -q -b makeWWDataCards.C'(0,2,"anaZ","'${theAna}'",20220,0)'
@@ -30,11 +31,25 @@ if [ $theOption -eq 0 ]; then
 
 elif [ $theOption -eq 1 ]; then
 
+  export theAna=wwAnalysis$1
+
   root -l -q -b makeWWDataCards.C'(1,1,"anaZ","'${theAna}'",20220,0)'
   root -l -q -b makeWWDataCards.C'(1,2,"anaZ","'${theAna}'",20220,0)'
   root -l -q -b makeWWDataCards.C'(1,3,"anaZ","'${theAna}'",20220,0)'
   root -l -q -b makeWWDataCards.C'(1,1,"anaZ","'${theAna}'",20221,0)'
   root -l -q -b makeWWDataCards.C'(1,2,"anaZ","'${theAna}'",20221,0)'
   root -l -q -b makeWWDataCards.C'(1,3,"anaZ","'${theAna}'",20221,0)'
+
+elif [ $theOption -eq 2 ]; then
+
+  export theAna=wzAnalysis$1
+  root -l -q -b makeVVDataCards.C'(0,0,"anaZ","'${theAna}'",20220)'
+  root -l -q -b makeVVDataCards.C'(0,1,"anaZ","'${theAna}'",20220)'
+  root -l -q -b makeVVDataCards.C'(0,0,"anaZ","'${theAna}'",20221)'
+  root -l -q -b makeVVDataCards.C'(0,1,"anaZ","'${theAna}'",20221)'
+
+  export theAna=zzAnalysis$1
+  root -l -q -b makeVVDataCards.C'(0,0,"anaZ","'${theAna}'",20220)'
+  root -l -q -b makeVVDataCards.C'(0,0,"anaZ","'${theAna}'",20221)'
 
 fi

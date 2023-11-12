@@ -16,6 +16,8 @@ useBTaggingWeights = 0
 
 useFR = 0
 
+altMass = "Def"
+
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
     selectionJsonPath = "selection.json"
@@ -96,7 +98,7 @@ def selectionLL(df,year,PDType,isData,count):
     dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
     dftag = selection4LVar  (dftag,year,isData)
 
-    dftag = (dftag.Filter("ptlmax > 25", "ptlmax > 25")
+    dftag = (dftag.Filter("ptlmax{0} > 25".format(altMass), "ptlmax > 25")
 		  )
     return dftag
 
@@ -203,26 +205,26 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     for x in range(nCat):
         dfzzcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
 
-        histo[ 0][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),120,  0, 120), "mllmin","weight")
-        dfzzcat[x] = dfzzcat[x].Filter("mllmin > 5","mllmin cut")
+        histo[ 0][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),120,  0, 120), "mllmin{0}".format(altMass),"weight")
+        dfzzcat[x] = dfzzcat[x].Filter("mllmin{0} > 5".format(altMass),"mllmin cut")
 
         histo[21][x] = dfzzcat[x].Filter("mllZ1 == -1 && Sum(vtight_mu)+Sum(vtight_el) == 4").Histo1D(("histo_{0}_{1}".format(21,x), "histo_{0}_{1}".format(21,x),3,-0.5, 2.5), "FourLepton_flavor","weight")
         histo[22][x] = dfzzcat[x].Filter("mllZ1 == -1 && Sum(vtight_mu)+Sum(vtight_el) == 4").Histo1D(("histo_{0}_{1}".format(22,x), "histo_{0}_{1}".format(22,x),10, 0, 500), "m4l","weight")
         histo[23][x] = dfzzcat[x].Filter("mllZ1 == -1 && Sum(vtight_mu)+Sum(vtight_el) == 4").Histo1D(("histo_{0}_{1}".format(23,x), "histo_{0}_{1}".format(23,x),5,-0.5 ,4.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
 
-        histo[ 1][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 1,x), "histo_{0}_{1}".format( 1,x),100,  0, 100), "mllZ1","weight")
-        dfzzcat[x] = dfzzcat[x].Filter("mllZ1 < 10000 && mllZ1 >= 0","mllZ1 cut")
+        histo[ 1][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 1,x), "histo_{0}_{1}".format( 1,x),100,  0, 100), "mllZ1{0}".format(altMass),"weight")
+        dfzzcat[x] = dfzzcat[x].Filter("mllZ1{0} < 10000 && mllZ1{0} > 0".format(altMass),"mllZ1 cut")
 
-        dfzzxycat.append(dfzzcat[x].Filter("mllxy > 0 && Sum(vtight_mu)+Sum(vtight_el) == 4 && mllZ1 < 15"))
+        dfzzxycat.append(dfzzcat[x].Filter("mllxy{0} > 0 && Sum(vtight_mu)+Sum(vtight_el) == 4 && mllZ1{0} < 15".format(altMass)))
 
-        histo[ 2][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 2,x), "histo_{0}_{1}".format( 2,x),100,  0, 100), "mllZ2","weight")
-        dfzzcat[x] = dfzzcat[x].Filter("mllZ2 < 10000","mllZ2 cut")
+        histo[ 2][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 2,x), "histo_{0}_{1}".format( 2,x),100,  0, 100), "mllZ2{0}".format(altMass),"weight")
+        dfzzcat[x] = dfzzcat[x].Filter("mllZ2{0} < 10000".format(altMass),"mllZ2 cut")
 
-        histo[ 3][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 40, 10, 210), "ptl1Z1","weight")
-        histo[ 4][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 20, 10, 110), "ptl2Z1","weight")
-        histo[ 5][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 5,x), "histo_{0}_{1}".format( 5,x), 40, 10, 210), "ptl1Z2","weight")
-        histo[ 6][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 6,x), "histo_{0}_{1}".format( 6,x), 20, 10, 110), "ptl2Z2","weight")
-        histo[ 7][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 7,x), "histo_{0}_{1}".format( 7,x), 40,150, 550), "m4l","weight")
+        histo[ 3][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 40, 10, 210), "ptl1Z1{0}".format(altMass),"weight")
+        histo[ 4][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 20, 10, 110), "ptl2Z1{0}".format(altMass),"weight")
+        histo[ 5][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 5,x), "histo_{0}_{1}".format( 5,x), 40, 10, 210), "ptl1Z2{0}".format(altMass),"weight")
+        histo[ 6][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 6,x), "histo_{0}_{1}".format( 6,x), 20, 10, 110), "ptl2Z2{0}".format(altMass),"weight")
+        histo[ 7][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 7,x), "histo_{0}_{1}".format( 7,x), 40,150, 550), "m4l{0}".format(altMass),"weight")
         histo[ 8][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 8,x), "histo_{0}_{1}".format( 8,x),3,-0.5, 2.5), "FourLepton_flavor","weight")
         histo[ 9][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 9,x), "histo_{0}_{1}".format( 9,x), 6,-0.5, 5.5), "ngood_jets","weight")
         histo[10][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 40,  0, 200), "thePuppiMET_pt","weight")
@@ -251,11 +253,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfzzxycat[x] = dfzzxycat[x].Filter("nbtag_goodbtag_Jet_bjet == 0")
 
         histo[26][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(26,x), "histo_{0}_{1}".format(26,x),3,-0.5, 2.5), "FourLepton_flavor","weightBTag")
-        histo[27][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(27,x), "histo_{0}_{1}".format(27,x),20, 5, 205), "mllxy","weightBTag")
+        histo[27][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(27,x), "histo_{0}_{1}".format(27,x),20, 5, 205), "mllxy{0}".format(altMass),"weightBTag")
         histo[28][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(28,x), "histo_{0}_{1}".format(28,x),20, 0, 200), "thePuppiMET_pt","weightBTag")
-        histo[29][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x),20, 0, 500), "m4l","weightBTag")
-        histo[30][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x),20, 0, 200), "ptZ2","weightBTag")
-        histo[31][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x),20, 0, 200), "mtxy","weightBTag")
+        histo[29][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x),20, 0, 500), "m4l{0}".format(altMass),"weightBTag")
+        histo[30][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x),20, 0, 200), "ptZ2{0}".format(altMass),"weightBTag")
+        histo[31][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x),20, 0, 200), "mtxy{0}".format(altMass),"weightBTag")
 
         histo[91][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x),3,-0.5, 2.5), "FourLepton_flavor","weight3")
         histo[92][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x),3,-0.5, 2.5), "FourLepton_flavor","weight4")
@@ -267,11 +269,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfzzcatMuonMomDown    .append(dfzzcat[x])
             dfzzcatElectronMomUp  .append(dfzzcat[x])
             dfzzcatElectronMomDown.append(dfzzcat[x])
-            dfzzcat		  [x] = dfzzcat 	      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4l		     > 150"," nbjets == 0 && m4l > 150")
-            dfzzcatMuonMomUp	  [x] = dfzzcatMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomUp       > 150"," nbjets == 0 && m4l > 150")
-            dfzzcatMuonMomDown    [x] = dfzzcatMuonMomDown    [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomDown     > 150"," nbjets == 0 && m4l > 150")
-            dfzzcatElectronMomUp  [x] = dfzzcatElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomUp   > 150"," nbjets == 0 && m4l > 150")
-            dfzzcatElectronMomDown[x] = dfzzcatElectronMomDown[x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomDown > 150"," nbjets == 0 && m4l > 150")
+            dfzzcat		  [x] = dfzzcat 	      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4l{0}             > 150".format(altMass)," nbjets == 0 && m4l > 150")
+            dfzzcatMuonMomUp	  [x] = dfzzcatMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomUp       > 150")
+            dfzzcatMuonMomDown    [x] = dfzzcatMuonMomDown    [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomDown     > 150")
+            dfzzcatElectronMomUp  [x] = dfzzcatElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomUp   > 150")
+            dfzzcatElectronMomDown[x] = dfzzcatElectronMomDown[x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomDown > 150")
             BinXF = 4
             minXF = -0.5
             maxXF = 3.5
