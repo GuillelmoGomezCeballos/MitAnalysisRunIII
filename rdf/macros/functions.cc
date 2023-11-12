@@ -411,31 +411,67 @@ Vec_b cleaningJetVetoMapMask(const Vec_f& jet_eta, const Vec_f& jet_phi, int jet
   return jet_vetoMap_mask;
 }
 
-Vec_f compute_MUOPT_Unc(const Vec_f& mu_pt, const Vec_f& mu_eta, int type){
+Vec_f compute_MUOPT_Unc(const int year, const Vec_f& mu_pt, const Vec_f& mu_eta, int type){
   Vec_f new_mu_pt(mu_pt.size(), 1.0);
-  for(unsigned int i=0;i<mu_pt.size();i++) {
-     if     (type == +1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9998+gRandom->Gaus(0.0,0.0030));
-     else if(type ==  0 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9993+gRandom->Gaus(0.0,0.0030));
-     else if(type == -1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9988+gRandom->Gaus(0.0,0.0030));
-     else if(type == +1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9988+gRandom->Gaus(0.0,0.0110));
-     else if(type ==  0 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9983+gRandom->Gaus(0.0,0.0110));
-     else if(type == -1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9978+gRandom->Gaus(0.0,0.0110));
-     else printf("PROBLEM in compute_MUOPT_Unc\n");
+  if     (year == 20220){
+    for(unsigned int i=0;i<mu_pt.size();i++) {
+       if     (type == +1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(1.0014+gRandom->Gaus(0.0,0.0030));
+       else if(type ==  0 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9994+gRandom->Gaus(0.0,0.0030));
+       else if(type == -1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9974+gRandom->Gaus(0.0,0.0030));
+       else if(type == +1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(1.0014+gRandom->Gaus(0.0,0.0050));
+       else if(type ==  0 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9994+gRandom->Gaus(0.0,0.0050));
+       else if(type == -1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9974+gRandom->Gaus(0.0,0.0050));
+       else printf("PROBLEM in compute_MUOPT_Unc\n");
+    }
+  }
+  else if(year == 20221){
+    for(unsigned int i=0;i<mu_pt.size();i++) {
+       if     (type == +1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(1.0015+gRandom->Gaus(0.0,0.0030));
+       else if(type ==  0 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9995+gRandom->Gaus(0.0,0.0030));
+       else if(type == -1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9975+gRandom->Gaus(0.0,0.0030));
+       else if(type == +1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(1.0008+gRandom->Gaus(0.0,0.0110));
+       else if(type ==  0 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9988+gRandom->Gaus(0.0,0.0110));
+       else if(type == -1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9968+gRandom->Gaus(0.0,0.0110));
+       else printf("PROBLEM in compute_MUOPT_Unc\n");
+    }
+  }
+  else {
+    for(unsigned int i=0;i<mu_pt.size();i++) {
+       new_mu_pt[i] = mu_pt[i];
+    }
   }
 
   return new_mu_pt;
 }
 
-Vec_f compute_ELEPT_Unc(const Vec_f& el_pt, const Vec_f& el_eta, int type){
+Vec_f compute_ELEPT_Unc(const int year, const Vec_f& el_pt, const Vec_f& el_eta, int type){
   Vec_f new_el_pt(el_pt.size(), 1.0);
-  for(unsigned int i=0;i<el_pt.size();i++) {
-     if     (type == +1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9972+gRandom->Gaus(0.0,0.0150));
-     else if(type ==  0 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9967+gRandom->Gaus(0.0,0.0150));
-     else if(type == -1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9962+gRandom->Gaus(0.0,0.0150));
-     else if(type == +1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0011+gRandom->Gaus(0.0,0.0200));
-     else if(type ==  0 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0006+gRandom->Gaus(0.0,0.0200));
-     else if(type == -1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0001+gRandom->Gaus(0.0,0.0200));
-     else printf("PROBLEM in compute_MUOPT_Unc\n");
+  if     (year == 20220){
+    for(unsigned int i=0;i<el_pt.size();i++) {
+       if     (type == +1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(1.0006+gRandom->Gaus(0.0,0.0150));
+       else if(type ==  0 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9986+gRandom->Gaus(0.0,0.0150));
+       else if(type == -1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9966+gRandom->Gaus(0.0,0.0150));
+       else if(type == +1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0057+gRandom->Gaus(0.0,0.0200));
+       else if(type ==  0 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0037+gRandom->Gaus(0.0,0.0200));
+       else if(type == -1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0017+gRandom->Gaus(0.0,0.0200));
+       else printf("PROBLEM in compute_MUOPT_Unc\n");
+    }
+  }
+  else if(year == 20221){
+    for(unsigned int i=0;i<el_pt.size();i++) {
+       if     (type == +1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9970+gRandom->Gaus(0.0,0.0150));
+       else if(type ==  0 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9950+gRandom->Gaus(0.0,0.0150));
+       else if(type == -1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9930+gRandom->Gaus(0.0,0.0150));
+       else if(type == +1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0029+gRandom->Gaus(0.0,0.0200));
+       else if(type ==  0 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0009+gRandom->Gaus(0.0,0.0200));
+       else if(type == -1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(0.9989+gRandom->Gaus(0.0,0.0200));
+       else printf("PROBLEM in compute_MUOPT_Unc\n");
+    }
+  }
+  else {
+    for(unsigned int i=0;i<el_pt.size();i++) {
+       new_el_pt[i] = el_pt[i];
+    }
   }
 
   return new_el_pt;
