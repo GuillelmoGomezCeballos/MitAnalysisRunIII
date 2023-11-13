@@ -2,6 +2,7 @@ import ROOT
 import os, json
 from utilsCategory import plotCategory
 
+# DeepJet
 def getBTagCut(type,year):
 
     if(type < 0 or type > 2): return 100
@@ -14,6 +15,38 @@ def getBTagCut(type,year):
        value[0] = 0.7300
        value[1] = 0.3196
        value[2] = 0.0614
+
+    return value[type]
+
+# PNet
+def getBTagCut2(type,year):
+
+    if(type < 0 or type > 2): return 100
+    value = [0.6734, 0.2450, 0.0470]
+    if(year == 20220):
+       value[0] = 0.6734
+       value[1] = 0.2450
+       value[2] = 0.0470
+    elif(year == 20221):
+       value[0] = 0.6915
+       value[1] = 0.2605
+       value[2] = 0.0499
+
+    return value[type]
+
+# RobustParTAK4
+def getBTagCut3(type,year):
+
+    if(type < 0 or type > 2): return 100
+    value = [0.8482, 0.4319, 0.0849]
+    if(year == 20220):
+       value[0] = 0.8482
+       value[1] = 0.4319
+       value[2] = 0.0849
+    elif(year == 20221):
+       value[0] = 0.8604
+       value[1] = 0.4510
+       value[2] = 0.0897
 
     return value[type]
 
@@ -76,8 +109,9 @@ def makeJES(df,year,postFix,bTagSel):
               .Define("good_Jet_mass{0}".format(postFix), "clean_Jet_mass[good_jet{0}]".format(postFix))
               .Define("good_Jet_area{0}".format(postFix), "clean_Jet_area[good_jet{0}]".format(postFix))
               .Define("good_Jet_rawFactor{0}".format(postFix), "clean_Jet_rawFactor[good_jet{0}]".format(postFix))
-             #.Define("good_Jet_btagDeepB{0}".format(postFix), "clean_Jet_btagDeepB[good_jet{0}]".format(postFix))
               .Define("good_Jet_btagDeepFlavB{0}".format(postFix), "clean_Jet_btagDeepFlavB[good_jet{0}]".format(postFix))
+              .Define("good_Jet_btagPNetB{0}".format(postFix), "clean_Jet_btagPNetB[good_jet{0}]".format(postFix))
+              .Define("good_Jet_btagRobustParTAK4B{0}".format(postFix), "clean_Jet_btagRobustParTAK4B[good_jet{0}]".format(postFix))
               .Define("good_Jet_chEmEF{0}".format(postFix), "clean_Jet_chEmEF[good_jet{0}]".format(postFix))
               .Define("good_Jet_neEmEF{0}".format(postFix), "clean_Jet_neEmEF[good_jet{0}]".format(postFix))
               .Define("good_Jet_chHEF{0}".format(postFix), "clean_Jet_chHEF[good_jet{0}]".format(postFix))
@@ -96,9 +130,18 @@ def makeJES(df,year,postFix,bTagSel):
               .Define("goodbtag_Jet_pt{0}".format(postFix), "clean_Jet_pt{0}[goodbtag_jet{1}]".format(postFitDef,postFix))
               .Define("goodbtag_Jet_eta{0}".format(postFix), "abs(clean_Jet_eta[goodbtag_jet{0}])".format(postFix))
               .Define("goodbtag_Jet_phi{0}".format(postFix), "abs(clean_Jet_phi[goodbtag_jet{0}])".format(postFix))
+
               .Define("goodbtag_Jet_btagDeepFlavB{0}".format(postFix), "clean_Jet_btagDeepFlavB[goodbtag_jet{0}]".format(postFix))
               .Define("goodbtag_Jet_bjet{0}".format(postFix), "goodbtag_Jet_btagDeepFlavB{0} > {1}".format(postFix,getBTagCut(bTagSel,year)))
               .Define("nbtag_goodbtag_Jet_bjet{0}".format(postFix), "Sum(goodbtag_Jet_bjet{0})*1.0f".format(postFix))
+
+              .Define("goodbtag_Jet_btagPNetB{0}".format(postFix), "clean_Jet_btagPNetB[goodbtag_jet{0}]".format(postFix))
+              .Define("goodbtag_Jet_bjetPNetB{0}".format(postFix), "goodbtag_Jet_btagPNetB{0} > {1}".format(postFix,getBTagCut2(bTagSel,year)))
+              .Define("nbtag_goodbtag_Jet_bjetPNetB{0}".format(postFix), "Sum(goodbtag_Jet_bjetPNetB{0})*1.0f".format(postFix))
+
+              .Define("goodbtag_Jet_btagRobustParTAK4B{0}".format(postFix), "clean_Jet_btagRobustParTAK4B[goodbtag_jet{0}]".format(postFix))
+              .Define("goodbtag_Jet_bjetRobustParTAK4{0}".format(postFix), "goodbtag_Jet_btagRobustParTAK4B{0} > {1}".format(postFix,getBTagCut3(bTagSel,year)))
+              .Define("nbtag_goodbtag_Jet_bjetRobustParTAK4{0}".format(postFix), "Sum(goodbtag_Jet_bjetRobustParTAK4{0})*1.0f".format(postFix))
 
               .Define("vbs_jet{0}".format(postFix), "abs(clean_Jet_eta) < 5.0 && clean_Jet_pt{0} > 50".format(postFitDef))
               .Define("nvbs_jets{0}".format(postFix), "Sum(vbs_jet{0})*1.0f".format(postFix))
@@ -147,8 +190,9 @@ def selectionJetMet(df,year,bTagSel,isData,count):
               .Define("clean_Jet_mass", "Jet_mass[clean_jet]")
               .Define("clean_Jet_area", "Jet_area[clean_jet]")
               .Define("clean_Jet_rawFactor", "Jet_rawFactor[clean_jet]")
-             #.Define("clean_Jet_btagDeepB", "Jet_btagDeepB[clean_jet]")
               .Define("clean_Jet_btagDeepFlavB", "Jet_btagDeepFlavB[clean_jet]")
+              .Define("clean_Jet_btagPNetB", "Jet_btagPNetB[clean_jet]")
+              .Define("clean_Jet_btagRobustParTAK4B", "Jet_btagRobustParTAK4B[clean_jet]")
               .Define("clean_Jet_muonSubtrFactor", "Jet_muonSubtrFactor[clean_jet]")
               .Define("clean_Jet_chEmEF", "Jet_chEmEF[clean_jet]")
               .Define("clean_Jet_neEmEF", "Jet_neEmEF[clean_jet]")
