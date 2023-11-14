@@ -8,6 +8,8 @@ from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionLGVar, selectionTrigger2L, selectionElMu, selectionWeigths, makeFinalVariable
 
+correctionString = ""
+
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 1
@@ -157,7 +159,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfzllgcat = []
     for x in range(nCat):
         for ltype in range(3):
-            dfzllcat.append(dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
+            dfzllcat.append(dfbase.Filter("DiLepton_flavor=={0}".format(ltype), "flavor type == {0}".format(ltype))
+                                  .Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                                   .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
                                   .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                                   )
@@ -179,11 +182,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
             dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
 
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("thePuppiMET_pt >  60 && (MET_significance > 20||jetPtFrac<0.2)","PuppiMET_pt > X1")
+            #dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("thePuppiMET_pt >  60 && (MET_significance > 20||jetPtFrac<0.2)","PuppiMET_pt > X1")
 
             histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 50, 60, 260), "thePuppiMET_pt","weight")
 
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("thePuppiMET_pt > 100 && (MET_significance > 20||jetPtFrac<0.2)","PuppiMET_pt > X2")
+            #dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("thePuppiMET_pt > 100 && (MET_significance > 20||jetPtFrac<0.2)","PuppiMET_pt > X2")
+            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("thePuppiMET_pt > 100","PuppiMET_pt > X2")
 
             histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
             histo[ltype+ 3][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 50,  60, 260), "ptll","weight")
@@ -196,8 +200,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[ltype+24][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+24,x), "histo_{0}_{1}".format(ltype+24,x), 10,-0.5, 9.5), "ngood_jets","weight")
             histo[ltype+42][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 50, 0, 3.1416), "dphijmet","weight")
             histo[ltype+45][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 40,100, 500), "mt","weight")
-            histo[ltype+84][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+84,x), "histo_{0}_{1}".format(ltype+84,x), 40,0,80), "MET_significance","weight")
-            histo[ltype+87][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+87,x), "histo_{0}_{1}".format(ltype+87,x), 20,0,1), "jetPtFrac","weight")
+            histo[ltype+84][x] = dfzllcat[3*x+ltype].Filter("jetPtFrac>0.2").Histo1D(("histo_{0}_{1}".format(ltype+84,x), "histo_{0}_{1}".format(ltype+84,x), 40,0,80), "MET_significance","weight")
+            histo[ltype+87][x] = dfzllcat[3*x+ltype].Filter("MET_significance < 20").Histo1D(("histo_{0}_{1}".format(ltype+87,x), "histo_{0}_{1}".format(ltype+87,x), 20,0,1), "jetPtFrac","weight")
 
             histo[ltype+48][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 40, 60, 260), "ptll","weight")
             histo[ltype+51][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 40,100, 300), "thePuppiMET_pt","weight")
@@ -213,16 +217,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
             dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("dphillgmet > 2.5","dphillgmet > 2.5")
 
-            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("thePuppiMET_pt >  60 && (MET_significance > 20||jetPtgFrac<0.2)","PuppiMET_pt > X1")
+            #dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("thePuppiMET_pt >  60 && (MET_significance > 20||jetPtgFrac<0.2)","PuppiMET_pt > X1")
 
             histo[ltype+69][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+69,x), "histo_{0}_{1}".format(ltype+69,x), 25, 60, 260), "thePuppiMET_pt","weight")
 
-            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("thePuppiMET_pt > 100 && (MET_significance > 20||jetPtgFrac<0.2)","PuppiMET_pt > X2")
+            #dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("thePuppiMET_pt > 100 && (MET_significance > 20||jetPtgFrac<0.2)","PuppiMET_pt > X2")
+            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("thePuppiMET_pt > 100","PuppiMET_pt > X2")
 
             histo[ltype+72][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+72,x), "histo_{0}_{1}".format(ltype+72,x), 20,0,400), "mtg","weight")
             histo[ltype+75][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+75,x), "histo_{0}_{1}".format(ltype+75,x), 10,-0.5, 9.5), "ngood_jets","weight")
-            histo[ltype+78][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+78,x), "histo_{0}_{1}".format(ltype+78,x), 40,0,80), "MET_significance","weight")
-            histo[ltype+81][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+81,x), "histo_{0}_{1}".format(ltype+81,x), 20,0,1), "jetPtgFrac","weight")
+            histo[ltype+78][x] =dfzllgcat[3*x+ltype].Filter("jetPtFrac>0.2").Histo1D(("histo_{0}_{1}".format(ltype+78,x), "histo_{0}_{1}".format(ltype+78,x), 40,0,80), "MET_significance","weight")
+            histo[ltype+81][x] =dfzllgcat[3*x+ltype].Filter("MET_significance < 20").Histo1D(("histo_{0}_{1}".format(ltype+81,x), "histo_{0}_{1}".format(ltype+81,x), 20,0,1), "jetPtgFrac","weight")
 
             #histo[ltype+96][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+96,x), "histo_{0}_{1}".format(ltype+96,x), 10,-0.5, 9.5), "ngood_jets","weightNoPURecoSF")
             #histo[ltype+97][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+97,x), "histo_{0}_{1}".format(ltype+97,x), 10,-0.5, 9.5), "ngood_jets","weightNoLepSF")
@@ -412,19 +417,15 @@ if __name__ == "__main__":
         histoFakeEtaPt_el[x].SetDirectory(0)
     fFakeFile.Close()
 
-    lepSFPath = "data/histoLepSFEtaPt_{0}.root".format(year)
-    if(not os.path.exists(lepSFPath)):
-        lepSFPath = "histoLepSFEtaPt_{0}.root".format(year)
+    lepSFPath = "data/histoLepSFEtaPt_{0}{1}.root".format(year,correctionString)
     fLepSFFile = ROOT.TFile(lepSFPath)
-    histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_0")
-    histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_0")
+    histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(muSelChoice))
+    histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_{0}".format(elSelChoice))
     histoLepSFEtaPt_mu.SetDirectory(0)
     histoLepSFEtaPt_el.SetDirectory(0)
     fLepSFFile.Close()
 
     triggerSFPath = "data/histoTriggerSFEtaPt_{0}.root".format(year)
-    if(not os.path.exists(triggerSFPath)):
-        triggerSFPath = "histoTriggerSFEtaPt_{0}.root".format(year)
     fTriggerSFFile = ROOT.TFile(triggerSFPath)
     histoTriggerSFEtaPt_0_0 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_0")
     histoTriggerSFEtaPt_0_1 = fTriggerSFFile.Get("histoTriggerSFEtaPt_0_1")
@@ -461,8 +462,6 @@ if __name__ == "__main__":
     fTriggerSFFile.Close()
 
     BTVEffPath = "data/histoBtagEffSelEtaPt_{0}.root".format(year)
-    if(not os.path.exists(BTVEffPath)):
-        BTVEffPath = "histoBtagEffSelEtaPt_{0}.root".format(year)
     fBTVEffPathFile = ROOT.TFile(BTVEffPath)
     histoBTVEffEtaPtLF = fBTVEffPathFile.Get("histoBtagEffSelEtaPt_{0}".format(0+3*bTagSel))
     histoBTVEffEtaPtCJ = fBTVEffPathFile.Get("histoBtagEffSelEtaPt_{0}".format(1+3*bTagSel))
