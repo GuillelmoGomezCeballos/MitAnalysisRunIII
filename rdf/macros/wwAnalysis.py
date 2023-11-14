@@ -20,6 +20,8 @@ useFR = 1
 
 altMass = "Def"
 
+jetEtaCut = 2.5
+
 selectionJsonPath = "config/selection.json"
 
 with open(selectionJsonPath) as jsonFile:
@@ -90,7 +92,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,jetEtaCut)
 
     return dftag
 
@@ -226,7 +228,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfcat[x] = dfcat[x].Define("weightWW", "weight")
 
         if((x == plotCategory("kPlotqqWW") or x == plotCategory("kPlotggWW")) and isData == "false"):
-            dfcat[x] = selectionGenLepJet(dfcat[x],20,30)
+            dfcat[x] = selectionGenLepJet(dfcat[x],20,30,jetEtaCut)
             dfcat[x] = (dfcat[x].Define("kPlotSignal0", "{0}".format(plotCategory("kPlotSignal0")))
                                 .Define("kPlotSignal1", "{0}".format(plotCategory("kPlotSignal1")))
                                 .Define("kPlotSignal2", "{0}".format(plotCategory("kPlotSignal2")))

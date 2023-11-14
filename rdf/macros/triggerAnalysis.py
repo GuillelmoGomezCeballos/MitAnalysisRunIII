@@ -117,7 +117,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,5.0)
     dftag = selection2LVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("mll{0} > 80 && mll{0} < 100".format(altMass),"mll{0} cut".format(altMass))
@@ -140,7 +140,7 @@ def selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count):
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,5.0)
     dftag = selection2LVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("mll{0} > 80 && mll{0} < 100".format(altMass),"mll{0} cut".format(altMass))

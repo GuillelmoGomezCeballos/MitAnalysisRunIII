@@ -26,6 +26,8 @@ VBSSEL = jsonObject['VBSSEL']
 bTagSel = 2
 useBTaggingWeights = 1
 
+jetEtaCut = 2.5
+
 muSelChoice = 1
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
@@ -55,7 +57,7 @@ def selectionWW(df,year,PDType,isData,count):
                   .Filter("ptll > 30","ptll > 30")
                   )
 
-    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,5.0)
     dftag = (dftag.Filter("PuppiMET_pt > 20", "PuppiMET_pt > 20")
                   .Filter("minPMET > 20", "minPMET > 20")
                   )
@@ -107,7 +109,7 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
 
     dfww = selectionWW(dfcat,year,PDType,isData,count)
 
-    dfwwgen = selectionGenLepJet(dfcat,20,30).Filter("ngood_GenDressedLeptons >= 2", "ngood_GenDressedLeptons >= 2")
+    dfwwgen = selectionGenLepJet(dfcat,20,30,jetEtaCut).Filter("ngood_GenDressedLeptons >= 2", "ngood_GenDressedLeptons >= 2")
     dfwwgen = (dfwwgen.Define("kPlotSignal0", "{0}".format(plotCategory("kPlotSignal0")))
     		      .Define("kPlotSignal1", "{0}".format(plotCategory("kPlotSignal1")))
     		      .Define("kPlotSignal2", "{0}".format(plotCategory("kPlotSignal2")))

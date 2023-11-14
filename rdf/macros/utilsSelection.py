@@ -50,7 +50,7 @@ def getBTagCut3(type,year):
 
     return value[type]
 
-def selectionGenLepJet(df,ptlcut,ptjcut):
+def selectionGenLepJet(df,ptlcut,ptjcut,etajcut):
 
     dftag =(df.Define("good_GenDressedLepton", "abs(GenDressedLepton_eta) < 2.5 && GenDressedLepton_pt > {0}".format(ptlcut))
               .Define("good_GenDressedLepton_pt", "GenDressedLepton_pt[good_GenDressedLepton]")
@@ -58,7 +58,7 @@ def selectionGenLepJet(df,ptlcut,ptjcut):
               .Define("good_GenDressedLepton_phi", "GenDressedLepton_phi[good_GenDressedLepton]")
               .Define("ngood_GenDressedLeptons","Sum(good_GenDressedLepton)*1.0f")
               .Define("GenJet_mask", "cleaningJetFromLepton(GenJet_eta,GenJet_phi,good_GenDressedLepton_eta,good_GenDressedLepton_phi)")
-              .Define("good_GenJet", "GenJet_pt > {0} && abs(GenJet_eta) < 5.0 && GenJet_mask > 0".format(ptjcut))
+              .Define("good_GenJet", "GenJet_pt > {0} && abs(GenJet_eta) < {1} && GenJet_mask > 0".format(ptjcut,etajcut))
               .Define("ngood_GenJets","Sum(good_GenJet)*1.0f")
               .Define("good_GenJet_pt",            "GenJet_pt[good_GenJet]")
               .Define("good_GenJet_eta",           "GenJet_eta[good_GenJet]")
@@ -94,14 +94,14 @@ def selectionPhoton(df,year,BARRELphotons,ENDCAPphotons):
 
     return dftag
 
-def makeJES(df,year,postFix,bTagSel):
+def makeJES(df,year,postFix,bTagSel,jetEtaCut):
     postFitDef = postFix
     postFitMet = "Def"
     if(postFix == ""):
         postFitDef = "Def"
         postFitMet = ""
 
-    dftag =(df.Define("good_jet{0}".format(postFix), "abs(clean_Jet_eta) < 5.0 && clean_Jet_pt{0} > 30".format(postFitDef))
+    dftag =(df.Define("good_jet{0}".format(postFix), "abs(clean_Jet_eta) < {0} && clean_Jet_pt{1} > 30".format(jetEtaCut,postFitDef))
               .Define("ngood_jets{0}".format(postFix), "Sum(good_jet{0})*1.0f".format(postFix))
               .Define("good_Jet_pt{0}".format(postFix), "clean_Jet_pt{0}[good_jet{1}]".format(postFitDef,postFix))
               .Define("good_Jet_eta{0}".format(postFix), "clean_Jet_eta[good_jet{0}]".format(postFix))
@@ -174,7 +174,7 @@ def makeJES(df,year,postFix,bTagSel):
 
     return dftag
 
-def selectionJetMet(df,year,bTagSel,isData,count):
+def selectionJetMet(df,year,bTagSel,isData,count,jetEtaCut):
 
     jetTypeCorr = -1
     if(count > 1000): jetTypeCorr = count%10
@@ -273,23 +273,23 @@ def selectionJetMet(df,year,bTagSel,isData,count):
                      .Define("thePuppiMET_ptUnclusteredDown" ,"PuppiMET_pt")
                      )
 
-    dftag = makeJES(dftag,year,""       ,bTagSel)
-    dftag = makeJES(dftag,year,"Jes0Up"  ,bTagSel)
-    dftag = makeJES(dftag,year,"Jes0Down",bTagSel)
-    dftag = makeJES(dftag,year,"Jes1Up"  ,bTagSel)
-    dftag = makeJES(dftag,year,"Jes1Down",bTagSel)
-    dftag = makeJES(dftag,year,"Jes2Up"  ,bTagSel)
-    dftag = makeJES(dftag,year,"Jes2Down",bTagSel)
-    dftag = makeJES(dftag,year,"Jes3Up"  ,bTagSel)
-    dftag = makeJES(dftag,year,"Jes3Down",bTagSel)
-    dftag = makeJES(dftag,year,"Jes4Up"  ,bTagSel)
-    dftag = makeJES(dftag,year,"Jes4Down",bTagSel)
-    dftag = makeJES(dftag,year,"Jes5Up"  ,bTagSel)
-    dftag = makeJES(dftag,year,"Jes5Down",bTagSel)
-    dftag = makeJES(dftag,year,"Jes6Up"  ,bTagSel)
-    dftag = makeJES(dftag,year,"Jes6Down",bTagSel)
-    dftag = makeJES(dftag,year,"JerUp"   ,bTagSel)
-    dftag = makeJES(dftag,year,"JerDown" ,bTagSel)
+    dftag = makeJES(dftag,year,""        ,bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes0Up"  ,bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes0Down",bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes1Up"  ,bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes1Down",bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes2Up"  ,bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes2Down",bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes3Up"  ,bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes3Down",bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes4Up"  ,bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes4Down",bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes5Up"  ,bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes5Down",bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes6Up"  ,bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"Jes6Down",bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"JerUp"   ,bTagSel,jetEtaCut)
+    dftag = makeJES(dftag,year,"JerDown" ,bTagSel,jetEtaCut)
 
     return dftag
 

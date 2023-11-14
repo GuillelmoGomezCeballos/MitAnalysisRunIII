@@ -86,7 +86,7 @@ def selectionLL(df,year,PDType,isData,count):
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,5.0)
     dftag = selection2LVar  (dftag,year,isData)
 
     dftag = (dftag.Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")

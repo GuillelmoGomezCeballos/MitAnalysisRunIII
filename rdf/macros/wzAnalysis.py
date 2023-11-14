@@ -91,7 +91,7 @@ def selectionLL(df,year,PDType,isData,count):
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData,count)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,5.0)
     dftag = selection3LVar  (dftag,year,isData)
 
     return dftag

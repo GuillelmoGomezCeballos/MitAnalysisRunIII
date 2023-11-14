@@ -82,7 +82,7 @@ def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count):
                  .Define("maxMETMT","max(PuppiMET_pt,mt)")
                 )
 
-    dftag = selectionJetMet(dftag,year,bTagSel,isData,count)
+    dftag = selectionJetMet(dftag,year,bTagSel,isData,count,5.0)
 
     return dftag
 
