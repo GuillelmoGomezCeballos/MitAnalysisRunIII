@@ -424,6 +424,18 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[75][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(75,x), "histo_{0}_{1}".format(75,x), 30,  0, 200), "ptww","weightWW")
         histo[76][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(76,x), "histo_{0}_{1}".format(76,x), 50,  0, 200), "ptww","weightWW")
 
+        histo[100][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(100,x), "histo_{0}_{1}".format(100,x), 100, 0, 200), "thePuppiMET_pt"		  ,"weightWW")
+        histo[101][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(101,x), "histo_{0}_{1}".format(101,x), 100, 0, 200), "thePuppiMET_ptJERUp" 	  ,"weightWW")
+        histo[102][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(102,x), "histo_{0}_{1}".format(102,x), 100, 0, 200), "thePuppiMET_ptJERDown"	  ,"weightWW")
+        histo[103][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(103,x), "histo_{0}_{1}".format(103,x), 100, 0, 200), "thePuppiMET_ptJESUp" 	  ,"weightWW")
+        histo[104][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(104,x), "histo_{0}_{1}".format(104,x), 100, 0, 200), "thePuppiMET_ptJESDown"	  ,"weightWW")
+        histo[105][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(105,x), "histo_{0}_{1}".format(105,x), 100, 0, 200), "thePuppiMET_ptUnclusteredUp"   ,"weightWW")
+        histo[106][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(106,x), "histo_{0}_{1}".format(106,x), 100, 0, 200), "thePuppiMET_ptUnclusteredDown" ,"weightWW")
+        histo[107][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(107,x), "histo_{0}_{1}".format(107,x), 100, 0, 200), "MET_ptDef"			  ,"weightWW")
+        histo[108][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(108,x), "histo_{0}_{1}".format(108,x), 100, 0, 200), "MET_ptJes0Up"		  ,"weightWW")
+        histo[109][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(109,x), "histo_{0}_{1}".format(109,x), 100, 0, 200), "MET_ptJes0Down"		  ,"weightWW")
+
+
         if(makeDataCards >= 1):
             BinXF = 4
             minXF = -0.5

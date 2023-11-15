@@ -158,93 +158,87 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfzllbcat = []
     dfzllgcat = []
     for x in range(nCat):
-        for ltype in range(3):
-            dfzllcat.append(dfbase.Filter("DiLepton_flavor=={0}".format(ltype), "flavor type == {0}".format(ltype))
+        for ltype in range(2):
+            dfzllcat.append(dfbase.Filter("DiLepton_flavor%2=={0}".format(ltype), "flavor type%2=={0}".format(ltype))
                                   .Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                                   .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
                                   .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                                   )
-            dfzllbcat.append(dfzllcat[3*x+ltype].Filter("nbtag_goodbtag_Jet_bjet > 0","at least one btagged jet"))
-            dfzllbcat[3*x+ltype] = dfzllbcat[3*x+ltype].Filter("ptbalance < 0.4","ptbalance < 0.4")
-            dfzllbcat[3*x+ltype] = dfzllbcat[3*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
 
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("nbtag_goodbtag_Jet_bjet == 0","no btagged jet")
+            dfzllbcat.append(dfzllcat[2*x+ltype].Filter("nbtag_goodbtag_Jet_bjet > 0","at least one btagged jet"))
+            dfzllbcat[2*x+ltype] = dfzllbcat[2*x+ltype].Filter("ptbalance < 0.4","ptbalance < 0.4")
+            dfzllbcat[2*x+ltype] = dfzllbcat[2*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
 
-            dfzllgcat.append(dfzllcat[3*x+ltype].Filter("Sum(good_Photons) > 0","At least one photon"))
+            dfzllgcat.append(dfzllcat[2*x+ltype].Filter("Sum(good_Photons) > 0","At least one photon"))
 
-            histo[ltype+30][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+30,x), "histo_{0}_{1}".format(ltype+30,x), 50, 0, 2), "ptbalance","weight")
-            histo[ltype+33][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+33,x), "histo_{0}_{1}".format(ltype+33,x), 50, 0, 2), "ptjbalance","weight")
+            dfzllcat[2*x+ltype] = dfzllcat[2*x+ltype].Filter("nbtag_goodbtag_Jet_bjet == 0","no btagged jet")
 
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("ptbalance < 0.4","ptbalance < 0.4")
+            histo[ltype+0][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+0,x), "histo_{0}_{1}".format(ltype+0,x), 50, 60, 260), "thePuppiMET_pt","weight")
 
-            histo[ltype+36][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 50, 0, 3.1416), "dphillmet","weight")
-            histo[ltype+39][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 50, 0, 3.1416), "dphilljmet","weight")
+            dfzllcat[2*x+ltype] = dfzllcat[2*x+ltype].Filter("thePuppiMET_pt > 100","PuppiMET_pt > 100")
 
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
+            histo[ltype+2][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+2,x), "histo_{0}_{1}".format(ltype+2,x), 50, 0, 2), "ptbalance","weight")
+            histo[ltype+4][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+4,x), "histo_{0}_{1}".format(ltype+4,x), 50, 0, 2), "ptjbalance","weight")
 
-            #dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("thePuppiMET_pt >  60 && (MET_significance > 20||jetPtFrac<0.2)","PuppiMET_pt > X1")
+            dfzllcat[2*x+ltype] = dfzllcat[2*x+ltype].Filter("ptbalance < 0.4","ptbalance < 0.4")
 
-            histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 50, 60, 260), "thePuppiMET_pt","weight")
+            histo[ltype+6][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+6,x), "histo_{0}_{1}".format(ltype+6,x), 50, 0, 3.1416), "dphillmet","weight")
+            histo[ltype+8][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+8,x), "histo_{0}_{1}".format(ltype+8,x), 50, 0, 3.1416), "dphilljmet","weight")
 
-            #dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("thePuppiMET_pt > 100 && (MET_significance > 20||jetPtFrac<0.2)","PuppiMET_pt > X2")
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("thePuppiMET_pt > 100","PuppiMET_pt > X2")
+            dfzllcat[2*x+ltype] = dfzllcat[2*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
 
-            histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
-            histo[ltype+ 3][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 50,  60, 260), "ptll","weight")
-            histo[ltype+ 6][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 6,x), "histo_{0}_{1}".format(ltype+ 6,x), 50,  0, 5),   "drll","weight")
-            histo[ltype+ 9][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 9,x), "histo_{0}_{1}".format(ltype+ 9,x), 50,  0, 3.1416), "dphill","weight")
-            histo[ltype+12][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x), 40,  0, 200), "ptl1","weight")
-            histo[ltype+15][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+15,x), "histo_{0}_{1}".format(ltype+15,x), 40,  0, 200), "ptl2","weight")
-            histo[ltype+18][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+18,x), "histo_{0}_{1}".format(ltype+18,x), 25,  0,2.5), "etal1","weight")
-            histo[ltype+21][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+21,x), "histo_{0}_{1}".format(ltype+21,x), 25,  0,2.5), "etal2","weight")
-            histo[ltype+24][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+24,x), "histo_{0}_{1}".format(ltype+24,x), 10,-0.5, 9.5), "ngood_jets","weight")
-            histo[ltype+42][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 50, 0, 3.1416), "dphijmet","weight")
-            histo[ltype+45][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 40,100, 500), "mt","weight")
-            histo[ltype+84][x] = dfzllcat[3*x+ltype].Filter("jetPtFrac>0.2").Histo1D(("histo_{0}_{1}".format(ltype+84,x), "histo_{0}_{1}".format(ltype+84,x), 40,0,80), "MET_significance","weight")
-            histo[ltype+87][x] = dfzllcat[3*x+ltype].Filter("MET_significance < 20").Histo1D(("histo_{0}_{1}".format(ltype+87,x), "histo_{0}_{1}".format(ltype+87,x), 20,0,1), "jetPtFrac","weight")
+            histo[ltype+10][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+10,x), "histo_{0}_{1}".format(ltype+10,x), 40,0,80), "MET_significance","weight")
+            histo[ltype+12][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x), 20,0,1), "jetPtFrac","weight")
+            histo[ltype+14][x] = dfzllcat[2*x+ltype].Filter("jetPtFrac>0.2")        .Histo1D(("histo_{0}_{1}".format(ltype+14,x), "histo_{0}_{1}".format(ltype+14,x), 40,0,80), "MET_significance","weight")
+            histo[ltype+16][x] = dfzllcat[2*x+ltype].Filter("MET_significance < 20").Histo1D(("histo_{0}_{1}".format(ltype+16,x), "histo_{0}_{1}".format(ltype+16,x), 20,0,1), "jetPtFrac","weight")
 
-            histo[ltype+48][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 40, 60, 260), "ptll","weight")
-            histo[ltype+51][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 40,100, 300), "thePuppiMET_pt","weight")
-            histo[ltype+54][x] =dfzllbcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 40,100, 500), "mt","weight")
+            dfzllcat[2*x+ltype] = dfzllcat[2*x+ltype].Filter("jetPtFrac < 0.2 || MET_significance > 20","jetPtFrac < 0.2 || MET_significance > 20")
 
-            histo[ltype+57][x] = dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+57,x), "histo_{0}_{1}".format(ltype+57,x), 50, 0, 2), "ptgbalance","weight")
-            histo[ltype+60][x] = dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+60,x), "histo_{0}_{1}".format(ltype+60,x), 50, 0, 2), "ptgjbalance","weight")
+            histo[ltype+18][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+18,x), "histo_{0}_{1}".format(ltype+18,x), 60, 91.1876-15, 91.1876+15), "mll","weight")
+            histo[ltype+20][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+20,x), "histo_{0}_{1}".format(ltype+20,x), 50,  60, 260), "ptll","weight")
+            histo[ltype+22][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+22,x), "histo_{0}_{1}".format(ltype+22,x), 50,  0, 5),   "drll","weight")
+            histo[ltype+24][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+24,x), "histo_{0}_{1}".format(ltype+24,x), 50,  0, 3.1416), "dphill","weight")
+            histo[ltype+26][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+26,x), "histo_{0}_{1}".format(ltype+26,x), 40,  0, 200), "ptl1","weight")
+            histo[ltype+28][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+28,x), "histo_{0}_{1}".format(ltype+28,x), 40,  0, 200), "ptl2","weight")
+            histo[ltype+30][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+30,x), "histo_{0}_{1}".format(ltype+30,x), 25,  0,2.5), "etal1","weight")
+            histo[ltype+32][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+32,x), "histo_{0}_{1}".format(ltype+32,x), 25,  0,2.5), "etal2","weight")
+            histo[ltype+34][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+34,x), "histo_{0}_{1}".format(ltype+34,x), 10,-0.5, 9.5), "ngood_jets","weight")
+            histo[ltype+36][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 50, 0, 3.1416), "dphijmet","weight")
+            histo[ltype+38][x] = dfzllcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+38,x), "histo_{0}_{1}".format(ltype+38,x), 40,100, 500), "mt","weight")
 
-            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("ptgbalance < 0.4","ptgbalance < 0.4")
+            histo[ltype+80][x] =dfzllbcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+80,x), "histo_{0}_{1}".format(ltype+80,x), 40, 60, 260), "ptll","weight")
+            histo[ltype+82][x] =dfzllbcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+82,x), "histo_{0}_{1}".format(ltype+82,x), 40,100, 300), "thePuppiMET_pt","weight")
+            histo[ltype+84][x] =dfzllbcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+84,x), "histo_{0}_{1}".format(ltype+84,x), 40,100, 500), "mt","weight")
 
-            histo[ltype+63][x] = dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+63,x), "histo_{0}_{1}".format(ltype+63,x), 50, 0, 3.1416), "dphillgmet","weight")
-            histo[ltype+66][x] = dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+66,x), "histo_{0}_{1}".format(ltype+66,x), 50, 0, 3.1416), "dphillgjmet","weight")
+            dfzllgcat[2*x+ltype] = dfzllgcat[2*x+ltype].Filter("thePuppiMET_pt > 100","PuppiMET_pt > 100")
 
-            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("dphillgmet > 2.5","dphillgmet > 2.5")
+            histo[ltype+100][x] = dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+100,x), "histo_{0}_{1}".format(ltype+100,x), 50, 0, 2), "ptgbalance","weight")
+            histo[ltype+102][x] = dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+102,x), "histo_{0}_{1}".format(ltype+102,x), 50, 0, 2), "ptgjbalance","weight")
 
-            #dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("thePuppiMET_pt >  60 && (MET_significance > 20||jetPtgFrac<0.2)","PuppiMET_pt > X1")
+            dfzllgcat[2*x+ltype] = dfzllgcat[2*x+ltype].Filter("ptgbalance < 0.4","ptgbalance < 0.4")
 
-            histo[ltype+69][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+69,x), "histo_{0}_{1}".format(ltype+69,x), 25, 60, 260), "thePuppiMET_pt","weight")
+            histo[ltype+104][x] = dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+104,x), "histo_{0}_{1}".format(ltype+104,x), 50, 0, 3.1416), "dphillgmet","weight")
+            histo[ltype+106][x] = dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+106,x), "histo_{0}_{1}".format(ltype+106,x), 50, 0, 3.1416), "dphillgjmet","weight")
 
-            #dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("thePuppiMET_pt > 100 && (MET_significance > 20||jetPtgFrac<0.2)","PuppiMET_pt > X2")
-            dfzllgcat[3*x+ltype] = dfzllgcat[3*x+ltype].Filter("thePuppiMET_pt > 100","PuppiMET_pt > X2")
+            dfzllgcat[2*x+ltype] = dfzllgcat[2*x+ltype].Filter("dphillgmet > 2.5","dphillgmet > 2.5")
 
-            histo[ltype+72][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+72,x), "histo_{0}_{1}".format(ltype+72,x), 20,0,400), "mtg","weight")
-            histo[ltype+75][x] =dfzllgcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+75,x), "histo_{0}_{1}".format(ltype+75,x), 10,-0.5, 9.5), "ngood_jets","weight")
-            histo[ltype+78][x] =dfzllgcat[3*x+ltype].Filter("jetPtFrac>0.2").Histo1D(("histo_{0}_{1}".format(ltype+78,x), "histo_{0}_{1}".format(ltype+78,x), 40,0,80), "MET_significance","weight")
-            histo[ltype+81][x] =dfzllgcat[3*x+ltype].Filter("MET_significance < 20").Histo1D(("histo_{0}_{1}".format(ltype+81,x), "histo_{0}_{1}".format(ltype+81,x), 20,0,1), "jetPtgFrac","weight")
-
-            #histo[ltype+96][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+96,x), "histo_{0}_{1}".format(ltype+96,x), 10,-0.5, 9.5), "ngood_jets","weightNoPURecoSF")
-            #histo[ltype+97][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+97,x), "histo_{0}_{1}".format(ltype+97,x), 10,-0.5, 9.5), "ngood_jets","weightNoLepSF")
-            #histo[ltype+98][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+98,x), "histo_{0}_{1}".format(ltype+98,x), 10,-0.5, 9.5), "ngood_jets","weightNoTriggerSF")
-            #histo[ltype+99][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+99,x), "histo_{0}_{1}".format(ltype+99,x), 10,-0.5, 9.5), "ngood_jets","weightNoBTVSF")
+            histo[ltype+108][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+108,x), "histo_{0}_{1}".format(ltype+108,x), 20, 100, 300), "thePuppiMET_pt","weight")
+            histo[ltype+110][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+110,x), "histo_{0}_{1}".format(ltype+110,x), 20,0,400), "mtg","weight")
+            histo[ltype+112][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+112,x), "histo_{0}_{1}".format(ltype+112,x), 10,-0.5, 9.5), "ngood_jets","weight")
+            histo[ltype+114][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+114,x), "histo_{0}_{1}".format(ltype+114,x), 40,0,80), "MET_significance","weight")
+            histo[ltype+116][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+116,x), "histo_{0}_{1}".format(ltype+116,x), 20,0,1), "jetPtgFrac","weight")
 
     reporta = []
     reportb = []
     for x in range(nCat):
-        for ltype in range(3):
-            reporta.append(dfzllcat[3*x+ltype].Report())
-            reportb.append(dfzllgcat[3*x+ltype].Report())
+        for ltype in range(2):
+            reporta.append(dfzllcat[2*x+ltype].Report())
+            reportb.append(dfzllgcat[2*x+ltype].Report())
             if(x != theCat): continue
-            print("---------------- SUMMARY 3*{0}+{1} = {2} -------------".format(x,ltype,3*x+ltype))
-            reporta[3*x+ltype].Print()
+            print("---------------- SUMMARY 3*{0}+{1} = {2} -------------".format(x,ltype,2*x+ltype))
+            reporta[2*x+ltype].Print()
             print("-----------------------------")
-            reportb[3*x+ltype].Print()
+            reportb[2*x+ltype].Print()
 
     myfile = ROOT.TFile("fillhisto_zmetAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
