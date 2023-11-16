@@ -87,6 +87,7 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     ROOT.initJSONSFs(year)
 
     dfcat = df.Define("PDType","\"{0}\"".format(PDType))\
+              .Define("weightForBTag","1.0f")\
               .Define("weight","{0}*genWeight".format(weight/getLumi(year)))\
               .Filter("weight != 0","good weight")
 
@@ -179,20 +180,18 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
           .Define("goodloosejet_eta_bj_l","goodloosejet_eta[goodloosejet_bj_l]")
           )
 
-    dfcat = dfcat.Define("nbtag","Sum(goodloosejet_lf)").Filter("nbtag > 0","nbtag > 0")
-
-    histo2D[ 0][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 0,x),"histo2d_{0}_{1}".format( 0,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf"  ,"goodloosejet_pt_lf"  ,"weight")
-    histo2D[ 1][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 1,x),"histo2d_{0}_{1}".format( 1,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj"  ,"goodloosejet_pt_cj"  ,"weight")
-    histo2D[ 2][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 2,x),"histo2d_{0}_{1}".format( 2,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj"  ,"goodloosejet_pt_bj"  ,"weight")
-    histo2D[ 3][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 3,x),"histo2d_{0}_{1}".format( 3,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_t","goodloosejet_pt_lf_t","weight")
-    histo2D[ 4][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 4,x),"histo2d_{0}_{1}".format( 4,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_t","goodloosejet_pt_cj_t","weight")
-    histo2D[ 5][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 5,x),"histo2d_{0}_{1}".format( 5,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_t","goodloosejet_pt_bj_t","weight")
-    histo2D[ 6][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 6,x),"histo2d_{0}_{1}".format( 6,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_m","goodloosejet_pt_lf_m","weight")
-    histo2D[ 7][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 7,x),"histo2d_{0}_{1}".format( 7,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_m","goodloosejet_pt_cj_m","weight")
-    histo2D[ 8][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 8,x),"histo2d_{0}_{1}".format( 8,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_m","goodloosejet_pt_bj_m","weight")
-    histo2D[ 9][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 9,x),"histo2d_{0}_{1}".format( 9,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_l","goodloosejet_pt_lf_l","weight")
-    histo2D[10][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(10,x),"histo2d_{0}_{1}".format(10,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_l","goodloosejet_pt_cj_l","weight")
-    histo2D[11][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(11,x),"histo2d_{0}_{1}".format(11,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_l","goodloosejet_pt_bj_l","weight")
+    histo2D[ 0][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 0,x),"histo2d_{0}_{1}".format( 0,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf"  ,"goodloosejet_pt_lf"  ,"weightForBTag")
+    histo2D[ 1][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 1,x),"histo2d_{0}_{1}".format( 1,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj"  ,"goodloosejet_pt_cj"  ,"weightForBTag")
+    histo2D[ 2][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 2,x),"histo2d_{0}_{1}".format( 2,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj"  ,"goodloosejet_pt_bj"  ,"weightForBTag")
+    histo2D[ 3][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 3,x),"histo2d_{0}_{1}".format( 3,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_t","goodloosejet_pt_lf_t","weightForBTag")
+    histo2D[ 4][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 4,x),"histo2d_{0}_{1}".format( 4,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_t","goodloosejet_pt_cj_t","weightForBTag")
+    histo2D[ 5][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 5,x),"histo2d_{0}_{1}".format( 5,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_t","goodloosejet_pt_bj_t","weightForBTag")
+    histo2D[ 6][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 6,x),"histo2d_{0}_{1}".format( 6,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_m","goodloosejet_pt_lf_m","weightForBTag")
+    histo2D[ 7][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 7,x),"histo2d_{0}_{1}".format( 7,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_m","goodloosejet_pt_cj_m","weightForBTag")
+    histo2D[ 8][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 8,x),"histo2d_{0}_{1}".format( 8,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_m","goodloosejet_pt_bj_m","weightForBTag")
+    histo2D[ 9][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 9,x),"histo2d_{0}_{1}".format( 9,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_l","goodloosejet_pt_lf_l","weightForBTag")
+    histo2D[10][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(10,x),"histo2d_{0}_{1}".format(10,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_l","goodloosejet_pt_cj_l","weightForBTag")
+    histo2D[11][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(11,x),"histo2d_{0}_{1}".format(11,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_l","goodloosejet_pt_bj_l","weightForBTag")
 
     histo[10][x] = dfgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
     histo[11][x] = dfgen.Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 50, 0., 100.), "Zpt","weight")
