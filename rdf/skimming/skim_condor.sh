@@ -21,6 +21,8 @@ skim.py skim_*.cfg \
 functions_skim.cc haddnanoaod.py \
 jsns/* config/*
 
+mkdir -p logs;
+
 while IFS= read -r line; do
 
 set -- $line
