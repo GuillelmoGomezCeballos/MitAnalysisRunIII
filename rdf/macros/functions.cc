@@ -546,10 +546,15 @@ struct WeightsComputer {
 
 float compute_fakeRate(const bool isData,
                        const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& tight_mu, const int mType,
-                       const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& tight_el, const int eType){
+                       const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& tight_el, const int eType,
+		       const int whichAna){
 
   // 0/1/2 - 1001/1002/1003 anaType 1
   // 3/4/5 - 1001/1002/1003 anaType 2
+
+  // whichAna = 1 (ssww)
+  double addSF[2] {1.0, 1.0};
+  if(whichAna == 1) {addSF[0] = 0.35; addSF[1] = 0.80;}
 
   if(mu_pt.size() != tight_mu.size() || el_pt.size() != tight_el.size()) {
     printf("PROBLEM in compute_fakeRate (%zu/%zu) (%zu/%zu)!\n",mu_pt.size(),tight_mu.size(),el_pt.size(),tight_el.size());
@@ -560,7 +565,7 @@ float compute_fakeRate(const bool isData,
   for(unsigned int i=0;i<mu_pt.size();i++) {
     if(tight_mu[i] == 1) continue;
     const TH2D& hcorr = histoFakeEtaPt_mu[mType];
-    double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),mu_pt[i]);
+    double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),mu_pt[i]) * addSF[0];
     sfTot = -sfTot*sf/(1-sf);
     //printf("fakemu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sf/(1-sf),sfTot);
   }
@@ -568,7 +573,7 @@ float compute_fakeRate(const bool isData,
   for(unsigned int i=0;i<el_pt.size();i++) {
     if(tight_el[i] == 1) continue;
     const TH2D& hcorr = histoFakeEtaPt_el[eType];
-    double sf = getValFromTH2(hcorr, fabs(el_eta[i]), el_pt[i]);
+    double sf = getValFromTH2(hcorr, fabs(el_eta[i]), el_pt[i]) * addSF[1];
     sfTot = -sfTot*sf/(1-sf);
     //printf("fakeel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sf/(1-sf),sfTot);
   }

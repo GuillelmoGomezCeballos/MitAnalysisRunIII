@@ -12,7 +12,7 @@ correctionString = "_correction"
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
-bTagSel = 1
+bTagSel = 2
 useBTaggingWeights = 1
 
 useFR = 1
@@ -183,7 +183,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     dftag = selectionLL(df,year,PDType,isData,count)
 
-    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString)
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,1)
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("theCat","compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
@@ -229,6 +229,15 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[17][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 40,0,3.1416), "vbs_dphijj","weight")
         histo[18][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 20,-1,1), "bdt_vbfinc","weight")
         histo[19][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 20,-1,1), "bdt_vbfinc","weight")
+        for ltype in range(4):
+            histo[50+ltype][x] = dfwwcat[x] .Filter("ltype == {0}".format(ltype)).Histo1D(("histo_{0}_{1}".format(50+ltype,x), "histo_{0}_{1}".format(50+ltype,x),40, 25, 225), "ptl1","weight")
+            histo[54+ltype][x] = dfwwbcat[x].Filter("ltype == {0}".format(ltype)).Histo1D(("histo_{0}_{1}".format(54+ltype,x), "histo_{0}_{1}".format(54+ltype,x),40, 25, 225), "ptl1","weight")
+            histo[58+ltype][x] = dfwwcat[x] .Filter("ltype == {0}".format(ltype)).Histo1D(("histo_{0}_{1}".format(58+ltype,x), "histo_{0}_{1}".format(58+ltype,x),20, 20, 120), "ptl2","weight")
+            histo[62+ltype][x] = dfwwbcat[x].Filter("ltype == {0}".format(ltype)).Histo1D(("histo_{0}_{1}".format(62+ltype,x), "histo_{0}_{1}".format(62+ltype,x),20, 20, 120), "ptl2","weight")
+            histo[66+ltype][x] = dfwwcat[x] .Filter("ltype == {0}".format(ltype)).Histo1D(("histo_{0}_{1}".format(66+ltype,x), "histo_{0}_{1}".format(66+ltype,x),25, 0, 2.5), "etal1","weight")
+            histo[70+ltype][x] = dfwwbcat[x].Filter("ltype == {0}".format(ltype)).Histo1D(("histo_{0}_{1}".format(70+ltype,x), "histo_{0}_{1}".format(70+ltype,x),25, 0, 2.5), "etal1","weight")
+            histo[74+ltype][x] = dfwwcat[x] .Filter("ltype == {0}".format(ltype)).Histo1D(("histo_{0}_{1}".format(74+ltype,x), "histo_{0}_{1}".format(74+ltype,x),25, 0, 2.5), "etal2","weight")
+            histo[78+ltype][x] = dfwwbcat[x].Filter("ltype == {0}".format(ltype)).Histo1D(("histo_{0}_{1}".format(78+ltype,x), "histo_{0}_{1}".format(78+ltype,x),25, 0, 2.5), "etal2","weight")
 
         dfwwvbscat .append(dfwwcat[x] .Filter(VBSSEL, "VBS selection"))
         dfwwbvbscat.append(dfwwbcat[x].Filter(VBSSEL, "VBS selection"))
@@ -263,14 +272,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[45][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(45,x), "histo_{0}_{1}".format(45,x),25, 0, 5), "vbs_etaj1","weight")
         histo[46][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(46,x), "histo_{0}_{1}".format(46,x),25, 0, 5), "vbs_etaj2","weight")
         histo[47][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(47,x), "histo_{0}_{1}".format(47,x),25, 0, 5), "vbs_etaj2","weight")
-        histo[48][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(48,x), "histo_{0}_{1}".format(48,x),40, 25, 225), "ptl1","weight")
-        histo[49][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(49,x), "histo_{0}_{1}".format(49,x),40, 25, 225), "ptl1","weight")
-        histo[50][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(50,x), "histo_{0}_{1}".format(50,x),20, 20, 120), "ptl2","weight")
-        histo[51][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(51,x), "histo_{0}_{1}".format(51,x),20, 20, 120), "ptl2","weight")
-        histo[52][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(52,x), "histo_{0}_{1}".format(52,x),25, 0, 2.5), "etal1","weight")
-        histo[53][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(53,x), "histo_{0}_{1}".format(53,x),25, 0, 2.5), "etal1","weight")
-        histo[54][x] = dfwwjjcat[x] .Histo1D(("histo_{0}_{1}".format(54,x), "histo_{0}_{1}".format(54,x),25, 0, 2.5), "etal2","weight")
-        histo[55][x] = dfwwbjjcat[x].Histo1D(("histo_{0}_{1}".format(55,x), "histo_{0}_{1}".format(55,x),25, 0, 2.5), "etal2","weight")
 
         if(doNtuples == True and x == theCat):
             outputFile = "ntupleSSWWAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob)
@@ -281,17 +282,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         #histo[94][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(94,x), "histo_{0}_{1}".format(94,x), 4,-0.5, 3.5), "ltype","weightNoTriggerSF")
         #histo[95][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(95,x), "histo_{0}_{1}".format(95,x), 4,-0.5, 3.5), "ltype","weightNoBTVSF")
 
-        startF = 300
-        BinF = 50
-        minF = 500
-        maxF = 2500
-        histo[startF+0][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj",theCat,startF,x,BinF,minF,maxF,0)
-        for nv in range(1,129):
-            histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj"       ,theCat,startF,x,BinF,minF,maxF,nv)
-        histo[startF+129][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJes0Up"  ,theCat,startF,x,BinF,minF,maxF,129)
-        histo[startF+130][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJes0Down",theCat,startF,x,BinF,minF,maxF,130)
-        histo[startF+131][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerUp"  ,theCat,startF,x,BinF,minF,maxF,131)
-        histo[startF+132][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerDown",theCat,startF,x,BinF,minF,maxF,132)
+        #startF = 300
+        #BinF = 50
+        #minF = 500
+        #maxF = 2500
+        #histo[startF+0][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj",theCat,startF,x,BinF,minF,maxF,0)
+        #for nv in range(1,129):
+        #    histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj"       ,theCat,startF,x,BinF,minF,maxF,nv)
+        #histo[startF+129][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJes0Up"  ,theCat,startF,x,BinF,minF,maxF,129)
+        #histo[startF+130][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJes0Down",theCat,startF,x,BinF,minF,maxF,130)
+        #histo[startF+131][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerUp"  ,theCat,startF,x,BinF,minF,maxF,131)
+        #histo[startF+132][x]    = makeFinalVariable(dfwwvbscat[x],"vbs_mjjJerDown",theCat,startF,x,BinF,minF,maxF,132)
 
     report = []
     for x in range(nCat):

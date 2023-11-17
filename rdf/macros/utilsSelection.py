@@ -693,9 +693,9 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
 
     return dftag
 
-def selectionDAWeigths(df,year,PDType):
+def selectionDAWeigths(df,year,PDType,whichAna):
     dftag =(df.Define("PDType","\"{0}\"".format(PDType))
-              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
+              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
               .Define("weight","weightFake*1.0")
               .Define("weight0","1.0")
               .Define("weight1","weightFake*1.0")
@@ -706,15 +706,15 @@ def selectionDAWeigths(df,year,PDType):
               .Define("weightNoLepSF","weightFake*1.0")
               .Define("weightBTag","weight")
               .Define("weightNoBTag","weight")
-              .Define("weightFakeAltm0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,5,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
-              .Define("weightFakeAltm1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,1,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
-              .Define("weightFakeAlte0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,5)")
-              .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,1)")
+              .Define("weightFakeAltm0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,5,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
+              .Define("weightFakeAltm1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,1,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
+              .Define("weightFakeAlte0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,5,{0})".format(whichAna))
+              .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,1,{0})".format(whichAna))
               )
 
     return dftag
 
-def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString):
+def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,whichAna):
 
     hasTheoryColumnName = [True, True, True]
     theoryColumnName = ["PSWeight", "LHEScaleWeight", "LHEPdfWeight"]
@@ -757,7 +757,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
               .Define("ELEWP","\"{0}\"".format(ELEWP))
               .Define("PHOWP","\"Medium\"")
 
-              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
+              .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
 
               .Define("weightBtagSF","compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"central\",0,{0})".format(bTagSel))
 
@@ -847,10 +847,10 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weightTauSFJSON","compute_JSON_TAU_SFs(good_Tau_pt,good_Tau_eta,good_Tau_decayMode,good_Tau_genPartFlav,\"nom\")")
                  .Filter("weightTauSFJSON > 0","weightTauSFJSON > 0")
 
-                 .Define("weightFakeAltm0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,5,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
-                 .Define("weightFakeAltm1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,1,fake_Electron_pt,fake_Electron_eta,tight_el,2)")
-                 .Define("weightFakeAlte0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,5)")
-                 .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,1)")
+                 .Define("weightFakeAltm0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,5,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
+                 .Define("weightFakeAltm1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,1,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
+                 .Define("weightFakeAlte0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,5,{0})".format(whichAna))
+                 .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,1,{0})".format(whichAna))
 
                  )
 
@@ -953,9 +953,9 @@ def selectionTheoryWeigths(dftag,weight,nTheoryReplicas,genEventSumLHEScaleRenor
 
     return dftag
 
-def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString):
-    if(isData == "true"): return selectionDAWeigths(df,year,PDType)
-    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString)
+def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,whichAna):
+    if(isData == "true"): return selectionDAWeigths(df,year,PDType,whichAna)
+    else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,whichAna)
 
 def makeFinalVariable(df,var,theCat,start,x,bin,min,max,type):
     histoNumber = start+type
