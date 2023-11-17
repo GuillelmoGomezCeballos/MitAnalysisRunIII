@@ -1,13 +1,13 @@
 #!/bin/sh
 
-if [ $# -lt 1 ]; then
+if [ $# -lt 2 ]; then
    echo "TOO FEW PARAMETERS"
    exit
 fi
 
 export option=$1
 export path="fillhisto_zAnalysis1002"
-export year=2022
+export year=$2
 export output="anaZ"
 
 if [ $option -eq 0 ]; then
