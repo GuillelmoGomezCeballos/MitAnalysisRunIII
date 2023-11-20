@@ -13,7 +13,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 bTagSel = 1
 useBTaggingWeights = 0
 
-useFR = 1
+useFR = 0
 
 altMass = "Def"
 
