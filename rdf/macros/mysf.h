@@ -16,6 +16,8 @@ class MyCorrections {
     double eval_muonISOSF (double eta, double pt, const char *valType);
 
     double eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
+    double eval_electronScale(const char *valType, const int gain, const double run, const double eta, const double r9, const double et);
+    double eval_electronSmearing(const char *valType, const double eta, const double r9);
     double eval_photonSF  (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
 
     double eval_tauJETSF  (double pt, int dm, int genmatch, const char *workingPoint, const char *valType);
@@ -37,6 +39,8 @@ class MyCorrections {
     correction::Correction::Ref muonIDSF_;
     correction::Correction::Ref muonISOSF_;
     correction::Correction::Ref electronSF_;
+    correction::Correction::Ref electronScale_;
+    correction::Correction::Ref electronSmearing_;
     correction::Correction::Ref photonSF_;
     correction::Correction::Ref tauJETSF_;
     correction::Correction::Ref tauELESF_;

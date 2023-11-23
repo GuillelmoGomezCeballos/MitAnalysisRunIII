@@ -54,6 +54,11 @@ MyCorrections::MyCorrections(int the_input_year) {
   if	 (year == 20220) electronSF_ = csetELE->at("2022FG-Electron-ID-SF");
   else if(year == 20221) electronSF_ = csetELE->at("2022FG-Electron-ID-SF");
 
+  std::string fileNameEnergyELE = dirName+"EGM/"+subDirName+"SS.json.gz";
+  auto csetEnergyELE = correction::CorrectionSet::from_file(fileNameEnergyELE);
+  if	 (year == 20220) {electronScale_ = csetEnergyELE->at("Prompt2022FG_ScaleJSON"); electronSmearing_ = csetEnergyELE->at("Prompt2022FG_SmearingJSON");}
+  else if(year == 20221) {electronScale_ = csetEnergyELE->at("Prompt2022FG_ScaleJSON"); electronSmearing_ = csetEnergyELE->at("Prompt2022FG_SmearingJSON");}
+
   std::string fileNameTAU = dirName+"TAU/"+subDirName+"tau.json.gz";
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);
   tauJETSF_ = csetTAU->at("DeepTau2017v2p1VSjet");
@@ -169,6 +174,14 @@ double MyCorrections::eval_muonISOSF(double eta, double pt, const char *valType)
 double MyCorrections::eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt) {
   pt = std::max(pt,10.001);
   return electronSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
+};
+
+double MyCorrections::eval_electronScale(const char *valType, const int gain, const double run, const double eta, const double r9, const double et) {
+  return electronScale_->evaluate({valType, gain, run, eta, r9, et});
+};
+
+double MyCorrections::eval_electronSmearing(const char *valType, const double eta, const double r9) {
+  return electronSmearing_->evaluate({valType, eta, r9});
 };
 
 double MyCorrections::eval_photonSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt) {

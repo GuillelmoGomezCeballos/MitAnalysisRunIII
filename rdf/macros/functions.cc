@@ -444,37 +444,65 @@ Vec_f compute_MUOPT_Unc(const int year, const Vec_f& mu_pt, const Vec_f& mu_eta,
   return new_mu_pt;
 }
 
-Vec_f compute_ELEPT_Unc(const int year, const Vec_f& el_pt, const Vec_f& el_eta, int type){
-  Vec_f new_el_pt(el_pt.size(), 1.0);
-  if     (year == 20220){
-    for(unsigned int i=0;i<el_pt.size();i++) {
-       if     (type == +1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(1.0006+gRandom->Gaus(0.0,0.0150));
-       else if(type ==  0 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9986+gRandom->Gaus(0.0,0.0150));
-       else if(type == -1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9966+gRandom->Gaus(0.0,0.0150));
-       else if(type == +1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0057+gRandom->Gaus(0.0,0.0200));
-       else if(type ==  0 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0037+gRandom->Gaus(0.0,0.0200));
-       else if(type == -1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0017+gRandom->Gaus(0.0,0.0200));
-       else printf("PROBLEM in compute_MUOPT_Unc\n");
+Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const int run, const Vec_f& eta, const Vec_f& r9, const Vec_f& pt){
+  Vec_f new_pt(pt.size(), 1.0);
+  bool debug = false;
+  if(debug) printf("eleEnergy: %lu %d\n",pt.size(),type);
+
+  if     (year == 20220 && type != 10){
+    for(unsigned int i=0;i<pt.size();i++) {
+       if     (type == +1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(1.0006+gRandom->Gaus(0.0,0.0150));
+       else if(type ==  0 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9986+gRandom->Gaus(0.0,0.0150));
+       else if(type == -1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9966+gRandom->Gaus(0.0,0.0150));
+       else if(type == +1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0057+gRandom->Gaus(0.0,0.0200));
+       else if(type ==  0 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0037+gRandom->Gaus(0.0,0.0200));
+       else if(type == -1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0017+gRandom->Gaus(0.0,0.0200));
+       else printf("PROBLEM in compute_ELEPT_Unc\n");
     }
   }
-  else if(year == 20221){
-    for(unsigned int i=0;i<el_pt.size();i++) {
-       if     (type == +1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9970+gRandom->Gaus(0.0,0.0150));
-       else if(type ==  0 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9950+gRandom->Gaus(0.0,0.0150));
-       else if(type == -1 && abs(el_eta[i]) <  1.5) new_el_pt[i] = el_pt[i]*(0.9930+gRandom->Gaus(0.0,0.0150));
-       else if(type == +1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0029+gRandom->Gaus(0.0,0.0200));
-       else if(type ==  0 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(1.0009+gRandom->Gaus(0.0,0.0200));
-       else if(type == -1 && abs(el_eta[i]) >= 1.5) new_el_pt[i] = el_pt[i]*(0.9989+gRandom->Gaus(0.0,0.0200));
-       else printf("PROBLEM in compute_MUOPT_Unc\n");
+  else if(year == 20220 && type == 10){
+    for(unsigned int i=0;i<pt.size();i++) new_pt[i] = pt[i];
+  }
+  else if(year == 20221 && type != 10){
+    for(unsigned int i=0;i<pt.size();i++) {
+       if     (type == +1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9970+gRandom->Gaus(0.0,0.0150));
+       else if(type ==  0 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9950+gRandom->Gaus(0.0,0.0150));
+       else if(type == -1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9930+gRandom->Gaus(0.0,0.0150));
+       else if(type == +1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0029+gRandom->Gaus(0.0,0.0200));
+       else if(type ==  0 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0009+gRandom->Gaus(0.0,0.0200));
+       else if(type == -1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(0.9989+gRandom->Gaus(0.0,0.0200));
+       else printf("PROBLEM in compute_ELEPT_Unc\n");
     }
+  }
+  else if(year == 20221 && type == 10){
+    for(unsigned int i=0;i<pt.size();i++) new_pt[i] = pt[i];
   }
   else {
-    for(unsigned int i=0;i<el_pt.size();i++) {
-       new_el_pt[i] = el_pt[i];
+    if    (type == 10) { // data
+      for(unsigned int i=0;i<pt.size();i++) {
+	new_pt[i] = pt[i]*corrSFs.eval_electronScale((char*)"total_correction", gain[i], (double)run, eta[i], r9[i], pt[i]);
+	if(debug) printf("ele(%d)-%d: %.3f %.3f\n",i,type,pt[i],new_pt[i]);
+      }
+    }
+    else if(type == 0) { // MC default
+      for(unsigned int i=0;i<pt.size();i++) {
+	double rho = corrSFs.eval_electronSmearing((char*)"rho", eta[i], r9[i]);
+	new_pt[i] = pt[i]*gRandom->Gaus(1.0,rho);
+	if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f\n",i,type,pt[i],new_pt[i],rho);
+      }
+    }
+    else if(type == -1 || type == +1) { // MC smearing uncertainty
+      for(unsigned int i=0;i<pt.size();i++) {
+	double rho     = corrSFs.eval_electronSmearing((char*)"rho", eta[i], r9[i]);
+	double rho_unc = corrSFs.eval_electronSmearing((char*)"err_rho", eta[i], r9[i]);
+	double scale_unc = corrSFs.eval_electronScale((char*)"total_uncertainty", gain[i], 1.0, eta[i], r9[i], pt[i]);
+	new_pt[i] = pt[i]*gRandom->Gaus(1.0,rho+(double)type*(rho_unc+scale_unc));
+	if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f %.6f %.6f\n",i,type,pt[i],new_pt[i],rho,rho_unc,scale_unc);
+      }
     }
   }
 
-  return new_el_pt;
+  return new_pt;
 }
 
 Vec_f compute_PHOPT_Unc(const Vec_f& ph_pt, int type){
