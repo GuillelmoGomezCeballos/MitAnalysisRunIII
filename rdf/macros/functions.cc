@@ -79,6 +79,9 @@ TH1D histo_wwpt_scaleup;
 TH1D histo_wwpt_scaledown;
 TH1D histo_wwpt_resumup;
 TH1D histo_wwpt_resumdown;
+TH1D histoWSEtaSF;
+TH1D histoWSEtaSF_unc;
+TH2D histoWSEtaPtSF;
 auto corrSFs = MyCorrections(2018);
 
 void initHisto2D(TH2D h, int nsel){
@@ -115,6 +118,7 @@ void initHisto2D(TH2D h, int nsel){
   else if(nsel == 30) histoFakeEtaPt_el[3] = h;
   else if(nsel == 31) histoFakeEtaPt_el[4] = h;
   else if(nsel == 32) histoFakeEtaPt_el[5] = h;
+  else if(nsel == 33) histoWSEtaPtSF = h;
 }
 
 void initHisto1D(TH1D h, int nsel){
@@ -126,6 +130,8 @@ void initHisto1D(TH1D h, int nsel){
   else if(nsel == 5) histo_wwpt_scaledown = h;
   else if(nsel == 6) histo_wwpt_resumup = h;
   else if(nsel == 7) histo_wwpt_resumdown = h;
+  else if(nsel == 8) histoWSEtaSF = h;
+  else if(nsel == 9) histoWSEtaSF_unc = h;
 }
 
 float getValFromTH1(const TH1& h, const float& x, const float& sumError=0.0) {
@@ -571,6 +577,64 @@ struct WeightsComputer {
       return compute_test(mu_pt, mu_eta, *fHist2D);
   }
 };
+
+int compute_number_WS(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& mu_charge, const Vec_i& mu_genPartIdx,
+                      const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& el_charge, const Vec_i& el_genPartIdx,
+                      const Vec_i& GenPart_pdgId){
+
+  int nWS = 0;
+  for(unsigned int i=0;i<mu_pt.size();i++) {
+    if(mu_genPartIdx[i] < 0) continue; // no gen particle matched
+    if(abs(GenPart_pdgId[mu_genPartIdx[i]]) != 13) continue; // no gen muon matched
+    if(GenPart_pdgId[mu_genPartIdx[i]] * mu_charge[i] > 0) { // Wrong charge
+      nWS++;
+    }
+  }
+
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    if(el_genPartIdx[i] < 0) continue; // no gen particle matched
+    if(abs(GenPart_pdgId[el_genPartIdx[i]]) != 11) continue; // no gen electron matched
+    if(GenPart_pdgId[el_genPartIdx[i]] * el_charge[i] > 0) { // Wrong charge
+      nWS++;
+    }
+  }
+
+  return nWS;
+}
+
+float compute_WSSF(const int type, 
+                   const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& el_charge, const Vec_i& el_genPartIdx,
+		   const Vec_i& GenPart_pdgId){
+
+  if(type == 0) return 1.0;
+  bool debug = false;
+  if(debug) printf("WSSFTot: %d %lu\n",type,el_pt.size());
+
+  double sfTot = 1.0;
+  for(unsigned int i=0;i<el_pt.size();i++) {
+    if(el_genPartIdx[i] < 0) continue; // no gen particle matched
+    if(abs(GenPart_pdgId[el_genPartIdx[i]]) != 11) continue; // no gen electron matched
+    if(GenPart_pdgId[el_genPartIdx[i]] * el_charge[i] > 0) { // Wrong charge
+      double sf = 1.0;
+      if     (type == 1){
+        const TH1D& hcorr = histoWSEtaSF;
+        sf = getValFromTH1(hcorr, std::min(fabs(el_eta[i]),2.4999f));
+      }
+      else if(type == 2){
+        const TH1D& hcorr = histoWSEtaSF_unc;
+        sf = getValFromTH1(hcorr, std::min(fabs(el_eta[i]),2.4999f));
+      }
+      else if(type == 3){
+        const TH2D& hcorr = histoWSEtaPtSF;
+        sf = getValFromTH2(hcorr, std::min(fabs(el_eta[i]),2.4999f), std::min(el_pt[i],49.999f));
+      }
+      sfTot = sfTot * sf;
+      if(debug) printf("WSSF(%d) %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sfTot);
+    }
+  }
+
+  return sfTot;
+}
 
 float compute_fakeRate(const bool isData,
                        const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& tight_mu, const int mType,
@@ -1718,9 +1782,10 @@ float compute_ptww_weight(const Vec_f& GenDressedLepton_pt, const Vec_f& GenDres
 }
 
 // compute category
-int compute_category(const int mc, const int typeFake, const int nFake, const int nTight){
+int compute_category(const int mc, const int typeFake, const int typeWS, const int nFake, const int nTight, const int nWS){
   if     (nFake > nTight) return typeFake;
   else if(nFake < nTight) {printf("IMPOSSIBLE compute_category\n"); return -1;}
+  if(nWS > 0) return typeWS;
   return mc;
 }
 

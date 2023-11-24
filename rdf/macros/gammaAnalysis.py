@@ -214,7 +214,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
     dftag = selectionLL(df,year,PDType,isData)
 
     dftag = (dftag.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
-                  .Define("theCat","compute_category({0},kPlotNonPrompt,0,0)".format(theCat))
+                  .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
+                  .Define("theCat","compute_category({0},kPlotNonPrompt,kPlotWS,0,0,0)".format(theCat))
                     )
 
     if(theCat == plotCategory("kPlotData")):

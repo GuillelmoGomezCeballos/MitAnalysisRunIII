@@ -107,9 +107,9 @@ if __name__ == "__main__":
         histoWSSFEta.SetBinContent(nbin, sf)
         histoWSSFEta.SetBinError(nbin, sfe)
 
-    fileWSEffName = "histoWSSFEta_{0}.root".format(year)
-    outfileWSEff = TFile(fileWSEffName,"recreate")
-    outfileWSEff.cd()
-    histoWSSFEta.Write()
-    outfileWSEff.Close()
+    #fileWSEffName = "histoWSSFEta_{0}.root".format(year)
+    #outfileWSEff = TFile(fileWSEffName,"recreate")
+    #outfileWSEff.cd()
+    #histoWSSFEta.Write()
+    #outfileWSEff.Close()
 	

@@ -218,7 +218,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     for x in range(nCat):
         dfcat.append(dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
-                           .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
+                           .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
+                           .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,kPlotWS,nFake,nTight,0)".format(theCat))
                            .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                            )
 

@@ -98,7 +98,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
         for ltype in range(6):
             dfcat.append(dfbase.Filter("ltype=={0}".format(ltype), "flavor type == {0}".format(ltype))
                                .Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
-                               .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,2,2)".format(theCat))
+                               .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
+                               .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,kPlotWS,2,2,0)".format(theCat))
                                .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
 
             histo[ltype+ 0][x] = dfcat[6*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 100,  0, 500), "mtot","weight")

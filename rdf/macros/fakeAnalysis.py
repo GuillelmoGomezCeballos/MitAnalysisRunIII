@@ -185,7 +185,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
         for ltype in range(2):
             dfcat.append(dfbase.Filter("Sum(fake_mu)+2*Sum(fake_el)-1=={0}".format(ltype), "flavor type == {0}".format(ltype))
                                .Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
-                               .Define("theCat{0}".format(y), "compute_category({0},kPlotNonPrompt,1,1)".format(theCat))
+                               .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
+                               .Define("theCat{0}".format(y), "compute_category({0},kPlotNonPrompt,kPlotWS,1,1,0)".format(theCat))
                                .Filter("theCat{0}=={1}".format(y,y), "correct category ({0})".format(y))
                                )
 

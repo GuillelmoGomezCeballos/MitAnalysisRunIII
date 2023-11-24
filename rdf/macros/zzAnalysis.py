@@ -190,7 +190,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,"",0)
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
-                    .Define("theCat","compute_category({0},kPlotNonPrompt,nFake,nTight)".format(theCat))
+                    .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
+                    .Define("theCat","compute_category({0},kPlotNonPrompt,kPlotWS,nFake,nTight,0)".format(theCat))
 		    .Define("bdt_vbfinc", ROOT.computeModel, ROOT.model.GetVariableNames())
                     )
 
