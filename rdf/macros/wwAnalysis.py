@@ -9,6 +9,7 @@ from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariable2D
 #from utilsAna import loadCorrectionSet
 
+print_info = False
 makeDataCards = 1
 correctionString = ""
 
@@ -436,6 +437,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         #histo[108][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(108,x), "histo_{0}_{1}".format(108,x), 100, 0, 200), "MET_ptJes0Up"		  ,"weightWW")
         #histo[109][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(109,x), "histo_{0}_{1}".format(109,x), 100, 0, 200), "MET_ptJes0Down"		  ,"weightWW")
 
+        if(x == plotCategory("kPlotData") and print_info == True):
+             histo_test = (dfwwx0cat[x].Define("print_info","print_info(run,event)")
+                          .Filter("print_info > 0")
+                          .Histo1D(("test", "test", 4,-0.5,3.5), "ngood_jets","weightWW"))
 
         if(makeDataCards >= 1):
             BinXF = 4

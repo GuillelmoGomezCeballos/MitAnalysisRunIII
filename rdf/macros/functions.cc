@@ -1820,4 +1820,12 @@ float compute_weights(const float weight, const float genWeight, const TString t
   return weight*genWeight;
 }
 
+// print information
+int print_info(const UInt_t run, const ULong64_t event){
+
+  printf("INFO: %d %llu\n",run,event);
+
+  return 1;
+}
+
 #endif
