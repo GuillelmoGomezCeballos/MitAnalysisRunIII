@@ -141,6 +141,14 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
           .Define("fake_el","{0}".format(FAKE_EL))
           .Define("nFake","Sum(fake_mu)+Sum(fake_el)")
           .Filter("nFake == 2","Two fake leptons")
+          .Define("fake_Muon_pt"   ,"Muon_pt[fake_mu]")
+          .Define("fake_Muon_eta"  ,"Muon_eta[fake_mu]")
+          .Define("fake_Muon_phi"  ,"Muon_phi[fake_mu]")
+          .Define("fake_Muon_mass" ,"Muon_mass[fake_mu]")
+          .Define("fake_Electron_pt"   ,"Electron_pt[fake_el]")
+          .Define("fake_Electron_eta"  ,"Electron_eta[fake_el]")
+          .Define("fake_Electron_phi"  ,"Electron_phi[fake_el]")
+          .Define("fake_Electron_mass" ,"Electron_mass[fake_el]")
 
           .Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
           .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
@@ -202,6 +210,16 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     histo2D[ 9][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 9,x),"histo2d_{0}_{1}".format( 9,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_l","goodloosejet_pt_lf_l","weightForBTag")
     histo2D[10][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(10,x),"histo2d_{0}_{1}".format(10,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_l","goodloosejet_pt_cj_l","weightForBTag")
     histo2D[11][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(11,x),"histo2d_{0}_{1}".format(11,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_l","goodloosejet_pt_bj_l","weightForBTag")
+
+    histo[ 1][x] = (dfcat.Filter("Sum(fake_mu)==2")
+                         .Define("mll", "Minv2(fake_Muon_pt[0], fake_Muon_eta[0], fake_Muon_phi[0], fake_Muon_mass[0],fake_Muon_pt[1], fake_Muon_eta[1], fake_Muon_phi[1], fake_Muon_mass[1]).first")
+                         .Histo1D(("histo_{0}_{1}".format(1,x), "histo_{0}_{1}".format(1,x), 100, 10, 110), "mll","weight")
+			 )
+
+    histo[ 2][x] = (dfcat.Filter("Sum(fake_el)==2")
+                         .Define("mll", "Minv2(fake_Electron_pt[0], fake_Electron_eta[0], fake_Electron_phi[0], fake_Electron_mass[0],fake_Electron_pt[1], fake_Electron_eta[1], fake_Electron_phi[1], fake_Electron_mass[1]).first")
+                         .Histo1D(("histo_{0}_{1}".format(2,x), "histo_{0}_{1}".format(2,x), 100, 10, 110), "mll","weight")
+			 )
 
     histo[10][x] = dfgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
     histo[11][x] = dfgen.Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 50, 0., 100.), "Zpt","weight")
