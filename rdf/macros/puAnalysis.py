@@ -104,8 +104,18 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
           .Define("Zeta", "GenPart_eta[gen_z]")
           .Define("Zphi", "abs(GenPart_phi[gen_z])")
           .Define("Zmass", "GenPart_mass[gen_z]")
-          .Filter("abs(Zmass[0]-91.1876) < 15","abs(Zmass[0]-91.1876) < 15")
+          .Filter("abs(Zmass[0]-91.1876) < 15","Zmass cut")
           .Define("Zrap", "abs(makeRapidity(Zpt[0],Zeta[0],Zphi[0],Zmass[0]))")
+            )
+
+    dfLLgen = (dfcat
+          .Define("genLep", "(abs(GenDressedLepton_pdgId) == 11 || abs(GenDressedLepton_pdgId) == 13)")
+          .Filter("Sum(genLep) == 2","genLep == 2")
+          .Define("filter_GenDressedLepton_pt", "GenDressedLepton_pt[genLep]")
+          .Define("filter_GenDressedLepton_eta", "GenDressedLepton_eta[genLep]")
+          .Define("filter_GenDressedLepton_phi", "GenDressedLepton_phi[genLep]")
+          .Define("filter_GenDressedLepton_mass", "GenDressedLepton_mass[genLep]")
+          .Define("mllGen", "Minv2(filter_GenDressedLepton_pt[0], filter_GenDressedLepton_eta[0], filter_GenDressedLepton_phi[0], filter_GenDressedLepton_mass[0],filter_GenDressedLepton_pt[1], filter_GenDressedLepton_eta[1], filter_GenDressedLepton_phi[1], filter_GenDressedLepton_mass[1]).first")
             )
 
     dfww = selectionWW(dfcat,year,PDType,isData,count)
@@ -222,6 +232,8 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     dfww = dfww.Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
     histo[18][x] = dfww.Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x),3,-0.5,2.5), "ngood_jets","weight")
 
+    histo[19][x] = dfLLgen.Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 100, 10, 110), "mllGen","weight")
+
     BinXF = 3
     minXF = -0.5
     maxXF = 2.5
@@ -241,13 +253,15 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
 
     report0 = dfcat.Report()
     report1 = dfgen.Report()
-    report2 = dfww.Report()
-    report3 = dfwwgen.Report()
+    report2 = dfLLgen.Report()
+    report3 = dfww.Report()
+    report4 = dfwwgen.Report()
     print("---------------- SUMMARY -------------")
     report0.Print()
     report1.Print()
     report2.Print()
     report3.Print()
+    report4.Print()
 
     myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}_job-1.root".format(count,year),'RECREATE')
     for i in range(nCat):

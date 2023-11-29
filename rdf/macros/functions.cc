@@ -1729,17 +1729,16 @@ Vec_b cleaningJetFromLepton(Vec_f & Jeta, Vec_f & Jphi, Vec_f & Leta, Vec_f & Lp
 
 // Minv2
 std::pair<float, float>  Minv2(const float& pt, const float& eta, const float& phi, const float& m,
-                               const float& ph_pt, const float& ph_eta, const float& ph_phi) {
+                               const float& ph_pt, const float& ph_eta, const float& ph_phi, const float& ph_m) {
 
   PtEtaPhiMVector p_M(pt, eta, phi, m);
-  PtEtaPhiMVector p_ph(ph_pt, ph_eta, ph_phi, 0);
+  PtEtaPhiMVector p_ph(ph_pt, ph_eta, ph_phi, ph_m);
 
   float Minv = (p_M + p_ph).mass();
   float ptPair = (p_M + p_ph).pt();
 
   std::pair<float, float> pairRECO = std::make_pair(Minv , ptPair);
   return pairRECO;
-
 }
 
 float compute_ptww_weight(const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_phi, const float met_pt, const float met_phi, int nsel){

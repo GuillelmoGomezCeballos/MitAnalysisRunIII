@@ -72,7 +72,7 @@ cat << EOF > submit
 #SBATCH --output=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.out
 #SBATCH --error=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.error
 #SBATCH --mem-per-cpu=4000
-#SBATCH --exclude=submit03
+#SBATCH --exclude=submit[09]
 srun ./analysis_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 EOF
 
