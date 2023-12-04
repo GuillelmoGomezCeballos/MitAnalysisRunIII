@@ -316,54 +316,59 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   } // loop over categories
 
   // Begin Nonprompt study
-  const int nNonPromptSyst = 8;
+  const int nNonPromptSyst = 12;
   TString namenonPromptSyst[nSystTotal];
   namenonPromptSyst[ 0] = "nonPromptMuonAlt0Up";
   namenonPromptSyst[ 1] = "nonPromptMuonAlt1Down";
-  namenonPromptSyst[ 2] = "nonPromptElectronAlt0Up";
-  namenonPromptSyst[ 3] = "nonPromptElectronAlt1Up";
-  namenonPromptSyst[ 4] = "nonPromptMuonAlt0Down";
-  namenonPromptSyst[ 5] = "nonPromptMuonAlt1Up";
-  namenonPromptSyst[ 6] = "nonPromptElectronAlt0Down";
-  namenonPromptSyst[ 7] = "nonPromptElectronAlt1Down";
+  namenonPromptSyst[ 2] = "nonPromptMuonAlt2Up";
+  namenonPromptSyst[ 3] = "nonPromptElectronAlt0Up";
+  namenonPromptSyst[ 4] = "nonPromptElectronAlt1Up";
+  namenonPromptSyst[ 5] = "nonPromptElectronAlt2Up";
+  namenonPromptSyst[ 6] = "nonPromptMuonAlt0Down";
+  namenonPromptSyst[ 7] = "nonPromptMuonAlt1Up";
+  namenonPromptSyst[ 8] = "nonPromptMuonAlt2Down";
+  namenonPromptSyst[ 9] = "nonPromptElectronAlt0Down";
+  namenonPromptSyst[10] = "nonPromptElectronAlt1Down";
+  namenonPromptSyst[11] = "nonPromptElectronAlt2Down";
   TH1D *histo_NonPromtUnc[nNonPromptSyst];
   for(int j=0; j<nNonPromptSyst; j++){
     histo_NonPromtUnc[j] = new TH1D(Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j].Data()), Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j].Data()), BinXF, minXF, maxXF);
   }
 
+  const int totalNumberFakeSyst = 6;
   if(whichAna == 0){ 
-    TH1D *histo_InputNonPromtUnc[20];
+    TH1D *histo_InputNonPromtUnc[30];
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_nonprompt.root",InputDir.Data(),anaSel.Data(),year), "read");
-    for(int j=0; j<20; j++){
+    for(int j=0; j<30; j++){
       histo_InputNonPromtUnc[j] = (TH1D*)inputFile->Get(Form("histoNonPrompt_%d", j));
     }
-    for(int j=0; j<4; j++){
+    for(int j=0; j<totalNumberFakeSyst; j++){
       for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
-        histo_NonPromtUnc[j]->SetBinContent(nSel+1,histo_InputNonPromtUnc[j+nSel*4]->GetBinContent(fidAna));
-        histo_NonPromtUnc[j]->SetBinError  (nSel+1,histo_InputNonPromtUnc[j+nSel*4]->GetBinError  (fidAna));
+        histo_NonPromtUnc[j]->SetBinContent(nSel+1,histo_InputNonPromtUnc[j+nSel*totalNumberFakeSyst]->GetBinContent(fidAna));
+        histo_NonPromtUnc[j]->SetBinError  (nSel+1,histo_InputNonPromtUnc[j+nSel*totalNumberFakeSyst]->GetBinError  (fidAna));
       }
     }
     delete inputFile;
   } else {
-    TH1D *histo_InputNonPromtUnc[12];
+    TH1D *histo_InputNonPromtUnc[18];
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_nonprompt.root",InputDir.Data(),anaSel.Data(),year), "read");
-    for(int j=0; j<12; j++){
-      histo_InputNonPromtUnc[j] = (TH1D*)inputFile->Get(Form("histoNonPrompt_%d", 20+j));
+    for(int j=0; j<18; j++){
+      histo_InputNonPromtUnc[j] = (TH1D*)inputFile->Get(Form("histoNonPrompt_%d", 30+j));
     }
-    for(int j=0; j<4; j++){
+    for(int j=0; j<totalNumberFakeSyst; j++){
       for(int nb=1; nb<=histo_InputNonPromtUnc[j]->GetNbinsX(); nb++){
-        histo_NonPromtUnc[j]->SetBinContent(nb,histo_InputNonPromtUnc[j+(fidAna-1)*4]->GetBinContent(nb));
-        histo_NonPromtUnc[j]->SetBinError  (nb,histo_InputNonPromtUnc[j+(fidAna-1)*4]->GetBinError  (nb));
+        histo_NonPromtUnc[j]->SetBinContent(nb,histo_InputNonPromtUnc[j+(fidAna-1)*totalNumberFakeSyst]->GetBinContent(nb));
+        histo_NonPromtUnc[j]->SetBinError  (nb,histo_InputNonPromtUnc[j+(fidAna-1)*totalNumberFakeSyst]->GetBinError  (nb));
       }
     }
   }
 
-  for(int j=0; j<4; j++){
+  for(int j=0; j<totalNumberFakeSyst; j++){
     for(int nb=1; nb<=histo_Baseline[kPlotNonPrompt]->GetNbinsX(); nb++){
       if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
   	systValue = histo_NonPromtUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotNonPrompt]->GetBinContent(nb);
   	printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
-  	if(systValue > 0) histo_NonPromtUnc[j+4]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
+  	if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
       }
     }
   }
@@ -395,7 +400,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
       histo_PDFDown[npdf][ic]->Write();
     }
   }
-  for(int j=0; j<8; j++) histo_NonPromtUnc[j]->Write();
+  for(int j=0; j<nNonPromptSyst; j++) histo_NonPromtUnc[j]->Write();
   outputFile->Close();
 
   // Filling datacards txt file
@@ -491,6 +496,15 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
+  newcardShape << Form("nonPromptMuonAlt2 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("- "); 
+  }
+  newcardShape << Form("\n");
+
   newcardShape << Form("nonPromptElectronAlt0 shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
@@ -501,6 +515,15 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   newcardShape << Form("\n");
 
   newcardShape << Form("nonPromptElectronAlt1 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("- "); 
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("nonPromptElectronAlt2 shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;

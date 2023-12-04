@@ -1,6 +1,7 @@
 #!/bin/sh
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
+#export HOMEDIR=$PWD;export APPTAINER_BIND="/scratch";cmssw-cc7
 export SCRAM_ARCH=slc7_amd64_gcc11
 scramv1 project CMSSW CMSSW_13_2_6 # cmsrel is an alias not on the workers
 cd CMSSW_13_2_6/src/

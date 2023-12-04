@@ -48,8 +48,8 @@ typedef ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > PtEtaPhiMVec
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzM4D<double> > PxPyPzMVector;
 std::unordered_map< UInt_t, std::vector< std::pair<UInt_t,UInt_t> > > jsonMap;
 
-TH2D histoFakeEtaPt_mu[6];
-TH2D histoFakeEtaPt_el[6];
+TH2D histoFakeEtaPt_mu[9];
+TH2D histoFakeEtaPt_el[9];
 TH2D histoLepSFEtaPt_mu;
 TH2D histoLepSFEtaPt_el;
 TH2D histoTriggerSFEtaPt_0_0;
@@ -113,12 +113,18 @@ void initHisto2D(TH2D h, int nsel){
   else if(nsel == 25) histoFakeEtaPt_mu[3] = h;
   else if(nsel == 26) histoFakeEtaPt_mu[4] = h;
   else if(nsel == 27) histoFakeEtaPt_mu[5] = h;
-  else if(nsel == 28) histoFakeEtaPt_el[1] = h;
-  else if(nsel == 29) histoFakeEtaPt_el[2] = h;
-  else if(nsel == 30) histoFakeEtaPt_el[3] = h;
-  else if(nsel == 31) histoFakeEtaPt_el[4] = h;
-  else if(nsel == 32) histoFakeEtaPt_el[5] = h;
-  else if(nsel == 33) histoWSEtaPtSF = h;
+  else if(nsel == 28) histoFakeEtaPt_mu[6] = h;
+  else if(nsel == 29) histoFakeEtaPt_mu[7] = h;
+  else if(nsel == 30) histoFakeEtaPt_mu[8] = h;
+  else if(nsel == 31) histoFakeEtaPt_el[1] = h;
+  else if(nsel == 32) histoFakeEtaPt_el[2] = h;
+  else if(nsel == 33) histoFakeEtaPt_el[3] = h;
+  else if(nsel == 34) histoFakeEtaPt_el[4] = h;
+  else if(nsel == 35) histoFakeEtaPt_el[5] = h;
+  else if(nsel == 36) histoFakeEtaPt_el[6] = h;
+  else if(nsel == 37) histoFakeEtaPt_el[7] = h;
+  else if(nsel == 38) histoFakeEtaPt_el[8] = h;
+  else if(nsel == 39) histoWSEtaPtSF = h;
 }
 
 void initHisto1D(TH1D h, int nsel){
@@ -641,6 +647,9 @@ float compute_fakeRate(const bool isData,
                        const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& tight_el, const int eType,
 		       const int whichAna){
 
+  bool debug = false;
+  if(debug) printf("fakeRate: %d %d %d\n",mType,eType,whichAna);
+
   // 0/1/2 - 1001/1002/1003 anaType 1
   // 3/4/5 - 1001/1002/1003 anaType 2
 
@@ -659,7 +668,7 @@ float compute_fakeRate(const bool isData,
     const TH2D& hcorr = histoFakeEtaPt_mu[mType];
     double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),mu_pt[i]) * addSF[0];
     sfTot = -sfTot*sf/(1-sf);
-    //printf("fakemu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sf/(1-sf),sfTot);
+    if(debug) printf("fakemu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sf/(1-sf),sfTot);
   }
 
   for(unsigned int i=0;i<el_pt.size();i++) {
@@ -667,7 +676,7 @@ float compute_fakeRate(const bool isData,
     const TH2D& hcorr = histoFakeEtaPt_el[eType];
     double sf = getValFromTH2(hcorr, fabs(el_eta[i]), el_pt[i]) * addSF[1];
     sfTot = -sfTot*sf/(1-sf);
-    //printf("fakeel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sf/(1-sf),sfTot);
+    if(debug) printf("fakeel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sf/(1-sf),sfTot);
   }
       
   if(sfTot != 1 && isData) sfTot = -sfTot;

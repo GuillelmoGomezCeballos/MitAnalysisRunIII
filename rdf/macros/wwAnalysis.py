@@ -144,11 +144,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     ROOT.initHisto2D(histoFakeEtaPt_mu[3],25)
     ROOT.initHisto2D(histoFakeEtaPt_mu[4],26)
     ROOT.initHisto2D(histoFakeEtaPt_mu[5],27)
-    ROOT.initHisto2D(histoFakeEtaPt_el[1],28)
-    ROOT.initHisto2D(histoFakeEtaPt_el[2],29)
-    ROOT.initHisto2D(histoFakeEtaPt_el[3],30)
-    ROOT.initHisto2D(histoFakeEtaPt_el[4],31)
-    ROOT.initHisto2D(histoFakeEtaPt_el[5],32)
+    ROOT.initHisto2D(histoFakeEtaPt_mu[6],28)
+    ROOT.initHisto2D(histoFakeEtaPt_mu[7],29)
+    ROOT.initHisto2D(histoFakeEtaPt_mu[8],30)
+    ROOT.initHisto2D(histoFakeEtaPt_el[1],31)
+    ROOT.initHisto2D(histoFakeEtaPt_el[2],32)
+    ROOT.initHisto2D(histoFakeEtaPt_el[3],33)
+    ROOT.initHisto2D(histoFakeEtaPt_el[4],34)
+    ROOT.initHisto2D(histoFakeEtaPt_el[5],35)
+    ROOT.initHisto2D(histoFakeEtaPt_el[6],36)
+    ROOT.initHisto2D(histoFakeEtaPt_el[7],37)
+    ROOT.initHisto2D(histoFakeEtaPt_el[8],38)
     ROOT.initHisto1D(puWeights[0],0)
     ROOT.initHisto1D(puWeights[1],1)
     ROOT.initHisto1D(puWeights[2],2)
@@ -483,8 +489,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 startNonPrompt = 0
                 histoNonPrompt[0+startNonPrompt] = dfssx0cat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm0")
                 histoNonPrompt[1+startNonPrompt] = dfssx0cat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfssx0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dfssx0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[2+startNonPrompt] = dfssx0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm2")
+                histoNonPrompt[3+startNonPrompt] = dfssx0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
+                histoNonPrompt[4+startNonPrompt] = dfssx0cat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[5+startNonPrompt] = dfssx0cat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte2")
 
             startF = 200
             for nv in range(0,134):
@@ -516,11 +524,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo2D[startF+158][x]    = makeFinalVariable2D(dfwwx0cat[x],"ngood_jetsJes6Up"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,158)
             histo2D[startF+159][x]    = makeFinalVariable2D(dfwwx0cat[x],"ngood_jetsJes6Down","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,159)
             if(x == plotCategory("kPlotNonPrompt")):
-                startNonPrompt = 4
+                startNonPrompt = 6
                 histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm0")
                 histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm2")
+                histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
+                histoNonPrompt[4+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[5+startNonPrompt] = dfwwx0cat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte2")
 
             startF = 400
             for nv in range(0,134):
@@ -552,11 +562,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo2D[startF+158][x]    = makeFinalVariable2D(dfztt0cat[x],"ngood_jetsJes6Up"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,158)
             histo2D[startF+159][x]    = makeFinalVariable2D(dfztt0cat[x],"ngood_jetsJes6Down","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,159)
             if(x == plotCategory("kPlotNonPrompt")):
-                startNonPrompt = 8
+                startNonPrompt = 12
                 histoNonPrompt[0+startNonPrompt] = dfztt0cat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm0")
                 histoNonPrompt[1+startNonPrompt] = dfztt0cat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfztt0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dfztt0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[2+startNonPrompt] = dfztt0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm2")
+                histoNonPrompt[3+startNonPrompt] = dfztt0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
+                histoNonPrompt[4+startNonPrompt] = dfztt0cat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[5+startNonPrompt] = dfztt0cat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte2")
 
             startF = 600
             for nv in range(0,134):
@@ -588,11 +600,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo2D[startF+158][x]    = makeFinalVariable2D(dftop0cat[x],"ngood_jetsJes6Up"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,158)
             histo2D[startF+159][x]    = makeFinalVariable2D(dftop0cat[x],"ngood_jetsJes6Down","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,159)
             if(x == plotCategory("kPlotNonPrompt")):
-                startNonPrompt = 12
+                startNonPrompt = 18
                 histoNonPrompt[0+startNonPrompt] = dftop0cat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm0")
                 histoNonPrompt[1+startNonPrompt] = dftop0cat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dftop0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dftop0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[2+startNonPrompt] = dftop0cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm2")
+                histoNonPrompt[3+startNonPrompt] = dftop0cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
+                histoNonPrompt[4+startNonPrompt] = dftop0cat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[5+startNonPrompt] = dftop0cat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte2")
 
             startF = 800
             for nv in range(0,134):
@@ -624,11 +638,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo2D[startF+158][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJes6Up"  ,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,158)
             histo2D[startF+159][x]    = makeFinalVariable2D(dftop1cat[x],"ngood_jetsJes6Down","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,159)
             if(x == plotCategory("kPlotNonPrompt")):
-                startNonPrompt = 16
+                startNonPrompt = 24
                 histoNonPrompt[0+startNonPrompt] = dftop1cat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm0")
                 histoNonPrompt[1+startNonPrompt] = dftop1cat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dftop1cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dftop1cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[2+startNonPrompt] = dftop1cat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm2")
+                histoNonPrompt[3+startNonPrompt] = dftop1cat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
+                histoNonPrompt[4+startNonPrompt] = dftop1cat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[5+startNonPrompt] = dftop1cat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte2")
 
             BinXF1 = 25
             minXF1 = 85
@@ -664,11 +680,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[startF+158][x]    = makeFinalVariable2D(dfwwx0cat[x].Filter("ngood_jetsJes6Up==0")  ,"mll{0}".format(altMass),"theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,158)
                 histo2D[startF+159][x]    = makeFinalVariable2D(dfwwx0cat[x].Filter("ngood_jetsJes6Down==0"),"mll{0}".format(altMass),"theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,159)
                 if(x == plotCategory("kPlotNonPrompt")):
-                    startNonPrompt = 20
+                    startNonPrompt = 30
                     histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAltm0")
                     histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAltm1")
-                    histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte0")
-                    histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte1")
+                    histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAltm2")
+                    histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte0")
+                    histoNonPrompt[4+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte1")
+                    histoNonPrompt[5+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==0").Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte2")
 
                 startF = 1200
                 for nv in range(0,134):
@@ -700,11 +718,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[startF+158][x]    = makeFinalVariable2D(dfwwx0cat[x].Filter("ngood_jetsJes6Up==1")  ,"mll{0}".format(altMass),"theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,158)
                 histo2D[startF+159][x]    = makeFinalVariable2D(dfwwx0cat[x].Filter("ngood_jetsJes6Down==1"),"mll{0}".format(altMass),"theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,159)
                 if(x == plotCategory("kPlotNonPrompt")):
-                    startNonPrompt = 24
+                    startNonPrompt = 36
                     histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAltm0")
                     histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAltm1")
-                    histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte0")
-                    histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte1")
+                    histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAltm2")
+                    histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte0")
+                    histoNonPrompt[4+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte1")
+                    histoNonPrompt[5+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets==1").Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte2")
 
                 startF = 1400
                 for nv in range(0,134):
@@ -736,11 +756,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[startF+158][x]    = makeFinalVariable2D(dfwwx0cat[x].Filter("ngood_jetsJes6Up>=2")  ,"mll{0}".format(altMass),"theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,158)
                 histo2D[startF+159][x]    = makeFinalVariable2D(dfwwx0cat[x].Filter("ngood_jetsJes6Down>=2"),"mll{0}".format(altMass),"theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,159)
                 if(x == plotCategory("kPlotNonPrompt")):
-                    startNonPrompt = 28
+                    startNonPrompt = 42
                     histoNonPrompt[0+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAltm0")
                     histoNonPrompt[1+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAltm1")
-                    histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte0")
-                    histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte1")
+                    histoNonPrompt[2+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAltm2")
+                    histoNonPrompt[3+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte0")
+                    histoNonPrompt[4+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte1")
+                    histoNonPrompt[5+startNonPrompt] = dfwwx0cat[x].Filter("ngood_jets>=2").Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF1,minXF1,maxXF1), "mll{0}".format(altMass),"weightFakeAlte2")
 
     report = []
     for x in range(nCat):
@@ -977,13 +999,19 @@ if __name__ == "__main__":
     histoFakeEtaPt_mu.append(fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}_fakeAnalysis1001_anaType2".format(muSelChoice)))
     histoFakeEtaPt_mu.append(fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}_fakeAnalysis1002_anaType2".format(muSelChoice)))
     histoFakeEtaPt_mu.append(fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}_fakeAnalysis1003_anaType2".format(muSelChoice)))
+    histoFakeEtaPt_mu.append(fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}_fakeAnalysis1001_anaType3".format(muSelChoice)))
+    histoFakeEtaPt_mu.append(fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}_fakeAnalysis1002_anaType3".format(muSelChoice)))
+    histoFakeEtaPt_mu.append(fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}_fakeAnalysis1003_anaType3".format(muSelChoice)))
     histoFakeEtaPt_el.append(fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}_fakeAnalysis1001_anaType1".format(elSelChoice)))
     histoFakeEtaPt_el.append(fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}_fakeAnalysis1002_anaType1".format(elSelChoice)))
     histoFakeEtaPt_el.append(fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}_fakeAnalysis1003_anaType1".format(elSelChoice)))
     histoFakeEtaPt_el.append(fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}_fakeAnalysis1001_anaType2".format(elSelChoice)))
     histoFakeEtaPt_el.append(fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}_fakeAnalysis1002_anaType2".format(elSelChoice)))
     histoFakeEtaPt_el.append(fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}_fakeAnalysis1003_anaType2".format(elSelChoice)))
-    for x in range(6):
+    histoFakeEtaPt_el.append(fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}_fakeAnalysis1001_anaType3".format(elSelChoice)))
+    histoFakeEtaPt_el.append(fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}_fakeAnalysis1002_anaType3".format(elSelChoice)))
+    histoFakeEtaPt_el.append(fFakeFile.Get("histoFakeEffSelEtaPt_1_{0}_fakeAnalysis1003_anaType3".format(elSelChoice)))
+    for x in range(9):
         histoFakeEtaPt_mu[x].SetDirectory(0)
         histoFakeEtaPt_el[x].SetDirectory(0)
     fFakeFile.Close()

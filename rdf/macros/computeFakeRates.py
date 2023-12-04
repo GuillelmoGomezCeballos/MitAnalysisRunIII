@@ -51,23 +51,31 @@ if __name__ == "__main__":
         if opt == "--format":
             format = str(arg)
 
+    if(path == "fillhisto_fakeAnalysis1001"):
+        isPseudoData = 0
+    elif(path == "fillhisto_fakeAnalysis1002"):
+        isPseudoData = 1
+    elif(path == "fillhisto_fakeAnalysis1003"):
+        isPseudoData = 1
+    print("isPseudoData: {0}".format(isPseudoData))
+
     startHisto = [0, 0]
-    # no jet requirements / no jet requirements
+    # no jet requirements
     if  (anaType%100 == 0):
         startHisto[0] = 0
         startHisto[1] = 0
-    # njets > 0 / njets > 0
+    # njets30 > 0
     elif(anaType%100 == 1):
         startHisto[0] = 20
         startHisto[1] = 20
-    # nbjets > 0 / nbjets > 0
+    # nbjets20 > 0
     elif(anaType%100 == 2):
         startHisto[0] = 40
         startHisto[1] = 40
-    # nbjets > 0 / njets > 0
+    # nbjets50 > 0
     elif(anaType%100 == 3):
-        startHisto[0] = 40
-        startHisto[1] = 20
+        startHisto[0] = 60
+        startHisto[1] = 60
     else:
         print("Problem with anaType")
         sys.exit(1)

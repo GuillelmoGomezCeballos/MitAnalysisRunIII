@@ -711,8 +711,10 @@ def selectionDAWeigths(df,year,PDType,whichAna):
               .Define("weightNoBTag","weight")
               .Define("weightFakeAltm0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,5,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
               .Define("weightFakeAltm1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,1,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
+              .Define("weightFakeAltm2","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,8,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
               .Define("weightFakeAlte0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,5,{0})".format(whichAna))
               .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,1,{0})".format(whichAna))
+              .Define("weightFakeAlte2","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,8,{0})".format(whichAna))
               .Define("weightWSUnc0","weight")
               .Define("weightWSUnc1","weight")
               )
@@ -860,8 +862,10 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
 
                  .Define("weightFakeAltm0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,5,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
                  .Define("weightFakeAltm1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,1,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
+                 .Define("weightFakeAltm2","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,8,fake_Electron_pt,fake_Electron_eta,tight_el,2,{0})".format(whichAna))
                  .Define("weightFakeAlte0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,5,{0})".format(whichAna))
                  .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,1,{0})".format(whichAna))
+                 .Define("weightFakeAlte2","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,2,fake_Electron_pt,fake_Electron_eta,tight_el,8,{0})".format(whichAna))
 
                  .Define("weightWSUnc0","weight/weightWS*compute_WSSF({0},fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)".format(2))
                  .Define("weightWSUnc1","weight/weightWS*compute_WSSF({0},fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)".format(3))
