@@ -83,7 +83,7 @@ do
 
 cat << EOF > submit
 Universe   = vanilla
-Executable = analysis_condor.sh
+Executable = analysis_singularity_condor.sh
 Arguments  = ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 RequestMemory = 6000
 RequestCpus = 1
@@ -93,11 +93,10 @@ when_to_transfer_output = ON_EXIT
 Log    = logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}.log
 Output = logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}.out
 Error  = logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}.error
-transfer_input_files = ${whichAna}.tgz
+transfer_input_files = analysis_condor.sh,${whichAna}.tgz
 use_x509userproxy = True
 x509userproxy = /tmp/x509up_u${USERPROXY}
 Requirements = ( BOSCOCluster =!= "t3serv008.mit.edu" && BOSCOCluster =!= "ce03.cmsaf.mit.edu" && BOSCOCluster =!= "eofe8.mit.edu") && (Machine != "t3btch003.mit.edu")
-+REQUIRED_OS = "rhel7"
 +DESIRED_Sites = "mit_tier3"
 Queue
 EOF
