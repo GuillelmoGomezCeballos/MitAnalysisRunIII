@@ -367,6 +367,9 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     for(int nb=1; nb<=histo_Baseline[kPlotNonPrompt]->GetNbinsX(); nb++){
       if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
   	systValue = histo_NonPromtUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotNonPrompt]->GetBinContent(nb);
+        if     (systValue > 1.15) systValue = 1.15;
+        else if(systValue < 0.85) systValue = 0.85;
+        histo_NonPromtUnc[j+0]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)*systValue);
   	printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
   	if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
       }

@@ -17,9 +17,11 @@
 // whichAna = 0 (WZ), fidAna = 0 (SR), 1 (CR)
 // whichAna = 0 (ZZ), fidAna = 0 (SR)
 
-void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1001", int year = 20221){
+void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ", TString anaSel = "wwAnalysis1001", int year = 20221, int srAna = 1){
 
   if(fidAna < 0 || fidAna > 2) printf("Wrong fidAna(%d)\n",fidAna);
+
+  plotBaseNames[kPlotNonPrompt] = "NonPromptWZ";
 
   int jumpValue = 200;
 
@@ -97,7 +99,12 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   nameSyst[157] = "JesTimePtEtaUp";
   nameSyst[158] = "JesTimePtEtaDown";
 
-  int BinXF = 4; double minXF = -0.5; double maxXF = 3.5;    
+  int BinXF = 4; double minXF = -0.5; double maxXF = 3.5;
+
+  if(anaSel.Contains("zzAnalysis")) {
+    printf("Modifying default binning\n");
+    BinXF = 3; minXF = -0.5; maxXF = 2.5;
+  }
 
   for(int ic=0; ic<nPlotCategories; ic++) {
     histo_Baseline[ic] = new TH1D(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()), BinXF, minXF, maxXF);
@@ -247,34 +254,42 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   } // loop over categories
 
   // Begin Nonprompt study
-  const int nNonPromptSyst = 8;
+  const int nNonPromptSyst = 12;
   TString namenonPromptSyst[nSystTotal];
-  namenonPromptSyst[ 0] = "nonPromptMuonAlt0Up";
-  namenonPromptSyst[ 1] = "nonPromptMuonAlt1Down";
-  namenonPromptSyst[ 2] = "nonPromptElectronAlt0Up";
-  namenonPromptSyst[ 3] = "nonPromptElectronAlt1Up";
-  namenonPromptSyst[ 4] = "nonPromptMuonAlt0Down";
-  namenonPromptSyst[ 5] = "nonPromptMuonAlt1Up";
-  namenonPromptSyst[ 6] = "nonPromptElectronAlt0Down";
-  namenonPromptSyst[ 7] = "nonPromptElectronAlt1Down";
-  TH1D *histo_InputNonPromtUnc[4];
+  namenonPromptSyst[ 0] = "nonPromptWZMuonAlt0Up";
+  namenonPromptSyst[ 1] = "nonPromptWZMuonAlt1Down";
+  namenonPromptSyst[ 2] = "nonPromptWZMuonAlt2Up";
+  namenonPromptSyst[ 3] = "nonPromptWZElectronAlt0Up";
+  namenonPromptSyst[ 4] = "nonPromptWZElectronAlt1Up";
+  namenonPromptSyst[ 5] = "nonPromptWZElectronAlt2Up";
+  namenonPromptSyst[ 6] = "nonPromptWZMuonAlt0Down";
+  namenonPromptSyst[ 7] = "nonPromptWZMuonAlt1Up";
+  namenonPromptSyst[ 8] = "nonPromptWZMuonAlt2Down";
+  namenonPromptSyst[ 9] = "nonPromptWZElectronAlt0Down";
+  namenonPromptSyst[10] = "nonPromptWZElectronAlt1Down";
+  namenonPromptSyst[11] = "nonPromptWZElectronAlt2Down";
+  const int totalNumberFakeSyst = 6;
+  TH1D *histo_InputNonPromtUnc[totalNumberFakeSyst];
   TH1D *histo_NonPromtUnc[nNonPromptSyst];
   if(anaSel.Contains("wzAnalysis")){
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_nonprompt.root",InputDir.Data(),anaSel.Data(),year), "read");
-    int startH = 0; if(fidAna == 1) startH = 4;
-    for(int j=0; j<4; j++){
+    int startH = 0; if(fidAna == 1) startH = totalNumberFakeSyst;
+    for(int j=0; j<totalNumberFakeSyst; j++){
       histo_InputNonPromtUnc[j] = (TH1D*)inputFile->Get(Form("histoNonPrompt_%d", j+startH));
-      histo_NonPromtUnc[j+0] = (TH1D*)histo_InputNonPromtUnc[j]->Clone(Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j+0].Data())); histo_NonPromtUnc[j+0]->SetDirectory(0);
-      histo_NonPromtUnc[j+4] = (TH1D*)histo_InputNonPromtUnc[j]->Clone(Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j+4].Data())); histo_NonPromtUnc[j+4]->SetDirectory(0);
+      histo_NonPromtUnc[j+                  0] = (TH1D*)histo_InputNonPromtUnc[j]->Clone(Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j+                  0].Data())); histo_NonPromtUnc[j+		    0]->SetDirectory(0);
+      histo_NonPromtUnc[j+totalNumberFakeSyst] = (TH1D*)histo_InputNonPromtUnc[j]->Clone(Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j+totalNumberFakeSyst].Data())); histo_NonPromtUnc[j+totalNumberFakeSyst]->SetDirectory(0);
     }
     delete inputFile;
 
-    for(int j=0; j<4; j++){
+    for(int j=0; j<totalNumberFakeSyst; j++){
       for(int nb=1; nb<=histo_Baseline[kPlotNonPrompt]->GetNbinsX(); nb++){
         if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
           systValue = histo_NonPromtUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotNonPrompt]->GetBinContent(nb);
+          if     (systValue > 1.15) systValue = 1.15;
+          else if(systValue < 0.85) systValue = 0.85;
+          histo_NonPromtUnc[j+0]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)*systValue);
           printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
-          if(systValue > 0) histo_NonPromtUnc[j+4]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
+          if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
         }
       }
     }
@@ -303,7 +318,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
       histo_PDFDown[npdf][ic]->Write();
     }
   }
-  if(anaSel.Contains("wzAnalysis")) for(int j=0; j<8; j++) histo_NonPromtUnc[j]->Write();
+  if(anaSel.Contains("wzAnalysis")) for(int j=0; j<nNonPromptSyst; j++) histo_NonPromtUnc[j]->Write();
   outputFile->Close();
 
   // Filling datacards txt file
@@ -341,8 +356,8 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic != kPlotWZ &&
-            ic != kPlotZZ
+    if     ((ic != kPlotWZ &&
+             ic != kPlotZZ) || srAna == 0
             ) newcardShape << Form("%d  ", ic);
     else if(ic == kPlotWZ) newcardShape << Form("%d  ", -1);
     else if(ic == kPlotZZ) newcardShape << Form("%d  ", -2);
@@ -358,59 +373,81 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   newcardShape << Form("\n");
 
   if(anaSel.Contains("wzAnalysis")){
-    //newcardShape << Form("CMS_fakee_norm	 lnN	 ");
-    //for (int ic=0; ic<nPlotCategories; ic++){
-    //  if(!histo_Baseline[ic]) continue;
-    //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    //  if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
-    //  else		     newcardShape << Form("- "); 
-    //}
-    //newcardShape << Form("\n");
+    bool isTraditionalSyst = false;
+    if(isTraditionalSyst == true){
+      newcardShape << Form("nonPromptWZMuon      lnN     ");
+      for (int ic=0; ic<nPlotCategories; ic++){
+	if(!histo_Baseline[ic]) continue;
+	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+	if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
+	else                     newcardShape << Form("- "); 
+      }
+      newcardShape << Form("\n");
 
-    //newcardShape << Form("CMS_fakem_norm   lnN     ");
-    //for (int ic=0; ic<nPlotCategories; ic++){
-    //  if(!histo_Baseline[ic]) continue;
-    //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    //  if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
-    //  else                     newcardShape << Form("- ");
-    //}
-    //newcardShape << Form("\n");
+      newcardShape << Form("nonPromptWZElectron	lnN	");
+      for (int ic=0; ic<nPlotCategories; ic++){
+	if(!histo_Baseline[ic]) continue;
+	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+	if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
+	else                     newcardShape << Form("- ");
+      }
+      newcardShape << Form("\n");
+    } // isTraditionalSyst == true
+    else {
+      newcardShape << Form("nonPromptWZMuonAlt0 shape ");
+      for (int ic=0; ic<nPlotCategories; ic++){
+	if(!histo_Baseline[ic]) continue;
+	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+	else                     newcardShape << Form("- "); 
+      }
+      newcardShape << Form("\n");
 
-    newcardShape << Form("nonPromptMuonAlt0 shape ");
-    for (int ic=0; ic<nPlotCategories; ic++){
-      if(!histo_Baseline[ic]) continue;
-      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-      if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-      else                     newcardShape << Form("- "); 
-    }
-    newcardShape << Form("\n");
+      newcardShape << Form("nonPromptWZMuonAlt1 shape ");
+      for (int ic=0; ic<nPlotCategories; ic++){
+	if(!histo_Baseline[ic]) continue;
+	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+	else                     newcardShape << Form("- "); 
+      }
+      newcardShape << Form("\n");
 
-    newcardShape << Form("nonPromptMuonAlt1 shape ");
-    for (int ic=0; ic<nPlotCategories; ic++){
-      if(!histo_Baseline[ic]) continue;
-      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-      if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-      else                     newcardShape << Form("- "); 
-    }
-    newcardShape << Form("\n");
+      newcardShape << Form("nonPromptWZMuonAlt2 shape ");
+      for (int ic=0; ic<nPlotCategories; ic++){
+	if(!histo_Baseline[ic]) continue;
+	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+	else                     newcardShape << Form("- "); 
+      }
+      newcardShape << Form("\n");
 
-    newcardShape << Form("nonPromptElectronAlt0 shape ");
-    for (int ic=0; ic<nPlotCategories; ic++){
-      if(!histo_Baseline[ic]) continue;
-      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-      if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-      else                     newcardShape << Form("- "); 
-    }
-    newcardShape << Form("\n");
+      newcardShape << Form("nonPromptWZElectronAlt0 shape ");
+      for (int ic=0; ic<nPlotCategories; ic++){
+	if(!histo_Baseline[ic]) continue;
+	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+	else                     newcardShape << Form("- "); 
+      }
+      newcardShape << Form("\n");
 
-    newcardShape << Form("nonPromptElectronAlt1 shape ");
-    for (int ic=0; ic<nPlotCategories; ic++){
-      if(!histo_Baseline[ic]) continue;
-      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-      if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-      else                     newcardShape << Form("- "); 
-    }
-    newcardShape << Form("\n");
+      newcardShape << Form("nonPromptWZElectronAlt1 shape ");
+      for (int ic=0; ic<nPlotCategories; ic++){
+	if(!histo_Baseline[ic]) continue;
+	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+	else                     newcardShape << Form("- "); 
+      }
+      newcardShape << Form("\n");
+
+      newcardShape << Form("nonPromptWZElectronAlt2 shape ");
+      for (int ic=0; ic<nPlotCategories; ic++){
+	if(!histo_Baseline[ic]) continue;
+	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+	else                     newcardShape << Form("- "); 
+      }
+      newcardShape << Form("\n");
+    } // isTraditionalSyst == false
   }
 
   int yearLumi = year;

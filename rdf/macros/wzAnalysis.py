@@ -9,7 +9,7 @@ from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection3LVar, selectionTrigger2L, selectionElMu, selectionWeigths, makeFinalVariable
 import tmva_helper_xml
 
-makeDataCards = True
+makeDataCards = 2
 correctionString = ""
 
 doNtuples = False
@@ -475,7 +475,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         #histo[96][x] = dfwzcat[x].Filter("TriLepton_flavor==2").Histo1D(("histo_{0}_{1}".format(96,x), "histo_{0}_{1}".format(96,x), 6,-0.5, 5.5), "ngood_jets","weightNoBTVSF")
         #histo[97][x] = dfwzcat[x].Filter("TriLepton_flavor==3").Histo1D(("histo_{0}_{1}".format(97,x), "histo_{0}_{1}".format(97,x), 6,-0.5, 5.5), "ngood_jets","weightNoBTVSF")
 
-        if(makeDataCards == True):
+        if(makeDataCards == 1):
             BinXF = 4
             minXF = -0.5
             maxXF = 3.5
@@ -513,8 +513,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 startNonPrompt = 0
                 histoNonPrompt[0+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm0")
                 histoNonPrompt[1+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[2+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm2")
+                histoNonPrompt[3+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
+                histoNonPrompt[4+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[5+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte2")
 
             startF = 500
             for nv in range(0,134):
@@ -546,11 +548,95 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[startF+158][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes6Up"  ,theCat,startF,x,BinXF,minXF,maxXF,158)
             histo[startF+159][x]    = makeFinalVariable(dfwzbcat[x],"ngood_jetsJes6Down",theCat,startF,x,BinXF,minXF,maxXF,159)
             if(x == plotCategory("kPlotNonPrompt")):
-                startNonPrompt = 4
+                startNonPrompt = 6
                 histoNonPrompt[0+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm0")
                 histoNonPrompt[1+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
-                histoNonPrompt[3+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[2+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAltm2")
+                histoNonPrompt[3+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte0")
+                histoNonPrompt[4+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte1")
+                histoNonPrompt[5+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte2")
+
+
+        elif(makeDataCards == 2):
+            BinXF = 4
+            minXF = -0.5
+            maxXF = 3.5
+
+            startF = 300
+            for nv in range(0,134):
+                histo[startF+nv][x] = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,nv)
+            histo[startF+134][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,134)
+            histo[startF+135][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,135)
+            histo[startF+136][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,136)
+            histo[startF+137][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,137)
+            histo[startF+138][x]    = makeFinalVariable(dfwzcatMuonMomUp      [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,138)
+            histo[startF+139][x]    = makeFinalVariable(dfwzcatMuonMomDown    [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,139)
+            histo[startF+140][x]    = makeFinalVariable(dfwzcatElectronMomUp  [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,140)
+            histo[startF+141][x]    = makeFinalVariable(dfwzcatElectronMomDown[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,141)
+            histo[startF+142][x]    = makeFinalVariable(dfwzcatJERUp	      [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,142)
+            histo[startF+143][x]    = makeFinalVariable(dfwzcatJERDown        [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,143)
+            histo[startF+144][x]    = makeFinalVariable(dfwzcatJESUp	      [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,144)
+            histo[startF+145][x]    = makeFinalVariable(dfwzcatJESDown        [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,145)
+            histo[startF+146][x]    = makeFinalVariable(dfwzcatUnclusteredUp  [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,146)
+            histo[startF+147][x]    = makeFinalVariable(dfwzcatUnclusteredDown[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,147)
+            histo[startF+148][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,148)
+            histo[startF+149][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,149)
+            histo[startF+150][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,150)
+            histo[startF+151][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,151)
+            histo[startF+152][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,152)
+            histo[startF+153][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,153)
+            histo[startF+154][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,154)
+            histo[startF+155][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,155)
+            histo[startF+156][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,156)
+            histo[startF+157][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,157)
+            histo[startF+158][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,158)
+            histo[startF+159][x]    = makeFinalVariable(dfwzcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,159)
+            if(x == plotCategory("kPlotNonPrompt")):
+                startNonPrompt = 0
+                histoNonPrompt[0+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAltm0")
+                histoNonPrompt[1+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAltm1")
+                histoNonPrompt[2+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAltm2")
+                histoNonPrompt[3+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAlte0")
+                histoNonPrompt[4+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAlte1")
+                histoNonPrompt[5+startNonPrompt] = dfwzcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAlte2")
+
+            startF = 500
+            for nv in range(0,134):
+                histo[startF+nv][x] = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,nv)
+            histo[startF+134][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,134)
+            histo[startF+135][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,135)
+            histo[startF+136][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,136)
+            histo[startF+137][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,137)
+            histo[startF+138][x]    = makeFinalVariable(dfwzbcatMuonMomUp      [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,138)
+            histo[startF+139][x]    = makeFinalVariable(dfwzbcatMuonMomDown    [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,139)
+            histo[startF+140][x]    = makeFinalVariable(dfwzbcatElectronMomUp  [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,140)
+            histo[startF+141][x]    = makeFinalVariable(dfwzbcatElectronMomDown[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,141)
+            histo[startF+142][x]    = makeFinalVariable(dfwzbcatJERUp	       [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,142)
+            histo[startF+143][x]    = makeFinalVariable(dfwzbcatJERDown        [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,143)
+            histo[startF+144][x]    = makeFinalVariable(dfwzbcatJESUp	       [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,144)
+            histo[startF+145][x]    = makeFinalVariable(dfwzbcatJESDown        [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,145)
+            histo[startF+146][x]    = makeFinalVariable(dfwzbcatUnclusteredUp  [x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,146)
+            histo[startF+147][x]    = makeFinalVariable(dfwzbcatUnclusteredDown[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,147)
+            histo[startF+148][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,148)
+            histo[startF+149][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,149)
+            histo[startF+150][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,150)
+            histo[startF+151][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,151)
+            histo[startF+152][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,152)
+            histo[startF+153][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,153)
+            histo[startF+154][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,154)
+            histo[startF+155][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,155)
+            histo[startF+156][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,156)
+            histo[startF+157][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,157)
+            histo[startF+158][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,158)
+            histo[startF+159][x]    = makeFinalVariable(dfwzbcat[x],"TriLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,159)
+            if(x == plotCategory("kPlotNonPrompt")):
+                startNonPrompt = 6
+                histoNonPrompt[0+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAltm0")
+                histoNonPrompt[1+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAltm1")
+                histoNonPrompt[2+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAltm2")
+                histoNonPrompt[3+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAlte0")
+                histoNonPrompt[4+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAlte1")
+                histoNonPrompt[5+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAlte2")
 
     report = []
     for x in range(nCat):
