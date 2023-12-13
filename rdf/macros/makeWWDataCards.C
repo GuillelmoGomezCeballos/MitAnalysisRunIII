@@ -831,8 +831,8 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
 
   newcardShape << Form("CMS_ww_fakenorm_bin%d_%d  rateParam * %s 1 [0.1,3.9]\n",fidAna-1,year,plotBaseNames[kPlotNonPrompt].Data());
-  newcardShape << Form("CMS_ww_dytautaunorm_bin%d_%d  rateParam * %s 1 [0.1,1.9]\n",fidAna-1,year,plotBaseNames[kPlotDY].Data());
-  newcardShape << Form("CMS_ww_topnorm_bin%d_%d  rateParam * %s 1 [0.1,1.9]\n",fidAna-1,year,plotBaseNames[kPlotTop].Data());
+  newcardShape << Form("CMS_ww_dytautaunorm_bin%d_%d  rateParam * %s 1 [0.1,3.9]\n",fidAna-1,year,plotBaseNames[kPlotDY].Data());
+  newcardShape << Form("CMS_ww_topnorm_bin%d_%d  rateParam * %s 1 [0.1,3.9]\n",fidAna-1,year,plotBaseNames[kPlotTop].Data());
 
   newcardShape << Form("ch%d autoMCStats 0\n",fidAna-1);
 

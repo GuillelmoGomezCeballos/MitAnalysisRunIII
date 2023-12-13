@@ -707,8 +707,8 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
 
   //newcardShape << Form("CMS_ww_wznorm  rateParam * %s 1 [0.1,3.9]\n",plotBaseNames[kPlotWZ].Data());
-  //newcardShape << Form("CMS_ww_zznorm  rateParam * %s 1 [0.1,1.9]\n",plotBaseNames[kPlotZZ].Data());
-  //newcardShape << Form("CMS_ww_wzbnorm rateParam * %s 1 [0.1,1.9]\n",plotBaseNames[kPlotTVX].Data());
+  //newcardShape << Form("CMS_ww_zznorm  rateParam * %s 1 [0.1,3.9]\n",plotBaseNames[kPlotZZ].Data());
+  //newcardShape << Form("CMS_ww_wzbnorm rateParam * %s 1 [0.1,3.9]\n",plotBaseNames[kPlotTVX].Data());
 
   newcardShape << Form("ch%d autoMCStats 0\n",fidAna);
 
