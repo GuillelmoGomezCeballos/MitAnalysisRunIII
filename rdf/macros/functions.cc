@@ -236,7 +236,7 @@ float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet
 }
 
 float compute_JSON_MUO_SFs(std::string valType0S, std::string valType1S, std::string valType2S, 
-                           const Vec_f& mu_pt, const Vec_f& mu_eta, const double type){
+                           const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_p, const double type){
   if(mu_pt.size() == 0) return 1.0;
   bool debug = false;
   if(debug) printf("muoeff: %lu\n",mu_pt.size());
@@ -247,11 +247,11 @@ float compute_JSON_MUO_SFs(std::string valType0S, std::string valType1S, std::st
   const char *valType2 = valType2S.c_str();
 
   for(unsigned int i=0;i<mu_pt.size();i++) {
-    double sf0 = 1.0;//corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],"nominal"); if(valType0S != "nominal") sf0 = sf0 + type * corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],valType0);
-    double sf1 = corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i],"nominal"); if(valType1S != "nominal") sf1 = sf1 + type * corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i],valType1);
-    double sf2 = corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i],"nominal"); if(valType2S != "nominal") sf2 = sf2 + type * corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i],valType2);
+    double sf0 = corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],mu_p[i],"nominal"); if(valType0S != "nominal") sf0 = sf0 + type * corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],mu_p[i],valType0);
+    double sf1 = corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i]        ,"nominal"); if(valType1S != "nominal") sf1 = sf1 + type * corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i]        ,valType1);
+    double sf2 = corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,"nominal"); if(valType2S != "nominal") sf2 = sf2 + type * corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,valType2);
     sfTot = sfTot*sf0*sf1*sf2;
-    if(debug) printf("muoeff(%d-%s/%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,valType2,mu_pt[i],mu_eta[i],sf0,sf1,sf2,sf0*sf1*sf2,sfTot);
+    if(debug) printf("muoeff(%d-%s/%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,valType2,mu_pt[i],mu_eta[i],mu_p[i],sf0,sf1,sf2,sf0*sf1*sf2,sfTot);
   }
 
   return sfTot;
@@ -312,9 +312,9 @@ float compute_JSON_TAU_SFs(const Vec_f& tau_pt, const Vec_f& tau_eta, const Vec_
   const char *valType = valTypeS.c_str();
 
   for(unsigned int i=0;i<tau_pt.size();i++) {
-    double sf0 = corrSFs.eval_tauJETSF(tau_pt[i],tau_dm[i],tau_gen[i],"Tight",valType);
-    double sf1 = corrSFs.eval_tauELESF(tau_eta[i],tau_gen[i],"Tight",valType);
-    double sf2 = corrSFs.eval_tauMUOSF(tau_eta[i],tau_gen[i],"Tight",valType);
+    double sf0 = corrSFs.eval_tauJETSF(tau_pt[i],tau_dm[i],tau_gen[i],"Tight","Tight",valType);
+    double sf1 = 1.0;
+    double sf2 = 1.0;
     sfTot = sfTot*sf0*sf1*sf2;
     if(debug) printf("taueff(%d) %.3f %.3f %2d %2d %.3f %.3f %.3f %.3f %.3f\n",i,tau_pt[i],tau_eta[i],tau_dm[i],tau_gen[i],sf0,sf1,sf2,sf0*sf1*sf2,sfTot);
   }
@@ -715,7 +715,7 @@ float compute_ElectronSF(const Vec_f& el_pt, const Vec_f& el_eta){
 
 float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
                        const Vec_f& el_pt, const Vec_f& el_eta,
-		       const float nPU, const int type){
+                       const float nPU, const int type){
   bool debug = false;
   if(debug) printf("lepeff: %lu %lu\n",mu_pt.size(),el_pt.size());
   double sfTot = 1.0;
@@ -747,7 +747,7 @@ float compute_TriggerSF(float ptl1, float ptl2, float etal1, float etal2, int lt
   if(ltype >= 4) return 1.0;
 
   TH2D hcorr;
-  if	 (etal1 <= 1.5 && etal2 <= 1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_0;
+  if     (etal1 <= 1.5 && etal2 <= 1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_0;
   else if(etal1 >  1.5 && etal2 <= 1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_1;
   else if(etal1 <= 1.5 && etal2 >  1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_2;
   else if(etal1 >  1.5 && etal2 >  1.5 && ltype == 0) hcorr = histoTriggerSFEtaPt_0_3;
@@ -795,7 +795,7 @@ bool isGoodRunLS(const bool isData, const UInt_t run, const UInt_t lumi) {
 
   auto& validlumis = jsonMap.at(run);
   auto match = std::lower_bound(std::begin(validlumis), std::end(validlumis), lumi,
-				[](std::pair<unsigned int, unsigned int>& range, unsigned int val) { return range.second < val; });
+                                [](std::pair<unsigned int, unsigned int>& range, unsigned int val) { return range.second < val; });
   return match->first <= lumi && match->second >= lumi;
 }
 
@@ -926,8 +926,8 @@ float get_variable_index(Vec_f var, Vec_f pt, const unsigned int index){
     for(unsigned int j=i+1;j<pt.size();j++) {
       if(pt[i]<pt[j]) {
         float temp0 = pt[i]; float temp1 = var[i];
-        pt[i] = pt[j];	     var[i] = var[j];
-        pt[j] = temp0;	     var[j] = temp1;
+        pt[i] = pt[j]; var[i] = var[j];
+        pt[j] = temp0; var[j] = temp1;
       }
     }
   }
@@ -939,7 +939,7 @@ float get_variable_index(Vec_f var, Vec_f pt, const unsigned int index){
 // Muon Id variables
 int compute_muid_var(const Vec_b& mu_mediumId, const Vec_b& mu_tightId, const Vec_i& mu_pfIsoId,
                      const Vec_i& mu_miniIsoId, const Vec_f& mu_mvaTTH, const Vec_b& mu_mediumPromptId,
-		     unsigned int nsel)
+                     unsigned int nsel)
 {
   if(mu_mediumId.size() < nsel+1) return -1;
 
@@ -983,9 +983,9 @@ int compute_elid_var(const Vec_i& el_cutBased, const Vec_b& el_mvaNoIso_WP80, co
 float compute_met_lepton_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
                                    const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
                                    const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
-			           const float met_pt, const float met_phi,
-				   const Vec_f& ph_pt, const Vec_f& ph_eta, const Vec_f& ph_phi,
-		                   unsigned int var)
+                                   const float met_pt, const float met_phi,
+                                   const Vec_f& ph_pt, const Vec_f& ph_eta, const Vec_f& ph_phi,
+                                   unsigned int var)
 {
   if(mu_pt.size() + el_pt.size() < 2) return -1;
   if(ph_pt.size() < 1) return -1;
@@ -1030,8 +1030,8 @@ float compute_met_lepton_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
 float compute_met_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
                              const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
                              const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
-			     const float met_pt, const float met_phi,
-		             unsigned int var)
+                             const float met_pt, const float met_phi,
+                             unsigned int var)
 {
   if(mu_pt.size() + el_pt.size() < 2) return -1;
 
@@ -1712,6 +1712,16 @@ Vec_i HiggsCandFromRECO(const Vec_f& meson_pt, const Vec_f& meson_eta, const Vec
 float makeRapidity(const float& pt, const float& eta, const float& phi, const float& m) {
   PtEtaPhiMVector p_x(pt, eta, phi, m);
   return p_x.Rapidity();
+}
+
+Vec_f computeMomentum(const Vec_f& pt, const Vec_f& eta, const Vec_f& phi, const Vec_f& m) {
+
+  Vec_f momentum(pt.size(), 1.0);
+  for (unsigned int idx = 0; idx < pt.size(); ++idx) {
+    PtEtaPhiMVector particle(pt[idx], eta[idx], phi[idx], m[idx]);
+    momentum[idx] = particle.P();
+  }
+  return momentum;
 }
 
 // cleaning jets close-by to the meson

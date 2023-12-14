@@ -11,7 +11,7 @@ class MyCorrections {
 
     double eval_puSF      (double NumTrueInteractions, std::string weights);
 
-    double eval_muonTRKSF (double eta, double pt, const char *valType);
+    double eval_muonTRKSF (double eta, double pt, double p, const char *valType);
     double eval_muonIDSF  (double eta, double pt, const char *valType);
     double eval_muonISOSF (double eta, double pt, const char *valType);
 
@@ -20,9 +20,7 @@ class MyCorrections {
     double eval_electronSmearing(const char *valType, const double eta, const double r9);
     double eval_photonSF  (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
 
-    double eval_tauJETSF  (double pt, int dm, int genmatch, const char *workingPoint, const char *valType);
-    double eval_tauELESF  (double eta, int genmatch, const char *workingPoint, const char *valType);
-    double eval_tauMUOSF  (double eta, int genmatch, const char *workingPoint, const char *valType);
+    double eval_tauJETSF  (double pt, int dm, int genmatch, const char *workingPoint, const char *workingPoint_VSe, const char *valType);
 
     double eval_btvSF     (const char *valType, char *workingPoint, double eta, double pt, int flavor);
 
@@ -38,13 +36,14 @@ class MyCorrections {
     correction::Correction::Ref muonTRKSF_;
     correction::Correction::Ref muonIDSF_;
     correction::Correction::Ref muonISOSF_;
+    correction::Correction::Ref muonHighPtTRKSF_;
+    correction::Correction::Ref muonHighPtIDSF_;
+    correction::Correction::Ref muonHighPtISOSF_;
     correction::Correction::Ref electronSF_;
     correction::Correction::Ref electronScale_;
     correction::Correction::Ref electronSmearing_;
     correction::Correction::Ref photonSF_;
     correction::Correction::Ref tauJETSF_;
-    correction::Correction::Ref tauELESF_;
-    correction::Correction::Ref tauMUOSF_;
     correction::Correction::Ref btvHFSF_;
     correction::Correction::Ref btvLFSF_;
     correction::CompoundCorrection::Ref JECMC_;

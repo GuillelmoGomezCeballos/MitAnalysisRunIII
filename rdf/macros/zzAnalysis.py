@@ -410,7 +410,9 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
 
     genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]
     genEventSumPSRenorm = [1, 1, 1, 1]
-    if(SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotZZ")):
+    if(SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotWZ") or
+       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKWZ") or
+       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotZZ")):
         genEventSumLHEScaleRenorm[0] = genEventSumLHEScaleWeight[0] / genEventSumLHEScaleWeight[4]
         genEventSumLHEScaleRenorm[1] = genEventSumLHEScaleWeight[1] / genEventSumLHEScaleWeight[4]
         genEventSumLHEScaleRenorm[2] = genEventSumLHEScaleWeight[3] / genEventSumLHEScaleWeight[4]
