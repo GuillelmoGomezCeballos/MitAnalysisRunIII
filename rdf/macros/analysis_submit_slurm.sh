@@ -86,5 +86,9 @@ fi
 done < ${whichAna}_input_condor_jobs.cfg
 
 rm -f submit
+#srun ./analysis_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
+##SBATCH --partition=submit-alma9
+##SBATCH --exclude=submit[30,81]
+#srun ./analysis_singularity_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 #SBATCH --exclude=submit[52-59]
 #scontrol show jobid -dd 644285
