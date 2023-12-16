@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ~/releases/CMSSW_13_2_6/src/;eval `scramv1 runtime -sh`;cd -;
+
 echo "hostname"
 hostname
 whoami

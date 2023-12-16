@@ -3,7 +3,6 @@ import correctionlib
 
 correctionlib.register_pyroot_binding()
 ROOT.gInterpreter.Declare('#include "mysf.h"')
-ROOT.gInterpreter.Load("mysf.so")
 print("eval_20221")
 ROOT.gInterpreter.ProcessLine('auto corr = MyCorrections(20221);')
 ROOT.gInterpreter.ProcessLine('corr.eval_electronSF((char*)"2022FG", (char*)"sf", (char*)"wp80iso", 1.1, 34.0)')

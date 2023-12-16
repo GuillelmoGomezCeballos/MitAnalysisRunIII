@@ -26,8 +26,9 @@ def getLumi(year):
 
     return lumi[lumiBit]
 
-if "/functions.so" not in ROOT.gSystem.GetLibraries():
-    ROOT.gSystem.CompileMacro("functions.cc","k")
+#if "/functions.so" not in ROOT.gSystem.GetLibraries():
+#    ROOT.gSystem.CompileMacro("functions.cc","k")
+ROOT.gInterpreter.Declare('#include "functions.h"')
 
 #def loadCorrectionSet(year):
 #    ROOT.gInterpreter.Load("mysf.so")
