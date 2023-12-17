@@ -195,7 +195,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
       if(histo_Baseline[ic]->GetBinContent(nb) > 0 && TMath::Abs(histo_Baseline[ic]->GetBinContent(nb)-histo_Syst[30][ic]->GetBinContent(nb))/histo_Baseline[ic]->GetBinContent(nb) > 0.001) printf("PDF problem %f %f %f\n",histo_Baseline[ic]->GetBinContent(nb),histo_Syst[30][ic]->GetBinContent(nb),TMath::Abs(histo_Baseline[ic]->GetBinContent(nb)-histo_Syst[30][ic]->GetBinContent(nb)));
       for(int npdf=0; npdf<100; npdf++){
         double diff = 0;
-	if(histo_Baseline[ic]->GetBinContent(nb) > 0) diff = TMath::Abs(histo_Syst[npdf+31][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/histo_Baseline[ic]->GetBinContent(nb);
+        if(histo_Baseline[ic]->GetBinContent(nb) > 0) diff = TMath::Abs(histo_Syst[npdf+31][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/histo_Baseline[ic]->GetBinContent(nb);
         if(diff > 0.05) printf("Large PDFUnc(%d) %d %d %f\n",npdf,ic,nb,diff);
         histo_PDFUp  [npdf][ic]->SetBinContent(nb, histo_Baseline[ic]->GetBinContent(nb)*(1.0+diff));
         histo_PDFDown[npdf][ic]->SetBinContent(nb, histo_Baseline[ic]->GetBinContent(nb)/(1.0+diff));
@@ -322,7 +322,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   outputFile->Close();
 
   // Filling datacards txt file
-  char outputLimitsCard[200];  					  
+  char outputLimitsCard[200];
   sprintf(outputLimitsCard,"datacard_%s_%d_bin%d%s.txt",anaSel.Data(),year,fidAna,additionalSuffix.Data());
   ofstream newcardShape;
   newcardShape.open(outputLimitsCard);
@@ -377,74 +377,74 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(isTraditionalSyst == true){
       newcardShape << Form("nonPromptWZMuon      lnN     ");
       for (int ic=0; ic<nPlotCategories; ic++){
-	if(!histo_Baseline[ic]) continue;
-	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-	if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
-	else                     newcardShape << Form("- "); 
+        if(!histo_Baseline[ic]) continue;
+        if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+        if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
+        else                     newcardShape << Form("- "); 
       }
       newcardShape << Form("\n");
 
       newcardShape << Form("nonPromptWZElectron	lnN	");
       for (int ic=0; ic<nPlotCategories; ic++){
-	if(!histo_Baseline[ic]) continue;
-	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-	if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
-	else                     newcardShape << Form("- ");
+        if(!histo_Baseline[ic]) continue;
+        if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+        if(ic == kPlotNonPrompt) newcardShape << Form("%6.3f ",1.15);
+        else                     newcardShape << Form("- ");
       }
       newcardShape << Form("\n");
     } // isTraditionalSyst == true
     else {
       newcardShape << Form("nonPromptWZMuonAlt0 shape ");
       for (int ic=0; ic<nPlotCategories; ic++){
-	if(!histo_Baseline[ic]) continue;
-	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-	else                     newcardShape << Form("- "); 
+        if(!histo_Baseline[ic]) continue;
+        if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+        if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+        else                     newcardShape << Form("- "); 
       }
       newcardShape << Form("\n");
 
       newcardShape << Form("nonPromptWZMuonAlt1 shape ");
       for (int ic=0; ic<nPlotCategories; ic++){
-	if(!histo_Baseline[ic]) continue;
-	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-	else                     newcardShape << Form("- "); 
+        if(!histo_Baseline[ic]) continue;
+        if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+        if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+        else                     newcardShape << Form("- "); 
       }
       newcardShape << Form("\n");
 
       newcardShape << Form("nonPromptWZMuonAlt2 shape ");
       for (int ic=0; ic<nPlotCategories; ic++){
-	if(!histo_Baseline[ic]) continue;
-	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-	else                     newcardShape << Form("- "); 
+        if(!histo_Baseline[ic]) continue;
+        if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+        if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+        else                     newcardShape << Form("- "); 
       }
       newcardShape << Form("\n");
 
       newcardShape << Form("nonPromptWZElectronAlt0 shape ");
       for (int ic=0; ic<nPlotCategories; ic++){
-	if(!histo_Baseline[ic]) continue;
-	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-	else                     newcardShape << Form("- "); 
+        if(!histo_Baseline[ic]) continue;
+        if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+        if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+        else                     newcardShape << Form("- "); 
       }
       newcardShape << Form("\n");
 
       newcardShape << Form("nonPromptWZElectronAlt1 shape ");
       for (int ic=0; ic<nPlotCategories; ic++){
-	if(!histo_Baseline[ic]) continue;
-	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-	else                     newcardShape << Form("- "); 
+        if(!histo_Baseline[ic]) continue;
+        if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+        if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+        else                     newcardShape << Form("- "); 
       }
       newcardShape << Form("\n");
 
       newcardShape << Form("nonPromptWZElectronAlt2 shape ");
       for (int ic=0; ic<nPlotCategories; ic++){
-	if(!histo_Baseline[ic]) continue;
-	if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-	if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
-	else                     newcardShape << Form("- "); 
+        if(!histo_Baseline[ic]) continue;
+        if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+        if(ic == kPlotNonPrompt) newcardShape << Form("1.0 ");
+        else                     newcardShape << Form("- "); 
       }
       newcardShape << Form("\n");
     } // isTraditionalSyst == false
@@ -457,7 +457,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("%6.3f ",1.02);
+    else                     newcardShape << Form("%6.3f ",1.02);
   }
   newcardShape << Form("\n");
 
@@ -466,7 +466,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
@@ -475,7 +475,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
@@ -484,7 +484,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
@@ -493,7 +493,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
@@ -502,7 +502,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
@@ -511,7 +511,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
@@ -520,7 +520,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
@@ -529,7 +529,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
  
@@ -538,7 +538,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
@@ -547,7 +547,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
  
@@ -622,7 +622,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
  
@@ -631,7 +631,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
  
@@ -640,7 +640,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
+    else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
@@ -650,7 +650,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
       if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-      else		     newcardShape << Form("1.0 ");
+      else                     newcardShape << Form("1.0 ");
     }
     newcardShape << Form("\n");
 
@@ -659,7 +659,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
       if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-      else		     newcardShape << Form("1.0 ");
+      else                     newcardShape << Form("1.0 ");
     }
     newcardShape << Form("\n");
 
@@ -668,29 +668,29 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
       if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-      else		     newcardShape << Form("1.0 ");
+      else                     newcardShape << Form("1.0 ");
     }
     newcardShape << Form("\n");
   }
 
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic== kPlotData || ic == kPlotNonPrompt || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    newcardShape << Form("QCDScale_%s_ACCEPT	shape	",plotBaseNames[ic].Data());
+    newcardShape << Form("QCDScale_%s_ACCEPT shape ",plotBaseNames[ic].Data());
     for(unsigned ic2=0; ic2<nPlotCategories; ic2++) {
       if(ic2 == kPlotData || histo_Baseline[ic2]->GetSumOfWeights() <= 0) continue;
-  	  if(ic==ic2) newcardShape << Form("1.0  ");
-  	  else        newcardShape << Form("-  ");
+      if(ic==ic2) newcardShape << Form("1.0  ");
+      else        newcardShape << Form("-  ");
       }
       newcardShape << Form("\n");
   } 
 
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic== kPlotData || ic == kPlotNonPrompt || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    newcardShape << Form("PS_%s_ACCEPT	shape	",plotBaseNames[ic].Data());
+    newcardShape << Form("PS_%s_ACCEPT shape ",plotBaseNames[ic].Data());
     for(unsigned ic2=0; ic2<nPlotCategories; ic2++) {
       if(ic2 == kPlotData || histo_Baseline[ic2]->GetSumOfWeights() <= 0) continue;
-  	  if(ic==ic2) newcardShape << Form("1.0  ");
-  	  else        newcardShape << Form("-  ");
+      if(ic==ic2) newcardShape << Form("1.0  ");
+      else        newcardShape << Form("-  ");
       }
       newcardShape << Form("\n");
   } 
@@ -706,9 +706,9 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     newcardShape << Form("\n");
   }
 
-  //newcardShape << Form("CMS_ww_wznorm  rateParam * %s 1 [0.1,3.9]\n",plotBaseNames[kPlotWZ].Data());
-  //newcardShape << Form("CMS_ww_zznorm  rateParam * %s 1 [0.1,3.9]\n",plotBaseNames[kPlotZZ].Data());
-  //newcardShape << Form("CMS_ww_wzbnorm rateParam * %s 1 [0.1,3.9]\n",plotBaseNames[kPlotTVX].Data());
+  //newcardShape << Form("CMS_ww_wznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotWZ].Data());
+  //newcardShape << Form("CMS_ww_zznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotZZ].Data());
+  //newcardShape << Form("CMS_ww_wzbnorm rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotTVX].Data());
 
   newcardShape << Form("ch%d autoMCStats 0\n",fidAna);
 

@@ -308,7 +308,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
         dfztt0cat[x] = dfztt0cat[x].Filter("ptll{0} < 30 && mll{0} < 85 && ptl1{0} > 25 && ptl2{0} > 20".format(altMass), "ptll < 30 && mll < 85 && ptl1 > 25 && ptl2 > 20")
 
-        dftop0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet > 0", "b-jets"))
+        dftop0cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet >= 1 && nbtag_goodbtag_Jet_bjet <= 2", "b-jets"))
         dftop0catMuonMomUp      .append(dftop0cat[x])
         dftop0catMuonMomDown    .append(dftop0cat[x])
         dftop0catElectronMomUp  .append(dftop0cat[x])
