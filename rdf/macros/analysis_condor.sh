@@ -18,7 +18,7 @@ g++ $(correction config --cflags --ldflags) mysf.cpp -shared -fPIC -o mysf.so
 ./analysis_slurm.sh $1 $2 $3 $4 $5
 
 rm -rf functions* *.pyc $5.tgz \
-*Analysis.py analysis_slurm.sh functions.cc utils*.py \
+*Analysis.py analysis_slurm.sh functions.h utils*.py \
 data weights_mva tmva_helper_xml.* \
 mysf.* \
 jsns config jsonpog-integration 

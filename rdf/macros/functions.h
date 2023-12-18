@@ -403,10 +403,12 @@ const Vec_f& Jet_pt_def, const Vec_f& Jet_pt_mod, const Vec_f& Jet_eta, const Ve
   return 0;
 }
 
-Vec_b cleaningJetVetoMapMask(const Vec_f& jet_eta, const Vec_f& jet_phi, int jetTypeCorr) {
+Vec_b cleaningJetVetoMapMask(const Vec_f& jet_eta, const Vec_f& jet_phi, int jetTypeCorr, const int year) {
   Vec_b jet_vetoMap_mask(jet_eta.size(), true);
 
-  if(jetTypeCorr == -1) return jet_vetoMap_mask;
+  if     (jetTypeCorr == -1 && year == 20220) jetTypeCorr = 0;
+  else if(jetTypeCorr == -1 && year == 20221) jetTypeCorr = 4;
+  else if(jetTypeCorr == -1) return jet_vetoMap_mask;
 
   bool debug = false;
   if(debug) printf("cleaningJetVetoMapMask: %lu %d\n",jet_eta.size(),jetTypeCorr);

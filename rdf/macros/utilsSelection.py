@@ -182,7 +182,7 @@ def selectionJetMet(df,year,bTagSel,isData,count,jetEtaCut):
 
     dftag =(df.Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
-              .Define("jet_VetoMapMask", "cleaningJetVetoMapMask(Jet_eta,Jet_phi,{0})".format(jetTypeCorr))
+              .Define("jet_VetoMapMask", "cleaningJetVetoMapMask(Jet_eta,Jet_phi,{0},{1})".format(jetTypeCorr,year))
               .Define("clean_jet", "Jet_pt > 10 && jet_mask1 && jet_mask2 && jet_VetoMapMask > 0 && Jet_jetId > 0")
               .Define("clean_Jet_pt", "Jet_pt[clean_jet]")
               .Define("clean_Jet_eta", "Jet_eta[clean_jet]")

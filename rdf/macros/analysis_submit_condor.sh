@@ -62,7 +62,7 @@ echo ${USERPROXY}
 voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 
 tar cvzf ${whichAna}.tgz \
-*Analysis.py analysis_slurm.sh functions.cc utils*.py \
+*Analysis.py analysis_slurm.sh functions.h utils*.py \
 data/* weights_mva/* tmva_helper_xml.* \
 mysf.cpp mysf.h \
 jsns/* config/* jsonpog-integration/*
