@@ -8,7 +8,7 @@ correctionlib.register_pyroot_binding()
 #ROOT.gInterpreter.Declare('#include "mysf.h"')
 #ROOT.gInterpreter.Load("mysf.so")
 
-useXROOTD = False
+useXROOTD = True
 
 def getLumi(year):
     lumi = [36.1, 41.5, 60.0, 8.2, 26.0, 17.1, 9.5]

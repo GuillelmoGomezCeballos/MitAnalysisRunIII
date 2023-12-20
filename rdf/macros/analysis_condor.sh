@@ -13,8 +13,6 @@ tar xzf $5.tgz
 
 echo $PWD
 
-g++ $(correction config --cflags --ldflags) mysf.cpp -shared -fPIC -o mysf.so
-
 ./analysis_slurm.sh $1 $2 $3 $4 $5
 
 rm -rf functions* *.pyc $5.tgz \

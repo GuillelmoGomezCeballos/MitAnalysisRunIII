@@ -129,6 +129,10 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);
   tauJETSF_ = csetTAU->at("DeepTau2018v2p5VSjet");
 
+  std::string fileNameJER = dirName+"JME/"+subDirName+"jerc_only.json.gz";
+  //std::cout << fileNameJER << std::endl;
+  auto csetJER = correction::CorrectionSet::from_file(fileNameJER);
+
   std::string fileNameJEC = dirName+"JME/"+subDirName+"jet_jerc.json.gz";
   //std::cout << fileNameJEC << std::endl;
   auto csetJEC = correction::CorrectionSet::from_file(fileNameJEC);
@@ -140,24 +144,24 @@ MyCorrections::MyCorrections(int the_input_year) {
   std::string jetVetoMapName[10] = {"NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"};
 
   if      (year == 20220)  {
-    jecMCName = "Winter22Run3_V2_MC"; jerName = "JR_Winter22Run3_V1_MC";
-    jecDATAName[0] = "Winter22Run3_RunC_V2_DATA"; jetVetoMapName[0] = "Winter22Run3_RunCD_V1"; // A
-    jecDATAName[1] = "Winter22Run3_RunC_V2_DATA"; jetVetoMapName[1] = "Winter22Run3_RunCD_V1"; // B
-    jecDATAName[2] = "Winter22Run3_RunC_V2_DATA"; jetVetoMapName[2] = "Winter22Run3_RunCD_V1"; // C
-    jecDATAName[3] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[3] = "Winter22Run3_RunCD_V1"; // D
-    jecDATAName[4] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[4] = "Winter22Run3_RunE_V1";  // E
-    jecDATAName[5] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[5] = "Winter22Run3_RunE_V1";  // F
-    jecDATAName[6] = "Winter22Run3_RunD_V2_DATA"; jetVetoMapName[6] = "Winter22Run3_RunE_V1";  // G
+    jecMCName = "Summer22_22Sep2023_V2_MC"; jerName = "JR_Winter22Run3_V1_MC";
+    jecDATAName[0] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[0] = "Summer22_23Sep2023_RunCD_V1"; // A
+    jecDATAName[1] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[1] = "Summer22_23Sep2023_RunCD_V1"; // B
+    jecDATAName[2] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[2] = "Summer22_23Sep2023_RunCD_V1"; // C
+    jecDATAName[3] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[3] = "Summer22_23Sep2023_RunCD_V1"; // D
+    jecDATAName[4] = "NULL"; jetVetoMapName[4] = "NULL";  // E
+    jecDATAName[5] = "NULL"; jetVetoMapName[5] = "NULL";  // F
+    jecDATAName[6] = "NULL"; jetVetoMapName[6] = "NULL";  // G
   }
   else if(year == 20221)  {
-    jecMCName = "Summer22EEPrompt22_V1_MC"; jerName = "Summer22EEPrompt22_JRV1_MC";
-    jecDATAName[0] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[0] = "Winter22Run3_RunCD_V1"; // A
-    jecDATAName[1] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[1] = "Winter22Run3_RunCD_V1"; // B
-    jecDATAName[2] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[2] = "Winter22Run3_RunCD_V1"; // C
-    jecDATAName[3] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[3] = "Winter22Run3_RunCD_V1"; // D
-    jecDATAName[4] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[4] = "Winter22Run3_RunE_V1";  // E
-    jecDATAName[5] = "Summer22EEPrompt22_RunF_V1_DATA"; jetVetoMapName[5] = "Winter22Run3_RunE_V1";  // F
-    jecDATAName[6] = "Summer22EEPrompt22_RunG_V1_DATA"; jetVetoMapName[6] = "Winter22Run3_RunE_V1";  // G
+    jecMCName = "Summer22EE_22Sep2023_V2_MC"; jerName = "Summer22EEPrompt22_JRV1_MC";
+    jecDATAName[0] = "NULL";   jetVetoMapName[0] = "NULL"; // A
+    jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
+    jecDATAName[2] = "NULL";   jetVetoMapName[2] = "NULL"; // C
+    jecDATAName[3] = "NULL";   jetVetoMapName[3] = "NULL"; // D
+    jecDATAName[4] = "Summer22EE_22Sep2023_RunE_V2_DATA"; jetVetoMapName[4] = "Summer22EE_23Sep2023_RunEFG_V1";  // E
+    jecDATAName[5] = "Summer22EE_22Sep2023_RunF_V2_DATA"; jetVetoMapName[5] = "Summer22EE_23Sep2023_RunEFG_V1";  // F
+    jecDATAName[6] = "Summer22EE_22Sep2023_RunG_V2_DATA"; jetVetoMapName[6] = "Summer22EE_23Sep2023_RunEFG_V1";  // G
   }
 
   std::string tagName = jecMCName + "_" + "L1L2L3Res" + "_" + algoName;
@@ -194,15 +198,16 @@ MyCorrections::MyCorrections(int the_input_year) {
 
   tagName = jerName + "_" + "ScaleFactor" + "_" + algoName;
   //std::cout << tagName << std::endl;
-  jerMethod1Unc_ = csetJEC->at(tagName);
+  jerMethod1Unc_ = csetJER->at(tagName);
 
   tagName = jerName + "_" + "PtResolution" + "_" + algoName;
-  jerMethod2Unc_ = csetJEC->at(tagName);
+  jerMethod2Unc_ = csetJER->at(tagName);
 
   //std::string fileNamePUJetID = dirName+"JME/"+subDirName+"jmar.json.gz";
   //auto csetPUJetID = correction::CorrectionSet::from_file(fileNamePUJetID);
   //puJetIDSF_ = csetPUJetID->at("PUJetID_eff");
 
+  std::cout << fileNameJEC << std::endl;
   std::string fileNamejetVetoMap = dirName+"JME/"+subDirName+"jetvetomaps.json.gz";
   auto csetJetVetoMap = correction::CorrectionSet::from_file(fileNamejetVetoMap);
 
@@ -273,7 +278,7 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
 };
 
 double MyCorrections::eval_jetCORR(double area, double eta, double pt, double rho, int type) {
-  if(type >= 4 && year == 2022) return JECL2ResDATA_[type]->evaluate({eta, pt});
+  //if(type >= 4 && year == 2022) return JECL2ResDATA_[type]->evaluate({eta, pt});
   if(type >= 0) return JECDATA_[type]->evaluate({area, eta, pt, rho});
   return JECMC_->evaluate({area, eta, pt, rho});
 };

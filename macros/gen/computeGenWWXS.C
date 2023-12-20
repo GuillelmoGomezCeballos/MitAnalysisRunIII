@@ -97,9 +97,11 @@ void computeGenWWXS(TString input = "", TString output = "output.root"){
 
     histo_PDF_unc->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systPDF);
 
-    printf("bin(%d): %6.1f / %.3f %.3f %.3f\n",nb,histo_Baseline->GetBinContent(nb),systPS-1,systQCDScale-1,systPDF-1);
+    double tot = sqrt((systPS-1)*(systPS-1)+(systQCDScale-1)*(systQCDScale-1)+(systPDF-1)*(systPDF-1));
+    printf("bin(%d): %6.1f / %.3f %.3f %.3f / %.3f %6.1f\n",nb,histo_Baseline->GetBinContent(nb),systPS-1,systQCDScale-1,systPDF-1,tot,histo_Baseline->GetBinContent(nb)*tot);
   }
-  printf("bin(%d): %6.1f / %.3f %.3f %.3f\n",0,histo_Baseline->GetSumOfWeights(),histo_PS_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1,histo_QCDScale_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1,histo_PDF_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1);
+  double tot = sqrt((histo_PS_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1)*(histo_PS_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1)+(histo_QCDScale_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1)*(histo_QCDScale_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1)+(histo_PDF_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1)*(histo_PDF_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1));
+  printf("bin(%d): %6.1f / %.3f %.3f %.3f / %.3f %6.1f\n",0,histo_Baseline->GetSumOfWeights(),histo_PS_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1,histo_QCDScale_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1,histo_PDF_unc->GetSumOfWeights()/histo_Baseline->GetSumOfWeights()-1,tot,histo_Baseline->GetSumOfWeights()*tot);
   TFile *outputFile = TFile::Open(Form("%s",output.Data()),"recreate");
   outputFile->cd();
   histo_Baseline    ->Write();

@@ -66,7 +66,7 @@ voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 tar cvzf ${whichAna}.tgz \
 *Analysis.py analysis_slurm.sh functions.h utils*.py \
 data/* weights_mva/* tmva_helper_xml.* \
-mysf.cpp mysf.h \
+mysf.h \
 jsns/* config/* jsonpog-integration/*
 
 while IFS= read -r line; do
@@ -87,7 +87,7 @@ cat << EOF > submit
 Universe   = vanilla
 Executable = analysis_singularity_condor.sh
 Arguments  = ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
-RequestMemory = 6000
+RequestMemory = 4000
 RequestCpus = 1
 RequestDisk = DiskUsage
 should_transfer_files = YES
@@ -99,7 +99,7 @@ transfer_input_files = analysis_condor.sh,${whichAna}.tgz
 use_x509userproxy = True
 x509userproxy = /tmp/x509up_u${USERPROXY}
 Requirements = ( BOSCOCluster =!= "t3serv008.mit.edu" && BOSCOCluster =!= "ce03.cmsaf.mit.edu" && BOSCOCluster =!= "eofe8.mit.edu") && (Machine != "t3btch003.mit.edu")
-+DESIRED_Sites = "mit_tier3"
++DESIRED_Sites = "mit_tier2,mit_tier3"
 Queue
 EOF
 
