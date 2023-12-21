@@ -22,7 +22,6 @@ fi
 
 if [ $theAna -eq 0 ]; then
  whichAna="zAnalysis"
- group=19
 
 elif [ $theAna -eq 1 ]; then
  whichAna="wzAnalysis"
@@ -47,7 +46,6 @@ elif [ $theAna -eq 5 ]; then
 
 elif [ $theAna -eq 6 ]; then
  whichAna="triggerAnalysis"
- group=19
 
 elif [ $theAna -eq 7 ]; then
  whichAna="metAnalysis"
@@ -81,7 +79,7 @@ cat << EOF > submit
 #SBATCH --job-name=simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}
 #SBATCH --output=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.out
 #SBATCH --error=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.error
-#SBATCH --cpus-per-task=3
+#SBATCH --cpus-per-task=4
 srun ./analysis_singularity_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 EOF
 

@@ -2,7 +2,7 @@ import ROOT
 import os, sys, getopt, json
 from array import array
 
-ROOT.ROOT.EnableImplicitMT()
+ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist, getTriggerFromJson, getLumi
 from utilsAna import SwitchSample

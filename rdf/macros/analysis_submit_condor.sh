@@ -18,7 +18,6 @@ fi
 
 if [ $theAna -eq 0 ]; then
  whichAna="zAnalysis"
- group=19
 
 elif [ $theAna -eq 1 ]; then
  whichAna="wzAnalysis"
@@ -43,7 +42,6 @@ elif [ $theAna -eq 5 ]; then
 
 elif [ $theAna -eq 6 ]; then
  whichAna="triggerAnalysis"
- group=19
 
 elif [ $theAna -eq 7 ]; then
  whichAna="metAnalysis"
@@ -88,7 +86,7 @@ Universe   = vanilla
 Executable = analysis_singularity_condor.sh
 Arguments  = ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 RequestMemory = 4000
-RequestCpus = 1
+RequestCpus = 2
 RequestDisk = DiskUsage
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
