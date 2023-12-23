@@ -75,7 +75,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   std::cout << "subDirName/year: " << subDirName << " " << year << std::endl;
 
   //std::string subDirNamePrime0 = ""; std::string subDirNamePrime1 = "";
-  //if     (yearPrime == 12016) {subDirNamePrime0 = "2016preVFP_UL/";	subDirNamePrime1 = "2016preVFP_UL/";}  
+  //if     (yearPrime == 12016) {subDirNamePrime0 = "2016preVFP_UL/";   subDirNamePrime1 = "2016preVFP_UL/";}  
   //else if(yearPrime == 22016) {subDirNamePrime0 = "2016postVFP_UL/";  subDirNamePrime1 = "2016postVFP_UL/";}
   //else if(yearPrime == 2017)  {subDirNamePrime0 = "2017_UL/";         subDirNamePrime1 = "2017_UL/";}
   //else if(yearPrime == 2018)  {subDirNamePrime0 = "2018_UL/";         subDirNamePrime1 = "2018_UL/";}
@@ -90,10 +90,13 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
   
-  std::string fileNameBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
-  auto csetBTV = correction::CorrectionSet::from_file(fileNameBTV);
-  btvHFSF_ = csetBTV->at("deepJet_comb");
-  btvLFSF_ = csetBTV->at("deepJet_incl");
+  std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_methods_v0.json.gz";
+  auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
+  btvHFSF_ = csetHFBTV->at("deepJet_ptrel");
+
+  std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging_v0.json.gz";
+  auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
+  btvLFSF_ = csetLFBTV->at("deepJet_light");
 
   std::string fileNameMu = dirName+"MUO/"+subDirName+"muon_Z.json.gz";
   auto csetMu = correction::CorrectionSet::from_file(fileNameMu);
@@ -112,18 +115,18 @@ MyCorrections::MyCorrections(int the_input_year) {
   
   std::string fileNamePH = dirName+"EGM/"+subDirName+"photon.json.gz";
   auto csetPH = correction::CorrectionSet::from_file(fileNamePH);
-  if     (year == 20220) photonSF_ = csetPH->at("2022FG-Photon-ID-SF");
-  else if(year == 20221) photonSF_ = csetPH->at("2022FG-Photon-ID-SF");
+  if     (year == 20220) photonSF_ = csetPH->at("Photon-ID-SF");
+  else if(year == 20221) photonSF_ = csetPH->at("Photon-ID-SF");
 
   std::string fileNameELE = dirName+"EGM/"+subDirName+"electron.json.gz";
   auto csetELE = correction::CorrectionSet::from_file(fileNameELE);
-  if     (year == 20220) electronSF_ = csetELE->at("2022FG-Electron-ID-SF");
-  else if(year == 20221) electronSF_ = csetELE->at("2022FG-Electron-ID-SF");
+  if     (year == 20220) electronSF_ = csetELE->at("Electron-ID-SF");
+  else if(year == 20221) electronSF_ = csetELE->at("Electron-ID-SF");
 
-  std::string fileNameEnergyELE = dirName+"EGM/"+subDirName+"SS.json.gz";
+  std::string fileNameEnergyELE = dirName+"EGM/"+subDirName+"electronSS.json.gz";
   auto csetEnergyELE = correction::CorrectionSet::from_file(fileNameEnergyELE);
-  if     (year == 20220) {electronScale_ = csetEnergyELE->at("Prompt2022FG_ScaleJSON"); electronSmearing_ = csetEnergyELE->at("Prompt2022FG_SmearingJSON");}
-  else if(year == 20221) {electronScale_ = csetEnergyELE->at("Prompt2022FG_ScaleJSON"); electronSmearing_ = csetEnergyELE->at("Prompt2022FG_SmearingJSON");}
+  if     (year == 20220) {electronScale_ = csetEnergyELE->at("2022Re-recoBCD_ScaleJSON");        electronSmearing_ = csetEnergyELE->at("2022Re-recoBCD_SmearingJSON");}
+  else if(year == 20221) {electronScale_ = csetEnergyELE->at("2022Re-recoE+PromptFG_ScaleJSON"); electronSmearing_ = csetEnergyELE->at("2022Re-recoE+PromptFG_SmearingJSON");}
 
   std::string fileNameTAU = dirName+"TAU/"+subDirName+"tau_DeepTau2018v2p5.json.gz";
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);
@@ -207,7 +210,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   //auto csetPUJetID = correction::CorrectionSet::from_file(fileNamePUJetID);
   //puJetIDSF_ = csetPUJetID->at("PUJetID_eff");
 
-  std::cout << fileNameJEC << std::endl;
+  //std::cout << fileNameJEC << std::endl;
   std::string fileNamejetVetoMap = dirName+"JME/"+subDirName+"jetvetomaps.json.gz";
   auto csetJetVetoMap = correction::CorrectionSet::from_file(fileNamejetVetoMap);
 
@@ -271,8 +274,9 @@ double MyCorrections::eval_tauJETSF(double pt, int dm, int genmatch, const char 
 };
 
 double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double eta, double pt, int flavor) {
+  // No c-jets corrections, using b-jets instead
   if(flavor != 0)
-    return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
+    return btvHFSF_->evaluate({valType, workingPoint,      5, eta, pt});
   else
     return btvLFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
 };

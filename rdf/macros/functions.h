@@ -491,24 +491,24 @@ Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const
   else {
     if    (type == 10) { // data
       for(unsigned int i=0;i<pt.size();i++) {
-	new_pt[i] = pt[i]*corrSFs.eval_electronScale((char*)"total_correction", gain[i], (double)run, eta[i], r9[i], pt[i]);
-	if(debug) printf("ele(%d)-%d: %.3f %.3f\n",i,type,pt[i],new_pt[i]);
+        new_pt[i] = pt[i]*corrSFs.eval_electronScale((char*)"total_correction", gain[i], (double)run, eta[i], r9[i], pt[i]);
+        if(debug) printf("ele(%d)-%d: %.3f %.3f\n",i,type,pt[i],new_pt[i]);
       }
     }
     else if(type == 0) { // MC default
       for(unsigned int i=0;i<pt.size();i++) {
-	double rho = corrSFs.eval_electronSmearing((char*)"rho", eta[i], r9[i]);
-	new_pt[i] = pt[i]*gRandom->Gaus(1.0,rho);
-	if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f\n",i,type,pt[i],new_pt[i],rho);
+        double rho = corrSFs.eval_electronSmearing((char*)"rho", eta[i], r9[i]);
+        new_pt[i] = pt[i]*gRandom->Gaus(1.0,rho);
+        if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f\n",i,type,pt[i],new_pt[i],rho);
       }
     }
     else if(type == -1 || type == +1) { // MC smearing uncertainty
       for(unsigned int i=0;i<pt.size();i++) {
-	double rho     = corrSFs.eval_electronSmearing((char*)"rho", eta[i], r9[i]);
-	double rho_unc = corrSFs.eval_electronSmearing((char*)"err_rho", eta[i], r9[i]);
-	double scale_unc = corrSFs.eval_electronScale((char*)"total_uncertainty", gain[i], 1.0, eta[i], r9[i], pt[i]);
-	new_pt[i] = pt[i]*gRandom->Gaus(1.0,rho+(double)type*(rho_unc+scale_unc));
-	if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f %.6f %.6f\n",i,type,pt[i],new_pt[i],rho,rho_unc,scale_unc);
+        double rho     = corrSFs.eval_electronSmearing((char*)"rho", eta[i], r9[i]);
+        double rho_unc = corrSFs.eval_electronSmearing((char*)"err_rho", eta[i], r9[i]);
+        double scale_unc = corrSFs.eval_electronScale((char*)"total_uncertainty", gain[i], 1.0, eta[i], r9[i], pt[i]);
+        new_pt[i] = pt[i]*gRandom->Gaus(1.0,rho+(double)type*(rho_unc+scale_unc));
+        if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f %.6f %.6f\n",i,type,pt[i],new_pt[i],rho,rho_unc,scale_unc);
       }
     }
   }

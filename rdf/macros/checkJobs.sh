@@ -13,10 +13,10 @@ export queue=$4
 export group=10
 
 if [ $theAna = 'z' ]; then
- export group=20
+ export group=10
 
 elif [ $theAna = 'trigger' ]; then
- export group=20
+ export group=10
 
 fi
 
