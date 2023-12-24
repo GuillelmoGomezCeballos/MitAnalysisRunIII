@@ -230,6 +230,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                            .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                            )
 
+        if(isData == "false"):
+            dfcat[x] = dfcat[x].Define("nPileupJets", "compute_nPileupJets(good_Jet_pt,good_Jet_eta,good_Jet_phi,GenJet_pt,GenJet_eta,GenJet_phi)")
+        else:
+            dfcat[x] = dfcat[x].Define("nPileupJets", "ngood_jets")
+
         if(x == plotCategory("kPlotTop")):
             dfcat[x] = dfcat[x].Define("weightWW", "weight")
         else:
@@ -431,6 +436,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[74][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(74,x), "histo_{0}_{1}".format(74,x), 50,  0, 200), "ptww","weightWW")
         histo[75][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(75,x), "histo_{0}_{1}".format(75,x), 30,  0, 200), "ptww","weightWW")
         histo[76][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(76,x), "histo_{0}_{1}".format(76,x), 50,  0, 200), "ptww","weightWW")
+
+        histo[77][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(77,x), "histo_{0}_{1}".format(77,x), 10,-0.5, 9.5), "nPileupJets","weightWW")
 
         #histo[100][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(100,x), "histo_{0}_{1}".format(100,x), 100, 0, 200), "thePuppiMET_pt"		  ,"weightWW")
         #histo[101][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(101,x), "histo_{0}_{1}".format(101,x), 100, 0, 200), "thePuppiMET_ptJERUp" 	  ,"weightWW")

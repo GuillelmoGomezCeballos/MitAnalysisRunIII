@@ -1745,6 +1745,32 @@ Vec_b cleaningJetFromLepton(Vec_f & Jeta, Vec_f & Jphi, Vec_f & Leta, Vec_f & Lp
   return mask;
 }
 
+int compute_nPileupJets(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_f& jet_phi,
+                          const Vec_f& genjet_pt, const Vec_f& genjet_eta, const Vec_f& genjet_phi){
+
+  int nPileupJets = 0;
+  for (unsigned int ij = 0; ij < jet_pt.size(); ++ij) {
+    bool isPileupJet = true;
+    for (unsigned int ig = 0; ig < genjet_pt.size(); ++ig) {
+      if(genjet_pt[ig] <= 10) continue;
+      if(deltaR(jet_eta[ij], jet_phi[ij], genjet_eta[ig], genjet_phi[ig]) < 0.4) {isPileupJet = false; break;}
+    }
+    if(isPileupJet == true) nPileupJets++;
+  }
+  
+  int nPileupJetsPlot = std::min((int)jet_pt.size(),3);
+  if(nPileupJets > 0){
+    if     (jet_pt.size() == 1 && nPileupJets == 1) nPileupJetsPlot = 3 + 1;
+    else if(jet_pt.size() == 2 && nPileupJets == 1) nPileupJetsPlot = 3 + 2;
+    else if(jet_pt.size() == 2 && nPileupJets == 2) nPileupJetsPlot = 3 + 3;
+    else if(jet_pt.size() >= 3 && nPileupJets == 1) nPileupJetsPlot = 3 + 4;
+    else if(jet_pt.size() >= 3 && nPileupJets == 2) nPileupJetsPlot = 3 + 5;
+    else if(jet_pt.size() >= 3 && nPileupJets == 3) nPileupJetsPlot = 3 + 6;
+  }
+
+  return nPileupJetsPlot;
+}
+
 // Minv2
 std::pair<float, float>  Minv2(const float& pt, const float& eta, const float& phi, const float& m,
                                const float& ph_pt, const float& ph_eta, const float& ph_phi, const float& ph_m) {
