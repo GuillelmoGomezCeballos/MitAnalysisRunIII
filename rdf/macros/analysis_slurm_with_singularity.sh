@@ -1,10 +1,10 @@
 #!/bin/bash
 
-cd ~/releases/CMSSW_13_2_6/src/;eval `scramv1 runtime -sh`;cd -;
-
 echo "hostname"
 hostname
 whoami
+
+cd ~/releases/CMSSW_13_3_1/src/;eval `scramv1 runtime -sh`;cd -;
 
 time python3 $5.py --process=$1 --year=$2 --whichJob=$3
 status=$?
