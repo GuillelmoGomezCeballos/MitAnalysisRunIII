@@ -165,7 +165,7 @@ float compute_JSONS_PUJetID_SF(Vec_f jet_pt, Vec_f jet_eta, unsigned int sel)
 {
   //printf("pujetidsf: %lu %lu %d\n",jet_pt.size(),jet_eta.size(),sel);
   double sfTot = 1.0;
-  char *valType = (char*)"T"; double bcut = 0.711;
+  char *valType = (char*)"T";
   if     (sel == 0) {valType = (char*)"T";}
   else if(sel == 1) {valType = (char*)"M";}
   else if(sel == 2) {valType = (char*)"L";}
@@ -186,17 +186,17 @@ float compute_JSON_PU_SF(double NumTrueInteractions, std::string type){
 }
 
 // BTag SFs
-float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet_flavor, std::string keyS, int flavorToStudy, const int sel)
+float compute_JSON_BTV_SF(Vec_f jet_pt, Vec_f jet_eta, Vec_f jet_btag, Vec_i jet_flavor, std::string keyS, int flavorToStudy, const int sel, const float bcut)
 {
   // flavorToStudy = 0 (central) / > 0 (BC) / < 0 (LF)
   bool debug = false;
   if(debug) printf("btagsf(%s): %lu %lu %lu %lu %d %d\n",keyS.c_str(),jet_pt.size(),jet_eta.size(),jet_btag.size(),jet_flavor.size(),flavorToStudy,sel);
   double sfTot[2] = {1.0, 1.0};
   const char *key = keyS.c_str();
-  char *valType = (char*)"T"; double bcut = 0.711;
-  if     (sel == 0) {valType = (char*)"T"; bcut = 0.7100;}
-  else if(sel == 1) {valType = (char*)"M"; bcut = 0.2783;}
-  else if(sel == 2) {valType = (char*)"L"; bcut = 0.0490;}
+  char *valType = (char*)"T";
+  if     (sel == 0) {valType = (char*)"T";}
+  else if(sel == 1) {valType = (char*)"M";}
+  else if(sel == 2) {valType = (char*)"L";}
   for(unsigned int i=0;i<jet_pt.size();i++) {
     if(jet_flavor[i] != 0 && jet_flavor[i] != 4 && jet_flavor[i] != 5) continue;
     if(jet_pt[i] <= 20 || fabs(jet_eta[i]) >= 2.5) continue;
