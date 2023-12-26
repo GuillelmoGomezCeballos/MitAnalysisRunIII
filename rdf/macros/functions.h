@@ -460,7 +460,7 @@ Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const
   bool debug = false;
   if(debug) printf("eleEnergy: %lu %d\n",pt.size(),type);
 
-  if     (year == 20220 && type != 10){
+  /*if     (year == 20220 && type != 10){
     for(unsigned int i=0;i<pt.size();i++) {
        if     (type == +1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(1.0006+gRandom->Gaus(0.0,0.0150));
        else if(type ==  0 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9986+gRandom->Gaus(0.0,0.0150));
@@ -487,8 +487,8 @@ Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const
   }
   else if(year == 20221 && type == 10){
     for(unsigned int i=0;i<pt.size();i++) new_pt[i] = pt[i];
-  }
-  else {
+  }*/
+  //else {
     if    (type == 10) { // data
       for(unsigned int i=0;i<pt.size();i++) {
         new_pt[i] = pt[i]*corrSFs.eval_electronScale((char*)"total_correction", gain[i], (double)run, eta[i], r9[i], pt[i]);
@@ -511,7 +511,7 @@ Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const
         if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f %.6f %.6f\n",i,type,pt[i],new_pt[i],rho,rho_unc,scale_unc);
       }
     }
-  }
+  //}
 
   return new_pt;
 }

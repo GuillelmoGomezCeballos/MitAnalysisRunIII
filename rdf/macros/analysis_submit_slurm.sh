@@ -93,7 +93,7 @@ cat << EOF > submit
 #SBATCH --error=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.error
 #SBATCH --cpus-per-task=4
 #SBATCH --partition=submit-alma9
-#SBATCH --exclude=submit[30,81]
+#SBATCH --exclude=submit[30,80]
 srun ./analysis_singularity_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 EOF
 
