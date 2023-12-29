@@ -243,7 +243,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
             dfzllcat.append(dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons"))
 
-            histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+            histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altMass),"weight")
             histo[ltype+ 3][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 50,  0, 200), "ptll","weight")
             histo[ltype+ 6][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 6,x), "histo_{0}_{1}".format(ltype+ 6,x), 50,  0, 5),   "drll","weight")
             histo[ltype+ 9][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 9,x), "histo_{0}_{1}".format(ltype+ 9,x), 50,  0, 3.1416), "dphill","weight")
@@ -399,7 +399,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[ltype+237][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+237,x), "histo_{0}_{1}".format(ltype+237,x), len(xPtbins)-1, xPtbins), "ptl1","weightNoBTag")
 
             isBB = "(etal1<1.5 and etal2<1.5)"
-            isEB = "((etal1>1.5 and etal2<1.5) || (etal1<1.5 and etal2>1.5))"
+            isEB = "true" # "((etal1>1.5 and etal2<1.5) || (etal1<1.5 and etal2>1.5))"
             isEE = "(etal1>1.5 and etal2>1.5)"
             altShapes = ["", "Def", "MuonMomUp", "MuonMomDown", "", "Def", "ElectronMomUp", "ElectronMomDown"]
 
