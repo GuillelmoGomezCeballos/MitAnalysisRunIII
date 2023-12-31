@@ -3,15 +3,17 @@ import correctionlib
 import os, sys, getopt, glob
 from array import array
 
-etaVal = array('d', [0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4])
+etaVal = array('d', [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4])
 ptVal = array('d', [10.0,15.0,20.0,25.0,30.0,35.0,40.0,45.0,50.0,55.0,60.0,65.0,70.0,75.0,80.0,85.0,90.0,95.0,100.0])
 yearVal = [20220, 20221]
 
 if __name__ == "__main__":
     input = "data"
+    debug = 0
 
-    valid = ['input=', 'help']
-    usage  =  "Usage: ana.py --input=<{0}>".format(input)
+    valid = ['input=', "debug=", 'help']
+    usage  =  "Usage: ana.py --input=<{0}>\n".format(input)
+    usage +=  "              --debug=<{0}>".format(debug)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -25,6 +27,8 @@ if __name__ == "__main__":
             sys.exit(1)
         if opt == "--input":
             input = str(arg)
+        if opt == "--debug":
+            debug = int(arg)
 
     print("etaBins: {0} / ptBins: {1} -> {2}".format(len(etaVal)-1,len(ptVal)-1,(len(etaVal)-1)*(len(ptVal)-1)))
     histo_mu = [0 for x in range(len(yearVal))]
@@ -80,7 +84,8 @@ if __name__ == "__main__":
                 sfe = sfOff_el[count]/sfPri_el[count]
                 histo_el[ny].SetBinContent(eta+1,pt+1,sfe)
 
-                print("SF({0:.1f}/{1:.0f}) {2:.3f} / {3:.3f} = {4:.3f}  |  {5:.3f} / {6:.3f} = {7:.3f}".format(etaVal[eta],ptVal[pt],sfOff_mu[count],sfPri_mu[count],sfOff_el[count],sfm,sfPri_el[count],sfe))
+                if(debug == 1):
+                    print("SF({0:.1f}/{1:.0f}) {2:.3f} / {3:.3f} = {4:.3f}  |  {5:.3f} / {6:.3f} = {7:.3f}".format(etaVal[eta],ptVal[pt],sfOff_mu[count],sfPri_mu[count],sfOff_el[count],sfm,sfPri_el[count],sfe))
 
 
     fileLepEffCompName = "histoLepSFComparison.root"
