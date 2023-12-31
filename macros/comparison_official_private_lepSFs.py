@@ -26,6 +26,7 @@ if __name__ == "__main__":
         if opt == "--input":
             input = str(arg)
 
+    print("etaBins: {0} / ptBins: {1} -> {2}".format(len(etaVal)-1,len(ptVal)-1,(len(etaVal)-1)*(len(ptVal)-1)))
     histo_mu = [0 for x in range(len(yearVal))]
     histo_el = [0 for x in range(len(yearVal))]
     for ny in range(len(yearVal)):
