@@ -1,7 +1,6 @@
 import ROOT
 from ROOT import TFile, TH1D, TH2D
 import os, sys, getopt, glob
-from array import array
 from utilsCategory import plotCategory
 
 if __name__ == "__main__":

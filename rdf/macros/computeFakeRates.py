@@ -5,8 +5,8 @@ from array import array
 import json
 from utilsCategory import plotCategory
 
-xPtbins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 35.0])
-xEtabins = array('d', [0.0, 0.5, 1.0, 1.5, 2.0, 2.5])
+xPtBins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 35.0])
+xEtaBins = array('d', [0.0, 0.5, 1.0, 1.5, 2.0, 2.5])
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
 
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     if(isPseudoData == 1):
         dataCat = plotCategory("kPlotNonPrompt")
 
-    prescale = [[1.0 for y in range(len(xPtbins)-1)] for x in range(2)]
+    prescale = [[1.0 for y in range(len(xPtBins)-1)] for x in range(2)]
     print(prescale)
 
     #fileWLName = [0 for x in range(2)]
@@ -114,8 +114,8 @@ if __name__ == "__main__":
 
     numberOfSel = 9
     histoFakeEffSelEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
-    histoFakeEffSelPt    = [[[0 for z in range(len(xEtabins)-1)] for y in range(numberOfSel)] for x in range(2)]
-    histoFakeEffSelEta   = [[[0 for z in range(len(xPtbins)-1)] for y in range(numberOfSel)] for x in range(2)]
+    histoFakeEffSelPt    = [[[0 for z in range(len(xEtaBins)-1)] for y in range(numberOfSel)] for x in range(2)]
+    histoFakeEffSelEta   = [[[0 for z in range(len(xPtBins)-1)] for y in range(numberOfSel)] for x in range(2)]
 
     fileTight = [[0 for y in range(numberOfSel)] for x in range(2)]
 
@@ -126,11 +126,11 @@ if __name__ == "__main__":
 
     for thePlot in range(2):
         for j in range(numberOfSel):
-            histoFakeEffSelEtaPt[thePlot][j] = TH2D("histoFakeEffSelEtaPt_{0}_{1}_{2}_anaType{3}".format(thePlot,j,path.split("fillhisto_")[1],anaType), "histoFakeEffSelEtaPt_{0}_{1}".format(thePlot,j), len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins)
-            for neta in range(len(xEtabins)-1):
-                histoFakeEffSelPt[thePlot][j][neta] = TH1D("histoFakeEffSelPt_{0}_{1}_{2}_{3}_anaType{4}".format(thePlot,j,neta,path.split("fillhisto_")[1],anaType), "histoFakeEffSelPt_{0}_{1}_{2}".format(thePlot,j,neta), len(xPtbins)-1, xPtbins)
-            for npt in range(len(xPtbins)-1):
-                histoFakeEffSelEta[thePlot][j][npt] = TH1D("histoFakeEffSelEta_{0}_{1}_{2}_{3}_anaType{4}".format(thePlot,j,npt,path.split("fillhisto_")[1],anaType), "histoFakeEffSelEta_{0}_{1}_{2}".format(thePlot,j,npt), len(xEtabins)-1, xEtabins)
+            histoFakeEffSelEtaPt[thePlot][j] = TH2D("histoFakeEffSelEtaPt_{0}_{1}_{2}_anaType{3}".format(thePlot,j,path.split("fillhisto_")[1],anaType), "histoFakeEffSelEtaPt_{0}_{1}".format(thePlot,j), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins)
+            for neta in range(len(xEtaBins)-1):
+                histoFakeEffSelPt[thePlot][j][neta] = TH1D("histoFakeEffSelPt_{0}_{1}_{2}_{3}_anaType{4}".format(thePlot,j,neta,path.split("fillhisto_")[1],anaType), "histoFakeEffSelPt_{0}_{1}_{2}".format(thePlot,j,neta), len(xPtBins)-1, xPtBins)
+            for npt in range(len(xPtBins)-1):
+                histoFakeEffSelEta[thePlot][j][npt] = TH1D("histoFakeEffSelEta_{0}_{1}_{2}_{3}_anaType{4}".format(thePlot,j,npt,path.split("fillhisto_")[1],anaType), "histoFakeEffSelEta_{0}_{1}_{2}".format(thePlot,j,npt), len(xEtaBins)-1, xEtaBins)
 
     fileFakeRateName = "histoFakeEtaPt_{0}_{1}_anaType{2}.root".format(path.split("fillhisto_")[1],year,anaType)
     outFileFakeRate = TFile(fileFakeRateName,"recreate")
@@ -178,10 +178,10 @@ if __name__ == "__main__":
             histoFakeEffSelEtaPt[thePlot][nsel].Write()
             histoFakeEffSelEtaPt[thePlot][nsel].SetDirectory(0)
             if(doSavePtEtaHist == True):
-              for neta in range(len(xEtabins)-1):
+              for neta in range(len(xEtaBins)-1):
                   histoFakeEffSelPt[thePlot][nsel][neta].Write()
                   histoFakeEffSelPt[thePlot][nsel][neta].SetDirectory(0)
-              for npt in range(len(xEtabins)-1):
+              for npt in range(len(xEtaBins)-1):
                   histoFakeEffSelEta[thePlot][nsel][npt].Write()
                   histoFakeEffSelEta[thePlot][nsel][npt].SetDirectory(0)
     outFileFakeRate.Close()
@@ -191,9 +191,9 @@ if __name__ == "__main__":
 
     for nsel in range(numberOfSel):
         canvasPt[nsel] = TCanvas("canvasPt{0}".format(nsel), "canvasPt{0}".format(nsel), 10, 10, 500, 500)
-        canvasPt[nsel].Divide(2,len(xPtbins)-1)
+        canvasPt[nsel].Divide(2,len(xPtBins)-1)
         for thePlot in range(2):
-            for npt in range(len(xPtbins)-1):
+            for npt in range(len(xPtBins)-1):
                 canvasPt[nsel].cd(thePlot+2*npt+1)
                 #print(histoFakeEffSelPt[thePlot][nsel][npt].GetSumOfWeights())
                 histoFakeEffSelPt[thePlot][nsel][npt].DrawCopy()
@@ -201,9 +201,9 @@ if __name__ == "__main__":
         canvasPt[nsel].SaveAs("histoFakePt_{0}_{1}_anaType{2}_nsel{3}.{4}".format(path.split("fillhisto_")[1],year,anaType,nsel,format))
 
         canvasEta[nsel] = TCanvas("canvasEta{0}".format(nsel), "canvasEta{0}".format(nsel), 10, 10, 500, 500)
-        canvasEta[nsel].Divide(2,len(xEtabins)-1)
+        canvasEta[nsel].Divide(2,len(xEtaBins)-1)
         for thePlot in range(2):
-            for neta in range(len(xEtabins)-1):
+            for neta in range(len(xEtaBins)-1):
                 canvasEta[nsel].cd(thePlot+2*neta+1)
                 #print(histoFakeEffSelEta[thePlot][nsel][neta].GetSumOfWeights())
                 histoFakeEffSelEta[thePlot][nsel][neta].DrawCopy()

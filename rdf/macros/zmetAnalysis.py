@@ -1,6 +1,5 @@
 import ROOT
 import os, sys, getopt, json
-from array import array
 
 ROOT.ROOT.EnableImplicitMT(4)
 from utilsCategory import plotCategory
@@ -95,9 +94,6 @@ def selectionLL(df,year,PDType,isData,count):
 def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
-
-    xPtbins = array('d', [10,15,20,25,30,35,40,50,60,70,85,100,200,1000])
-    xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")

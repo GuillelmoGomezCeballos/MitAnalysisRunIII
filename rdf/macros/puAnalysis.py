@@ -66,8 +66,8 @@ def selectionWW(df,year,PDType,isData,count):
 
 def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
-    xPtbins = array('d', [20,25,30,35,40,50,60,70,80,90,100,125,150,175,200,300,400,500,1000])
-    xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
+    xPtBins = array('d', [20,25,30,35,40,50,60,70,80,90,100,125,150,175,200,300,400,500,1000])
+    xEtaBins = array('d', [0.0,1.0,1.5,2.0,2.5])
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5}".format(count,category,weight,year,PDType,isData))
 
@@ -198,18 +198,18 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
           .Define("goodloosejet_eta_bj_l","goodloosejet_eta[goodloosejet_bj_l]")
           )
 
-    histo2D[ 0][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 0,x),"histo2d_{0}_{1}".format( 0,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf"  ,"goodloosejet_pt_lf"  ,"weightForBTag")
-    histo2D[ 1][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 1,x),"histo2d_{0}_{1}".format( 1,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj"  ,"goodloosejet_pt_cj"  ,"weightForBTag")
-    histo2D[ 2][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 2,x),"histo2d_{0}_{1}".format( 2,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj"  ,"goodloosejet_pt_bj"  ,"weightForBTag")
-    histo2D[ 3][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 3,x),"histo2d_{0}_{1}".format( 3,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_t","goodloosejet_pt_lf_t","weightForBTag")
-    histo2D[ 4][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 4,x),"histo2d_{0}_{1}".format( 4,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_t","goodloosejet_pt_cj_t","weightForBTag")
-    histo2D[ 5][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 5,x),"histo2d_{0}_{1}".format( 5,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_t","goodloosejet_pt_bj_t","weightForBTag")
-    histo2D[ 6][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 6,x),"histo2d_{0}_{1}".format( 6,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_m","goodloosejet_pt_lf_m","weightForBTag")
-    histo2D[ 7][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 7,x),"histo2d_{0}_{1}".format( 7,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_m","goodloosejet_pt_cj_m","weightForBTag")
-    histo2D[ 8][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 8,x),"histo2d_{0}_{1}".format( 8,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_m","goodloosejet_pt_bj_m","weightForBTag")
-    histo2D[ 9][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 9,x),"histo2d_{0}_{1}".format( 9,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_lf_l","goodloosejet_pt_lf_l","weightForBTag")
-    histo2D[10][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(10,x),"histo2d_{0}_{1}".format(10,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_cj_l","goodloosejet_pt_cj_l","weightForBTag")
-    histo2D[11][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(11,x),"histo2d_{0}_{1}".format(11,x),len(xEtabins)-1, xEtabins, len(xPtbins)-1, xPtbins),"goodloosejet_eta_bj_l","goodloosejet_pt_bj_l","weightForBTag")
+    histo2D[ 0][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 0,x),"histo2d_{0}_{1}".format( 0,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_lf"  ,"goodloosejet_pt_lf"  ,"weightForBTag")
+    histo2D[ 1][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 1,x),"histo2d_{0}_{1}".format( 1,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_cj"  ,"goodloosejet_pt_cj"  ,"weightForBTag")
+    histo2D[ 2][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 2,x),"histo2d_{0}_{1}".format( 2,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_bj"  ,"goodloosejet_pt_bj"  ,"weightForBTag")
+    histo2D[ 3][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 3,x),"histo2d_{0}_{1}".format( 3,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_lf_t","goodloosejet_pt_lf_t","weightForBTag")
+    histo2D[ 4][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 4,x),"histo2d_{0}_{1}".format( 4,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_cj_t","goodloosejet_pt_cj_t","weightForBTag")
+    histo2D[ 5][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 5,x),"histo2d_{0}_{1}".format( 5,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_bj_t","goodloosejet_pt_bj_t","weightForBTag")
+    histo2D[ 6][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 6,x),"histo2d_{0}_{1}".format( 6,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_lf_m","goodloosejet_pt_lf_m","weightForBTag")
+    histo2D[ 7][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 7,x),"histo2d_{0}_{1}".format( 7,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_cj_m","goodloosejet_pt_cj_m","weightForBTag")
+    histo2D[ 8][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 8,x),"histo2d_{0}_{1}".format( 8,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_bj_m","goodloosejet_pt_bj_m","weightForBTag")
+    histo2D[ 9][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format( 9,x),"histo2d_{0}_{1}".format( 9,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_lf_l","goodloosejet_pt_lf_l","weightForBTag")
+    histo2D[10][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(10,x),"histo2d_{0}_{1}".format(10,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_cj_l","goodloosejet_pt_cj_l","weightForBTag")
+    histo2D[11][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(11,x),"histo2d_{0}_{1}".format(11,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_bj_l","goodloosejet_pt_bj_l","weightForBTag")
 
     histo[ 1][x] = (dfcat.Filter("Sum(fake_mu)==2")
                          .Define("mll", "Minv2(fake_Muon_pt[0], fake_Muon_eta[0], fake_Muon_phi[0], fake_Muon_mass[0],fake_Muon_pt[1], fake_Muon_eta[1], fake_Muon_phi[1], fake_Muon_mass[1]).first")

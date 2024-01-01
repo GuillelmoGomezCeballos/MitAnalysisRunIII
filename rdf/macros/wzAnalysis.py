@@ -104,7 +104,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    xPtTrgbins = array('d', [10,15,20,25,30,35,40,50,60,70,80,90,105,120,150,200])
+    xPtTrgBins = array('d', [10,15,20,25,30,35,40,50,60,70,80,90,105,120,150,200])
 
     nCat, nHisto, nhistoNonPrompt = plotCategory("kPlotCategories"), 700, 50
     histo    = [[0 for y in range(nCat)] for x in range(nHisto)]
@@ -265,18 +265,18 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[63][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(63,x), "histo_{0}_{1}".format(63,x), 20, 30, 130), "pttag","weightNoBTag")
         histo[64][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(64,x), "histo_{0}_{1}".format(64,x), 20, 30, 130), "pttag","weightNoBTag")
 
-        histo[65][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmax","weightNoBTag")
-        histo[66][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(66,x), "histo_{0}_{1}".format(66,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmin","weightNoBTag")
-        histo[67][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(67,x), "histo_{0}_{1}".format(67,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmax","weightNoBTag")
-        histo[68][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(68,x), "histo_{0}_{1}".format(68,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmin","weightNoBTag")
+        histo[65][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmax","weightNoBTag")
+        histo[66][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(66,x), "histo_{0}_{1}".format(66,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmin","weightNoBTag")
+        histo[67][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(67,x), "histo_{0}_{1}".format(67,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmax","weightNoBTag")
+        histo[68][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(68,x), "histo_{0}_{1}".format(68,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmin","weightNoBTag")
 
         dfEMMcat[x] = dfEMMcat[x].Filter("triggerDMU > 0")
         dfMEEcat[x] = dfMEEcat[x].Filter("triggerDEL > 0")
 
-        histo[69][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmax","weightNoBTag")
-        histo[70][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmin","weightNoBTag")
-        histo[71][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(71,x), "histo_{0}_{1}".format(71,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmax","weightNoBTag")
-        histo[72][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(72,x), "histo_{0}_{1}".format(72,x), len(xPtTrgbins)-1, xPtTrgbins), "ptmin","weightNoBTag")
+        histo[69][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmax","weightNoBTag")
+        histo[70][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmin","weightNoBTag")
+        histo[71][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(71,x), "histo_{0}_{1}".format(71,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmax","weightNoBTag")
+        histo[72][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(72,x), "histo_{0}_{1}".format(72,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmin","weightNoBTag")
 
         dfwzcatMuonMomUp      .append(dfwzcat[x])
         dfwzcatMuonMomDown    .append(dfwzcat[x])

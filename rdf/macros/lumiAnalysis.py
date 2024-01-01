@@ -1,6 +1,5 @@
 import ROOT
 import os, sys, getopt, json
-from array import array
 
 ROOT.ROOT.EnableImplicitMT(4)
 from utilsAna import getDATAlist

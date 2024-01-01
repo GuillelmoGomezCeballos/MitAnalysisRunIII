@@ -1,11 +1,7 @@
 import ROOT
 from ROOT import TFile, TH1D, TH2D
 import os, sys, getopt, glob
-from array import array
 from utilsCategory import plotCategory
-
-xPtbins = array('d', [10,15,20,25,30,35,40,50,60,70,85,100,200,1000])
-xEtabins = array('d', [0.0,1.0,1.5,2.0,2.5])
 
 if __name__ == "__main__":
     path = "fillhisto_zAnalysis1001"
