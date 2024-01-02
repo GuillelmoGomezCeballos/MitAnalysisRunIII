@@ -12,7 +12,7 @@ whichAna="DUMMY"
 group=9
 
 condorJob=1001
-if [ $# -eq 2 ]; then
+if [ $# -ge 2 ]; then
   condorJob=$2
 fi
 
@@ -33,7 +33,7 @@ elif [ $theAna -eq 4 ]; then
 
 elif [ $theAna -eq 5 ]; then
  whichAna="fakeAnalysis"
- if [ $# -eq 3 ]; then
+ if [ $# -ge 3 ]; then
    nohup ./analysis_slurm.sh 110 20220 -1 1002 fakeAnalysis >& logs/log_110 &
    nohup ./analysis_slurm.sh 136 20220 -1 1003 fakeAnalysis >& logs/log_136 &
    nohup ./analysis_slurm.sh 210 20221 -1 1002 fakeAnalysis >& logs/log_210 &

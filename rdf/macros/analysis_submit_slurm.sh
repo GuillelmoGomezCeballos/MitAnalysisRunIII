@@ -10,12 +10,12 @@ whichAna="DUMMY"
 group=9
 
 condorJob=1001
-if [ $# -eq 2 ]; then
+if [ $# -ge 1 ]; then
   condorJob=$2
 fi
 
 runAlma9=1
-if [ $# -eq 4 ]; then
+if [ $# -ge 4 ]; then
   runAlma9=$4
 fi
 
@@ -37,7 +37,7 @@ elif [ $theAna -eq 4 ]; then
 
 elif [ $theAna -eq 5 ]; then
  whichAna="fakeAnalysis"
- if [ $# -eq 3 ] && [ $3 = "1" ]; then
+ if [ $# -ge 3 ] && [ $3 = "1" ]; then
    nohup ./analysis_slurm.sh 110 20220 -1 1002 fakeAnalysis >& logs/log_110 &
    nohup ./analysis_slurm.sh 136 20220 -1 1003 fakeAnalysis >& logs/log_136 &
    nohup ./analysis_slurm.sh 210 20221 -1 1002 fakeAnalysis >& logs/log_210 &
@@ -93,7 +93,7 @@ cat << EOF > submit
 #SBATCH --error=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.error
 #SBATCH --cpus-per-task=4
 #SBATCH --partition=submit-alma9
-#SBATCH --exclude=submit[30,80]
+#SBATCH --exclude=submit[30,08]
 srun ./analysis_singularity_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 EOF
 

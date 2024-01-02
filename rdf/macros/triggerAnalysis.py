@@ -152,8 +152,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
-    xPtBins = array('d', [10,15,20,25,30,35,40,45,50,55,60,70,80,90,100,150,200,250])
-    xEtaBins = array('d', [0.0,0.3,0.6,0.9,1.2,1.5,1.8,2.1,2.5])
+    xMuPtBins = array('d', [10,15,20,25,30,35,40,45,50,55,60,70,80,90,100,150,200,250])
+    xMuEtaBins = array('d', [0.0,0.3,0.6,0.9,1.2,1.5,1.8,2.1,2.5])
+    xElPtBins = array('d', [10,15,20,25,30,35,40,45,50,55,60,70,80,90,100,150,200,250])
+    xElEtaBins = array('d', [0.0,0.3,0.6,0.9,1.2,1.5,1.8,2.1,2.5])
+    #xMuPtBins = array('d', [10.0,15.0,20.0,25.0,30.0,40.0,50.0,60.0,120.0,200.0])
+    #xMuEtaBins = array('d', [0.0,0.9,1.2,2.1,2.5])
+    #xElPtBins = array('d', [10.0,20.0,35.0,50.0,100.0,200.0])
+    #xElEtaBins = array('d', [0.0,0.8,1.444,1.566,2.0,2.5])
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
@@ -307,6 +313,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
                 lepSelChoice = muSelChoice
                 if(ltype == 1): lepSelChoice = elSelChoice
+
+                xPtBins = xMuPtBins
+                xEtaBins = xMuEtaBins
+                if(ltype == 1):
+                    xPtBins = xElPtBins
+                    xEtaBins = xElEtaBins
 
                 histo2D[2*ltype+ltag+ 0][x] = dfzoscat[4*x+2*ltype+ltag]                                                   .Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+ 0, x), "histo2d_{0}_{1}".format(2*ltype+ltag+ 0, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
                 histo2D[2*ltype+ltag+ 4][x] = dfzoscat[4*x+2*ltype+ltag].Filter("{0}0[{1}] == true".format(lflavor,lprobe)).Histo2D(("histo2d_{0}_{1}".format(2*ltype+ltag+ 4, x), "histo2d_{0}_{1}".format(2*ltype+ltag+ 4, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal{0}".format(lprobe+1), "ptl{0}".format(lprobe+1),"weightNoLepSF")
