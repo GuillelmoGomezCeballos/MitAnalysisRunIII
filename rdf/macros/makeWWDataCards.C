@@ -564,14 +564,14 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_00 shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
+  //newcardShape << Form("BtagSFBC_00 shape ");
+  //for (int ic=0; ic<nPlotCategories; ic++){
+  //  if(!histo_Baseline[ic]) continue;
+  //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+  //  if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+  //  else                     newcardShape << Form("1.0 ");
+  //}
+  //newcardShape << Form("\n");
 
   newcardShape << Form("BtagSFBC_01 shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
