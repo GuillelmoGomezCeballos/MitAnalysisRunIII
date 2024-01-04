@@ -29,7 +29,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   TFile *inputFile;
   TFile *outputFile;
   const int nSelTotal = 5;
-  const int nSystTotal = 159;
+  const int nSystTotal = 177;
 
   TH1D *histo_Auxiliar[nSelTotal][nPlotCategories];
   TH1D *histo_Baseline[nPlotCategories];
@@ -47,14 +47,14 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   TH1D *histo_PDFDown[101][nPlotCategories];
 
   TString nameSyst[nSystTotal];
-  nameSyst[ 0] = "BtagSFBC_correlatedUp";
-  nameSyst[ 1] = "BtagSFBC_correlatedDown";
-  nameSyst[ 2] = "BtagSFBC_uncorrelatedUp";
-  nameSyst[ 3] = "BtagSFBC_uncorrelatedDown";
-  nameSyst[ 4] = "BtagSFLF_correlatedUp";
-  nameSyst[ 5] = "BtagSFLF_correlatedDown";
-  nameSyst[ 6] = "BtagSFLF_uncorrelatedUp";
-  nameSyst[ 7] = "BtagSFLF_uncorrelatedDown";
+  nameSyst[ 0] = "BtagSFBC_00Up";
+  nameSyst[ 1] = "BtagSFBC_00Down";
+  nameSyst[ 2] = "BtagSFBC_01Up";
+  nameSyst[ 3] = "BtagSFBC_01Down";
+  nameSyst[ 4] = "BtagSFBC_02Up";
+  nameSyst[ 5] = "BtagSFBC_02Down";
+  nameSyst[ 6] = "BtagSFBC_03Up";
+  nameSyst[ 7] = "BtagSFBC_03Down";
   nameSyst[ 8] = "MuoSFTRKUp";
   nameSyst[ 9] = "MuoSFTRKDown";
   nameSyst[10] = "MuoSFIDUp";
@@ -78,32 +78,50 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   nameSyst[28] = "QCDScale4";
   nameSyst[29] = "QCDScale5";
   for(int i=0; i<=102; i++) nameSyst[30+i] = Form("PDF%d",i);
-  nameSyst[133] = "JesUp";
-  nameSyst[134] = "JesDown";
-  nameSyst[135] = "JerUp";
-  nameSyst[136] = "JerDown";
-  nameSyst[137] = "MuonMomUp";
-  nameSyst[138] = "MuonMomDown";
-  nameSyst[139] = "ElectronMomUp";
-  nameSyst[140] = "ElectronMomDown";
-  nameSyst[141] = "metJERUp";
-  nameSyst[142] = "metJERDown";
-  nameSyst[143] = "metJESUp";
-  nameSyst[144] = "metJESDown";
-  nameSyst[145] = "metUnclusteredUp";
-  nameSyst[146] = "metUnclusteredDown";
-  nameSyst[147] = "JesSubTotalPileUpUp";
-  nameSyst[148] = "JesSubTotalPileUpDown";
-  nameSyst[149] = "JesSubTotalRelativeUp";
-  nameSyst[150] = "JesSubTotalRelativeDown";
-  nameSyst[151] = "JesSubTotalPtUp";
-  nameSyst[152] = "JesSubTotalPtDown";
-  nameSyst[153] = "JesSubTotalScaleUp";
-  nameSyst[154] = "JesSubTotalScaleDown";
-  nameSyst[155] = "JesFlavorQCDUp";
-  nameSyst[156] = "JesFlavorQCDDown";
-  nameSyst[157] = "JesTimePtEtaUp";
-  nameSyst[158] = "JesTimePtEtaDown";
+  nameSyst[133] = "BtagSFBC_04Up";
+  nameSyst[134] = "BtagSFBC_04Down";
+  nameSyst[135] = "BtagSFBC_05Up";
+  nameSyst[136] = "BtagSFBC_05Down";
+  nameSyst[137] = "BtagSFBC_06Up";
+  nameSyst[138] = "BtagSFBC_06Down";
+  nameSyst[139] = "BtagSFBC_07Up";
+  nameSyst[140] = "BtagSFBC_07Down";
+  nameSyst[141] = "BtagSFBC_08Up";
+  nameSyst[142] = "BtagSFBC_08Down";
+  nameSyst[143] = "BtagSFBC_09Up";
+  nameSyst[144] = "BtagSFBC_09Down";
+  nameSyst[145] = "BtagSFBC_10Up";
+  nameSyst[146] = "BtagSFBC_10Down";
+  nameSyst[147] = "BtagSFBC_11Up";
+  nameSyst[148] = "BtagSFBC_11Down";
+  nameSyst[149] = "BtagSFLF_00Up";
+  nameSyst[150] = "BtagSFLF_00Down";
+  nameSyst[151] = "JesUp";
+  nameSyst[152] = "JesDown";
+  nameSyst[153] = "JerUp";
+  nameSyst[154] = "JerDown";
+  nameSyst[155] = "MuonMomUp";
+  nameSyst[156] = "MuonMomDown";
+  nameSyst[157] = "ElectronMomUp";
+  nameSyst[158] = "ElectronMomDown";
+  nameSyst[159] = "metJERUp";
+  nameSyst[160] = "metJERDown";
+  nameSyst[161] = "metJESUp";
+  nameSyst[162] = "metJESDown";
+  nameSyst[163] = "metUnclusteredUp";
+  nameSyst[164] = "metUnclusteredDown";
+  nameSyst[165] = "JesSubTotalPileUpUp";
+  nameSyst[166] = "JesSubTotalPileUpDown";
+  nameSyst[167] = "JesSubTotalRelativeUp";
+  nameSyst[168] = "JesSubTotalRelativeDown";
+  nameSyst[169] = "JesSubTotalPtUp";
+  nameSyst[170] = "JesSubTotalPtDown";
+  nameSyst[171] = "JesSubTotalScaleUp";
+  nameSyst[172] = "JesSubTotalScaleDown";
+  nameSyst[173] = "JesFlavorQCDUp";
+  nameSyst[174] = "JesFlavorQCDDown";
+  nameSyst[175] = "JesTimePtEtaUp";
+  nameSyst[176] = "JesTimePtEtaDown";
 
   double scaleFactorFiducial[nSelTotal][nPlotCategories];
  for(unsigned nSel=0; nSel<nSelTotal; nSel++) for(int ic=0; ic<nPlotCategories; ic++) scaleFactorFiducial[nSel][ic] = 0.0;
@@ -271,46 +289,46 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
         systValue = histo_Syst[19][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[18][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
         // Jes
-        systValue = histo_Syst[134][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[133][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // Jer
-        systValue = (histo_Syst[136][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/5.0;
-        histo_Syst[136][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)+systValue);
-        systValue = histo_Syst[136][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[135][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // MuonMom
-        systValue = histo_Syst[138][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[137][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // ElectronMom
-        systValue = histo_Syst[140][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[139][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // metJER
-        systValue = histo_Syst[142][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[141][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // metJES
-        systValue = histo_Syst[144][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[143][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // metUnclustered
-        systValue = histo_Syst[146][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[145][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalPileUp
-        systValue = histo_Syst[148][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[147][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalRelative
-        systValue = histo_Syst[150][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[149][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalPt
         systValue = histo_Syst[152][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[151][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalScale
+        // Jer
+        systValue = (histo_Syst[154][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/5.0;
+        histo_Syst[154][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)+systValue);
         systValue = histo_Syst[154][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[153][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesFlavorQCD
+        // MuonMom
         systValue = histo_Syst[156][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[155][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesTimePtEta
+        // ElectronMom
         systValue = histo_Syst[158][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[157][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // metJER
+        systValue = histo_Syst[160][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[159][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // metJES
+        systValue = histo_Syst[162][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[161][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // metUnclustered
+        systValue = histo_Syst[164][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[163][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesSubTotalPileUp
+        systValue = histo_Syst[166][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[165][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesSubTotalRelative
+        systValue = histo_Syst[168][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[167][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesSubTotalPt
+        systValue = histo_Syst[170][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[169][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesSubTotalScale
+        systValue = histo_Syst[172][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[171][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesFlavorQCD
+        systValue = histo_Syst[174][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[173][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesTimePtEta
+        systValue = histo_Syst[176][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[175][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
       }
     } // loop over bins
   } // loop over categories
@@ -546,7 +564,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_correlated shape ");
+  newcardShape << Form("BtagSFBC_00 shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -555,7 +573,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_uncorrelated shape ");
+  newcardShape << Form("BtagSFBC_01 shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -564,7 +582,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFLF_correlated shape ");
+  newcardShape << Form("BtagSFBC_02 shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -573,7 +591,88 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFLF_uncorrelated shape ");
+  newcardShape << Form("BtagSFBC_03 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("BtagSFBC_04 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("BtagSFBC_05 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("BtagSFBC_06 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("BtagSFBC_07 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("BtagSFBC_08 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("BtagSFBC_09 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("BtagSFBC_10 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("BtagSFBC_11 shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("BtagSFLF_00 shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
