@@ -12,7 +12,7 @@ fi
 export year=$1
 
 if [ $# -eq 2 ]; then
-  export path=$2
+  export path="fillhisto_triggerAnalysis"$2
 fi
 
 hadd -f ${output}/${path}_${year}_loose_mu_2d.root ${output}/${path}_${year}_0_2d.root  ${output}/${path}_${year}_1_2d.root

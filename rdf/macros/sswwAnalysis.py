@@ -452,17 +452,6 @@ if __name__ == "__main__":
         if opt == "--whichJob":
             whichJob = int(arg)
 
-    puWeights = []
-    puPath = "data/puWeights_UL_{0}.root".format(year)
-    fPuFile = ROOT.TFile(puPath)
-    puWeights.append(fPuFile.Get("puWeights"))
-    puWeights.append(fPuFile.Get("puWeightsUp"))
-    puWeights.append(fPuFile.Get("puWeightsDown"))
-    for x in range(3):
-        puWeights[x].SetDirectory(0)
-    fPuFile.Close()
-
-
     wsWeights = []
     wsPath = "data/histoWSSF_{0}.root".format(year)
     fwsFile = ROOT.TFile(wsPath)
@@ -472,6 +461,16 @@ if __name__ == "__main__":
     for x in range(3):
         wsWeights[x].SetDirectory(0)
     fwsFile.Close()
+
+    puWeights = []
+    puPath = "data/puWeights_UL_{0}.root".format(year)
+    fPuFile = ROOT.TFile(puPath)
+    puWeights.append(fPuFile.Get("puWeights"))
+    puWeights.append(fPuFile.Get("puWeightsUp"))
+    puWeights.append(fPuFile.Get("puWeightsDown"))
+    for x in range(3):
+        puWeights[x].SetDirectory(0)
+    fPuFile.Close()
 
     histoFakeEtaPt_mu = []
     histoFakeEtaPt_el = []

@@ -10,6 +10,10 @@ export path="fillhisto_zAnalysis1001"
 export year=$2
 export output="anaZ"
 
+if [ $# -eq 3 ]; then
+  export path="fillhisto_zAnalysis"$3
+fi
+
 if [ $option -eq 0 ]; then
 
 export bins=15
