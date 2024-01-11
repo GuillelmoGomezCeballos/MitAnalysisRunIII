@@ -11,6 +11,12 @@
 #include <fstream>
 #include "TLorentzVector.h"
 
+//root -q -l -b ~/cms/MitAnalysisRunIII/macros/applyDataSmearing.C'("fillhisto_zAnalysis1001_20220_243.root")'
+//root -q -l -b ~/cms/MitAnalysisRunIII/macros/applyDataSmearing.C'("fillhisto_zAnalysis1001_20220_244.root")'
+//root -q -l -b ~/cms/MitAnalysisRunIII/macros/applyDataSmearing.C'("fillhisto_zAnalysis1001_20220_245.root")'
+//root -q -l -b ~/cms/MitAnalysisRunIII/macros/applyDataSmearing.C'("fillhisto_zAnalysis1001_20221_243.root")'
+//root -q -l -b ~/cms/MitAnalysisRunIII/macros/applyDataSmearing.C'("fillhisto_zAnalysis1001_20221_244.root")'
+//root -q -l -b ~/cms/MitAnalysisRunIII/macros/applyDataSmearing.C'("fillhisto_zAnalysis1001_20221_245.root")'
 //root -q -l -b ~/cms/MitAnalysisRunIII/macros/applyDataSmearing.C'("fillhisto_zAnalysis1001_20220_255.root")'
 //root -q -l -b ~/cms/MitAnalysisRunIII/macros/applyDataSmearing.C'("fillhisto_zAnalysis1001_20220_256.root")'
 //root -q -l -b ~/cms/MitAnalysisRunIII/macros/applyDataSmearing.C'("fillhisto_zAnalysis1001_20220_257.root")'
@@ -34,7 +40,7 @@ void applyDataSmearing(TString inputName){
   }
 
   for(int nb=1; nb<=_histData->GetNbinsX(); nb++){
-    double systValue = (_histData->GetBinContent(nb)-hBck->GetBinContent(nb))/1.7;
+    double systValue = (_histData->GetBinContent(nb)-hBck->GetBinContent(nb))/2.0;
     hBck->SetBinContent(nb,hBck->GetBinContent(nb)+systValue);
   }
 
