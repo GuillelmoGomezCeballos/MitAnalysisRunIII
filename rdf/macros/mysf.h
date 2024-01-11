@@ -274,6 +274,9 @@ double MyCorrections::eval_tauJETSF(double pt, int dm, int genmatch, const char 
 };
 
 double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double eta, double pt, int flavor) {
+  if(eta <= -2.5 || eta >= 2.5) return 0.0;
+  eta = std::min(std::abs(eta),2.399);
+  pt = std::min(pt,999.999);
   // No c-jets corrections, using b-jets instead
   if(flavor != 0)
     return btvHFSF_->evaluate({valType, workingPoint,      5, eta, pt});

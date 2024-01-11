@@ -7,11 +7,14 @@ if __name__ == "__main__":
     path = "fillhisto_puAnalysis"
     year = 2022
     output = "anaZ"
+    debug = 1
+    maxTolerance = 0.03
 
     valid = ['path=', "year=", 'output=', 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
-    usage +=  "              --output=<{0}>".format(output)
+    usage +=  "              --output=<{0}>\n".format(output)
+    usage +=  "              --debug=<{0}>".format(debug)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -29,6 +32,8 @@ if __name__ == "__main__":
             year = int(arg)
         if opt == "--output":
             output = str(arg)
+        if opt == "--debug":
+            debug = int(arg)
 
     nCat = plotCategory("kPlotCategories")
 
@@ -72,7 +77,8 @@ if __name__ == "__main__":
 
     for theNumSel in range(0,numberOfSel):
         theDenSel = theNumSel%3
-        print("******** {0} ({1}) / {2} ({3})".format(theNumSel,histoBtagNumSelEtaPt[theNumSel].GetSumOfWeights(),theDenSel,histoBtagDenSelEtaPt[theDenSel].GetSumOfWeights()))
+        if(debug >= 1):
+            print("******** {0} ({1}) / {2} ({3})".format(theNumSel,histoBtagNumSelEtaPt[theNumSel].GetSumOfWeights(),theDenSel,histoBtagDenSelEtaPt[theDenSel].GetSumOfWeights()))
         for i in range(histoBtagDenSelEtaPt[theDenSel].GetNbinsX()):
             for j in range(histoBtagDenSelEtaPt[theDenSel].GetNbinsY()):
                 den0 = histoBtagDenSelEtaPt[theDenSel].GetBinContent(i+1,j+1)
@@ -90,7 +96,10 @@ if __name__ == "__main__":
                 histoBtagEffSelEtaPt[theNumSel].SetBinContent(i+1,j+1,eff0)
                 histoBtagEffSelEtaPt[theNumSel].SetBinError  (i+1,j+1,unc0)
 
-                print("({0:2d},{1:2d}): ({2:.3f} +/- {3:.3f})".format(i+1,j+1,eff0,unc0))
+                if(debug >= 2):
+                    print("({0:2d},{1:2d}): ({2:.3f} +/- {3:.3f})".format(i+1,j+1,eff0,unc0))
+                if(unc0 > maxTolerance):
+                    print("LARGE UNC ({0:2d},{1:2d}): ({2:.3f} +/- {3:.3f})".format(i+1,j+1,eff0,unc0))
 
         histoBtagEffSelEtaPt[theNumSel].SetNameTitle("histoBtagEffSelEtaPt_{0}".format(theNumSel),"histoBtagEffSelEtaPt_{0}".format(theNumSel))
         histoBtagEffSelEtaPt[theNumSel].Write()

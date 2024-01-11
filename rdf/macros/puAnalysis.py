@@ -67,7 +67,7 @@ def selectionWW(df,year,PDType,isData,count):
 def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
     xPtBins = array('d', [20,25,30,35,40,50,60,70,80,90,100,125,150,175,200,300,400,500,1000])
-    xEtaBins = array('d', [0.0,1.0,1.5,2.0,2.5])
+    xEtaBins = array('d', [0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.5])
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5}".format(count,category,weight,year,PDType,isData))
 
@@ -282,14 +282,35 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     report4.Print()
 
     myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}_job-1.root".format(count,year),'RECREATE')
-    for i in range(nCat):
+    for nc in range(nCat):
         for j in range(nHisto):
-            if(histo[j][i] == 0): continue
-            if(j==0): histo[j][i].SetNameTitle("pileup","pileup")
-            histo[j][i].Write()
+            if(histo[j][nc] == 0): continue
+            if(j==0): histo[j][nc].SetNameTitle("pileup","pileup")
+
+            histo[j][nc].SetBinContent(histo[j][nc].GetNbinsX(),histo[j][nc].GetBinContent(histo[j][nc].GetNbinsX())+histo[j][nc].GetBinContent(histo[j][nc].GetNbinsX()+1))
+            histo[j][nc].SetBinError  (histo[j][nc].GetNbinsX(),pow(pow(histo[j][nc].GetBinError(histo[j][nc].GetNbinsX()),2)+pow(histo[j][nc].GetBinError(histo[j][nc].GetNbinsX()+1),2),0.5))
+            histo[j][nc].SetBinContent(histo[j][nc].GetNbinsX()+1,0.0)
+            histo[j][nc].SetBinError  (histo[j][nc].GetNbinsX()+1,0.0)
+
+            histo[j][nc].Write()
+
         for j in range(nHisto):
-            if(histo2D[j][i] == 0): continue
-            histo2D[j][i].Write()
+            if(histo2D[j][nc] == 0): continue
+
+            for i in range(histo2D[j][nc].GetNbinsX()):
+               histo2D[j][nc].SetBinContent(i+1,histo2D[j][nc].GetNbinsY(),histo2D[j][nc].GetBinContent(i+1,histo2D[j][nc].GetNbinsY())+histo2D[j][nc].GetBinContent(i+1,histo2D[j][nc].GetNbinsY()+1))
+               histo2D[j][nc].SetBinError  (i+1,histo2D[j][nc].GetNbinsY(),pow(pow(histo2D[j][nc].GetBinError(i+1,histo2D[j][nc].GetNbinsY()),2)+pow(histo2D[j][nc].GetBinError(i+1,histo2D[j][nc].GetNbinsY()+1),2),0.5))
+               histo2D[j][nc].SetBinContent(i+1,histo2D[j][nc].GetNbinsY()+1,0.0)
+               histo2D[j][nc].SetBinError  (i+1,histo2D[j][nc].GetNbinsY()+1,0.0)
+
+            for i in range(histo2D[j][nc].GetNbinsY()):
+               histo2D[j][nc].SetBinContent(histo2D[j][nc].GetNbinsX(),i+1,histo2D[j][nc].GetBinContent(histo2D[j][nc].GetNbinsX(),i+1)+histo2D[j][nc].GetBinContent(histo2D[j][nc].GetNbinsX()+1,i+1))
+               histo2D[j][nc].SetBinError  (histo2D[j][nc].GetNbinsX(),i+1,pow(pow(histo2D[j][nc].GetBinError(histo2D[j][nc].GetNbinsX(),i+1),2)+pow(histo2D[j][nc].GetBinError(histo2D[j][nc].GetNbinsX()+1,i+1),2),0.5))
+               histo2D[j][nc].SetBinContent(histo2D[j][nc].GetNbinsX()+1,i+1,0.0)
+               histo2D[j][nc].SetBinError  (histo2D[j][nc].GetNbinsX()+1,i+1,0.0)
+
+            histo2D[j][nc].Write()
+
     myfile.Close()
 
     print("ending {0} / {1} / {2} / {3} / {4} / {5}".format(count,category,weight,year,PDType,isData))
