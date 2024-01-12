@@ -707,6 +707,7 @@ def selectionDAWeigths(df,year,PDType,whichAna):
               .Define("weight3","weightFake*1.0")
               .Define("weight4","weightFake*1.0")
               .Define("weight5","weightFake*1.0")
+              .Define("weight6","weightFake*1.0")
               .Define("weightNoLepSF","weightFake*1.0")
               .Define("weightBTag","weight")
               .Define("weightNoBTag","weight")
@@ -787,11 +788,15 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
             print("BtagCorr/AddCorr: 1/1")
             dftag = (dftag
                      .Define("weight","weightMC*weightFake*weightWS*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
+                     .Define("weightMuoCorr","weightMuoSFJSON*weightMuonSF")
+                     .Define("weightEleCorr","weightEleSFJSON*weightMuonSF")
                     )
         else:
             print("BtagCorr/AddCorr: 0/1")
             dftag = (dftag
                      .Define("weight","weightMC*weightFake*weightWS*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
+                     .Define("weightMuoCorr","weightMuoSFJSON*weightMuonSF")
+                     .Define("weightEleCorr","weightEleSFJSON*weightMuonSF")
                     )
 
     else:
@@ -799,11 +804,15 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
             print("BtagCorr/AddCorr: 1/0")
             dftag = (dftag
                      .Define("weight","weightMC*weightFake*weightWS*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
+                     .Define("weightMuoCorr","weightMuoSFJSON")
+                     .Define("weightEleCorr","weightEleSFJSON")
                     )
         else:
             print("BtagCorr/AddCorr: 0/0")
             dftag = (dftag
                      .Define("weight","weightMC*weightFake*weightWS*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
+                     .Define("weightMuoCorr","weightMuoSFJSON")
+                     .Define("weightEleCorr","weightEleSFJSON")
                     )
 
     if(useBTaggingWeights == 1):
@@ -819,13 +828,14 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weightNoBTag","weight")
                 )
 
-    dftag =(dftag.Define("weight0","weightMC*weightFake*weightWS*weightBtagSF")
-                 .Define("weight1","weightMC*weightFake*weightWS*weightMuoSFJSON")
-                 .Define("weight2","weightMC*weightFake*weightWS*weightEleSFJSON")
-                 .Define("weight3","weight/weightPURecoSF")
-                 .Define("weight4","weight/weightMuonSF/weightElectronSF")
-                 .Define("weight5","weight/weightTriggerSF")
-
+    dftag =(dftag.Define("weight0","weight/(weightBtagSF*weightTriggerSF*weightMuoCorr*weightEleCorr)")
+                 .Define("weight1","weight/weightBtagSF")
+                 .Define("weight2","weight/weightPURecoSF")
+                 .Define("weight3","weight/weightTriggerSF")
+                 .Define("weight4","weight/weightMuoCorr")
+                 .Define("weight5","weight/weightEleCorr")
+                 .Define("weight6","weight/weightWS")
+ 
                  .Define("weightBtagSFBC_00Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_01Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"up_bfragmentation\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_02Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagDeepFlavB,goodbtag_Jet_hadronFlavour,\"up_btempcorr\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))

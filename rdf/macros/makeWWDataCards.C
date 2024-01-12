@@ -20,6 +20,10 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
   if(fidAna <= 0 || fidAna >= 5) printf("Wrong fidAna(%d)\n",fidAna);
 
+  double triggerEffUnc = 1.000;
+  if     (year == 20220) triggerEffUnc = 1.002;
+  else if(year == 20221) triggerEffUnc = 1.004;
+
   int jumpValue = 200;
 
   TString addFiducialName = "";
@@ -561,6 +565,15 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
     else                     newcardShape << Form("%6.3f ",1.02);
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("CMS_triggerEff_%d   lnN     ",yearLumi);
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("%6.3f ",triggerEffUnc);
   }
   newcardShape << Form("\n");
 

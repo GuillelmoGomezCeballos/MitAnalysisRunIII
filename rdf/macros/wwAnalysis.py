@@ -449,6 +449,16 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                           .Filter("print_info > 0")
                           .Histo1D(("test", "test", 4,-0.5,3.5), "ngood_jets","weightWW"))
 
+        if(makeDataCards == -1):
+            histo[100][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(100,x), "histo_{0}_{1}".format(100,x), 4,-0.5,3.5), "ngood_jets","weight")
+            histo[101][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(101,x), "histo_{0}_{1}".format(101,x), 4,-0.5,3.5), "ngood_jets","weight0")
+            histo[102][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(102,x), "histo_{0}_{1}".format(102,x), 4,-0.5,3.5), "ngood_jets","weight1")
+            histo[103][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(103,x), "histo_{0}_{1}".format(103,x), 4,-0.5,3.5), "ngood_jets","weight2")
+            histo[104][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(104,x), "histo_{0}_{1}".format(104,x), 4,-0.5,3.5), "ngood_jets","weight3")
+            histo[105][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(105,x), "histo_{0}_{1}".format(105,x), 4,-0.5,3.5), "ngood_jets","weight4")
+            histo[106][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(106,x), "histo_{0}_{1}".format(106,x), 4,-0.5,3.5), "ngood_jets","weight5")
+            histo[107][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(107,x), "histo_{0}_{1}".format(107,x), 4,-0.5,3.5), "ngood_jets","weight6")
+
         if(makeDataCards >= 1):
             BinXF = 4
             minXF = -0.5

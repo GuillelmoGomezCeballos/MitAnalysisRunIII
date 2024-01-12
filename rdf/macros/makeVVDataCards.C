@@ -23,6 +23,8 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
 
   plotBaseNames[kPlotNonPrompt] = "NonPromptWZ";
 
+  double triggerEffUnc = 1.001;
+
   int jumpValue = 200;
 
   double systValue;
@@ -476,6 +478,15 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
     else                     newcardShape << Form("%6.3f ",1.02);
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("CMS_triggerEff_%d   lnN     ",yearLumi);
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("%6.3f ",triggerEffUnc);
   }
   newcardShape << Form("\n");
 
