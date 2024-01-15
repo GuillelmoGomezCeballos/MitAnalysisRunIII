@@ -5,7 +5,7 @@ from array import array
 import json
 from utilsCategory import plotCategory
 
-xPtBins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 35.0])
+xPtBins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 40.0])
 xEtaBins = array('d', [0.0, 0.5, 1.0, 1.5, 2.0, 2.5])
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)

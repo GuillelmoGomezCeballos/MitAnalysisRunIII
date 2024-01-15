@@ -92,7 +92,8 @@ MyCorrections::MyCorrections(int the_input_year) {
   
   std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_methods_v0.json.gz";
   auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
-  btvHFSF_ = csetHFBTV->at("deepJet_ptrel");
+  if     (year == 20220) btvHFSF_ = csetHFBTV->at("deepJet_ptrel");
+  else if(year == 20221) btvHFSF_ = csetHFBTV->at("deepJet_tnp");
 
   std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging_v0.json.gz";
   auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);

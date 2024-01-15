@@ -30,7 +30,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   double systValue;
   TFile *inputFile;
   TFile *outputFile;
-  const int nSystTotal = 177;
+  const int nSystTotal = 179;
 
   TH1D *histo_Baseline[nPlotCategories];
   TH1D *histo_QCDScaleUp[nPlotCategories];
@@ -42,15 +42,17 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   TH1D *histo_PDFUp  [101][nPlotCategories];
   TH1D *histo_PDFDown[101][nPlotCategories];
 
+  TString BtagSFBCNames[13] = {"BtagSFBC_00", "BtagSFBC_01", "BtagSFBC_02", "BtagSFBC_03", "BtagSFBC_04", "BtagSFBC_05", "BtagSFBC_06", "BtagSFBC_07", "BtagSFBC_08", "BtagSFBC_09", "BtagSFBC_10", "BtagSFBC_11", "BtagSFBC_12"};
+
   TString nameSyst[nSystTotal];
-  nameSyst[ 0] = "BtagSFBC_00Up";
-  nameSyst[ 1] = "BtagSFBC_00Down";
-  nameSyst[ 2] = "BtagSFBC_01Up";
-  nameSyst[ 3] = "BtagSFBC_01Down";
-  nameSyst[ 4] = "BtagSFBC_02Up";
-  nameSyst[ 5] = "BtagSFBC_02Down";
-  nameSyst[ 6] = "BtagSFBC_03Up";
-  nameSyst[ 7] = "BtagSFBC_03Down";
+  nameSyst[ 0] = Form("%s_%dUp"  ,BtagSFBCNames[ 0].Data(),year);
+  nameSyst[ 1] = Form("%s_%dDown",BtagSFBCNames[ 0].Data(),year);
+  nameSyst[ 2] = Form("%s_%dUp"  ,BtagSFBCNames[ 1].Data(),year);
+  nameSyst[ 3] = Form("%s_%dDown",BtagSFBCNames[ 1].Data(),year);
+  nameSyst[ 4] = Form("%s_%dUp"  ,BtagSFBCNames[ 2].Data(),year);
+  nameSyst[ 5] = Form("%s_%dDown",BtagSFBCNames[ 2].Data(),year);
+  nameSyst[ 6] = Form("%s_%dUp"  ,BtagSFBCNames[ 3].Data(),year);
+  nameSyst[ 7] = Form("%s_%dDown",BtagSFBCNames[ 3].Data(),year);
   nameSyst[ 8] = "MuoSFTRKUp";
   nameSyst[ 9] = "MuoSFTRKDown";
   nameSyst[10] = "MuoSFIDUp";
@@ -74,50 +76,52 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   nameSyst[28] = "QCDScale4";
   nameSyst[29] = "QCDScale5";
   for(int i=0; i<=102; i++) nameSyst[30+i] = Form("PDF%d",i);
-  nameSyst[133] = "BtagSFBC_04Up";
-  nameSyst[134] = "BtagSFBC_04Down";
-  nameSyst[135] = "BtagSFBC_05Up";
-  nameSyst[136] = "BtagSFBC_05Down";
-  nameSyst[137] = "BtagSFBC_06Up";
-  nameSyst[138] = "BtagSFBC_06Down";
-  nameSyst[139] = "BtagSFBC_07Up";
-  nameSyst[140] = "BtagSFBC_07Down";
-  nameSyst[141] = "BtagSFBC_08Up";
-  nameSyst[142] = "BtagSFBC_08Down";
-  nameSyst[143] = "BtagSFBC_09Up";
-  nameSyst[144] = "BtagSFBC_09Down";
-  nameSyst[145] = "BtagSFBC_10Up";
-  nameSyst[146] = "BtagSFBC_10Down";
-  nameSyst[147] = "BtagSFBC_11Up";
-  nameSyst[148] = "BtagSFBC_11Down";
-  nameSyst[149] = "BtagSFLF_00Up";
-  nameSyst[150] = "BtagSFLF_00Down";
-  nameSyst[151] = "JesUp";
-  nameSyst[152] = "JesDown";
-  nameSyst[153] = "JerUp";
-  nameSyst[154] = "JerDown";
-  nameSyst[155] = "MuonMomUp";
-  nameSyst[156] = "MuonMomDown";
-  nameSyst[157] = "ElectronMomUp";
-  nameSyst[158] = "ElectronMomDown";
-  nameSyst[159] = "metJERUp";
-  nameSyst[160] = "metJERDown";
-  nameSyst[161] = "metJESUp";
-  nameSyst[162] = "metJESDown";
-  nameSyst[163] = "metUnclusteredUp";
-  nameSyst[164] = "metUnclusteredDown";
-  nameSyst[165] = "JesSubTotalPileUpUp";
-  nameSyst[166] = "JesSubTotalPileUpDown";
-  nameSyst[167] = "JesSubTotalRelativeUp";
-  nameSyst[168] = "JesSubTotalRelativeDown";
-  nameSyst[169] = "JesSubTotalPtUp";
-  nameSyst[170] = "JesSubTotalPtDown";
-  nameSyst[171] = "JesSubTotalScaleUp";
-  nameSyst[172] = "JesSubTotalScaleDown";
-  nameSyst[173] = "JesFlavorQCDUp";
-  nameSyst[174] = "JesFlavorQCDDown";
-  nameSyst[175] = "JesTimePtEtaUp";
-  nameSyst[176] = "JesTimePtEtaDown";
+  nameSyst[133] = Form("%s_%dUp"  ,BtagSFBCNames[ 4].Data(),year);
+  nameSyst[134] = Form("%s_%dDown",BtagSFBCNames[ 4].Data(),year);
+  nameSyst[135] = Form("%s_%dUp"  ,BtagSFBCNames[ 5].Data(),year);
+  nameSyst[136] = Form("%s_%dDown",BtagSFBCNames[ 5].Data(),year);
+  nameSyst[137] = Form("%s_%dUp"  ,BtagSFBCNames[ 6].Data(),year);
+  nameSyst[138] = Form("%s_%dDown",BtagSFBCNames[ 6].Data(),year);
+  nameSyst[139] = Form("%s_%dUp"  ,BtagSFBCNames[ 7].Data(),year);
+  nameSyst[140] = Form("%s_%dDown",BtagSFBCNames[ 7].Data(),year);
+  nameSyst[141] = Form("%s_%dUp"  ,BtagSFBCNames[ 8].Data(),year);
+  nameSyst[142] = Form("%s_%dDown",BtagSFBCNames[ 8].Data(),year);
+  nameSyst[143] = Form("%s_%dUp"  ,BtagSFBCNames[ 9].Data(),year);
+  nameSyst[144] = Form("%s_%dDown",BtagSFBCNames[ 9].Data(),year);
+  nameSyst[145] = Form("%s_%dUp"  ,BtagSFBCNames[10].Data(),year);
+  nameSyst[146] = Form("%s_%dDown",BtagSFBCNames[10].Data(),year);
+  nameSyst[147] = Form("%s_%dUp"  ,BtagSFBCNames[11].Data(),year);
+  nameSyst[148] = Form("%s_%dDown",BtagSFBCNames[11].Data(),year);
+  nameSyst[149] = Form("%s_%dUp"  ,BtagSFBCNames[12].Data(),year);
+  nameSyst[150] = Form("%s_%dDown",BtagSFBCNames[12].Data(),year);
+  nameSyst[151] = "BtagSFLF_00Up";
+  nameSyst[152] = "BtagSFLF_00Down";
+  nameSyst[153] = "JesUp";
+  nameSyst[154] = "JesDown";
+  nameSyst[155] = "JerUp";
+  nameSyst[156] = "JerDown";
+  nameSyst[157] = "MuonMomUp";
+  nameSyst[158] = "MuonMomDown";
+  nameSyst[159] = "ElectronMomUp";
+  nameSyst[160] = "ElectronMomDown";
+  nameSyst[161] = "metJERUp";
+  nameSyst[162] = "metJERDown";
+  nameSyst[163] = "metJESUp";
+  nameSyst[164] = "metJESDown";
+  nameSyst[165] = "metUnclusteredUp";
+  nameSyst[166] = "metUnclusteredDown";
+  nameSyst[167] = "JesSubTotalPileUpUp";
+  nameSyst[168] = "JesSubTotalPileUpDown";
+  nameSyst[169] = "JesSubTotalRelativeUp";
+  nameSyst[170] = "JesSubTotalRelativeDown";
+  nameSyst[171] = "JesSubTotalPtUp";
+  nameSyst[172] = "JesSubTotalPtDown";
+  nameSyst[173] = "JesSubTotalScaleUp";
+  nameSyst[174] = "JesSubTotalScaleDown";
+  nameSyst[175] = "JesFlavorQCDUp";
+  nameSyst[176] = "JesFlavorQCDDown";
+  nameSyst[177] = "JesTimePtEtaUp";
+  nameSyst[178] = "JesTimePtEtaDown";
 
   int BinXF = 4; double minXF = -0.5; double maxXF = 3.5;
 
@@ -229,46 +233,46 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
         systValue = histo_Syst[19][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[18][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
         // Jes
-        systValue = histo_Syst[152][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[151][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // Jer
-        systValue = (histo_Syst[154][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/5.0;
-        histo_Syst[154][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)+systValue);
         systValue = histo_Syst[154][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[153][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // MuonMom
+        // Jer
+        systValue = (histo_Syst[156][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/5.0;
+        histo_Syst[156][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)+systValue);
         systValue = histo_Syst[156][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[155][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // ElectronMom
+        // MuonMom
         systValue = histo_Syst[158][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[157][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // metJER
+        // ElectronMom
         systValue = histo_Syst[160][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[159][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // metJES
+        // metJER
         systValue = histo_Syst[162][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[161][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // metUnclustered
+        // metJES
         systValue = histo_Syst[164][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[163][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalPileUp
+        // metUnclustered
         systValue = histo_Syst[166][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[165][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalRelative
+        // JesSubTotalPileUp
         systValue = histo_Syst[168][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[167][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalPt
+        // JesSubTotalRelative
         systValue = histo_Syst[170][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[169][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalScale
+        // JesSubTotalPt
         systValue = histo_Syst[172][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[171][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesFlavorQCD
+        // JesSubTotalScale
         systValue = histo_Syst[174][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[173][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesTimePtEta
+        // JesFlavorQCD
         systValue = histo_Syst[176][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[175][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // JesTimePtEta
+        systValue = histo_Syst[178][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+        if(systValue > 0) histo_Syst[177][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
       }
     } // loop over bins
   } // loop over categories
@@ -490,16 +494,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  //newcardShape << Form("BtagSFBC_00 shape ");
-  //for (int ic=0; ic<nPlotCategories; ic++){
-  //  if(!histo_Baseline[ic]) continue;
-  //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-  //  if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-  //  else                     newcardShape << Form("1.0 ");
-  //}
-  //newcardShape << Form("\n");
-
-  newcardShape << Form("BtagSFBC_01 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 0].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -508,7 +503,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_02 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 1].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -517,7 +512,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_03 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 2].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -526,7 +521,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_04 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 3].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -535,7 +530,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_05 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 4].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -544,7 +539,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_06 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 5].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -553,7 +548,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_07 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 6].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -562,7 +557,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_08 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 7].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -571,7 +566,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_09 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 8].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -580,7 +575,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_10 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 9].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -589,7 +584,25 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("BtagSFBC_11 shape ");
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[10].Data(),year);
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[11].Data(),year);
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("%s_%d shape ",BtagSFBCNames[12].Data(),year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;

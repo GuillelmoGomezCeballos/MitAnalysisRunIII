@@ -79,7 +79,7 @@ def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count):
                  .Define("phil"    ,"compute_lmet_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_jetRelIso, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_jetRelIso, PuppiMET_pt, PuppiMET_phi,5)")
                  .Define("absetal" ,"compute_lmet_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_jetRelIso, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_jetRelIso, PuppiMET_pt, PuppiMET_phi,6)")
                  .Define("ptlcone" ,"compute_lmet_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_jetRelIso, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_jetRelIso, PuppiMET_pt, PuppiMET_phi,7)")
-                 .Define("maxMETMT","max(PuppiMET_pt,mt)")
+                 .Define("sumMETMT","PuppiMET_pt+mt")
                 )
 
     dftag = selectionJetMet(dftag,year,bTagSel,isData,count,5.0)
@@ -96,7 +96,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    maxMETMTCut = 30
+    sumMETMTCut = 50
 
     nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
@@ -215,7 +215,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
             histo[ltype+ 8][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 8,y), "histo_{0}_{1}".format(ltype+ 8,y),50, 10, 60), "ptl","weight")
             histo[ltype+10][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+10,y), "histo_{0}_{1}".format(ltype+10,y),50,0.0,2.5), "absetal","weight")
             histo[ltype+12][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+12,y), "histo_{0}_{1}".format(ltype+12,y),50, 10, 60), "ptlcone","weight")
-            histo[ltype+14][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+14,y), "histo_{0}_{1}".format(ltype+14,y),40, 0, 160), "maxMETMT","weight")
+            histo[ltype+14][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+14,y), "histo_{0}_{1}".format(ltype+14,y),80, 0, 160), "sumMETMT","weight")
 
             histo[ltype+16][y] = dfcat[2*y+ltype].Filter("{0}".format(tagTriggerSel0)).Histo1D(("histo_{0}_{1}".format(ltype+16,y), "histo_{0}_{1}".format(ltype+16,y),50, 10, 60), "ptl","weight")
             histo[ltype+18][y] = dfcat[2*y+ltype].Filter("{0}".format(tagTriggerSel1)).Histo1D(("histo_{0}_{1}".format(ltype+18,y), "histo_{0}_{1}".format(ltype+18,y),50, 10, 60), "ptl","weight")
@@ -247,9 +247,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
                 for lepSel in range(9):
                     histo[ltype+100+2*ptbin+2*2*lepSel][y] = dfjet30cat[2*y+ltype].Filter("{0} && Sum(tight_{1}{2})==1".format(list_FILTERLEP[ptbin],strLep,lepSel)).Histo1D(("histo_{0}_{1}".format(ltype+100+2*ptbin+2*2*lepSel,y), "histo_{0}_{1}".format(ltype+100+2*ptbin+2*2*lepSel,y),40, 0, 160), "mtfix","weight")
 
-            dffakecat.append(dfcat[2*y+ltype].Filter("maxMETMT < {0}".format(maxMETMTCut), "maxMETMT < {0}".format(maxMETMTCut)))
-            dfjet30cat [2*y+ltype] = dfjet30cat [2*y+ltype].Filter("maxMETMT < {0}".format(maxMETMTCut), "maxMETMT < {0}".format(maxMETMTCut))
-            dfbjet20cat[2*y+ltype] = dfbjet20cat[2*y+ltype].Filter("maxMETMT < {0}".format(maxMETMTCut), "maxMETMT < {0}".format(maxMETMTCut))
+            dffakecat.append(dfcat[2*y+ltype].Filter("sumMETMT < {0} && ptl < {1}".format(sumMETMTCut,xPtBins[len(xPtBins)-1]), "sumMETMT < X && ptl < Y"))
+            dfjet30cat [2*y+ltype] = dfjet30cat [2*y+ltype].Filter("sumMETMT < {0} && ptl < {1}".format(sumMETMTCut,xPtBins[len(xPtBins)-1]), "sumMETMT < X && ptl < Y")
+            dfbjet20cat[2*y+ltype] = dfbjet20cat[2*y+ltype].Filter("sumMETMT < {0} && ptl < {1}".format(sumMETMTCut,xPtBins[len(xPtBins)-1]), "sumMETMT < X && ptl < Y")
+            dfjet50cat [2*y+ltype] = dfjet50cat [2*y+ltype].Filter("sumMETMT < {0} && ptl < {1}".format(sumMETMTCut,xPtBins[len(xPtBins)-1]), "sumMETMT < X && ptl < Y")
 
             for ptbin in range(2):
                 nHist = ptbin*100
