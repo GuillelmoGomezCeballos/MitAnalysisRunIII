@@ -43,8 +43,7 @@ def selectionLL(df,year,PDType,isData):
 
     dftag =(df.Define("isData","{}".format(isData))
               .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
-              .Define("trigger","{0}".format(TRIGGERMET))
-              .Filter("trigger > 0","Passed trigger")
+              .Define("triggerMET","{0}".format(TRIGGERMET))
               )
 
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
@@ -101,6 +100,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
                                .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
                                .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,kPlotWS,2,2,0)".format(theCat))
                                .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
+
+            histo[ltype+12][x] = dfcat[6*x+ltype]                                         .Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x), 40,  0, 400), "ptll","weight")
+            histo[ltype+18][x] = dfcat[6*x+ltype].Filter("triggerMET > 0")                .Histo1D(("histo_{0}_{1}".format(ltype+18,x), "histo_{0}_{1}".format(ltype+18,x), 40,  0, 400), "ptll","weight")
+            histo[ltype+24][x] = dfcat[6*x+ltype].Filter("triggerl > 0")                  .Histo1D(("histo_{0}_{1}".format(ltype+24,x), "histo_{0}_{1}".format(ltype+24,x), 40,  0, 400), "ptll","weight")
+            histo[ltype+30][x] = dfcat[6*x+ltype].Filter("triggerMET > 0 && triggerl > 0").Histo1D(("histo_{0}_{1}".format(ltype+30,x), "histo_{0}_{1}".format(ltype+30,x), 40,  0, 400), "ptll","weight")
+
+            dfcat[6*x+ltype] = dfcat[6*x+ltype].Filter("triggerMET > 0","Passed MET trigger")
 
             histo[ltype+ 0][x] = dfcat[6*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 100,  0, 500), "mtot","weight")
             histo[ltype+ 6][x] = dfcat[6*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 6,x), "histo_{0}_{1}".format(ltype+ 6,x), 100,  0, 200), "mllmin","weight")

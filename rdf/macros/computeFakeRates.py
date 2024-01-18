@@ -6,6 +6,7 @@ import json
 from utilsCategory import plotCategory
 
 xPtBins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 40.0])
+#xPtBins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 100.0])
 xEtaBins = array('d', [0.0, 0.5, 1.0, 1.5, 2.0, 2.5])
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
@@ -181,7 +182,7 @@ if __name__ == "__main__":
               for neta in range(len(xEtaBins)-1):
                   histoFakeEffSelPt[thePlot][nsel][neta].Write()
                   histoFakeEffSelPt[thePlot][nsel][neta].SetDirectory(0)
-              for npt in range(len(xEtaBins)-1):
+              for npt in range(len(xPtBins)-1):
                   histoFakeEffSelEta[thePlot][nsel][npt].Write()
                   histoFakeEffSelEta[thePlot][nsel][npt].SetDirectory(0)
     outFileFakeRate.Close()
@@ -191,22 +192,22 @@ if __name__ == "__main__":
 
     for nsel in range(numberOfSel):
         canvasPt[nsel] = TCanvas("canvasPt{0}".format(nsel), "canvasPt{0}".format(nsel), 10, 10, 500, 500)
-        canvasPt[nsel].Divide(2,len(xPtBins)-1)
+        canvasPt[nsel].Divide(2,len(xEtaBins)-1)
         for thePlot in range(2):
-            for npt in range(len(xPtBins)-1):
-                canvasPt[nsel].cd(thePlot+2*npt+1)
-                #print(histoFakeEffSelPt[thePlot][nsel][npt].GetSumOfWeights())
-                histoFakeEffSelPt[thePlot][nsel][npt].DrawCopy()
+            for neta in range(len(xEtaBins)-1):
+                canvasPt[nsel].cd(thePlot+2*neta+1)
+                #print(histoFakeEffSelPt[thePlot][nsel][neta].GetSumOfWeights())
+                histoFakeEffSelPt[thePlot][nsel][neta].DrawCopy()
         canvasPt[nsel].Draw()
         canvasPt[nsel].SaveAs("histoFakePt_{0}_{1}_anaType{2}_nsel{3}.{4}".format(path.split("fillhisto_")[1],year,anaType,nsel,format))
 
         canvasEta[nsel] = TCanvas("canvasEta{0}".format(nsel), "canvasEta{0}".format(nsel), 10, 10, 500, 500)
-        canvasEta[nsel].Divide(2,len(xEtaBins)-1)
+        canvasEta[nsel].Divide(2,len(xPtBins)-1)
         for thePlot in range(2):
-            for neta in range(len(xEtaBins)-1):
-                canvasEta[nsel].cd(thePlot+2*neta+1)
-                #print(histoFakeEffSelEta[thePlot][nsel][neta].GetSumOfWeights())
-                histoFakeEffSelEta[thePlot][nsel][neta].DrawCopy()
+            for npt in range(len(xPtBins)-1):
+                canvasEta[nsel].cd(thePlot+2*npt+1)
+                #print(histoFakeEffSelEta[thePlot][nsel][npt].GetSumOfWeights())
+                histoFakeEffSelEta[thePlot][nsel][npt].DrawCopy()
                 canvasEta[nsel].Update()
         canvasEta[nsel].Draw()
         canvasEta[nsel].SaveAs("histoFakeEta_{0}_{1}_anaType{2}_nsel{3}.{4}".format(path.split("fillhisto_")[1],year,anaType,nsel,format))

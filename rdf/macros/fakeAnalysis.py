@@ -80,6 +80,7 @@ def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count):
                  .Define("absetal" ,"compute_lmet_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_jetRelIso, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_jetRelIso, PuppiMET_pt, PuppiMET_phi,6)")
                  .Define("ptlcone" ,"compute_lmet_var(fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_jetRelIso, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_jetRelIso, PuppiMET_pt, PuppiMET_phi,7)")
                  .Define("sumMETMT","PuppiMET_pt+mt")
+                 .Define("sumMETMTFIX","PuppiMET_pt+mtfix")
                 )
 
     dftag = selectionJetMet(dftag,year,bTagSel,isData,count,5.0)
@@ -90,13 +91,15 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
-    xPtBins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 40.0])
+    xPtDistBins = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 100.0])
+    xPtBins     = array('d', [10.0, 15.0, 20.0, 25.0, 30.0, 40.0])
     xEtaBins = array('d', [0.0, 0.5, 1.0, 1.5, 2.0, 2.5])
+    totalxPtDistBins = len(xPtDistBins)-1
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    sumMETMTCut = 50
+    mtfixCut = 30
 
     nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
@@ -182,6 +185,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
     dfjet50cat = []
     dfbjet20cat = []
     dftrgcat = []
+    dfptcat = []
     for y in range(nCat):
         for ltype in range(2):
             dfcat.append(dfbase.Filter("Sum(fake_mu)+2*Sum(fake_el)-1=={0}".format(ltype), "flavor type == {0}".format(ltype))
@@ -189,6 +193,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
                                .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
                                .Define("theCat{0}".format(y), "compute_category({0},kPlotNonPrompt,kPlotWS,1,1,0)".format(theCat))
                                .Filter("theCat{0}=={1}".format(y,y), "correct category ({0})".format(y))
+                               .Filter("ptl < {0}".format(xPtDistBins[len(xPtDistBins)-1]), "ptl < {0}".format(xPtDistBins[len(xPtDistBins)-1]))
                                )
 
             for trgfake in range(3):
@@ -197,60 +202,45 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
                 else:
                     dftrgcat.append(dfcat[2*y+ltype].Filter("{0}".format(list_TRIGGERFAKEEL[trgfake])))
 
-                histo[trgfake+3*ltype+24][y] = dftrgcat[6*y+3*ltype+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+24,y), "histo_{0}_{1}".format(trgfake+3*ltype+24,y),40, 0, 160), "mt","weightFakeSel{0}".format(trgfake))
-                histo[trgfake+3*ltype+30][y] = dftrgcat[6*y+3*ltype+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+30,y), "histo_{0}_{1}".format(trgfake+3*ltype+30,y),40, 0, 160), "PuppiMET_pt","weightFakeSel{0}".format(trgfake))
-                histo[trgfake+3*ltype+36][y] = dftrgcat[6*y+3*ltype+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+36,y), "histo_{0}_{1}".format(trgfake+3*ltype+36,y),40, 0, 160), "mtfix","weightFakeSel{0}".format(trgfake))
-                histo[trgfake+3*ltype+42][y] = dftrgcat[6*y+3*ltype+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+42,y), "histo_{0}_{1}".format(trgfake+3*ltype+42,y),50, 10, 60), "ptl","weightFakeSel{0}".format(trgfake))
-                histo[trgfake+3*ltype+48][y] = dftrgcat[6*y+3*ltype+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+48,y), "histo_{0}_{1}".format(trgfake+3*ltype+48,y),50,0.0,2.5), "absetal","weightFakeSel{0}".format(trgfake))
-                histo[trgfake+3*ltype+54][y] = dftrgcat[6*y+3*ltype+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+54,y), "histo_{0}_{1}".format(trgfake+3*ltype+54,y),5,-0.5,4.5), "ngood_jets","weightFakeSel{0}".format(trgfake))
-                histo[trgfake+3*ltype+60][y] = dftrgcat[6*y+3*ltype+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+60,y), "histo_{0}_{1}".format(trgfake+3*ltype+60,y),5,-0.5,4.5), "nbtag_goodbtag_Jet_bjet","weightFakeSel{0}".format(trgfake))
-                histo[trgfake+3*ltype+66][y] = dftrgcat[6*y+3*ltype+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+66,y), "histo_{0}_{1}".format(trgfake+3*ltype+66,y),50, 10, 60), "ptlcone","weightFakeSel{0}".format(trgfake))
+                histo[trgfake+3*ltype+ 0][y] = dftrgcat[(2*y+ltype)*3+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+ 0,y), "histo_{0}_{1}".format(trgfake+3*ltype+ 0,y),90, 10, 100), "ptl","weightFakeSel{0}".format(trgfake))
+                histo[trgfake+3*ltype+ 6][y] = dftrgcat[(2*y+ltype)*3+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+ 6,y), "histo_{0}_{1}".format(trgfake+3*ltype+ 6,y),50,0.0,2.5), "absetal","weightFakeSel{0}".format(trgfake))
+                histo[trgfake+3*ltype+12][y] = dftrgcat[(2*y+ltype)*3+trgfake].Histo1D(("histo_{0}_{1}".format(trgfake+3*ltype+12,y), "histo_{0}_{1}".format(trgfake+3*ltype+12,y),90, 10, 100), "ptlcone","weightFakeSel{0}".format(trgfake))
 
-            dfcat[2*y+ltype] = dfcat[2*y+ltype].Filter(FILTERLEP).Filter("mtfix < 160", "mtfix < 160")
+            dfcat[2*y+ltype] = dfcat[2*y+ltype].Filter(FILTERLEP)
 
-            histo[ltype+ 0][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,y), "histo_{0}_{1}".format(ltype+ 0,y),40, 0, 160), "mt","weight")
-            histo[ltype+ 2][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 2,y), "histo_{0}_{1}".format(ltype+ 2,y),32,  0, 3.1416), "dphilmet","weight")
-            histo[ltype+ 4][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 4,y), "histo_{0}_{1}".format(ltype+ 4,y),40, 0, 160), "PuppiMET_pt","weight")
-            histo[ltype+ 6][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 6,y), "histo_{0}_{1}".format(ltype+ 6,y),40, 0, 160), "mtfix","weight")
-            histo[ltype+ 8][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 8,y), "histo_{0}_{1}".format(ltype+ 8,y),50, 10, 60), "ptl","weight")
-            histo[ltype+10][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+10,y), "histo_{0}_{1}".format(ltype+10,y),50,0.0,2.5), "absetal","weight")
-            histo[ltype+12][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+12,y), "histo_{0}_{1}".format(ltype+12,y),50, 10, 60), "ptlcone","weight")
-            histo[ltype+14][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+14,y), "histo_{0}_{1}".format(ltype+14,y),80, 0, 160), "sumMETMT","weight")
+            histo[ltype+18][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+18,y), "histo_{0}_{1}".format(ltype+18,y),90, 10, 100), "ptl","weight")
 
-            histo[ltype+16][y] = dfcat[2*y+ltype].Filter("{0}".format(tagTriggerSel0)).Histo1D(("histo_{0}_{1}".format(ltype+16,y), "histo_{0}_{1}".format(ltype+16,y),50, 10, 60), "ptl","weight")
-            histo[ltype+18][y] = dfcat[2*y+ltype].Filter("{0}".format(tagTriggerSel1)).Histo1D(("histo_{0}_{1}".format(ltype+18,y), "histo_{0}_{1}".format(ltype+18,y),50, 10, 60), "ptl","weight")
-            histo[ltype+20][y] = dfcat[2*y+ltype].Filter("{0}".format(tagTriggerSel2)).Histo1D(("histo_{0}_{1}".format(ltype+20,y), "histo_{0}_{1}".format(ltype+20,y),50, 10, 60), "ptl","weight")
-            histo[ltype+22][y] = dfcat[2*y+ltype].Filter("{0}".format(tagTriggerSel3)).Histo1D(("histo_{0}_{1}".format(ltype+22,y), "histo_{0}_{1}".format(ltype+22,y),50, 10, 60), "ptl","weight")
+            for npt in range(totalxPtDistBins):
+                dfptcat.append(dfcat[2*y+ltype].Filter("ptl > {0} && ptl < {1}".format(xPtDistBins[npt],xPtDistBins[npt+1])))
 
-            dfjet30cat .append(dfcat[2*y+ltype].Filter("ngood_jets > 0","at least one jet").Define("drljet","deltaR(good_Jet_eta[0],good_Jet_phi[0],etal,phil)"))
-            dfjet50cat .append(dfcat[2*y+ltype].Filter("nvbs_jets > 0","at least one jet").Define("drljet","deltaR(vbs_Jet_eta[0],vbs_Jet_phi[0],etal,phil)"))
-            dfbjet20cat.append(dfcat[2*y+ltype].Filter("nbtag_goodbtag_Jet_bjet > 0","at least one btagjet").Define("drljet","deltaR(goodbtag_Jet_eta[0],goodbtag_Jet_phi[0],etal,phil)"))
+                histo[npt+totalxPtDistBins*ltype+ 20][y] = dfptcat[(2*y+ltype)*totalxPtDistBins+npt].Histo1D(("histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+ 20,y), "histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+ 20,y),40, 0, 200), "mt","weight")
+                histo[npt+totalxPtDistBins*ltype+ 40][y] = dfptcat[(2*y+ltype)*totalxPtDistBins+npt].Histo1D(("histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+ 40,y), "histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+ 40,y),40, 0, 200), "mtfix","weight")
+                histo[npt+totalxPtDistBins*ltype+ 60][y] = dfptcat[(2*y+ltype)*totalxPtDistBins+npt].Histo1D(("histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+ 60,y), "histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+ 60,y),40, 0, 200), "PuppiMET_pt","weight")
+                histo[npt+totalxPtDistBins*ltype+ 80][y] = dfptcat[(2*y+ltype)*totalxPtDistBins+npt].Histo1D(("histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+ 80,y), "histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+ 80,y),40, 0, 200), "sumMETMT","weight")
+                histo[npt+totalxPtDistBins*ltype+100][y] = dfptcat[(2*y+ltype)*totalxPtDistBins+npt].Histo1D(("histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+100,y), "histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+100,y),40, 0, 200), "sumMETMTFIX","weight")
+                if(ltype == 0):
+                    histo[npt+totalxPtDistBins*ltype+120][y] = dfptcat[(2*y+ltype)*totalxPtDistBins+npt].Filter("Sum(tight_mu2)==1").Histo1D(("histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+120,y), "histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+120,y),40, 0, 200), "mtfix","weight")
+                if(ltype == 1):
+                    histo[npt+totalxPtDistBins*ltype+120][y] = dfptcat[(2*y+ltype)*totalxPtDistBins+npt].Filter("Sum(tight_el3)==1").Histo1D(("histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+120,y), "histo_{0}_{1}".format(npt+totalxPtDistBins*ltype+120,y),40, 0, 200), "mtfix","weight")
 
-            histo[ltype+72][y] = dfjet30cat [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+72,y), "histo_{0}_{1}".format(ltype+72,y),50,0,5.0), "drljet","weight")
-            histo[ltype+74][y] = dfbjet20cat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+74,y), "histo_{0}_{1}".format(ltype+74,y),50,0,5.0), "drljet","weight")
+            dffakecat.append(dfcat[2*y+ltype].Filter("mtfix < {0} && ptl < {1}".format(mtfixCut,xPtBins[len(xPtBins)-1]), "mtfixCut < X && ptl < Y"))
+
+            dfjet30cat .append(dffakecat[2*y+ltype].Filter("ngood_jets > 0","at least one jet30").Define("drljet","deltaR(good_Jet_eta[0],good_Jet_phi[0],etal,phil)"))
+            dfjet50cat .append(dffakecat[2*y+ltype].Filter("nvbs_jets > 0","at least one jet50").Define("drljet","deltaR(vbs_Jet_eta[0],vbs_Jet_phi[0],etal,phil)"))
+            dfbjet20cat.append(dffakecat[2*y+ltype].Filter("nbtag_goodbtag_Jet_bjet > 0","at least one btagjet20").Define("drljet","deltaR(goodbtag_Jet_eta[0],goodbtag_Jet_phi[0],etal,phil)"))
+
+            histo[ltype+140][y] = dffakecat  [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+140,y), "histo_{0}_{1}".format(ltype+140,y),80,-0.5,79.5), "PV_npvsGood","weight")
+            histo[ltype+142][y] = dfjet30cat [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+142,y), "histo_{0}_{1}".format(ltype+142,y),50,0,5.0), "drljet","weight")
+            histo[ltype+144][y] = dfjet50cat [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+144,y), "histo_{0}_{1}".format(ltype+144,y),50,0,5.0), "drljet","weight")
+            histo[ltype+146][y] = dfbjet20cat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+146,y), "histo_{0}_{1}".format(ltype+146,y),50,0,5.0), "drljet","weight")
 
             dfjet30cat [2*y+ltype] = dfjet30cat [2*y+ltype].Filter("drljet > 0.7", "drljet > 0.7")
             dfjet50cat [2*y+ltype] = dfjet50cat [2*y+ltype].Filter("drljet > 0.7", "drljet > 0.7")
             dfbjet20cat[2*y+ltype] = dfbjet20cat[2*y+ltype].Filter("drljet > 0.7", "drljet > 0.7")
 
             strLep = "mu"
-            chosenSel = "6"
             if(ltype == 1):
                strLep = "el"
-               chosenSel = "4"
-
-            histo[ltype+76][y] = dfjet30cat [2*y+ltype].Filter("PuppiMET_pt < 30 && ptl < 70 && Sum(tight_{0}{1})==1".format(strLep,chosenSel)).Histo1D(("histo_{0}_{1}".format(ltype+76,y), "histo_{0}_{1}".format(ltype+76,y), 50, 0, 100), "mt","weight")
-            histo[ltype+78][y] = dfbjet20cat[2*y+ltype].Filter("PuppiMET_pt < 30 && ptl < 70 && Sum(tight_{0}{1})==1".format(strLep,chosenSel)).Histo1D(("histo_{0}_{1}".format(ltype+78,y), "histo_{0}_{1}".format(ltype+78,y), 50, 0, 100), "mt","weight")
-            histo[ltype+80][y] = dfcat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+80,y), "histo_{0}_{1}".format(ltype+80,y), 80,-0.5,79.5), "PV_npvsGood","weight")
-
-            for ptbin in range(2):
-                for lepSel in range(9):
-                    histo[ltype+100+2*ptbin+2*2*lepSel][y] = dfjet30cat[2*y+ltype].Filter("{0} && Sum(tight_{1}{2})==1".format(list_FILTERLEP[ptbin],strLep,lepSel)).Histo1D(("histo_{0}_{1}".format(ltype+100+2*ptbin+2*2*lepSel,y), "histo_{0}_{1}".format(ltype+100+2*ptbin+2*2*lepSel,y),40, 0, 160), "mtfix","weight")
-
-            dffakecat.append(dfcat[2*y+ltype].Filter("sumMETMT < {0} && ptl < {1}".format(sumMETMTCut,xPtBins[len(xPtBins)-1]), "sumMETMT < X && ptl < Y"))
-            dfjet30cat [2*y+ltype] = dfjet30cat [2*y+ltype].Filter("sumMETMT < {0} && ptl < {1}".format(sumMETMTCut,xPtBins[len(xPtBins)-1]), "sumMETMT < X && ptl < Y")
-            dfbjet20cat[2*y+ltype] = dfbjet20cat[2*y+ltype].Filter("sumMETMT < {0} && ptl < {1}".format(sumMETMTCut,xPtBins[len(xPtBins)-1]), "sumMETMT < X && ptl < Y")
-            dfjet50cat [2*y+ltype] = dfjet50cat [2*y+ltype].Filter("sumMETMT < {0} && ptl < {1}".format(sumMETMTCut,xPtBins[len(xPtBins)-1]), "sumMETMT < X && ptl < Y")
 
             for ptbin in range(2):
                 nHist = ptbin*100
