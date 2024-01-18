@@ -26,6 +26,12 @@ void convert_histograms(TString inputSampleName = "/home/submit/ceballos/cards/c
     histo[kPlotData]->SetNameTitle(Form("histo%d",kPlotData),Form("histo%d",kPlotData));
     histo[kPlotData]->SetDirectory(0);
   }
+  // Special for NonPromptWZ
+  if((TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "NonPromptWZ"))){
+    histo[kPlotNonPrompt] = (TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "NonPromptWZ"));
+    histo[kPlotNonPrompt]->SetNameTitle(Form("histo%d",kPlotNonPrompt),Form("histo%d",kPlotNonPrompt));
+    histo[kPlotNonPrompt]->SetDirectory(0);
+  }
 
   TFile fileOutput(outputSampleName.Data(),"RECREATE");
   fileOutput.cd();

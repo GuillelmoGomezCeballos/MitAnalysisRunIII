@@ -1049,11 +1049,15 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"Njets3","",Form("ww_output_bin3.root"),"ww_output_bin3",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr0.root"),"ww_output_cr0",0,year,legendBSM.Data(),1.0,isBlinded,"Same-sign CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"N_{j}","",Form("ww_output_cr1.root"),"ww_output_cr1",0,year,legendBSM.Data(),1.0,isNeverBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"N_{j}","",Form("ww_output_cr1.root"),"ww_output_cr1",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr2.root"),"ww_output_cr2",0,year,legendBSM.Data(),1.0,isBlinded,"Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr3.root"),"ww_output_cr3",0,year,legendBSM.Data(),1.0,isBlinded,"1 b-tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr4.root"),"ww_output_cr4",0,year,legendBSM.Data(),1.0,isBlinded,"2 b-tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
-    finalPlot(0,1,"m_{ll}","GeV",Form("ww_output_alt.root"),"ww_output_alt",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
-  }
+    //finalPlot(0,1,"m_{ll}","GeV",Form("ww_output_alt.root"),"ww_output_alt",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+
+    finalPlot(0,1,"Lepton category","",Form("vv/ww_output_wz_2002.root"),"ww_output_wz_2002",0,year,legendBSM.Data(),1.0,isBlinded,"WZ CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
+ 
+    finalPlot(0,1,"Lepton category","",Form("vv/ww_output_zz_2002.root"),"ww_output_zz_2002",0,year,legendBSM.Data(),1.0,isBlinded,"ZZ CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
+ }
 }
