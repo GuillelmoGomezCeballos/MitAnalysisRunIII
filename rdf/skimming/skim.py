@@ -385,10 +385,11 @@ if __name__ == "__main__":
                 runTreeCopy1.Write()
                 if(isSkimData == 1):
                     lumiTreeCopy1 = lumiTree.CopyTree("");
-                    lumiTreeCopy1.Write()		    
+                    lumiTreeCopy1.Write()
                 fOut1.Close()
-                atLeastOneFile[0] = True
-                msgMerge1 = msgMerge1 + " " + fOutIndivName1
+                if(eventCounts[0] > 0):
+                    atLeastOneFile[0] = True
+                    msgMerge1 = msgMerge1 + " " + fOutIndivName1
 
                 fOut2 = ROOT.TFile(fOutIndivName2,"UPDATE")
                 fOut2.cd()
@@ -396,10 +397,11 @@ if __name__ == "__main__":
                 runTreeCopy2.Write()
                 if(isSkimData == 1):
                     lumiTreeCopy2 = lumiTree.CopyTree("");
-                    lumiTreeCopy2.Write()		    
+                    lumiTreeCopy2.Write()
                 fOut2.Close()
-                atLeastOneFile[1] = True
-                msgMerge2 = msgMerge2 + " " + fOutIndivName2
+                if(eventCounts[1] > 0):
+                    atLeastOneFile[1] = True
+                    msgMerge2 = msgMerge2 + " " + fOutIndivName2
 
                 fOut3 = ROOT.TFile(fOutIndivName3,"UPDATE")
                 fOut3.cd()
@@ -407,10 +409,11 @@ if __name__ == "__main__":
                 runTreeCopy3.Write()
                 if(isSkimData == 1):
                     lumiTreeCopy3 = lumiTree.CopyTree("");
-                    lumiTreeCopy3.Write()		    
+                    lumiTreeCopy3.Write()
                 fOut3.Close()
-                atLeastOneFile[2] = True
-                msgMerge3 = msgMerge3 + " " + fOutIndivName3
+                if(eventCounts[2] > 0):
+                    atLeastOneFile[2] = True
+                    msgMerge3 = msgMerge3 + " " + fOutIndivName3
 
                 fOut4 = ROOT.TFile(fOutIndivName4,"UPDATE")
                 fOut4.cd()
@@ -418,10 +421,11 @@ if __name__ == "__main__":
                 runTreeCopy4.Write()
                 if(isSkimData == 1):
                     lumiTreeCopy4 = lumiTree.CopyTree("");
-                    lumiTreeCopy4.Write()		    
+                    lumiTreeCopy4.Write()
                 fOut4.Close()
-                atLeastOneFile[3] = True
-                msgMerge4 = msgMerge4 + " " + fOutIndivName4
+                if(eventCounts[3] > 0):
+                    atLeastOneFile[3] = True
+                    msgMerge4 = msgMerge4 + " " + fOutIndivName4
 
                 fOut5 = ROOT.TFile(fOutIndivName5,"UPDATE")
                 fOut5.cd()
@@ -429,10 +433,11 @@ if __name__ == "__main__":
                 runTreeCopy5.Write()
                 if(isSkimData == 1):
                     lumiTreeCopy5 = lumiTree.CopyTree("");
-                    lumiTreeCopy5.Write()		    
+                    lumiTreeCopy5.Write()
                 fOut5.Close()
-                atLeastOneFile[4] = True
-                msgMerge5 = msgMerge5 + " " + fOutIndivName5
+                if(eventCounts[4] > 0):
+                    atLeastOneFile[4] = True
+                    msgMerge5 = msgMerge5 + " " + fOutIndivName5
 
                 os.remove(inputSingleFileBase)
 
