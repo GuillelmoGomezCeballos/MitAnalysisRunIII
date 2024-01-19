@@ -1040,7 +1040,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     channelName="XXX"; 
     SF_DY=1;
     
-    applyScaling = 0;
+    applyScaling = 1;
     year = 2022;
 
     finalPlot(0,1,"Njets0","",Form("ww_output_bin0.root"),"ww_output_bin0",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
