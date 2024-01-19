@@ -4,7 +4,7 @@ import os, sys, getopt, glob
 from utilsCategory import plotCategory
 
 if __name__ == "__main__":
-    path = "fillhisto_puAnalysis"
+    path = "fillhisto_puAnalysis_sample000"
     year = 2022
     output = "anaZ"
     debug = 1
@@ -37,8 +37,8 @@ if __name__ == "__main__":
 
     nCat = plotCategory("kPlotCategories")
 
-    fileBTV = TFile("{0}/{1}_sample000_year{2}.root".format(output,path,year))
-    print("{0}/{1}_sample000_year{2}.root".format(output,path,year))
+    fileBTV = TFile("{0}/{1}_year{2}.root".format(output,path,year))
+    print("{0}/{1}_year{2}.root".format(output,path,year))
 
     numberOfSel = 3
     histoBtagDenSelEtaPt = [0 for y in range(numberOfSel)]
