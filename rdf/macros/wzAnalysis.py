@@ -558,7 +558,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
 
         elif(makeDataCards == 2):
-            BinXF = 4
+            BinXF = 1
             minXF = -0.5
             maxXF = 3.5
 

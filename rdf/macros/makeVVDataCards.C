@@ -123,11 +123,13 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   nameSyst[177] = "JesTimePtEtaUp";
   nameSyst[178] = "JesTimePtEtaDown";
 
-  int BinXF = 4; double minXF = -0.5; double maxXF = 3.5;
+  //int BinXF = 4; double minXF = -0.5; double maxXF = 3.5;
+  int BinXF = 1; double minXF = -0.5; double maxXF = 3.5;
 
   if(anaSel.Contains("zzAnalysis")) {
     printf("Modifying default binning\n");
-    BinXF = 3; minXF = -0.5; maxXF = 2.5;
+    //BinXF = 3; minXF = -0.5; maxXF = 2.5;
+    BinXF = 1; minXF = -0.5; maxXF = 2.5;
   }
 
   for(int ic=0; ic<nPlotCategories; ic++) {

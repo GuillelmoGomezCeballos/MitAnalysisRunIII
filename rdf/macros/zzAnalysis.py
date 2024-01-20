@@ -325,7 +325,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfzzcatMuonMomDown    [x] = dfzzcatMuonMomDown    [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomDown     > 150")
             dfzzcatElectronMomUp  [x] = dfzzcatElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomUp   > 150")
             dfzzcatElectronMomDown[x] = dfzzcatElectronMomDown[x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomDown > 150")
-            BinXF = 3
+            BinXF = 1
             minXF = -0.5
             maxXF = 2.5
 
