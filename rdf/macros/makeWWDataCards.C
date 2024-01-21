@@ -293,50 +293,21 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
       // making symmetric uncertainties
       if(histo_Baseline[ic]->GetBinContent(nb) > 0) {
-        // PU
-        systValue = histo_Syst[19][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[18][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // Jes
-        systValue = histo_Syst[154][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[153][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        // First 20
+        for(int nuis=0; nuis<10; nuis++) {
+          systValue = histo_Syst[2*nuis+1][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+          if(systValue > 0) histo_Syst[2*nuis][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        }
+        // Last ones
+        for(int nuis=67; nuis<90; nuis++) {
+          systValue = histo_Syst[2*nuis][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+          if(systValue > 0) histo_Syst[2*nuis-1][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+        }
         // Jer
         systValue = (histo_Syst[156][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/5.0;
         histo_Syst[156][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)+systValue);
         systValue = histo_Syst[156][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
         if(systValue > 0) histo_Syst[155][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // MuonMom
-        systValue = histo_Syst[158][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[157][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // ElectronMom
-        systValue = histo_Syst[160][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[159][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // metJER
-        systValue = histo_Syst[162][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[161][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // metJES
-        systValue = histo_Syst[164][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[163][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // metUnclustered
-        systValue = histo_Syst[166][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[165][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalPileUp
-        systValue = histo_Syst[168][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[167][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalRelative
-        systValue = histo_Syst[170][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[169][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalPt
-        systValue = histo_Syst[172][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[171][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesSubTotalScale
-        systValue = histo_Syst[174][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[173][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesFlavorQCD
-        systValue = histo_Syst[176][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[175][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        // JesTimePtEta
-        systValue = histo_Syst[178][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_Syst[177][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
       }
     } // loop over bins
   } // loop over categories
@@ -906,35 +877,37 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("WWNNLO_resum shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic != kPlotqqWW &&
-            ic != kPlotggWW &&
-            ic != kPlotSignal0 &&
-            ic != kPlotSignal1 &&
-            ic != kPlotSignal2 &&
-            ic != kPlotSignal3
-            ) newcardShape << Form("- ");
-    else      newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
+  if(whichAna == 0){
+    newcardShape << Form("WWNNLO_resum shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if     (ic != kPlotqqWW &&
+              ic != kPlotggWW &&
+              ic != kPlotSignal0 &&
+              ic != kPlotSignal1 &&
+              ic != kPlotSignal2 &&
+              ic != kPlotSignal3
+              ) newcardShape << Form("- ");
+      else      newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
 
-  newcardShape << Form("WWNNLO_scale shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic != kPlotqqWW &&
-            ic != kPlotggWW &&
-            ic != kPlotSignal0 &&
-            ic != kPlotSignal1 &&
-            ic != kPlotSignal2 &&
-            ic != kPlotSignal3
-            ) newcardShape << Form("- ");
-    else      newcardShape << Form("1.0 ");
+    newcardShape << Form("WWNNLO_scale shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if     (ic != kPlotqqWW &&
+              ic != kPlotggWW &&
+              ic != kPlotSignal0 &&
+              ic != kPlotSignal1 &&
+              ic != kPlotSignal2 &&
+              ic != kPlotSignal3
+              ) newcardShape << Form("- ");
+      else      newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
   }
-  newcardShape << Form("\n");
 
   for(int npdf=0; npdf<=100; npdf++){
     newcardShape << Form("PDF%d shape ",npdf);
