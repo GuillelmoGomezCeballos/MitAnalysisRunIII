@@ -244,9 +244,9 @@ float compute_JSON_MUO_SFs(std::string valType0S, std::string valType1S, std::st
   const char *valType2 = valType2S.c_str();
 
   for(unsigned int i=0;i<mu_pt.size();i++) {
-    double sf0 = corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],mu_p[i],"nominal"); if(valType0S != "nominal") sf0 = sf0 + type * corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],mu_p[i],valType0);
-    double sf1 = corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i]        ,"nominal"); if(valType1S != "nominal") sf1 = sf1 + type * corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i]        ,valType1);
-    double sf2 = corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,"nominal"); if(valType2S != "nominal") sf2 = sf2 + type * corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,valType2);
+    double sf0 = corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],mu_p[i],"nominal"); if(valType0S != "nominal") sf0 = sf0 + type * sqrt(TMath::Power(corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],mu_p[i],valType0),2)+TMath::Power(corrSFs.eval_muonTRKSF(mu_eta[i],mu_pt[i],mu_p[i],"stat"),2));
+    double sf1 = corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i]        ,"nominal"); if(valType1S != "nominal") sf1 = sf1 + type * sqrt(TMath::Power(corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i]        ,valType1),2)+TMath::Power(corrSFs.eval_muonIDSF (mu_eta[i],mu_pt[i]        ,"stat"),2));
+    double sf2 = corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,"nominal"); if(valType2S != "nominal") sf2 = sf2 + type * sqrt(TMath::Power(corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,valType2),2)+TMath::Power(corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,"stat"),2));
     sfTot = sfTot*sf0*sf1*sf2;
     if(debug) printf("muoeff(%d-%s/%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,valType2,mu_pt[i],mu_eta[i],mu_p[i],sf0,sf1,sf2,sf0*sf1*sf2,sfTot);
   }
@@ -1611,7 +1611,7 @@ float compute_nl_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
        if(var == 7) theVar = dPhilMETMin;
        else {
          if(dPhilMETMin > TMath::Pi()/2) theVar = met_pt;
-	 else theVar = met_pt*sin(dPhilMETMin);
+         else theVar = met_pt*sin(dPhilMETMin);
        }
      }
      else if(var ==  9) {
