@@ -53,14 +53,14 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   TString BtagSFBCNames[13] = {"BtagSFBC_00", "BtagSFBC_01", "BtagSFBC_02", "BtagSFBC_03", "BtagSFBC_04", "BtagSFBC_05", "BtagSFBC_06", "BtagSFBC_07", "BtagSFBC_08", "BtagSFBC_09", "BtagSFBC_10", "BtagSFBC_11", "BtagSFBC_12"};
 
   TString nameSyst[nSystTotal];
-  nameSyst[ 0] = Form("%s_%dUp"  ,BtagSFBCNames[ 0].Data(),year);
-  nameSyst[ 1] = Form("%s_%dDown",BtagSFBCNames[ 0].Data(),year);
-  nameSyst[ 2] = Form("%s_%dUp"  ,BtagSFBCNames[ 1].Data(),year);
-  nameSyst[ 3] = Form("%s_%dDown",BtagSFBCNames[ 1].Data(),year);
-  nameSyst[ 4] = Form("%s_%dUp"  ,BtagSFBCNames[ 2].Data(),year);
-  nameSyst[ 5] = Form("%s_%dDown",BtagSFBCNames[ 2].Data(),year);
-  nameSyst[ 6] = Form("%s_%dUp"  ,BtagSFBCNames[ 3].Data(),year);
-  nameSyst[ 7] = Form("%s_%dDown",BtagSFBCNames[ 3].Data(),year);
+  nameSyst[ 0] = Form("%sUp"  ,BtagSFBCNames[ 0].Data());
+  nameSyst[ 1] = Form("%sDown",BtagSFBCNames[ 0].Data());
+  nameSyst[ 2] = Form("%sUp"  ,BtagSFBCNames[ 1].Data());
+  nameSyst[ 3] = Form("%sDown",BtagSFBCNames[ 1].Data());
+  nameSyst[ 4] = Form("%sUp"  ,BtagSFBCNames[ 2].Data());
+  nameSyst[ 5] = Form("%sDown",BtagSFBCNames[ 2].Data());
+  nameSyst[ 6] = Form("%sUp"  ,BtagSFBCNames[ 3].Data());
+  nameSyst[ 7] = Form("%sDown",BtagSFBCNames[ 3].Data());
   nameSyst[ 8] = "MuoSFTRKUp";
   nameSyst[ 9] = "MuoSFTRKDown";
   nameSyst[10] = "MuoSFIDUp";
@@ -84,24 +84,24 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   nameSyst[28] = "QCDScale4";
   nameSyst[29] = "QCDScale5";
   for(int i=0; i<=102; i++) nameSyst[30+i] = Form("PDF%d",i);
-  nameSyst[133] = Form("%s_%dUp"  ,BtagSFBCNames[ 4].Data(),year);
-  nameSyst[134] = Form("%s_%dDown",BtagSFBCNames[ 4].Data(),year);
-  nameSyst[135] = Form("%s_%dUp"  ,BtagSFBCNames[ 5].Data(),year);
-  nameSyst[136] = Form("%s_%dDown",BtagSFBCNames[ 5].Data(),year);
-  nameSyst[137] = Form("%s_%dUp"  ,BtagSFBCNames[ 6].Data(),year);
-  nameSyst[138] = Form("%s_%dDown",BtagSFBCNames[ 6].Data(),year);
-  nameSyst[139] = Form("%s_%dUp"  ,BtagSFBCNames[ 7].Data(),year);
-  nameSyst[140] = Form("%s_%dDown",BtagSFBCNames[ 7].Data(),year);
-  nameSyst[141] = Form("%s_%dUp"  ,BtagSFBCNames[ 8].Data(),year);
-  nameSyst[142] = Form("%s_%dDown",BtagSFBCNames[ 8].Data(),year);
-  nameSyst[143] = Form("%s_%dUp"  ,BtagSFBCNames[ 9].Data(),year);
-  nameSyst[144] = Form("%s_%dDown",BtagSFBCNames[ 9].Data(),year);
-  nameSyst[145] = Form("%s_%dUp"  ,BtagSFBCNames[10].Data(),year);
-  nameSyst[146] = Form("%s_%dDown",BtagSFBCNames[10].Data(),year);
-  nameSyst[147] = Form("%s_%dUp"  ,BtagSFBCNames[11].Data(),year);
-  nameSyst[148] = Form("%s_%dDown",BtagSFBCNames[11].Data(),year);
-  nameSyst[149] = Form("%s_%dUp"  ,BtagSFBCNames[12].Data(),year);
-  nameSyst[150] = Form("%s_%dDown",BtagSFBCNames[12].Data(),year);
+  nameSyst[133] = Form("%sUp"  ,BtagSFBCNames[ 4].Data());
+  nameSyst[134] = Form("%sDown",BtagSFBCNames[ 4].Data());
+  nameSyst[135] = Form("%sUp"  ,BtagSFBCNames[ 5].Data());
+  nameSyst[136] = Form("%sDown",BtagSFBCNames[ 5].Data());
+  nameSyst[137] = Form("%sUp"  ,BtagSFBCNames[ 6].Data());
+  nameSyst[138] = Form("%sDown",BtagSFBCNames[ 6].Data());
+  nameSyst[139] = Form("%sUp"  ,BtagSFBCNames[ 7].Data());
+  nameSyst[140] = Form("%sDown",BtagSFBCNames[ 7].Data());
+  nameSyst[141] = Form("%sUp"  ,BtagSFBCNames[ 8].Data());
+  nameSyst[142] = Form("%sDown",BtagSFBCNames[ 8].Data());
+  nameSyst[143] = Form("%sUp"  ,BtagSFBCNames[ 9].Data());
+  nameSyst[144] = Form("%sDown",BtagSFBCNames[ 9].Data());
+  nameSyst[145] = Form("%sUp"  ,BtagSFBCNames[10].Data());
+  nameSyst[146] = Form("%sDown",BtagSFBCNames[10].Data());
+  nameSyst[147] = Form("%sUp"  ,BtagSFBCNames[11].Data());
+  nameSyst[148] = Form("%sDown",BtagSFBCNames[11].Data());
+  nameSyst[149] = Form("%sUp"  ,BtagSFBCNames[12].Data());
+  nameSyst[150] = Form("%sDown",BtagSFBCNames[12].Data());
   nameSyst[151] = "BtagSFLF_00Up";
   nameSyst[152] = "BtagSFLF_00Down";
   nameSyst[153] = "JesUp";
@@ -552,7 +552,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 0].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 0].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -561,7 +561,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 1].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 1].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -570,7 +570,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 2].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 2].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -579,7 +579,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 3].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 3].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -588,7 +588,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 4].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 4].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -597,7 +597,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 5].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 5].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -606,7 +606,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 6].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 6].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -615,7 +615,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 7].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 7].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -624,7 +624,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 8].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 8].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -633,7 +633,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[ 9].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[ 9].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -642,7 +642,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[10].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[10].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -651,7 +651,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[11].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[11].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -660,7 +660,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[12].Data(),year);
+  newcardShape << Form("%s shape ",BtagSFBCNames[12].Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
