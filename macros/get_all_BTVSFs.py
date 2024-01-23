@@ -46,9 +46,6 @@ if __name__ == "__main__":
         jsnFolder = ""
         if(yearVal[ny] == 20220):
             jsnFolder = "2022_Summer22"
-            listMethod[2] = "deepJet_kinfit"
-            listMethod[5] = "particleNet_kinfit"
-            listMethod[8] = "robustParticleTransformer_kinfit"
         elif(yearVal[ny] == 20221):
             jsnFolder = "2022_Summer22EE"
 
