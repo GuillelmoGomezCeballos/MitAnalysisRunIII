@@ -116,11 +116,13 @@ if __name__ == "__main__":
                         eff1 = 0.0
                         unc1 = min(pow(1.0/den1,0.5),0.999)
 
-                    sf = 1.
+                    sf = 0.
                     sfe = 0.
                     if(eff0 > 0 and eff1 > 0):
                         sf = eff0/eff1
                         sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
+                    elif(histoLepDenDY[nlep][nsel].GetXaxis().GetBinCenter(i+1) >= histoLepDenDY[nlep][nsel].GetXaxis().GetBinCenter(j+1)):
+                        sf = 1.0
 
                     histoTriggerLooseSFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
                     histoTriggerLooseSFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
@@ -182,7 +184,7 @@ if __name__ == "__main__":
                 for j in range(histoLepDenDA[nlep][nsel].GetNbinsY()):
                     den0 = histoLepDenDA[nlep][nsel].GetBinContent(i+1,j+1)
                     num0 = histoLepNumDA[nlep][nsel].GetBinContent(i+1,j+1)
-                    eff0 = 1.0
+                    eff0 = 0.0
                     unc0 = 0.0
                     if(den0 > 0 and num0 > 0 and num0 <= den0):
                         eff0 = num0 / den0
@@ -194,7 +196,7 @@ if __name__ == "__main__":
 
                     den1 = histoLepDenDY[nlep][nsel].GetBinContent(i+1,j+1)
                     num1 = histoLepNumDY[nlep][nsel].GetBinContent(i+1,j+1)
-                    eff1 = 1.0
+                    eff1 = 0.0
                     unc1 = 0.0
                     if(den1 > 0 and num1 > 0 and num1 <= den1):
                         eff1 = num1 / den1
@@ -204,11 +206,13 @@ if __name__ == "__main__":
                         eff1 = 0.0
                         unc1 = min(pow(1.0/den1,0.5),0.999)
 
-                    sf = 1.
+                    sf = 0.
                     sfe = 0.
                     if(eff0 > 0 and eff1 > 0):
                         sf = eff0/eff1
                         sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
+                    elif(histoLepDenDY[nlep][nsel].GetXaxis().GetBinCenter(i+1) >= histoLepDenDY[nlep][nsel].GetYaxis().GetBinCenter(j+1)):
+                        sf = 1
 
                     histoTriggerTightSFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
                     histoTriggerTightSFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
