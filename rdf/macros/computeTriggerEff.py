@@ -1,17 +1,27 @@
 import ROOT
-from ROOT import TFile, TH1D, TH2D
+from ROOT import TFile, TH1D, TH2D, TCanvas
 import os, sys, getopt, glob
 from utilsCategory import plotCategory
+from array import array
+
+xPtMaxBins = array('d', [25,35,50,80,100])
+xPtMinBins = array('d', [10,20,30,40,50,100])
+ROOT.gROOT.SetBatch(True)
+ROOT.gStyle.SetOptStat(0)
 
 if __name__ == "__main__":
     path = "fillhisto_metAnalysis1001"
     year = 2022
     output = "anaZ"
+    format = "pdf"
 
-    valid = ['path=', "year=", 'output=', 'help']
+    doSavePtEtaHist = False
+
+    valid = ['path=', "year=", 'output=', 'format=', 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
-    usage +=  "              --output=<{0}>".format(output)
+    usage +=  "              --output=<{0}>\n".format(output)
+    usage +=  "              --format=<{0}>".format(format)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -29,30 +39,42 @@ if __name__ == "__main__":
             year = int(arg)
         if opt == "--output":
             output = str(arg)
+        if opt == "--format":
+            format = str(arg)
 
     nCat = plotCategory("kPlotCategories")
 
     numberOfLep = 6
     numberOfSel = 5
-    histoTriggerLooseSFEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
-    histoTriggerLooseDAEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
-    histoTriggerLooseMCEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
-    histoTriggerTightSFEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
-    histoTriggerTightDAEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
-    histoTriggerTightMCEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
+    nLepName = ["mm", "ee", "me", "em", "3l", "4l"]
+    nSelName = ["bb", "eb", "be", "ee", "all"]
+    histoTriggerV1SFEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
+    histoTriggerV1DAEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
+    histoTriggerV1MCEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
+    histoTriggerV2SFEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
+    histoTriggerV2DAEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
+    histoTriggerV2MCEtaPt = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepDenDA = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepDenDY = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepNumDA = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
     histoLepNumDY = [[0 for y in range(numberOfSel)] for x in range(numberOfLep)]
 
+    histoTriggerV1SFPtMax = [[[0 for z in range(len(xPtMinBins)-1)] for y in range(numberOfSel)] for x in range(numberOfLep)]
+    histoTriggerV1SFPtMin = [[[0 for z in range(len(xPtMaxBins)-1)] for y in range(numberOfSel)] for x in range(numberOfLep)]
+
     for nlep in range(numberOfLep):
         for nsel in range(numberOfSel):
+            for npt in range(len(xPtMinBins)-1):
+                histoTriggerV1SFPtMax[nlep][nsel][npt] = TH1D("histoTriggerV1SFPtMax_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), "histoTriggerV1SFPtMax_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), len(xPtMaxBins)-1, xPtMaxBins)
+            for npt in range(len(xPtMaxBins)-1):
+                histoTriggerV1SFPtMin[nlep][nsel][npt] = TH1D("histoTriggerV1SFPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), "histoTriggerV1SFPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), len(xPtMinBins)-1, xPtMinBins)
+
             fileTriggerDEN = TFile("{0}/{1}_{2}_{3}_2d.root".format(output,path,year,  nlep+12*nsel))
             fileTriggerDEN.cd()
 
-            histoTriggerLooseSFEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
-            histoTriggerLooseDAEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
-            histoTriggerLooseMCEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoTriggerV1SFEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoTriggerV1DAEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoTriggerV1MCEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
 
             histoLepDenDA[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
             histoLepDenDY[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotDY")))).Clone()
@@ -60,9 +82,9 @@ if __name__ == "__main__":
                 if(nc == plotCategory("kPlotData") or nc == plotCategory("kPlotDY") or nc == plotCategory("kPlotSignal3")): continue
                 histoLepDenDY[nlep][nsel].Add(ROOT.gROOT.FindObject("histo2d{0}".format(nc)),1.0)
 
-            histoTriggerLooseSFEtaPt[nlep][nsel].SetDirectory(0)
-            histoTriggerLooseDAEtaPt[nlep][nsel].SetDirectory(0)
-            histoTriggerLooseMCEtaPt[nlep][nsel].SetDirectory(0)
+            histoTriggerV1SFEtaPt[nlep][nsel].SetDirectory(0)
+            histoTriggerV1DAEtaPt[nlep][nsel].SetDirectory(0)
+            histoTriggerV1MCEtaPt[nlep][nsel].SetDirectory(0)
             histoLepDenDA[nlep][nsel].SetDirectory(0)
             histoLepDenDY[nlep][nsel].SetDirectory(0)
 
@@ -83,7 +105,7 @@ if __name__ == "__main__":
             fileTriggerNUM.Close()
 
             if(histoLepDenDA[nlep][nsel].GetSumOfWeights() > 0 and histoLepDenDY[nlep][nsel].GetSumOfWeights() > 0):
-                print("AverageLoose({0},{1}) = {2} / {3} = {4}".format(nlep,nsel,
+                print("AverageLoose({0},{1}) = {2} / {3} = {4}".format(nLepName[nlep],nSelName[nsel],
                       histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights(),
                       histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights(),
                      (histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights())/
@@ -94,11 +116,15 @@ if __name__ == "__main__":
                 for j in range(histoLepDenDA[nlep][nsel].GetNbinsY()):
                     den0 = histoLepDenDA[nlep][nsel].GetBinContent(i+1,j+1)
                     num0 = histoLepNumDA[nlep][nsel].GetBinContent(i+1,j+1)
-                    eff0 = 1.0
+                    eff0 = 0.0
                     unc0 = 0.0
-                    if(den0 > 0 and num0 > 0 and num0 <= den0):
+                    if(den0 > 0 and num0 > 0 and num0 < den0):
                         eff0 = num0 / den0
                         unc0 = pow(eff0*(1-eff0)/den0,0.5)
+
+                    elif(den0 > 0 and num0 > 0 and num0 == den0):
+                        eff0 = num0 / den0
+                        unc0 = pow(1.0/den0,0.5)
 
                     elif(den0 > 0):
                         eff0 = 0.0
@@ -106,11 +132,15 @@ if __name__ == "__main__":
 
                     den1 = histoLepDenDY[nlep][nsel].GetBinContent(i+1,j+1)
                     num1 = histoLepNumDY[nlep][nsel].GetBinContent(i+1,j+1)
-                    eff1 = 1.0
+                    eff1 = 0.0
                     unc1 = 0.0
-                    if(den1 > 0 and num1 > 0 and num1 <= den1):
+                    if(den1 > 0 and num1 > 0 and num1 < den1):
                         eff1 = num1 / den1
                         unc1 = pow(eff1*(1-eff1)/den1,0.5)
+
+                    elif(den0 > 1 and num1 > 0 and num1 == den1):
+                        eff1 = num1 / den1
+                        unc1 = pow(1.0/den1,0.5)
 
                     elif(den1 > 0):
                         eff1 = 0.0
@@ -120,16 +150,22 @@ if __name__ == "__main__":
                     sfe = 0.
                     if(eff0 > 0 and eff1 > 0):
                         sf = eff0/eff1
-                        sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
+                        sfe = sf*min(pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)/3.0,0.05)
                     elif(histoLepDenDY[nlep][nsel].GetXaxis().GetBinCenter(i+1) >= histoLepDenDY[nlep][nsel].GetXaxis().GetBinCenter(j+1)):
-                        sf = 1.0
+                        sf = 1.00
+                        sf = 0.05
 
-                    histoTriggerLooseSFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
-                    histoTriggerLooseSFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
-                    histoTriggerLooseDAEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff0)
-                    histoTriggerLooseDAEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc0)
-                    histoTriggerLooseMCEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff1)
-                    histoTriggerLooseMCEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc1)
+                    histoTriggerV1SFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
+                    histoTriggerV1SFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
+                    histoTriggerV1DAEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff0)
+                    histoTriggerV1DAEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc0)
+                    histoTriggerV1MCEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff1)
+                    histoTriggerV1MCEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc1)
+
+                    histoTriggerV1SFPtMax[nlep][nsel][j].SetBinContent(i+1,sf)
+                    histoTriggerV1SFPtMax[nlep][nsel][j].SetBinError  (i+1,sfe)
+                    histoTriggerV1SFPtMin[nlep][nsel][i].SetBinContent(j+1,sf)
+                    histoTriggerV1SFPtMin[nlep][nsel][i].SetBinError  (j+1,sfe)
 
                     print("BinLoose({0:2d},{1:2d}): ( {2:.3f} +/- {3:.3f} ) / ( {4:.3f} - {5:.3f} ) = {6:.3f} / {7:.3f}".format(i+1,j+1,
                           eff0,unc0,eff1,unc1,sf,sfe))
@@ -140,9 +176,9 @@ if __name__ == "__main__":
             fileTriggerDEN = TFile("{0}/{1}_{2}_{3}_2d.root".format(output,path,year,  nlep+12*nsel+100))
             fileTriggerDEN.cd()
 
-            histoTriggerTightSFEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
-            histoTriggerTightDAEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
-            histoTriggerTightMCEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoTriggerV2SFEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoTriggerV2DAEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
+            histoTriggerV2MCEtaPt[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotSignal3")))).Clone()
 
             histoLepDenDA[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
             histoLepDenDY[nlep][nsel] = (ROOT.gROOT.FindObject("histo2d{0}".format(plotCategory("kPlotDY")))).Clone()
@@ -150,9 +186,9 @@ if __name__ == "__main__":
                 if(nc == plotCategory("kPlotData") or nc == plotCategory("kPlotDY") or nc == plotCategory("kPlotSignal3")): continue
                 histoLepDenDY[nlep][nsel].Add(ROOT.gROOT.FindObject("histo2d{0}".format(nc)),1.0)
 
-            histoTriggerTightSFEtaPt[nlep][nsel].SetDirectory(0)
-            histoTriggerTightDAEtaPt[nlep][nsel].SetDirectory(0)
-            histoTriggerTightMCEtaPt[nlep][nsel].SetDirectory(0)
+            histoTriggerV2SFEtaPt[nlep][nsel].SetDirectory(0)
+            histoTriggerV2DAEtaPt[nlep][nsel].SetDirectory(0)
+            histoTriggerV2MCEtaPt[nlep][nsel].SetDirectory(0)
             histoLepDenDA[nlep][nsel].SetDirectory(0)
             histoLepDenDY[nlep][nsel].SetDirectory(0)
 
@@ -173,7 +209,7 @@ if __name__ == "__main__":
             fileTriggerNUM.Close()
 
             if(histoLepDenDA[nlep][nsel].GetSumOfWeights() > 0 and histoLepDenDY[nlep][nsel].GetSumOfWeights() > 0):
-                print("AverageTight({0},{1}) = {2} / {3} = {4}".format(nlep,nsel,
+                print("AverageTight({0},{1}) = {2} / {3} = {4}".format(nLepName[nlep],nSelName[nsel],
                       histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights(),
                       histoLepNumDY[nlep][nsel].GetSumOfWeights()/histoLepDenDY[nlep][nsel].GetSumOfWeights(),
                      (histoLepNumDA[nlep][nsel].GetSumOfWeights()/histoLepDenDA[nlep][nsel].GetSumOfWeights())/
@@ -186,9 +222,13 @@ if __name__ == "__main__":
                     num0 = histoLepNumDA[nlep][nsel].GetBinContent(i+1,j+1)
                     eff0 = 0.0
                     unc0 = 0.0
-                    if(den0 > 0 and num0 > 0 and num0 <= den0):
+                    if(den0 > 0 and num0 > 0 and num0 < den0):
                         eff0 = num0 / den0
                         unc0 = pow(eff0*(1-eff0)/den0,0.5)
+
+                    elif(den0 > 0 and num0 > 0 and num0 == den0):
+                        eff0 = num0 / den0
+                        unc0 = pow(1.0/den0,0.5)
 
                     elif(den0 > 0):
                         eff0 = 0.0
@@ -198,9 +238,13 @@ if __name__ == "__main__":
                     num1 = histoLepNumDY[nlep][nsel].GetBinContent(i+1,j+1)
                     eff1 = 0.0
                     unc1 = 0.0
-                    if(den1 > 0 and num1 > 0 and num1 <= den1):
+                    if(den1 > 0 and num1 > 0 and num1 < den1):
                         eff1 = num1 / den1
                         unc1 = pow(eff1*(1-eff1)/den1,0.5)
+
+                    elif(den0 > 1 and num1 > 0 and num1 == den1):
+                        eff1 = num1 / den1
+                        unc1 = pow(1.0/den1,0.5)
 
                     elif(den1 > 0):
                         eff1 = 0.0
@@ -210,16 +254,17 @@ if __name__ == "__main__":
                     sfe = 0.
                     if(eff0 > 0 and eff1 > 0):
                         sf = eff0/eff1
-                        sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
+                        sfe = sf*min(pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)/3.0,0.05)
                     elif(histoLepDenDY[nlep][nsel].GetXaxis().GetBinCenter(i+1) >= histoLepDenDY[nlep][nsel].GetYaxis().GetBinCenter(j+1)):
-                        sf = 1
+                        sf = 1.00
+                        sf = 0.05
 
-                    histoTriggerTightSFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
-                    histoTriggerTightSFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
-                    histoTriggerTightDAEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff0)
-                    histoTriggerTightDAEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc0)
-                    histoTriggerTightMCEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff1)
-                    histoTriggerTightMCEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc1)
+                    histoTriggerV2SFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
+                    histoTriggerV2SFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
+                    histoTriggerV2DAEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff0)
+                    histoTriggerV2DAEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc0)
+                    histoTriggerV2MCEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff1)
+                    histoTriggerV2MCEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc1)
 
                     print("BinTight({0:2d},{1:2d}): ( {2:.3f} +/- {3:.3f} ) / ( {4:.3f} - {5:.3f} ) = {6:.3f} / {7:.3f}".format(i+1,j+1,
                           eff0,unc0,eff1,unc1,sf,sfe))
@@ -229,16 +274,46 @@ if __name__ == "__main__":
     outfileTriggerEff.cd()
     for nlep in range(numberOfLep):
         for nsel in range(numberOfSel):
-            histoTriggerLooseSFEtaPt[nlep][nsel].SetNameTitle("histoTriggerLooseSFEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerLooseSFEtaPt_{0}_{1}".format(nlep,nsel))
-            histoTriggerLooseSFEtaPt[nlep][nsel].Write()
-            histoTriggerLooseDAEtaPt[nlep][nsel].SetNameTitle("histoTriggerLooseDAEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerLooseDAEtaPt_{0}_{1}".format(nlep,nsel))
-            histoTriggerLooseDAEtaPt[nlep][nsel].Write()
-            histoTriggerLooseMCEtaPt[nlep][nsel].SetNameTitle("histoTriggerLooseMCEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerLooseMCEtaPt_{0}_{1}".format(nlep,nsel))
-            histoTriggerLooseMCEtaPt[nlep][nsel].Write()
-            histoTriggerTightSFEtaPt[nlep][nsel].SetNameTitle("histoTriggerSFEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerSFEtaPt_{0}_{1}".format(nlep,nsel))
-            histoTriggerTightSFEtaPt[nlep][nsel].Write()
-            histoTriggerTightDAEtaPt[nlep][nsel].SetNameTitle("histoTriggerDAEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerDAEtaPt_{0}_{1}".format(nlep,nsel))
-            histoTriggerTightDAEtaPt[nlep][nsel].Write()
-            histoTriggerTightMCEtaPt[nlep][nsel].SetNameTitle("histoTriggerMCEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerMCEtaPt_{0}_{1}".format(nlep,nsel))
-            histoTriggerTightMCEtaPt[nlep][nsel].Write()
+            if(doSavePtEtaHist == True):
+              for npt in range(len(xPtMinBins)-1):
+                  histoTriggerV1SFPtMax[nlep][nsel][npt].Write()
+                  histoTriggerV1SFPtMax[nlep][nsel][npt].SetDirectory(0)
+              for npt in range(len(xPtMaxBins)-1):
+                  histoTriggerV1SFPtMin[nlep][nsel][npt].Write()
+                  histoTriggerV1SFPtMin[nlep][nsel][npt].SetDirectory(0)
+            histoTriggerV1SFEtaPt[nlep][nsel].SetNameTitle("histoTriggerV1SFEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerV1SFEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerV1SFEtaPt[nlep][nsel].Write()
+            histoTriggerV1DAEtaPt[nlep][nsel].SetNameTitle("histoTriggerV1DAEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerV1DAEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerV1DAEtaPt[nlep][nsel].Write()
+            histoTriggerV1MCEtaPt[nlep][nsel].SetNameTitle("histoTriggerV1MCEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerV1MCEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerV1MCEtaPt[nlep][nsel].Write()
+            histoTriggerV2SFEtaPt[nlep][nsel].SetNameTitle("histoTriggerV2SFEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerV2SFEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerV2SFEtaPt[nlep][nsel].Write()
+            histoTriggerV2DAEtaPt[nlep][nsel].SetNameTitle("histoTriggerV2DAEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerV2DAEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerV2DAEtaPt[nlep][nsel].Write()
+            histoTriggerV2MCEtaPt[nlep][nsel].SetNameTitle("histoTriggerV2MCEtaPt_{0}_{1}".format(nlep,nsel),"histoTriggerV2MCEtaPt_{0}_{1}".format(nlep,nsel))
+            histoTriggerV2MCEtaPt[nlep][nsel].Write()
     outfileTriggerEff.Close()
+
+    canvasPtMax = [[[0 for z in range(len(xPtMinBins)-1)] for y in range(numberOfSel)] for x in range(numberOfLep)]
+    canvasPtMin = [[[0 for z in range(len(xPtMaxBins)-1)] for y in range(numberOfSel)] for x in range(numberOfLep)]
+
+    for nlep in range(numberOfLep):
+        if(nlep > 3): continue
+        for nsel in range(numberOfSel):
+            if(nsel > 3): continue
+            for npt in range(len(xPtMinBins)-1):
+                canvasPtMax[nlep][nsel][npt] = TCanvas("canvasPtMax_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), "canvasPtMax_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), 10, 10, 500, 500)
+                canvasPtMax[nlep][nsel][npt].Divide(1,1)
+                canvasPtMax[nlep][nsel][npt].cd(1)
+                histoTriggerV1SFPtMax[nlep][nsel][npt].DrawCopy()
+                canvasPtMax[nlep][nsel][npt].Draw()
+                canvasPtMax[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMax_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,format))
+
+            for npt in range(len(xPtMaxBins)-1):
+                canvasPtMin[nlep][nsel][npt] = TCanvas("canvasPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), "canvasPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), 10, 10, 500, 500)
+                canvasPtMin[nlep][nsel][npt].Divide(1,1)
+                canvasPtMin[nlep][nsel][npt].cd(1)
+                histoTriggerV1SFPtMin[nlep][nsel][npt].DrawCopy()
+                canvasPtMin[nlep][nsel][npt].Draw()
+                canvasPtMin[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMin_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,format))

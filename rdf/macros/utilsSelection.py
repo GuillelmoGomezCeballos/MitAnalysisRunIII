@@ -756,7 +756,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
               .Define("weightPURecoSF","compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,0)")
               .Define("weightMuonSF","compute_MuonSF(fake_Muon_pt,fake_Muon_eta)")
               .Define("weightElectronSF","compute_ElectronSF(fake_Electron_pt,fake_Electron_eta)")
-              .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype)")
+              .Define("weightTriggerSF","compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype,0)")
+             #.Define("weightTriggerSF","compute_TriggerForSingleLegsSF(ptl1,ptl2,etal1,etal2,ltype)")
 
               .Define("weightMC","compute_weights({0},genWeight,PDType,fake_Muon_genPartFlav,fake_Electron_genPartFlav,{1})".format(weight,type))
               .Filter("weightMC != 0","MC weight")

@@ -79,6 +79,8 @@ TH1D histo_wwpt_resumdown;
 TH1D histoWSEtaSF;
 TH1D histoWSEtaSF_unc;
 TH2D histoWSEtaPtSF;
+TH2D histoTriggerDAEtaPt[10];
+TH2D histoTriggerMCEtaPt[10];
 auto corrSFs = MyCorrections(2018);
 
 void initHisto2D(TH2D h, int nsel){
@@ -122,6 +124,26 @@ void initHisto2D(TH2D h, int nsel){
   else if(nsel == 37) histoFakeEtaPt_el[7] = h;
   else if(nsel == 38) histoFakeEtaPt_el[8] = h;
   else if(nsel == 39) histoWSEtaPtSF = h;
+  else if(nsel == 40) histoTriggerDAEtaPt[0] = h;
+  else if(nsel == 41) histoTriggerDAEtaPt[1] = h;
+  else if(nsel == 42) histoTriggerDAEtaPt[2] = h;
+  else if(nsel == 43) histoTriggerDAEtaPt[3] = h;
+  else if(nsel == 44) histoTriggerDAEtaPt[4] = h;
+  else if(nsel == 45) histoTriggerDAEtaPt[5] = h;
+  else if(nsel == 46) histoTriggerDAEtaPt[6] = h;
+  else if(nsel == 47) histoTriggerDAEtaPt[7] = h;
+  else if(nsel == 48) histoTriggerDAEtaPt[8] = h;
+  else if(nsel == 49) histoTriggerDAEtaPt[9] = h;
+  else if(nsel == 50) histoTriggerMCEtaPt[0] = h;
+  else if(nsel == 51) histoTriggerMCEtaPt[1] = h;
+  else if(nsel == 52) histoTriggerMCEtaPt[2] = h;
+  else if(nsel == 53) histoTriggerMCEtaPt[3] = h;
+  else if(nsel == 54) histoTriggerMCEtaPt[4] = h;
+  else if(nsel == 55) histoTriggerMCEtaPt[5] = h;
+  else if(nsel == 56) histoTriggerMCEtaPt[6] = h;
+  else if(nsel == 57) histoTriggerMCEtaPt[7] = h;
+  else if(nsel == 58) histoTriggerMCEtaPt[8] = h;
+  else if(nsel == 59) histoTriggerMCEtaPt[9] = h;
 }
 
 void initHisto1D(TH1D h, int nsel){
@@ -741,7 +763,7 @@ float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
   return sfTot;
 }
 
-float compute_TriggerSF(float ptl1, float ptl2, float etal1, float etal2, int ltype){
+float compute_TriggerSF(float ptl1, float ptl2, float etal1, float etal2, int ltype, float unc){
 
   if(ltype >= 4) return 1.0;
 
@@ -763,7 +785,86 @@ float compute_TriggerSF(float ptl1, float ptl2, float etal1, float etal2, int lt
   else if(etal1 <= 1.5 && etal2 >  1.5 && ltype == 3) hcorr = histoTriggerSFEtaPt_3_2;
   else if(etal1 >  1.5 && etal2 >  1.5 && ltype == 3) hcorr = histoTriggerSFEtaPt_3_3;
   else printf("Problem trigger type (%d) %f %f\n",ltype,etal1,etal2);
-  return getValFromTH2(hcorr, ptl1, ptl2);
+  float sf = getValFromTH2(hcorr, ptl1, ptl2, unc);
+  if(sf == 0) {sf = 1.0; printf("PROBLEM sf==0! %.3f %.3f %.2f %.2f %d\n",ptl1,ptl2,etal1,etal2,ltype);}
+  return sf;
+}
+
+float compute_TriggerForSingleLegsSF(float ptl1, float ptl2, float etal1, float etal2, int ltype){
+  // triggerEff_da_sel  0
+  // triggerEff_da_smu  1
+  // triggerEff_da_del0 2
+  // triggerEff_da_del1 3
+  // triggerEff_da_dmu0 4
+  // triggerEff_da_dmu1 5
+  // triggerEff_da_emu0 6
+  // triggerEff_da_emu1 7
+  // triggerEff_da_mue0 8
+  // triggerEff_da_mue1 9
+  bool debug = false;
+
+  if(ltype >= 4) return 1.0;
+  
+  float effda_sgl_1 = 1; float effda_sgl_2 = 1; float effda_dbl_leadingleg = 1; float effda_dbl_trailingleg = 1;
+  float effmc_sgl_1 = 1; float effmc_sgl_2 = 1; float effmc_dbl_leadingleg = 1; float effmc_dbl_trailingleg = 1;
+  if     (ltype == 0){ // mm
+    effda_sgl_1           = getValFromTH2(histoTriggerDAEtaPt[1], fabs(etal1), ptl1);
+    effda_sgl_2           = getValFromTH2(histoTriggerDAEtaPt[1], fabs(etal2), ptl2);
+    effda_dbl_leadingleg  = getValFromTH2(histoTriggerDAEtaPt[4], fabs(etal1), ptl1);
+    effda_dbl_trailingleg = getValFromTH2(histoTriggerDAEtaPt[5], fabs(etal2), ptl2);
+
+    effmc_sgl_1           = getValFromTH2(histoTriggerMCEtaPt[1], fabs(etal1), ptl1);
+    effmc_sgl_2           = getValFromTH2(histoTriggerMCEtaPt[1], fabs(etal2), ptl2);
+    effmc_dbl_leadingleg  = getValFromTH2(histoTriggerMCEtaPt[4], fabs(etal1), ptl1);
+    effmc_dbl_trailingleg = getValFromTH2(histoTriggerMCEtaPt[5], fabs(etal2), ptl2);
+  }
+  else if(ltype == 1){ // ee
+    effda_sgl_1           = getValFromTH2(histoTriggerDAEtaPt[0], fabs(etal1), ptl1);
+    effda_sgl_2           = getValFromTH2(histoTriggerDAEtaPt[0], fabs(etal2), ptl2);
+    effda_dbl_leadingleg  = getValFromTH2(histoTriggerDAEtaPt[2], fabs(etal1), ptl1);
+    effda_dbl_trailingleg = getValFromTH2(histoTriggerDAEtaPt[3], fabs(etal2), ptl2);
+
+    effmc_sgl_1           = getValFromTH2(histoTriggerMCEtaPt[0], fabs(etal1), ptl1);
+    effmc_sgl_2           = getValFromTH2(histoTriggerMCEtaPt[0], fabs(etal2), ptl2);
+    effmc_dbl_leadingleg  = getValFromTH2(histoTriggerMCEtaPt[2], fabs(etal1), ptl1);
+    effmc_dbl_trailingleg = getValFromTH2(histoTriggerMCEtaPt[3], fabs(etal2), ptl2);
+  }
+  else if(ltype == 2){ // me
+    effda_sgl_1           = getValFromTH2(histoTriggerDAEtaPt[1], fabs(etal1), ptl1);
+    effda_sgl_2           = getValFromTH2(histoTriggerDAEtaPt[0], fabs(etal2), ptl2);
+    effda_dbl_leadingleg  = getValFromTH2(histoTriggerDAEtaPt[8], fabs(etal1), ptl1);
+    effda_dbl_trailingleg = getValFromTH2(histoTriggerDAEtaPt[9], fabs(etal2), ptl2);
+
+    effmc_sgl_1           = getValFromTH2(histoTriggerMCEtaPt[1], fabs(etal1), ptl1);
+    effmc_sgl_2           = getValFromTH2(histoTriggerMCEtaPt[0], fabs(etal2), ptl2);
+    effmc_dbl_leadingleg  = getValFromTH2(histoTriggerMCEtaPt[8], fabs(etal1), ptl1);
+    effmc_dbl_trailingleg = getValFromTH2(histoTriggerMCEtaPt[9], fabs(etal2), ptl2);
+  }
+  else if(ltype == 3){ // em
+    effda_sgl_1           = getValFromTH2(histoTriggerDAEtaPt[0], fabs(etal1), ptl1);
+    effda_sgl_2           = getValFromTH2(histoTriggerDAEtaPt[1], fabs(etal2), ptl2);
+    effda_dbl_leadingleg  = getValFromTH2(histoTriggerDAEtaPt[6], fabs(etal1), ptl1);
+    effda_dbl_trailingleg = getValFromTH2(histoTriggerDAEtaPt[7], fabs(etal2), ptl2);
+
+    effmc_sgl_1           = getValFromTH2(histoTriggerMCEtaPt[0], fabs(etal1), ptl1);
+    effmc_sgl_2           = getValFromTH2(histoTriggerMCEtaPt[1], fabs(etal2), ptl2);
+    effmc_dbl_leadingleg  = getValFromTH2(histoTriggerMCEtaPt[6], fabs(etal1), ptl1);
+    effmc_dbl_trailingleg = getValFromTH2(histoTriggerMCEtaPt[7], fabs(etal2), ptl2);
+  }
+  
+  float evt_effda =  effda_sgl_1 * (1-effda_sgl_2)
+                   + effda_sgl_2 * (1-effda_sgl_1)
+                   + effda_sgl_1 * effda_sgl_2
+                   + (1-effda_sgl_1) * (1-effda_sgl_2) * effda_dbl_leadingleg * effda_dbl_trailingleg;
+  
+  float evt_effmc =  effmc_sgl_1 * (1-effmc_sgl_2)
+                   + effmc_sgl_2 * (1-effmc_sgl_1)
+                   + effmc_sgl_1 * effmc_sgl_2
+                   + (1-effmc_sgl_1) * (1-effmc_sgl_2) * effmc_dbl_leadingleg * effmc_dbl_trailingleg;
+
+  if(debug) printf("trgeff (%.2f/%.2f/%.2f/%.2f/%d): %.3f/%.3f %.3f/%.3f %.3f/%.3f %.3f/%.3f -> %.3f/%.3f = %.3f\n",ptl1,ptl2,etal1,etal2,ltype,effda_sgl_1,effmc_sgl_1,effda_sgl_2,effmc_sgl_2,effda_dbl_leadingleg,effmc_dbl_leadingleg,effda_dbl_trailingleg,effmc_dbl_trailingleg,evt_effda,evt_effmc,evt_effda/evt_effmc);
+  if(evt_effda > 0 && evt_effmc > 0) return evt_effda/evt_effmc;
+  return 1.0;
 }
 
 float compute_lumiFakeRate(const Vec_f& mu_pt, const Vec_f& el_pt, const int nTrigger){
