@@ -12,21 +12,25 @@
 #include "TLegend.h"
 #include <iostream>
 
-void computeGenPtWWUnc(TString input = ""){
+void computeGenPtWWUnc(TString input = "", const int whichAna = 0){
+
+  // whichAna = 0 (gen), 1 (inc), 2 (0j), 3 (1j), 4 (2j), 5 (3j)
+
+  TString anaName[6] = {"gen", "inc", "0j", "1j", "2j", "3j"};
 
   const int number_unc = 5;
-  int startF=20;
+  int startF=134+6*whichAna;
   TH1D *histo_Baseline;
   TH1D *histo_PTWWUnc[number_unc];
 
   TFile *_fileGenWW = TFile::Open(Form("%s",input.Data()));
   histo_Baseline = (TH1D*)_fileGenWW->Get(Form("histo_%d_0",startF+0));
   for(int i=0; i<number_unc; i++) {
-    histo_PTWWUnc[i] = (TH1D*)_fileGenWW->Get(Form("histo_%d_0",134+i));
+    histo_PTWWUnc[i] = (TH1D*)_fileGenWW->Get(Form("histo_%d_0",startF+1+i));
   }
   double scaleFactor = histo_Baseline->GetSumOfWeights()/histo_PTWWUnc[0]->GetSumOfWeights();
 
-  printf("===> Overall yields\n");
+  printf("===> Overall yields, analysis: %s\n",anaName[whichAna].Data());
   printf("%5.1f ",histo_Baseline->GetSumOfWeights());
   for(int i=0; i<number_unc; i++) {
     printf("| %6.1f ",histo_PTWWUnc[i]->GetSumOfWeights());

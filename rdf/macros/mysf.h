@@ -50,7 +50,7 @@ class MyCorrections {
     correction::CompoundCorrection::Ref JECDATA_[10];
     correction::Correction::Ref JECL2ResDATA_[10];
     correction::Correction::Ref jetVetoMap_[10];
-    correction::Correction::Ref jesSourcesUnc_[7];
+    correction::Correction::Ref jesSourcesUnc_[28];
     correction::Correction::Ref jerMethod1Unc_;
     correction::Correction::Ref jerMethod2Unc_;
     correction::Correction::Ref puJetIDSF_;
@@ -173,23 +173,86 @@ MyCorrections::MyCorrections(int the_input_year) {
   tagName = jecMCName + "_" + "Total" + "_" + algoName;
   jesSourcesUnc_[0] = csetJEC->at(tagName);
 
-  tagName = jecMCName + "_" + "SubTotalPileUp" + "_" + algoName;
-  jesSourcesUnc_[1] = csetJEC->at(tagName);
+  tagName = jecMCName + "_" + "AbsoluteMPFBias" + "_" + algoName;
+  jesSourcesUnc_[ 1] = csetJEC->at(tagName);
 
-  tagName = jecMCName + "_" + "SubTotalRelative" + "_" + algoName;
-  jesSourcesUnc_[2] = csetJEC->at(tagName);
+  tagName = jecMCName + "_" + "AbsoluteScale" + "_" + algoName;
+  jesSourcesUnc_[ 2] = csetJEC->at(tagName);
 
-  tagName = jecMCName + "_" + "SubTotalPt" + "_" + algoName;
-  jesSourcesUnc_[3] = csetJEC->at(tagName);
-
-  tagName = jecMCName + "_" + "SubTotalScale" + "_" + algoName;
-  jesSourcesUnc_[4] = csetJEC->at(tagName);
+  tagName = jecMCName + "_" + "AbsoluteStat" + "_" + algoName;
+  jesSourcesUnc_[ 3] = csetJEC->at(tagName);
 
   tagName = jecMCName + "_" + "FlavorQCD" + "_" + algoName;
-  jesSourcesUnc_[5] = csetJEC->at(tagName);
+  jesSourcesUnc_[ 4] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "Fragmentation" + "_" + algoName;
+  jesSourcesUnc_[ 5] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "PileUpDataMC" + "_" + algoName;
+  jesSourcesUnc_[ 6] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "PileUpPtBB" + "_" + algoName;
+  jesSourcesUnc_[ 7] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "PileUpPtEC1" + "_" + algoName;
+  jesSourcesUnc_[ 8] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "PileUpPtEC2" + "_" + algoName;
+  jesSourcesUnc_[ 9] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "PileUpPtHF" + "_" + algoName;
+  jesSourcesUnc_[10] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "PileUpPtRef" + "_" + algoName;
+  jesSourcesUnc_[11] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativeFSR" + "_" + algoName;
+  jesSourcesUnc_[12] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativeJEREC1" + "_" + algoName;
+  jesSourcesUnc_[13] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativeJEREC2" + "_" + algoName;
+  jesSourcesUnc_[14] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativeJERHF" + "_" + algoName;
+  jesSourcesUnc_[15] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativePtBB" + "_" + algoName;
+  jesSourcesUnc_[16] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativePtEC1" + "_" + algoName;
+  jesSourcesUnc_[17] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativePtEC2" + "_" + algoName;
+  jesSourcesUnc_[18] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativePtHF" + "_" + algoName;
+  jesSourcesUnc_[19] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativeBal" + "_" + algoName;
+  jesSourcesUnc_[20] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativeSample" + "_" + algoName;
+  jesSourcesUnc_[21] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativeStatEC" + "_" + algoName;
+  jesSourcesUnc_[22] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativeStatFSR" + "_" + algoName;
+  jesSourcesUnc_[23] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "RelativeStatHF" + "_" + algoName;
+  jesSourcesUnc_[24] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "SinglePionECAL" + "_" + algoName;
+  jesSourcesUnc_[25] = csetJEC->at(tagName);
+
+  tagName = jecMCName + "_" + "SinglePionHCAL" + "_" + algoName;
+  jesSourcesUnc_[26] = csetJEC->at(tagName);
 
   tagName = jecMCName + "_" + "TimePtEta" + "_" + algoName;
-  jesSourcesUnc_[6] = csetJEC->at(tagName);
+  jesSourcesUnc_[27] = csetJEC->at(tagName);
 
   for(int i=0; i<10; i++){
     if(jecDATAName[i].compare("NULL") == 0) continue;

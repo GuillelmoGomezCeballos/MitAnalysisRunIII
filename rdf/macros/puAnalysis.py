@@ -44,7 +44,8 @@ def selectionWW(df,year,PDType,isData,count):
                   .Define("loose_Muon_pt" ,"Muon_pt[loose_mu]")
                   .Define("loose_Electron_pt" ,"Electron_pt[loose_el]")
                   .Filter("(Sum(loose_mu) == 2 && loose_Muon_pt[0] > 20 && loose_Muon_pt[1] > 20)||(Sum(loose_el) == 2 && loose_Electron_pt[0] > 20 && loose_Electron_pt[1] > 20)||(Sum(loose_mu) == 1 && Sum(loose_el) == 1 && loose_Muon_pt[0] > 20 && loose_Electron_pt[0] > 20)","ptl1/2 > 20")
-                  .Filter("Sum(loose_mu) == 1 && Sum(loose_el) == 1","e-mu events")
+                 #.Filter("Sum(loose_mu) == 1 && Sum(loose_el) == 1","e-mu events")
+                  .Filter("Sum(loose_mu)+Sum(loose_el) == 2","2l events")
                   .Filter("nFake == 2","Two fake leptons")
                   .Filter("nTight == 2","Two tight leptons")
                   .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons")
@@ -53,21 +54,22 @@ def selectionWW(df,year,PDType,isData,count):
     dftag = selection2LVar  (dftag,year,isData)
     dftag = (dftag.Filter("ptl1 > 25", "ptl1 > 25")
                   .Filter("ptl2 > 20", "ptl2 > 20")
-                  .Filter("mll > 20","mll > 20")
-                  .Filter("ptll > 30","ptll > 30")
+                 #.Filter("mll > 20","mll > 20")
+                 #.Filter("ptll > 30","ptll > 30")
+                  .Filter("mll > 85","mll > 85")
                   )
 
     dftag = selectionJetMet (dftag,year,bTagSel,isData,count,5.0)
-    dftag = (dftag.Filter("PuppiMET_pt > 20", "PuppiMET_pt > 20")
-                  .Filter("minPMET > 20", "minPMET > 20")
-                  )
+    #dftag = (dftag.Filter("PuppiMET_pt > 20", "PuppiMET_pt > 20")
+    #              .Filter("minPMET > 20", "minPMET > 20")
+    #              )
 
     return dftag
 
 def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
-    xPtBins = array('d', [20,25,30,35,40,50,60,70,80,90,100,125,150,175,200,300,400,500,1000])
-    xEtaBins = array('d', [0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.5])
+    xPtBins = array('d', [20,25,30,35,40,50,60,80,100,150,250,500,1000])
+    xEtaBins = array('d', [0.0,0.3,0.6,0.9,1.2,1.5,1.8,2.1,2.5])
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5}".format(count,category,weight,year,PDType,isData))
 
@@ -119,6 +121,18 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
             )
 
     dfww = selectionWW(dfcat,year,PDType,isData,count)
+    dfww = selectionGenLepJet(dfww,20,30,jetEtaCut).Filter("ngood_GenDressedLeptons >= 2", "ngood_GenDressedLeptons >= 2")
+    dfww = (dfww.Define("kPlotSignal0", "{0}".format(plotCategory("kPlotSignal0")))
+        	.Define("kPlotSignal1", "{0}".format(plotCategory("kPlotSignal1")))
+        	.Define("kPlotSignal2", "{0}".format(plotCategory("kPlotSignal2")))
+        	.Define("kPlotSignal3", "{0}".format(plotCategory("kPlotSignal3")))
+        	.Define("theGenCat", "compute_gen_category({0},kPlotSignal0,kPlotSignal1,kPlotSignal2,kPlotSignal3,ngood_GenJets,ngood_GenDressedLeptons)-1.0".format(0))
+        	.Define("theNNLOWeight0", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,0)")
+        	.Define("theNNLOWeight1", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,1)")
+        	.Define("theNNLOWeight2", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,2)")
+        	.Define("theNNLOWeight3", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,3)")
+        	.Define("theNNLOWeight4", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,4)")
+        	)
 
     dfwwgen = selectionGenLepJet(dfcat,20,30,jetEtaCut).Filter("ngood_GenDressedLeptons >= 2", "ngood_GenDressedLeptons >= 2")
     dfwwgen = (dfwwgen.Define("kPlotSignal0", "{0}".format(plotCategory("kPlotSignal0")))
@@ -250,21 +264,63 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     dfww = dfww.Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
     histo[18][x] = dfww.Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x),3,-0.5,2.5), "ngood_jets","weight")
 
-    histo[19][x] = dfLLgen.Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 100, 10, 110), "mllGen","weight")
-
+    dfww0j = dfww.Filter("ngood_jets == 0")
+    dfww1j = dfww.Filter("ngood_jets == 1")
+    dfww2j = dfww.Filter("ngood_jets == 2")
+    dfww3j = dfww.Filter("ngood_jets >= 3")
+    
     BinXF = 3
     minXF = -0.5
     maxXF = 2.5
+
+    histo[140][x] = dfww  .Histo1D(("histo_{0}_{1}".format(140,x), "histo_{0}_{1}".format(140,x),BinXF,minXF,maxXF),"theGenCat","weight")
+    histo[141][x] = dfww  .Histo1D(("histo_{0}_{1}".format(141,x), "histo_{0}_{1}".format(141,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight0")
+    histo[142][x] = dfww  .Histo1D(("histo_{0}_{1}".format(142,x), "histo_{0}_{1}".format(142,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight1")
+    histo[143][x] = dfww  .Histo1D(("histo_{0}_{1}".format(143,x), "histo_{0}_{1}".format(143,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight2")
+    histo[144][x] = dfww  .Histo1D(("histo_{0}_{1}".format(144,x), "histo_{0}_{1}".format(144,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight3")
+    histo[145][x] = dfww  .Histo1D(("histo_{0}_{1}".format(145,x), "histo_{0}_{1}".format(145,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight4")    
+
+    histo[146][x] = dfww0j.Histo1D(("histo_{0}_{1}".format(146,x), "histo_{0}_{1}".format(146,x),BinXF,minXF,maxXF),"theGenCat","weight")
+    histo[147][x] = dfww0j.Histo1D(("histo_{0}_{1}".format(147,x), "histo_{0}_{1}".format(147,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight0")
+    histo[148][x] = dfww0j.Histo1D(("histo_{0}_{1}".format(148,x), "histo_{0}_{1}".format(148,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight1")
+    histo[149][x] = dfww0j.Histo1D(("histo_{0}_{1}".format(149,x), "histo_{0}_{1}".format(149,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight2")
+    histo[150][x] = dfww0j.Histo1D(("histo_{0}_{1}".format(150,x), "histo_{0}_{1}".format(150,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight3")
+    histo[151][x] = dfww0j.Histo1D(("histo_{0}_{1}".format(151,x), "histo_{0}_{1}".format(151,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight4")
+
+    histo[152][x] = dfww1j.Histo1D(("histo_{0}_{1}".format(152,x), "histo_{0}_{1}".format(152,x),BinXF,minXF,maxXF),"theGenCat","weight")
+    histo[153][x] = dfww1j.Histo1D(("histo_{0}_{1}".format(153,x), "histo_{0}_{1}".format(153,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight0")
+    histo[154][x] = dfww1j.Histo1D(("histo_{0}_{1}".format(154,x), "histo_{0}_{1}".format(154,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight1")
+    histo[155][x] = dfww1j.Histo1D(("histo_{0}_{1}".format(155,x), "histo_{0}_{1}".format(155,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight2")
+    histo[156][x] = dfww1j.Histo1D(("histo_{0}_{1}".format(156,x), "histo_{0}_{1}".format(156,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight3")
+    histo[157][x] = dfww1j.Histo1D(("histo_{0}_{1}".format(157,x), "histo_{0}_{1}".format(157,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight4")
+
+    histo[158][x] = dfww2j.Histo1D(("histo_{0}_{1}".format(158,x), "histo_{0}_{1}".format(158,x),BinXF,minXF,maxXF),"theGenCat","weight")
+    histo[159][x] = dfww2j.Histo1D(("histo_{0}_{1}".format(159,x), "histo_{0}_{1}".format(159,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight0")
+    histo[160][x] = dfww2j.Histo1D(("histo_{0}_{1}".format(160,x), "histo_{0}_{1}".format(160,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight1")
+    histo[161][x] = dfww2j.Histo1D(("histo_{0}_{1}".format(161,x), "histo_{0}_{1}".format(161,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight2")
+    histo[162][x] = dfww2j.Histo1D(("histo_{0}_{1}".format(162,x), "histo_{0}_{1}".format(162,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight3")
+    histo[163][x] = dfww2j.Histo1D(("histo_{0}_{1}".format(163,x), "histo_{0}_{1}".format(163,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight4")
+
+    histo[164][x] = dfww3j.Histo1D(("histo_{0}_{1}".format(164,x), "histo_{0}_{1}".format(164,x),BinXF,minXF,maxXF),"theGenCat","weight")
+    histo[165][x] = dfww3j.Histo1D(("histo_{0}_{1}".format(165,x), "histo_{0}_{1}".format(165,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight0")
+    histo[166][x] = dfww3j.Histo1D(("histo_{0}_{1}".format(166,x), "histo_{0}_{1}".format(166,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight1")
+    histo[167][x] = dfww3j.Histo1D(("histo_{0}_{1}".format(167,x), "histo_{0}_{1}".format(167,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight2")
+    histo[168][x] = dfww3j.Histo1D(("histo_{0}_{1}".format(168,x), "histo_{0}_{1}".format(168,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight3")
+    histo[169][x] = dfww3j.Histo1D(("histo_{0}_{1}".format(169,x), "histo_{0}_{1}".format(169,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight4")
+
+    histo[19][x] = dfLLgen.Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 100, 10, 110), "mllGen","weight")
+
     startF = 0
     histo[startF+20][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(startF+20,x), "histo_{0}_{1}".format(startF+20,x),BinXF,minXF,maxXF),"theGenCat","weight")
-    for nv in range(21,134):
-        histo[startF+nv][x] = makeFinalVariable(dfwwgen,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,nv)
+    for nv in range(1,114):
+        histo[startF+20+nv][x] = makeFinalVariable(dfwwgen,"theGenCat",theCat,startF+20,x,BinXF,minXF,maxXF,nv)
 
-    histo[134][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(134,x), "histo_{0}_{1}".format(134,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight0")
-    histo[135][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(135,x), "histo_{0}_{1}".format(135,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight1")
-    histo[136][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(136,x), "histo_{0}_{1}".format(136,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight2")
-    histo[137][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(137,x), "histo_{0}_{1}".format(137,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight3")
-    histo[138][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(138,x), "histo_{0}_{1}".format(138,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight4")
+    histo[134][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(134,x), "histo_{0}_{1}".format(134,x),BinXF,minXF,maxXF),"theGenCat","weight")
+    histo[135][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(135,x), "histo_{0}_{1}".format(135,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight0")
+    histo[136][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(136,x), "histo_{0}_{1}".format(136,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight1")
+    histo[137][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(137,x), "histo_{0}_{1}".format(137,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight2")
+    histo[138][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(138,x), "histo_{0}_{1}".format(138,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight3")
+    histo[139][x] = dfwwgen.Histo1D(("histo_{0}_{1}".format(139,x), "histo_{0}_{1}".format(139,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight4")
 
     #branches = ["nElectron", "nPhoton", "nMuon", "Photon_pt", "Muon_pt", "PuppiMET_pt", "nbtag"]
     #dfcat.Snapshot("Events", "test.root", branches)

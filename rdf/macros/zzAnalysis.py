@@ -202,9 +202,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                     )
 
     dfzzcatMuonMomUp       = []
-    dfzzcatMuonMomDown     = []
     dfzzcatElectronMomUp   = []
-    dfzzcatElectronMomDown = []
     dfzzcat = []
     dfzzxycat = []
     dfzzjjcat = []
@@ -273,73 +271,92 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
         if(makeDataCards == 1):
             dfzzcatMuonMomUp      .append(dfzzcat[x])
-            dfzzcatMuonMomDown    .append(dfzzcat[x])
             dfzzcatElectronMomUp  .append(dfzzcat[x])
-            dfzzcatElectronMomDown.append(dfzzcat[x])
             dfzzcat		  [x] = dfzzcat 	      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4l{0}             > 150".format(altMass)," nbjets == 0 && m4l > 150")
             dfzzcatMuonMomUp	  [x] = dfzzcatMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomUp       > 150")
-            dfzzcatMuonMomDown    [x] = dfzzcatMuonMomDown    [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomDown     > 150")
             dfzzcatElectronMomUp  [x] = dfzzcatElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomUp   > 150")
-            dfzzcatElectronMomDown[x] = dfzzcatElectronMomDown[x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomDown > 150")
             BinXF = 4
             minXF = -0.5
             maxXF = 3.5
 
             startF = 300
-            for nv in range(0,154):
+            for nv in range(0,135):
                 histo[startF+nv][x] = makeFinalVariable(dfzzcat[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,nv)
-            histo[startF+154][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes0Up"  ,theCat,startF,x,BinXF,minXF,maxXF,154)
-            histo[startF+155][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes0Down",theCat,startF,x,BinXF,minXF,maxXF,155)
-            histo[startF+156][x]    = makeFinalVariable(dfzzcat[x]	  ,"ngood_jetsJerUp"  ,theCat,startF,x,BinXF,minXF,maxXF,156)
-            histo[startF+157][x]    = makeFinalVariable(dfzzcat[x]	  ,"ngood_jetsJerDown",theCat,startF,x,BinXF,minXF,maxXF,157)
-            histo[startF+158][x]    = makeFinalVariable(dfzzcatMuonMomUp      [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,158)
-            histo[startF+159][x]    = makeFinalVariable(dfzzcatMuonMomDown    [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,159)
-            histo[startF+160][x]    = makeFinalVariable(dfzzcatElectronMomUp  [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,160)
-            histo[startF+161][x]    = makeFinalVariable(dfzzcatElectronMomDown[x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,161)
-            histo[startF+162][x]    = makeFinalVariable(dfzzcat[x]		 ,"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,162)
-            histo[startF+163][x]    = makeFinalVariable(dfzzcat[x]		 ,"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,163)
-            histo[startF+164][x]    = makeFinalVariable(dfzzcat[x]		 ,"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,164)
-            histo[startF+165][x]    = makeFinalVariable(dfzzcat[x]		 ,"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,165)
-            histo[startF+166][x]    = makeFinalVariable(dfzzcat[x]		 ,"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,166)
-            histo[startF+167][x]    = makeFinalVariable(dfzzcat[x]		 ,"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,167)
-            histo[startF+168][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes1Up"  ,theCat,startF,x,BinXF,minXF,maxXF,168)
-            histo[startF+169][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes1Down",theCat,startF,x,BinXF,minXF,maxXF,169)
-            histo[startF+170][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes2Up"  ,theCat,startF,x,BinXF,minXF,maxXF,170)
-            histo[startF+171][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes2Down",theCat,startF,x,BinXF,minXF,maxXF,171)
-            histo[startF+172][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes3Up"  ,theCat,startF,x,BinXF,minXF,maxXF,172)
-            histo[startF+173][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes3Down",theCat,startF,x,BinXF,minXF,maxXF,173)
-            histo[startF+174][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes4Up"  ,theCat,startF,x,BinXF,minXF,maxXF,174)
-            histo[startF+175][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes4Down",theCat,startF,x,BinXF,minXF,maxXF,175)
-            histo[startF+176][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes5Up"  ,theCat,startF,x,BinXF,minXF,maxXF,176)
-            histo[startF+177][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes5Down",theCat,startF,x,BinXF,minXF,maxXF,177)
-            histo[startF+178][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes6Up"  ,theCat,startF,x,BinXF,minXF,maxXF,178)
-            histo[startF+179][x]    = makeFinalVariable(dfzzcat[x]	 ,"ngood_jetsJes6Down",theCat,startF,x,BinXF,minXF,maxXF,179)
+            histo[startF+135][x]    = makeFinalVariable(dfzzcatMuonMomUp      [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,135)
+            histo[startF+136][x]    = makeFinalVariable(dfzzcatElectronMomUp  [x],"ngood_jets",theCat,startF,x,BinXF,minXF,maxXF,136)
+            histo[startF+137][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes00Up"        ,theCat,startF,x,BinXF,minXF,maxXF,137)
+            histo[startF+138][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes01Up"        ,theCat,startF,x,BinXF,minXF,maxXF,138)
+            histo[startF+139][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes02Up"        ,theCat,startF,x,BinXF,minXF,maxXF,139)
+            histo[startF+140][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes03Up"        ,theCat,startF,x,BinXF,minXF,maxXF,140)
+            histo[startF+141][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes04Up"        ,theCat,startF,x,BinXF,minXF,maxXF,141)
+            histo[startF+142][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes05Up"        ,theCat,startF,x,BinXF,minXF,maxXF,142)
+            histo[startF+143][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes06Up"        ,theCat,startF,x,BinXF,minXF,maxXF,143)
+            histo[startF+144][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes07Up"        ,theCat,startF,x,BinXF,minXF,maxXF,144)
+            histo[startF+145][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes08Up"        ,theCat,startF,x,BinXF,minXF,maxXF,145)
+            histo[startF+146][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes09Up"        ,theCat,startF,x,BinXF,minXF,maxXF,146)
+            histo[startF+147][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes10Up"        ,theCat,startF,x,BinXF,minXF,maxXF,147)
+            histo[startF+148][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes11Up"        ,theCat,startF,x,BinXF,minXF,maxXF,148)
+            histo[startF+149][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes12Up"        ,theCat,startF,x,BinXF,minXF,maxXF,149)
+            histo[startF+150][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes13Up"        ,theCat,startF,x,BinXF,minXF,maxXF,150)
+            histo[startF+151][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes14Up"        ,theCat,startF,x,BinXF,minXF,maxXF,151)
+            histo[startF+152][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes15Up"        ,theCat,startF,x,BinXF,minXF,maxXF,152)
+            histo[startF+153][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes16Up"        ,theCat,startF,x,BinXF,minXF,maxXF,153)
+            histo[startF+154][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes17Up"        ,theCat,startF,x,BinXF,minXF,maxXF,154)
+            histo[startF+155][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes18Up"        ,theCat,startF,x,BinXF,minXF,maxXF,155)
+            histo[startF+156][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes19Up"        ,theCat,startF,x,BinXF,minXF,maxXF,156)
+            histo[startF+157][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes20Up"        ,theCat,startF,x,BinXF,minXF,maxXF,157)
+            histo[startF+158][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes21Up"        ,theCat,startF,x,BinXF,minXF,maxXF,158)
+            histo[startF+159][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes22Up"        ,theCat,startF,x,BinXF,minXF,maxXF,159)
+            histo[startF+160][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes23Up"        ,theCat,startF,x,BinXF,minXF,maxXF,160)
+            histo[startF+161][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes24Up"        ,theCat,startF,x,BinXF,minXF,maxXF,161)
+            histo[startF+162][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes25Up"        ,theCat,startF,x,BinXF,minXF,maxXF,162)
+            histo[startF+163][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes26Up"        ,theCat,startF,x,BinXF,minXF,maxXF,163)
+            histo[startF+164][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJes27Up"        ,theCat,startF,x,BinXF,minXF,maxXF,164)
+            histo[startF+165][x]    = makeFinalVariable(dfzzcat[x],"ngood_jetsJerUp"          ,theCat,startF,x,BinXF,minXF,maxXF,165)
+            histo[startF+166][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets"               ,theCat,startF,x,BinXF,minXF,maxXF,166)
+            histo[startF+167][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets"               ,theCat,startF,x,BinXF,minXF,maxXF,167)
+            histo[startF+168][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets"               ,theCat,startF,x,BinXF,minXF,maxXF,168)
 
         elif(makeDataCards == 2):
             dfzzcatMuonMomUp      .append(dfzzcat[x])
-            dfzzcatMuonMomDown    .append(dfzzcat[x])
             dfzzcatElectronMomUp  .append(dfzzcat[x])
-            dfzzcatElectronMomDown.append(dfzzcat[x])
             dfzzcat		  [x] = dfzzcat 	      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4l{0}             > 150".format(altMass)," nbjets == 0 && m4l > 150")
             dfzzcatMuonMomUp	  [x] = dfzzcatMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomUp       > 150")
-            dfzzcatMuonMomDown    [x] = dfzzcatMuonMomDown    [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomDown     > 150")
             dfzzcatElectronMomUp  [x] = dfzzcatElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomUp   > 150")
-            dfzzcatElectronMomDown[x] = dfzzcatElectronMomDown[x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomDown > 150")
             BinXF = 1
             minXF = -0.5
             maxXF = 2.5
 
             startF = 300
-            for nv in range(0,154):
+            for nv in range(0,135):
                 histo[startF+nv][x] = makeFinalVariable(dfzzcat[x],"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,nv)
+            histo[startF+135][x]    = makeFinalVariable(dfzzcatMuonMomUp      [x],"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,135)
+            histo[startF+136][x]    = makeFinalVariable(dfzzcatElectronMomUp  [x],"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,136)
+            histo[startF+137][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,137)
+            histo[startF+138][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,138)
+            histo[startF+139][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,139)
+            histo[startF+140][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,140)
+            histo[startF+141][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,141)
+            histo[startF+142][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,142)
+            histo[startF+143][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,143)
+            histo[startF+144][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,144)
+            histo[startF+145][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,145)
+            histo[startF+146][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,146)
+            histo[startF+147][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,147)
+            histo[startF+148][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,148)
+            histo[startF+149][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,149)
+            histo[startF+150][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,150)
+            histo[startF+151][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,151)
+            histo[startF+152][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,152)
+            histo[startF+153][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,153)
             histo[startF+154][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,154)
             histo[startF+155][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,155)
             histo[startF+156][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,156)
             histo[startF+157][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,157)
-            histo[startF+158][x]    = makeFinalVariable(dfzzcatMuonMomUp      [x],"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,158)
-            histo[startF+159][x]    = makeFinalVariable(dfzzcatMuonMomDown    [x],"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,159)
-            histo[startF+160][x]    = makeFinalVariable(dfzzcatElectronMomUp  [x],"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,160)
-            histo[startF+161][x]    = makeFinalVariable(dfzzcatElectronMomDown[x],"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,161)
+            histo[startF+158][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,158)
+            histo[startF+159][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,159)
+            histo[startF+160][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,160)
+            histo[startF+161][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,161)
             histo[startF+162][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,162)
             histo[startF+163][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,163)
             histo[startF+164][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,164)
@@ -347,17 +364,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[startF+166][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,166)
             histo[startF+167][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,167)
             histo[startF+168][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,168)
-            histo[startF+169][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,169)
-            histo[startF+170][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,170)
-            histo[startF+171][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,171)
-            histo[startF+172][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,172)
-            histo[startF+173][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,173)
-            histo[startF+174][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,174)
-            histo[startF+175][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,175)
-            histo[startF+176][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,176)
-            histo[startF+177][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,177)
-            histo[startF+178][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,178)
-            histo[startF+179][x]    = makeFinalVariable(dfzzcat[x]		 ,"FourLepton_flavor",theCat,startF,x,BinXF,minXF,maxXF,179)
 
     report = []
     for x in range(nCat):
