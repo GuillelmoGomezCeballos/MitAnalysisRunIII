@@ -671,8 +671,10 @@ float compute_fakeRate(const bool isData,
   bool debug = false;
   if(debug) printf("fakeRate: %d %d %d\n",mType,eType,whichAna);
 
-  // 0/1/2 - 1001/1002/1003 anaType 1
-  // 3/4/5 - 1001/1002/1003 anaType 2
+  // 0/1/2 - 1001/1002/1003 anaType 1 njets30  > 0
+  // 3/4/5 - 1001/1002/1003 anaType 2 nbjets20 > 0
+  // 6/7/8 - 1001/1002/1003 anaType 3 nbjets50 > 0
+  // def 2, unc 5 / 1 / 8
 
   // whichAna = 1 (ssww)
   double addSF[2] {1.0, 1.0};
