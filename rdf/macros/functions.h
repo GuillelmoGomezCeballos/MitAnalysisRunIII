@@ -678,7 +678,7 @@ float compute_fakeRate(const bool isData,
 
   // whichAna = 1 (ssww)
   double addSF[2] {1.0, 1.0};
-  if(whichAna == 1) {addSF[0] = 0.35; addSF[1] = 0.80;}
+  //if(whichAna == 1) {addSF[0] = 0.35; addSF[1] = 0.80;}
 
   if(mu_pt.size() != tight_mu.size() || el_pt.size() != tight_el.size()) {
     printf("PROBLEM in compute_fakeRate (%zu/%zu) (%zu/%zu)!\n",mu_pt.size(),tight_mu.size(),el_pt.size(),tight_el.size());
