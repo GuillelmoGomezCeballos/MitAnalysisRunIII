@@ -139,7 +139,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
     //_hist[ic]->SetBinContent(1,0);
     //if(ic != kPlotNonPrompt && ic != kPlotTVX && ic != kPlotWS && ic != kPlotData) {hData->Add(_hist[ic],-1);_hist[ic]->Scale(0);}
     // end btaging study
-    for(int i=1; i<=_hist[ic]->GetNbinsX(); i++) if(_hist[ic]->GetBinContent(i)<0) _hist[ic]->SetBinContent(i,0);
+    for(int i=1; i<=_hist[ic]->GetNbinsX(); i++) if(_hist[ic]->GetBinContent(i)<0) {_hist[ic]->SetBinContent(i,0);_hist[ic]->SetBinError(i,0);}
     if(ic == kPlotData) {
       //for(int i=1; i<=_hist[ic]->GetNbinsX(); i++){
       //  if(i>20)_hist[ic]->SetBinContent(i,0);
