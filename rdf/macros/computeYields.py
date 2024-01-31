@@ -33,9 +33,9 @@ if __name__ == "__main__":
     histo = []
     signalDict = []
     if('sswwAna' in path):
-        histo.append(12)
+        histo.append(18)
         signalDict.append(plotCategory("kPlotEWKSSWW"))
-        histo.append(13)
+        histo.append(19)
         signalDict.append(plotCategory("kPlotEWKSSWW"))
     elif('zzAna' in path):
         histo.append(8)
