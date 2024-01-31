@@ -16,6 +16,7 @@ bTagSel = 2
 useBTaggingWeights = 1
 
 useFR = 1
+whichAna = 1
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -197,7 +198,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     dftag = selectionLL(df,year,PDType,isData,count)
 
-    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,1)
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,whichAna)
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
