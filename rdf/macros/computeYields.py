@@ -31,45 +31,62 @@ if __name__ == "__main__":
             output = str(arg)
 
     histo = []
-    signalDict = []
+    signalDict0 = []
+    signalDict1 = []
     if('sswwAna' in path):
         histo.append(18)
-        signalDict.append(plotCategory("kPlotEWKSSWW"))
+        signalDict0.append(plotCategory("kPlotEWKSSWW"))
+        signalDict1.append(plotCategory("kPlotEWKSSWW"))
         histo.append(19)
-        signalDict.append(plotCategory("kPlotEWKSSWW"))
+        signalDict0.append(plotCategory("kPlotEWKSSWW"))
+        signalDict1.append(plotCategory("kPlotEWKSSWW"))
     elif('zzAna' in path):
         histo.append(8)
-        signalDict.append(plotCategory("kPlotZZ"))
+        signalDict0.append(plotCategory("kPlotZZ"))
+        signalDict1.append(plotCategory("kPlotZZ"))
     elif('wzAna' in path):
         histo.append(11)
-        signalDict.append(plotCategory("kPlotWZ"))
+        signalDict0.append(plotCategory("kPlotWZ"))
+        signalDict1.append(plotCategory("kPlotWZ"))
         histo.append(12)
-        signalDict.append(plotCategory("kPlotWZ"))
+        signalDict0.append(plotCategory("kPlotWZ"))
+        signalDict1.append(plotCategory("kPlotWZ"))
     elif('zmetAna' in path):
         histo.append(24)
-        signalDict.append(plotCategory("kPlotZZ"))
+        signalDict0.append(plotCategory("kPlotZZ"))
+        signalDict1.append(plotCategory("kPlotZZ"))
         histo.append(25)
-        signalDict.append(plotCategory("kPlotZZ"))
+        signalDict0.append(plotCategory("kPlotZZ"))
+        signalDict1.append(plotCategory("kPlotZZ"))
         histo.append(26)
-        signalDict.append(plotCategory("kPlotZZ"))
+        signalDict0.append(plotCategory("kPlotZZ"))
+        signalDict1.append(plotCategory("kPlotZZ"))
     elif('wwAna' in path):
         histo.append(42)
-        signalDict.append(plotCategory("kPlotNonPrompt"))
+        signalDict0.append(plotCategory("kPlotNonPrompt"))
+        signalDict1.append(plotCategory("kPlotNonPrompt"))
         histo.append(71)
-        signalDict.append(plotCategory("kPlotNonPrompt"))
+        signalDict0.append(plotCategory("kPlotNonPrompt"))
+        signalDict1.append(plotCategory("kPlotNonPrompt"))
         histo.append(72)
-        signalDict.append(plotCategory("kPlotNonPrompt"))
+        signalDict0.append(plotCategory("kPlotNonPrompt"))
+        signalDict1.append(plotCategory("kPlotNonPrompt"))
         histo.append(43)
-        signalDict.append(plotCategory("kPlotqqWW"))
+        signalDict0.append(plotCategory("kPlotqqWW"))
+        signalDict1.append(plotCategory("kPlotggWW"))
         histo.append(44)
-        signalDict.append(plotCategory("kPlotDY"))
+        signalDict0.append(plotCategory("kPlotDY"))
+        signalDict1.append(plotCategory("kPlotDY"))
         histo.append(45)
-        signalDict.append(plotCategory("kPlotTop"))
+        signalDict0.append(plotCategory("kPlotTT"))
+        signalDict1.append(plotCategory("kPlotTW"))
         histo.append(57)
-        signalDict.append(plotCategory("kPlotHiggs"))
+        signalDict0.append(plotCategory("kPlotHiggs"))
+        signalDict1.append(plotCategory("kPlotHiggs"))
     elif('zAna' in path):
         histo.append(28)
-        signalDict.append(plotCategory("kPlotDY"))
+        signalDict0.append(plotCategory("kPlotDY"))
+        signalDict1.append(plotCategory("kPlotDY"))
 
     nCat = plotCategory("kPlotCategories")
     for nh in range(len(histo)):
@@ -93,7 +110,7 @@ if __name__ == "__main__":
                 if(i == plotCategory("kPlotData")):
                     theYields[0]  += histoSel[i].GetBinContent(nb)
                     theYieldsE[0] += histoSel[i].GetBinError(nb)*histoSel[i].GetBinError(nb)
-                elif(i == signalDict[nh]):
+                elif(i == signalDict0[nh] or i == signalDict1[nh]):
                     theYields[1]  += histoSel[i].GetBinContent(nb)
                     theYieldsE[1] += histoSel[i].GetBinError(nb)*histoSel[i].GetBinError(nb)
                     mcYield += histoSel[i].GetBinContent(nb)

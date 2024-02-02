@@ -31,12 +31,14 @@ void convert_njets_to_crs(){
     TFile* outFileLimits = new TFile(Form("ww_output_cr%d.root",ncr),"recreate");
     outFileLimits->cd();
     for(int nc=0; nc<nPlotCategories; nc++) {
-      if(!histo[0][nc]) continue;
+      bool isNonZero = false;
       for(int nj=0; nj<njets; nj++) {
+        if(!histo[nj][nc]) continue;
+        isNonZero = true;
         _hist[nc]->SetBinContent(nj+1, histo[nj][nc]->GetBinContent(ncr+1));
         _hist[nc]->SetBinError  (nj+1, histo[nj][nc]->GetBinError  (ncr+1));
       }
-      _hist[nc]->Write();
+      if(isNonZero == true) _hist[nc]->Write();
     }
     outFileLimits->Close();
   }

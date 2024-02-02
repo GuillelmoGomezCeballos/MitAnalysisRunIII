@@ -239,18 +239,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         else:
             dfcat[x] = dfcat[x].Define("nPileupJets", "ngood_jets")
 
-        if(x == plotCategory("kPlotTop")):
-            dfcat[x] = dfcat[x].Define("weightWW", "weight")
-        else:
-            dfcat[x] = dfcat[x].Define("weightWW", "weight")
+        dfcat[x] = dfcat[x].Define("weightWW", "weight")
 
         if((x == plotCategory("kPlotqqWW") or x == plotCategory("kPlotggWW")) and isData == "false"):
             dfcat[x] = selectionGenLepJet(dfcat[x],20,30,jetEtaCut)
-            dfcat[x] = (dfcat[x].Define("kPlotSignal0", "{0}".format(plotCategory("kPlotSignal0")))
-                                .Define("kPlotSignal1", "{0}".format(plotCategory("kPlotSignal1")))
-                                .Define("kPlotSignal2", "{0}".format(plotCategory("kPlotSignal2")))
-                                .Define("kPlotSignal3", "{0}".format(plotCategory("kPlotSignal3")))
-                                .Define("theGenCat", "compute_gen_category({0},kPlotSignal0,kPlotSignal1,kPlotSignal2,kPlotSignal3,ngood_GenJets,ngood_GenDressedLeptons)".format(x))
+            dfcat[x] = (dfcat[x].Define("theGenCat", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId)".format(x))
                                 )
         else:
             dfcat[x] = dfcat[x].Define("theGenCat", "{0}".format(0))
@@ -429,6 +422,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[105][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(105,x), "histo_{0}_{1}".format(105,x), 4,-0.5,3.5), "ngood_jets","weight4")
             histo[106][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(106,x), "histo_{0}_{1}".format(106,x), 4,-0.5,3.5), "ngood_jets","weight5")
             histo[107][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(107,x), "histo_{0}_{1}".format(107,x), 4,-0.5,3.5), "ngood_jets","weight6")
+            TRIGGERMET = getTriggerFromJson(overallTriggers, "TRIGGERMET", year)
+            histo[108][x] = dfwwx0cat[x].Define("triggerMET","{0}".format(TRIGGERMET)).Filter("triggerMET > 0").Histo1D(("histo_{0}_{1}".format(108,x), "histo_{0}_{1}".format(108,x), 4,-0.5,3.5), "ngood_jets","weight")
 
         if(makeDataCards >= 1):
             BinXF = 4
@@ -842,7 +837,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX()+1,i+1,0.0)
                 histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX()+1,i+1,0.0)
 
-            if(x == plotCategory("kPlotqqWW") or x == plotCategory("kPlotggWW")):
+            if(x == plotCategory("kPlotqqWW")):
                 for i in range(histoMVA[j][x].GetNbinsX()):
                     histoMVA[j][plotCategory("kPlotqqWW")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotqqWW")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,1))
                     histoMVA[j][plotCategory("kPlotqqWW")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotqqWW")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,1),2),0.5))
@@ -855,6 +850,20 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
                     histoMVA[j][plotCategory("kPlotSignal2")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal2")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,4))
                     histoMVA[j][plotCategory("kPlotSignal2")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal2")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,5),2),0.5))
+
+            elif(x == plotCategory("kPlotggWW")):
+                for i in range(histoMVA[j][x].GetNbinsX()):
+                    histoMVA[j][plotCategory("kPlotggWW")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotggWW")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,1))
+                    histoMVA[j][plotCategory("kPlotggWW")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotggWW")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,1),2),0.5))
+
+                    histoMVA[j][plotCategory("kPlotSignal3")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal3")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,2))
+                    histoMVA[j][plotCategory("kPlotSignal3")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal3")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,2),2),0.5))
+
+                    histoMVA[j][plotCategory("kPlotSignal4")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal4")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,3))
+                    histoMVA[j][plotCategory("kPlotSignal4")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal4")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,4),2),0.5))
+
+                    histoMVA[j][plotCategory("kPlotSignal5")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal5")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,4))
+                    histoMVA[j][plotCategory("kPlotSignal5")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal5")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,5),2),0.5))
 
             else:
                 for i in range(histoMVA[j][x].GetNbinsX()):
@@ -913,7 +922,8 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,puWeights,histoTriggerDA
     genEventSumPSRenorm = [1, 1, 1, 1]
     if(SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotqqWW") or
        SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotggWW") or
-       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotTop") or
+       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotTT") or
+       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotTW") or
        SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotDY") or
        SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotWZ") or
        SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKWZ") or

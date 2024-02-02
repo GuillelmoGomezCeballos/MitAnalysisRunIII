@@ -212,9 +212,13 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
 
     else if(isVBS[1] == 1 && ic == kPlotggWW)    {_hist[kPlotEWKWZ]  ->Add(_hist[ic]); _hist[ic]->Scale(0);}
 
-    else if(isVBS[0] == 3 && ic == kPlotSignal0)                  {_hist[kPlotqqWW] = (TH1F*) _hist[ic]->Clone(); _hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic ==    kPlotggWW)                  {_hist[kPlotggWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic == kPlotSignal0)                  {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
     else if(isVBS[0] == 3 && ic == kPlotSignal1)                  {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
     else if(isVBS[0] == 3 && ic == kPlotSignal2)                  {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic == kPlotSignal3)                  {_hist[kPlotggWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic == kPlotSignal4)                  {_hist[kPlotggWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic == kPlotSignal5)                  {_hist[kPlotggWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
     //printf("DEBUG3 %d\n",ic);
   }
   

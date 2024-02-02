@@ -87,7 +87,7 @@ def selectionLL(df,year,PDType,isData,count):
     dftag = (dftag.Filter("abs(mll-91.1876) < 15","abs(mll-mZ)<15")
                   .Filter("thePuppiMET_pt > 60 && ptll > 60","met > 60 && ptll > 60")
                   .Filter("ptl1 > 25 && ptl2 > 20","ptl1 > 25 && ptl2 > 20")
-		  )
+                  )
 
     return dftag
 
@@ -98,7 +98,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
     elif(theCat == plotCategory("kPlotqqWW") or theCat == plotCategory("kPlotggWW") or
-         theCat == plotCategory("kPlotTop") or theCat == plotCategory("kPlotHiggs")):
+         theCat == plotCategory("kPlotTT") or theCat == plotCategory("kPlotTW") or
+         theCat == plotCategory("kPlotHiggs")):
         theCat = plotCategory("kPlotEM")
     elif(theCat == plotCategory("kPlotTVX")):
         theCat = plotCategory("kPlotVVV")

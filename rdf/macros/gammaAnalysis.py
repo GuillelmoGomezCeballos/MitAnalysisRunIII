@@ -163,7 +163,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
     elif(theCat == plotCategory("kPlotqqWW") or theCat == plotCategory("kPlotggWW") or
-         theCat == plotCategory("kPlotTop") or theCat == plotCategory("kPlotHiggs")):
+         theCat == plotCategory("kPlotTT") or theCat == plotCategory("kPlotTW") or
+         theCat == plotCategory("kPlotHiggs")):
         theCat = plotCategory("kPlotEM")
     elif(theCat == plotCategory("kPlotTVX")):
         theCat = plotCategory("kPlotVVV")

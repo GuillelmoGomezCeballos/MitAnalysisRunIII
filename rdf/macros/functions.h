@@ -1942,8 +1942,10 @@ int compute_category(const int mc, const int typeFake, const int typeWS, const i
 }
 
 // compute gen category
-int compute_gen_category(const int mc, const int kPlotSignal0, const int kPlotSignal1, const int kPlotSignal2, const int kPlotSignal3, const int ngood_GenJets, const int ngood_GenDressedLeptons){
+int compute_gen_category(const int mc, const int ngood_GenJets, const int ngood_GenDressedLeptons, const Vec_i& GenDressedLepton_pdgId){
   if(ngood_GenDressedLeptons <= 1) return 0;
+  if(GenDressedLepton_pdgId[0] * GenDressedLepton_pdgId[1] > 0)  return 0;
+  if(abs(GenDressedLepton_pdgId[0]) == abs(GenDressedLepton_pdgId[1]))  return 0;
   if     (ngood_GenJets == 0) return 1;
   else if(ngood_GenJets == 1) return 2;
   else if(ngood_GenJets >= 2) return 3;

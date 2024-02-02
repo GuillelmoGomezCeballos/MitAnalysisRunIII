@@ -104,7 +104,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
     if(theCat == plotCategory("kPlotqqWW") or theCat == plotCategory("kPlotggWW") or
-       theCat == plotCategory("kPlotDY") or theCat == plotCategory("kPlotTop")):
+       theCat == plotCategory("kPlotDY") or theCat == plotCategory("kPlotTT") or
+       theCat == plotCategory("kPlotTW")):
         theCat = plotCategory("kPlotWS")
     elif(theCat == plotCategory("kPlotHiggs")):
         theCat = plotCategory("kPlotVVV")

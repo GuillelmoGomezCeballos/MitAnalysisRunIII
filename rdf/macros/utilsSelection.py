@@ -80,6 +80,7 @@ def selectionGenLepJet(df,ptlcut,ptjcut,etajcut):
               .Define("good_GenDressedLepton_pt", "GenDressedLepton_pt[good_GenDressedLepton]")
               .Define("good_GenDressedLepton_eta", "GenDressedLepton_eta[good_GenDressedLepton]")
               .Define("good_GenDressedLepton_phi", "GenDressedLepton_phi[good_GenDressedLepton]")
+              .Define("good_GenDressedLepton_pdgId", "GenDressedLepton_pdgId[good_GenDressedLepton]")
               .Define("ngood_GenDressedLeptons","Sum(good_GenDressedLepton)*1.0f")
               .Define("GenJet_mask", "cleaningJetFromLepton(GenJet_eta,GenJet_phi,good_GenDressedLepton_eta,good_GenDressedLepton_phi)")
               .Define("good_GenJet", "GenJet_pt > {0} && abs(GenJet_eta) < {1} && GenJet_mask > 0".format(ptjcut,etajcut))

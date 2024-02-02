@@ -2,110 +2,118 @@
 #include "TH2D.h"
 
 enum plotCategory {
-  kPlotData        , // 0
-  kPlotqqWW        , // 1
-  kPlotggWW        , // 2
-  kPlotTop         , // 3
-  kPlotDY          , // 4
-  kPlotEWKSSWW     , // 5
-  kPlotQCDSSWW     , // 6
-  kPlotEWKWZ       , // 7
-  kPlotWZ          , // 8
-  kPlotZZ          , // 9
-  kPlotNonPrompt   , //10
-  kPlotVVV         , //11
-  kPlotTVX         , //12
-  kPlotVG          , //13
-  kPlotHiggs       , //14
-  kPlotDPSWW       , //15
-  kPlotWS          , //16
-  kPlotEM          , //17
-  kPlotOther        ,//18
-  kPlotBSM         , //19
-  kPlotSignal0     , //20
-  kPlotSignal1     , //21
-  kPlotSignal2     , //22
-  kPlotSignal3     , //23
+  kPlotData      , // 0
+  kPlotqqWW      , // 1
+  kPlotggWW      , // 2
+  kPlotTT        , // 3
+  kPlotTW        , // 4
+  kPlotDY        , // 5
+  kPlotEWKSSWW   , // 6
+  kPlotQCDSSWW   , // 7
+  kPlotEWKWZ     , // 8
+  kPlotWZ        , // 9
+  kPlotZZ        , //10
+  kPlotNonPrompt , //11
+  kPlotVVV       , //12
+  kPlotTVX       , //13
+  kPlotVG        , //14
+  kPlotHiggs     , //15
+  kPlotWS        , //16
+  kPlotOther     , //17
+  kPlotEM        , //18
+  kPlotBSM       , //19
+  kPlotSignal0   , //20
+  kPlotSignal1   , //21
+  kPlotSignal2   , //22
+  kPlotSignal3   , //23
+  kPlotSignal4   , //24
+  kPlotSignal5   , //25
   nPlotCategories
 };
 
 std::map<int, TString> plotBaseNames={
-  { kPlotData	     , "Data" },
-  { kPlotqqWW	     , "qqWW" },
-  { kPlotggWW	     , "ggWW" },
-  { kPlotTop	     , "Top" },
-  { kPlotDY	     , "DY" },
-  { kPlotEWKSSWW     , "EWKSSWW" },
-  { kPlotQCDSSWW     , "QCDSSWW" },
-  { kPlotEWKWZ	     , "EWKWZ" },
-  { kPlotWZ	     , "WZ" },
-  { kPlotZZ	     , "ZZ" },
-  { kPlotNonPrompt   , "NonPrompt" },
-  { kPlotVVV	     , "VVV" },
-  { kPlotTVX	     , "TVX" },
-  { kPlotVG	     , "VG" },
-  { kPlotHiggs       , "Higgs" },
-  { kPlotDPSWW       , "DPSWW" },
-  { kPlotWS	     , "WS" },
-  { kPlotEM	     , "EM" },
-  { kPlotOther       , "Other" },
-  { kPlotBSM	     , "BSM" },
-  { kPlotSignal0     , "Signal0" },
-  { kPlotSignal1     , "Signal1" },
-  { kPlotSignal2     , "Signal2" },
-  { kPlotSignal3     , "Signal3" }
+  { kPlotData	   , "Data" },
+  { kPlotqqWW	   , "qqWW" },
+  { kPlotggWW	   , "ggWW" },
+  { kPlotTT	   , "TT" },
+  { kPlotTW	   , "TW" },
+  { kPlotDY	   , "DY" },
+  { kPlotEWKSSWW   , "EWKSSWW" },
+  { kPlotQCDSSWW   , "QCDSSWW" },
+  { kPlotEWKWZ     , "EWKWZ" },
+  { kPlotWZ	   , "WZ" },
+  { kPlotZZ	   , "ZZ" },
+  { kPlotNonPrompt , "NonPrompt" },
+  { kPlotVVV	   , "VVV" },
+  { kPlotTVX	   , "TVX" },
+  { kPlotVG	   , "VG" },
+  { kPlotHiggs     , "Higgs" },
+  { kPlotWS	   , "WS" },
+  { kPlotOther     , "Other" },
+  { kPlotEM	   , "EM" },
+  { kPlotBSM	   , "BSM" },
+  { kPlotSignal0   , "Signal0" },
+  { kPlotSignal1   , "Signal1" },
+  { kPlotSignal2   , "Signal2" },
+  { kPlotSignal3   , "Signal3" },
+  { kPlotSignal4   , "Signal4" },
+  { kPlotSignal5   , "Signal5" }
 }; 
 
 std::map<int, int> plotColors={
-  { kPlotData	     , kBlack},
-  { kPlotqqWW	     , kAzure-9},
-  { kPlotggWW	     , 901},
-  { kPlotTop	     , kYellow},
-  { kPlotDY	     , kAzure-2},
-  { kPlotEWKSSWW     , TColor::GetColor(248,206,104)},
-  { kPlotQCDSSWW     , TColor::GetColor(250,202,255)},
-  { kPlotEWKWZ       , kCyan+3},
-  { kPlotWZ	     , TColor::GetColor(222,90,106)},
-  { kPlotZZ	     , kAzure-9},
-  { kPlotNonPrompt   , TColor::GetColor(155,152,204)},
-  { kPlotVVV	     , 840},
-  { kPlotTVX	     , kViolet+6},
-  { kPlotVG	     , kGreen-8},
-  { kPlotHiggs       , 842},
-  { kPlotDPSWW       , kGreen},
-  { kPlotWS	     , kAzure+10},
-  { kPlotEM	     , kGreen-5},
-  { kPlotOther       , kGreen-5},
-  { kPlotBSM	     , kGreen-4},
-  { kPlotSignal0     , kBlue},
-  { kPlotSignal1     , kMagenta+1},
-  { kPlotSignal2     , kGreen-4},
-  { kPlotSignal3     , kAzure-4}
+  { kPlotData	   , kBlack},
+  { kPlotqqWW	   , kAzure-9},
+  { kPlotggWW	   , 901},
+  { kPlotTT	   , kYellow},
+  { kPlotTW	   , kYellow-3},
+  { kPlotDY	   , kAzure-2},
+  { kPlotEWKSSWW   , TColor::GetColor(248,206,104)},
+  { kPlotQCDSSWW   , TColor::GetColor(250,202,255)},
+  { kPlotEWKWZ     , kCyan+3},
+  { kPlotWZ	   , TColor::GetColor(222,90,106)},
+  { kPlotZZ	   , kAzure-9},
+  { kPlotNonPrompt , TColor::GetColor(155,152,204)},
+  { kPlotVVV	   , 840},
+  { kPlotTVX	   , kViolet+6},
+  { kPlotVG	   , kGreen-8},
+  { kPlotHiggs     , 842},
+  { kPlotWS	   , kAzure+10},
+  { kPlotOther     , kGreen-5},
+  { kPlotEM	   , kGreen-5},
+  { kPlotBSM	   , kGreen-4},
+  { kPlotSignal0   , kBlue},
+  { kPlotSignal1   , kMagenta+1},
+  { kPlotSignal2   , kGreen-4},
+  { kPlotSignal3   , kAzure-5},
+  { kPlotSignal4   , kAzure-6},
+  { kPlotSignal5   , kAzure-7}
 }; 
 
 std::map<int, TString> plotNames={
-    { kPlotData        , "Data"},
-    { kPlotqqWW        , "WW"},
-    { kPlotggWW        , "gg #rightarrow WW"},
-    { kPlotTop         , "Top quark"},
-    { kPlotDY	       , "Drell-Yan"},
-    { kPlotEWKSSWW     , "W^{#pm}W^{#pm}"},
-    { kPlotQCDSSWW     , "QCD W^{#pm}W^{#pm}"},
-    { kPlotEWKWZ       , "EWK WZ"},
-    { kPlotWZ	       , "WZ"},
-    { kPlotZZ	       , "ZZ"},
-    { kPlotNonPrompt   , "Nonprompt"},
-    { kPlotVVV         , "VVV"},
-    { kPlotTVX         , "tVx"},
-    { kPlotVG	       , "V#gamma" },
-    { kPlotHiggs       , "VH"},
-    { kPlotDPSWW       , "DPS W^{#pm}W^{#pm}"},
-    { kPlotWS	       , "Wrong sign"},
-    { kPlotEM	       , "Nonresonant"},
-    { kPlotOther       , "Other bkg."},
-    { kPlotBSM         , "BSM"},
-    { kPlotSignal0     , "Signal 0"},
-    { kPlotSignal1     , "W_{L}W_{L}"},
-    { kPlotSignal2     , "W_{L}W_{T}"},
-    { kPlotSignal3     , "W_{T}W_{T}"}
+    { kPlotData      , "Data"},
+    { kPlotqqWW      , "qq #rightarrow WW"},
+    { kPlotggWW      , "gg #rightarrow WW"},
+    { kPlotTT	     , "t#bar{t}"},
+    { kPlotTW	     , "tW"},
+    { kPlotDY	     , "Drell-Yan"},
+    { kPlotEWKSSWW   , "W^{#pm}W^{#pm}"},
+    { kPlotQCDSSWW   , "QCD W^{#pm}W^{#pm}"},
+    { kPlotEWKWZ     , "EWK WZ"},
+    { kPlotWZ	     , "WZ"},
+    { kPlotZZ	     , "ZZ"},
+    { kPlotNonPrompt , "Nonprompt"},
+    { kPlotVVV       , "VVV"},
+    { kPlotTVX       , "tVx"},
+    { kPlotVG	     , "V#gamma" },
+    { kPlotHiggs     , "Higgs"},
+    { kPlotWS	     , "Wrong sign"},
+    { kPlotOther     , "Other bkg."},
+    { kPlotEM	     , "Nonresonant"},
+    { kPlotBSM       , "BSM"},
+    { kPlotSignal0   , "Signal 0"},
+    { kPlotSignal1   , "Signal 1"},
+    { kPlotSignal2   , "Signal 2"},
+    { kPlotSignal3   , "Signal 3"},
+    { kPlotSignal4   , "Signal 4"},
+    { kPlotSignal5   , "Signal 5"}
 };
