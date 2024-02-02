@@ -18,7 +18,7 @@ voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 
 tar cvzf skim.tgz \
 skim.py skim_*.cfg \
-functions_skim.cc haddnanoaod.py \
+functions_skim.h haddnanoaod.py \
 jsns/* config/*
 
 mkdir -p logs;

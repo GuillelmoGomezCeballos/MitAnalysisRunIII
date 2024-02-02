@@ -59,10 +59,9 @@ class MyCorrections {
 
 MyCorrections::MyCorrections(int the_input_year) {
 
-  //if(the_input_year == 20221) the_input_year = 2022;
-
   year = the_input_year;
-  if(year == 2023) year = 20221;
+  if     (year == 20230) year = 20220;
+  else if(year == 20231) year = 20220;
 
   //std::string dirName    = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/";
   std::string dirName    = "jsonpog-integration/POG/";

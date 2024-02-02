@@ -38,6 +38,10 @@ elif [ $theAna -eq 5 ]; then
    nohup ./analysis_slurm.sh 136 20220 -1 1003 fakeAnalysis >& logs/log_136 &
    nohup ./analysis_slurm.sh 210 20221 -1 1002 fakeAnalysis >& logs/log_210 &
    nohup ./analysis_slurm.sh 236 20221 -1 1003 fakeAnalysis >& logs/log_236 &
+   nohup ./analysis_slurm.sh 310 20230 -1 1002 fakeAnalysis >& logs/log_310 &
+   nohup ./analysis_slurm.sh 336 20230 -1 1003 fakeAnalysis >& logs/log_336 &
+   nohup ./analysis_slurm.sh 410 20231 -1 1002 fakeAnalysis >& logs/log_410 &
+   nohup ./analysis_slurm.sh 436 20231 -1 1003 fakeAnalysis >& logs/log_436 &
  fi
 
 elif [ $theAna -eq 6 ]; then

@@ -5,8 +5,7 @@ import math
 
 ROOT.ROOT.EnableImplicitMT(2)
 
-if "./functions_skim.so" not in ROOT.gSystem.GetLibraries():
-    ROOT.gSystem.CompileMacro("./functions_skim.cc","k")
+ROOT.gInterpreter.Declare('#include "functions_skim.h"')
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -144,7 +143,7 @@ if __name__ == "__main__":
     elif("Run3Summer22" in sampleToSkim):
         year = 2022
         isSkimData = 0
-    elif("Run3Winter23" in sampleToSkim):
+    elif("Run3Summer23" in sampleToSkim):
         year = 2023
         isSkimData = 0
 

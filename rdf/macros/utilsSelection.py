@@ -15,6 +15,14 @@ def getBTagCut(type,year):
        value[0] = 0.7300
        value[1] = 0.3196
        value[2] = 0.0614
+    elif(year == 20230):
+       value[0] = 0.6553
+       value[1] = 0.2431
+       value[2] = 0.0479
+    elif(year == 20231):
+       value[0] = 0.6563
+       value[1] = 0.2435
+       value[2] = 0.0480
 
     return value[type]
 
@@ -31,6 +39,14 @@ def getBTagCut2(type,year):
        value[0] = 0.6915
        value[1] = 0.2605
        value[2] = 0.0499
+    elif(year == 20230):
+       value[0] = 0.6172
+       value[1] = 0.1917
+       value[2] = 0.0358
+    elif(year == 20231):
+       value[0] = 0.6133
+       value[1] = 0.1919
+       value[2] = 0.0359
 
     return value[type]
 
@@ -47,6 +63,14 @@ def getBTagCut3(type,year):
        value[0] = 0.8604
        value[1] = 0.4510
        value[2] = 0.0897
+    elif(year == 20230):
+       value[0] = 0.7969
+       value[1] = 0.3487
+       value[2] = 0.0681
+    elif(year == 20231):
+       value[0] = 0.7994
+       value[1] = 0.3494
+       value[2] = 0.0683
 
     return value[type]
 
@@ -765,9 +789,13 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
     ELEYEAR = "NULL"
     if  (year == 20220): ELEYEAR = "2022Re-recoBCD"
     elif(year == 20221): ELEYEAR = "2022Re-recoE+PromptFG"
+    elif(year == 20230 or
+         year == 20231): ELEYEAR = "2022Re-recoBCD"
     PHOYEAR = "NULL"
     if  (year == 20220): PHOYEAR = "2022Re-recoBCD"
     elif(year == 20221): PHOYEAR = "2022Re-recoE+PromptFG"
+    elif(year == 20230 or
+         year == 20231): PHOYEAR = "2022Re-recoBCD"
     if(correctionString == "_correction"):
         MUOWP = "Medium"
         ELEWP = "Medium"

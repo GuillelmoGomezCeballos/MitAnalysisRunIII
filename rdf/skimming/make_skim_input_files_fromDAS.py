@@ -17,6 +17,10 @@ def findDataset(name):
 
     return files_ROOT
 
+#dasgoclient --query="dataset status=* dataset=/*/*Run3Summer23NanoAODv12*/NANOAODSIM" | sort > lll;
+#grep FAKE skim_input_samples_2023a_fromDAS.cfg|awk '{split($1,a,"+");print"grep "a[1]" lll"}' > ll
+#dasgoclient --query="dataset status=* dataset=/*/*Run3Summer23BPixNanoAODv12*/NANOAODSIM" | sort > lll;
+#grep FAKE skim_input_samples_2023b_fromDAS.cfg|awk '{split($1,a,"+");print"grep "a[1]" lll"}' > ll
 
 if __name__ == "__main__":
 

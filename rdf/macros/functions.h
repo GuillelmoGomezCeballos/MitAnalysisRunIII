@@ -511,6 +511,7 @@ Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const
     for(unsigned int i=0;i<pt.size();i++) new_pt[i] = pt[i];
   }*/
   //else {
+  if(year == 20220 || year == 20221){
     if    (type == 10) { // data
       for(unsigned int i=0;i<pt.size();i++) {
         new_pt[i] = pt[i]*corrSFs.eval_electronScale((char*)"total_correction", gain[i], (double)run, eta[i], r9[i], pt[i]);
@@ -533,7 +534,12 @@ Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const
         if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f %.6f %.6f\n",i,type,pt[i],new_pt[i],rho,rho_unc,scale_unc);
       }
     }
-  //}
+  }
+  else {
+    for(unsigned int i=0;i<pt.size();i++) {
+       new_pt[i] = pt[i];
+    }
+  }
 
   return new_pt;
 }
