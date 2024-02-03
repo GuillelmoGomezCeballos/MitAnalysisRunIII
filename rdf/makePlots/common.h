@@ -91,9 +91,9 @@ std::map<int, int> plotColors={
 
 std::map<int, TString> plotNames={
     { kPlotData      , "Data"},
-    { kPlotqqWW      , "qq #rightarrow WW"},
+    { kPlotqqWW      , "WW"},
     { kPlotggWW      , "gg #rightarrow WW"},
-    { kPlotTT	     , "t#bar{t}"},
+    { kPlotTT	     , "Top-quark"},
     { kPlotTW	     , "tW"},
     { kPlotDY	     , "Drell-Yan"},
     { kPlotEWKSSWW   , "W^{#pm}W^{#pm}"},

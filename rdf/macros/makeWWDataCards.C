@@ -182,9 +182,25 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   double scaleFactorFiducial[nSelTotal][nPlotCategories];
  for(unsigned nSel=0; nSel<nSelTotal; nSel++) for(int ic=0; ic<nPlotCategories; ic++) scaleFactorFiducial[nSel][ic] = 0.0;
 
-  int BinXF = nSelTotal; double minXF = -0.5; double maxXF = nSelTotal-0.5;    
-  if(whichAna != 0){
-    BinXF = 25; minXF = 85; maxXF = 385;    
+  int BinXF = nSelTotal; double minXF = -0.5; double maxXF = nSelTotal-0.5;
+  if     (whichAna == 1){
+    BinXF = 25; minXF = 85; maxXF = 385;
+  }
+  else if(whichAna == 2){
+    BinXF = 25; minXF = 0; maxXF = 200;
+  }
+  else if(whichAna == 3){
+    BinXF = 25; minXF = 25; maxXF = 225;
+  }
+  else if(whichAna == 4){
+    BinXF = 30; minXF = 20; maxXF = 200;
+  }
+  else if(whichAna == 5){
+    BinXF = 25; minXF = 0; maxXF = 3.1416;
+  }
+  else {
+    printf("WRONG OPTION");
+    return;
   }
 
   for(int ic=0; ic<nPlotCategories; ic++) {
@@ -260,7 +276,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
   } // Default analysis
   else if(whichAna != 0){
-    inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,600+fidAna*jumpValue), "read");
+    inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,800+fidAna*jumpValue), "read");
     for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
       histo_Baseline[ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Baseline[ic]); histo_Baseline[ic]->SetDirectory(0);
       histo_Baseline[ic]->SetNameTitle(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()));
@@ -268,7 +284,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     delete inputFile;
 
     for(int j=0; j<nSystTotal; j++){
-      inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,600+fidAna*jumpValue+1+j), "read");
+      inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,800+fidAna*jumpValue+1+j), "read");
       for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
         histo_Syst[j][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Syst[j][ic]); histo_Syst[j][ic]->SetDirectory(0);
         histo_Syst[j][ic]->SetNameTitle(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()));
@@ -443,11 +459,19 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     for(int nb=1; nb<=histo_Baseline[kPlotNonPrompt]->GetNbinsX(); nb++){
       if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
         systValue = histo_NonPromtUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotNonPrompt]->GetBinContent(nb);
-        if     (systValue > 1.15) systValue = 1.15;
-        else if(systValue < 0.85) systValue = 0.85;
+        if     (systValue > 0 && systValue > 1.15) systValue = 1.15;
+        else if(systValue > 0 && systValue < 0.85) systValue = 0.85;
         histo_NonPromtUnc[j+0]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)*systValue);
-        printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
+        if(whichAna == 0) printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
         if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
+        else {
+                          histo_NonPromtUnc[j+                  0]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb));
+                          histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb));
+             }
+      }
+      else {
+        histo_NonPromtUnc[j+                  0]->SetBinContent(nb,0.0f);
+        histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,0.0f);
       }
     }
   }
