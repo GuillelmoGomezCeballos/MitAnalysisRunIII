@@ -97,6 +97,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   gStyle->SetOptStat(0);
 
   TH1F* _hist[nPlotCategories];
+  TH1F* _histo_total;
   StandardPlot myPlot;
   myPlot.setDoApplyBinWidth(doApplyBinWidth);
   myPlot.setLumi(lumi);
@@ -120,6 +121,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   TH1F* hBck = 0;
   for(int ic=0; ic<nPlotCategories; ic++){
     _hist[ic] = (TH1F*)file->Get(Form("histo%d",ic));
+    _histo_total = (TH1F*)file->Get(Form("histo_total"));
   }
 
   int isVBS[2] = {0, 0};
@@ -215,13 +217,12 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
 
     else if(isVBS[1] == 1 && ic == kPlotggWW)    {_hist[kPlotEWKWZ]  ->Add(_hist[ic]); _hist[ic]->Scale(0);}
 
-    else if(isVBS[0] == 3 && ic ==    kPlotggWW && _hist[ic])     {_hist[kPlotggWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
     else if(isVBS[0] == 3 && ic == kPlotSignal0 && _hist[ic])     {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
     else if(isVBS[0] == 3 && ic == kPlotSignal1 && _hist[ic])     {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
     else if(isVBS[0] == 3 && ic == kPlotSignal2 && _hist[ic])     {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
-    else if(isVBS[0] == 3 && ic == kPlotSignal3 && _hist[ic])     {_hist[kPlotggWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
-    else if(isVBS[0] == 3 && ic == kPlotSignal4 && _hist[ic])     {_hist[kPlotggWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
-    else if(isVBS[0] == 3 && ic == kPlotSignal5 && _hist[ic])     {_hist[kPlotggWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic == kPlotSignal3 && _hist[ic])     {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic == kPlotSignal4 && _hist[ic])     {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
+    else if(isVBS[0] == 3 && ic == kPlotSignal5 && _hist[ic])     {_hist[kPlotqqWW]->Add(_hist[ic]);_hist[ic]->Scale(0);}
     //printf("DEBUG3 %d\n",ic);
   }
   
@@ -235,6 +236,14 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
           totalStatUnc = totalStatUnc + TMath::Power(_hist[ic]->GetBinError(i),2);
         }
       }
+    }
+  }
+
+  if(_histo_total){
+    for(int i=1; i<=hBck->GetNbinsX(); i++){
+      printf("(%2d) %7.1f +/- %5.1f | %7.1f +/- %5.1f\n",i,hBck->GetBinContent(i),hBck->GetBinError(i),_histo_total->GetBinContent(i),_histo_total->GetBinError(i));
+      if(hBck->GetBinContent(i) > 0 && abs(hBck->GetBinContent(i)-_histo_total->GetBinContent(i))/hBck->GetBinContent(i) > 0.01) printf("Big difference!\n");
+      hBck->SetBinError(i,max(hBck->GetBinError(i),_histo_total->GetBinError(i)));
     }
   }
 
@@ -422,8 +431,8 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   // Set the y-axis range symmetric around y=0
   Double_t dy = TMath::Max(TMath::Abs(hRatio->GetMaximum()),
                            TMath::Abs(hRatio->GetMinimum())) + theLines[1];
-  minRatio = TMath::Min(TMath::Max(minRatio-0.10,0.000),0.501);
-  maxRatio = TMath::Min(TMath::Max(maxRatio+0.10,1.400),2.999);
+  minRatio = TMath::Min(TMath::Max(minRatio-0.10,0.000),0.750);
+  maxRatio = TMath::Min(TMath::Max(maxRatio+0.10,1.250),2.999);
   if(showPulls) hBand->GetYaxis()->SetRangeUser(-dy, +dy);
   else          hBand->GetYaxis()->SetRangeUser(minRatio,maxRatio);
   hRatio->GetYaxis()->CenterTitle();

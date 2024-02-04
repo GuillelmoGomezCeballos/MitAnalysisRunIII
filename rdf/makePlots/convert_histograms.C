@@ -12,6 +12,7 @@ void convert_histograms(TString inputSampleName = "/home/submit/ceballos/cards/c
 
   TH1F* histo[nPlotCategories];
   for(int nc=0; nc<nPlotCategories; nc++) histo[nc] = NULL;
+  TH1F* histo_total = NULL;
 
   for(int nc=0; nc<nPlotCategories; nc++) {
     if((TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), plotBaseNames[nc].Data()))){
@@ -20,8 +21,15 @@ void convert_histograms(TString inputSampleName = "/home/submit/ceballos/cards/c
       histo[nc]->SetDirectory(0);
     }
   }
+
+  if((TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "total"))){
+    histo_total = (TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "total"));
+    histo_total->SetNameTitle(Form("histo_total"),Form("histo_total"));
+    histo_total->SetDirectory(0);
+  }
+
   // Special for Data
-  if((TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "DATA"))){
+  if((TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "total"))){
     histo[kPlotData] = (TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "DATA"));
     histo[kPlotData]->SetNameTitle(Form("histo%d",kPlotData),Form("histo%d",kPlotData));
     histo[kPlotData]->SetDirectory(0);
@@ -39,6 +47,7 @@ void convert_histograms(TString inputSampleName = "/home/submit/ceballos/cards/c
     if(!histo[nc]) continue;
     histo[nc]->Write();
   }
+  if(histo_total) histo_total->Write();
   fileOutput.Close();
 }
 //root -q -b -l ~/cms/MitAnalysisRunIII/rdf/makePlots/finalPlot.C+'(0,1,"X","Y","output.root","mva",0,2019,"",1.0,0,"",1,"","","")';
