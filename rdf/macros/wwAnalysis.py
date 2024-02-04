@@ -682,9 +682,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 maxXF1 = 225
                 varToFit = "ptl1"
             elif(whichVarToFit == 3):
-                BinXF1 = 30
+                BinXF1 = 25
                 minXF1 = 20
-                maxXF1 = 200
+                maxXF1 = 170
                 varToFit = "ptl2"
             elif(whichVarToFit == 4):
                 BinXF1 = 25
