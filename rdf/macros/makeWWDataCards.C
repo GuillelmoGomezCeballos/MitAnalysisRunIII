@@ -193,7 +193,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     BinXF = 25; minXF = 25; maxXF = 225;
   }
   else if(whichAna == 4){
-    BinXF = 30; minXF = 20; maxXF = 200;
+    BinXF = 25; minXF = 20; maxXF = 170;
   }
   else if(whichAna == 5){
     BinXF = 25; minXF = 0; maxXF = 3.1416;
