@@ -665,29 +665,29 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histoNonPrompt[5+startNonPrompt] = dftop1cat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "ngood_jets","weightFakeAlte2")
 
         if(makeDataCards == 2):
-            BinXF1 = 25
+            BinXF1 = 20
             minXF1 = 85
             maxXF1 = 385
             varToFit = "mll"
             varMuPtUnc = "MuonMomUp"
             varElPtUnc = "ElectronMomUp"
             if(whichVarToFit == 1):
-                BinXF1 = 25
+                BinXF1 = 20
                 minXF1 = 0
                 maxXF1 = 200
                 varToFit = "ptll"
             elif(whichVarToFit == 2):
-                BinXF1 = 25
+                BinXF1 = 20
                 minXF1 = 25
                 maxXF1 = 225
                 varToFit = "ptl1"
             elif(whichVarToFit == 3):
-                BinXF1 = 25
+                BinXF1 = 20
                 minXF1 = 20
-                maxXF1 = 170
+                maxXF1 = 160
                 varToFit = "ptl2"
             elif(whichVarToFit == 4):
-                BinXF1 = 25
+                BinXF1 = 20
                 minXF1 = 0
                 maxXF1 = 3.1416
                 varToFit = "dphill"
