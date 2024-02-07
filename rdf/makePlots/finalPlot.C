@@ -243,7 +243,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
     for(int i=1; i<=hBck->GetNbinsX(); i++){
       printf("(%2d) %7.1f +/- %5.1f | %7.1f +/- %5.1f\n",i,hBck->GetBinContent(i),hBck->GetBinError(i),_histo_total->GetBinContent(i),_histo_total->GetBinError(i));
       if(hBck->GetBinContent(i) > 0 && abs(hBck->GetBinContent(i)-_histo_total->GetBinContent(i))/hBck->GetBinContent(i) > 0.01) printf("Big difference!\n");
-      hBck->SetBinError(i,max(hBck->GetBinError(i),_histo_total->GetBinError(i)));
+      hBck->SetBinError(i,_histo_total->GetBinError(i));
     }
   }
 

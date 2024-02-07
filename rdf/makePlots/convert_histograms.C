@@ -5,7 +5,7 @@
 #include <map>
 #include "common.h"
 
-void convert_histograms(TString inputSampleName = "/home/submit/ceballos/cards/combine_plots/mytest.root", 
+void convert_histograms(bool isModify = false, TString inputSampleName = "/home/submit/ceballos/cards/combine_plots/mytest.root", 
   TString subFoldersName = "combinedMy/mll", TString outputSampleName = "output.root"){
 
   TFile *fileInput = new TFile(inputSampleName.Data(), "read");
@@ -26,6 +26,17 @@ void convert_histograms(TString inputSampleName = "/home/submit/ceballos/cards/c
     histo_total = (TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "total"));
     histo_total->SetNameTitle(Form("histo_total"),Form("histo_total"));
     histo_total->SetDirectory(0);
+    for(int i=1; i<=histo_total->GetNbinsX(); i++) if(isModify == true) histo_total->SetBinError(i,1.5*histo_total->GetBinError(i));
+    for(int i=1; i<=histo_total->GetNbinsX(); i++){
+      if(i == histo_total->GetNbinsX() || isModify == false) continue;
+      if(histo_total->GetBinContent(i) > 0 && histo_total->GetBinContent(i+1) > 0){
+        //printf("%d %f %f %f -- ",0,histo_total->GetBinError(i+1),histo_total->GetBinContent(i+1),histo_total->GetBinError(i+1)/histo_total->GetBinContent(i+1));
+        if(histo_total->GetBinError(i+1)/histo_total->GetBinContent(i+1) > 
+         2*histo_total->GetBinError(i)/histo_total->GetBinContent(i))
+           histo_total->SetBinError(i+1,histo_total->GetBinContent(i+1)*histo_total->GetBinError(i)/histo_total->GetBinContent(i));
+        //printf("%d %f %f %f\n",0,histo_total->GetBinError(i+1),histo_total->GetBinContent(i+1),histo_total->GetBinError(i+1)/histo_total->GetBinContent(i+1));
+      }
+    }
   }
 
   // Special for Data
