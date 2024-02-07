@@ -183,20 +183,22 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
  for(unsigned nSel=0; nSel<nSelTotal; nSel++) for(int ic=0; ic<nPlotCategories; ic++) scaleFactorFiducial[nSel][ic] = 0.0;
 
   int BinXF = nSelTotal; double minXF = -0.5; double maxXF = nSelTotal-0.5;
-  if     (whichAna == 1){
-    BinXF = 25; minXF = 85; maxXF = 385;
+  if     (whichAna == 0){
+  }
+  else if(whichAna == 1){
+    BinXF = 20; minXF = 85; maxXF = 385;
   }
   else if(whichAna == 2){
-    BinXF = 25; minXF = 0; maxXF = 200;
+    BinXF = 20; minXF = 0; maxXF = 200;
   }
   else if(whichAna == 3){
-    BinXF = 25; minXF = 25; maxXF = 225;
+    BinXF = 20; minXF = 25; maxXF = 225;
   }
   else if(whichAna == 4){
-    BinXF = 25; minXF = 20; maxXF = 170;
+    BinXF = 20; minXF = 20; maxXF = 160;
   }
   else if(whichAna == 5){
-    BinXF = 25; minXF = 0; maxXF = 3.1416;
+    BinXF = 20; minXF = 0; maxXF = 3.1416;
   }
   else {
     printf("WRONG OPTION");

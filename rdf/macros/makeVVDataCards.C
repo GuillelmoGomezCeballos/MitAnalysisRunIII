@@ -318,6 +318,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
         for(int nuis=0; nuis<nSystDataCardTotal; nuis++) {
           histo_SystDataCard[nuis][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
         }
+      }
     } // loop over bins
   } // loop over categories
 
