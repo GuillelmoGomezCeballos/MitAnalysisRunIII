@@ -200,6 +200,9 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   else if(whichAna == 5){
     BinXF = 20; minXF = 0; maxXF = 3.1416;
   }
+  else if(whichAna == 6){
+    BinXF = 20; minXF = 0; maxXF = 200;
+  }
   else {
     printf("WRONG OPTION");
     return;
@@ -238,21 +241,21 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
       inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*jumpValue), "read");
       for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
-	histo_Auxiliar[nSel][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Auxiliar[nSel][ic]);
-      if((ic == kPlotSignal0 || ic == kPlotSignal1 ||
-          ic == kPlotSignal2 || ic == kPlotSignal3 ||
-          ic == kPlotSignal4 || ic == kPlotSignal5 ||
-          ic == kPlotqqWW    || ic == kPlotggWW) && histo_Auxiliar[nSel][ic]->GetSumOfWeights() > 0) scaleFactorFiducial[nSel][ic] = histo_Auxiliar[nSel][ic]->GetSumOfWeights();
-	histo_Baseline[ic]->SetBinContent(nSel+1,histo_Auxiliar[nSel][ic]->GetBinContent(fidAna));
-	histo_Baseline[ic]->SetBinError  (nSel+1,histo_Auxiliar[nSel][ic]->GetBinError  (fidAna));
+        histo_Auxiliar[nSel][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Auxiliar[nSel][ic]);
+        if((ic == kPlotSignal0 || ic == kPlotSignal1 ||
+            ic == kPlotSignal2 || ic == kPlotSignal3 ||
+            ic == kPlotSignal4 || ic == kPlotSignal5 ||
+            ic == kPlotqqWW    || ic == kPlotggWW) && histo_Auxiliar[nSel][ic]->GetSumOfWeights() > 0) scaleFactorFiducial[nSel][ic] = histo_Auxiliar[nSel][ic]->GetSumOfWeights();
+        histo_Baseline[ic]->SetBinContent(nSel+1,histo_Auxiliar[nSel][ic]->GetBinContent(fidAna));
+        histo_Baseline[ic]->SetBinError  (nSel+1,histo_Auxiliar[nSel][ic]->GetBinError  (fidAna));
       }
       delete inputFile;
     }
 
     for(int j=0; j<nSystTotal; j++){
       for(unsigned nSel=0; nSel<nSelTotal; nSel++) {
-	inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*jumpValue+1+j), "read");
-	for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
+        inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d_mva.root",InputDir.Data(),anaSel.Data(),year,nSel*jumpValue+1+j), "read");
+        for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
           histo_Auxiliar[nSel][ic] = (TH1D*)inputFile->Get(Form("histoMVA%d", ic)); assert(histo_Auxiliar[nSel][ic]);
 
           if(isFiducial == true && 
@@ -1238,6 +1241,35 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     else                     newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
+
+  if(whichAna == 6){
+    newcardShape << Form("metJER shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else                     newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
+
+    newcardShape << Form("metJES shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else                     newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
+
+    newcardShape << Form("metUnclustered shape ");
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else                     newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
+  }
 
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic== kPlotData || ic == kPlotNonPrompt || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;

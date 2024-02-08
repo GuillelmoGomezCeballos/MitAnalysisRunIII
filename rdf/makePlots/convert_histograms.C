@@ -26,7 +26,7 @@ void convert_histograms(bool isModify = false, TString inputSampleName = "/home/
     histo_total = (TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "total"));
     histo_total->SetNameTitle(Form("histo_total"),Form("histo_total"));
     histo_total->SetDirectory(0);
-    for(int i=1; i<=histo_total->GetNbinsX(); i++) if(isModify == true) histo_total->SetBinError(i,1.5*histo_total->GetBinError(i));
+    for(int i=1; i<=histo_total->GetNbinsX(); i++) if(isModify == true) histo_total->SetBinError(i,1.9*histo_total->GetBinError(i));
     for(int i=1; i<=histo_total->GetNbinsX(); i++){
       if(i == histo_total->GetNbinsX() || isModify == false) continue;
       if(histo_total->GetBinContent(i) > 0 && histo_total->GetBinContent(i+1) > 0){

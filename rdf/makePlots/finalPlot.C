@@ -280,6 +280,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
     if(ic == kPlotBSM && higgsLabel == "W_{L}W_{L}") {_hist[ic]->Scale(10.0); myPlot.setHiggsLabel("W_{L}W_{L} x 10");}
     if(_hist[ic]->GetSumOfWeights() > 0) myPlot.setMCHist(ic, _hist[ic]);
   }
+   myPlot.setAllHist(hBck);
 
   myPlot.setOverlaid(false);
   if(isSignalStack == true){

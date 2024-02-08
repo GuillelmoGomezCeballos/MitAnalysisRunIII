@@ -14,7 +14,7 @@
 #include "TRandom.h"
 #include "common.h"
 
-void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceballos/cards/ww_2022/logs_ana1001/fitDiagnosticsww_incl_exp.root") {
+void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceballos/cards/ww_2022/logs_ana1012/fitDiagnosticsww_fid_excl_obs.root") {
 
   TFile *mlfit = TFile::Open(mlfitResult); assert(mlfit);
 
@@ -46,8 +46,10 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
         if(_hist[nc][ic]){
           for(int nr=0; nr<regions; nr++){
             int theIC = ic;
-	    if(ic == kPlotqqWW || ic == kPlotggWW ||
-	       ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2) theIC = kPlotqqWW;
+            if(ic == kPlotqqWW || ic == kPlotggWW ||
+               ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2 ||
+               ic == kPlotSignal3 || ic == kPlotSignal4 || ic == kPlotSignal5) theIC = kPlotqqWW;
+            if(ic == kPlotTT || ic == kPlotTW) theIC = kPlotTT;
             yields[nr][theIC]  += _hist[nc][ic]->GetBinContent(nr+1);
             yieldsE[nr][theIC] += _hist[nc][ic]->GetBinError(nr+1);
             nonZeroYields[theIC] = true;
@@ -79,7 +81,8 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
       printf("%20s & ",plotBaseNames[ic].Data());
       for(int nr=0; nr<regions; nr++){
         yieldsE[nr][kPlotData] = sqrt(yieldsE[nr][kPlotData]);
-        printf(" %7.1f $\\pm$ %5.1f ",yields[nr][ic],yieldsE[nr][ic]);
+        if(ic == kPlotData) printf("      %6d         ",(int)yields[nr][ic]);
+        else                printf(" %7.1f $\\pm$ %5.1f ",yields[nr][ic],yieldsE[nr][ic]);
         if(nr == regions-1) printf("\\\\"); else printf("&");
       }
       printf("\n");

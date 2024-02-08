@@ -157,6 +157,7 @@ class StandardPlot {
     public: 
         StandardPlot() { _doApplyBinWidth = false; _hist.resize(nPlotCategories,0); _hist[kPlotData] = 0; _breakdown = false; _HiggsLabel = ""; _Higgs2Label = "";_labelEM = " Nonprompt";_labelVVV = " VVV";}
         void setMCHist   (int s, TH1F * h)  { _hist[s] = h;} 
+        void setAllHist  (TH1F * h)         { _hist_total = h;} 
         void setOverlaid  (bool b)   { isBSMOverlaid = b;   }
         void setLabelEM   (TString s){ _labelEM  = s.Data();}
         void setLabelVVV  (TString s){ _labelVVV = s.Data();}
@@ -218,6 +219,7 @@ class StandardPlot {
                 hstack->Add(_hist[ic]);
 		hSum  ->Add(_hist[ic]);
             }
+            if(_hist_total) for(int i=1; i<=_hist_total->GetNbinsX(); i++) {hSum->SetBinError(i,_hist_total->GetBinError(i));}
 
             if(_hist[kPlotBSM]    ) _hist[kPlotBSM    ]->SetLineWidth(4);
             if(_hist[kPlotSignal0]) _hist[kPlotSignal0]->SetLineWidth(4);
@@ -465,6 +467,7 @@ class StandardPlot {
 
     private: 
         std::vector<TH1F*> _hist;
+        TH1F* _hist_total;
 
         //MWL
         float    _lumi;
