@@ -26,7 +26,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   WWNNLO_scaleSyst[0][2] = 1.014; WWNNLO_scaleSyst[1][2] = 1.004; WWNNLO_scaleSyst[2][2] = 0.995;
   WWNNLO_scaleSyst[0][3] = 1.020; WWNNLO_scaleSyst[1][3] = 1.010; WWNNLO_scaleSyst[2][3] = 0.997;
 
-  bool useJESUncTopDY = false;
+  bool useJESUncTopDY = true;
 
   if(fidAna <= 0 || fidAna >= 5) printf("Wrong fidAna(%d)\n",fidAna);
 
