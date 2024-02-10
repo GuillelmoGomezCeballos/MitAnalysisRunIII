@@ -47,11 +47,38 @@ void computeGenPtWWUnc(TString input = "", const int whichAna = 0){
     }
     printf("\n");
   }
-
-  histo_Baseline->Scale(1./histo_Baseline->GetSumOfWeights());
-  for(int i=0; i<number_unc; i++) {
-    histo_PTWWUnc[i]->Scale(1./histo_PTWWUnc[i]->GetSumOfWeights());
+  printf("===> Symmetric uncertainties\n");
+  for(int nb=1; nb<=histo_Baseline->GetNbinsX(); nb++){
+    double unc[6] = {
+    abs(histo_PTWWUnc[1]->GetBinContent(nb)-histo_PTWWUnc[2]->GetBinContent(nb))/2.,
+    abs(histo_PTWWUnc[3]->GetBinContent(nb)-histo_PTWWUnc[4]->GetBinContent(nb))/2.,
+    0.,
+    abs(histo_PTWWUnc[1]->GetBinContent(nb)-histo_PTWWUnc[2]->GetBinContent(nb))/2.,
+    abs(histo_PTWWUnc[3]->GetBinContent(nb)-histo_PTWWUnc[4]->GetBinContent(nb))/2.,
+    0.
+    };
+    unc[2] = sqrt(unc[0]*unc[0]+unc[1]*unc[1]);
+    unc[5] = sqrt(unc[3]*unc[3]+unc[4]*unc[4]);
+    printf("bin(%d) ",nb);
+    printf("%.3f %.3f -> %.3f | %.3f %.3f -> %.3f",
+    unc[0]/histo_PTWWUnc[0]->GetBinContent(nb),
+    unc[1]/histo_PTWWUnc[0]->GetBinContent(nb),
+    unc[2]/histo_PTWWUnc[0]->GetBinContent(nb),
+    unc[3]/histo_Baseline->GetBinContent(nb),
+    unc[4]/histo_Baseline->GetBinContent(nb),
+    unc[5]/histo_Baseline->GetBinContent(nb));
+    printf("\n");
   }
+
+  for(int i=0; i<number_unc; i++) {
+    histo_PTWWUnc[i]->Scale(histo_Baseline->GetSumOfWeights()/histo_PTWWUnc[i]->GetSumOfWeights());
+  }
+  printf("===> Overall rescaled yields, analysis: %s\n",anaName[whichAna].Data());
+  printf("%5.1f ",histo_Baseline->GetSumOfWeights());
+  for(int i=0; i<number_unc; i++) {
+    printf("| %6.1f ",histo_PTWWUnc[i]->GetSumOfWeights());
+  }
+  printf("\n");
 
   printf("===> Relative uncertainties\n");
   for(int nb=1; nb<=histo_Baseline->GetNbinsX(); nb++){
@@ -63,12 +90,24 @@ void computeGenPtWWUnc(TString input = "", const int whichAna = 0){
   }
   printf("===> Relative symmetric uncertainties\n");
   for(int nb=1; nb<=histo_Baseline->GetNbinsX(); nb++){
+    double unc[6] = {
+    abs(histo_PTWWUnc[1]->GetBinContent(nb)-histo_PTWWUnc[2]->GetBinContent(nb))/2.,
+    abs(histo_PTWWUnc[3]->GetBinContent(nb)-histo_PTWWUnc[4]->GetBinContent(nb))/2.,
+    0.,
+    abs(histo_PTWWUnc[1]->GetBinContent(nb)-histo_PTWWUnc[2]->GetBinContent(nb))/2.,
+    abs(histo_PTWWUnc[3]->GetBinContent(nb)-histo_PTWWUnc[4]->GetBinContent(nb))/2.,
+    0.
+    };
+    unc[2] = sqrt(unc[0]*unc[0]+unc[1]*unc[1]);
+    unc[5] = sqrt(unc[3]*unc[3]+unc[4]*unc[4]);
     printf("bin(%d) ",nb);
-    printf("%.3f %.3f | %.3f %.3f",
-    1.0+(histo_PTWWUnc[1]->GetBinContent(nb)-histo_PTWWUnc[2]->GetBinContent(nb))/histo_PTWWUnc[0]->GetBinContent(nb)/2.,
-    1.0+(histo_PTWWUnc[3]->GetBinContent(nb)-histo_PTWWUnc[4]->GetBinContent(nb))/histo_PTWWUnc[0]->GetBinContent(nb)/2.,
-    1.0+(histo_PTWWUnc[1]->GetBinContent(nb)-histo_PTWWUnc[2]->GetBinContent(nb))/histo_Baseline->GetBinContent(nb)/2.,
-    1.0+(histo_PTWWUnc[3]->GetBinContent(nb)-histo_PTWWUnc[4]->GetBinContent(nb))/histo_Baseline->GetBinContent(nb)/2.);
+    printf("%.3f %.3f -> %.3f | %.3f %.3f -> %.3f",
+    unc[0]/histo_PTWWUnc[0]->GetBinContent(nb),
+    unc[1]/histo_PTWWUnc[0]->GetBinContent(nb),
+    unc[2]/histo_PTWWUnc[0]->GetBinContent(nb),
+    unc[3]/histo_Baseline->GetBinContent(nb),
+    unc[4]/histo_Baseline->GetBinContent(nb),
+    unc[5]/histo_Baseline->GetBinContent(nb));
     printf("\n");
   }
 }
