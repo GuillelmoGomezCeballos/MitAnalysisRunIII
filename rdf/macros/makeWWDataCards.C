@@ -27,7 +27,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   WWNNLO_scaleSyst[0][3] = 1.020; WWNNLO_scaleSyst[1][3] = 1.010; WWNNLO_scaleSyst[2][3] = 0.997;
 
   bool useJESUncTopDY = true;
-  if(isFiducial == false && whichAna == 0) useJESUncTopDY = false;
+  //if(isFiducial == false && whichAna == 0) useJESUncTopDY = false;
 
   if(fidAna <= 0 || fidAna >= 5) printf("Wrong fidAna(%d)\n",fidAna);
 
@@ -214,8 +214,8 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   for(int ic=0; ic<nPlotCategories; ic++) {
     histo_Baseline[ic] = new TH1D(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()), BinXF, minXF, maxXF);
     TString plotBaseNamesTemp =  plotBaseNames[ic];
-    if     (ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2 || ic == kPlotqqWW) plotBaseNamesTemp = "qqWW";
-    else if(ic == kPlotSignal3 || ic == kPlotSignal4 || ic == kPlotSignal5 || ic == kPlotggWW) plotBaseNamesTemp = "ggWW";
+    //if     (ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2 || ic == kPlotqqWW) plotBaseNamesTemp = "qqWW";
+    //else if(ic == kPlotSignal3 || ic == kPlotSignal4 || ic == kPlotSignal5 || ic == kPlotggWW) plotBaseNamesTemp = "ggWW";
     histo_QCDScaleUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTUp"  , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
     histo_QCDScaleDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTDown", plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
     histo_PSUp  [ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTUp"  , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
@@ -1276,8 +1276,8 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
 
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic== kPlotData || ic == kPlotNonPrompt || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic== kPlotSignal0 || ic == kPlotSignal1 || ic== kPlotSignal2 || ic == kPlotSignal3 || ic == kPlotSignal4 || ic == kPlotSignal5 || ic == kPlotqqWW || ic == kPlotggWW) continue;
-    newcardShape << Form("QCDScale_%s_ACCEPT	shape	",plotBaseNames[ic].Data());
+    //if(ic== kPlotSignal0 || ic == kPlotSignal1 || ic== kPlotSignal2 || ic == kPlotSignal3 || ic == kPlotSignal4 || ic == kPlotSignal5 || ic == kPlotqqWW || ic == kPlotggWW) continue;
+    newcardShape << Form("QCDScale_%s_ACCEPT shape ",plotBaseNames[ic].Data());
     for(unsigned ic2=0; ic2<nPlotCategories; ic2++) {
       if(ic2 == kPlotData || histo_Baseline[ic2]->GetSumOfWeights() <= 0) continue;
       if(ic==ic2) newcardShape << Form("1.0  ");
@@ -1286,36 +1286,36 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     newcardShape << Form("\n");
   }
 
-  newcardShape << Form("QCDScale_qqWW_ACCEPT shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic != kPlotSignal0 &&
-            ic != kPlotSignal1 &&
-            ic != kPlotSignal2 &&
-            ic != kPlotqqWW
-            ) newcardShape << Form("- ");
-    else      newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
+  //newcardShape << Form("QCDScale_qqWW_ACCEPT shape ");
+  //for (int ic=0; ic<nPlotCategories; ic++){
+  //  if(!histo_Baseline[ic]) continue;
+  //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+  //  if     (ic != kPlotSignal0 &&
+  //          ic != kPlotSignal1 &&
+  //          ic != kPlotSignal2 &&
+  //          ic != kPlotqqWW
+  //          ) newcardShape << Form("- ");
+  //  else      newcardShape << Form("1.0 ");
+  //}
+  //newcardShape << Form("\n");
 
-  newcardShape << Form("QCDScale_ggWW_ACCEPT shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic != kPlotSignal3 &&
-            ic != kPlotSignal4 &&
-            ic != kPlotSignal5 &&
-            ic != kPlotggWW
-            ) newcardShape << Form("- ");
-    else      newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
+  //newcardShape << Form("QCDScale_ggWW_ACCEPT shape ");
+  //for (int ic=0; ic<nPlotCategories; ic++){
+  //  if(!histo_Baseline[ic]) continue;
+  //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+  //  if     (ic != kPlotSignal3 &&
+  //          ic != kPlotSignal4 &&
+  //          ic != kPlotSignal5 &&
+  //          ic != kPlotggWW
+  //          ) newcardShape << Form("- ");
+  //  else      newcardShape << Form("1.0 ");
+  //}
+  //newcardShape << Form("\n");
 
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic== kPlotData || ic == kPlotNonPrompt || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic== kPlotSignal0 || ic == kPlotSignal1 || ic== kPlotSignal2 || ic == kPlotSignal3 || ic == kPlotSignal4 || ic == kPlotSignal5 || ic == kPlotqqWW || ic == kPlotggWW) continue;
-    newcardShape << Form("PS_%s_ACCEPT	shape	",plotBaseNames[ic].Data());
+    //if(ic== kPlotSignal0 || ic == kPlotSignal1 || ic== kPlotSignal2 || ic == kPlotSignal3 || ic == kPlotSignal4 || ic == kPlotSignal5 || ic == kPlotqqWW || ic == kPlotggWW) continue;
+    newcardShape << Form("PS_%s_ACCEPT shape ",plotBaseNames[ic].Data());
     for(unsigned ic2=0; ic2<nPlotCategories; ic2++) {
       if(ic2 == kPlotData || histo_Baseline[ic2]->GetSumOfWeights() <= 0) continue;
       if(ic==ic2) newcardShape << Form("1.0  ");
@@ -1324,31 +1324,31 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     newcardShape << Form("\n");
   } 
 
-  newcardShape << Form("PS_qqWW_ACCEPT shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic != kPlotSignal0 &&
-            ic != kPlotSignal1 &&
-            ic != kPlotSignal2 &&
-            ic != kPlotqqWW
-            ) newcardShape << Form("- ");
-    else      newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
+  //newcardShape << Form("PS_qqWW_ACCEPT shape ");
+  //for (int ic=0; ic<nPlotCategories; ic++){
+  //  if(!histo_Baseline[ic]) continue;
+  //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+  //  if     (ic != kPlotSignal0 &&
+  //          ic != kPlotSignal1 &&
+  //          ic != kPlotSignal2 &&
+  //          ic != kPlotqqWW
+  //          ) newcardShape << Form("- ");
+  //  else      newcardShape << Form("1.0 ");
+  //}
+  //newcardShape << Form("\n");
 
-  newcardShape << Form("PS_ggWW_ACCEPT shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic != kPlotSignal3 &&
-            ic != kPlotSignal4 &&
-            ic != kPlotSignal5 &&
-            ic != kPlotggWW
-            ) newcardShape << Form("- ");
-    else      newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
+  //newcardShape << Form("PS_ggWW_ACCEPT shape ");
+  //for (int ic=0; ic<nPlotCategories; ic++){
+  //  if(!histo_Baseline[ic]) continue;
+  //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+  //  if     (ic != kPlotSignal3 &&
+  //          ic != kPlotSignal4 &&
+  //          ic != kPlotSignal5 &&
+  //          ic != kPlotggWW
+  //          ) newcardShape << Form("- ");
+  //  else      newcardShape << Form("1.0 ");
+  //}
+  //newcardShape << Form("\n");
 
   if(whichAna == 100){ // Never enter here
     newcardShape << Form("WWNNLO_resum shape ");
