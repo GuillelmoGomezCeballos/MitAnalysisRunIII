@@ -26,7 +26,7 @@ void convert_histograms(bool isModify = false, TString inputSampleName = "/home/
     histo_total = (TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "total"));
     histo_total->SetNameTitle(Form("histo_total"),Form("histo_total"));
     histo_total->SetDirectory(0);
-    for(int i=1; i<=histo_total->GetNbinsX(); i++) if(isModify == true) histo_total->SetBinError(i,1.3*histo_total->GetBinError(i));
+    for(int i=1; i<=histo_total->GetNbinsX(); i++) if(isModify == true && inputSampleName.Contains("prefit") == false) histo_total->SetBinError(i,1.3*histo_total->GetBinError(i));
     for(int i=1; i<=histo_total->GetNbinsX(); i++){
       if(i == histo_total->GetNbinsX() || isModify == false) continue;
       if(histo_total->GetBinContent(i) > 0 && histo_total->GetBinContent(i+1) > 0){
@@ -60,11 +60,11 @@ void convert_histograms(bool isModify = false, TString inputSampleName = "/home/
   }
   else if(outputSampleName == "ww_output_bin2.root"){
     whichBin = 2;
-    whichWeight = 4174./3967.;
+    //whichWeight = 4174./3967.;
   }
   else if(outputSampleName == "ww_output_bin3.root"){
     whichBin = 2;
-    whichWeight = 1370./1308.;
+    //whichWeight = 1370./1308.;
   }
 
   if(whichBin != -1) printf("APPLYING SPECIAL WEIGHTS! %d / %f\n",whichBin,whichWeight);
