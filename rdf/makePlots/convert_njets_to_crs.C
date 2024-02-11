@@ -27,11 +27,6 @@ void convert_njets_to_crs(TString postfix = ""){
     _hist[nc] = new TH1F(Form("histo%d",nc), Form("histo%d",nc), 4, -0.5, 3.5);
   }
 
-  if(strcmp(postfix.Data(),"_prefit")==0){
-    _hist[kPlotTT]->SetBinContent(2+1, 4*histo[2][kPlotTT]->GetBinContent(1+1));
-    _hist[kPlotTT]->SetBinContent(3+1, 4*histo[3][kPlotTT]->GetBinContent(1+1));
-  }
-
   for(int ncr=0; ncr<5; ncr++){
     TFile* outFileLimits = new TFile(Form("ww_output_cr%d%s.root",ncr,postfix.Data()),"recreate");
     outFileLimits->cd();

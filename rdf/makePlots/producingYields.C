@@ -14,7 +14,7 @@
 #include "TRandom.h"
 #include "common.h"
 
-void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceballos/cards/ww_smp24001/logs_ana1001/fitDiagnosticsww_fid_normalized0_obs.root") {
+void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceballos/cards/ww_smp24001/fitDiagnosticsww_fid_normalized1_obs.root") {
 
   TFile *mlfit = TFile::Open(mlfitResult); assert(mlfit);
 
