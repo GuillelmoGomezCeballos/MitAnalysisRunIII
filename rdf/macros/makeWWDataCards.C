@@ -444,6 +444,14 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     } // loop over bins
   } // loop over categories
 
+  // QCD scale uncertainty for ggWW
+  for(int ic=0; ic<nPlotCategories; ic++) {
+    if(ic == kPlotSignal3 || ic == kPlotSignal4 || ic == kPlotSignal5 || ic == kPlotggWW) {
+      histo_QCDScaleUp[ic]  ->Scale(1.05);
+      histo_QCDScaleDown[ic]->Scale(1./1.05);
+    }
+  }
+
   // Begin Nonprompt study
   const int nNonPromptSyst = 12;
   TString namenonPromptSyst[nSystTotal];
