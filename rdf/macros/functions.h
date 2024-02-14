@@ -1942,10 +1942,26 @@ int compute_category(const int mc, const int typeFake, const int typeWS, const i
 }
 
 // compute gen category
-int compute_gen_category(const int mc, const int ngood_GenJets, const int ngood_GenDressedLeptons, const Vec_i& GenDressedLepton_pdgId){
+int compute_gen_category(const int mc, const int ngood_GenJets, const int ngood_GenDressedLeptons, const Vec_i& GenDressedLepton_pdgId, 
+                         const Vec_b& GenDressedLepton_hasTauAnc,
+                         const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_eta, const Vec_f& GenDressedLepton_phi, const Vec_f& GenDressedLepton_mass,
+                         const int applyTightSel){
   if(ngood_GenDressedLeptons <= 1) return 0;
   if(GenDressedLepton_pdgId[0] * GenDressedLepton_pdgId[1] > 0)  return 0;
   if(abs(GenDressedLepton_pdgId[0]) == abs(GenDressedLepton_pdgId[1]))  return 0;
+
+  if(applyTightSel >= 1) {
+    if(GenDressedLepton_pt[1] > GenDressedLepton_pt[0]) {printf("PROBLEM, ptl2 > ptl1 at gen level\n");}
+    bool passTightGenSel = GenDressedLepton_pt[0] > 25 &&  GenDressedLepton_pt[1] > 20;
+    if(applyTightSel >= 2) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0;
+    if(applyTightSel >= 3) {
+      float mllGen = Minv2(GenDressedLepton_pt[0], GenDressedLepton_eta[0], GenDressedLepton_phi[0], GenDressedLepton_mass[0],
+                           GenDressedLepton_pt[1], GenDressedLepton_eta[1], GenDressedLepton_phi[1], GenDressedLepton_mass[1]).first;
+      passTightGenSel = passTightGenSel && mllGen > 85;
+    }
+    if(passTightGenSel == false) return 0;
+  }
+
   if     (ngood_GenJets == 0) return 1;
   else if(ngood_GenJets == 1) return 2;
   else if(ngood_GenJets >= 2) return 3;

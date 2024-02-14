@@ -14,7 +14,7 @@ correctionString = ""
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
-bTagSel = 0
+bTagSel = 1
 useBTaggingWeights = 1
 
 useFR = 1
@@ -176,7 +176,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             "vbs_pttot",
             "vbs_detavvj1",
             "vbs_detavvj2",
-	    "vbs_ptbalance"
+            "vbs_ptbalance"
     ]:
         branchList.push_back(branchName)
 

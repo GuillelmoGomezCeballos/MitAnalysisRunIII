@@ -244,7 +244,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
         if((x == plotCategory("kPlotqqWW") or x == plotCategory("kPlotggWW")) and isData == "false"):
             dfcat[x] = selectionGenLepJet(dfcat[x],20,30,jetEtaCut)
-            dfcat[x] = (dfcat[x].Define("theGenCat", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId)".format(x))
+            dfcat[x] = (dfcat[x].Define("theGenCat", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,0)".format(x))
                                 )
         else:
             dfcat[x] = dfcat[x].Define("theGenCat", "{0}".format(0))

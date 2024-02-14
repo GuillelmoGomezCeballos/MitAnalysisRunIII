@@ -77,9 +77,11 @@ def getBTagCut3(type,year):
 def selectionGenLepJet(df,ptlcut,ptjcut,etajcut):
 
     dftag =(df.Define("good_GenDressedLepton", "abs(GenDressedLepton_eta) < 2.5 && GenDressedLepton_pt > {0}".format(ptlcut))
+              .Define("good_GenDressedLepton_hasTauAnc", "GenDressedLepton_hasTauAnc[good_GenDressedLepton]")
               .Define("good_GenDressedLepton_pt", "GenDressedLepton_pt[good_GenDressedLepton]")
               .Define("good_GenDressedLepton_eta", "GenDressedLepton_eta[good_GenDressedLepton]")
               .Define("good_GenDressedLepton_phi", "GenDressedLepton_phi[good_GenDressedLepton]")
+              .Define("good_GenDressedLepton_mass", "GenDressedLepton_mass[good_GenDressedLepton]")
               .Define("good_GenDressedLepton_pdgId", "GenDressedLepton_pdgId[good_GenDressedLepton]")
               .Define("ngood_GenDressedLeptons","Sum(good_GenDressedLepton)*1.0f")
               .Define("GenJet_mask", "cleaningJetFromLepton(GenJet_eta,GenJet_phi,good_GenDressedLepton_eta,good_GenDressedLepton_phi)")

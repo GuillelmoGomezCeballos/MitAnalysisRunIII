@@ -11,8 +11,8 @@ makeDataCards = 2
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
-bTagSel = 0
-useBTaggingWeights = 0
+bTagSel = 1
+useBTaggingWeights = 1
 
 useFR = 0
 
@@ -179,7 +179,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             "vbs_pttot",
             "vbs_detavvj1",
             "vbs_detavvj2",
-	    "vbs_ptbalance"
+            "vbs_ptbalance"
     ]:
         branchList.push_back(branchName)
 
@@ -198,7 +198,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
                     .Define("theCat","compute_category({0},kPlotNonPrompt,kPlotWS,nFake,nTight,0)".format(theCat))
-		    .Define("bdt_vbfinc", ROOT.computeModel, ROOT.model.GetVariableNames())
+                    .Define("bdt_vbfinc", ROOT.computeModel, ROOT.model.GetVariableNames())
                     )
 
     dfzzcatMuonMomUp       = []
@@ -224,6 +224,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
         histo[ 2][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 2,x), "histo_{0}_{1}".format( 2,x),100,  0, 100), "mllZ2{0}".format(altMass),"weight")
         dfzzcat[x] = dfzzcat[x].Filter("mllZ2{0} < 10000".format(altMass),"mllZ2 cut")
+
+        dfzzcatMuonMomUp      .append(dfzzcat[x])
+        dfzzcatElectronMomUp  .append(dfzzcat[x])
+        dfzzcat               [x] = dfzzcat               [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4l{0}           > 150".format(altMass)," nbjets == 0 && m4l > 150")
+        dfzzcatMuonMomUp      [x] = dfzzcatMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomUp     > 150")
+        dfzzcatElectronMomUp  [x] = dfzzcatElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomUp > 150")
 
         histo[ 3][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 40, 10, 210), "ptl1Z1{0}".format(altMass),"weight")
         histo[ 4][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 20, 10, 110), "ptl2Z1{0}".format(altMass),"weight")
@@ -253,7 +259,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfzzvbscat[x].Snapshot("events", outputFile, branchList)
 
         histo[24][x] = dfzzxycat[x].Histo1D(("histo_{0}_{1}".format(24,x), "histo_{0}_{1}".format(24,x),5,-0.5 ,4.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
-        histo[25][x] = dfzzxycat[x].Filter("nbtag_goodbtag_Jet_bjet  > 0").Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x),20, 0, 500), "m4l","weightBTag")
+        histo[25][x] = dfzzxycat[x].Filter("nbtag_goodbtag_Jet_bjet > 0").Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x),20, 0, 500), "m4l","weightBTag")
 
         dfzzxycat[x] = dfzzxycat[x].Filter("nbtag_goodbtag_Jet_bjet == 0")
 
@@ -270,11 +276,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[94][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format(94,x), "histo_{0}_{1}".format(94,x),3,-0.5, 2.5), "FourLepton_flavor","weightNoBTag")
 
         if(makeDataCards == 1):
-            dfzzcatMuonMomUp      .append(dfzzcat[x])
-            dfzzcatElectronMomUp  .append(dfzzcat[x])
-            dfzzcat		  [x] = dfzzcat 	      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4l{0}             > 150".format(altMass)," nbjets == 0 && m4l > 150")
-            dfzzcatMuonMomUp	  [x] = dfzzcatMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomUp       > 150")
-            dfzzcatElectronMomUp  [x] = dfzzcatElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomUp   > 150")
             BinXF = 4
             minXF = -0.5
             maxXF = 3.5
@@ -318,11 +319,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[startF+168][x]    = makeFinalVariable(dfzzcat[x],"ngood_jets"               ,theCat,startF,x,BinXF,minXF,maxXF,168)
 
         elif(makeDataCards == 2):
-            dfzzcatMuonMomUp      .append(dfzzcat[x])
-            dfzzcatElectronMomUp  .append(dfzzcat[x])
-            dfzzcat		  [x] = dfzzcat 	      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4l{0}             > 150".format(altMass)," nbjets == 0 && m4l > 150")
-            dfzzcatMuonMomUp	  [x] = dfzzcatMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lMuonMomUp       > 150")
-            dfzzcatElectronMomUp  [x] = dfzzcatElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 0 && m4lElectronMomUp   > 150")
             BinXF = 1
             minXF = -0.5
             maxXF = 2.5

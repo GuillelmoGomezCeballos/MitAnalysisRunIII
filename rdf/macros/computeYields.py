@@ -7,11 +7,13 @@ if __name__ == "__main__":
     path = "fillhisto_sswwAnalysis1001"
     year = 2022
     output = "anaZ"
+    showUnc = 0
 
-    valid = ['path=', "year=", 'output=', 'help']
+    valid = ['path=', "year=", 'output=', "unc=", 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
     usage +=  "              --output=<{0}>".format(output)
+    usage +=  "              --unc=<{0}>".format(showUnc)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -29,6 +31,8 @@ if __name__ == "__main__":
             year = int(arg)
         if opt == "--output":
             output = str(arg)
+        if opt == "--unc":
+            showUnc = int(arg)
 
     histo = []
     signalDict0 = []
@@ -95,7 +99,8 @@ if __name__ == "__main__":
         inputFile = TFile("{0}/{1}_{2}_{3}.root".format(output,os.path.basename(path),year,histo[nh]),"w")
         theYields  = [0,0,0]
         theYieldsE = [0,0,0]
-        theYieldsProcess  = [0 for y in range(nCat)]
+        theYieldsProcess     = [0 for y in range(nCat)]
+        theYieldsProcessUnc  = [0 for y in range(nCat)]
         for i in range(nCat):
             histoSel[i] = (inputFile.Get("histo{0}".format(i))).Clone()
         for nb in range(1,histoSel[0].GetNbinsX()+1):
@@ -104,9 +109,13 @@ if __name__ == "__main__":
             processesWithEvents = []
             for i in range(nCat):
                 if(histoSel[i].GetSumOfWeights() > 0 or i == plotCategory("kPlotData")):
-                    streamYield += " {0:7.1f}".format(histoSel[i].GetBinContent(nb))
+                    if(showUnc == 0):
+                        streamYield += " {0:7.1f}".format(histoSel[i].GetBinContent(nb))
+                    else:
+                        streamYield += " {0:7.1f} +/- {1:5.1f}".format(histoSel[i].GetBinContent(nb),histoSel[i].GetBinError(nb))
                     processesWithEvents.append(i)
-                theYieldsProcess[i]  += histoSel[i].GetBinContent(nb)
+                theYieldsProcess[i]     += histoSel[i].GetBinContent(nb)
+                theYieldsProcessUnc[i]  += histoSel[i].GetBinError(nb)
                 if(i == plotCategory("kPlotData")):
                     theYields[0]  += histoSel[i].GetBinContent(nb)
                     theYieldsE[0] += histoSel[i].GetBinError(nb)*histoSel[i].GetBinError(nb)
@@ -129,7 +138,10 @@ if __name__ == "__main__":
         streamYield = ""
         for i in range(nCat):
             if(histoSel[i].GetSumOfWeights() > 0 or i == plotCategory("kPlotData")):
-                streamYield += " {0:7.1f}".format(theYieldsProcess[i])
+                if(showUnc == 0):
+                    streamYield += " {0:7.1f}".format(theYieldsProcess[i])
+                else:
+                    streamYield += " {0:7.1f} +/- {1:5.1f}".format(theYieldsProcess[i],theYieldsProcessUnc[i])
         for i in range(3):
             theYieldsE[i] = pow(theYieldsE[i],0.5)
         streamYield = "(xx) {0:7.1f}".format(theYields[1]+theYields[2]) + streamYield
