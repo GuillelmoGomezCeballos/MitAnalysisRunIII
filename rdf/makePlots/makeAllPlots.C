@@ -1077,6 +1077,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l min}"   ,"GeV",Form("ww_output_alt1005_bin-1.root"),"ww_output_alt1005_binx",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#Delta #phi_{ll}",""   ,Form("ww_output_alt1006_bin-1.root"),"ww_output_alt1006_binx",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{miss}"    ,"GeV",Form("ww_output_alt1007_bin-1.root"),"ww_output_alt1007_binx",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{l max}"   ,"GeV",Form("ww_output_alt1009_bin-1.root"),"ww_output_alt1009_binx",0,year,legendBSM.Data(),1.0,isBlinded,"Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"m_{ll}"          ,"GeV",Form("ww_output_alt1002_prefit_bin-1.root"),"ww_output_alt1002_binx_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{ll}"      ,"GeV",Form("ww_output_alt1003_prefit_bin-1.root"),"ww_output_alt1003_binx_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
@@ -1084,6 +1085,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l min}"   ,"GeV",Form("ww_output_alt1005_prefit_bin-1.root"),"ww_output_alt1005_binx_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#Delta #phi_{ll}",""   ,Form("ww_output_alt1006_prefit_bin-1.root"),"ww_output_alt1006_binx_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{miss}"    ,"GeV",Form("ww_output_alt1007_prefit_bin-1.root"),"ww_output_alt1007_binx_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{l max}"   ,"GeV",Form("ww_output_alt1009_prefit_bin-1.root"),"ww_output_alt1009_binx_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     // bin0
     finalPlot(0,1,"m_{ll}"          ,"GeV",Form("ww_output_alt1002_bin0.root"),"ww_output_alt1002_bin0",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
@@ -1092,6 +1094,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l min}"   ,"GeV",Form("ww_output_alt1005_bin0.root"),"ww_output_alt1005_bin0",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#Delta #phi_{ll}",""   ,Form("ww_output_alt1006_bin0.root"),"ww_output_alt1006_bin0",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{miss}"    ,"GeV",Form("ww_output_alt1007_bin0.root"),"ww_output_alt1007_bin0",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{l max}"   ,"GeV",Form("ww_output_alt1009_bin0.root"),"ww_output_alt1009_bin0",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"m_{ll}"          ,"GeV",Form("ww_output_alt1002_prefit_bin0.root"),"ww_output_alt1002_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{ll}"      ,"GeV",Form("ww_output_alt1003_prefit_bin0.root"),"ww_output_alt1003_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
@@ -1099,6 +1102,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l min}"   ,"GeV",Form("ww_output_alt1005_prefit_bin0.root"),"ww_output_alt1005_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#Delta #phi_{ll}",""   ,Form("ww_output_alt1006_prefit_bin0.root"),"ww_output_alt1006_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{miss}"    ,"GeV",Form("ww_output_alt1007_prefit_bin0.root"),"ww_output_alt1007_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{l max}"   ,"GeV",Form("ww_output_alt1009_prefit_bin0.root"),"ww_output_alt1009_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"0-jet Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     // bin1
     finalPlot(0,1,"m_{ll}"          ,"GeV",Form("ww_output_alt1002_bin1.root"),"ww_output_alt1002_bin1",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
@@ -1107,6 +1111,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l min}"   ,"GeV",Form("ww_output_alt1005_bin1.root"),"ww_output_alt1005_bin1",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#Delta #phi_{ll}",""   ,Form("ww_output_alt1006_bin1.root"),"ww_output_alt1006_bin1",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{miss}"    ,"GeV",Form("ww_output_alt1007_bin1.root"),"ww_output_alt1007_bin1",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{l max}"   ,"GeV",Form("ww_output_alt1009_bin1.root"),"ww_output_alt1009_bin1",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"m_{ll}"          ,"GeV",Form("ww_output_alt1002_prefit_bin1.root"),"ww_output_alt1002_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{ll}"      ,"GeV",Form("ww_output_alt1003_prefit_bin1.root"),"ww_output_alt1003_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
@@ -1114,6 +1119,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l min}"   ,"GeV",Form("ww_output_alt1005_prefit_bin1.root"),"ww_output_alt1005_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#Delta #phi_{ll}",""   ,Form("ww_output_alt1006_prefit_bin1.root"),"ww_output_alt1006_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{miss}"    ,"GeV",Form("ww_output_alt1007_prefit_bin1.root"),"ww_output_alt1007_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"1-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{l max}"   ,"GeV",Form("ww_output_alt1009_prefit_bin1.root"),"ww_output_alt1009_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     // bin2
     finalPlot(0,1,"m_{ll}"          ,"GeV",Form("ww_output_alt1002_bin2.root"),"ww_output_alt1002_bin2",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
@@ -1122,6 +1128,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l min}"   ,"GeV",Form("ww_output_alt1005_bin2.root"),"ww_output_alt1005_bin2",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#Delta #phi_{ll}",""   ,Form("ww_output_alt1006_bin2.root"),"ww_output_alt1006_bin2",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{miss}"    ,"GeV",Form("ww_output_alt1007_bin2.root"),"ww_output_alt1007_bin2",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{l max}"   ,"GeV",Form("ww_output_alt1009_bin2.root"),"ww_output_alt1009_bin2",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"m_{ll}"          ,"GeV",Form("ww_output_alt1002_prefit_bin2.root"),"ww_output_alt1002_bin2_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{ll}"      ,"GeV",Form("ww_output_alt1003_prefit_bin2.root"),"ww_output_alt1003_bin2_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
@@ -1129,6 +1136,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l min}"   ,"GeV",Form("ww_output_alt1005_prefit_bin2.root"),"ww_output_alt1005_bin2_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#Delta #phi_{ll}",""   ,Form("ww_output_alt1006_prefit_bin2.root"),"ww_output_alt1006_bin2_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{miss}"    ,"GeV",Form("ww_output_alt1007_prefit_bin2.root"),"ww_output_alt1007_bin2_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet WW region",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{l max}"   ,"GeV",Form("ww_output_alt1009_prefit_bin2.root"),"ww_output_alt1009_bin2_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"2-jet Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"Lepton category","",Form("vv/ww_output_wz_2002.root"),"ww_output_wz",0,year,legendBSM.Data(),1.0,isBlinded,"WZ CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Lepton category","",Form("vv/ww_output_zz_2002.root"),"ww_output_zz",0,year,legendBSM.Data(),1.0,isBlinded,"ZZ CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
