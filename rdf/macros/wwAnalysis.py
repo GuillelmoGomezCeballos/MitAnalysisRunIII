@@ -11,7 +11,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 print_info = False
 makeDataCards = 1
 correctionString = ""
-whichVarToFit = 0 # 0 (mll), 1 (ptll), 2 (ptl1), 3 (ptl2), 4 (dphill), 5 (ptmiss)
+whichVarToFit = 0 # 0 (ww-mll), 1 (ww-ptll), 2 (ww-ptl1), 3 (ww-ptl2), 4 (ww-dphill), 5 (ww-ptmiss), 6 (ztautau-ptl1)
 
 # 0 = T, 1 = M, 2 = L
 bTagSel = 2
@@ -708,6 +708,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 altMET0 = "JERUp"
                 altMET1 = "JESUp"
                 altMET2 = "UnclusteredUp"
+            elif(whichVarToFit == 6):
+                BinXF1 = 10
+                minXF1 = 25
+                maxXF1 = 55
+                varToFit = "ptl1"
 
             startF = 1000
             for nv in range(0,135):
