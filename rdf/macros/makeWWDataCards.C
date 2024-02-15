@@ -206,6 +206,9 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   else if(whichAna == 6){
     BinXF = 20; minXF = 0; maxXF = 200;
   }
+  else if(whichAna == 7){
+    BinXF = 10; minXF = 25; maxXF = 55;
+  }
   else {
     printf("WRONG OPTION");
     return;
