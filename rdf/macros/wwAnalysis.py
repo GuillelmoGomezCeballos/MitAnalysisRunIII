@@ -11,7 +11,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 print_info = False
 makeDataCards = 1
 correctionString = ""
-whichVarToFit = 0 # 0 (ww-mll), 1 (ww-ptll), 2 (ww-ptl1), 3 (ww-ptl2), 4 (ww-dphill), 5 (ww-ptmiss), 6 (ztautau-ptl1)
+whichVarToFit = 0 # 0 (ww-mll), 1 (ww-ptll), 2 (ww-ptl1), 3 (ww-ptl2), 4 (ww-dphill), 5 (ww-ptmiss), 6 (ztautau-xxx)
 
 # 0 = T, 1 = M, 2 = L
 bTagSel = 2
