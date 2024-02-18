@@ -18,7 +18,7 @@ bTagSel = 1
 useBTaggingWeights = 1
 
 useFR = 1
-whichAna = 1
+whichAna = 0
 
 altMass = "Def"
 
