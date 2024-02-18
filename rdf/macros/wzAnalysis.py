@@ -18,6 +18,7 @@ bTagSel = 1
 useBTaggingWeights = 1
 
 useFR = 1
+whichAna = 1
 
 altMass = "Def"
 
@@ -193,7 +194,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     dftag = selectionLL(df,year,PDType,isData,count)
 
-    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,0)
+    dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,whichAna)
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
