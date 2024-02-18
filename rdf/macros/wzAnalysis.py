@@ -22,6 +22,8 @@ whichAna = 0
 
 altMass = "Def"
 
+jetEtaCut = 2.5
+
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
     selectionJsonPath = "selection.json"
@@ -92,7 +94,7 @@ def selectionLL(df,year,PDType,isData,count):
 
     dftag = selectionTauVeto(dftag,year,isData)
     dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,5.0)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,jetEtaCut)
     dftag = selection3LVar  (dftag,year,isData)
 
     return dftag
