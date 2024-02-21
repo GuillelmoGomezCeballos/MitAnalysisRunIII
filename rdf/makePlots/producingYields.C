@@ -14,7 +14,9 @@
 #include "TRandom.h"
 #include "common.h"
 
-void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceballos/cards/ww_smp24001/fitDiagnosticsww_fid_normalized1_obs.root") {
+// shapeName = shapes_fit_s / shapes_fit_b / shapes_prefit
+
+void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceballos/cards/ww_smp24001/logs_ana1002/fitDiagnosticsww_fid_normalized1_obs.root", TString shapeName = "shapes_fit_s") {
 
   TFile *mlfit = TFile::Open(mlfitResult); assert(mlfit);
 
@@ -42,7 +44,7 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
     if(!passJetBin) continue;
     for(int ic=0; ic<nPlotCategories; ic++){
       if(ic != kPlotData){
-        _hist[nc][ic] = ((TH1F*)mlfit->Get(Form("shapes_fit_s/%s/%s",channelName[nc].Data(),plotBaseNames[ic].Data())));
+        _hist[nc][ic] = ((TH1F*)mlfit->Get(Form("%s/%s/%s",shapeName.Data(),channelName[nc].Data(),plotBaseNames[ic].Data())));
         if(_hist[nc][ic]){
           for(int nr=0; nr<regions; nr++){
             int theIC = ic;
@@ -59,7 +61,7 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
       else {
         nonZeroYields[kPlotData] = true;
         double x,y;
-        TGraphAsymmErrors *gr = ((TGraphAsymmErrors*)mlfit->Get(Form("shapes_fit_s/%s/%s",channelName[nc].Data(),"data")));
+        TGraphAsymmErrors *gr = ((TGraphAsymmErrors*)mlfit->Get(Form("%s/%s/%s",shapeName.Data(),channelName[nc].Data(),"data")));
         for(int nr=0; nr<regions; nr++){
           int a = gr->GetPoint(nr, x, y);
           yields[nr][ic]  += y;
@@ -68,7 +70,7 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
       }
     } // loop over categories
 
-    _hist[nc][nPlotCategories] = ((TH1F*)mlfit->Get(Form("shapes_fit_s/%s/%s",channelName[nc].Data(),"total")));
+    _hist[nc][nPlotCategories] = ((TH1F*)mlfit->Get(Form("%s/%s/%s",shapeName.Data(),channelName[nc].Data(),"total")));
     for(int nr=0; nr<regions; nr++){
       total[nr]  += _hist[nc][nPlotCategories]->GetBinContent(nr+1);
       totalE[nr] += _hist[nc][nPlotCategories]->GetBinError(nr+1);
