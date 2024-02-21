@@ -185,7 +185,7 @@ def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt):
                     nTheoryReplicas[2] = runTree.nPSSumw
             else:
                 genEventSumPSWeight[n] += 1.0
-            genEventSumPSWeight[4] += 1
+        genEventSumPSWeight[4] += 1
     print("Number of Theory replicas: {0} / {1} / {2}".format(nTheoryReplicas[0],nTheoryReplicas[1],nTheoryReplicas[2]))
 
     genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]
