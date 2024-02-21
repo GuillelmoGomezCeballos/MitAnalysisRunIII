@@ -721,7 +721,7 @@ def SwitchSample(argument, skimType):
        903:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_postEE",1.0*1000,plotCategory("kPlotDY")),
        904:("/data/submit/cms/store/user/ceballos/test_samples/DY_2023_partA",1.0*1000,plotCategory("kPlotDY")),
        905:("/data/submit/cms/store/user/ceballos/test_samples/DY_2023_partB",1.0*1000,plotCategory("kPlotDY")),
-       960:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2016_preVFP",1.0*1000,plotCategory("kPlotqqWW")),
+       960:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2016_preVFP",(118.7-3.974)*0.1086*0.1086*9*1000,plotCategory("kPlotqqWW")),
 
        961:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2022_postEE",(118.7*1.06-ggWWXS_LO_MCFM)*0.1086*0.1086*9*1000,plotCategory("kPlotqqWW")),
 
