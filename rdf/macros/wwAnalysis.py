@@ -388,13 +388,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[58][x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 1").Histo1D(("histo_{0}_{1}".format(58,x), "histo_{0}_{1}".format(58,x), 4,-0.5,3.5), "ngood_jets","weightWW")
         histo[59][x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 2").Histo1D(("histo_{0}_{1}".format(59,x), "histo_{0}_{1}".format(59,x), 4,-0.5,3.5), "ngood_jets","weightWW")
 
-        histo[60][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(60,x), "histo_{0}_{1}".format(60,x), 50,-5.0,5.0), "good_Jet_eta","weightWW")
-        histo[63][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(63,x), "histo_{0}_{1}".format(63,x), 50,-5.0,5.0), "good_Jet_eta","weightWW")
-        histo[66][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(66,x), "histo_{0}_{1}".format(66,x), 50,-5.0,5.0), "good_Jet_eta","weightWW")
+        histo[60][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(60,x), "histo_{0}_{1}".format(60,x), 25,-2.5,2.5), "good_Jet_eta","weightWW")
+        histo[61][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(61,x), "histo_{0}_{1}".format(61,x), 25,-2.5,2.5), "good_Jet_eta","weightWW")
+        histo[62][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(62,x), "histo_{0}_{1}".format(62,x), 25,-2.5,2.5), "good_Jet_eta","weightWW")
+        histo[63][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(63,x), "histo_{0}_{1}".format(63,x), 25,-2.5,2.5), "good_Jet_eta","weightWW")
 
-        dftop0cat[x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 1")
-        dftop0catMuonMomUp      [x] = dftop0catMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
-        dftop0catElectronMomUp  [x] = dftop0catElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
+        histo[64][x] = dfwwx0cat[x].Filter("ptll{0} < 20 && thePuppiMET_pt < 20".format(altMass)).Histo1D(("histo_{0}_{1}".format(64,x), "histo_{0}_{1}".format(64,x), 20,25,185), "ptl1","weightWW")
+        histo[65][x] = dfwwx0cat[x].Filter("ptll{0} < 20 && thePuppiMET_pt < 20".format(altMass)).Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), 20,20,140), "ptl2","weightWW")
 
         histo[69][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), 60, 50, 410), "mll{0}".format(altMass),"weightWW")
         histo[70][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), 60, 50, 410), "mll{0}".format(altMass),"weightWW")
@@ -408,6 +408,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[76][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(76,x), "histo_{0}_{1}".format(76,x), 50,  0, 200), "ptww","weightWW")
 
         histo[77][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(77,x), "histo_{0}_{1}".format(77,x), 10,-0.5, 9.5), "nPileupJets","weightWW")
+
+        dftop0cat[x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 1")
+        dftop0catMuonMomUp      [x] = dftop0catMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
+        dftop0catElectronMomUp  [x] = dftop0catElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
 
         if(x == plotCategory("kPlotData") and print_info == True):
              histo_test = (dfwwx0cat[x].Define("print_info","print_info(run,event)")
