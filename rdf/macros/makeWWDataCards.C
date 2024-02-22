@@ -26,6 +26,8 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   WWNNLO_scaleSyst[0][2] = 1.014; WWNNLO_scaleSyst[1][2] = 1.004; WWNNLO_scaleSyst[2][2] = 0.995;
   WWNNLO_scaleSyst[0][3] = 1.020; WWNNLO_scaleSyst[1][3] = 1.010; WWNNLO_scaleSyst[2][3] = 0.997;
 
+  double WWNNLO_GenJet[3] = {0.974, 0.848, 1.579};
+
   bool useJESUncTopDY = true;
   //if(isFiducial == false && whichAna == 0) useJESUncTopDY = false;
 
@@ -58,6 +60,8 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   TH1D *histo_WWNNLO_resumDown[nPlotCategories];
   TH1D *histo_WWNNLO_scaleUp[nPlotCategories];
   TH1D *histo_WWNNLO_scaleDown[nPlotCategories];
+  TH1D *histo_WWNNLO_GenJetUp[nPlotCategories];
+  TH1D *histo_WWNNLO_GenJetDown[nPlotCategories];
   TH1D *histo_WrongSignUncUp[nPlotCategories];
   TH1D *histo_WrongSignUncDown[nPlotCategories];
 
@@ -223,12 +227,14 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     histo_QCDScaleDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCDScale_%s_ACCEPTDown", plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
     histo_PSUp  [ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTUp"  , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
     histo_PSDown[ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTDown", plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
-    histo_WWNNLO_resumUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_resumUp"  , plotBaseNames[ic].Data()));
-    histo_WWNNLO_resumDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_resumDown", plotBaseNames[ic].Data()));
-    histo_WWNNLO_scaleUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_scaleUp"  , plotBaseNames[ic].Data()));
-    histo_WWNNLO_scaleDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_scaleDown", plotBaseNames[ic].Data()));
-    histo_WrongSignUncUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WrongSignUncUp"  , plotBaseNames[ic].Data()));
-    histo_WrongSignUncDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WrongSignUncDown", plotBaseNames[ic].Data()));
+    histo_WWNNLO_resumUp   [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_resumUp"   , plotBaseNames[ic].Data()));
+    histo_WWNNLO_resumDown [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_resumDown" , plotBaseNames[ic].Data()));
+    histo_WWNNLO_scaleUp   [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_scaleUp"   , plotBaseNames[ic].Data()));
+    histo_WWNNLO_scaleDown [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_scaleDown" , plotBaseNames[ic].Data()));
+    histo_WWNNLO_GenJetUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_%s_GenJetUp"  , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+    histo_WWNNLO_GenJetDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WWNNLO_%s_GenJetDown", plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
+    histo_WrongSignUncUp   [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WrongSignUncUp"   , plotBaseNames[ic].Data()));
+    histo_WrongSignUncDown [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_WrongSignUncDown" , plotBaseNames[ic].Data()));
   }
 
   for(int j=0; j<nSystTotal; j++){
@@ -319,19 +325,23 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
       }
     }
 
-    histo_WWNNLO_resumUp  [ic]->Add(histo_Baseline[ic]);
-    histo_WWNNLO_resumDown[ic]->Add(histo_Baseline[ic]);
-    histo_WWNNLO_scaleUp  [ic]->Add(histo_Baseline[ic]);
-    histo_WWNNLO_scaleDown[ic]->Add(histo_Baseline[ic]);
+    histo_WWNNLO_resumUp   [ic]->Add(histo_Baseline[ic]);
+    histo_WWNNLO_resumDown [ic]->Add(histo_Baseline[ic]);
+    histo_WWNNLO_scaleUp   [ic]->Add(histo_Baseline[ic]);
+    histo_WWNNLO_scaleDown [ic]->Add(histo_Baseline[ic]);
+    histo_WWNNLO_GenJetUp  [ic]->Add(histo_Baseline[ic]);
+    histo_WWNNLO_GenJetDown[ic]->Add(histo_Baseline[ic]);
     int genJetBin = -1;
     if     (ic == kPlotSignal0 || kPlotSignal3) genJetBin = 0;
     else if(ic == kPlotSignal1 || kPlotSignal4) genJetBin = 1;
     else if(ic == kPlotSignal2 || kPlotSignal5) genJetBin = 2;
-    if(genJetBin >= 0 && whichAna == 0){
-      histo_WWNNLO_resumUp  [ic]->Scale(WWNNLO_resumSyst[genJetBin][fidAna-1]);
-      histo_WWNNLO_resumDown[ic]->Scale(1./WWNNLO_resumSyst[genJetBin][fidAna-1]);
-      histo_WWNNLO_scaleUp  [ic]->Scale(WWNNLO_scaleSyst[genJetBin][fidAna-1]);
-      histo_WWNNLO_scaleDown[ic]->Scale(1./WWNNLO_scaleSyst[genJetBin][fidAna-1]);    
+    if(genJetBin >= 0 && isFiducial == false && whichAna == 0){
+      histo_WWNNLO_resumUp   [ic]->Scale(WWNNLO_resumSyst[genJetBin][fidAna-1]);
+      histo_WWNNLO_resumDown [ic]->Scale(1./WWNNLO_resumSyst[genJetBin][fidAna-1]);
+      histo_WWNNLO_scaleUp   [ic]->Scale(WWNNLO_scaleSyst[genJetBin][fidAna-1]);
+      histo_WWNNLO_scaleDown [ic]->Scale(1./WWNNLO_scaleSyst[genJetBin][fidAna-1]);
+      histo_WWNNLO_GenJetUp  [ic]->Scale(WWNNLO_GenJet[genJetBin]);
+      histo_WWNNLO_GenJetDown[ic]->Scale(1./WWNNLO_GenJet[genJetBin]);
     }
     for(int nb=1; nb<=histo_Baseline[ic]->GetNbinsX(); nb++){
       histo_Baseline[ic]->SetBinContent(nb, TMath::Max((float)histo_Baseline[ic]->GetBinContent(nb),0.0f));
@@ -538,12 +548,14 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     histo_Baseline[ic]->Write();
     for(int j=0; j<nSystDataCardTotal; j++) histo_SystDataCard[j][ic]->Write();
 
-    histo_WrongSignUncUp  [ic]->Write();
-    histo_WrongSignUncDown[ic]->Write();
-    histo_WWNNLO_resumUp  [ic]->Write();
-    histo_WWNNLO_resumDown[ic]->Write();
-    histo_WWNNLO_scaleUp  [ic]->Write();
-    histo_WWNNLO_scaleDown[ic]->Write();
+    histo_WrongSignUncUp   [ic]->Write();
+    histo_WrongSignUncDown [ic]->Write();
+    histo_WWNNLO_resumUp   [ic]->Write();
+    histo_WWNNLO_resumDown [ic]->Write();
+    histo_WWNNLO_scaleUp   [ic]->Write();
+    histo_WWNNLO_scaleDown [ic]->Write();
+    histo_WWNNLO_GenJetUp  [ic]->Write();
+    histo_WWNNLO_GenJetDown[ic]->Write();
     histo_QCDScaleUp  [ic]->Write();
     histo_QCDScaleDown[ic]->Write();
     histo_PSUp        [ic]->Write();
@@ -1395,6 +1407,27 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
       else      newcardShape << Form("1.0 ");
     }
     newcardShape << Form("\n");
+  }
+
+  if(isFiducial == false && whichAna == 200){ // Never enter here
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if     (ic != kPlotSignal0 &&
+              ic != kPlotSignal1 &&
+              ic != kPlotSignal2 &&
+              ic != kPlotSignal3 &&
+              ic != kPlotSignal4 &&
+              ic != kPlotSignal5
+              ) continue;
+      newcardShape << Form("WWNNLO_%s_GenJet shape ",plotBaseNames[ic].Data());
+      for(unsigned ic2=0; ic2<nPlotCategories; ic2++) {
+        if(ic2 == kPlotData || histo_Baseline[ic2]->GetSumOfWeights() <= 0) continue;
+        if(ic==ic2) newcardShape << Form("1.0  ");
+        else        newcardShape << Form("-  ");
+      }
+      newcardShape << Form("\n");
+    }
   }
 
   for(int npdf=0; npdf<=100; npdf++){
