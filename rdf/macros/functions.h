@@ -1837,7 +1837,7 @@ Vec_b cleaningJetFromMeson(Vec_f & Jeta, Vec_f & Jphi, float & eta, float & phi)
 
   Vec_b mask(Jeta.size(), true);
   for (unsigned int idx = 0; idx < Jeta.size(); ++idx) {
-    if(deltaR(Jeta[idx], Jphi[idx], eta, phi)<0.3) mask[idx] = false;
+    if(deltaR(Jeta[idx], Jphi[idx], eta, phi)<0.4) mask[idx] = false;
   }
   return mask;
 }
@@ -1848,7 +1848,7 @@ Vec_b cleaningJetFromLepton(Vec_f & Jeta, Vec_f & Jphi, Vec_f & Leta, Vec_f & Lp
   Vec_b mask(Jeta.size(), true);
   for (unsigned int jdx = 0; jdx < Jeta.size(); ++jdx) {
     for (unsigned int ldx = 0; ldx < Leta.size(); ++ldx) {
-      if(deltaR(Jeta[jdx], Jphi[jdx], Leta[ldx], Lphi[ldx]) < 0.3) {mask[jdx] = false; break;}
+      if(deltaR(Jeta[jdx], Jphi[jdx], Leta[ldx], Lphi[ldx]) < 0.4) {mask[jdx] = false; break;}
     }
   }
   return mask;
