@@ -20,9 +20,31 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
 
   TFile *mlfit = TFile::Open(mlfitResult); assert(mlfit);
 
-  const int chan = 8;  
-  TString channelName[chan] = {"ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7", "ch8"}; 
-  const int regions = 5;
+  int chanAux, regionsAux;
+  if     (jetBin >= -1) {
+    chanAux = 8;
+    regionsAux = 5;
+  }
+  else if(jetBin == -2 || jetBin == -3) {
+    chanAux = 2;
+    regionsAux = 1;
+  }
+
+
+  const int chan = chanAux;
+  const int regions = regionsAux;
+  TString channelName[chan];
+  if     (jetBin >= -1) {
+     for(int i=1; i<=8; i++)  channelName[i-1] = Form("ch%d",i);
+  }
+  else if(jetBin == -2) {
+    channelName[0] = Form("ch9");
+    channelName[1] = Form("ch10");
+  }
+  else if(jetBin == -3) {
+    channelName[0] = Form("ch11");
+    channelName[1] = Form("ch12");
+  }
 
   double yields[regions][nPlotCategories], yieldsE[regions][nPlotCategories];
   bool nonZeroYields[nPlotCategories];
@@ -40,7 +62,7 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
   TH1F* _hist[chan][nPlotCategories+1];
   for(int nc=0; nc<chan; nc++){
     bool passJetBin = false;
-    if(jetBin == -1 || nc%4 == jetBin) passJetBin = true;
+    if(jetBin <= -1 || nc%4 == jetBin) passJetBin = true;
     if(!passJetBin) continue;
     for(int ic=0; ic<nPlotCategories; ic++){
       if(ic != kPlotData){
@@ -70,11 +92,23 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
       }
     } // loop over categories
 
+    // Special for NonPromptWZ
+    if((TH1F*)mlfit->Get(Form("%s/%s/%s",shapeName.Data(),channelName[nc].Data(),"NonPromptWZ"))){
+      _hist[nc][kPlotNonPrompt] = ((TH1F*)mlfit->Get(Form("%s/%s/%s",shapeName.Data(),channelName[nc].Data(),"NonPromptWZ")));
+      if(_hist[nc][kPlotNonPrompt]){
+        for(int nr=0; nr<regions; nr++){
+          yields[nr][kPlotNonPrompt]  += _hist[nc][kPlotNonPrompt]->GetBinContent(nr+1);
+          yieldsE[nr][kPlotNonPrompt] += _hist[nc][kPlotNonPrompt]->GetBinError(nr+1);
+          nonZeroYields[kPlotNonPrompt] = true;
+        } // loop over regions
+      }
+    }
+
     _hist[nc][nPlotCategories] = ((TH1F*)mlfit->Get(Form("%s/%s/%s",shapeName.Data(),channelName[nc].Data(),"total")));
     for(int nr=0; nr<regions; nr++){
       total[nr]  += _hist[nc][nPlotCategories]->GetBinContent(nr+1);
       totalE[nr] += _hist[nc][nPlotCategories]->GetBinError(nr+1);
-    } // loop over regions	  
+    } // loop over regions
 
   } // loop over jet bins
 
