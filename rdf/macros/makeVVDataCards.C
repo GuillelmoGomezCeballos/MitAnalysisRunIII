@@ -526,7 +526,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("%6.3f ",1.02);
+    else                     newcardShape << Form("%6.3f ",1.014);
   }
   newcardShape << Form("\n");
 
