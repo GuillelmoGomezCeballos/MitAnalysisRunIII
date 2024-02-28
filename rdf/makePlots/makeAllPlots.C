@@ -1155,6 +1155,6 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"Lepton category","",Form("vv/ww_output_wz_2002_prefit.root"),"ww_output_wz_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"WZ CR",1,applyScaling,mlfitResult.Data(),channelName.Data()); 
     finalPlot(0,1,"Lepton category","",Form("vv/ww_output_zz_2002_prefit.root"),"ww_output_zz_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"ZZ CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
-    finalPlot(0,1,"VV category","",Form("vv/ww_output_vv_2002.root"),"ww_output_vv",0,year,legendBSM.Data(),1.0,isBlinded,"WZ/ZZ CRs",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"WZ                                    ZZ              ","",Form("vv/ww_output_vv_2002.root"),"ww_output_vv",0,year,legendBSM.Data(),1.0,isBlinded,"WZ/ZZ CRs",1,applyScaling,mlfitResult.Data(),channelName.Data());
  }
 }

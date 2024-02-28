@@ -416,7 +416,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
 
   //hRatio->Draw("e");
   hBand->SetFillColor(12);
-  hBand->SetFillStyle(3002);
+  hBand->SetFillStyle(3345);
   hBand->SetMarkerSize(0);
   hBand->SetLineWidth(0);
   hBand->Draw("E2");
