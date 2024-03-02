@@ -2,7 +2,7 @@ import ROOT
 import os, sys, getopt, json
 from array import array
 
-ROOT.ROOT.EnableImplicitMT(4)
+ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
@@ -32,6 +32,7 @@ VBSSEL = jsonObject['VBSSEL']
 
 muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
+TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 TIGHT_MU0 = jsonObject['TIGHT_MU0']
 TIGHT_MU1 = jsonObject['TIGHT_MU1']
 TIGHT_MU2 = jsonObject['TIGHT_MU2']
@@ -45,6 +46,7 @@ MUOWP = "Medium"
 
 elSelChoice = 0
 FAKE_EL   = jsonObject['FAKE_EL']
+TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 TIGHT_EL1 = jsonObject['TIGHT_EL1']
 TIGHT_EL2 = jsonObject['TIGHT_EL2']
@@ -80,7 +82,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU1,FAKE_EL,TIGHT_EL1)
+    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 
     dftag = (dftag.Define("tight_mu0", "{0}".format(TIGHT_MU0))
                   .Define("tight_mu1", "{0}".format(TIGHT_MU1))

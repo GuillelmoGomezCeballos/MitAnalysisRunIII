@@ -239,7 +239,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[ 6][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 6,x), "histo_{0}_{1}".format( 6,x), 20, 10, 110), "ptl2Z2{0}".format(altMass),"weight")
         histo[ 7][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 7,x), "histo_{0}_{1}".format( 7,x), 40,150, 550), "m4l{0}".format(altMass),"weight")
         histo[ 8][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 8,x), "histo_{0}_{1}".format( 8,x),3,-0.5, 2.5), "FourLepton_flavor","weight")
-        histo[ 9][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 9,x), "histo_{0}_{1}".format( 9,x), 6,-0.5, 5.5), "ngood_jets","weight")
+        histo[ 9][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format( 9,x), "histo_{0}_{1}".format( 9,x), 4,-0.5, 3.5), "ngood_jets","weight")
         histo[10][x] = dfzzcat[x].Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 40,  0, 200), "thePuppiMET_pt","weight")
 
         dfzzjjcat .append(dfzzcat[x] .Filter("nvbs_jets >= 2", "At least two VBS jets"))

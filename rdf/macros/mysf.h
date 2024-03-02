@@ -89,11 +89,11 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
   
-  std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_methods_v0.json.gz";
+  std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_v1_mar24.json.gz";
   auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
-  btvHFSF_ = csetHFBTV->at("deepJet_tnp");
+  btvHFSF_ = csetHFBTV->at("deepJet_comb");
 
-  std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging_v0.json.gz";
+  std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging_v1_mar24.json.gz";
   auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
   btvLFSF_ = csetLFBTV->at("deepJet_light");
 
@@ -339,9 +339,8 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
   if(eta <= -2.5 || eta >= 2.5) return 0.0;
   eta = std::min(std::abs(eta),2.399);
   pt = std::min(pt,999.999);
-  // No c-jets corrections, using b-jets instead
   if(flavor != 0)
-    return btvHFSF_->evaluate({valType, workingPoint,      5, eta, pt});
+    return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
   else
     return btvLFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
 };
