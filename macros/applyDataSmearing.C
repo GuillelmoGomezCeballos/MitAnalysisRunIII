@@ -11,7 +11,7 @@
 #include <fstream>
 #include "TLorentzVector.h"
 
-void theApplyDataSmearing(TString inputName, double factor = 2.0){
+void theApplyDataSmearing(TString inputName, double factor){
   TFile* file = new TFile(inputName, "read");
   const int nPlotCategories = 24;
   TH1F* _hist[nPlotCategories];
@@ -49,43 +49,55 @@ void theApplyDataSmearing(TString inputName, double factor = 2.0){
   //printf("DA/MC = %f/%f\n", _hist[0]->GetSumOfWeights(),sumBck);
 }
 
-void applyDataSmearing(int nsel = 0){
-  if(nsel == 0){
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20220_243.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20220_244.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20220_245.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20221_243.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20221_244.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20221_245.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20220_255.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20220_256.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20220_257.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20221_255.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20221_256.root");
-    theApplyDataSmearing("anaZ/fillhisto_zAnalysis1001_20221_257.root");
-
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20220_243_alt.root anaZ/fillhisto_zAnalysis1001_20220_243.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20220_244_alt.root anaZ/fillhisto_zAnalysis1001_20220_244.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20220_245_alt.root anaZ/fillhisto_zAnalysis1001_20220_245.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20221_243_alt.root anaZ/fillhisto_zAnalysis1001_20221_243.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20221_244_alt.root anaZ/fillhisto_zAnalysis1001_20221_244.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20221_245_alt.root anaZ/fillhisto_zAnalysis1001_20221_245.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20220_255_alt.root anaZ/fillhisto_zAnalysis1001_20220_255.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20220_256_alt.root anaZ/fillhisto_zAnalysis1001_20220_256.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20220_257_alt.root anaZ/fillhisto_zAnalysis1001_20220_257.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20221_255_alt.root anaZ/fillhisto_zAnalysis1001_20221_255.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20221_256_alt.root anaZ/fillhisto_zAnalysis1001_20221_256.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_zAnalysis1001_20221_257_alt.root anaZ/fillhisto_zAnalysis1001_20221_257.root"));
+void applyDataSmearing(int nsel = -1){
+  double factor = 2.0;
+  TString inputFolder = "anaZ/";
+  vector<TString> infileName_;
+  if      (nsel == 0){
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20220_243",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20220_244",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20220_245",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20221_243",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20221_244",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20221_245",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20220_255",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20220_256",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20220_257",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20221_255",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20221_256",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20221_257",inputFolder.Data()));
   }
   else if(nsel == 1){
-    theApplyDataSmearing("anaZ/fillhisto_wwAnalysis1001_20220_62.root",3.0);
-    theApplyDataSmearing("anaZ/fillhisto_wwAnalysis1001_20220_63.root",3.0);
-    theApplyDataSmearing("anaZ/fillhisto_wwAnalysis1001_20221_62.root",3.0);
-    theApplyDataSmearing("anaZ/fillhisto_wwAnalysis1001_20221_63.root",3.0);
+    infileName_.push_back(Form("%sfillhisto_wzAnalysis1008_20220_13",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wzAnalysis1008_20220_14",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wzAnalysis1008_20221_13",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wzAnalysis1008_20221_14",inputFolder.Data()));
+  }
+  else if(nsel == 2){
+    infileName_.push_back(Form("%sfillhisto_zzAnalysis1008_20220_11",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zzAnalysis1008_20221_11",inputFolder.Data()));
+  }
+  else if(nsel == 8){
+    infileName_.push_back(Form("%sfillhisto_wwAnalysis1008_20220_61",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wwAnalysis1008_20220_63",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wwAnalysis1008_20221_61",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wwAnalysis1008_20221_63",inputFolder.Data()));
+  }
+  else {
+    return;
+  }
 
-    gSystem->Exec(Form("mv anaZ/fillhisto_wwAnalysis1001_20220_62_alt.root anaZ/fillhisto_wwAnalysis1001_20220_62.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_wwAnalysis1001_20220_63_alt.root anaZ/fillhisto_wwAnalysis1001_20220_63.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_wwAnalysis1001_20221_62_alt.root anaZ/fillhisto_wwAnalysis1001_20221_62.root"));
-    gSystem->Exec(Form("mv anaZ/fillhisto_wwAnalysis1001_20221_63_alt.root anaZ/fillhisto_wwAnalysis1001_20221_63.root"));
- }
+  for(UInt_t ifile=0; ifile<infileName_.size(); ifile++) {
+    printf("%s\n",infileName_[ifile].Data());
+
+    // true == file does not exist!
+    if(gSystem->AccessPathName(Form("%s_bak.root",infileName_[ifile].Data())))
+      gSystem->Exec(Form("cp %s.root %s_bak.root",infileName_[ifile].Data(),infileName_[ifile].Data()));
+    else
+      gSystem->Exec(Form("cp %s_bak.root %s.root",infileName_[ifile].Data(),infileName_[ifile].Data()));
+
+    theApplyDataSmearing(Form("%s.root",infileName_[ifile].Data()),factor);
+
+    gSystem->Exec(Form("mv %s_alt.root %s.root",infileName_[ifile].Data(),infileName_[ifile].Data()));
+  }
 }
