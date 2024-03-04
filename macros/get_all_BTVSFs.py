@@ -28,7 +28,8 @@ if __name__ == "__main__":
             debug = int(arg)
 
 
-    listMethod = ["deepJet_kinfit", "deepJet_ptrel", "deepJet_tnp", "particleNet_kinfit", "particleNet_ptrel", "particleNet_tnp", "robustParticleTransformer_kinfit", "robustParticleTransformer_ptrel", "robustParticleTransformer_tnp"]
+    #listMethod = ["deepJet_kinfit", "deepJet_ptrel", "deepJet_tnp", "particleNet_kinfit", "particleNet_ptrel", "particleNet_tnp", "robustParticleTransformer_kinfit", "robustParticleTransformer_ptrel", "robustParticleTransformer_tnp"]
+    listMethod = ["deepJet_comb", "deepJet_mujets", "deepJet_mujets", "particleNet_comb", "particleNet_mujets", "particleNet_mujets", "robustParticleTransformer_comb", "robustParticleTransformer_mujets", "robustParticleTransformer_mujets"]
 
     workingPoint = ["T", "M", "L"]
 
@@ -51,7 +52,8 @@ if __name__ == "__main__":
 
         print("************** {0} **************".format(yearVal[ny]))
 
-        evaluator_btv = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/BTV/{0}/btagging_methods_v0.json.gz".format(jsnFolder))
+        #evaluator_btv = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/BTV/{0}/btagging_v0_hf_jan24.json.gz".format(jsnFolder))
+        evaluator_btv = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/BTV/{0}/btagging_v1_mar24.json.gz".format(jsnFolder))
 
         for eta in range(len(xEtaBins)):
             for wp in range(len(workingPoint)):
