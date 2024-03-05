@@ -9,6 +9,7 @@ from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths
 #from utilsAna import loadCorrectionSet
 
+print_info = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 1
 useBTaggingWeights = 0
@@ -138,6 +139,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo   = [[0 for y in range(nCat)] for x in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
+    histo_test = [[0 for y in range(nCat)] for x in range(3)]
 
     ROOT.initHisto2D(histoFakeEtaPt_mu[0],0)
     ROOT.initHisto2D(histoFakeEtaPt_el[0],1)
@@ -264,6 +266,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[ltype+48][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 80,-0.5,79.5), "Rho_fixedGridRhoFastjetAll","weight")
             histo[ltype+51][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 100, -3.1416, 3.1416), "MET_phi","weight")
             histo[ltype+54][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 100, -3.1416, 3.1416), "thePuppiMET_phi","weight")
+
+            if(x == plotCategory("kPlotData") and print_info == True):
+                histo_test[ltype][x] = (dfzllcat[3*x+ltype].Define("print_info","print_info(run,event)")
+                                       .Filter("print_info > 0")
+                                       .Histo1D(("test_{0}_{1}".format(ltype,x), "test_{0}_{1}".format(ltype,x), 4,-0.5,3.5), "ngood_jets","weight"))
 
             if(ltype == 2):
                 dftightsscat.append(dfcat[3*x+ltype].Filter("Sum(fake_Electron_charge)==0 && DiLepton_flavor==2 && tight_el7[0]==true && tight_el7[1]==true && mll{0}>80 && mll{0}<100".format(altMass)))
