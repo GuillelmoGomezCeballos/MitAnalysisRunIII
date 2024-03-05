@@ -68,20 +68,20 @@ void applyDataSmearing(int nsel = -1){
     infileName_.push_back(Form("%sfillhisto_zAnalysis1001_20221_257",inputFolder.Data()));
   }
   else if(nsel == 1){
-    infileName_.push_back(Form("%sfillhisto_wzAnalysis1008_20220_13",inputFolder.Data()));
-    infileName_.push_back(Form("%sfillhisto_wzAnalysis1008_20220_14",inputFolder.Data()));
-    infileName_.push_back(Form("%sfillhisto_wzAnalysis1008_20221_13",inputFolder.Data()));
-    infileName_.push_back(Form("%sfillhisto_wzAnalysis1008_20221_14",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wzAnalysis1001_20220_13",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wzAnalysis1001_20220_14",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wzAnalysis1001_20221_13",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wzAnalysis1001_20221_14",inputFolder.Data()));
   }
   else if(nsel == 2){
-    infileName_.push_back(Form("%sfillhisto_zzAnalysis1008_20220_11",inputFolder.Data()));
-    infileName_.push_back(Form("%sfillhisto_zzAnalysis1008_20221_11",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zzAnalysis1001_20220_11",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_zzAnalysis1001_20221_11",inputFolder.Data()));
   }
   else if(nsel == 8){
-    infileName_.push_back(Form("%sfillhisto_wwAnalysis1008_20220_61",inputFolder.Data()));
-    infileName_.push_back(Form("%sfillhisto_wwAnalysis1008_20220_63",inputFolder.Data()));
-    infileName_.push_back(Form("%sfillhisto_wwAnalysis1008_20221_61",inputFolder.Data()));
-    infileName_.push_back(Form("%sfillhisto_wwAnalysis1008_20221_63",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wwAnalysis1001_20220_61",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wwAnalysis1001_20220_63",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wwAnalysis1001_20221_61",inputFolder.Data()));
+    infileName_.push_back(Form("%sfillhisto_wwAnalysis1001_20221_63",inputFolder.Data()));
   }
   else {
     return;
