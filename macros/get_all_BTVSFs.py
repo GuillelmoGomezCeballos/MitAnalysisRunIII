@@ -90,6 +90,16 @@ if __name__ == "__main__":
                     if(debug == 1):
                         print("SF({0}/{1:.1f}/{2:.0f}) ({3:.3f}/{4:.3f}/{5:.3f}) ({6:.3f}/{7:.3f}/{8:.3f}) ({9:.3f}/{10:.3f}/{11:.3f})".format(workingPoint[wp],xEtaBins[eta],xPtBins[pt],syst[0],syst[1],syst[2],syst[3],syst[4],syst[5],syst[6],syst[7],syst[8]))
 
+        theWorkingPoint = workingPoint[2]
+        theListMethod = listMethod[0]
+        for npt in range(20):
+            for neta in range(25):
+                theEta = float(neta)/10.
+                thePt = float(npt)*10+20
+                val = evaluator_btv[theListMethod].evaluate("central", theWorkingPoint, 5, theEta, thePt)
+                if(debug == 2):
+                    print("SF({0}/{1:.1f}/{2:.0f}) {3:.5f}".format(theWorkingPoint,theEta,thePt,val))
+
     fileBTVSFsName = "histoBTVSFs.root"
     outFileBTVSFs = ROOT.TFile(fileBTVSFsName,"recreate")
     outFileBTVSFs.cd()
