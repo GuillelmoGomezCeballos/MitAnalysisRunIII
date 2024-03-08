@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     valid = ['input=', "binOption=", "debug=", 'help']
     usage  =  "Usage: ana.py --input=<{0}>\n".format(input)
-    usage +=  "              --binOption=<{0}>".format(binOption)
+    usage +=  "              --binOption=<{0}>\n".format(binOption)
     usage +=  "              --debug=<{0}>".format(debug)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)

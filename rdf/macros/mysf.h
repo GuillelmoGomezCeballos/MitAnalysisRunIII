@@ -83,8 +83,8 @@ MyCorrections::MyCorrections(int the_input_year) {
   std::string fileNameLUM = dirName+"LUM/"+subDirName+"puWeights.json.gz";
 
   std::string corrNameLUM = "";  
-  if     (year == 20220) corrNameLUM = "Collisions18_UltraLegacy_goldenJSON";
-  else if(year == 20221) corrNameLUM = "Collisions18_UltraLegacy_goldenJSON";
+  if     (year == 20220) corrNameLUM = "Collisions2022_355100_357900_eraBCD_GoldenJson";
+  else if(year == 20221) corrNameLUM = "Collisions2022_359022_362760_eraEFG_GoldenJson";
   
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
