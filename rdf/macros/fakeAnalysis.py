@@ -375,6 +375,9 @@ def readDASample(sampleNOW, year, skimType, whichJob, group, puWeights):
     nevents = df.Count().GetValue()
     print("%s entries in the dataset" %nevents)
 
+    if(year == 20220 and sampleNOW == 1042):
+        df = df.Filter("run > 356386","run > 356386")
+
     analysis(df, sampleNOW, sampleNOW, weight, year, PDType, "true", whichJob, puWeights)
 
 if __name__ == "__main__":
