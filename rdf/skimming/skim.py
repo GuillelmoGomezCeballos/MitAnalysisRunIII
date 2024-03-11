@@ -190,11 +190,11 @@ if __name__ == "__main__":
     #trick to deal with official samples
     sampleToFilter = [sampleToSkim, sampleToSkim, sampleToSkim]
     if("NANOAODSIM" in sampleToSkim):
-        sampleToFilter[0] = sampleToSkim.split("+")[0]+"/"
+        sampleToFilter[0] = "/"+sampleToSkim.split("+")[0]+"/"
         sampleToFilter[1] = sampleToSkim.split("+")[1].split("-")[0]
         sampleToFilter[2] = sampleToSkim.split("+")[1].split("-")[1]
     elif("NANOAOD" in sampleToSkim):
-        sampleToFilter[0] = sampleToSkim.split("+")[0]+"/"
+        sampleToFilter[0] = "/"+sampleToSkim.split("+")[0]+"/"
         sampleToFilter[1] = sampleToSkim.split("+")[1].split("-")[0]
         sampleToFilter[2] = sampleToSkim.split("+")[1].split("-")[1]
     while True:
