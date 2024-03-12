@@ -93,6 +93,23 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     histo[16][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 50, 0., 5.0), "Zrap","weight")
     histo2D[101][x] = dfzllgen.Histo2D(("histo2d_{0}_{1}".format(101,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 101),"Zrap","Zpt","weight")
 
+    dfwwxgen = (dfwwxgen.Define("ptl1", "good_GenDressedLepton_pt[0]")
+                        .Define("ptl2", "good_GenDressedLepton_pt[1]")
+                        .Define("etal1","good_GenDressedLepton_eta[0]")
+                        .Define("etal2","good_GenDressedLepton_eta[1]")
+                        .Define("mllGen",  "Minv2(good_GenDressedLepton_pt[0], good_GenDressedLepton_eta[0], good_GenDressedLepton_phi[0], good_GenDressedLepton_mass[0],good_GenDressedLepton_pt[1], good_GenDressedLepton_eta[1], good_GenDressedLepton_phi[1], good_GenDressedLepton_mass[1]).first")
+                        .Define("ptllGen", "Minv2(good_GenDressedLepton_pt[0], good_GenDressedLepton_eta[0], good_GenDressedLepton_phi[0], good_GenDressedLepton_mass[0],good_GenDressedLepton_pt[1], good_GenDressedLepton_eta[1], good_GenDressedLepton_phi[1], good_GenDressedLepton_mass[1]).second")
+                        )
+    histo[0][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(0,x), "histo_{0}_{1}".format(0,x), 30, 85., 385.), "mllGen","weight")
+    histo[1][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(1,x), "histo_{0}_{1}".format(1,x), 30, 0.,  240.), "ptllGen","weight")
+    histo[2][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(2,x), "histo_{0}_{1}".format(2,x), 30, 25., 325.), "ptl1","weight")
+    histo[3][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(3,x), "histo_{0}_{1}".format(3,x), 30, 20., 220.), "ptl2","weight")
+    histo[4][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(4,x), "histo_{0}_{1}".format(4,x), 25, -2.5,  2.5), "etal1","weight")
+    histo[5][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(5,x), "histo_{0}_{1}".format(5,x), 25, -2.5,  2.5), "etal2","weight")
+    histo[6][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(6,x), "histo_{0}_{1}".format(6,x), 30, 30.,  330.), "good_GenJet_pt","weight")
+    histo[7][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(7,x), "histo_{0}_{1}".format(7,x), 25, -2.5,  2.5), "good_GenJet_eta","weight")
+    histo[8][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(8,x), "histo_{0}_{1}".format(8,x), 4, -0.5,  3.5), "ngood_GenJets","weight")
+
     BinXF = 3
     minXF = -0.5
     maxXF = 2.5
@@ -115,7 +132,7 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     report0.Print()
     report1.Print()
 
-    myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}_job-1.root".format(count,year),'RECREATE')
+    myfile = ROOT.TFile("fillhisto_genAnalysis_sample{0}_year{1}_job-1.root".format(count,year),'RECREATE')
     for nc in range(nCat):
         for j in range(nHisto):
             if(histo[j][nc] == 0): continue
