@@ -416,7 +416,7 @@ class StandardPlot {
             for (int ic=0; ic<nPlotCategories; ic++) {
 	      if     (ic==kPlotData){
 	        if(_hist[ic] && _hist[ic]->GetSumOfWeights() > 0) { DrawLegend(xPos[j], 0.84 - yOff[j]*_yoffset, _hist[ic], plotNames[ic].Data(), "ep"); j++;}
-                if(plotSystErrorBars == true) {DrawLegendTG(xPos[j], 0.84 - yOff[j]*_yoffset,gsyst, "Bkg. unc.",  "f" ); j++;isThereSignal = true;}
+                if(plotSystErrorBars == true) {DrawLegendTG(xPos[j], 0.84 - yOff[j]*_yoffset,gsyst, "Total unc.",  "f" ); j++;isThereSignal = true;}
               }
 	      else if(ic == kPlotBSM){
 	        double furtherXOffSet = 0.0;
@@ -440,7 +440,7 @@ class StandardPlot {
 	      }
 	    }
 
-            if(plotSystErrorBars == true && isThereSignal == false) {DrawLegendTG(xPos[j], 0.84 - yOff[j]*_yoffset,gsyst, "Bkg. unc.",  "f" ); j++;}
+            if(plotSystErrorBars == true && isThereSignal == false) {DrawLegendTG(xPos[j], 0.84 - yOff[j]*_yoffset,gsyst, "Total unc.",  "f" ); j++;}
 
             //TLatex* luminosity = new TLatex(0.9, 0.8, TString::Format("L = %.1f fb^{-1}",_lumi));
             //luminosity->SetNDC();

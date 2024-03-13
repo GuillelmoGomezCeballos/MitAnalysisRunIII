@@ -93,7 +93,7 @@ std::map<int, TString> plotNames={
     { kPlotData      , "Data"},
     { kPlotqqWW      , "WW"},
     { kPlotggWW      , "gg #rightarrow WW"},
-    { kPlotTT	     , "Top-quark"},
+    { kPlotTT	     , "Top quark"},
     { kPlotTW	     , "tW"},
     { kPlotDY	     , "Drell-Yan"},
     { kPlotEWKSSWW   , "W^{#pm}W^{#pm}"},
