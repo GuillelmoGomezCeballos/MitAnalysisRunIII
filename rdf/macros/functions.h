@@ -875,9 +875,17 @@ float compute_TriggerForSingleLegsSF(float ptl1, float ptl2, float etal1, float 
   return 1.0;
 }
 
-float compute_lumiFakeRate(const Vec_f& mu_pt, const Vec_f& el_pt, const int nTrigger){
+float compute_lumiFakeRate(const Vec_f& mu_pt, const Vec_f& el_pt, const int nTrigger, const int year){
   double lumiPrescalesM[3] = {0.182/1000., 0.769/1000., 0.769/1000.}; // Mu8/17/19
   double lumiPrescalesE[3] = {0.134/1000., 0.754/1000., 0.754/1000.}; // El8/12/23
+  if(year == 20230 || year == 20231){
+    lumiPrescalesM[0] =  5.8/27693.1;
+    lumiPrescalesM[1] = 79.6/27693.1;
+    lumiPrescalesM[2] = 79.6/27693.1;
+    lumiPrescalesE[0] =  4.8/27693.1;
+    lumiPrescalesE[1] = 27.6/27693.1;
+    lumiPrescalesE[2] = 27.6/27693.1;
+  }
   if     (nTrigger == -1 && mu_pt.size() == 1 && mu_pt[0] <  20) return lumiPrescalesM[0];
   else if(nTrigger == -1 && mu_pt.size() == 1 && mu_pt[0] >= 20) return lumiPrescalesM[1];
   else if(nTrigger == -1 && el_pt.size() == 1 && el_pt[0] <  15) return lumiPrescalesE[0];

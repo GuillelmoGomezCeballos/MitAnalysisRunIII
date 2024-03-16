@@ -2,7 +2,7 @@ import ROOT
 import os, sys, getopt, json
 from array import array
 
-ROOT.ROOT.EnableImplicitMT(4)
+ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
@@ -255,9 +255,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                         .Define("weightFakeSel2", "weight")
                         )
     else:
-        dffake = (dffake.Define("weightFakeSel0", "weight*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,0)")
-                        .Define("weightFakeSel1", "weight*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,1)")
-                        .Define("weightFakeSel2", "weight*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,2)")
+        dffake = (dffake.Define("weightFakeSel0", "weight*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,0,{0})".format(year))
+                        .Define("weightFakeSel1", "weight*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,1,{0})".format(year))
+                        .Define("weightFakeSel2", "weight*compute_lumiFakeRate(fake_Muon_pt,fake_Electron_pt,2,{0})".format(year))
                         )
 
     xMllMin = [ 80,  80]

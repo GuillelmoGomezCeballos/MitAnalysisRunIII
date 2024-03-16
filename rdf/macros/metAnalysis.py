@@ -2,7 +2,7 @@ import ROOT
 import os, sys, getopt, json, time
 from array import array
 
-ROOT.ROOT.EnableImplicitMT(4)
+ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist, getLumi
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
