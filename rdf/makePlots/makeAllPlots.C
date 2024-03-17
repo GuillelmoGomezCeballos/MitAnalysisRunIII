@@ -7,7 +7,7 @@
 #include "finalPlot.C"
 
 void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob = 1001){
-  if((year == 2022 || year == 2023) and nsel != "combine") {
+  if((year == 2022 || year == 2023 || year == 2024 || year == 2025 || year == 2026) and nsel != "combine") {
     gSystem->Exec(Form("./MitAnalysisRunIII/rdf/makePlots/merge_histograms_year.sh %s %d %d",Form("fillhisto_%sAnalysis",nsel.Data()),whichCondorJob,year));    
   }
   TString legendBSM="";
