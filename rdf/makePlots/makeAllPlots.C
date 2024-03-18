@@ -1064,14 +1064,14 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr0.root"),"ww_output_cr0",0,year,legendBSM.Data(),1.0,isBlinded,"Same-sign CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr1.root"),"ww_output_cr1",0,year,legendBSM.Data(),1.0,isBlinded,"WW SR",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr2.root"),"ww_output_cr2",0,year,legendBSM.Data(),1.0,isBlinded,"Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"N_{j}","",Form("ww_output_cr3.root"),"ww_output_cr3",0,year,legendBSM.Data(),1.0,isBlinded,"One b-tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"N_{j}","",Form("ww_output_cr4.root"),"ww_output_cr4",0,year,legendBSM.Data(),1.0,isBlinded,"Two b-tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"N_{j}","",Form("ww_output_cr3.root"),"ww_output_cr3",0,year,legendBSM.Data(),1.0,isBlinded,"One b tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"N_{j}","",Form("ww_output_cr4.root"),"ww_output_cr4",0,year,legendBSM.Data(),1.0,isBlinded,"Two b tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr0_prefit.root"),"ww_output_cr0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"Same-sign CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr1_prefit.root"),"ww_output_cr1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"WW SR",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"N_{j}","",Form("ww_output_cr2_prefit.root"),"ww_output_cr2_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"Z #rightarrow #tau#tau CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"N_{j}","",Form("ww_output_cr3_prefit.root"),"ww_output_cr3_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"One b-tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"N_{j}","",Form("ww_output_cr4_prefit.root"),"ww_output_cr4_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"Two b-tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"N_{j}","",Form("ww_output_cr3_prefit.root"),"ww_output_cr3_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"One b tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"N_{j}","",Form("ww_output_cr4_prefit.root"),"ww_output_cr4_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"Two b tag CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     // bin-1
     finalPlot(0,1,"m_{ll}"          ,"GeV",Form("ww_output_alt1002_bin-1.root"),"ww_output_alt1002_binx",0,year,legendBSM.Data(),1.0,isBlinded,"WW SR",1,applyScaling,mlfitResult.Data(),channelName.Data());

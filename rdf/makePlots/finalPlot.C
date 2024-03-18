@@ -95,6 +95,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   GoodStyle();
   //gROOT->LoadMacro("StandardPlot.C");
   gStyle->SetOptStat(0);
+  TGaxis::SetMaxDigits(3); 
 
   TH1F* _hist[nPlotCategories];
   TH1F* _histo_total;
