@@ -315,7 +315,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     histo_WrongSignUncUp  [ic]->Add(histo_Baseline[ic]);
     histo_WrongSignUncDown[ic]->Add(histo_Baseline[ic]);
-    if(whichAna == 0) {
+    if(whichAna == 0 && histo_Baseline[ic]->GetBinContent(1) > 0.0) {
       if(ic == kPlotqqWW || ic == kPlotggWW ||
          ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2 ||
          ic == kPlotSignal3 || ic == kPlotSignal4 || ic == kPlotSignal5 ||
