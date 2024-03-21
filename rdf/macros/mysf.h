@@ -92,11 +92,11 @@ MyCorrections::MyCorrections(int the_input_year) {
   
   std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_v1_mar24.json.gz";
   auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
-  btvHFSF_ = csetHFBTV->at("deepJet_comb");
+  btvHFSF_ = csetHFBTV->at("robustParticleTransformer_comb");
 
   std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging_v1_mar24.json.gz";
   auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
-  btvLFSF_ = csetLFBTV->at("deepJet_light");
+  btvLFSF_ = csetLFBTV->at("robustParticleTransformer_light");
 
   std::string fileNameMu = dirName+"MUO/"+subDirName+"muon_Z.json.gz";
   auto csetMu = correction::CorrectionSet::from_file(fileNameMu);

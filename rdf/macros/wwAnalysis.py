@@ -262,11 +262,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[ 3][x] = dfcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 60, 20, 320), "mll{0}".format(altMass),"weightWW")
         histo[ 4][x] = dfcat[x].Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 50,  0, 200), "ptll{0}".format(altMass),"weightWW")
         histo[ 5][x] = dfcat[x].Histo1D(("histo_{0}_{1}".format( 5,x), "histo_{0}_{1}".format( 5,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjet","weightWW")
-        histo[77][x] = dfcat[x].Histo1D(("histo_{0}_{1}".format(77,x), "histo_{0}_{1}".format(77,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjetPNetB","weightWW")
-        histo[78][x] = dfcat[x].Histo1D(("histo_{0}_{1}".format(78,x), "histo_{0}_{1}".format(78,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjetRobustParTAK4","weightWW")
         histo[79][x] = dfcat[x].Filter("ngood_jets==0").Histo1D(("histo_{0}_{1}".format(79,x), "histo_{0}_{1}".format(79,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjet","weightWW")
-        histo[80][x] = dfcat[x].Filter("ngood_jets==0").Histo1D(("histo_{0}_{1}".format(80,x), "histo_{0}_{1}".format(80,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjetPNetB","weightWW")
-        histo[81][x] = dfcat[x].Filter("ngood_jets==0").Histo1D(("histo_{0}_{1}".format(81,x), "histo_{0}_{1}".format(81,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjetRobustParTAK4","weightWW")
 
         dfssx0cat[x] = dfssx0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
         dfssx0catMuonMomUp      .append(dfssx0cat[x])

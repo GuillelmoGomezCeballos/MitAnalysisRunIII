@@ -305,7 +305,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                         coutWSStudy = coutWSStudy + 2
 
             dfjetcat.append(dfzllcat[3*x+ltype].Filter("ngood_jets >= 1", "At least one jet"))
-            histo[ltype+110][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+110,x), "histo_{0}_{1}".format(ltype+110,x), 50,0,1), "good_Jet_btagDeepFlavB","weight")
+            histo[ltype+110][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+110,x), "histo_{0}_{1}".format(ltype+110,x), 50,0,1), "good_Jet_btagRobustParTAK4B","weight")
             histo[ltype+113][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+113,x), "histo_{0}_{1}".format(ltype+113,x), 6,-0.5,5.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
 
             dfjetcat[3*x+ltype] = dfjetcat[3*x+ltype].Filter("DiLepton_flavor != 1 || nbtag_goodbtag_Jet_bjet >= 1", "At least one b-jet")
