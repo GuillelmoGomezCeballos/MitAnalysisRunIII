@@ -1999,9 +1999,9 @@ float compute_weights(const float weight, const float genWeight, const TString t
 }
 
 // print information
-int print_info(const UInt_t run, const ULong64_t event){
+int print_info(const UInt_t run, const UInt_t lumi, const ULong64_t event){
 
-  printf("INFO: %d %llu\n",run,event);
+  printf("INFO: %d %d %llu\n",run,lumi,event);
 
   return 1;
 }

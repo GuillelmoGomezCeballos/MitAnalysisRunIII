@@ -410,7 +410,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dftop0catElectronMomUp  [x] = dftop0catElectronMomUp  [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
 
         if(x == plotCategory("kPlotData") and print_info == True):
-             histo_test = (dfwwx0cat[x].Define("print_info","print_info(run,event)")
+             histo_test = (dfwwx0cat[x].Define("print_info","print_info(run,luminosityBlock,event)")
                           .Filter("print_info > 0")
                           .Histo1D(("test", "test", 4,-0.5,3.5), "ngood_jets","weightWW"))
 

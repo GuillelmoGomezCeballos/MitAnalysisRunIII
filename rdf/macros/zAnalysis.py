@@ -268,7 +268,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[ltype+54][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 100, -3.1416, 3.1416), "thePuppiMET_phi","weight")
 
             if(x == plotCategory("kPlotData") and print_info == True):
-                histo_test[ltype][x] = (dfzllcat[3*x+ltype].Define("print_info","print_info(run,event)")
+                histo_test[ltype][x] = (dfzllcat[3*x+ltype].Define("print_info","print_info(run,luminosityBlock,event)")
                                        .Filter("print_info > 0")
                                        .Histo1D(("test_{0}_{1}".format(ltype,x), "test_{0}_{1}".format(ltype,x), 4,-0.5,3.5), "ngood_jets","weight"))
 
