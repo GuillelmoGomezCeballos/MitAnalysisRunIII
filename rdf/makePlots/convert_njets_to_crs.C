@@ -39,7 +39,7 @@ void convert_njets_to_crs(TString postfix = ""){
         _hist[nc]->SetBinError  (nj+1, histo[nj][nc]->GetBinError  (ncr+1));
 
         if(strcmp(postfix.Data(),"_prefit")==0 && ncr == 1 && (nj == 2 || nj == 3) && nc == kPlotTT){
-          _hist[nc]->SetBinContent(nj+1, 1.05*_hist[nc]->GetBinContent(nj+1));
+          _hist[nc]->SetBinContent(nj+1, 1.0*_hist[nc]->GetBinContent(nj+1));
         }
 
       }

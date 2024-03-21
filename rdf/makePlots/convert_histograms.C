@@ -56,15 +56,15 @@ void convert_histograms(bool isModify = false, TString inputSampleName = "/home/
   double whichWeight = 1.0;
   if     (outputSampleName == "ww_output_bin0.root"){
     whichBin = 5;
-    whichWeight = 712./744.;
+    whichWeight = 1;//712./744.;
   }
   else if(outputSampleName == "ww_output_bin2.root"){
     whichBin = 2;
-    whichWeight = 4175./4043.;
+    whichWeight = 1;//4175./4043.;
   }
   else if(outputSampleName == "ww_output_bin3.root"){
     whichBin = 2;
-    whichWeight = 1371./1363.;
+    whichWeight = 1;//1371./1363.;
   }
 
   if(whichBin != -1) printf("APPLYING SPECIAL WEIGHTS! %d / %f\n",whichBin,whichWeight);
