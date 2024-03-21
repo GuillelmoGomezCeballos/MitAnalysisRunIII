@@ -19,6 +19,7 @@
 void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceballos/cards/ww_smp24001/logs_ana1009/fitDiagnosticsww_fid_normalized1_obs.root", TString shapeName = "shapes_fit_s") {
 
   TFile *mlfit = TFile::Open(mlfitResult); assert(mlfit);
+  TH1F* _histoWrite[nPlotCategories];
 
   int chanAux, regionsAux;
   if     (jetBin >= -1) {
@@ -30,6 +31,10 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
     regionsAux = 1;
   }
 
+  for(int nc=0; nc<nPlotCategories; nc++) {
+    _histoWrite[nc] = new TH1F(Form("histo%d",nc), Form("histo%d",nc), regionsAux, -0.5, (float)regionsAux-0.5);
+  }
+  TH1F* histo_total = new TH1F(Form("histo_total"), Form("histo_total"), regionsAux, -0.5, (float)regionsAux-0.5);
 
   const int chan = chanAux;
   const int regions = regionsAux;
@@ -116,6 +121,8 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
     if(nonZeroYields[ic] == true) {
       printf("%20s & ",plotBaseNames[ic].Data());
       for(int nr=0; nr<regions; nr++){
+        _histoWrite[ic]->SetBinContent(nr+1, yields[nr][ic]);
+        _histoWrite[ic]->SetBinError  (nr+1, yields[nr][ic],yieldsE[nr][ic]);
         yieldsE[nr][kPlotData] = sqrt(yieldsE[nr][kPlotData]);
         if(ic == kPlotData) printf("      %6d         ",(int)yields[nr][ic]);
         else                printf(" %7.1f $\\pm$ %5.1f ",yields[nr][ic],yieldsE[nr][ic]);
@@ -126,8 +133,21 @@ void producingYields(int jetBin = -1, TString mlfitResult = "/home/submit/ceball
   }
   printf("%20s & ","Total");
   for(int nr=0; nr<regions; nr++){
+    histo_total->SetBinContent(nr+1, total[nr]);
+    histo_total->SetBinError  (nr+1, totalE[nr]);
     printf(" %7.1f $\\pm$ %5.1f ",total[nr],totalE[nr]);
     if(nr == regions-1) printf("\\\\"); else printf("&");
   }
   printf("\n");
+
+  TString postfix = "";
+  if(strcmp(shapeName.Data(),"shapes_prefit")==0) postfix = "_prefit";
+  TFile fileOutput(Form("ww_output_bin%d%s.root",jetBin,postfix.Data()),"RECREATE");
+  fileOutput.cd();
+  for(int nc=0; nc<nPlotCategories; nc++) {
+    _histoWrite[nc]->Write();
+  }
+  histo_total->Write();
+  fileOutput.Close();
+
 }
