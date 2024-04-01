@@ -45,9 +45,8 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     minXF = -0.5
     maxXF = 0.5
 
-    startF = 200
-    histo[startF+0][x] = dfcat.Histo1D(("histo_{0}_{1}".format(startF+0,x), "histo_{0}_{1}".format(startF+20,x),BinXF,minXF,maxXF),"weightForBTag","weight")
-    for nv in range(1,114):
+    startF = 140
+    for nv in range(0,114):
         histo[startF+0+nv][x] = makeFinalVariable(dfcat,"weightForBTag",theCat,startF+0,x,BinXF,minXF,maxXF,nv)
 
     dfzllgen = (dfcat
@@ -78,14 +77,19 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
                       .Define("theNNLOWeight4", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,4)")
                       )
 
+    # Z->ll + X study
     histo[10][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
     histo[11][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 50, 0., 100.), "Zpt","weight")
     histo[12][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 50, 0., 5.0), "Zrap","weight")
     histo2D[100][x] = dfzllgen.Histo2D(("histo2d_{0}_{1}".format(100,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 100),"Zrap","Zpt","weight")
 
+    startF = 260
+    for nv in range(0,114):
+        histo[startF+0+nv][x] = makeFinalVariable(dfzllgen,"weightForBTag",theCat,startF+0,x,BinXF,minXF,maxXF,nv)
+
     dfzllgen = (dfzllgen
           .Define("genLep", "(abs(GenDressedLepton_pdgId) == 11 || abs(GenDressedLepton_pdgId) == 13)")
-          .Filter("Sum(genLep) == 2","genLep == 2")
+          .Filter("Sum(genLep) >= 2","genLep >= 2")
           .Define("filter_GenDressedLepton_pt", "GenDressedLepton_pt[genLep]")
           .Define("filter_GenDressedLepton_eta", "GenDressedLepton_eta[genLep]")
             )
@@ -96,11 +100,19 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     histo[13][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 50, 0., 100.), "Zpt","weight")
     histo[14][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 50, 0., 5.0), "Zrap","weight")
 
-    dfzllgen = dfzllgen.Filter("filter_GenDressedLepton_pt[0] > 25 && filter_GenDressedLepton_pt[1] > 25","Tighter pt requirements")
+    dfzllgen = dfzllgen.Filter("filter_GenDressedLepton_pt[0] > 25 && filter_GenDressedLepton_pt[1] > 20","Tighter pt requirements")
 
     histo[15][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 50, 0., 100.), "Zpt","weight")
     histo[16][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 50, 0., 5.0), "Zrap","weight")
     histo2D[101][x] = dfzllgen.Histo2D(("histo2d_{0}_{1}".format(101,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 101),"Zrap","Zpt","weight")
+
+    dfzllgen = (dfzllgen.Filter("Sum(genLep) == 3","genLep == 3")
+                        .Filter("abs(filter_GenDressedLepton_eta[2]) < 2.5 && filter_GenDressedLepton_pt[2] > 10","3rd lepton requirement")
+                        )
+
+    startF = 380
+    for nv in range(0,114):
+        histo[startF+0+nv][x] = makeFinalVariable(dfzllgen,"weightForBTag",theCat,startF+0,x,BinXF,minXF,maxXF,nv)
 
     dfwwxgen = (dfwwxgen.Define("ptl1", "good_GenDressedLepton_pt[0]")
                         .Define("ptl2", "good_GenDressedLepton_pt[1]")
@@ -124,8 +136,7 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     maxXF = 2.5
 
     startF = 0
-    histo[startF+20][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(startF+20,x), "histo_{0}_{1}".format(startF+20,x),BinXF,minXF,maxXF),"theGenCat","weight")
-    for nv in range(1,114):
+    for nv in range(0,114):
         histo[startF+20+nv][x] = makeFinalVariable(dfwwxgen,"theGenCat",theCat,startF+20,x,BinXF,minXF,maxXF,nv)
 
     histo[134][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(134,x), "histo_{0}_{1}".format(134,x),BinXF,minXF,maxXF),"theGenCat","weight")

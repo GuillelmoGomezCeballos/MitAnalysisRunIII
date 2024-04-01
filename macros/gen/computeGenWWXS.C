@@ -12,14 +12,16 @@
 #include "TLegend.h"
 #include <iostream>
 
-void computeGenWWXS(TString input = "", bool isFiducial = 0, TString output = "output.root"){
+void computeGenWWXS(TString input = "", int selectType = 0, TString output = "output.root"){
 
   const int number_unc_PS       = 4;
   const int number_unc_QCDScale = 6;
   const int number_unc_PDF      = 101;
 
-  int startF=20;
-  if(!isFiducial) startF=200;
+  int startF=20; // WW fiducial
+  if     (selectType == 1) startF=140; // No requirements
+  else if(selectType == 2) startF=260; // mZ requirement
+  else if(selectType == 3) startF=380; // mZ + 3l requirements
 
   TH1D *histo_Baseline;
   TH1D *histo_PS[number_unc_PS];
