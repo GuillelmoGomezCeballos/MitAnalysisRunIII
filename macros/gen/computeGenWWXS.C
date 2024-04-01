@@ -12,13 +12,15 @@
 #include "TLegend.h"
 #include <iostream>
 
-void computeGenWWXS(TString input = "", TString output = "output.root"){
+void computeGenWWXS(TString input = "", bool isFiducial = 0, TString output = "output.root"){
 
   const int number_unc_PS       = 4;
   const int number_unc_QCDScale = 6;
   const int number_unc_PDF      = 101;
 
   int startF=20;
+  if(!isFiducial) startF=200;
+
   TH1D *histo_Baseline;
   TH1D *histo_PS[number_unc_PS];
   TH1D *histo_QCDScale[number_unc_QCDScale];

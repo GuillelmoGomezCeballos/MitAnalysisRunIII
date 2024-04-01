@@ -20,7 +20,7 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 200
+    nCat, nHisto = plotCategory("kPlotCategories"), 500
     histo   = [[0 for x in range(nCat)] for y in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
 
@@ -40,6 +40,15 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     dfcat = selectionTheoryWeigths(dfcat,weight,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
 
     x = 0
+
+    BinXF = 1
+    minXF = -0.5
+    maxXF = 0.5
+
+    startF = 200
+    histo[startF+0][x] = dfcat.Histo1D(("histo_{0}_{1}".format(startF+0,x), "histo_{0}_{1}".format(startF+20,x),BinXF,minXF,maxXF),"weightForBTag","weight")
+    for nv in range(1,114):
+        histo[startF+0+nv][x] = makeFinalVariable(dfcat,"weightForBTag",theCat,startF+0,x,BinXF,minXF,maxXF,nv)
 
     dfzllgen = (dfcat
           .Define("gen_z", "GenPart_pdgId == 23 && GenPart_status == 62")
