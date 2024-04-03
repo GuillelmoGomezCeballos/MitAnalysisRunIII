@@ -57,7 +57,8 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
           .Define("Zeta", "GenPart_eta[gen_z]")
           .Define("Zphi", "abs(GenPart_phi[gen_z])")
           .Define("Zmass", "GenPart_mass[gen_z]")
-          .Filter("abs(Zmass[0]-91.1876) < 15","Zmass cut")
+         #.Filter("abs(Zmass[0]-91.1876) < 15","Zmass cut")
+          .Filter("Zmass[0] > 60 && Zmass[0] < 120","Zmass cut")
           .Define("Zrap", "abs(makeRapidity(Zpt[0],Zeta[0],Zphi[0],Zmass[0]))")
             )
 
@@ -78,9 +79,9 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
                       )
 
     # Z->ll + X study
-    histo[10][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
-    histo[11][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 50, 0., 100.), "Zpt","weight")
-    histo[12][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 50, 0., 5.0), "Zrap","weight")
+    histo[ 9][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format( 9,x), "histo_{0}_{1}".format( 9,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
+    histo[10][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 40,  0, 200), "Zpt","weight")
+    histo[11][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 50, 0., 5.0), "Zrap","weight")
     histo2D[100][x] = dfzllgen.Histo2D(("histo2d_{0}_{1}".format(100,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 100),"Zrap","Zpt","weight")
 
     startF = 260
@@ -97,13 +98,19 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     dfzllgen = dfzllgen.Filter("abs(filter_GenDressedLepton_eta[0]) < 2.5 && abs(filter_GenDressedLepton_eta[1]) < 2.5","eta requirements")
     dfzllgen = dfzllgen.Filter("filter_GenDressedLepton_pt[0] > 10 && filter_GenDressedLepton_pt[1] > 10","Minimal pt requirements")
 
-    histo[13][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 50, 0., 100.), "Zpt","weight")
-    histo[14][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 50, 0., 5.0), "Zrap","weight")
+    histo[12][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 40,  0, 200), "Zpt","weight")
+    histo[13][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 50, 0., 5.0), "Zrap","weight")
 
     dfzllgen = dfzllgen.Filter("filter_GenDressedLepton_pt[0] > 25 && filter_GenDressedLepton_pt[1] > 20","Tighter pt requirements")
 
-    histo[15][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 50, 0., 100.), "Zpt","weight")
-    histo[16][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 50, 0., 5.0), "Zrap","weight")
+    dfzllgen = selectionGenLepJet(dfzllgen,20,30,jetEtaCut)
+
+    histo[14][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 40,  0, 200), "Zpt","weight")
+    histo[15][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 50, 0., 5.0), "Zrap","weight")
+    histo[16][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 4, -0.5,  3.5), "ngood_GenJets","weight")
+    histo[17][x] = dfzllgen.Filter("ngood_GenJets == 0").Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 40,  0, 200), "Zpt","weight")
+    histo[18][x] = dfzllgen.Filter("ngood_GenJets == 1").Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 40,  0, 200), "Zpt","weight")
+    histo[19][x] = dfzllgen.Filter("ngood_GenJets >= 2").Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 40,  0, 200), "Zpt","weight")
     histo2D[101][x] = dfzllgen.Histo2D(("histo2d_{0}_{1}".format(101,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 101),"Zrap","Zpt","weight")
 
     dfzllgen = (dfzllgen.Filter("Sum(genLep) == 3","genLep == 3")
@@ -135,9 +142,9 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     minXF = -0.5
     maxXF = 2.5
 
-    startF = 0
+    startF = 20
     for nv in range(0,114):
-        histo[startF+20+nv][x] = makeFinalVariable(dfwwxgen,"theGenCat",theCat,startF+20,x,BinXF,minXF,maxXF,nv)
+        histo[startF+nv][x] = makeFinalVariable(dfwwxgen,"theGenCat",theCat,startF,x,BinXF,minXF,maxXF,nv)
 
     histo[134][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(134,x), "histo_{0}_{1}".format(134,x),BinXF,minXF,maxXF),"theGenCat","weight")
     histo[135][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(135,x), "histo_{0}_{1}".format(135,x),BinXF,minXF,maxXF),"theGenCat","theNNLOWeight0")

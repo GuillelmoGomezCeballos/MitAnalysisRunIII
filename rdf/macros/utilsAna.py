@@ -746,11 +746,11 @@ def SwitchSample(argument, skimType):
        474: (dirT2+"/WpWpJJ_EWK-QCD_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2+NANOAODSIMFAKE",0.058707*1000,plotCategory("kPlotEWKSSWW")),
 
        900:(dirLocal+"/2018/vbf-hrhogamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
-       901:(dirLocal+"/2018/vbf-hphiKLKSgamma-powheg/NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
-       902:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_preEE",1.0*1000,plotCategory("kPlotDY")),
-       903:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_postEE",1.0*1000,plotCategory("kPlotDY")),
-       904:("/data/submit/cms/store/user/ceballos/test_samples/DY_2023_partA",1.0*1000,plotCategory("kPlotDY")),
-       905:("/data/submit/cms/store/user/ceballos/test_samples/DY_2023_partB",1.0*1000,plotCategory("kPlotDY")),
+       901:("/data/submit/cms/store/user/ceballos/test_samples/DY_MLM_2022_preEE",6345.99*1000,plotCategory("kPlotDY")),
+       902:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_preEE",6345.99*1000,plotCategory("kPlotDY")),
+       903:("/data/submit/cms/store/user/ceballos/test_samples/DY_2022_postEE",6345.99*1000,plotCategory("kPlotDY")),
+       904:("/data/submit/cms/store/user/ceballos/test_samples/DY_2023_partA",6345.99*1000,plotCategory("kPlotDY")),
+       905:("/data/submit/cms/store/user/ceballos/test_samples/DY_2023_partB",6345.99*1000,plotCategory("kPlotDY")),
        960:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2016_preVFP",(118.7-3.974)*0.1086*0.1086*9*1000,plotCategory("kPlotqqWW")),
 
        961:("/data/submit/cms/store/user/ceballos/test_samples/qqWW_2022_postEE",(118.7*1.06-ggWWXS_LO_MCFM)*0.1086*0.1086*9*1000,plotCategory("kPlotqqWW")),
@@ -771,6 +771,8 @@ def SwitchSample(argument, skimType):
        974:("/data/submit/cms/store/user/ceballos/test_samples/ggWWto2L2Nu_OS_PolarizationTT_postEE",3.10724*(ggWWXS_LO_MCFM/ggWWXS_LO_MADGRAPH)*ggWWXS_kFactor*1000,plotCategory("kPlotggWW")),
 
        975:("/data/submit/cms/store/user/ceballos/test_samples/WW_MINNLO",12.80173*1000,plotCategory("kPlotqqWW")),
+
+       976:("/data/submit/cms/store/user/ceballos/test_samples/WZ3l_2022_postEE",4.924*1.08*1000,plotCategory("kPlotWZ")),
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")
