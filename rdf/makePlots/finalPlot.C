@@ -62,7 +62,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetTitle(ytitle.Data());
   histo->GetYaxis()->SetLabelFont  (   42);
   histo->GetYaxis()->SetLabelOffset(0.015);
-  histo->GetYaxis()->SetLabelSize  (0.090);
+  histo->GetYaxis()->SetLabelSize  (0.150);
   histo->GetYaxis()->SetNdivisions (  505);
   histo->GetYaxis()->SetTitleFont  (   42);
   histo->GetYaxis()->SetTitleOffset( 0.35);
