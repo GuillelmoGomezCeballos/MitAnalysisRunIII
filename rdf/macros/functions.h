@@ -341,7 +341,7 @@ float compute_JSON_TAU_SFs(const Vec_f& tau_pt, const Vec_f& tau_eta, const Vec_
   return sfTot;
 }
 
-Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_f& jet_rawFactor, const Vec_f& jet_area, const double rho, int type, int jetTypeCorr){
+Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_f& jet_phi, const Vec_f& jet_rawFactor, const Vec_f& jet_area, const double rho, int type, int jetTypeCorr){
   // jetTypeCorr == -1 (MC) 0/1/2/... A/B/C/... (DATA)
   bool debug = false;
   if(debug) printf("jes: %lu %f %d\n",jet_pt.size(),rho,type);
@@ -349,7 +349,7 @@ Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
 
   for (unsigned int idx = 0; idx < jet_pt.size(); ++idx) {
     if     (type ==  0) {
-      double sf = corrSFs.eval_jetCORR(jet_area[idx], jet_eta[idx], jet_pt[idx]*(1-jet_rawFactor[idx]), rho, jetTypeCorr);
+      double sf = corrSFs.eval_jetCORR(jet_area[idx], jet_eta[idx], jet_phi[idx], jet_pt[idx]*(1-jet_rawFactor[idx]), rho, jetTypeCorr);
       new_jet_pt[idx] = jet_pt[idx] * (1-jet_rawFactor[idx]) * sf;
       if(debug) printf("jes(%d): %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,jet_area[idx],jet_eta[idx],jet_pt[idx]*(1-jet_rawFactor[idx]), jet_pt[idx],1./(1-jet_rawFactor[idx]),sf,new_jet_pt[idx]);
     }

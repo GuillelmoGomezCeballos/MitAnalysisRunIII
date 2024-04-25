@@ -24,7 +24,7 @@ class MyCorrections {
 
     double eval_btvSF     (const char *valType, char *workingPoint, double eta, double pt, int flavor);
 
-    double eval_jetCORR   (double area, double eta, double pt, double rho, int type);
+    double eval_jetCORR   (double area, double eta, double phi, double pt, double rho, int type);
     double eval_jesUnc    (double eta, double pt, int type);
     double eval_jerMethod1(double eta, double pt, int type);
     double eval_jerMethod2(double eta, double pt, double rho);
@@ -61,15 +61,14 @@ class MyCorrections {
 MyCorrections::MyCorrections(int the_input_year) {
 
   year = the_input_year;
-  if     (year == 20230) year = 20220;
-  else if(year == 20231) year = 20220;
 
-  //std::string dirName    = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/";
   std::string dirName    = "jsonpog-integration/POG/";
 
   std::string subDirName = "";
   if     (year == 20220) subDirName = "2022_Summer22/";  
   else if(year == 20221) subDirName = "2022_Summer22EE/";
+  else if(year == 20230) subDirName = "2023_Summer23/";
+  else if(year == 20231) subDirName = "2023_Summer23BPix/";
   else return;
 
   std::cout << "subDirName/year: " << subDirName << " " << year << std::endl;
@@ -86,6 +85,8 @@ MyCorrections::MyCorrections(int the_input_year) {
   std::string corrNameLUM = "";  
   if     (year == 20220) corrNameLUM = "Collisions2022_355100_357900_eraBCD_GoldenJson";
   else if(year == 20221) corrNameLUM = "Collisions2022_359022_362760_eraEFG_GoldenJson";
+  else if(year == 20230) corrNameLUM = "Collisions2023_366403_369802_eraBC_GoldenJson";
+  else if(year == 20231) corrNameLUM = "Collisions2023_369803_370790_eraD_GoldenJson";
   
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
@@ -117,16 +118,22 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetPH = correction::CorrectionSet::from_file(fileNamePH);
   if     (year == 20220) photonSF_ = csetPH->at("Photon-ID-SF");
   else if(year == 20221) photonSF_ = csetPH->at("Photon-ID-SF");
+  else if(year == 20230) photonSF_ = csetPH->at("Photon-ID-SF");
+  else if(year == 20231) photonSF_ = csetPH->at("Photon-ID-SF");
 
   std::string fileNameELE = dirName+"EGM/"+subDirName+"electron.json.gz";
   auto csetELE = correction::CorrectionSet::from_file(fileNameELE);
   if     (year == 20220) electronSF_ = csetELE->at("Electron-ID-SF");
   else if(year == 20221) electronSF_ = csetELE->at("Electron-ID-SF");
+  else if(year == 20230) electronSF_ = csetELE->at("Electron-ID-SF");
+  else if(year == 20231) electronSF_ = csetELE->at("Electron-ID-SF");
 
   std::string fileNameEnergyELE = dirName+"EGM/"+subDirName+"electronSS.json.gz";
   auto csetEnergyELE = correction::CorrectionSet::from_file(fileNameEnergyELE);
   if     (year == 20220) {electronScale_ = csetEnergyELE->at("2022Re-recoBCD_ScaleJSON");        electronSmearing_ = csetEnergyELE->at("2022Re-recoBCD_SmearingJSON");}
   else if(year == 20221) {electronScale_ = csetEnergyELE->at("2022Re-recoE+PromptFG_ScaleJSON"); electronSmearing_ = csetEnergyELE->at("2022Re-recoE+PromptFG_SmearingJSON");}
+  else if(year == 20230) {electronScale_ = csetEnergyELE->at("2022Re-recoBCD_ScaleJSON");        electronSmearing_ = csetEnergyELE->at("2022Re-recoBCD_SmearingJSON");}
+  else if(year == 20231) {electronScale_ = csetEnergyELE->at("2022Re-recoBCD_ScaleJSON");        electronSmearing_ = csetEnergyELE->at("2022Re-recoBCD_SmearingJSON");}
 
   std::string fileNameTAU = dirName+"TAU/"+subDirName+"tau_DeepTau2018v2p5.json.gz";
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);
@@ -169,6 +176,26 @@ MyCorrections::MyCorrections(int the_input_year) {
     jecDATAName[4] = "Summer22EE_22Sep2023_RunE_V2_DATA"; jetVetoMapName[4] = "Summer22EE_23Sep2023_RunEFG_V1";  // E
     jecDATAName[5] = "Summer22EE_22Sep2023_RunF_V2_DATA"; jetVetoMapName[5] = "Summer22EE_23Sep2023_RunEFG_V1";  // F
     jecDATAName[6] = "Summer22EE_22Sep2023_RunG_V2_DATA"; jetVetoMapName[6] = "Summer22EE_23Sep2023_RunEFG_V1";  // G
+  }
+  else if(year == 20230)  {
+    jecMCName = "Summer23Prompt23_V1_MC"; jerName = "Summer23Prompt23_RunCv4_JRV1_MC";
+    jecDATAName[0] = "NULL";   jetVetoMapName[0] = "NULL"; // A
+    jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
+    jecDATAName[2] = "Summer23Prompt23_RunCv123_V1_DATA";   jetVetoMapName[2] = "Summer23Prompt23_RunC_V1"; // C
+    jecDATAName[3] = "NULL";   jetVetoMapName[3] = "NULL"; // D
+    jecDATAName[4] = "NULL";   jetVetoMapName[4] = "NULL"; // E
+    jecDATAName[5] = "NULL";   jetVetoMapName[5] = "NULL"; // F
+    jecDATAName[6] = "NULL";   jetVetoMapName[6] = "NULL"; // G
+  }
+  else if(year == 20231)  {
+    jecMCName = "Summer23BPixPrompt23_V1_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
+    jecDATAName[0] = "NULL";   jetVetoMapName[0] = "NULL"; // A
+    jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
+    jecDATAName[2] = "NULL";   jetVetoMapName[2] = "NULL"; // C
+    jecDATAName[3] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[3] = "Summer23BPixPrompt23_RunD_V1"; // D
+    jecDATAName[4] = "NULL";   jetVetoMapName[4] = "NULL"; // E
+    jecDATAName[5] = "NULL";   jetVetoMapName[5] = "NULL"; // F
+    jecDATAName[6] = "NULL";   jetVetoMapName[6] = "NULL"; // G
   }
 
   std::string tagName = jecMCName + "_" + "L1L2L3Res" + "_" + algoName;
@@ -350,10 +377,15 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
     return btvLFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
 };
 
-double MyCorrections::eval_jetCORR(double area, double eta, double pt, double rho, int type) {
-  //if(type >= 4 && year == 2022) return JECL2ResDATA_[type]->evaluate({eta, pt});
-  if(type >= 0) return JECDATA_[type]->evaluate({area, eta, pt, rho});
-  return JECMC_->evaluate({area, eta, pt, rho});
+double MyCorrections::eval_jetCORR(double area, double eta, double phi, double pt, double rho, int type) {
+  // data
+  if     (type >= 0 && year == 20231) return JECDATA_[type]->evaluate({area, eta, phi, pt, rho});
+  else if(type >= 0 && year != 20231) return JECDATA_[type]->evaluate({area, eta,      pt, rho});
+  // MC
+  if     (year == 20231) return JECMC_->evaluate({area, eta, phi, pt, rho});
+  else if(year != 20231) return JECMC_->evaluate({area, eta,      pt, rho});
+  printf("ERROR in eval_jetCORR!\n");
+  return 1.0;
 };
 
 double MyCorrections::eval_jesUnc(double eta, double pt, int type) {
