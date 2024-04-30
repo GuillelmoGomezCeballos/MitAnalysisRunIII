@@ -130,10 +130,10 @@ MyCorrections::MyCorrections(int the_input_year) {
 
   std::string fileNameEnergyELE = dirName+"EGM/"+subDirName+"electronSS.json.gz";
   auto csetEnergyELE = correction::CorrectionSet::from_file(fileNameEnergyELE);
-  if     (year == 20220) {electronScale_ = csetEnergyELE->at("2022Re-recoBCD_ScaleJSON");        electronSmearing_ = csetEnergyELE->at("2022Re-recoBCD_SmearingJSON");}
-  else if(year == 20221) {electronScale_ = csetEnergyELE->at("2022Re-recoE+PromptFG_ScaleJSON"); electronSmearing_ = csetEnergyELE->at("2022Re-recoE+PromptFG_SmearingJSON");}
-  else if(year == 20230) {electronScale_ = csetEnergyELE->at("2022Re-recoBCD_ScaleJSON");        electronSmearing_ = csetEnergyELE->at("2022Re-recoBCD_SmearingJSON");}
-  else if(year == 20231) {electronScale_ = csetEnergyELE->at("2022Re-recoBCD_ScaleJSON");        electronSmearing_ = csetEnergyELE->at("2022Re-recoBCD_SmearingJSON");}
+  if     (year == 20220) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
+  else if(year == 20221) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
+  else if(year == 20230) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
+  else if(year == 20231) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
 
   std::string fileNameTAU = dirName+"TAU/"+subDirName+"tau_DeepTau2018v2p5.json.gz";
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);
