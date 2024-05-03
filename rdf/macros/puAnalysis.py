@@ -66,7 +66,7 @@ def selectionWW(df,year,PDType,isData,count):
 
     return dftag
 
-def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
+def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,puWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
     xPtBins = array('d', [20,25,30,35,40,50,60,80,100,150,250,500,1000])
     xEtaBins = array('d', [0.0,0.3,0.6,0.9,1.2,1.5,1.8,2.1,2.5])
@@ -85,18 +85,28 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     ROOT.initHisto1D(histo_wwpt[2],5)
     ROOT.initHisto1D(histo_wwpt[3],6)
     ROOT.initHisto1D(histo_wwpt[4],7)
+    ROOT.initHisto1D(puWeights[0],0)
+    ROOT.initHisto1D(puWeights[1],1)
+    ROOT.initHisto1D(puWeights[2],2)
 
     ROOT.initJSONSFs(year)
 
     dfcat = df.Define("PDType","\"{0}\"".format(PDType))\
               .Define("weightForBTag","1.0f")\
               .Define("weight","{0}*genWeight".format(weight/getLumi(year)))\
-              .Filter("weight != 0","good weight")
+              .Filter("weight != 0","good weight")\
+              .Define("weightPUSF"     ,"weight*compute_PURecoSF(Muon_pt,Muon_eta,Electron_pt,Electron_eta,Pileup_nTrueInt,0)")\
+              .Define("weightPUSF_Up"  ,"weight*compute_PURecoSF(Muon_pt,Muon_eta,Electron_pt,Electron_eta,Pileup_nTrueInt,1)")\
+              .Define("weightPUSF_Down","weight*compute_PURecoSF(Muon_pt,Muon_eta,Electron_pt,Electron_eta,Pileup_nTrueInt,2)")
 
     dfcat = selectionTheoryWeigths(dfcat,weight,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
 
     x = 0
     histo[ 0][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x), 100,  0, 100), "Pileup_nTrueInt","weightForBTag")
+    histo[ 1][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 1,x), "histo_{0}_{1}".format( 1,x), 100,  0, 100), "Pileup_nTrueInt","weight")
+    histo[ 2][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 2,x), "histo_{0}_{1}".format( 2,x), 100,  0, 100), "Pileup_nTrueInt","weightPUSF")
+    histo[ 3][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 100,  0, 100), "Pileup_nTrueInt","weightPUSF_Up")
+    histo[ 4][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 100,  0, 100), "Pileup_nTrueInt","weightPUSF_Down")
 
     dfgen = (dfcat
           .Define("gen_z", "GenPart_pdgId == 23 && GenPart_status == 62")
@@ -231,14 +241,14 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     histo2D[10][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(10,x),"histo2d_{0}_{1}".format(10,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_cj_l","goodloosejet_pt_cj_l","weightForBTag")
     histo2D[11][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(11,x),"histo2d_{0}_{1}".format(11,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_bj_l","goodloosejet_pt_bj_l","weightForBTag")
 
-    histo[ 1][x] = (dfcat.Filter("Sum(fake_mu)==2")
+    histo[ 5][x] = (dfcat.Filter("Sum(fake_mu)==2")
                          .Define("mll", "Minv2(fake_Muon_pt[0], fake_Muon_eta[0], fake_Muon_phi[0], fake_Muon_mass[0],fake_Muon_pt[1], fake_Muon_eta[1], fake_Muon_phi[1], fake_Muon_mass[1]).first")
-                         .Histo1D(("histo_{0}_{1}".format(1,x), "histo_{0}_{1}".format(1,x), 100, 10, 110), "mll","weight")
+                         .Histo1D(("histo_{0}_{1}".format(5,x), "histo_{0}_{1}".format(5,x), 100, 10, 110), "mll","weight")
                          )
 
-    histo[ 2][x] = (dfcat.Filter("Sum(fake_el)==2")
+    histo[ 6][x] = (dfcat.Filter("Sum(fake_el)==2")
                          .Define("mll", "Minv2(fake_Electron_pt[0], fake_Electron_eta[0], fake_Electron_phi[0], fake_Electron_mass[0],fake_Electron_pt[1], fake_Electron_eta[1], fake_Electron_phi[1], fake_Electron_mass[1]).first")
-                         .Histo1D(("histo_{0}_{1}".format(2,x), "histo_{0}_{1}".format(2,x), 100, 10, 110), "mll","weight")
+                         .Histo1D(("histo_{0}_{1}".format(6,x), "histo_{0}_{1}".format(6,x), 100, 10, 110), "mll","weight")
                          )
 
     histo[10][x] = dfgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
@@ -377,7 +387,7 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
 
     print("ending {0} / {1} / {2} / {3} / {4} / {5}".format(count,category,weight,year,PDType,isData))
 
-def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt):
+def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt, puWeights):
 
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
@@ -436,7 +446,7 @@ def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt):
     print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
     print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
-    analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false",histo_wwpt,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
+    analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false",histo_wwpt,puWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
 
 if __name__ == "__main__":
 
@@ -463,6 +473,16 @@ if __name__ == "__main__":
         if opt == "--process":
             process = int(arg)
 
+    puWeights = []
+    puPath = "data/puWeights_UL_{0}.root".format(year)
+    fPuFile = ROOT.TFile(puPath)
+    puWeights.append(fPuFile.Get("puWeights"))
+    puWeights.append(fPuFile.Get("puWeightsUp"))
+    puWeights.append(fPuFile.Get("puWeightsDown"))
+    for x in range(3):
+        puWeights[x].SetDirectory(0)
+    fPuFile.Close()
+
     histo_wwpt = []
     fPtwwWeightPath = ROOT.TFile("data/MyRatioWWpTHistogramAll.root")
     histo_wwpt.append(fPtwwWeightPath.Get("wwpt"))
@@ -475,6 +495,6 @@ if __name__ == "__main__":
     fPtwwWeightPath.Close()
 
     try:
-        readMCSample(process,year,"All", skimType, histo_wwpt)
+        readMCSample(process,year,"All", skimType, histo_wwpt, puWeights)
     except Exception as e:
         print("FAILED {0}".format(e))
