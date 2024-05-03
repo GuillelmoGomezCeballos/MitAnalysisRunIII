@@ -97,7 +97,10 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,puWeights,nT
               .Filter("weight != 0","good weight")\
               .Define("weightPUSF"     ,"weight*compute_PURecoSF(Muon_pt,Muon_eta,Electron_pt,Electron_eta,Pileup_nTrueInt,0)")\
               .Define("weightPUSF_Up"  ,"weight*compute_PURecoSF(Muon_pt,Muon_eta,Electron_pt,Electron_eta,Pileup_nTrueInt,1)")\
-              .Define("weightPUSF_Down","weight*compute_PURecoSF(Muon_pt,Muon_eta,Electron_pt,Electron_eta,Pileup_nTrueInt,2)")
+              .Define("weightPUSF_Down","weight*compute_PURecoSF(Muon_pt,Muon_eta,Electron_pt,Electron_eta,Pileup_nTrueInt,2)")\
+              .Define("weightLUMPUSF"     ,"weight*compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")\
+              .Define("weightLUMPUSF_Up"  ,"weight*compute_JSON_PU_SF(Pileup_nTrueInt,\"up\")")\
+              .Define("weightLUMPUSF_Down","weight*compute_JSON_PU_SF(Pileup_nTrueInt,\"down\")")
 
     dfcat = selectionTheoryWeigths(dfcat,weight,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
 
@@ -107,6 +110,9 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,puWeights,nT
     histo[ 2][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 2,x), "histo_{0}_{1}".format( 2,x), 100,  0, 100), "Pileup_nTrueInt","weightPUSF")
     histo[ 3][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 100,  0, 100), "Pileup_nTrueInt","weightPUSF_Up")
     histo[ 4][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 100,  0, 100), "Pileup_nTrueInt","weightPUSF_Down")
+    histo[ 5][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 5,x), "histo_{0}_{1}".format( 5,x), 100,  0, 100), "Pileup_nTrueInt","weightLUMPUSF")
+    histo[ 6][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 6,x), "histo_{0}_{1}".format( 6,x), 100,  0, 100), "Pileup_nTrueInt","weightLUMPUSF_Up")
+    histo[ 7][x] = dfcat.Histo1D(("histo_{0}_{1}".format( 7,x), "histo_{0}_{1}".format( 7,x), 100,  0, 100), "Pileup_nTrueInt","weightLUMPUSF_Down")
 
     dfgen = (dfcat
           .Define("gen_z", "GenPart_pdgId == 23 && GenPart_status == 62")
@@ -241,14 +247,14 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,puWeights,nT
     histo2D[10][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(10,x),"histo2d_{0}_{1}".format(10,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_cj_l","goodloosejet_pt_cj_l","weightForBTag")
     histo2D[11][x] = dfcat.Histo2D(("histo2d_{0}_{1}".format(11,x),"histo2d_{0}_{1}".format(11,x),len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins),"goodloosejet_eta_bj_l","goodloosejet_pt_bj_l","weightForBTag")
 
-    histo[ 5][x] = (dfcat.Filter("Sum(fake_mu)==2")
+    histo[ 8][x] = (dfcat.Filter("Sum(fake_mu)==2")
                          .Define("mll", "Minv2(fake_Muon_pt[0], fake_Muon_eta[0], fake_Muon_phi[0], fake_Muon_mass[0],fake_Muon_pt[1], fake_Muon_eta[1], fake_Muon_phi[1], fake_Muon_mass[1]).first")
-                         .Histo1D(("histo_{0}_{1}".format(5,x), "histo_{0}_{1}".format(5,x), 100, 10, 110), "mll","weight")
+                         .Histo1D(("histo_{0}_{1}".format(8,x), "histo_{0}_{1}".format(8,x), 100, 10, 110), "mll","weight")
                          )
 
-    histo[ 6][x] = (dfcat.Filter("Sum(fake_el)==2")
+    histo[ 9][x] = (dfcat.Filter("Sum(fake_el)==2")
                          .Define("mll", "Minv2(fake_Electron_pt[0], fake_Electron_eta[0], fake_Electron_phi[0], fake_Electron_mass[0],fake_Electron_pt[1], fake_Electron_eta[1], fake_Electron_phi[1], fake_Electron_mass[1]).first")
-                         .Histo1D(("histo_{0}_{1}".format(6,x), "histo_{0}_{1}".format(6,x), 100, 10, 110), "mll","weight")
+                         .Histo1D(("histo_{0}_{1}".format(9,x), "histo_{0}_{1}".format(9,x), 100, 10, 110), "mll","weight")
                          )
 
     histo[10][x] = dfgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")

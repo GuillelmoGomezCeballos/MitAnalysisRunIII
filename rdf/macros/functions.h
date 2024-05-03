@@ -202,7 +202,7 @@ float compute_JSONS_PUJetID_SF(Vec_f jet_pt, Vec_f jet_eta, unsigned int sel)
 
 float compute_JSON_PU_SF(double NumTrueInteractions, std::string type){
   bool debug = false;
-  double sf = corrSFs.eval_puSF(NumTrueInteractions,type);
+  double sf = corrSFs.eval_puSF(std::min((float)NumTrueInteractions,74.999f),type);
   if(debug) printf("pusf(%s): %f / %f\n",type.c_str(),NumTrueInteractions,sf);
   return sf;
 }
