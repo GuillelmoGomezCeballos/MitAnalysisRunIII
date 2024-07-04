@@ -12,7 +12,7 @@ group=9
 
 if [ ${theYear} = 2026 ]; then
 
-for i in `seq 0 300`;
+for i in `seq 0 600`;
 do
     if [[ -f anaZ/${theAna}${theCondor}_20220_${i}.root ]]; then
 
@@ -24,7 +24,7 @@ done
 
 else
 
-for i in `seq 0 300`;
+for i in `seq 0 600`;
 do
     if [[ -f anaZ/${theAna}${theCondor}_${theYear}0_${i}.root ]]; then
 

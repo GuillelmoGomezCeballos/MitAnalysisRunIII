@@ -6,8 +6,8 @@
 
 #include "finalPlot.C"
 
-void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob = 1001){
-  if((year == 2022 || year == 2023 || year == 2024 || year == 2025 || year == 2026) and nsel != "combine") {
+void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob = 1001, bool doMerging = true){
+  if((year == 2022 || year == 2023 || year == 2024 || year == 2025 || year == 2026) and nsel != "combine" && doMerging == true) {
     gSystem->Exec(Form("./MitAnalysisRunIII/rdf/makePlots/merge_histograms_year.sh %s %d %d",Form("fillhisto_%sAnalysis",nsel.Data()),whichCondorJob,year));    
   }
   TString legendBSM="";
@@ -639,6 +639,9 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,2,"p_{T}^{e-W}"  ,"GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_74.root",whichCondorJob,year),"wzsel_ptew", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"|#eta^{#mu-W}|","",Form("anaZ/fillhisto_wzAnalysis%d_%d_75.root",whichCondorJob,year),"wzsel_etamw", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"|#eta^{e-W}|" ,"",Form("anaZ/fillhisto_wzAnalysis%d_%d_76.root",whichCondorJob,year),"wzsel_etaew", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+
+    finalPlot(0,1,"Output","",Form("anaZ/fillhisto_wzAnalysis%d_%d_300.root",whichCondorJob,year),"wzvbssel_output", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("anaZ/fillhisto_wzAnalysis%d_%d_500.root",whichCondorJob,year),"wzbvbssel_output", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
   }
   else if(nsel == "zz"){
     legendBSM="";
@@ -706,7 +709,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
   else if(nsel == "ssww"){
     legendBSM="";
     isNeverBlinded=0;
-    isBlinded=1;
+    isBlinded=0;
     fidAnaName="";
     mlfitResult="";
     channelName="XXX"; 
@@ -803,6 +806,9 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"#eta_{T}^{l2}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_89.root",whichCondorJob,year),"ssww_preselbee_etal2", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#eta_{T}^{l2}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_90.root",whichCondorJob,year),"ssww_preselbme_etal2", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#eta_{T}^{l2}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_91.root",whichCondorJob,year),"ssww_preselbem_etal2", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+
+    finalPlot(0,1,"Output","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_200.root",whichCondorJob,year),"sswwvbssel_output", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_400.root",whichCondorJob,year),"sswwbvbssel_output", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
   }
   else if(nsel == "zmet"){
     legendBSM="";
