@@ -689,7 +689,7 @@ int compute_number_WS(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& mu_c
 
 float compute_WSSF(const int type, 
                    const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& el_charge, const Vec_i& el_genPartIdx,
-		   const Vec_i& GenPart_pdgId){
+                   const Vec_i& GenPart_pdgId){
 
   if(type == 0) return 1.0;
   bool debug = false;
@@ -724,7 +724,7 @@ float compute_WSSF(const int type,
 float compute_fakeRate(const bool isData,
                        const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& tight_mu, const int mType,
                        const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& tight_el, const int eType,
-		       const int whichAna){
+                       const int whichAna){
 
   bool debug = false;
   if(debug) printf("fakeRate: %d %d %d\n",mType,eType,whichAna);
@@ -1279,6 +1279,41 @@ float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   else if(var == 7) theVar = (p4momVV.Pt()-(p1+p2).Pt())/(p1+p2).Pt();
   return theVar;
 }
+// Jet-lepton final variables
+float compute_jet_lepton_final_var(const float mjj, const float detajj, const float mll, unsigned int var)
+{
+  if     (var == 0){
+    int typeSelAux1 = -1;
+    if     (mjj <  800) typeSelAux1 = 0;
+    else if(mjj < 1200) typeSelAux1 = 1;
+    else if(mjj < 1800) typeSelAux1 = 2;
+    else                typeSelAux1 = 3; 
+  
+    float typeSelAux2 = -1;
+    if     (mll <  80) typeSelAux2 = 0;
+    else if(mll < 140) typeSelAux2 = 1;
+    else if(mll < 240) typeSelAux2 = 2;
+    else               typeSelAux2 = 3; 
+    
+    return (float)(typeSelAux1+4*typeSelAux2);
+  }
+  else if(var == 1){
+    int typeSelAux1 = -1;
+    if     (mjj <  800) typeSelAux1 = 0;
+    else if(mjj < 1200) typeSelAux1 = 1;
+    else if(mjj < 1800) typeSelAux1 = 2;
+    else                typeSelAux1 = 3; 
+  
+    int typeSelAux2 = -1;
+    if     (detajj < 3.25) typeSelAux2 = 0;
+    else if(detajj < 4.00) typeSelAux2 = 1;
+    else                   typeSelAux2 = 2; 
+
+    return (float)(typeSelAux1+4*typeSelAux2);
+  }
+  return 0.0;
+}
+
 
 // Jet-lepton variables
 float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 

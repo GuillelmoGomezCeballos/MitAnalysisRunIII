@@ -21,7 +21,7 @@ Bool_t isBSMOverlaid = true;
 float xPos[nPlotCategories] = {0.70,0.70,0.70,0.70,0.70,0.70,0.70,0.45,0.45,0.45,0.45,0.45,0.45,0.45,0.45};
 float yOff[nPlotCategories] = {   0,	1,   2,   3,   4,  5,   6,   0,   1,   2,   3,   4,   5,   6,   7};
 
-const Float_t _tsize   = 0.040;
+const Float_t _tsize   = 0.050;
 const Float_t _xoffset = 0.200;
 const Float_t _yoffset = 0.051;
 
@@ -80,7 +80,7 @@ void AxisFonts(TAxis*  axis,
     axis->SetNdivisions (  505);
     axis->SetTitleFont  (   42);
     axis->SetTitleOffset(  0.9);
-    axis->SetTitleSize  (0.070);
+    axis->SetTitleSize  (0.090);
 
     if      (coordinate == "y" && doApplyBinWidth == true) axis->SetTitleOffset(1.00);
     else if (coordinate == "y")                            axis->SetTitleOffset(1.00);
@@ -458,11 +458,11 @@ class StandardPlot {
         void setUnits(const TString &s) { _units = s; }
         void setBreakdown(const bool &b = true) { _breakdown = b; }
         void addLabel(const std::string &s) {
-            _extraLabel = new TLatex(0.216, 0.75, TString(s));
+            _extraLabel = new TLatex(0.216, 0.70, TString(s));
             _extraLabel->SetNDC();
             _extraLabel->SetTextAlign(13);
             _extraLabel->SetTextFont(62);
-            _extraLabel->SetTextSize(0.050);
+            _extraLabel->SetTextSize(0.055);
         }
 
     private: 

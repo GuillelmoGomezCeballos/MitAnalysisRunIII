@@ -5,19 +5,27 @@ inputFilesDA20220 = ["inputs/20220/da/Ele35_pt_eta_Run2022BCD_nominal_Ele_effici
 inputFilesMC20220 = ["inputs/20220/mc/Ele35_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt", "inputs/20220/mc/IsoMu24_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20220/mc/Ele23_Ele12_leg1_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt", "inputs/20220/mc/Ele23_Ele12_leg2_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt", "inputs/20220/mc/Mu17_Mu8_leg1_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20220/mc/Mu17_Mu8_leg2_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20220/mc/Ele23_Ele12_leg1_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt", "inputs/20220/mc/Mu12_Ele23_Muonleg_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20220/mc/Mu23_Ele12_Muonleg_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20220/mc/Ele23_Ele12_leg2_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt"]
 inputFilesDA20221 = ["inputs/20221/da/Ele35_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/IsoMu24_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg1_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Ele23_Ele12_leg2_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Mu17_Mu8_leg1_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Mu17_Mu8_leg2_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg1_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Mu12_Ele23_Muonleg_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Mu23_Ele12_Muonleg_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg2_pt_eta_nominal_Ele_efficiency.txt"]
 inputFilesMC20221 = ["inputs/20221/mc/Ele35_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/IsoMu24_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg1_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg2_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu12_Ele23_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu23_Ele12_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt"]
+inputFilesDA20230 = ["inputs/20230/da/Ele35_pt_eta_Run2022BCD_nominal_Ele_efficiency.txt",    "inputs/20230/da/IsoMu24_pt_eta_Run2022BCD_nominal_Mu_efficiency.txt",    "inputs/20230/da/Ele23_Ele12_leg1_pt_eta_Run2022BCD_nominal_Ele_efficiency.txt",    "inputs/20230/da/Ele23_Ele12_leg2_pt_eta_Run2022BCD_nominal_Ele_efficiency.txt",    "inputs/20230/da/Mu17_Mu8_leg1_pt_eta_Run2022BCD_nominal_Mu_efficiency.txt",    "inputs/20230/da/Mu17_Mu8_leg2_pt_eta_Run2022BCD_nominal_Mu_efficiency.txt",    "inputs/20230/da/Ele23_Ele12_leg1_pt_eta_Run2022BCD_nominal_Ele_efficiency.txt",    "inputs/20230/da/Mu12_Ele23_Muonleg_pt_eta_Run2022BCD_nominal_Mu_efficiency.txt",    "inputs/20230/da/Mu23_Ele12_Muonleg_pt_eta_Run2022BCD_nominal_Mu_efficiency.txt",    "inputs/20230/da/Ele23_Ele12_leg2_pt_eta_Run2022BCD_nominal_Ele_efficiency.txt"]
+inputFilesMC20230 = ["inputs/20230/mc/Ele35_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt", "inputs/20230/mc/IsoMu24_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20230/mc/Ele23_Ele12_leg1_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt", "inputs/20230/mc/Ele23_Ele12_leg2_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt", "inputs/20230/mc/Mu17_Mu8_leg1_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20230/mc/Mu17_Mu8_leg2_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20230/mc/Ele23_Ele12_leg1_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt", "inputs/20230/mc/Mu12_Ele23_Muonleg_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20230/mc/Mu23_Ele12_Muonleg_pt_eta_DY_Run2022BCD_nominal_Mu_efficiency.txt", "inputs/20230/mc/Ele23_Ele12_leg2_pt_eta_DY_Run2022BCD_nominal_Ele_efficiency.txt"]
+inputFilesDA20231 = ["inputs/20221/da/Ele35_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/IsoMu24_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg1_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Ele23_Ele12_leg2_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Mu17_Mu8_leg1_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Mu17_Mu8_leg2_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg1_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Mu12_Ele23_Muonleg_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Mu23_Ele12_Muonleg_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg2_pt_eta_nominal_Ele_efficiency.txt"]
+inputFilesMC20231 = ["inputs/20221/mc/Ele35_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/IsoMu24_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg1_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg2_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu12_Ele23_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu23_Ele12_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt"]
 
 thePlot = ["sel", "smu", "del0", "del1", "dmu0", "dmu1", "emu0", "emu1", "mue0", "mue1"]
-theID = ["20220_da", "20220_mc", "20221_da", "20221_mc"]
+theID = ["20220_da", "20220_mc", "20221_da", "20221_mc", "20230_da", "20230_mc", "20231_da", "20231_mc"]
 
-histo = [[0 for y in range(4)] for x in range(len(thePlot))]
+histo = [[0 for y in range(8)] for x in range(len(thePlot))]
 
-for nInp in range(4):
+for nInp in range(8):
     for nType in range(len(thePlot)):
         inputFile = ""
         if  (nInp == 0): inputFile = inputFilesDA20220[nType]
         elif(nInp == 1): inputFile = inputFilesMC20220[nType]
         elif(nInp == 2): inputFile = inputFilesDA20221[nType]
         elif(nInp == 3): inputFile = inputFilesMC20221[nType]
+        elif(nInp == 4): inputFile = inputFilesDA20230[nType]
+        elif(nInp == 5): inputFile = inputFilesMC20230[nType]
+        elif(nInp == 6): inputFile = inputFilesDA20231[nType]
+        elif(nInp == 7): inputFile = inputFilesMC20231[nType]
         print(inputFile)
         xMin = array('d', [])
         xMax = array('d', [])
@@ -58,7 +66,7 @@ for nInp in range(4):
 fileTriggerEffName = "histoTriggerForSingleLegs.root"
 outfileTriggerEff = ROOT.TFile(fileTriggerEffName,"recreate")
 outfileTriggerEff.cd()
-for nInp in range(4):
+for nInp in range(8):
     for nType in range(len(thePlot)):
         histo[nType][nInp].Write()
 outfileTriggerEff.Close()

@@ -36,7 +36,7 @@ if __name__ == "__main__":
     inputDataFolders = glob.glob(paths_to_watch)
     print("Total found files: {0}".format(len(inputDataFolders)))
 
-    nCat, nHisto, nhistoNonPrompt = plotCategory("kPlotCategories"), 1600, 50
+    nCat, nHisto, nhistoNonPrompt, nhistoWS = plotCategory("kPlotCategories"), 1600, 50, 4
 
     myfile = [0 for x in range(len(inputDataFolders))]
     for nf in range(len(inputDataFolders)):
@@ -67,6 +67,30 @@ if __name__ == "__main__":
             histo[nc].Write()
     outputFile.Close()
     if(isHistoNonPromptUsed == False):
+        os.remove(outputFileName)
+
+    # 1Dwrongsign
+    isHistowrongsignUsed = False
+    outputFileName = "{0}/{1}_{2}_{3}.root".format(output,os.path.basename(path),year,"wrongsign")
+    print("Making 1D {0}".format(outputFileName))
+    outputFile = TFile(outputFileName, "RECREATE")
+    outputFile.cd()
+    histo = [0 for x in range(nhistoWS)]
+    for nc in range(nhistoWS):
+        histo[nc] = myfile[0].Get("histoWS_{0}".format(nc))
+        for nf in range(1,len(inputDataFolders)):
+            if(histo[nc]):
+                histo[nc].Add(myfile[nf].Get("histoWS_{0}".format(nc)))
+        if(histo[nc]):
+            isHistowrongsignUsed = True
+            histo[nc].SetNameTitle("histoWS_{0}".format(nc),"histoWS_{0}".format(nc))
+            histo[nc].SetBinContent(histo[nc].GetNbinsX(),histo[nc].GetBinContent(histo[nc].GetNbinsX())+histo[nc].GetBinContent(histo[nc].GetNbinsX()+1))
+            histo[nc].SetBinError  (histo[nc].GetNbinsX(),pow(pow(histo[nc].GetBinError(histo[nc].GetNbinsX()),2)+pow(histo[nc].GetBinError(histo[nc].GetNbinsX()+1),2),0.5))
+            histo[nc].SetBinContent(histo[nc].GetNbinsX()+1,0.0)
+            histo[nc].SetBinError  (histo[nc].GetNbinsX()+1,0.0)
+            histo[nc].Write()
+    outputFile.Close()
+    if(isHistowrongsignUsed == False):
         os.remove(outputFileName)
 
     for nh in range(nHisto):

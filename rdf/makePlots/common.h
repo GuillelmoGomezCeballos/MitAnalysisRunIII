@@ -105,7 +105,7 @@ std::map<int, TString> plotNames={
     { kPlotVVV       , "VVV"},
     { kPlotTVX       , "tVx"},
     { kPlotVG	     , "V#gamma" },
-    { kPlotHiggs     , "Higgs"},
+    { kPlotHiggs     , "Higgs boson"},
     { kPlotWS	     , "Wrong sign"},
     { kPlotOther     , "Other bkg."},
     { kPlotEM	     , "Nonresonant"},

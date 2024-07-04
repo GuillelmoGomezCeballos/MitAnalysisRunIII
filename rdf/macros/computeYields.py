@@ -48,6 +48,9 @@ if __name__ == "__main__":
         histo.append(8)
         signalDict0.append(plotCategory("kPlotZZ"))
         signalDict1.append(plotCategory("kPlotZZ"))
+        histo.append(11)
+        signalDict0.append(plotCategory("kPlotZZ"))
+        signalDict1.append(plotCategory("kPlotZZ"))
     elif('wzAna' in path):
         histo.append(11)
         signalDict0.append(plotCategory("kPlotWZ"))
@@ -55,6 +58,12 @@ if __name__ == "__main__":
         histo.append(12)
         signalDict0.append(plotCategory("kPlotWZ"))
         signalDict1.append(plotCategory("kPlotWZ"))
+        histo.append(27)
+        signalDict0.append(plotCategory("kPlotEWKWZ"))
+        signalDict1.append(plotCategory("kPlotEWKWZ"))
+        histo.append(28)
+        signalDict0.append(plotCategory("kPlotEWKWZ"))
+        signalDict1.append(plotCategory("kPlotEWKWZ"))
     elif('zmetAna' in path):
         histo.append(34)
         signalDict0.append(plotCategory("kPlotZZ"))

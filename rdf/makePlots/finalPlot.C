@@ -56,7 +56,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
   histo->GetXaxis()->SetTitleOffset( 1.00);
-  histo->GetXaxis()->SetTitleSize  (0.135);
+  histo->GetXaxis()->SetTitleSize  (0.140);
   //histo->GetXaxis()->SetTickLength (0.07 );
 
   histo->GetYaxis()->SetTitle(ytitle.Data());
@@ -65,8 +65,8 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetLabelSize  (0.150);
   histo->GetYaxis()->SetNdivisions (  505);
   histo->GetYaxis()->SetTitleFont  (   42);
-  histo->GetYaxis()->SetTitleOffset( 0.35);
-  histo->GetYaxis()->SetTitleSize  (0.160);
+  histo->GetYaxis()->SetTitleOffset( 0.45);
+  histo->GetYaxis()->SetTitleSize  (0.140);
   //histo->GetYaxis()->SetTickLength (0.03 );
 
   histo->SetLineColor  (kBlack);
@@ -96,6 +96,8 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   //gROOT->LoadMacro("StandardPlot.C");
   gStyle->SetOptStat(0);
   TGaxis::SetMaxDigits(3); 
+  TGaxis::SetExponentOffset(-0.00, 0.00, "x");
+  TGaxis::SetExponentOffset(-0.08, 0.01, "y");
 
   TH1F* _hist[nPlotCategories];
   TH1F* _histo_total;
@@ -433,8 +435,8 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   // Set the y-axis range symmetric around y=0
   Double_t dy = TMath::Max(TMath::Abs(hRatio->GetMaximum()),
                            TMath::Abs(hRatio->GetMinimum())) + theLines[1];
-  minRatio = TMath::Min(TMath::Max(minRatio-0.10,0.000),0.810);
-  maxRatio = TMath::Min(TMath::Max(maxRatio+0.10,1.190),2.999);
+  minRatio = TMath::Min(TMath::Max(minRatio-0.03,0.000),0.810);
+  maxRatio = TMath::Min(TMath::Max(maxRatio+0.03,1.190),2.999);
   if(showPulls) hBand->GetYaxis()->SetRangeUser(-dy, +dy);
   else          hBand->GetYaxis()->SetRangeUser(minRatio,maxRatio);
   hRatio->GetYaxis()->CenterTitle();
