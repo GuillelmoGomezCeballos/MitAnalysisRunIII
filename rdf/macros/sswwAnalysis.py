@@ -518,16 +518,16 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             outputFile = "ntupleSSWWAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob)
             dfwwvbscat[x].Snapshot("events", outputFile, branchList)
 
-        histo[90][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(90,x), "histo_{0}_{1}".format(90,x), 8,500,2500), "vbs_mjj","weight")
-        histo[91][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 8,500,2500), "vbs_mjj","weight0")
-        histo[92][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x), 8,500,2500), "vbs_mjj","weight1")
-        histo[93][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(93,x), "histo_{0}_{1}".format(93,x), 8,500,2500), "vbs_mjj","weight2")
-        histo[94][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(94,x), "histo_{0}_{1}".format(94,x), 8,500,2500), "vbs_mjj","weight3")
-        histo[95][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(95,x), "histo_{0}_{1}".format(95,x), 8,500,2500), "vbs_mjj","weight4")
-        histo[96][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(96,x), "histo_{0}_{1}".format(96,x), 8,500,2500), "vbs_mjj","weight5")
-        histo[97][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(97,x), "histo_{0}_{1}".format(97,x), 8,500,2500), "vbs_mjj","weight6")
-        histo[98][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(98,x), "histo_{0}_{1}".format(98,x), 8,500,2500), "vbs_mjj","weightWSUnc0")
-        histo[99][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(99,x), "histo_{0}_{1}".format(99,x), 8,500,2500), "vbs_mjj","weightWSUnc1")
+        histo[100][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(100,x), "histo_{0}_{1}".format(100,x), 8,500,2500), "vbs_mjj","weight")
+        histo[101][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(101,x), "histo_{0}_{1}".format(101,x), 8,500,2500), "vbs_mjj","weight0")
+        histo[102][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(102,x), "histo_{0}_{1}".format(102,x), 8,500,2500), "vbs_mjj","weight1")
+        histo[103][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(103,x), "histo_{0}_{1}".format(103,x), 8,500,2500), "vbs_mjj","weight2")
+        histo[104][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(104,x), "histo_{0}_{1}".format(104,x), 8,500,2500), "vbs_mjj","weight3")
+        histo[105][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(105,x), "histo_{0}_{1}".format(105,x), 8,500,2500), "vbs_mjj","weight4")
+        histo[106][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(106,x), "histo_{0}_{1}".format(106,x), 8,500,2500), "vbs_mjj","weight5")
+        histo[107][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(107,x), "histo_{0}_{1}".format(107,x), 8,500,2500), "vbs_mjj","weight6")
+        histo[108][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(108,x), "histo_{0}_{1}".format(108,x), 8,500,2500), "vbs_mjj","weightWSUnc0")
+        histo[109][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(109,x), "histo_{0}_{1}".format(109,x), 8,500,2500), "vbs_mjj","weightWSUnc1")
 
         startF = 200
         BinXF = 8
@@ -872,7 +872,9 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,wsWeights,puWeights,hist
 
     genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]
     genEventSumPSRenorm = [1, 1, 1, 1]
-    if(SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKSSWW")):
+    if(SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKSSWW") or
+       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotWZ") or
+       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKWZ")):
         genEventSumLHEScaleRenorm[0] = genEventSumLHEScaleWeight[0] / genEventSumLHEScaleWeight[4]
         genEventSumLHEScaleRenorm[1] = genEventSumLHEScaleWeight[1] / genEventSumLHEScaleWeight[4]
         genEventSumLHEScaleRenorm[2] = genEventSumLHEScaleWeight[3] / genEventSumLHEScaleWeight[4]

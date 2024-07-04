@@ -207,6 +207,17 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
       histo_Syst[j][ic] = (TH1D*)inputFile->Get(Form("histo%d", ic)); assert(histo_Syst[j][ic]); histo_Syst[j][ic]->SetDirectory(0);
       histo_Syst[j][ic]->SetNameTitle(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()));
+
+      // Renormalize distributions
+      if(
+        (ic == kPlotEWKSSWW ||
+         ic == kPlotWZ ||
+         ic == kPlotEWKWZ
+        ) && histo_Baseline[ic]->GetSumOfWeights() > 0 &&
+        (j == 0 || j == 1 || j == 2 || j == 3 ||
+         j == 4 || j == 5 || j == 6 || j == 7 || j == 8 || j == 9)
+        ) histo_Syst[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_Syst[j][ic]->GetSumOfWeights());
+
     }
     delete inputFile;
   }
