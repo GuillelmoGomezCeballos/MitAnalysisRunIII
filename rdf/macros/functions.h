@@ -1823,6 +1823,9 @@ float compute_nl_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
        p4metmom = p4metmom + p4momTot;
        theVar = p4metmom.Pt();
      }
+     else if(var ==  10) {
+       theVar = p4momTot.M()/sqrt((p4mom[0].Pt()/(p4mom[0].Pt()+met_pt))*(p4mom[1].Pt()/(p4mom[1].Pt()+met_pt)));
+     }
    }
    return theVar;
 }
