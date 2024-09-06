@@ -91,11 +91,11 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
   
-  std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_v1.json.gz";
+  std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
   auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
   btvHFSF_ = csetHFBTV->at("robustParticleTransformer_comb");
 
-  std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging_v1.json.gz";
+  std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
   auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
   btvLFSF_ = csetLFBTV->at("robustParticleTransformer_light");
 
