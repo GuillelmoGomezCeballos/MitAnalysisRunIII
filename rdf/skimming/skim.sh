@@ -1,5 +1,6 @@
 #!/bin/sh
 
+unset X509_USER_KEY
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 export SCRAM_ARCH=slc7_amd64_gcc12
 scramv1 project CMSSW CMSSW_13_3_1 # cmsrel is an alias not on the workers

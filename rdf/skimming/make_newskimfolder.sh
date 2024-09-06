@@ -1,7 +1,7 @@
 #!/bin/sh
 
-cp -r /home/submit/ceballos/cms/MitAnalysisRunIII/rdf/skimming /data/submit/cms/store/user/ceballos/test0
-cd /data/submit/cms/store/user/ceballos/test0
+cp -r /home/submit/ceballos/cms/MitAnalysisRunIII/rdf/skimming /ceph/submit/data/group/cms/store/user/ceballos/test0
+cd /ceph/submit/data/group/cms/store/user/ceballos/test0
 rm config jsns
 cp -r /home/submit/ceballos/cms/MitAnalysisRunIII/rdf/macros/jsns .
 cp -r /home/submit/ceballos/cms/MitAnalysisRunIII/rdf/macros/config .

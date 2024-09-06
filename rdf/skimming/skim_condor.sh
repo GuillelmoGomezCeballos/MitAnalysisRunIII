@@ -12,9 +12,11 @@ echo ${USERPROXY}
 
 #condor_q 1769874.0 -analyze
 #transfer_input_files = ""
-#transfer_output_remaps = "output_1l_${whichSample}_${whichJob}.root =  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/1l/${sampleName}/output_1l_${whichSample}_${whichJob}.root; output_2l_${whichSample}_${whichJob}.root =  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/2l/${sampleName}/output_2l_${whichSample}_${whichJob}.root; output_3l_${whichSample}_${whichJob}.root =  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/3l/${sampleName}/output_3l_${whichSample}_${whichJob}.root"
+#transfer_output_remaps = "output_1l_${whichSample}_${whichJob}.root =  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/1l/${sampleName}/output_1l_${whichSample}_${whichJob}.root; output_2l_${whichSample}_${whichJob}.root =  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/2l/${sampleName}/output_2l_${whichSample}_${whichJob}.root; output_3l_${whichSample}_${whichJob}.root =  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/3l/${sampleName}/output_3l_${whichSample}_${whichJob}.root"
 
 voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
+
+cp /tmp/x509up_u${USERPROXY} /home/submit/ceballos/x509up_u${USERPROXY}
 
 tar cvzf skim.tgz \
 skim.py skim_*.cfg \
@@ -31,13 +33,13 @@ whichJob=$2
 group=$3
 sampleName=$4
 
-if [ ! -d " /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/pho/${sampleName}" ]; then
-  echo "creating output folders"  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/nl/${sampleName}
-  mkdir -p  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/1l/${sampleName}
-  mkdir -p  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/2l/${sampleName}
-  mkdir -p  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/3l/${sampleName}
-  mkdir -p  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/met/${sampleName}
-  mkdir -p  /data/submit/cms/store/user/ceballos/nanoaod/skims_submit/pho/${sampleName}
+if [ ! -d " /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/pho/${sampleName}" ]; then
+  echo "creating output folders"  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/nl/${sampleName}
+  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/1l/${sampleName}
+  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/2l/${sampleName}
+  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/3l/${sampleName}
+  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/met/${sampleName}
+  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/pho/${sampleName}
 fi
 
 cat << EOF > submit
@@ -55,7 +57,7 @@ Output = logs/simple_skim_${whichSample}_${whichJob}.out
 Error  = logs/simple_skim_${whichSample}_${whichJob}.error
 transfer_input_files = skim.tgz
 use_x509userproxy = True
-x509userproxy = /tmp/x509up_u${USERPROXY}
+x509userproxy = /home/submit/ceballos/x509up_u${USERPROXY}
 +AccountingGroup = "analysis.ceballos"
 Requirements = ( BOSCOCluster =!= "t3serv008.mit.edu" && BOSCOCluster =!= "ce03.cmsaf.mit.edu" && BOSCOCluster =!= "eofe8.mit.edu") && (Machine != "submit81.mit.edu")
 +REQUIRED_OS = "rhel7"

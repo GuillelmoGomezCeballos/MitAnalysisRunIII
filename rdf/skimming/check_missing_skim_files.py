@@ -2,7 +2,7 @@ import os, sys, getopt, time
 
 if __name__ == "__main__":
 
-    outputDir = "/data/submit/cms/store/user/ceballos/nanoaod/skims_submit"
+    outputDir = "/ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit"
     outputForCondorCfg = "skim_input_condor_jobs_fromDAS.cfg"
     missingFilesCfg = "skim_input_condor_missing_jobs_fromDAS.cfg"
     debug = 0
