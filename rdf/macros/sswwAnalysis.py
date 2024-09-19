@@ -5,11 +5,11 @@ ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, makeFinalVariable
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariable2D
 import tmva_helper_xml
 
 correctionString = "_correction"
-makeDataCards = 2
+makeDataCards = 1
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
@@ -111,10 +111,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     elif(theCat == plotCategory("kPlotHiggs")):
         theCat = plotCategory("kPlotVVV")
 
-    nCat, nHisto, nhistoWS, nhistoNonPrompt = plotCategory("kPlotCategories"), 600, 4, 30
+    nCat, nHisto, nhistoWS, nhistoNonPrompt, nHistoMVA = plotCategory("kPlotCategories"), 600, 4, 30, 400
     histo = [[0 for y in range(nCat)] for x in range(nHisto)]
     histoWS = [0 for y in range(nhistoWS)]
     histoNonPrompt = [0 for y in range(nhistoNonPrompt)]
+    histo2D  = [[0 for y in range(nCat)] for x in range(nHistoMVA)]
+    histoMVA = [[0 for y in range(nCat)] for x in range(nHistoMVA)]
 
     ROOT.initHisto2D(histoFakeEtaPt_mu[0],0)
     ROOT.initHisto2D(histoFakeEtaPt_el[0],1)
@@ -289,6 +291,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfwwbvbscatUnclusteredUp  = []
     for x in range(nCat):
         dfwwcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
+
+        if((x == plotCategory("kPlotEWKSSWW")) and isData == "false"):
+            dfwwcat[x] = selectionGenLepJet(dfwwcat[x],20,30,5.0)
+            dfwwcat[x] = (dfwwcat[x].Define("theGenCat", "compute_vbs_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,0)".format(x))
+                                )
+        else:
+            dfwwcat[x] = dfwwcat[x].Define("theGenCat", "{0}".format(0))
 
         dfwwvbscatMuonMomUp    .append(dfwwcat[x])
         dfwwvbscatElectronMomUp.append(dfwwcat[x])
@@ -529,229 +538,128 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[108][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(108,x), "histo_{0}_{1}".format(108,x), 8,500,2500), "vbs_mjj","weightWSUnc0")
         histo[109][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format(109,x), "histo_{0}_{1}".format(109,x), 8,500,2500), "vbs_mjj","weightWSUnc1")
 
-        startF = 200
+        BinYF = 4
+        minYF = -0.5
+        maxYF = 3.5
+        startF = 0
         BinXF = 8
         minXF = 500
         maxXF = 2500
         if(makeDataCards == 1):
-            startF = 200
-            BinXF = 8
-            minXF = 500
-            maxXF = 2500
-            for nv in range(0,135):
-                histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,nv)
-            histo[startF+135][x]    = makeFinalVariable(dfwwvbscatMuonMomUp    [x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,135)
-            histo[startF+136][x]    = makeFinalVariable(dfwwvbscatElectronMomUp[x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,136)
-            histo[startF+137][x]    = makeFinalVariable(dfwwvbscatJes00Up	   [x],"vbs_mjjJes00Up"  ,theCat,startF,x,BinXF,minXF,maxXF,137)
-            histo[startF+138][x]    = makeFinalVariable(dfwwvbscatJes01Up	   [x],"vbs_mjjJes01Up"  ,theCat,startF,x,BinXF,minXF,maxXF,138)
-            histo[startF+139][x]    = makeFinalVariable(dfwwvbscatJes02Up	   [x],"vbs_mjjJes02Up"  ,theCat,startF,x,BinXF,minXF,maxXF,139)
-            histo[startF+140][x]    = makeFinalVariable(dfwwvbscatJes03Up	   [x],"vbs_mjjJes03Up"  ,theCat,startF,x,BinXF,minXF,maxXF,140)
-            histo[startF+141][x]    = makeFinalVariable(dfwwvbscatJes04Up	   [x],"vbs_mjjJes04Up"  ,theCat,startF,x,BinXF,minXF,maxXF,141)
-            histo[startF+142][x]    = makeFinalVariable(dfwwvbscatJes05Up	   [x],"vbs_mjjJes05Up"  ,theCat,startF,x,BinXF,minXF,maxXF,142)
-            histo[startF+143][x]    = makeFinalVariable(dfwwvbscatJes06Up	   [x],"vbs_mjjJes06Up"  ,theCat,startF,x,BinXF,minXF,maxXF,143)
-            histo[startF+144][x]    = makeFinalVariable(dfwwvbscatJes07Up	   [x],"vbs_mjjJes07Up"  ,theCat,startF,x,BinXF,minXF,maxXF,144)
-            histo[startF+145][x]    = makeFinalVariable(dfwwvbscatJes08Up	   [x],"vbs_mjjJes08Up"  ,theCat,startF,x,BinXF,minXF,maxXF,145)
-            histo[startF+146][x]    = makeFinalVariable(dfwwvbscatJes09Up	   [x],"vbs_mjjJes09Up"  ,theCat,startF,x,BinXF,minXF,maxXF,146)
-            histo[startF+147][x]    = makeFinalVariable(dfwwvbscatJes10Up	   [x],"vbs_mjjJes10Up"  ,theCat,startF,x,BinXF,minXF,maxXF,147)
-            histo[startF+148][x]    = makeFinalVariable(dfwwvbscatJes11Up	   [x],"vbs_mjjJes11Up"  ,theCat,startF,x,BinXF,minXF,maxXF,148)
-            histo[startF+149][x]    = makeFinalVariable(dfwwvbscatJes12Up	   [x],"vbs_mjjJes12Up"  ,theCat,startF,x,BinXF,minXF,maxXF,149)
-            histo[startF+150][x]    = makeFinalVariable(dfwwvbscatJes13Up	   [x],"vbs_mjjJes13Up"  ,theCat,startF,x,BinXF,minXF,maxXF,150)
-            histo[startF+151][x]    = makeFinalVariable(dfwwvbscatJes14Up	   [x],"vbs_mjjJes14Up"  ,theCat,startF,x,BinXF,minXF,maxXF,151)
-            histo[startF+152][x]    = makeFinalVariable(dfwwvbscatJes15Up	   [x],"vbs_mjjJes15Up"  ,theCat,startF,x,BinXF,minXF,maxXF,152)
-            histo[startF+153][x]    = makeFinalVariable(dfwwvbscatJes16Up	   [x],"vbs_mjjJes16Up"  ,theCat,startF,x,BinXF,minXF,maxXF,153)
-            histo[startF+154][x]    = makeFinalVariable(dfwwvbscatJes17Up	   [x],"vbs_mjjJes17Up"  ,theCat,startF,x,BinXF,minXF,maxXF,154)
-            histo[startF+155][x]    = makeFinalVariable(dfwwvbscatJes18Up	   [x],"vbs_mjjJes18Up"  ,theCat,startF,x,BinXF,minXF,maxXF,155)
-            histo[startF+156][x]    = makeFinalVariable(dfwwvbscatJes19Up	   [x],"vbs_mjjJes19Up"  ,theCat,startF,x,BinXF,minXF,maxXF,156)
-            histo[startF+157][x]    = makeFinalVariable(dfwwvbscatJes20Up	   [x],"vbs_mjjJes20Up"  ,theCat,startF,x,BinXF,minXF,maxXF,157)
-            histo[startF+158][x]    = makeFinalVariable(dfwwvbscatJes21Up	   [x],"vbs_mjjJes21Up"  ,theCat,startF,x,BinXF,minXF,maxXF,158)
-            histo[startF+159][x]    = makeFinalVariable(dfwwvbscatJes22Up	   [x],"vbs_mjjJes22Up"  ,theCat,startF,x,BinXF,minXF,maxXF,159)
-            histo[startF+160][x]    = makeFinalVariable(dfwwvbscatJes23Up	   [x],"vbs_mjjJes23Up"  ,theCat,startF,x,BinXF,minXF,maxXF,160)
-            histo[startF+161][x]    = makeFinalVariable(dfwwvbscatJes24Up	   [x],"vbs_mjjJes24Up"  ,theCat,startF,x,BinXF,minXF,maxXF,161)
-            histo[startF+162][x]    = makeFinalVariable(dfwwvbscatJes25Up	   [x],"vbs_mjjJes25Up"  ,theCat,startF,x,BinXF,minXF,maxXF,162)
-            histo[startF+163][x]    = makeFinalVariable(dfwwvbscatJes26Up	   [x],"vbs_mjjJes26Up"  ,theCat,startF,x,BinXF,minXF,maxXF,163)
-            histo[startF+164][x]    = makeFinalVariable(dfwwvbscatJes27Up	   [x],"vbs_mjjJes27Up"  ,theCat,startF,x,BinXF,minXF,maxXF,164)
-            histo[startF+165][x]    = makeFinalVariable(dfwwvbscatJerUp  	   [x],"vbs_mjjJerUp"	 ,theCat,startF,x,BinXF,minXF,maxXF,165)
-            histo[startF+166][x]    = makeFinalVariable(dfwwvbscatJERUp	   [x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,166)
-            histo[startF+167][x]    = makeFinalVariable(dfwwvbscatJESUp	   [x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,167)
-            histo[startF+168][x]    = makeFinalVariable(dfwwvbscatUnclusteredUp[x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,168)
-            if(x == plotCategory("kPlotWS")):
-                startWS = 0
-                histoWS[0+startWS] = dfwwvbscat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF,minXF,maxXF), "vbs_mjj","weightWSUnc0")
-                histoWS[1+startWS] = dfwwvbscat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF,minXF,maxXF), "vbs_mjj","weightWSUnc1")
-            if(x == plotCategory("kPlotNonPrompt")):
-                startNonPrompt = 0
-                histoNonPrompt[0+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAltm0")
-                histoNonPrompt[1+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAltm2")
-                histoNonPrompt[3+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAlte0")
-                histoNonPrompt[4+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAlte1")
-                histoNonPrompt[5+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAlte2")
-
-            startF = 400
-            for nv in range(0,135):
-                histo[startF+nv][x] = makeFinalVariable(dfwwbvbscat[x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,nv)
-            histo[startF+135][x]    = makeFinalVariable(dfwwbvbscatMuonMomUp    [x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,135)
-            histo[startF+136][x]    = makeFinalVariable(dfwwbvbscatElectronMomUp[x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,136)
-            histo[startF+137][x]    = makeFinalVariable(dfwwbvbscatJes00Up	    [x],"vbs_mjjJes00Up"  ,theCat,startF,x,BinXF,minXF,maxXF,137)
-            histo[startF+138][x]    = makeFinalVariable(dfwwbvbscatJes01Up	    [x],"vbs_mjjJes01Up"  ,theCat,startF,x,BinXF,minXF,maxXF,138)
-            histo[startF+139][x]    = makeFinalVariable(dfwwbvbscatJes02Up	    [x],"vbs_mjjJes02Up"  ,theCat,startF,x,BinXF,minXF,maxXF,139)
-            histo[startF+140][x]    = makeFinalVariable(dfwwbvbscatJes03Up	    [x],"vbs_mjjJes03Up"  ,theCat,startF,x,BinXF,minXF,maxXF,140)
-            histo[startF+141][x]    = makeFinalVariable(dfwwbvbscatJes04Up	    [x],"vbs_mjjJes04Up"  ,theCat,startF,x,BinXF,minXF,maxXF,141)
-            histo[startF+142][x]    = makeFinalVariable(dfwwbvbscatJes05Up	    [x],"vbs_mjjJes05Up"  ,theCat,startF,x,BinXF,minXF,maxXF,142)
-            histo[startF+143][x]    = makeFinalVariable(dfwwbvbscatJes06Up	    [x],"vbs_mjjJes06Up"  ,theCat,startF,x,BinXF,minXF,maxXF,143)
-            histo[startF+144][x]    = makeFinalVariable(dfwwbvbscatJes07Up	    [x],"vbs_mjjJes07Up"  ,theCat,startF,x,BinXF,minXF,maxXF,144)
-            histo[startF+145][x]    = makeFinalVariable(dfwwbvbscatJes08Up	    [x],"vbs_mjjJes08Up"  ,theCat,startF,x,BinXF,minXF,maxXF,145)
-            histo[startF+146][x]    = makeFinalVariable(dfwwbvbscatJes09Up	    [x],"vbs_mjjJes09Up"  ,theCat,startF,x,BinXF,minXF,maxXF,146)
-            histo[startF+147][x]    = makeFinalVariable(dfwwbvbscatJes10Up	    [x],"vbs_mjjJes10Up"  ,theCat,startF,x,BinXF,minXF,maxXF,147)
-            histo[startF+148][x]    = makeFinalVariable(dfwwbvbscatJes11Up	    [x],"vbs_mjjJes11Up"  ,theCat,startF,x,BinXF,minXF,maxXF,148)
-            histo[startF+149][x]    = makeFinalVariable(dfwwbvbscatJes12Up	    [x],"vbs_mjjJes12Up"  ,theCat,startF,x,BinXF,minXF,maxXF,149)
-            histo[startF+150][x]    = makeFinalVariable(dfwwbvbscatJes13Up	    [x],"vbs_mjjJes13Up"  ,theCat,startF,x,BinXF,minXF,maxXF,150)
-            histo[startF+151][x]    = makeFinalVariable(dfwwbvbscatJes14Up	    [x],"vbs_mjjJes14Up"  ,theCat,startF,x,BinXF,minXF,maxXF,151)
-            histo[startF+152][x]    = makeFinalVariable(dfwwbvbscatJes15Up	    [x],"vbs_mjjJes15Up"  ,theCat,startF,x,BinXF,minXF,maxXF,152)
-            histo[startF+153][x]    = makeFinalVariable(dfwwbvbscatJes16Up	    [x],"vbs_mjjJes16Up"  ,theCat,startF,x,BinXF,minXF,maxXF,153)
-            histo[startF+154][x]    = makeFinalVariable(dfwwbvbscatJes17Up	    [x],"vbs_mjjJes17Up"  ,theCat,startF,x,BinXF,minXF,maxXF,154)
-            histo[startF+155][x]    = makeFinalVariable(dfwwbvbscatJes18Up	    [x],"vbs_mjjJes18Up"  ,theCat,startF,x,BinXF,minXF,maxXF,155)
-            histo[startF+156][x]    = makeFinalVariable(dfwwbvbscatJes19Up	    [x],"vbs_mjjJes19Up"  ,theCat,startF,x,BinXF,minXF,maxXF,156)
-            histo[startF+157][x]    = makeFinalVariable(dfwwbvbscatJes20Up	    [x],"vbs_mjjJes20Up"  ,theCat,startF,x,BinXF,minXF,maxXF,157)
-            histo[startF+158][x]    = makeFinalVariable(dfwwbvbscatJes21Up	    [x],"vbs_mjjJes21Up"  ,theCat,startF,x,BinXF,minXF,maxXF,158)
-            histo[startF+159][x]    = makeFinalVariable(dfwwbvbscatJes22Up	    [x],"vbs_mjjJes22Up"  ,theCat,startF,x,BinXF,minXF,maxXF,159)
-            histo[startF+160][x]    = makeFinalVariable(dfwwbvbscatJes23Up	    [x],"vbs_mjjJes23Up"  ,theCat,startF,x,BinXF,minXF,maxXF,160)
-            histo[startF+161][x]    = makeFinalVariable(dfwwbvbscatJes24Up	    [x],"vbs_mjjJes24Up"  ,theCat,startF,x,BinXF,minXF,maxXF,161)
-            histo[startF+162][x]    = makeFinalVariable(dfwwbvbscatJes25Up	    [x],"vbs_mjjJes25Up"  ,theCat,startF,x,BinXF,minXF,maxXF,162)
-            histo[startF+163][x]    = makeFinalVariable(dfwwbvbscatJes26Up	    [x],"vbs_mjjJes26Up"  ,theCat,startF,x,BinXF,minXF,maxXF,163)
-            histo[startF+164][x]    = makeFinalVariable(dfwwbvbscatJes27Up	    [x],"vbs_mjjJes27Up"  ,theCat,startF,x,BinXF,minXF,maxXF,164)
-            histo[startF+165][x]    = makeFinalVariable(dfwwbvbscatJerUp	    [x],"vbs_mjjJerUp"    ,theCat,startF,x,BinXF,minXF,maxXF,165)
-            histo[startF+166][x]    = makeFinalVariable(dfwwbvbscatJERUp	    [x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,166)
-            histo[startF+167][x]    = makeFinalVariable(dfwwbvbscatJESUp	    [x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,167)
-            histo[startF+168][x]    = makeFinalVariable(dfwwbvbscatUnclusteredUp[x],"vbs_mjj",theCat,startF,x,BinXF,minXF,maxXF,168)
-            if(x == plotCategory("kPlotWS")):
-                startWS = 2
-                histoWS[0+startWS] = dfwwbvbscat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF,minXF,maxXF), "vbs_mjj","weightWSUnc0")
-                histoWS[1+startWS] = dfwwbvbscat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF,minXF,maxXF), "vbs_mjj","weightWSUnc1")
-            if(x == plotCategory("kPlotNonPrompt")):
-                startNonPrompt = 6
-                histoNonPrompt[0+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAltm0")
-                histoNonPrompt[1+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAltm2")
-                histoNonPrompt[3+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAlte0")
-                histoNonPrompt[4+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAlte1")
-                histoNonPrompt[5+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "vbs_mjj","weightFakeAlte2")
-
-        elif(makeDataCards == 2):
-            startF = 200
-            BinXF = 16
+            startF = 0
+            BinXF = 48
             minXF = -0.5
-            maxXF = 15.5
+            maxXF = 47.5
 
             # Making final variable
-            dfwwvbscat             [x] = dfwwvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,0)")
-            dfwwvbscatMuonMomUp    [x] = dfwwvbscatMuonMomUp    [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mllMuonMomUp,0)")
-            dfwwvbscatElectronMomUp[x] = dfwwvbscatElectronMomUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mllElectronMomUp,0)")
-            dfwwvbscatJes00Up      [x] = dfwwvbscatJes00Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes00Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes01Up      [x] = dfwwvbscatJes01Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes01Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes02Up      [x] = dfwwvbscatJes02Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes02Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes03Up      [x] = dfwwvbscatJes03Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes03Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes04Up      [x] = dfwwvbscatJes04Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes04Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes05Up      [x] = dfwwvbscatJes05Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes05Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes06Up      [x] = dfwwvbscatJes06Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes06Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes07Up      [x] = dfwwvbscatJes07Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes07Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes08Up      [x] = dfwwvbscatJes08Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes08Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes09Up      [x] = dfwwvbscatJes09Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes09Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes10Up      [x] = dfwwvbscatJes10Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes10Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes11Up      [x] = dfwwvbscatJes11Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes11Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes12Up      [x] = dfwwvbscatJes12Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes12Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes13Up      [x] = dfwwvbscatJes13Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes13Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes14Up      [x] = dfwwvbscatJes14Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes14Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes15Up      [x] = dfwwvbscatJes15Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes15Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes16Up      [x] = dfwwvbscatJes16Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes16Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes17Up      [x] = dfwwvbscatJes17Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes17Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes18Up      [x] = dfwwvbscatJes18Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes18Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes19Up      [x] = dfwwvbscatJes19Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes19Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes20Up      [x] = dfwwvbscatJes20Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes20Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes21Up      [x] = dfwwvbscatJes21Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes21Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes22Up      [x] = dfwwvbscatJes22Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes22Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes23Up      [x] = dfwwvbscatJes23Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes23Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes24Up      [x] = dfwwvbscatJes24Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes24Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes25Up      [x] = dfwwvbscatJes25Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes25Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes26Up      [x] = dfwwvbscatJes26Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes26Up,vbs_detajj,mll,0)")
-            dfwwvbscatJes27Up      [x] = dfwwvbscatJes27Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes27Up,vbs_detajj,mll,0)")
-            dfwwvbscatJerUp        [x] = dfwwvbscatJerUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJerUp,vbs_detajj,mll,0)")
-            dfwwvbscatJERUp        [x] = dfwwvbscatJERUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,0)")
-            dfwwvbscatJESUp        [x] = dfwwvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,0)")
-            dfwwvbscatUnclusteredUp[x] = dfwwvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,0)")
+            dfwwvbscat             [x] = dfwwvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,0)")
+            dfwwvbscatMuonMomUp    [x] = dfwwvbscatMuonMomUp    [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mllMuonMomUp,ngood_jets,0)")
+            dfwwvbscatElectronMomUp[x] = dfwwvbscatElectronMomUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mllElectronMomUp,ngood_jets,0)")
+            dfwwvbscatJes00Up      [x] = dfwwvbscatJes00Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes00Up,vbs_detajj,mll,ngood_jetsJes00Up,0)")
+            dfwwvbscatJes01Up      [x] = dfwwvbscatJes01Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes01Up,vbs_detajj,mll,ngood_jetsJes01Up,0)")
+            dfwwvbscatJes02Up      [x] = dfwwvbscatJes02Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes02Up,vbs_detajj,mll,ngood_jetsJes02Up,0)")
+            dfwwvbscatJes03Up      [x] = dfwwvbscatJes03Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes03Up,vbs_detajj,mll,ngood_jetsJes03Up,0)")
+            dfwwvbscatJes04Up      [x] = dfwwvbscatJes04Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes04Up,vbs_detajj,mll,ngood_jetsJes04Up,0)")
+            dfwwvbscatJes05Up      [x] = dfwwvbscatJes05Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes05Up,vbs_detajj,mll,ngood_jetsJes05Up,0)")
+            dfwwvbscatJes06Up      [x] = dfwwvbscatJes06Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes06Up,vbs_detajj,mll,ngood_jetsJes06Up,0)")
+            dfwwvbscatJes07Up      [x] = dfwwvbscatJes07Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes07Up,vbs_detajj,mll,ngood_jetsJes07Up,0)")
+            dfwwvbscatJes08Up      [x] = dfwwvbscatJes08Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes08Up,vbs_detajj,mll,ngood_jetsJes08Up,0)")
+            dfwwvbscatJes09Up      [x] = dfwwvbscatJes09Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes09Up,vbs_detajj,mll,ngood_jetsJes09Up,0)")
+            dfwwvbscatJes10Up      [x] = dfwwvbscatJes10Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes10Up,vbs_detajj,mll,ngood_jetsJes10Up,0)")
+            dfwwvbscatJes11Up      [x] = dfwwvbscatJes11Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes11Up,vbs_detajj,mll,ngood_jetsJes11Up,0)")
+            dfwwvbscatJes12Up      [x] = dfwwvbscatJes12Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes12Up,vbs_detajj,mll,ngood_jetsJes12Up,0)")
+            dfwwvbscatJes13Up      [x] = dfwwvbscatJes13Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes13Up,vbs_detajj,mll,ngood_jetsJes13Up,0)")
+            dfwwvbscatJes14Up      [x] = dfwwvbscatJes14Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes14Up,vbs_detajj,mll,ngood_jetsJes14Up,0)")
+            dfwwvbscatJes15Up      [x] = dfwwvbscatJes15Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes15Up,vbs_detajj,mll,ngood_jetsJes15Up,0)")
+            dfwwvbscatJes16Up      [x] = dfwwvbscatJes16Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes16Up,vbs_detajj,mll,ngood_jetsJes16Up,0)")
+            dfwwvbscatJes17Up      [x] = dfwwvbscatJes17Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes17Up,vbs_detajj,mll,ngood_jetsJes17Up,0)")
+            dfwwvbscatJes18Up      [x] = dfwwvbscatJes18Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes18Up,vbs_detajj,mll,ngood_jetsJes18Up,0)")
+            dfwwvbscatJes19Up      [x] = dfwwvbscatJes19Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes19Up,vbs_detajj,mll,ngood_jetsJes19Up,0)")
+            dfwwvbscatJes20Up      [x] = dfwwvbscatJes20Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes20Up,vbs_detajj,mll,ngood_jetsJes20Up,0)")
+            dfwwvbscatJes21Up      [x] = dfwwvbscatJes21Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes21Up,vbs_detajj,mll,ngood_jetsJes21Up,0)")
+            dfwwvbscatJes22Up      [x] = dfwwvbscatJes22Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes22Up,vbs_detajj,mll,ngood_jetsJes22Up,0)")
+            dfwwvbscatJes23Up      [x] = dfwwvbscatJes23Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes23Up,vbs_detajj,mll,ngood_jetsJes23Up,0)")
+            dfwwvbscatJes24Up      [x] = dfwwvbscatJes24Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes24Up,vbs_detajj,mll,ngood_jetsJes24Up,0)")
+            dfwwvbscatJes25Up      [x] = dfwwvbscatJes25Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes25Up,vbs_detajj,mll,ngood_jetsJes25Up,0)")
+            dfwwvbscatJes26Up      [x] = dfwwvbscatJes26Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes26Up,vbs_detajj,mll,ngood_jetsJes26Up,0)")
+            dfwwvbscatJes27Up      [x] = dfwwvbscatJes27Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes27Up,vbs_detajj,mll,ngood_jetsJes27Up,0)")
+            dfwwvbscatJerUp        [x] = dfwwvbscatJerUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJerUp,vbs_detajj,mll,ngood_jetsJerUp,0)")
+            dfwwvbscatJERUp        [x] = dfwwvbscatJERUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,0)")
+            dfwwvbscatJESUp        [x] = dfwwvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,0)")
+            dfwwvbscatUnclusteredUp[x] = dfwwvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,0)")
 
-            dfwwbvbscat             [x] = dfwwbvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,0)")
-            dfwwbvbscatMuonMomUp    [x] = dfwwbvbscatMuonMomUp    [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mllMuonMomUp,0)")
-            dfwwbvbscatElectronMomUp[x] = dfwwbvbscatElectronMomUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mllElectronMomUp,0)")
-            dfwwbvbscatJes00Up      [x] = dfwwbvbscatJes00Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes00Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes01Up      [x] = dfwwbvbscatJes01Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes01Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes02Up      [x] = dfwwbvbscatJes02Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes02Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes03Up      [x] = dfwwbvbscatJes03Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes03Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes04Up      [x] = dfwwbvbscatJes04Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes04Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes05Up      [x] = dfwwbvbscatJes05Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes05Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes06Up      [x] = dfwwbvbscatJes06Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes06Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes07Up      [x] = dfwwbvbscatJes07Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes07Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes08Up      [x] = dfwwbvbscatJes08Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes08Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes09Up      [x] = dfwwbvbscatJes09Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes09Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes10Up      [x] = dfwwbvbscatJes10Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes10Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes11Up      [x] = dfwwbvbscatJes11Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes11Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes12Up      [x] = dfwwbvbscatJes12Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes12Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes13Up      [x] = dfwwbvbscatJes13Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes13Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes14Up      [x] = dfwwbvbscatJes14Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes14Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes15Up      [x] = dfwwbvbscatJes15Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes15Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes16Up      [x] = dfwwbvbscatJes16Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes16Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes17Up      [x] = dfwwbvbscatJes17Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes17Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes18Up      [x] = dfwwbvbscatJes18Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes18Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes19Up      [x] = dfwwbvbscatJes19Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes19Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes20Up      [x] = dfwwbvbscatJes20Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes20Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes21Up      [x] = dfwwbvbscatJes21Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes21Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes22Up      [x] = dfwwbvbscatJes22Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes22Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes23Up      [x] = dfwwbvbscatJes23Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes23Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes24Up      [x] = dfwwbvbscatJes24Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes24Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes25Up      [x] = dfwwbvbscatJes25Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes25Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes26Up      [x] = dfwwbvbscatJes26Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes26Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJes27Up      [x] = dfwwbvbscatJes27Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes27Up,vbs_detajj,mll,0)")
-            dfwwbvbscatJerUp        [x] = dfwwbvbscatJerUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJerUp,vbs_detajj,mll,0)")
-            dfwwbvbscatJERUp        [x] = dfwwbvbscatJERUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,0)")
-            dfwwbvbscatJESUp        [x] = dfwwbvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,0)")
-            dfwwbvbscatUnclusteredUp[x] = dfwwbvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,0)")
+            dfwwbvbscat             [x] = dfwwbvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,0)")
+            dfwwbvbscatMuonMomUp    [x] = dfwwbvbscatMuonMomUp    [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mllMuonMomUp,ngood_jets,0)")
+            dfwwbvbscatElectronMomUp[x] = dfwwbvbscatElectronMomUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mllElectronMomUp,ngood_jets,0)")
+            dfwwbvbscatJes00Up      [x] = dfwwbvbscatJes00Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes00Up,vbs_detajj,mll,ngood_jetsJes00Up,0)")
+            dfwwbvbscatJes01Up      [x] = dfwwbvbscatJes01Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes01Up,vbs_detajj,mll,ngood_jetsJes01Up,0)")
+            dfwwbvbscatJes02Up      [x] = dfwwbvbscatJes02Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes02Up,vbs_detajj,mll,ngood_jetsJes02Up,0)")
+            dfwwbvbscatJes03Up      [x] = dfwwbvbscatJes03Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes03Up,vbs_detajj,mll,ngood_jetsJes03Up,0)")
+            dfwwbvbscatJes04Up      [x] = dfwwbvbscatJes04Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes04Up,vbs_detajj,mll,ngood_jetsJes04Up,0)")
+            dfwwbvbscatJes05Up      [x] = dfwwbvbscatJes05Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes05Up,vbs_detajj,mll,ngood_jetsJes05Up,0)")
+            dfwwbvbscatJes06Up      [x] = dfwwbvbscatJes06Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes06Up,vbs_detajj,mll,ngood_jetsJes06Up,0)")
+            dfwwbvbscatJes07Up      [x] = dfwwbvbscatJes07Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes07Up,vbs_detajj,mll,ngood_jetsJes07Up,0)")
+            dfwwbvbscatJes08Up      [x] = dfwwbvbscatJes08Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes08Up,vbs_detajj,mll,ngood_jetsJes08Up,0)")
+            dfwwbvbscatJes09Up      [x] = dfwwbvbscatJes09Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes09Up,vbs_detajj,mll,ngood_jetsJes09Up,0)")
+            dfwwbvbscatJes10Up      [x] = dfwwbvbscatJes10Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes10Up,vbs_detajj,mll,ngood_jetsJes10Up,0)")
+            dfwwbvbscatJes11Up      [x] = dfwwbvbscatJes11Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes11Up,vbs_detajj,mll,ngood_jetsJes11Up,0)")
+            dfwwbvbscatJes12Up      [x] = dfwwbvbscatJes12Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes12Up,vbs_detajj,mll,ngood_jetsJes12Up,0)")
+            dfwwbvbscatJes13Up      [x] = dfwwbvbscatJes13Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes13Up,vbs_detajj,mll,ngood_jetsJes13Up,0)")
+            dfwwbvbscatJes14Up      [x] = dfwwbvbscatJes14Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes14Up,vbs_detajj,mll,ngood_jetsJes14Up,0)")
+            dfwwbvbscatJes15Up      [x] = dfwwbvbscatJes15Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes15Up,vbs_detajj,mll,ngood_jetsJes15Up,0)")
+            dfwwbvbscatJes16Up      [x] = dfwwbvbscatJes16Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes16Up,vbs_detajj,mll,ngood_jetsJes16Up,0)")
+            dfwwbvbscatJes17Up      [x] = dfwwbvbscatJes17Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes17Up,vbs_detajj,mll,ngood_jetsJes17Up,0)")
+            dfwwbvbscatJes18Up      [x] = dfwwbvbscatJes18Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes18Up,vbs_detajj,mll,ngood_jetsJes18Up,0)")
+            dfwwbvbscatJes19Up      [x] = dfwwbvbscatJes19Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes19Up,vbs_detajj,mll,ngood_jetsJes19Up,0)")
+            dfwwbvbscatJes20Up      [x] = dfwwbvbscatJes20Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes20Up,vbs_detajj,mll,ngood_jetsJes20Up,0)")
+            dfwwbvbscatJes21Up      [x] = dfwwbvbscatJes21Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes21Up,vbs_detajj,mll,ngood_jetsJes21Up,0)")
+            dfwwbvbscatJes22Up      [x] = dfwwbvbscatJes22Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes22Up,vbs_detajj,mll,ngood_jetsJes22Up,0)")
+            dfwwbvbscatJes23Up      [x] = dfwwbvbscatJes23Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes23Up,vbs_detajj,mll,ngood_jetsJes23Up,0)")
+            dfwwbvbscatJes24Up      [x] = dfwwbvbscatJes24Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes24Up,vbs_detajj,mll,ngood_jetsJes24Up,0)")
+            dfwwbvbscatJes25Up      [x] = dfwwbvbscatJes25Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes25Up,vbs_detajj,mll,ngood_jetsJes25Up,0)")
+            dfwwbvbscatJes26Up      [x] = dfwwbvbscatJes26Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes26Up,vbs_detajj,mll,ngood_jetsJes26Up,0)")
+            dfwwbvbscatJes27Up      [x] = dfwwbvbscatJes27Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes27Up,vbs_detajj,mll,ngood_jetsJes27Up,0)")
+            dfwwbvbscatJerUp        [x] = dfwwbvbscatJerUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJerUp,vbs_detajj,mll,ngood_jetsJerUp,0)")
+            dfwwbvbscatJERUp        [x] = dfwwbvbscatJERUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,0)")
+            dfwwbvbscatJESUp        [x] = dfwwbvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,0)")
+            dfwwbvbscatUnclusteredUp[x] = dfwwbvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,0)")
 
             for nv in range(0,135):
-                histo[startF+nv][x] = makeFinalVariable(dfwwvbscat[x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,nv)
-            histo[startF+135][x]    = makeFinalVariable(dfwwvbscatMuonMomUp    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,135)
-            histo[startF+136][x]    = makeFinalVariable(dfwwvbscatElectronMomUp[x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,136)
-            histo[startF+137][x]    = makeFinalVariable(dfwwvbscatJes00Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,137)
-            histo[startF+138][x]    = makeFinalVariable(dfwwvbscatJes01Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,138)
-            histo[startF+139][x]    = makeFinalVariable(dfwwvbscatJes02Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,139)
-            histo[startF+140][x]    = makeFinalVariable(dfwwvbscatJes03Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,140)
-            histo[startF+141][x]    = makeFinalVariable(dfwwvbscatJes04Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,141)
-            histo[startF+142][x]    = makeFinalVariable(dfwwvbscatJes05Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,142)
-            histo[startF+143][x]    = makeFinalVariable(dfwwvbscatJes06Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,143)
-            histo[startF+144][x]    = makeFinalVariable(dfwwvbscatJes07Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,144)
-            histo[startF+145][x]    = makeFinalVariable(dfwwvbscatJes08Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,145)
-            histo[startF+146][x]    = makeFinalVariable(dfwwvbscatJes09Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,146)
-            histo[startF+147][x]    = makeFinalVariable(dfwwvbscatJes10Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,147)
-            histo[startF+148][x]    = makeFinalVariable(dfwwvbscatJes11Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,148)
-            histo[startF+149][x]    = makeFinalVariable(dfwwvbscatJes12Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,149)
-            histo[startF+150][x]    = makeFinalVariable(dfwwvbscatJes13Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,150)
-            histo[startF+151][x]    = makeFinalVariable(dfwwvbscatJes14Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,151)
-            histo[startF+152][x]    = makeFinalVariable(dfwwvbscatJes15Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,152)
-            histo[startF+153][x]    = makeFinalVariable(dfwwvbscatJes16Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,153)
-            histo[startF+154][x]    = makeFinalVariable(dfwwvbscatJes17Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,154)
-            histo[startF+155][x]    = makeFinalVariable(dfwwvbscatJes18Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,155)
-            histo[startF+156][x]    = makeFinalVariable(dfwwvbscatJes19Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,156)
-            histo[startF+157][x]    = makeFinalVariable(dfwwvbscatJes20Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,157)
-            histo[startF+158][x]    = makeFinalVariable(dfwwvbscatJes21Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,158)
-            histo[startF+159][x]    = makeFinalVariable(dfwwvbscatJes22Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,159)
-            histo[startF+160][x]    = makeFinalVariable(dfwwvbscatJes23Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,160)
-            histo[startF+161][x]    = makeFinalVariable(dfwwvbscatJes24Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,161)
-            histo[startF+162][x]    = makeFinalVariable(dfwwvbscatJes25Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,162)
-            histo[startF+163][x]    = makeFinalVariable(dfwwvbscatJes26Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,163)
-            histo[startF+164][x]    = makeFinalVariable(dfwwvbscatJes27Up      [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,164)
-            histo[startF+165][x]    = makeFinalVariable(dfwwvbscatJerUp        [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,165)
-            histo[startF+166][x]    = makeFinalVariable(dfwwvbscatJERUp	       [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,166)
-            histo[startF+167][x]    = makeFinalVariable(dfwwvbscatJESUp	       [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,167)
-            histo[startF+168][x]    = makeFinalVariable(dfwwvbscatUnclusteredUp[x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,168)
+                histo2D[startF+nv][x] = makeFinalVariable2D(dfwwvbscat[x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dfwwvbscatMuonMomUp    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dfwwvbscatElectronMomUp[x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dfwwvbscatJes00Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dfwwvbscatJes01Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dfwwvbscatJes02Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dfwwvbscatJes03Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dfwwvbscatJes04Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+            histo2D[startF+142][x]    = makeFinalVariable2D(dfwwvbscatJes05Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,142)
+            histo2D[startF+143][x]    = makeFinalVariable2D(dfwwvbscatJes06Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,143)
+            histo2D[startF+144][x]    = makeFinalVariable2D(dfwwvbscatJes07Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,144)
+            histo2D[startF+145][x]    = makeFinalVariable2D(dfwwvbscatJes08Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,145)
+            histo2D[startF+146][x]    = makeFinalVariable2D(dfwwvbscatJes09Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,146)
+            histo2D[startF+147][x]    = makeFinalVariable2D(dfwwvbscatJes10Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,147)
+            histo2D[startF+148][x]    = makeFinalVariable2D(dfwwvbscatJes11Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,148)
+            histo2D[startF+149][x]    = makeFinalVariable2D(dfwwvbscatJes12Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,149)
+            histo2D[startF+150][x]    = makeFinalVariable2D(dfwwvbscatJes13Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,150)
+            histo2D[startF+151][x]    = makeFinalVariable2D(dfwwvbscatJes14Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,151)
+            histo2D[startF+152][x]    = makeFinalVariable2D(dfwwvbscatJes15Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,152)
+            histo2D[startF+153][x]    = makeFinalVariable2D(dfwwvbscatJes16Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,153)
+            histo2D[startF+154][x]    = makeFinalVariable2D(dfwwvbscatJes17Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,154)
+            histo2D[startF+155][x]    = makeFinalVariable2D(dfwwvbscatJes18Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,155)
+            histo2D[startF+156][x]    = makeFinalVariable2D(dfwwvbscatJes19Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,156)
+            histo2D[startF+157][x]    = makeFinalVariable2D(dfwwvbscatJes20Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,157)
+            histo2D[startF+158][x]    = makeFinalVariable2D(dfwwvbscatJes21Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,158)
+            histo2D[startF+159][x]    = makeFinalVariable2D(dfwwvbscatJes22Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,159)
+            histo2D[startF+160][x]    = makeFinalVariable2D(dfwwvbscatJes23Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,160)
+            histo2D[startF+161][x]    = makeFinalVariable2D(dfwwvbscatJes24Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,161)
+            histo2D[startF+162][x]    = makeFinalVariable2D(dfwwvbscatJes25Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,162)
+            histo2D[startF+163][x]    = makeFinalVariable2D(dfwwvbscatJes26Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,163)
+            histo2D[startF+164][x]    = makeFinalVariable2D(dfwwvbscatJes27Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,164)
+            histo2D[startF+165][x]    = makeFinalVariable2D(dfwwvbscatJerUp        [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,165)
+            histo2D[startF+166][x]    = makeFinalVariable2D(dfwwvbscatJERUp        [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,166)
+            histo2D[startF+167][x]    = makeFinalVariable2D(dfwwvbscatJESUp        [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,167)
+            histo2D[startF+168][x]    = makeFinalVariable2D(dfwwvbscatUnclusteredUp[x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,168)
             if(x == plotCategory("kPlotWS")):
                 startWS = 0
                 histoWS[0+startWS] = dfwwvbscat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF,minXF,maxXF), "finalVar","weightWSUnc0")
@@ -765,43 +673,43 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histoNonPrompt[4+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "finalVar","weightFakeAlte1")
                 histoNonPrompt[5+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "finalVar","weightFakeAlte2")
 
-            startF = 400
+            startF = 200
             for nv in range(0,135):
-                histo[startF+nv][x] = makeFinalVariable(dfwwbvbscat[x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,nv)
-            histo[startF+135][x]    = makeFinalVariable(dfwwbvbscatMuonMomUp    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,135)
-            histo[startF+136][x]    = makeFinalVariable(dfwwbvbscatElectronMomUp[x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,136)
-            histo[startF+137][x]    = makeFinalVariable(dfwwbvbscatJes00Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,137)
-            histo[startF+138][x]    = makeFinalVariable(dfwwbvbscatJes01Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,138)
-            histo[startF+139][x]    = makeFinalVariable(dfwwbvbscatJes02Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,139)
-            histo[startF+140][x]    = makeFinalVariable(dfwwbvbscatJes03Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,140)
-            histo[startF+141][x]    = makeFinalVariable(dfwwbvbscatJes04Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,141)
-            histo[startF+142][x]    = makeFinalVariable(dfwwbvbscatJes05Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,142)
-            histo[startF+143][x]    = makeFinalVariable(dfwwbvbscatJes06Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,143)
-            histo[startF+144][x]    = makeFinalVariable(dfwwbvbscatJes07Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,144)
-            histo[startF+145][x]    = makeFinalVariable(dfwwbvbscatJes08Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,145)
-            histo[startF+146][x]    = makeFinalVariable(dfwwbvbscatJes09Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,146)
-            histo[startF+147][x]    = makeFinalVariable(dfwwbvbscatJes10Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,147)
-            histo[startF+148][x]    = makeFinalVariable(dfwwbvbscatJes11Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,148)
-            histo[startF+149][x]    = makeFinalVariable(dfwwbvbscatJes12Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,149)
-            histo[startF+150][x]    = makeFinalVariable(dfwwbvbscatJes13Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,150)
-            histo[startF+151][x]    = makeFinalVariable(dfwwbvbscatJes14Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,151)
-            histo[startF+152][x]    = makeFinalVariable(dfwwbvbscatJes15Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,152)
-            histo[startF+153][x]    = makeFinalVariable(dfwwbvbscatJes16Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,153)
-            histo[startF+154][x]    = makeFinalVariable(dfwwbvbscatJes17Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,154)
-            histo[startF+155][x]    = makeFinalVariable(dfwwbvbscatJes18Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,155)
-            histo[startF+156][x]    = makeFinalVariable(dfwwbvbscatJes19Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,156)
-            histo[startF+157][x]    = makeFinalVariable(dfwwbvbscatJes20Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,157)
-            histo[startF+158][x]    = makeFinalVariable(dfwwbvbscatJes21Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,158)
-            histo[startF+159][x]    = makeFinalVariable(dfwwbvbscatJes22Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,159)
-            histo[startF+160][x]    = makeFinalVariable(dfwwbvbscatJes23Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,160)
-            histo[startF+161][x]    = makeFinalVariable(dfwwbvbscatJes24Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,161)
-            histo[startF+162][x]    = makeFinalVariable(dfwwbvbscatJes25Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,162)
-            histo[startF+163][x]    = makeFinalVariable(dfwwbvbscatJes26Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,163)
-            histo[startF+164][x]    = makeFinalVariable(dfwwbvbscatJes27Up	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,164)
-            histo[startF+165][x]    = makeFinalVariable(dfwwbvbscatJerUp	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,165)
-            histo[startF+166][x]    = makeFinalVariable(dfwwbvbscatJERUp	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,166)
-            histo[startF+167][x]    = makeFinalVariable(dfwwbvbscatJESUp	    [x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,167)
-            histo[startF+168][x]    = makeFinalVariable(dfwwbvbscatUnclusteredUp[x],"finalVar",theCat,startF,x,BinXF,minXF,maxXF,168)
+                histo2D[startF+nv][x] = makeFinalVariable2D(dfwwbvbscat[x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
+            histo2D[startF+135][x]    = makeFinalVariable2D(dfwwbvbscatMuonMomUp    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,135)
+            histo2D[startF+136][x]    = makeFinalVariable2D(dfwwbvbscatElectronMomUp[x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,136)
+            histo2D[startF+137][x]    = makeFinalVariable2D(dfwwbvbscatJes00Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,137)
+            histo2D[startF+138][x]    = makeFinalVariable2D(dfwwbvbscatJes01Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,138)
+            histo2D[startF+139][x]    = makeFinalVariable2D(dfwwbvbscatJes02Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,139)
+            histo2D[startF+140][x]    = makeFinalVariable2D(dfwwbvbscatJes03Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,140)
+            histo2D[startF+141][x]    = makeFinalVariable2D(dfwwbvbscatJes04Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,141)
+            histo2D[startF+142][x]    = makeFinalVariable2D(dfwwbvbscatJes05Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,142)
+            histo2D[startF+143][x]    = makeFinalVariable2D(dfwwbvbscatJes06Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,143)
+            histo2D[startF+144][x]    = makeFinalVariable2D(dfwwbvbscatJes07Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,144)
+            histo2D[startF+145][x]    = makeFinalVariable2D(dfwwbvbscatJes08Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,145)
+            histo2D[startF+146][x]    = makeFinalVariable2D(dfwwbvbscatJes09Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,146)
+            histo2D[startF+147][x]    = makeFinalVariable2D(dfwwbvbscatJes10Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,147)
+            histo2D[startF+148][x]    = makeFinalVariable2D(dfwwbvbscatJes11Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,148)
+            histo2D[startF+149][x]    = makeFinalVariable2D(dfwwbvbscatJes12Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,149)
+            histo2D[startF+150][x]    = makeFinalVariable2D(dfwwbvbscatJes13Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,150)
+            histo2D[startF+151][x]    = makeFinalVariable2D(dfwwbvbscatJes14Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,151)
+            histo2D[startF+152][x]    = makeFinalVariable2D(dfwwbvbscatJes15Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,152)
+            histo2D[startF+153][x]    = makeFinalVariable2D(dfwwbvbscatJes16Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,153)
+            histo2D[startF+154][x]    = makeFinalVariable2D(dfwwbvbscatJes17Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,154)
+            histo2D[startF+155][x]    = makeFinalVariable2D(dfwwbvbscatJes18Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,155)
+            histo2D[startF+156][x]    = makeFinalVariable2D(dfwwbvbscatJes19Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,156)
+            histo2D[startF+157][x]    = makeFinalVariable2D(dfwwbvbscatJes20Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,157)
+            histo2D[startF+158][x]    = makeFinalVariable2D(dfwwbvbscatJes21Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,158)
+            histo2D[startF+159][x]    = makeFinalVariable2D(dfwwbvbscatJes22Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,159)
+            histo2D[startF+160][x]    = makeFinalVariable2D(dfwwbvbscatJes23Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,160)
+            histo2D[startF+161][x]    = makeFinalVariable2D(dfwwbvbscatJes24Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,161)
+            histo2D[startF+162][x]    = makeFinalVariable2D(dfwwbvbscatJes25Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,162)
+            histo2D[startF+163][x]    = makeFinalVariable2D(dfwwbvbscatJes26Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,163)
+            histo2D[startF+164][x]    = makeFinalVariable2D(dfwwbvbscatJes27Up	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,164)
+            histo2D[startF+165][x]    = makeFinalVariable2D(dfwwbvbscatJerUp        [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,165)
+            histo2D[startF+166][x]    = makeFinalVariable2D(dfwwbvbscatJERUp        [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,166)
+            histo2D[startF+167][x]    = makeFinalVariable2D(dfwwbvbscatJESUp        [x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,167)
+            histo2D[startF+168][x]    = makeFinalVariable2D(dfwwbvbscatUnclusteredUp[x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,168)
             if(x == plotCategory("kPlotWS")):
                 startWS = 2
                 histoWS[0+startWS] = dfwwbvbscat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF,minXF,maxXF), "finalVar","weightWSUnc0")
@@ -822,11 +730,59 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         print("---------------- SUMMARY {0} -------------".format(x))
         report[x].Print()
 
+    if(makeDataCards == 1):
+        for j in range(0,nHistoMVA):
+            for x in range(nCat):
+                histoMVA[j][x] = ROOT.TH1D("histoMVA_{0}_{1}".format(j,x), "histoMVA_{0}_{1}".format(j,x), BinXF,minXF,maxXF)
+
+    for j in range(nHistoMVA):
+        for x in range(nCat):
+            if(histo2D[j][x] == 0):
+                histoMVA[j][x] = 0
+                continue
+            for i in range(histo2D[j][x].GetNbinsX()):
+                histo2D[j][x].SetBinContent(i+1,histo2D[j][x].GetNbinsY(),histo2D[j][x].GetBinContent(i+1,histo2D[j][x].GetNbinsY())+histo2D[j][x].GetBinContent(i+1,histo2D[j][x].GetNbinsY()+1))
+                histo2D[j][x].SetBinError  (i+1,histo2D[j][x].GetNbinsY(),pow(pow(histo2D[j][x].GetBinError(i+1,histo2D[j][x].GetNbinsY()),2)+pow(histo2D[j][x].GetBinError(i+1,histo2D[j][x].GetNbinsY()+1),2),0.5))
+                histo2D[j][x].SetBinContent(i+1,histo2D[j][x].GetNbinsY()+1,0.0)
+                histo2D[j][x].SetBinError  (i+1,histo2D[j][x].GetNbinsY()+1,0.0)
+
+            for i in range(histo2D[j][x].GetNbinsY()):
+                histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX(),i+1,histo2D[j][x].GetBinContent(histo2D[j][x].GetNbinsX(),i+1)+histo2D[j][x].GetBinContent(histo2D[j][x].GetNbinsX()+1,i+1))
+                histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX(),i+1,pow(pow(histo2D[j][x].GetBinError(histo2D[j][x].GetNbinsX(),i+1),2)+pow(histo2D[j][x].GetBinError(histo2D[j][x].GetNbinsX()+1,i+1),2),0.5))
+                histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX()+1,i+1,0.0)
+                histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX()+1,i+1,0.0)
+
+            if(x == plotCategory("kPlotEWKSSWW")):
+                histoMVA[j][plotCategory("kPlotEWKSSWW")].SetBinError(1,0.0)
+                histoMVA[j][plotCategory("kPlotSignal0")].SetBinError(1,0.0)
+                histoMVA[j][plotCategory("kPlotSignal1")].SetBinError(1,0.0)
+                histoMVA[j][plotCategory("kPlotSignal2")].SetBinError(1,0.0)
+                for i in range(histoMVA[j][x].GetNbinsX()):
+                    histoMVA[j][plotCategory("kPlotEWKSSWW")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotEWKSSWW")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,1))
+                    histoMVA[j][plotCategory("kPlotEWKSSWW")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotEWKSSWW")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,1),2),0.5))
+
+                    histoMVA[j][plotCategory("kPlotSignal0")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal0")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,2))
+                    histoMVA[j][plotCategory("kPlotSignal0")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal0")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,2),2),0.5))
+
+                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal1")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,3))
+                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal1")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,3),2),0.5))
+
+                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal2")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,4))
+                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal2")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,4),2),0.5))
+
+            else:
+                for i in range(histoMVA[j][x].GetNbinsX()):
+                    histoMVA[j][x].SetBinContent(i+1,histoMVA[j][x].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,1))
+                    histoMVA[j][x].SetBinError  (i+1,pow(pow(histoMVA[j][x].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,1),2),0.5))
+
     myfile = ROOT.TFile("fillhisto_sswwAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
             if(histo[j][i] == 0): continue
             histo[j][i].Write()
+        for j in range(nHistoMVA):
+            if(histoMVA[j][i] == 0): continue
+            histoMVA[j][i].Write()
     for i in range(nhistoWS):
         if(histoWS[i] == 0): continue
         histoWS[i].Write()

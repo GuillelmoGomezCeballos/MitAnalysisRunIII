@@ -894,10 +894,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                     histoMVA[j][plotCategory("kPlotSignal0")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal0")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,2),2),0.5))
 
                     histoMVA[j][plotCategory("kPlotSignal1")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal1")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,3))
-                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal1")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,4),2),0.5))
+                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal1")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,3),2),0.5))
 
                     histoMVA[j][plotCategory("kPlotSignal2")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal2")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,4))
-                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal2")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,5),2),0.5))
+                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal2")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,4),2),0.5))
 
             elif(x == plotCategory("kPlotggWW")):
                 for i in range(histoMVA[j][x].GetNbinsX()):
@@ -908,10 +908,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                     histoMVA[j][plotCategory("kPlotSignal3")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal3")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,2),2),0.5))
 
                     histoMVA[j][plotCategory("kPlotSignal4")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal4")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,3))
-                    histoMVA[j][plotCategory("kPlotSignal4")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal4")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,4),2),0.5))
+                    histoMVA[j][plotCategory("kPlotSignal4")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal4")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,3),2),0.5))
 
                     histoMVA[j][plotCategory("kPlotSignal5")].SetBinContent(i+1,histoMVA[j][plotCategory("kPlotSignal5")].GetBinContent(i+1)+histo2D[j][x].GetBinContent(i+1,4))
-                    histoMVA[j][plotCategory("kPlotSignal5")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal5")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,5),2),0.5))
+                    histoMVA[j][plotCategory("kPlotSignal5")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal5")].GetBinError(i+1),2)+pow(histo2D[j][x].GetBinError(i+1,4),2),0.5))
 
             else:
                 for i in range(histoMVA[j][x].GetNbinsX()):

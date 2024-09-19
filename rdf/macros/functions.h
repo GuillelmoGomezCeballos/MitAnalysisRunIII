@@ -1280,7 +1280,7 @@ float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   return theVar;
 }
 // Jet-lepton final variables
-float compute_jet_lepton_final_var(const float mjj, const float detajj, const float mll, unsigned int var)
+float compute_jet_lepton_final_var(const float mjj, const float detajj, const float mll, const int njets, unsigned int var)
 {
   if     (var == 0){
     int typeSelAux1 = -1;
@@ -1295,7 +1295,12 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     else if(mll < 240) typeSelAux2 = 2;
     else               typeSelAux2 = 3; 
     
-    return (float)(typeSelAux1+4*typeSelAux2);
+    float typeSelAux3 = -1;
+    if     (njets <= 2) typeSelAux3 = 0;
+    else if(njets == 3) typeSelAux3 = 1;
+    else                typeSelAux3 = 2; 
+    
+    return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
   }
   else if(var == 1){
     int typeSelAux1 = -1;
@@ -2063,6 +2068,32 @@ int compute_gen_category(const int mc, const int ngood_GenJets, const int ngood_
   if     (ngood_GenJets == 0) return 1;
   else if(ngood_GenJets == 1) return 2;
   else if(ngood_GenJets >= 2) return 3;
+  return 0;
+}
+
+// compute vbs gen category
+int compute_vbs_gen_category(const int mc, const int ngood_GenJets, const int ngood_GenDressedLeptons, const Vec_i& GenDressedLepton_pdgId, 
+                            const Vec_b& GenDressedLepton_hasTauAnc,
+                            const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_eta, const Vec_f& GenDressedLepton_phi, const Vec_f& GenDressedLepton_mass,
+                            const int applyTightSel){
+  if(ngood_GenDressedLeptons <= 1) return 0;
+  if(GenDressedLepton_pdgId[0] * GenDressedLepton_pdgId[1] < 0) return 0;
+
+  if(applyTightSel >= 1) {
+    if(GenDressedLepton_pt[1] > GenDressedLepton_pt[0]) {printf("PROBLEM, ptl2 > ptl1 at gen level\n");}
+    bool passTightGenSel = GenDressedLepton_pt[0] > 25 &&  GenDressedLepton_pt[1] > 20;
+    if(applyTightSel >= 2) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0;
+    if(applyTightSel >= 3) {
+      float mllGen = Minv2(GenDressedLepton_pt[0], GenDressedLepton_eta[0], GenDressedLepton_phi[0], GenDressedLepton_mass[0],
+                           GenDressedLepton_pt[1], GenDressedLepton_eta[1], GenDressedLepton_phi[1], GenDressedLepton_mass[1]).first;
+      passTightGenSel = passTightGenSel && mllGen > 20;
+    }
+    if(passTightGenSel == false) return 0;
+  }
+
+  if     (ngood_GenJets <= 2) return 1;
+  else if(ngood_GenJets == 3) return 2;
+  else if(ngood_GenJets >= 4) return 3;
   return 0;
 }
 
