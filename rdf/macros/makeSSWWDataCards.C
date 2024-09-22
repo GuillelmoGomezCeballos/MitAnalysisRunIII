@@ -171,9 +171,11 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[108] = "CMS_met_unclusteredUp";
   nameSyst[109] = "CMS_met_unclusteredDown";
 
-  //int BinXF = 8; double minXF = 500; double maxXF = 2500;
   int BinXF = 48; double minXF = -0.5; double maxXF = 47.5;
-  if(anaSel.Contains("wzAnalysis")) {
+  if    (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002")) {
+    BinXF = 16; minXF = -0.5; maxXF = 15.5;
+  }
+  else if(anaSel.Contains("wzAnalysis")) {
     BinXF = 12; minXF = -0.5; maxXF = 11.5;
   }
 
@@ -1131,6 +1133,14 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     newcardShape << Form("\n");
   }
   */
+  newcardShape << Form("pdf   lnN     ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("%6.3f ",1.01);
+  }
+  newcardShape << Form("\n");
 
   //newcardShape << Form("CMS_ww_wznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotWZ].Data());
   //newcardShape << Form("CMS_ww_zznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotZZ].Data());
