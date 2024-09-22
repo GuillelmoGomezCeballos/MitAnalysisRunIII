@@ -1282,7 +1282,7 @@ float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
 // Jet-lepton final variables
 float compute_jet_lepton_final_var(const float mjj, const float detajj, const float mll, const int njets, unsigned int var)
 {
-  if     (var == 0){
+  if     (var == 1 || var == 2 || var == 3){
     int typeSelAux1 = -1;
     if     (mjj <  800) typeSelAux1 = 0;
     else if(mjj < 1200) typeSelAux1 = 1;
@@ -1300,9 +1300,10 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     else if(njets == 3) typeSelAux3 = 1;
     else                typeSelAux3 = 2; 
     
-    return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
+    if(var == 1 || var == 2) return (float)(typeSelAux1+4*typeSelAux2);
+    else                     return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
   }
-  else if(var == 1){
+  else if(var == 10){
     int typeSelAux1 = -1;
     if     (mjj <  800) typeSelAux1 = 0;
     else if(mjj < 1200) typeSelAux1 = 1;
@@ -2072,28 +2073,53 @@ int compute_gen_category(const int mc, const int ngood_GenJets, const int ngood_
 }
 
 // compute vbs gen category
-int compute_vbs_gen_category(const int mc, const int ngood_GenJets, const int ngood_GenDressedLeptons, const Vec_i& GenDressedLepton_pdgId, 
-                            const Vec_b& GenDressedLepton_hasTauAnc,
-                            const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_eta, const Vec_f& GenDressedLepton_phi, const Vec_f& GenDressedLepton_mass,
-                            const int applyTightSel){
+int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_f& good_GenJet_pt, const Vec_f& good_GenJet_eta,  const Vec_f& good_GenJet_phi, const Vec_f& good_GenJet_mass,
+                             const int ngood_GenDressedLeptons, const Vec_i& GenDressedLepton_pdgId, const Vec_b& GenDressedLepton_hasTauAnc,
+                             const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_eta, const Vec_f& GenDressedLepton_phi, const Vec_f& GenDressedLepton_mass,
+                             const int applyTightSel){
+
   if(ngood_GenDressedLeptons <= 1) return 0;
   if(GenDressedLepton_pdgId[0] * GenDressedLepton_pdgId[1] < 0) return 0;
+  if(ngood_GenJets < 2) return 0;
+
+  float mjjGen = Minv2(good_GenJet_pt[0], good_GenJet_eta[0], good_GenJet_phi[0], good_GenJet_mass[0],
+                       good_GenJet_pt[1], good_GenJet_eta[1], good_GenJet_phi[1], good_GenJet_mass[1]).first;
+
+  float mllGen = Minv2(GenDressedLepton_pt[0], GenDressedLepton_eta[0], GenDressedLepton_phi[0], GenDressedLepton_mass[0],
+                       GenDressedLepton_pt[1], GenDressedLepton_eta[1], GenDressedLepton_phi[1], GenDressedLepton_mass[1]).first;
 
   if(applyTightSel >= 1) {
     if(GenDressedLepton_pt[1] > GenDressedLepton_pt[0]) {printf("PROBLEM, ptl2 > ptl1 at gen level\n");}
     bool passTightGenSel = GenDressedLepton_pt[0] > 25 &&  GenDressedLepton_pt[1] > 20;
     if(applyTightSel >= 2) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0;
     if(applyTightSel >= 3) {
-      float mllGen = Minv2(GenDressedLepton_pt[0], GenDressedLepton_eta[0], GenDressedLepton_phi[0], GenDressedLepton_mass[0],
-                           GenDressedLepton_pt[1], GenDressedLepton_eta[1], GenDressedLepton_phi[1], GenDressedLepton_mass[1]).first;
       passTightGenSel = passTightGenSel && mllGen > 20;
+    }
+    if(applyTightSel >= 4) {
+      float detajjGen = fabs(good_GenJet_eta[0]-good_GenJet_eta[1]);
+      passTightGenSel = passTightGenSel && mjjGen > 500 && detajjGen > 2.5;
     }
     if(passTightGenSel == false) return 0;
   }
 
-  if     (ngood_GenJets <= 2) return 1;
-  else if(ngood_GenJets == 3) return 2;
-  else if(ngood_GenJets >= 4) return 3;
+  if     (nSel == 1){
+    if     (mjjGen <  800) return 1;
+    else if(mjjGen < 1200) return 2;
+    else if(mjjGen < 1800) return 3;
+    else                   return 4;
+  }
+  else if(nSel == 2){
+    if     (mllGen <  80) return 1;
+    else if(mllGen < 140) return 2;
+    else if(mllGen < 240) return 3;
+    else                  return 4;
+  }
+  else if(nSel == 3){
+    if     (ngood_GenJets == 2) return 1;
+    else if(ngood_GenJets == 3) return 2;
+    else if(ngood_GenJets >= 4) return 3;
+  }
+  
   return 0;
 }
 

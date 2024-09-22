@@ -90,6 +90,7 @@ def selectionGenLepJet(df,ptlcut,ptjcut,etajcut):
               .Define("good_GenJet_pt",            "GenJet_pt[good_GenJet]")
               .Define("good_GenJet_eta",           "GenJet_eta[good_GenJet]")
               .Define("good_GenJet_phi",           "GenJet_phi[good_GenJet]")
+              .Define("good_GenJet_mass",          "GenJet_mass[good_GenJet]")
               .Define("good_GenJet_hadronFlavour", "GenJet_hadronFlavour[good_GenJet]")
               .Define("good_GenJet_partonFlavour", "GenJet_partonFlavour[good_GenJet]")
               )
