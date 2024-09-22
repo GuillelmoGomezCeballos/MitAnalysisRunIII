@@ -2116,8 +2116,7 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
   }
   else if(nSel == 3){
     if     (ngood_GenJets == 2) return 1;
-    else if(ngood_GenJets == 3) return 2;
-    else if(ngood_GenJets >= 4) return 3;
+    else if(ngood_GenJets >= 3) return 2;
   }
   
   return 0;

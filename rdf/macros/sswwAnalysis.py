@@ -764,25 +764,25 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histoMVA[j][plotCategory("kPlotSignal2")].SetBinError(1,0.0)
                 histoMVA[j][plotCategory("kPlotSignal3")].SetBinError(1,0.0)
                 for i in range(histoMVA[j][x].GetNbinsX()):
-                    histoMVA[j][plotCategory("kPlotEWKSSWW")].SetBinContent(i+1,histo2D[j][x].GetBinContent(i+1,1))
-                    histoMVA[j][plotCategory("kPlotEWKSSWW")].SetBinError  (i+1,histo2D[j][x].GetBinError  (i+1,1))
+                    histoMVA[j][plotCategory("kPlotEWKSSWW")].SetBinContent(i+1,        histoMVA[j][plotCategory("kPlotEWKSSWW")].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,1))
+                    histoMVA[j][plotCategory("kPlotEWKSSWW")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotEWKSSWW")].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,1),2),0.5))
 
-                    histoMVA[j][plotCategory("kPlotSignal0")].SetBinContent(i+1,histo2D[j][x].GetBinContent(i+1,2))
-                    histoMVA[j][plotCategory("kPlotSignal0")].SetBinError  (i+1,histo2D[j][x].GetBinError  (i+1,2))
+                    histoMVA[j][plotCategory("kPlotSignal0")].SetBinContent(i+1,        histoMVA[j][plotCategory("kPlotSignal0")].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,2))
+                    histoMVA[j][plotCategory("kPlotSignal0")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal0")].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,2),2),0.5))
 
-                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinContent(i+1,histo2D[j][x].GetBinContent(i+1,3))
-                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinError  (i+1,histo2D[j][x].GetBinError  (i+1,3))
+                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinContent(i+1,        histoMVA[j][plotCategory("kPlotSignal1")].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,3))
+                    histoMVA[j][plotCategory("kPlotSignal1")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal1")].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,3),2),0.5))
 
-                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinContent(i+1,histo2D[j][x].GetBinContent(i+1,4))
-                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinError  (i+1,histo2D[j][x].GetBinError  (i+1,4))
+                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinContent(i+1,        histoMVA[j][plotCategory("kPlotSignal2")].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,4))
+                    histoMVA[j][plotCategory("kPlotSignal2")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal2")].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,4),2),0.5))
 
-                    histoMVA[j][plotCategory("kPlotSignal3")].SetBinContent(i+1,histo2D[j][x].GetBinContent(i+1,5))
-                    histoMVA[j][plotCategory("kPlotSignal3")].SetBinError  (i+1,histo2D[j][x].GetBinError  (i+1,5))
+                    histoMVA[j][plotCategory("kPlotSignal3")].SetBinContent(i+1,        histoMVA[j][plotCategory("kPlotSignal3")].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,5))
+                    histoMVA[j][plotCategory("kPlotSignal3")].SetBinError  (i+1,pow(pow(histoMVA[j][plotCategory("kPlotSignal3")].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,5),2),0.5))
 
-            elif(x != plotCategory("kPlotSignal0") and x != plotCategory("kPlotSignal1") and x != plotCategory("kPlotSignal2") and x != plotCategory("kPlotSignal3")):
+            else:
                 for i in range(histoMVA[j][x].GetNbinsX()):
-                    histoMVA[j][x].SetBinContent(i+1,histo2D[j][x].GetBinContent(i+1,1))
-                    histoMVA[j][x].SetBinError  (i+1,histo2D[j][x].GetBinError  (i+1,1))
+                    histoMVA[j][x].SetBinContent(i+1,        histoMVA[j][x].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,1))
+                    histoMVA[j][x].SetBinError  (i+1,pow(pow(histoMVA[j][x].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,1),2),0.5))
 
     myfile = ROOT.TFile("fillhisto_sswwAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
