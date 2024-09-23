@@ -22,7 +22,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   if(fidAna < 0 || fidAna > 2) printf("Wrong fidAna(%d)\n",fidAna);
 
   plotBaseNames[kPlotNonPrompt] = "NonPrompt";
-  if(anaSel.Contains("wzAnalysis")) plotBaseNames[kPlotNonPrompt] = "NonPromptWZ";
+  if(anaSel.Contains("wzAnalysis")) plotBaseNames[kPlotNonPrompt] = "WZNonPrompt";
 
   int theYear = 0;
   double triggerEffUnc = 1.000;
