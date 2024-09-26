@@ -171,9 +171,9 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[108] = "CMS_met_unclusteredUp";
   nameSyst[109] = "CMS_met_unclusteredDown";
 
-  int BinXF = 48; double minXF = -0.5; double maxXF = 47.5;
+  int BinXF = 32; double minXF = -0.5; double maxXF = 31.5;
   if    (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002")) {
-    BinXF = 16; minXF = -0.5; maxXF = 15.5;
+    BinXF = 32; minXF = -0.5; maxXF = 31.5;
   }
   else if(anaSel.Contains("wzAnalysis")) {
     BinXF = 12; minXF = -0.5; maxXF = 11.5;
@@ -1121,8 +1121,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
       newcardShape << Form("\n");
   } 
 
-  /*
-  for(int npdf=0; npdf<=100; npdf++){
+  for(int npdf=100; npdf<=100; npdf++){
     newcardShape << Form("pdf%d shape ",npdf);
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
@@ -1132,8 +1131,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     }
     newcardShape << Form("\n");
   }
-  */
-  newcardShape << Form("pdf   lnN     ");
+
+  newcardShape << Form("pdfqq   lnN     ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -1142,8 +1141,10 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  //newcardShape << Form("CMS_ww_wznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotWZ].Data());
-  //newcardShape << Form("CMS_ww_zznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotZZ].Data());
+  newcardShape << Form("CMS_ssww_wznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotWZ].Data());
+  newcardShape << Form("CMS_ssww_ewkwznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotEWKWZ].Data());
+  newcardShape << Form("CMS_ssww_nonpromptnorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotNonPrompt].Data());
+  //newcardShape << Form("CMS_ssww_zznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotZZ].Data());
 
   newcardShape << Form("ch%d autoMCStats 0\n",fidAna);
 

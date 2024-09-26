@@ -548,13 +548,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         maxXF = 2500
         if(makeDataCards == 1 or makeDataCards == 2 or makeDataCards == 3):
             startF = 0
-            BinXF = 16
+            BinXF = 32
             minXF = -0.5
-            maxXF = 15.5
+            maxXF = 31.5
             if(makeDataCards == 3):
-                BinXF = 48
+                BinXF = 32
                 minXF = -0.5
-                maxXF = 47.5
+                maxXF = 31.5
 
             # Making final variable
             dfwwvbscat             [x] = dfwwvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,{0})".format(makeDataCards))

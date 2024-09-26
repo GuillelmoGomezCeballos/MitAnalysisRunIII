@@ -736,7 +736,7 @@ float compute_fakeRate(const bool isData,
 
   // whichAna = 1 (ssww)
   double addSF[2] {1.0, 1.0};
-  //if(whichAna == 1) {addSF[0] = 0.35; addSF[1] = 0.80;}
+  if(whichAna == 1) {addSF[0] = 1.1; addSF[1] = 1.1;}
 
   if(mu_pt.size() != tight_mu.size() || el_pt.size() != tight_el.size()) {
     printf("PROBLEM in compute_fakeRate (%zu/%zu) (%zu/%zu)!\n",mu_pt.size(),tight_mu.size(),el_pt.size(),tight_el.size());
@@ -1297,10 +1297,9 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     
     float typeSelAux3 = -1;
     if     (njets <= 2) typeSelAux3 = 0;
-    else if(njets == 3) typeSelAux3 = 1;
-    else                typeSelAux3 = 2; 
+    else                typeSelAux3 = 1; 
     
-    if(var == 1 || var == 2) return (float)(typeSelAux1+4*typeSelAux2);
+    if(var == 1 || var == 2) return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
     else                     return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
   }
   else if(var == 10){
