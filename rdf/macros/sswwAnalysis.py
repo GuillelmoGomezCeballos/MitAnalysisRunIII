@@ -9,7 +9,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 import tmva_helper_xml
 
 correctionString = "_correction"
-makeDataCards = 1
+makeDataCards = 3
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
@@ -548,13 +548,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         maxXF = 2500
         if(makeDataCards == 1 or makeDataCards == 2 or makeDataCards == 3):
             startF = 0
-            BinXF = 32
+            BinXF = 33
             minXF = -0.5
-            maxXF = 31.5
-            if(makeDataCards == 3):
-                BinXF = 32
-                minXF = -0.5
-                maxXF = 31.5
+            maxXF = 32.5
 
             # Making final variable
             dfwwvbscat             [x] = dfwwvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,{0})".format(makeDataCards))

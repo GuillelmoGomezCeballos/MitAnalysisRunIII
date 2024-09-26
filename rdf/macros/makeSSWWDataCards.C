@@ -171,9 +171,9 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[108] = "CMS_met_unclusteredUp";
   nameSyst[109] = "CMS_met_unclusteredDown";
 
-  int BinXF = 32; double minXF = -0.5; double maxXF = 31.5;
+  int BinXF = 33; double minXF = -0.5; double maxXF = 32.5;
   if    (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002")) {
-    BinXF = 32; minXF = -0.5; maxXF = 31.5;
+    BinXF = 33; minXF = -0.5; maxXF = 32.5;
   }
   else if(anaSel.Contains("wzAnalysis")) {
     BinXF = 12; minXF = -0.5; maxXF = 11.5;
