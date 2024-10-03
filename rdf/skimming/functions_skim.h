@@ -42,6 +42,7 @@ using Vec_i = ROOT::VecOps::RVec<int>;
 using Vec_ui = ROOT::VecOps::RVec<unsigned int>;
 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > PtEtaPhiMVector;
+
 std::unordered_map< UInt_t, std::vector< std::pair<UInt_t,UInt_t> > > jsonMap;
 
 bool isGoodRunLS(const bool isData, const UInt_t run, const UInt_t lumi) {
@@ -52,7 +53,7 @@ bool isGoodRunLS(const bool isData, const UInt_t run, const UInt_t lumi) {
 
   auto& validlumis = jsonMap.at(run);
   auto match = std::lower_bound(std::begin(validlumis), std::end(validlumis), lumi,
-				[](std::pair<unsigned int, unsigned int>& range, unsigned int val) { return range.second < val; });
+                               [](std::pair<unsigned int, unsigned int>& range, unsigned int val) { return range.second < val; });
   return match->first <= lumi && match->second >= lumi;
 }
 

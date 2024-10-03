@@ -14,8 +14,8 @@ chmod a+x skim.sh
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 export SCRAM_ARCH=slc7_amd64_gcc12
-scramv1 project CMSSW CMSSW_13_3_1 # cmsrel is an alias not on the workers
-cd CMSSW_13_3_1/src/
+scramv1 project CMSSW CMSSW_14_1_0 # cmsrel is an alias not on the workers
+cd CMSSW_14_1_0/src/
 eval `scramv1 runtime -sh` # cmsenv is an alias not on the workers
 cd ../..
 

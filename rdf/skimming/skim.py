@@ -5,7 +5,7 @@ import math
 
 ROOT.ROOT.EnableImplicitMT(2)
 
-ROOT.gInterpreter.Declare('#include "functions_skim.h"')
+ROOT.gInterpreter.ProcessLine('#include "functions_skim.h"')
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     #            1l     2l     3l     met    pho
     doSkimSel = [True, True, True, True, False]
 
-    outputDir = "root://submit54.mit.edu//store/user/ceballos/nanoaod/skims_submit/"
+    outputDir = "root://submit50.mit.edu//store/user/ceballos/nanoaod/skims_submit/"
     inputSamplesCfg = "skim_input_samples.cfg"
     inputFilesCfg = "skim_input_files.cfg"
     whichSample = 1
@@ -137,6 +137,9 @@ if __name__ == "__main__":
     elif("Run2023" in sampleToSkim):
         year = 2023
         isSkimData = 1
+    elif("Run2024" in sampleToSkim):
+        year = 2024
+        isSkimData = 1
     elif("RunIISummer20UL18" in sampleToSkim):
         year = 2018
         isSkimData = 0
@@ -145,6 +148,9 @@ if __name__ == "__main__":
         isSkimData = 0
     elif("Run3Summer23" in sampleToSkim):
         year = 2023
+        isSkimData = 0
+    elif("Run3Summer24" in sampleToSkim):
+        year = 2024
         isSkimData = 0
 
     if(year == -1 or isSkimData == -1):
@@ -162,6 +168,8 @@ if __name__ == "__main__":
         jsnName = "Cert_Collisions2022_355100_362760_Golden.json"
     elif(year == 2023):
         jsnName = "Collisions23_13p6TeV_DCSOnly_TkPx.json"
+    elif(year == 2024):
+        jsnName = "Collisions24_13p6TeV_DCSOnly_TkPx.json"
 
     if os.path.exists(os.path.join("jsns",jsnName)):
         loadJSON(os.path.join("jsns",jsnName))
@@ -304,7 +312,7 @@ if __name__ == "__main__":
                                 .Define("skimel_mass",  "Electron_mass[skim_el]")\
                                 .Define("skimel_charge","Electron_charge[skim_el]")\
                                 .Define("skim_lep_charge","Sum(skimmu_charge)+Sum(skimel_charge)")\
-                                .Define("skim","applySkim(skimmu_pt, skimmu_eta, skimmu_phi, skimmu_mass, skimel_pt, skimel_eta, skimel_phi, skimel_mass, skim_lep_charge, MET_pt)")
+                                .Define("skim","applySkim(skimmu_pt, skimmu_eta, skimmu_phi, skimmu_mass, skimel_pt, skimel_eta, skimel_phi, skimel_mass, skim_lep_charge, PuppiMET_pt)")
 
                     rdf_2l = rdf_ll.Define("trigger2l","({0}) or ({1})".format(TRIGGERLEP,TRIGGERFAKE))\
                                    .Filter("trigger2l > 0","Passed trigger2l")\
