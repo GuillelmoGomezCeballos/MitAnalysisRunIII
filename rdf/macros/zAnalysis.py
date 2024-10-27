@@ -240,8 +240,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfzgcat.append(dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Muon_charge) == 0 && ptl1 > 25 && ptl2 > 20 && mll > 10 && Sum(good_Photons) > 0 && Max(good_Photons_pt) > 20")
               .Define("kPlotDY", "{0}".format(plotCategory("kPlotDY")))
               .Filter("theCat{0}!=kPlotDY".format(x))
-              .Define("ptg", "compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, MET_pt, MET_phi, good_Photons_pt, good_Photons_eta, good_Photons_phi, 6)")
-              .Define("mllg","compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, MET_pt, MET_phi, good_Photons_pt, good_Photons_eta, good_Photons_phi, 7)")
+              .Define("ptg", "compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, thePuppiMET_pt, thePuppiMET_phi, good_Photons_pt, good_Photons_eta, good_Photons_phi, 6)")
+              .Define("mllg","compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, thePuppiMET_pt, thePuppiMET_phi, good_Photons_pt, good_Photons_eta, good_Photons_phi, 7)")
             )
 
             #dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll-91.1876) < 15) || (DiLepton_flavor == 1 && mll > 30 && tight_mu6[0] == 1 && tight_el4[0] == 1)","mll cut")
@@ -261,12 +261,18 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
             histo[ltype+30][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+30,x), "histo_{0}_{1}".format(ltype+30,x), 80,-0.5,79.5), "PV_npvsGood","weight")
             histo[ltype+33][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+33,x), "histo_{0}_{1}".format(ltype+33,x), 100, 0, 200), "CaloMET_pt","weight")
-            histo[ltype+36][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 100, 0, 200), "ChsMET_pt","weight")
-            histo[ltype+39][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 100, 0, 200), "MET_pt","weight")
+            #histo[ltype+36][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 100, 0, 200), "ChsMET_pt","weight")
+            if((year // 10) < 2024):
+                histo[ltype+39][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 100, 0, 200), "MET_pt","weight")
+            else:
+                histo[ltype+39][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 100, 0, 200), "PFMET_pt","weight")
             histo[ltype+42][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 100, 0, 200), "thePuppiMET_pt","weight")
-            histo[ltype+45][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 100, 0, 200), "TkMET_pt","weight")
+            #histo[ltype+45][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 100, 0, 200), "TkMET_pt","weight")
             histo[ltype+48][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 80,-0.5,79.5), "Rho_fixedGridRhoFastjetAll","weight")
-            histo[ltype+51][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 100, -3.1416, 3.1416), "MET_phi","weight")
+            if((year // 10) < 2024):
+                histo[ltype+51][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 100, -3.1416, 3.1416), "MET_phi","weight")
+            else:
+                histo[ltype+51][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 100, -3.1416, 3.1416), "PFMET_phi","weight")
             histo[ltype+54][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+54,x), "histo_{0}_{1}".format(ltype+54,x), 100, -3.1416, 3.1416), "thePuppiMET_phi","weight")
 
             if(x == plotCategory("kPlotData") and print_info == True):
@@ -307,7 +313,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                         coutWSStudy = coutWSStudy + 2
 
             dfjetcat.append(dfzllcat[3*x+ltype].Filter("ngood_jets >= 1", "At least one jet"))
-            histo[ltype+110][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+110,x), "histo_{0}_{1}".format(ltype+110,x), 50,0,1), "good_Jet_btagRobustParTAK4B","weight")
+            histo[ltype+110][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+110,x), "histo_{0}_{1}".format(ltype+110,x), 50,0,1), "good_Jet_btagUnifiedParTB","weight")
             histo[ltype+113][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+113,x), "histo_{0}_{1}".format(ltype+113,x), 6,-0.5,5.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
 
             dfjetcat[3*x+ltype] = dfjetcat[3*x+ltype].Filter("DiLepton_flavor != 1 || nbtag_goodbtag_Jet_bjet >= 1", "At least one b-jet")

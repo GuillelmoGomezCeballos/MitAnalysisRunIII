@@ -141,8 +141,8 @@ def selectionLL(df,year,PDType,isData):
               .Define("goodloose_jet", "abs(Jet_eta) < 2.5 && Jet_pt > 20 && jet_maskl0 && jet_maskl1 && jet_maskg0 && jet_maskg1 && jet_maskg2 && jet_maskg3 && jet_maskg4 && jet_maskg5 && jet_maskg6 && jet_maskg7")
               .Define("goodloosejet_pt", "Jet_pt[goodloose_jet]")
               .Define("goodloosejet_eta", "abs(Jet_eta[goodloose_jet])")
-              .Define("goodloosejet_btagRobustParTAK4B", "Jet_btagRobustParTAK4B[goodloose_jet]")
-              .Define("goodloose_bjet", "goodloosejet_btagRobustParTAK4B > 0.7100")
+              .Define("goodloosejet_btagUnifiedParTB", "Jet_btagUnifiedParTB[goodloose_jet]")
+              .Define("goodloose_bjet", "goodloosejet_btagUnifiedParTB > 0.7100")
               .Define("nbtagloosejet", "Sum(goodloose_bjet)")
 
               .Define("good_jet"     , "abs(Jet_eta) < 5.0 && Jet_pt > 30 && jet_maskl0 && jet_maskl1 && jet_maskg0 && jet_maskg1 && jet_maskg2 && jet_maskg3 && jet_maskg4 && jet_maskg5 && jet_maskg6 && jet_maskg7 && Jet_jetId > 0")

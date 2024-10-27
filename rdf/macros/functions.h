@@ -1106,7 +1106,7 @@ float get_variable_index(Vec_f var, Vec_f pt, const unsigned int index){
 
 // Muon Id variables
 int compute_muid_var(const Vec_b& mu_mediumId, const Vec_b& mu_tightId, const Vec_i& mu_pfIsoId,
-                     const Vec_i& mu_miniIsoId, const Vec_f& mu_mvaTTH, const Vec_b& mu_mediumPromptId,
+                     const Vec_i& mu_miniIsoId, const Vec_f& mu_promptMVA, const Vec_b& mu_mediumPromptId,
                      unsigned int nsel)
 {
   if(mu_mediumId.size() < nsel+1) return -1;
@@ -1117,17 +1117,17 @@ int compute_muid_var(const Vec_b& mu_mediumId, const Vec_b& mu_tightId, const Ve
   if(mu_mediumPromptId[nsel] == true &&  mu_pfIsoId[nsel] >= 4) var = var + 4;
   if(mu_tightId[nsel] == true && mu_miniIsoId[nsel] >= 3) var = var + 8;
   if(mu_mediumPromptId[nsel] == true && mu_miniIsoId[nsel] >= 3) var = var + 16;
-  if(mu_mediumPromptId[nsel] == true && mu_mvaTTH[nsel] > 0.7) var = var + 32;
-  if(mu_tightId[nsel] == true && mu_mvaTTH[nsel] > 0.7) var = var + 64;
+  if(mu_mediumPromptId[nsel] == true && mu_promptMVA[nsel] > 0.7) var = var + 32;
+  if(mu_tightId[nsel] == true && mu_promptMVA[nsel] > 0.7) var = var + 64;
   if(mu_mediumPromptId[nsel] == true && mu_miniIsoId[nsel] >= 4) var = var + 128;
-  if(mu_mediumPromptId[nsel] == true && mu_mvaTTH[nsel] > 0.5) var = var + 256;
+  if(mu_mediumPromptId[nsel] == true && mu_promptMVA[nsel] > 0.5) var = var + 256;
 
   return var;
 }
 
 // Electron Id variables
 int compute_elid_var(const Vec_i& el_cutBased, const Vec_b& el_mvaNoIso_WP80, const Vec_b& el_mvaIso_WP80,
-                     const Vec_b& el_mvaIso_WP90, const Vec_i& el_tightCharge, const Vec_f& el_mvaTTH,
+                     const Vec_b& el_mvaIso_WP90, const Vec_i& el_tightCharge, const Vec_f& el_promptMVA,
                      const Vec_f& el_pfRelIso03_chg, const Vec_f& el_pfRelIso03_all,
                      unsigned int nsel)
 {
@@ -1138,10 +1138,10 @@ int compute_elid_var(const Vec_i& el_cutBased, const Vec_b& el_mvaNoIso_WP80, co
   if(el_cutBased[nsel] >= 4) var = var + 2;
   if(el_mvaNoIso_WP80[nsel] == true && el_pfRelIso03_chg[nsel] < 0.15) var = var + 4;
   if(el_mvaIso_WP80[nsel] == true) var = var + 8;
-  if(el_mvaTTH[nsel] > 0.5) var = var + 16;
+  if(el_promptMVA[nsel] > 0.5) var = var + 16;
   if(el_mvaIso_WP90[nsel] == true) var = var + 32;
   if(el_mvaIso_WP80[nsel] == true && el_tightCharge[nsel] == 2) var = var + 64;
-  if(el_mvaTTH[nsel] > 0.5 && el_tightCharge[nsel] == 2) var = var + 128;
+  if(el_promptMVA[nsel] > 0.5 && el_tightCharge[nsel] == 2) var = var + 128;
   if(el_mvaNoIso_WP80[nsel] == true && el_pfRelIso03_all[nsel] < 0.20) var = var + 256;
 
   return var;

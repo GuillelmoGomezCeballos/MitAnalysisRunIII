@@ -10,7 +10,7 @@ theCondor=$2;
 theYear=$3;
 group=9
 
-if [ ${theYear} = 2026 ]; then
+if [ ${theYear} = 2027 ]; then
 
 for i in `seq 0 600`;
 do

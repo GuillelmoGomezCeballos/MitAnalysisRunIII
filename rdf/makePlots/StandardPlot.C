@@ -51,7 +51,7 @@ Float_t GetMaximumIncludingErrors(TH1F* h, bool doApplyBinWidth)
 //------------------------------------------------------------------------------
 Float_t GetMinimumIncludingErrors(TH1F* h, bool doApplyBinWidth)
 {
-    Float_t minWithErrors = 100000000000;
+    Float_t minWithErrors = 100000000;
 
     for (Int_t i=1; i<=h->GetNbinsX(); i++) {
 

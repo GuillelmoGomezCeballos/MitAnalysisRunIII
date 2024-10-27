@@ -14,7 +14,7 @@
 #include "TRandom.h"
 #include "common.h"
 
-void producingYields_fromHistograms(TString plotName = "/home/submit/ceballos/cards/combine_plots_madgraph_smp24001/ww_output_bin-1.root") {
+void producingYields_fromHistograms(TString plotName = "/home/submit/ceballos/cards/combine_plots_madgraph_smp24001/ww_output_bin-2.root") {
 
   TFile* file = new TFile(plotName, "read");  if(!file) {printf("File %s does not exist\n",plotName.Data()); return;}
   TH1F* _hist[nPlotCategories];
