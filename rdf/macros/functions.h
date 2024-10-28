@@ -1299,7 +1299,7 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     if     (njets <= 2) typeSelAux3 = 0;
     else                typeSelAux3 = 1; 
 
-    if(njets >=4) return 32.0;
+    if(njets >=4) return (float)(32.0+typeSelAux1);
     else          return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
   }
   else if(var == 10){

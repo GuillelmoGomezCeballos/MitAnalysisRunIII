@@ -9,7 +9,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 import tmva_helper_xml
 
 correctionString = "_correction"
-makeDataCards = 3
+makeDataCards = 1
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
@@ -548,9 +548,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         maxXF = 2500
         if(makeDataCards == 1 or makeDataCards == 2 or makeDataCards == 3):
             startF = 0
-            BinXF = 33
+            BinXF = 36
             minXF = -0.5
-            maxXF = 32.5
+            maxXF = 35.5
 
             # Making final variable
             dfwwvbscat             [x] = dfwwvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,{0})".format(makeDataCards))
@@ -624,6 +624,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfwwbvbscatJERUp        [x] = dfwwbvbscatJERUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,{0})".format(makeDataCards))
             dfwwbvbscatJESUp        [x] = dfwwbvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,{0})".format(makeDataCards))
             dfwwbvbscatUnclusteredUp[x] = dfwwbvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,mll,ngood_jets,{0})".format(makeDataCards))
+
+            histo[110][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(110,x), "histo_{0}_{1}".format(110,x),BinXF,minXF,maxXF), "finalVar","weight")
+            histo[111][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(111,x), "histo_{0}_{1}".format(111,x),BinXF,minXF,maxXF), "finalVar","weight")
 
             for nv in range(0,135):
                 histo2D[startF+nv][x] = makeFinalVariable2D(dfwwvbscat[x],"finalVar","theGenCat",theCat,startF,x,BinXF,minXF,maxXF,BinYF,minYF,maxYF,nv)
