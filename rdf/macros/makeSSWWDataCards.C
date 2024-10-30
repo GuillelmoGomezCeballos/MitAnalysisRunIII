@@ -171,9 +171,9 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[108] = "CMS_met_unclusteredUp";
   nameSyst[109] = "CMS_met_unclusteredDown";
 
-  int BinXF = 36; double minXF = -0.5; double maxXF = 35.5;
+  int BinXF = 48; double minXF = -0.5; double maxXF = 47.5;
   if    (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002")) {
-    BinXF = 36; minXF = -0.5; maxXF = 35.5;
+    BinXF = 48; minXF = -0.5; maxXF = 47.5;
   }
   else if(anaSel.Contains("wzAnalysis")) {
     BinXF = 12; minXF = -0.5; maxXF = 11.5;
@@ -182,6 +182,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   for(int ic=0; ic<nPlotCategories; ic++) {
     histo_Baseline[ic] = new TH1D(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()), BinXF, minXF, maxXF);
     TString plotBaseNamesTemp =  plotBaseNames[ic];
+    if     (ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2 || ic == kPlotSignal3 || ic == kPlotEWKSSWW) plotBaseNamesTemp = "EWKSSWW";
     histo_QCDScaleUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCD_scale_%s_ACCEPTUp"  , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
     histo_QCDScaleDown[ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCD_scale_%s_ACCEPTDown", plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
     histo_PSUp  [ic]       = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_PS_%s_ACCEPTUp"  , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
@@ -209,9 +210,9 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   for(int j=0; j<nSystTotal; j++){
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()), "read");
     for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
-      if(j%100==0&&ic==3) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
+      if(j%1==0&&ic!=30) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
       histo_Syst[j][ic] = (TH1D*)inputFile->Get(Form("histo%s%d", postFixHist.Data(), ic)); assert(histo_Syst[j][ic]); histo_Syst[j][ic]->SetDirectory(0);
-      if(j%100==0&&ic==3) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
+      if(j%1==0&&ic!=30) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
       histo_Syst[j][ic]->SetNameTitle(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()));
 
       // Renormalize distributions
@@ -1103,6 +1104,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic== kPlotData || ic == kPlotNonPrompt || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2 || ic == kPlotSignal3 || ic == kPlotEWKSSWW) continue;
     newcardShape << Form("QCD_scale_%s_ACCEPT shape ",plotBaseNames[ic].Data());
     for(unsigned ic2=0; ic2<nPlotCategories; ic2++) {
       if(ic2 == kPlotData || histo_Baseline[ic2]->GetSumOfWeights() <= 0) continue;
@@ -1112,8 +1114,23 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
       newcardShape << Form("\n");
   } 
 
+  newcardShape << Form("QCD_scale_EWKSSWW_ACCEPT shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic != kPlotSignal0 &&
+            ic != kPlotSignal1 &&
+            ic != kPlotSignal2 &&
+            ic != kPlotSignal3 &&
+            ic != kPlotEWKSSWW
+            ) newcardShape << Form("- ");
+    else      newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic== kPlotData || ic == kPlotNonPrompt || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2 || ic == kPlotSignal3 || ic == kPlotEWKSSWW) continue;
     newcardShape << Form("PS_%s_ACCEPT shape ",plotBaseNames[ic].Data());
     for(unsigned ic2=0; ic2<nPlotCategories; ic2++) {
       if(ic2 == kPlotData || histo_Baseline[ic2]->GetSumOfWeights() <= 0) continue;
@@ -1122,6 +1139,20 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
       }
       newcardShape << Form("\n");
   } 
+
+  newcardShape << Form("PS_EWKSSWW_ACCEPT shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic != kPlotSignal0 &&
+            ic != kPlotSignal1 &&
+            ic != kPlotSignal2 &&
+            ic != kPlotSignal3 &&
+            ic != kPlotEWKSSWW
+           ) newcardShape << Form("- ");
+    else     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
 
   for(int npdf=100; npdf<=100; npdf++){
     newcardShape << Form("pdf%d shape ",npdf);

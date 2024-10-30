@@ -15,10 +15,10 @@ class MyCorrections {
     double eval_muonIDSF  (double eta, double pt, const char *valType);
     double eval_muonISOSF (double eta, double pt, const char *valType);
 
-    double eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
+    double eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
     double eval_electronScale(const char *valType, const int gain, const double run, const double eta, const double r9, const double et);
     double eval_electronSmearing(const char *valType, const double eta, const double r9);
-    double eval_photonSF  (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt);
+    double eval_photonSF  (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
 
     double eval_tauJETSF  (double pt, int dm, int genmatch, const char *workingPoint, const char *workingPoint_VSe, const char *valType);
 
@@ -107,11 +107,11 @@ MyCorrections::MyCorrections(int the_input_year) {
   muonIDSF_ = csetMu->at("NUM_MediumID_DEN_TrackerMuons");
   muonISOSF_ = csetMu->at("NUM_TightPFIso_DEN_MediumID");
 
-  std::string fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_RECO_schemaV2.json.gz";
+  std::string fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
   auto csetHighPtRECOMu = correction::CorrectionSet::from_file(fileNameHighPtRECOMu);
   muonHighPtTRKSF_ = csetHighPtRECOMu->at("NUM_GlobalMuons_DEN_TrackerMuonProbes");
 
-  std::string fileNameHighPtIDISOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_IDISO_schemaV2.json.gz";
+  std::string fileNameHighPtIDISOMu = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
   auto csetHighPtIDISOMu = correction::CorrectionSet::from_file(fileNameHighPtIDISOMu);
   muonHighPtIDSF_ = csetHighPtIDISOMu->at("NUM_MediumID_DEN_GlobalMuonProbes");
   muonHighPtISOSF_ = csetHighPtIDISOMu->at("NUM_probe_TightRelTkIso_DEN_MediumIDProbes");
@@ -338,7 +338,7 @@ double MyCorrections::eval_puSF(double int1, std::string str1) {
 };
 
 double MyCorrections::eval_muonTRKSF(double eta, double pt, double p, const char *valType) {
-  eta = std::min(std::abs(eta),2.399);
+  eta = std::max(std::min(eta,2.399),-2.399);
   pt = std::max(pt,15.001);
   if(pt > 200)                            return muonHighPtTRKSF_->evaluate({eta, p, valType});
   else if(strcmp(valType,"nominal") == 0) return 1.0;
@@ -347,7 +347,7 @@ double MyCorrections::eval_muonTRKSF(double eta, double pt, double p, const char
 };
 
 double MyCorrections::eval_muonIDSF(double eta, double pt, const char *valType) {
-  eta = std::min(std::abs(eta),2.399);
+  eta = std::max(std::min(eta,2.399),-2.399);
   pt = std::max(pt,15.001);
   if(pt > 200) return muonHighPtIDSF_->evaluate({eta, pt, valType});
   else         return muonIDSF_->evaluate({eta, pt, valType});
@@ -355,16 +355,17 @@ double MyCorrections::eval_muonIDSF(double eta, double pt, const char *valType) 
 };
 
 double MyCorrections::eval_muonISOSF(double eta, double pt, const char *valType) {
-  eta = std::min(std::abs(eta),2.399);
+  eta = std::max(std::min(eta,2.399),-2.399);
   pt = std::max(pt,15.001);
   if(pt > 200) return muonHighPtISOSF_->evaluate({eta, pt, valType});
   else         return muonISOSF_->evaluate({eta, pt, valType});
   return 1.0;
 };
 
-double MyCorrections::eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt) {
+double MyCorrections::eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi) {
   pt = std::max(pt,10.001);
-  return electronSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
+  if(year <= 20221) return electronSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
+  return electronSF_->evaluate({the_input_year, valType, workingPoint, eta, pt, phi});
 };
 
 double MyCorrections::eval_electronScale(const char *valType, const int gain, const double run, const double eta, const double r9, const double et) {
@@ -375,9 +376,10 @@ double MyCorrections::eval_electronSmearing(const char *valType, const double et
   return electronSmearing_->evaluate({valType, eta, r9});
 };
 
-double MyCorrections::eval_photonSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt) {
+double MyCorrections::eval_photonSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi) {
   pt = std::max(pt,20.001);
-  return photonSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
+  if(year <= 20221) return photonSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
+  return photonSF_->evaluate({the_input_year, valType, workingPoint, eta, pt, phi});
 };
 
 double MyCorrections::eval_tauJETSF(double pt, int dm, int genmatch, const char *workingPoint, const char *workingPoint_VSe, const char *valType) {

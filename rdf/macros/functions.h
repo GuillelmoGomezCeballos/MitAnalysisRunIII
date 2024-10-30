@@ -277,7 +277,7 @@ float compute_JSON_MUO_SFs(std::string valType0S, std::string valType1S, std::st
 }
 
 float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string valType1S, 
-                           std::string workingPointS, const Vec_f& el_pt, const Vec_f& el_eta){
+                           std::string workingPointS, const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi){
   if(el_pt.size() == 0) return 1.0;
   bool debug = false;
   if(debug) printf("eleeff: %lu\n",el_pt.size());
@@ -293,17 +293,17 @@ float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string
     if     (el_pt[i] < 20) recoNameAux = (char*)"RecoBelow20";
     else if(el_pt[i] < 75) recoNameAux = (char*)"Reco20to75";
     const char *recoName = recoNameAux;
-    double sf0 = corrSFs.eval_electronSF(year,valType0,    recoName,el_eta[i],el_pt[i]);
-    double sf1 = corrSFs.eval_electronSF(year,valType1,workingPoint,el_eta[i],el_pt[i]);
+    double sf0 = corrSFs.eval_electronSF(year,valType0,    recoName,el_eta[i],el_pt[i],el_phi[i]);
+    double sf1 = corrSFs.eval_electronSF(year,valType1,workingPoint,el_eta[i],el_pt[i],el_phi[i]);
     sfTot = sfTot*sf0*sf1;
-    if(debug) printf("eleff(%d-%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,el_pt[i],el_eta[i],sf0,sf1,sf0*sf1,sfTot);
+    if(debug) printf("eleff(%d-%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,el_pt[i],el_eta[i],el_phi[i],sf0,sf1,sf0*sf1,sfTot);
   }
 
   return sfTot;
 }
 
 float compute_JSON_PHO_SFs(std::string yearS, std::string valTypeS, std::string workingPointS,
-                           const Vec_f& ph_pt, const Vec_f& ph_eta){
+                           const Vec_f& ph_pt, const Vec_f& ph_eta, const Vec_f& ph_phi){
   if(ph_pt.size() == 0) return 1.0;
   bool debug = false;
   if(debug) printf("phoeff: %lu\n",ph_pt.size());
@@ -314,9 +314,9 @@ float compute_JSON_PHO_SFs(std::string yearS, std::string valTypeS, std::string 
   const char *workingPoint = workingPointS.c_str();
 
   for(unsigned int i=0;i<ph_pt.size();i++) {
-    double sf = corrSFs.eval_photonSF(year,valType,workingPoint,ph_eta[i],ph_pt[i]);
+    double sf = corrSFs.eval_photonSF(year,valType,workingPoint,ph_eta[i],ph_pt[i],ph_phi[i]);
     sfTot = sfTot*sf;
-    if(debug) printf("phoeff(%d) %.3f %.3f %.3f %.3f\n",i,ph_pt[i],ph_eta[i],sf,sfTot);
+    if(debug) printf("phoeff(%d) %.3f %.3f %.3f %.3f %.3f\n",i,ph_pt[i],ph_eta[i],ph_phi[i],sf,sfTot);
   }
 
   return sfTot;
@@ -1297,10 +1297,12 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     
     float typeSelAux3 = -1;
     if     (njets <= 2) typeSelAux3 = 0;
-    else                typeSelAux3 = 1; 
+    else if(njets == 3) typeSelAux3 = 1; 
+    else                typeSelAux3 = 2; 
 
-    if(njets >=4) return (float)(32.0+typeSelAux1);
-    else          return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
+    return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
+    //if(njets >=4) return (float)(32.0+typeSelAux1);
+    //else          return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
   }
   else if(var == 10){
     int typeSelAux1 = -1;
