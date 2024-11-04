@@ -11,7 +11,6 @@ from utilsAna import SwitchSample
 from utilsSelection import getBTagCut
 from utilsSelection import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet, selectionGenLepJet, selectionTheoryWeigths, makeFinalVariable
 
-#selectionJsonPath = "config/selectionNanoV9.json"
 selectionJsonPath = "config/selection.json"
 
 with open(selectionJsonPath) as jsonFile:
@@ -463,9 +462,10 @@ if __name__ == "__main__":
     process = 399
     skimType = "2l"
 
-    valid = ['year=', "process=", 'help']
+    valid = ['year=', "process=", 'whichJob=', 'help']
     usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
-    usage +=  "              --process=<{0}>".format(process)
+    usage +=  "              --process=<{0}>\n".format(process)
+    usage +=  "              --whichJob=<not used>"
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:

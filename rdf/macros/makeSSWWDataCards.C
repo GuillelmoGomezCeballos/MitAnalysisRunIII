@@ -59,6 +59,17 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
   TString jesNames[28] = {"", "AbsoluteMPFBias", "AbsoluteScale", "AbsoluteStat", "FlavorQCD", "Fragmentation", "PileUpDataMC", "PileUpPtBB", "PileUpPtEC1", "PileUpPtEC2", "PileUpPtHF", "PileUpPtRef", "RelativeFSR", "RelativeJEREC1", "RelativeJEREC2", "RelativeJERHF", "RelativePtBB", "RelativePtEC1", "RelativePtEC2", "RelativePtHF", "RelativeBal", "RelativeSample", "RelativeStatEC", "RelativeStatFSR", "RelativeStatHF", "SinglePionECAL", "SinglePionHCAL", "TimePtEta"};
 
+  jesNames[ 3] = Form("%s_%d"  ,jesNames[ 3].Data(),year); // AbsoluteStat
+  jesNames[13] = Form("%s_%d"  ,jesNames[13].Data(),year); // RelativeJEREC1
+  jesNames[14] = Form("%s_%d"  ,jesNames[14].Data(),year); // RelativeJEREC2
+  jesNames[17] = Form("%s_%d"  ,jesNames[17].Data(),year); // RelativePtEC1
+  jesNames[18] = Form("%s_%d"  ,jesNames[18].Data(),year); // RelativePtEC2
+  jesNames[21] = Form("%s_%d"  ,jesNames[21].Data(),year); // RelativeSample
+  jesNames[22] = Form("%s_%d"  ,jesNames[22].Data(),year); // RelativeStatEC
+  jesNames[23] = Form("%s_%d"  ,jesNames[23].Data(),year); // RelativeStatFSR
+  jesNames[24] = Form("%s_%d"  ,jesNames[24].Data(),year); // RelativeStatHF
+  jesNames[27] = Form("%s_%d"  ,jesNames[27].Data(),year); // TimePtEta
+
   TString nameSyst[nSystDataCardTotal];
   nameSyst[  0] = "CMS_eff_m_recoUp";
   nameSyst[  1] = "CMS_eff_m_recoDown";
@@ -210,9 +221,9 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   for(int j=0; j<nSystTotal; j++){
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()), "read");
     for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
-      if(j%1==0&&ic!=30) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
+      if(j%40==0&&ic!=30) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
       histo_Syst[j][ic] = (TH1D*)inputFile->Get(Form("histo%s%d", postFixHist.Data(), ic)); assert(histo_Syst[j][ic]); histo_Syst[j][ic]->SetDirectory(0);
-      if(j%1==0&&ic!=30) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
+      if(j%40==0&&ic!=30) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
       histo_Syst[j][ic]->SetNameTitle(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()));
 
       // Renormalize distributions
@@ -309,37 +320,18 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
                             histo_SystDataCard[2*nuis+1][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
                }
         }
-        // a
-        systValue = histo_SystDataCard[42][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if     (systValue > 0 && systValue > 1.15) systValue = 1.15;
-        else if(systValue > 0 && systValue < 0.85) systValue = 0.85;
-        histo_SystDataCard[42][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)*systValue);
-        systValue = histo_SystDataCard[42][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_SystDataCard[43][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        else {
-                          histo_SystDataCard[42][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
-                          histo_SystDataCard[43][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
-             }
-        // b
-        systValue = histo_SystDataCard[44][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if     (systValue > 0 && systValue > 1.15) systValue = 1.15;
-        else if(systValue > 0 && systValue < 0.85) systValue = 0.85;
-        histo_SystDataCard[44][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)*systValue);
-        systValue = histo_SystDataCard[44][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_SystDataCard[45][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        else {
-                          histo_SystDataCard[44][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
-                          histo_SystDataCard[45][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
-             }
-        // c
-        systValue = (histo_SystDataCard[102][ic]->GetBinContent(nb)-histo_Baseline[ic]->GetBinContent(nb))/10.0;
-        histo_SystDataCard[102][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)+systValue);
-        systValue = histo_SystDataCard[102][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-        if(systValue > 0) histo_SystDataCard[103][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
-        else {
-                          histo_SystDataCard[102][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
-                          histo_SystDataCard[103][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
-             }
+        for(int nuis=0; nuis<nSystTotal-endTheory; nuis++) {
+          systValue = histo_SystDataCard[2*nuis][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+          if     (systValue > 0 && systValue > 1.15) systValue = 1.15;
+          else if(systValue > 0 && systValue < 0.85) systValue = 0.85;
+          histo_SystDataCard[2*nuis][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)*systValue);
+          systValue = histo_SystDataCard[2*nuis][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
+          if(systValue > 0) histo_SystDataCard[2*nuis+1][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
+          else {
+                            histo_SystDataCard[2*nuis  ][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
+                            histo_SystDataCard[2*nuis+1][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb));
+               }
+        }
       }
       else {
         for(int nuis=0; nuis<nSystDataCardTotal; nuis++) {
@@ -1176,7 +1168,9 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
   newcardShape << Form("CMS_ssww_wznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotWZ].Data());
   newcardShape << Form("CMS_ssww_ewkwznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotEWKWZ].Data());
-  newcardShape << Form("CMS_ssww_nonpromptnorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotNonPrompt].Data());
+  if(anaSel.Contains("sswwAnalysis")){
+    newcardShape << Form("CMS_ssww_nonpromptnorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotNonPrompt].Data());
+  }
   //newcardShape << Form("CMS_ssww_zznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotZZ].Data());
 
   newcardShape << Form("ch%d autoMCStats 0\n",fidAna);

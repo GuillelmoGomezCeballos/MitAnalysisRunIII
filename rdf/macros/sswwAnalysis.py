@@ -9,7 +9,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 import tmva_helper_xml
 
 correctionString = "_correction"
-makeDataCards = 3
+makeDataCards = 2
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L

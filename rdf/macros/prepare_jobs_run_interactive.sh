@@ -34,4 +34,7 @@ elif [ $theAna -eq 7 ]; then
 elif [ $theAna -eq 8 ]; then
  cat wwAnalysis_input_condor_jobs.cfg|grep -v no|awk '{print"nohup ./analysis_slurm.sh "$1" "$2 " -1 1001 wwAnalysis >& logww_"NR"&"}' > lll_ww
 
+elif [ $theAna -eq 9 ]; then
+ cat puAnalysis_input_condor_jobs.cfg|grep -v no|awk '{print"nohup ./analysis_slurm.sh "$1" "$2 " -1 1001 puAnalysis >& logpu_"NR"&"}' > lll_pu
+
 fi
