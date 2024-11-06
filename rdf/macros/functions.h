@@ -1300,9 +1300,9 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     else if(njets == 3) typeSelAux3 = 1; 
     else                typeSelAux3 = 2; 
 
-    return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
-    //if(njets >=4) return (float)(32.0+typeSelAux1);
-    //else          return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
+    //return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
+    if(njets >=4) return (float)(32.0+typeSelAux1);
+    else          return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
   }
   else if(var == 10){
     int typeSelAux1 = -1;
