@@ -183,11 +183,18 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[109] = "CMS_met_unclusteredDown";
 
   int BinXF = 36; double minXF = -0.5; double maxXF = 35.5; TString nameFakeSyst = "ssww";
-  if    (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002")) {
+  if    (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002") || anaSel.Contains("sswwAnalysis1003")) {
     BinXF = 36; minXF = -0.5; maxXF = 35.5;
   }
-  else if(anaSel.Contains("wzAnalysis")) {
+  else if(anaSel.Contains("wzAnalysis1001")) {
     BinXF = 12; minXF = -0.5; maxXF = 11.5; nameFakeSyst = "wz";
+  }
+  else if(anaSel.Contains("wzAnalysis1002")) {
+    BinXF = 10; minXF = -1.0; maxXF = 1.0; nameFakeSyst = "wz";
+  }
+  else {
+    printf("Wrong option\n");
+    return;
   }
 
   for(int ic=0; ic<nPlotCategories; ic++) {
@@ -484,13 +491,15 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
             ic != kPlotSignal0 &&
             ic != kPlotSignal1 &&
             ic != kPlotSignal2 &&
-            ic != kPlotSignal3
+            ic != kPlotSignal3 &&
+            ic != kPlotEWKWZ
            ) newcardShape << Form("%d  ", ic);
-    else if(ic == kPlotEWKSSWW) newcardShape << Form("%d  ", 0);
+    else if(ic == kPlotEWKSSWW) newcardShape << Form("%d  ",  0);
     else if(ic == kPlotSignal0) newcardShape << Form("%d  ", -1);
     else if(ic == kPlotSignal1) newcardShape << Form("%d  ", -2);
     else if(ic == kPlotSignal2) newcardShape << Form("%d  ", -3);
     else if(ic == kPlotSignal3) newcardShape << Form("%d  ", -4);
+    else if(ic == kPlotEWKWZ)   newcardShape << Form("%d  ", -5);
   }
   newcardShape << Form("\n");
 
