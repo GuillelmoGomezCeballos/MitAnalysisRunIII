@@ -1280,25 +1280,25 @@ float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   return theVar;
 }
 // Jet-lepton final variables
-float compute_jet_lepton_final_var(const float mjj, const float detajj, const float mll, const int njets, unsigned int var)
+float compute_jet_lepton_final_var(const float mjj, const float detajj, const float zepvv, const float bdt, const float mll, const int njets, unsigned int var)
 {
   if     (var == 1 || var == 2 || var == 3){
     int typeSelAux1 = -1;
     if     (mjj <  800) typeSelAux1 = 0;
     else if(mjj < 1200) typeSelAux1 = 1;
     else if(mjj < 1800) typeSelAux1 = 2;
-    else                typeSelAux1 = 3; 
+    else                typeSelAux1 = 3;
   
     float typeSelAux2 = -1;
     if     (mll <  80) typeSelAux2 = 0;
     else if(mll < 140) typeSelAux2 = 1;
     else if(mll < 240) typeSelAux2 = 2;
-    else               typeSelAux2 = 3; 
+    else               typeSelAux2 = 3;
     
     float typeSelAux3 = -1;
     if     (njets <= 2) typeSelAux3 = 0;
-    else if(njets == 3) typeSelAux3 = 1; 
-    else                typeSelAux3 = 2; 
+    else if(njets == 3) typeSelAux3 = 1;
+    else                typeSelAux3 = 2;
 
     //return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
     if(njets >=4) return (float)(32.0+typeSelAux1);
@@ -1309,14 +1309,28 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     if     (mjj <  800) typeSelAux1 = 0;
     else if(mjj < 1200) typeSelAux1 = 1;
     else if(mjj < 1800) typeSelAux1 = 2;
-    else                typeSelAux1 = 3; 
+    else                typeSelAux1 = 3;
   
     int typeSelAux2 = -1;
-    if     (detajj < 3.25) typeSelAux2 = 0;
-    else if(detajj < 4.00) typeSelAux2 = 1;
-    else                   typeSelAux2 = 2; 
+    if     (detajj < 3.50) typeSelAux2 = 0;
+    else if(detajj < 4.50) typeSelAux2 = 1;
+    else                   typeSelAux2 = 2;
 
+    float typeSelAux3 = -1;
+    if     (zepvv >= 0.35) typeSelAux3 = 0;
+    else                   typeSelAux3 = 1;
+
+    //return (float)(typeSelAux1+4*typeSelAux2+12*typeSelAux3);
     return (float)(typeSelAux1+4*typeSelAux2);
+  }
+  else if(var == 11){
+    float bdtNew = std::min(std::max(bdt+1.0,0.001),1.999);
+    float typeSelAux3 = -1;
+    if     (zepvv >= 0.35) typeSelAux3 = 0;
+    else                   typeSelAux3 = 1;
+
+    //return (float)(bdtNew+2.0*typeSelAux3);
+    return (float)(bdtNew);
   }
   return 0.0;
 }
@@ -1326,7 +1340,7 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
 float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, 
                              const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass,
                              const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass,
-		             const float met_pt, const float met_phi, unsigned int var)
+                             const float met_pt, const float met_phi, unsigned int var)
 {
   if(mu_pt.size() + el_pt.size() == 0) return -1;
   if(pt.size() < 2) return -1;

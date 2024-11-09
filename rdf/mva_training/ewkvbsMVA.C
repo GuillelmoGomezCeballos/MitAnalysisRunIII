@@ -9,7 +9,7 @@
 #include <TStyle.h>
 
 void ewkvbsMVA(
-  TString inputFileName = "/work/submit/ceballos/mva_samples/ntupleWZAna_year2018.root",
+  TString inputFileName = "/work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root",
   int nsel = 0,
   TString extraString="vbfinc_v0",
   bool moreMVAs = false,
@@ -34,10 +34,10 @@ void ewkvbsMVA(
   factory = new TMVA::Factory("bdt", output_file, factoryOptions);
   TMVA::DataLoader *dataloader=new TMVA::DataLoader("MitEWKVBSAnalysis");
 
-  TCut cutTrainSignal = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),5,7);
-  TCut cutTrainBkg    = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),8);
-  TCut cutTestSignal  = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 5,7);
-  TCut cutTestBkg     = Form("%s && ptj1 > 50 && ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(), 8);
+  TCut cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),5,8);
+  TCut cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),9);
+  TCut cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 5,8);
+  TCut cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(), 9);
   dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTrainSignal, "train");
   dataloader->AddTree(mvaTree, "Background", 1.0, cutTrainBkg	, "train");
   dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTestSignal , "test");
@@ -49,22 +49,22 @@ void ewkvbsMVA(
   
   if(nsel == 0){
     dataloader->AddVariable("ngood_jets","ngood_jets","",'F');
-    dataloader->AddVariable("mjj"       ,"mjj"       ,"",'F');
-    dataloader->AddVariable("ptjj"      ,"ptjj"      ,"",'F');
-    dataloader->AddVariable("detajj"    ,"detajj"    ,"",'F');
-    dataloader->AddVariable("dphijj"    ,"dphijj"    ,"",'F');
-    dataloader->AddVariable("ptj1"      ,"ptj1"      ,"",'F');
-    dataloader->AddVariable("ptj2"      ,"ptj2"      ,"",'F');
-    dataloader->AddVariable("etaj1"     ,"etaj1"     ,"",'F');
-    dataloader->AddVariable("etaj2"     ,"etaj2"     ,"",'F');
-    dataloader->AddVariable("zepvv"     ,"zepvv"     ,"",'F');
-    //dataloader->AddVariable("zepmax"    ,"zepmax"    ,"",'F');
-    dataloader->AddVariable("sumHT"     ,"sumHT"     ,"",'F');
-    //dataloader->AddVariable("ptvv"      ,"ptvv"      ,"",'F');
-    dataloader->AddVariable("pttot"     ,"pttot"     ,"",'F');
-    dataloader->AddVariable("detavvj1"  ,"detavvj1"  ,"",'F');
-    dataloader->AddVariable("detavvj2"  ,"detavvj2"  ,"",'F');
-    dataloader->AddVariable("ptbalance" ,"ptbalance" ,"",'F');
+    dataloader->AddVariable("vbs_mjj"       ,"vbs_mjj"       ,"",'F');
+    dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
+    dataloader->AddVariable("vbs_detajj"    ,"vbs_detajj"    ,"",'F');
+    dataloader->AddVariable("vbs_dphijj"    ,"vbs_dphijj"    ,"",'F');
+    dataloader->AddVariable("vbs_ptj1"      ,"vbs_ptj1"      ,"",'F');
+    dataloader->AddVariable("vbs_ptj2"      ,"vbs_ptj2"      ,"",'F');
+    dataloader->AddVariable("vbs_etaj1"     ,"vbs_etaj1"     ,"",'F');
+    dataloader->AddVariable("vbs_etaj2"     ,"vbs_etaj2"     ,"",'F');
+    dataloader->AddVariable("vbs_zepvv"     ,"vbs_zepvv"     ,"",'F');
+    //dataloader->AddVariable("vbs_zepmax"    ,"vbs_zepmax"    ,"",'F');
+    dataloader->AddVariable("vbs_sumHT"     ,"vbs_sumHT"     ,"",'F');
+    //dataloader->AddVariable("vbs_ptvv"      ,"vbs_ptvv"      ,"",'F');
+    dataloader->AddVariable("vbs_pttot"     ,"vbs_pttot"     ,"",'F');
+    dataloader->AddVariable("vbs_detavvj1"  ,"vbs_detavvj1"  ,"",'F');
+    dataloader->AddVariable("vbs_detavvj2"  ,"vbs_detavvj2"  ,"",'F');
+    dataloader->AddVariable("vbs_ptbalance" ,"vbs_ptbalance" ,"",'F');
   }
 
   TString prepareOptions="NormMode=None";
