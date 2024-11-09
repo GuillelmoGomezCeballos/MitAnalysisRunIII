@@ -561,8 +561,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[22][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(22,x), "histo_{0}_{1}".format(22,x), 40,0,10), "vbs_detajj","weight")
         histo[23][x] = dfwzjjcat[x] .Histo1D(("histo_{0}_{1}".format(23,x), "histo_{0}_{1}".format(23,x), 40,0,3.1416), "vbs_dphijj","weight")
         histo[24][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(24,x), "histo_{0}_{1}".format(24,x), 40,0,3.1416), "vbs_dphijj","weight")
-        histo[25][x] = dfwzjjcat[x] .Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x), 20,0.0,1.0), "vbs_zepvv","weight")
-        histo[26][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(26,x), "histo_{0}_{1}".format(26,x), 20,0.0,1.0), "vbs_zepvv","weight")
+        histo[25][x] = dfwzjjcat[x] .Filter("vbs_zepvv < 1.0").Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x), 20,0.0,1.0), "vbs_zepvv","weight")
+        histo[26][x] = dfwzbjjcat[x].Filter("vbs_zepvv < 1.0").Histo1D(("histo_{0}_{1}".format(26,x), "histo_{0}_{1}".format(26,x), 20,0.0,1.0), "vbs_zepvv","weight")
         dfwzvbscat .append(dfwzjjcat[x] .Filter(VBSSEL, "VBS selection"))
         dfwzbvbscat.append(dfwzbjjcat[x].Filter(VBSSEL, "VBS selection"))
 
@@ -850,9 +850,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             maxXF = 11.5
             if(makeDataCards == 3):
                 startF = 300
-                BinXF = 12
+                BinXF = 24
                 minXF = -0.5
-                maxXF = 11.5
+                maxXF = 23.5
                 varSel = 10
                 # Making final variable
                 dfwzvbscat             [x] = dfwzvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,vbs_zepvv,bdt_vbfinc[0],mll,ngood_jets,{0})".format(varSel))
@@ -929,9 +929,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
             elif(makeDataCards == 4):
                 startF = 300
-                BinXF = 10
+                BinXF = 20
                 minXF = 0.0
-                maxXF = 2.0
+                maxXF = 4.0
                 varSel = 11
                 # Making final variable
                 dfwzvbscat             [x] = dfwzvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,vbs_zepvv,bdt_vbfinc[0],mll,ngood_jets,{0})".format(varSel))

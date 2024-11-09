@@ -1320,8 +1320,8 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     if     (zepvv >= 0.35) typeSelAux3 = 0;
     else                   typeSelAux3 = 1;
 
-    //return (float)(typeSelAux1+4*typeSelAux2+12*typeSelAux3);
-    return (float)(typeSelAux1+4*typeSelAux2);
+    return (float)(typeSelAux1+4*typeSelAux2+12*typeSelAux3);
+    //return (float)(typeSelAux1+4*typeSelAux2);
   }
   else if(var == 11){
     float bdtNew = std::min(std::max(bdt+1.0,0.001),1.999);
@@ -1329,8 +1329,8 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     if     (zepvv >= 0.35) typeSelAux3 = 0;
     else                   typeSelAux3 = 1;
 
-    //return (float)(bdtNew+2.0*typeSelAux3);
-    return (float)(bdtNew);
+    return (float)(bdtNew+2.0*typeSelAux3);
+    //return (float)(bdtNew);
   }
   return 0.0;
 }
