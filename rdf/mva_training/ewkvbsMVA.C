@@ -81,7 +81,7 @@ void ewkvbsMVA(
   TString hyperparameters;
 
   hyperparameters=
-  "!H:!V:NTrees=1000:BoostType=Grad:MinNodeSize=5%:NegWeightTreatment=IgnoreNegWeightsInTraining:Shrinkage=0.10:UseBaggedBoost:GradBaggingFraction=0.5:nCuts=1000:MaxDepth=2";
+  "!H:!V:NTrees=1000:BoostType=Grad:MinNodeSize=10%:NegWeightTreatment=IgnoreNegWeightsInTraining:Shrinkage=0.10:UseBaggedBoost:GradBaggingFraction=0.3:nCuts=1000:MaxDepth=3";
   factory->BookMethod(dataloader, TMVA::Types::kBDT, Form("BDTG_%s",extraString.Data()), hyperparameters);
 
   TString layoutString ("Layout=TANH|100,TANH|50,TANH|10,LINEAR");
