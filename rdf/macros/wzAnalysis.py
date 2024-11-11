@@ -38,6 +38,7 @@ BARRELphotons = jsonObject['BARRELphotons']
 ENDCAPphotons = jsonObject['ENDCAPphotons']
 
 VBSSEL = jsonObject['VBSSEL']
+VBSQCDSEL = jsonObject['VBSQCDSEL']
 
 muSelChoice = 2
 FAKE_MU   = jsonObject['FAKE_MU']
@@ -550,22 +551,22 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[13][x] = dfwzcat[x] .Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 4,-0.5, 3.5), "ngood_jets","weight")
         histo[14][x] = dfwzbcat[x].Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 4,-0.5, 3.5), "ngood_jets","weight")
 
-        dfwzjjcat .append(dfwzcat[x] .Filter("nvbs_jets >= 2", "At least two VBS jets"))
-        dfwzbjjcat.append(dfwzbcat[x].Filter("nvbs_jets >= 2", "At least two VBS jets"))
+        dfwzjjcat .append(dfwzcat[x] .Filter(VBSQCDSEL, "VBS QCD selection"))
+        dfwzbjjcat.append(dfwzbcat[x].Filter(VBSQCDSEL, "VBS QCD selection"))
 
         histo[17][x] = dfwzjjcat[x] .Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 4,1.5, 5.5), "ngood_jets","weight")
         histo[18][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 4,1.5, 5.5), "ngood_jets","weight")
-        histo[19][x] = dfwzjjcat[x] .Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 40,0,2000), "vbs_mjj","weight")
-        histo[20][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(20,x), "histo_{0}_{1}".format(20,x), 40,0,2000), "vbs_mjj","weight")
+        histo[19][x] = dfwzjjcat[x] .Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 30,200,500), "vbs_mjj","weight")
+        histo[20][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(20,x), "histo_{0}_{1}".format(20,x), 30,200,500), "vbs_mjj","weight")
         histo[21][x] = dfwzjjcat[x] .Histo1D(("histo_{0}_{1}".format(21,x), "histo_{0}_{1}".format(21,x), 40,0,10), "vbs_detajj","weight")
         histo[22][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(22,x), "histo_{0}_{1}".format(22,x), 40,0,10), "vbs_detajj","weight")
         histo[23][x] = dfwzjjcat[x] .Histo1D(("histo_{0}_{1}".format(23,x), "histo_{0}_{1}".format(23,x), 40,0,3.1416), "vbs_dphijj","weight")
         histo[24][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(24,x), "histo_{0}_{1}".format(24,x), 40,0,3.1416), "vbs_dphijj","weight")
         histo[25][x] = dfwzjjcat[x] .Filter("vbs_zepvv < 1.0").Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x), 20,0.0,1.0), "vbs_zepvv","weight")
         histo[26][x] = dfwzbjjcat[x].Filter("vbs_zepvv < 1.0").Histo1D(("histo_{0}_{1}".format(26,x), "histo_{0}_{1}".format(26,x), 20,0.0,1.0), "vbs_zepvv","weight")
-        dfwzvbscat .append(dfwzjjcat[x] .Filter(VBSSEL, "VBS selection"))
-        dfwzbvbscat.append(dfwzbjjcat[x].Filter(VBSSEL, "VBS selection"))
 
+        dfwzvbscat .append(dfwzcat[x] .Filter(VBSSEL, "VBS selection"))
+        dfwzbvbscat.append(dfwzbcat[x].Filter(VBSSEL, "VBS selection"))
         histo[27][x] = dfwzvbscat[x] .Histo1D(("histo_{0}_{1}".format(27,x), "histo_{0}_{1}".format(27,x), 4,1.5, 5.5), "ngood_jets","weight")
         histo[28][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(28,x), "histo_{0}_{1}".format(28,x), 4,1.5, 5.5), "ngood_jets","weight")
         histo[29][x] = dfwzvbscat[x] .Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x), 10,500,2500), "vbs_mjj","weight")
