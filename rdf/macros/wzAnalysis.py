@@ -22,7 +22,7 @@ whichAna = 0
 
 altMass = "Def"
 
-jetEtaCut = 2.5
+jetEtaCut = 5.0
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):

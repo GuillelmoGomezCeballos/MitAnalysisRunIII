@@ -34,15 +34,21 @@ void ewkvbsMVA(
   factory = new TMVA::Factory("bdt", output_file, factoryOptions);
   TMVA::DataLoader *dataloader=new TMVA::DataLoader("MitEWKVBSAnalysis");
 
-  TCut cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),6,8);
-  TCut cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),3,7,9);
-  TCut cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 6,8);
-  TCut cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 3,7,9);
-  if(nsel == 0){
+  TCut cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),8,8);
+  TCut cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),9,9,9);
+  TCut cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 8,8);
+  TCut cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 9,9,9);
+  if     (nsel == 1){
+    cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),6,8);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),3,7,9);
+    cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 6,8);
+    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 3,7,9);
+  }
+  else if(nsel == 2){
     cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),8,8);
-    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),9,9,9);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),6,6,6);
     cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 8,8);
-    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 9,9,9);
+    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 6,6,6);
   }
   dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTrainSignal, "train");
   dataloader->AddTree(mvaTree, "Background", 1.0, cutTrainBkg	, "train");
@@ -53,7 +59,7 @@ void ewkvbsMVA(
   dataloader->SetWeightExpression("1.0", "Signal");
   dataloader->SetWeightExpression("1.0", "Background");
   
-  if(nsel == 0 || nsel == 1){
+  if(nsel == 0 || nsel == 1 || nsel == 2){
     dataloader->AddVariable("ngood_jets","ngood_jets","",'F');
     dataloader->AddVariable("vbs_mjj"       ,"vbs_mjj"       ,"",'F');
     dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
