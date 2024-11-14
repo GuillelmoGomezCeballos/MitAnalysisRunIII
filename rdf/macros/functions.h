@@ -1282,7 +1282,7 @@ float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
 // Jet-lepton final variables
 float compute_jet_lepton_final_var(const float mjj, const float detajj, const float zepvv, const float bdt, const float mll, const int njets, unsigned int var)
 {
-  if     (var == 1 || var == 2 || var == 3){
+  if     (var == 0 || var == 1){
     int typeSelAux1 = -1;
     if     (mjj <  800) typeSelAux1 = 0;
     else if(mjj < 1200) typeSelAux1 = 1;
@@ -1300,11 +1300,16 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     else if(njets == 3) typeSelAux3 = 1;
     else                typeSelAux3 = 2;
 
-    //return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
-    if(njets >=4) return (float)(32.0+typeSelAux1);
-    else          return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
+    if     (var == 0){ // VBS W+W+ SR
+      //return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
+      if(njets >=4) return (float)(32.0+typeSelAux1);
+      else          return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
+    }
+    else if(var == 1){ // VBS W+W+ btagged CR
+      return (float)(typeSelAux1+4*typeSelAux3);
+    }
   }
-  else if(var == 10){
+  else if(var == 10 || var == 11){
     int typeSelAux1 = -1;
     if     (mjj <  800) typeSelAux1 = 0;
     else if(mjj < 1200) typeSelAux1 = 1;
@@ -1320,10 +1325,15 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     if     (zepvv >= 0.35) typeSelAux3 = 0;
     else                   typeSelAux3 = 1;
 
-    return (float)(typeSelAux1+4*typeSelAux2+12*typeSelAux3);
-    //return (float)(typeSelAux1+4*typeSelAux2);
+    if     (var == 10){ // VBS WZ SR cut-based
+      return (float)(typeSelAux1+4*typeSelAux2+12*typeSelAux3);
+      //return (float)(typeSelAux1+4*typeSelAux2);
+    }
+    else if(var == 11){ // VBS WZ btagged CR
+      return (float)(typeSelAux1);
+    }
   }
-  else if(var == 11){
+  else if(var == 12){ // VBS WZ SR MVA based
     float bdtNew = std::min(std::max(bdt+1.0,0.001),1.999);
     float typeSelAux3 = -1;
     if     (zepvv >= 0.35) typeSelAux3 = 0;

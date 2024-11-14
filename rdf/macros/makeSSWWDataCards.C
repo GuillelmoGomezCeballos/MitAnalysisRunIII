@@ -182,21 +182,26 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[108] = "CMS_met_unclusteredUp";
   nameSyst[109] = "CMS_met_unclusteredDown";
 
-  int BinXF = 36; double minXF = -0.5; double maxXF = 35.5; TString nameFakeSyst = "ssww";
+  int BinXF = 100; double minXF = 0; double maxXF = 1; TString nameFakeSyst = "random";
   if    (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002") || anaSel.Contains("sswwAnalysis1003")) {
-    BinXF = 36; minXF = -0.5; maxXF = 35.5;
+    if     (fidAna == 0) {BinXF = 36; minXF = -0.5; maxXF = 35.5; nameFakeSyst = "ssww";}
+    else if(fidAna == 1) {BinXF = 12; minXF = -0.5; maxXF = 11.5; nameFakeSyst = "ssww";}
   }
   else if(anaSel.Contains("wzAnalysis1001") || anaSel.Contains("wzAnalysis1005")) {
-    BinXF = 24; minXF = -0.5; maxXF = 23.5; nameFakeSyst = "wz";
+    if     (fidAna == 0) {BinXF = 24; minXF = -0.5; maxXF = 23.5; nameFakeSyst = "wz";}
+    else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
   }
   else if(anaSel.Contains("wzAnalysis1002") || anaSel.Contains("wzAnalysis1006")) {
-    BinXF = 20; minXF = 0.0; maxXF = 4.0; nameFakeSyst = "wz";
+    if     (fidAna == 0) {BinXF = 20; minXF =  0.0; maxXF =  4.0; nameFakeSyst = "wz";}
+    else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
   }
   else if(anaSel.Contains("wzAnalysis1003")) {
-    BinXF = 12; minXF = -0.5; maxXF = 11.5; nameFakeSyst = "wz";
+    if     (fidAna == 0) {BinXF = 12; minXF = -0.5; maxXF = 11.5; nameFakeSyst = "wz";}
+    else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
   }
   else if(anaSel.Contains("wzAnalysis1004")) {
-    BinXF = 10; minXF = 0.0; maxXF = 2.0; nameFakeSyst = "wz";
+    if     (fidAna == 0) {BinXF = 10; minXF =  0.0; maxXF =  2.0; nameFakeSyst = "wz";}
+    else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
   }
   else {
     printf("Wrong option\n");
