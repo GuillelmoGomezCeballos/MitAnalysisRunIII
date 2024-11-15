@@ -81,6 +81,8 @@ TH1D histoWSEtaSF_unc;
 TH2D histoWSEtaPtSF;
 TH2D histoTriggerDAEtaPt[10];
 TH2D histoTriggerMCEtaPt[10];
+TH1D hVV_KF_EWK[2]; // 0 (WW), 1 (WZ)
+TH1D hVV_KF_EWK_unc[2]; // 0 (WW), 1 (WZ)
 auto corrSFs = MyCorrections(2018);
 
 void initHisto2D(TH2D h, int nsel){
@@ -147,16 +149,20 @@ void initHisto2D(TH2D h, int nsel){
 }
 
 void initHisto1D(TH1D h, int nsel){
-  if     (nsel == 0) puWeights = h;
-  else if(nsel == 1) puWeightsUp = h;
-  else if(nsel == 2) puWeightsDown = h;
-  else if(nsel == 3) histo_wwpt = h;
-  else if(nsel == 4) histo_wwpt_scaleup = h;
-  else if(nsel == 5) histo_wwpt_scaledown = h;
-  else if(nsel == 6) histo_wwpt_resumup = h;
-  else if(nsel == 7) histo_wwpt_resumdown = h;
-  else if(nsel == 8) histoWSEtaSF = h;
-  else if(nsel == 9) histoWSEtaSF_unc = h;
+  if     (nsel ==  0) puWeights = h;
+  else if(nsel ==  1) puWeightsUp = h;
+  else if(nsel ==  2) puWeightsDown = h;
+  else if(nsel ==  3) histo_wwpt = h;
+  else if(nsel ==  4) histo_wwpt_scaleup = h;
+  else if(nsel ==  5) histo_wwpt_scaledown = h;
+  else if(nsel ==  6) histo_wwpt_resumup = h;
+  else if(nsel ==  7) histo_wwpt_resumdown = h;
+  else if(nsel ==  8) histoWSEtaSF = h;
+  else if(nsel ==  9) histoWSEtaSF_unc = h;
+  else if(nsel == 10) hVV_KF_EWK[0] = h;
+  else if(nsel == 11) hVV_KF_EWK[1] = h;
+  else if(nsel == 12) hVV_KF_EWK_unc[0] = h;
+  else if(nsel == 13) hVV_KF_EWK_unc[1] = h;
 }
 
 float getValFromTH1(const TH1& h, const float& x, const float& sumError=0.0) {
@@ -719,6 +725,41 @@ float compute_WSSF(const int type,
   }
 
   return sfTot;
+}
+
+float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
+
+  bool debug = false;
+  float sf = 1.0;
+
+  // Careful here, names will need be added to the list!
+  if(mjjGen < 500) {
+    sf = 1.0;
+  }
+  else if(theCat.Contains("VBS-SSWW") || theCat.Contains("WWto2L2Nu-2Jets_OS_noTop_EW") || theCat.Contains("WWto2L2Nu-2Jets_SS_noTop_EW")) {
+    if(type == 0) {
+      const TH1D& hcorr = hVV_KF_EWK[0];
+      sf = getValFromTH1(hcorr, mjjGen);
+    }
+    else if(type == 1) {
+      const TH1D& hcorr = hVV_KF_EWK_unc[0];
+      sf = getValFromTH1(hcorr, mjjGen);
+    }
+  }
+  else if(theCat.Contains("WZto3LNu-2Jets_EW")) {
+    if(type == 0) {
+      const TH1D& hcorr = hVV_KF_EWK[1];
+      sf = getValFromTH1(hcorr, mjjGen);
+    }
+    else if(type == 1) {
+      const TH1D& hcorr = hVV_KF_EWK_unc[1];
+      sf = getValFromTH1(hcorr, mjjGen);
+    }
+  }
+
+  if(debug) printf("EWKCorr: %d %s %f %f\n",type,theCat.Data(),mjjGen,sf);
+
+  return sf;
 }
 
 float compute_fakeRate(const bool isData,
@@ -2145,6 +2186,25 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
   }
   
   return 0;
+}
+
+// compute vbs gen variables
+int compute_vbs_gen_variables(const int nCat, const int ngood_GenJets, const Vec_f& good_GenJet_pt, const Vec_f& good_GenJet_eta,  const Vec_f& good_GenJet_phi, const Vec_f& good_GenJet_mass,
+                              const int ngood_GenDressedLeptons, const Vec_i& GenDressedLepton_pdgId, const Vec_b& GenDressedLepton_hasTauAnc,
+                              const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_eta, const Vec_f& GenDressedLepton_phi, const Vec_f& GenDressedLepton_mass){
+
+  float genVar = -1;
+
+  if     (nCat == 0 && ngood_GenJets >= 2){
+    genVar = Minv2(good_GenJet_pt[0], good_GenJet_eta[0], good_GenJet_phi[0], good_GenJet_mass[0],
+                   good_GenJet_pt[1], good_GenJet_eta[1], good_GenJet_phi[1], good_GenJet_mass[1]).first;
+  }
+  else if(nCat == 1 && ngood_GenDressedLeptons >= 2){
+    genVar = Minv2(GenDressedLepton_pt[0], GenDressedLepton_eta[0], GenDressedLepton_phi[0], GenDressedLepton_mass[0],
+                   GenDressedLepton_pt[1], GenDressedLepton_eta[1], GenDressedLepton_phi[1], GenDressedLepton_mass[1]).first;
+  }
+
+  return std::min(genVar,2899.999f);
 }
 
 // compute category

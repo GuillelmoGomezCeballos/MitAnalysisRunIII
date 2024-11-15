@@ -775,6 +775,7 @@ def selectionDAWeigths(df,year,PDType,whichAna,fakeRateSel):
               .Define("weight","weightFake*1.0")
               .Define("nWS","0")
               .Define("weightWS", "1.0")
+              .Define("weightEWKCorr", "1.0")
               .Define("weight0","1.0")
               .Define("weight1","weightFake*1.0")
               .Define("weight2","weightFake*1.0")
@@ -782,6 +783,7 @@ def selectionDAWeigths(df,year,PDType,whichAna,fakeRateSel):
               .Define("weight4","weightFake*1.0")
               .Define("weight5","weightFake*1.0")
               .Define("weight6","weightFake*1.0")
+              .Define("weight7","weightFake*1.0")
               .Define("weightNoLepSF","weightFake*1.0")
               .Define("weightBTag","weight")
               .Define("weightNoBTag","weight")
@@ -793,6 +795,7 @@ def selectionDAWeigths(df,year,PDType,whichAna,fakeRateSel):
               .Define("weightFakeAlte2","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,tight_el,{1},{2})".format(fakeRateSel[0],fakeRateSel[3],whichAna))
               .Define("weightWSUnc0","weight")
               .Define("weightWSUnc1","weight")
+              .Define("weightEWKUnc", "weight")
               )
 
     return dftag
@@ -862,20 +865,22 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
               .Define("weightPUSF_Nom","compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
 
               .Define("weightWS", "compute_WSSF({0},fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)".format(whichAna))
+
+              .Define("weightEWKCorr", "compute_EWKCorr(0,PDType,mjjGen)")
               )
 
     if(correctionString == "_correction"):
         if(useBTaggingWeights == 1):
             print("BtagCorr/AddCorr: 1/1")
             dftag = (dftag
-                     .Define("weight","weightMC*weightFake*weightWS*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
+                     .Define("weight","weightMC*weightFake*weightWS*weightEWKCorr*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
                      .Define("weightMuoCorr","weightMuoSFJSON*weightMuonSF")
                      .Define("weightEleCorr","weightEleSFJSON*weightMuonSF")
                     )
         else:
             print("BtagCorr/AddCorr: 0/1")
             dftag = (dftag
-                     .Define("weight","weightMC*weightFake*weightWS*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
+                     .Define("weight","weightMC*weightFake*weightWS*weightEWKCorr*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
                      .Define("weightMuoCorr","weightMuoSFJSON*weightMuonSF")
                      .Define("weightEleCorr","weightEleSFJSON*weightMuonSF")
                     )
@@ -884,27 +889,27 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
         if(useBTaggingWeights == 1):
             print("BtagCorr/AddCorr: 1/0")
             dftag = (dftag
-                     .Define("weight","weightMC*weightFake*weightWS*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
+                     .Define("weight","weightMC*weightFake*weightWS*weightEWKCorr*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
                      .Define("weightMuoCorr","weightMuoSFJSON")
                      .Define("weightEleCorr","weightEleSFJSON")
                     )
         else:
             print("BtagCorr/AddCorr: 0/0")
             dftag = (dftag
-                     .Define("weight","weightMC*weightFake*weightWS*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
+                     .Define("weight","weightMC*weightFake*weightWS*weightEWKCorr*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON")
                      .Define("weightMuoCorr","weightMuoSFJSON")
                      .Define("weightEleCorr","weightEleSFJSON")
                     )
 
     if(useBTaggingWeights == 1):
         dftag = (dftag
-                 .Define("weightNoLepSF","weightMC*weightFake*weightWS*weightBtagSF*weightPURecoSF*weightTriggerSF")
+                 .Define("weightNoLepSF","weightMC*weightFake*weightWS*weightEWKCorr*weightBtagSF*weightPURecoSF*weightTriggerSF")
                  .Define("weightBTag","weight")
                  .Define("weightNoBTag","weight/weightBtagSF")
                 )
     else:
         dftag = (dftag
-                 .Define("weightNoLepSF","weightMC*weightFake*weightWS*weightPURecoSF*weightTriggerSF")
+                 .Define("weightNoLepSF","weightMC*weightFake*weightWS*weightEWKCorr*weightPURecoSF*weightTriggerSF")
                  .Define("weightBTag","weight*weightBtagSF")
                  .Define("weightNoBTag","weight")
                 )
@@ -916,6 +921,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weight4","weight/weightEleCorr")
                  .Define("weight5","weight/weightWS")
                  .Define("weight6","weightMC*weightFake")
+                 .Define("weight7","weight/weightEWKCorr")
 
                  .Define("weightMuoSFTRKUp","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(\"syst\",\"nominal\",\"nominal\",fake_Muon_pt,fake_Muon_eta,fake_Muon_p,+1)")
                  .Define("weightMuoSFIDUp" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(\"nominal\",\"syst\",\"nominal\",fake_Muon_pt,fake_Muon_eta,fake_Muon_p,+1)")
@@ -951,6 +957,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
 
                  .Define("weightWSUnc0","weight/weightWS*compute_WSSF({0},fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)".format(2))
                  .Define("weightWSUnc1","weight/weightWS*compute_WSSF({0},fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)".format(3))
+
+                 .Define("weightEWKCorrUnc","weight/weightEWKCorr*compute_EWKCorr(1,PDType,mjjGen)")
 
                  .Define("weightTriggerSFUp"  ,"weight/weightTriggerSF*compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype,+1)")
                  .Define("weightTriggerSFDown","weight/weightTriggerSF*compute_TriggerSF(ptl1,ptl2,etal1,etal2,ltype,-1)")
@@ -1139,6 +1147,7 @@ def makeFinalVariable(df,var,theCat,start,x,bin,min,max,type):
     elif(type == 132): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFBC_11Up")
     elif(type == 133): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFBC_12Up")
     elif(type == 134): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightBtagSFLF_00Up")
+    elif(type == 135): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightEWKCorrUnc")
 
     else:              return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weight")
 
@@ -1182,5 +1191,6 @@ def makeFinalVariable2D(df,varX,varY,theCat,start,x,binX,minX,maxX,binY,minY,max
     elif(type == 132): return df.Histo2D(("histo2d_{0}_{1}".format(histoNumber,x), "histo2d_{0}_{1}".format(histoNumber,x),binX,minX,maxX,binY,minY,maxY), "{0}".format(varX), "{0}".format(varY),"weightBtagSFBC_11Up")
     elif(type == 133): return df.Histo2D(("histo2d_{0}_{1}".format(histoNumber,x), "histo2d_{0}_{1}".format(histoNumber,x),binX,minX,maxX,binY,minY,maxY), "{0}".format(varX), "{0}".format(varY),"weightBtagSFBC_12Up")
     elif(type == 134): return df.Histo2D(("histo2d_{0}_{1}".format(histoNumber,x), "histo2d_{0}_{1}".format(histoNumber,x),binX,minX,maxX,binY,minY,maxY), "{0}".format(varX), "{0}".format(varY),"weightBtagSFLF_00Up")
+    elif(type == 135): return df.Histo2D(("histo2d_{0}_{1}".format(histoNumber,x), "histo2d_{0}_{1}".format(histoNumber,x),binX,minX,maxX,binY,minY,maxY), "{0}".format(varX), "{0}".format(varY),"weightEWKCorrUnc")
 
     else:              return df.Histo2D(("histo2d_{0}_{1}".format(histoNumber,x), "histo2d_{0}_{1}".format(histoNumber,x),binX,minX,maxX,binY,minY,maxY), "{0}".format(varX), "{0}".format(varY),"weight")

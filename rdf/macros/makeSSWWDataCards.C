@@ -41,8 +41,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   TFile *inputFile;
   TFile *outputFile;
   const int endTheory = 113;
-  const int nSystTotal = 168;
-  const int nSystDataCardTotal = 110; // (nSystTotal-endTheory)*2 = nSystDataCardTotal
+  const int nSystTotal = 169;
+  const int nSystDataCardTotal = 112; // (nSystTotal-endTheory)*2 = nSystDataCardTotal
 
   TH1D *histo_Baseline[nPlotCategories];
   TH1D *histo_QCDScaleUp[nPlotCategories];
@@ -59,32 +59,32 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
   TString jesNames[28] = {"", "AbsoluteMPFBias", "AbsoluteScale", "AbsoluteStat", "FlavorQCD", "Fragmentation", "PileUpDataMC", "PileUpPtBB", "PileUpPtEC1", "PileUpPtEC2", "PileUpPtHF", "PileUpPtRef", "RelativeFSR", "RelativeJEREC1", "RelativeJEREC2", "RelativeJERHF", "RelativePtBB", "RelativePtEC1", "RelativePtEC2", "RelativePtHF", "RelativeBal", "RelativeSample", "RelativeStatEC", "RelativeStatFSR", "RelativeStatHF", "SinglePionECAL", "SinglePionHCAL", "TimePtEta"};
 
-  jesNames[ 3] = Form("%s_%d"  ,jesNames[ 3].Data(),year); // AbsoluteStat
-  jesNames[13] = Form("%s_%d"  ,jesNames[13].Data(),year); // RelativeJEREC1
-  jesNames[14] = Form("%s_%d"  ,jesNames[14].Data(),year); // RelativeJEREC2
-  jesNames[17] = Form("%s_%d"  ,jesNames[17].Data(),year); // RelativePtEC1
-  jesNames[18] = Form("%s_%d"  ,jesNames[18].Data(),year); // RelativePtEC2
-  jesNames[21] = Form("%s_%d"  ,jesNames[21].Data(),year); // RelativeSample
-  jesNames[22] = Form("%s_%d"  ,jesNames[22].Data(),year); // RelativeStatEC
-  jesNames[23] = Form("%s_%d"  ,jesNames[23].Data(),year); // RelativeStatFSR
-  jesNames[24] = Form("%s_%d"  ,jesNames[24].Data(),year); // RelativeStatHF
-  jesNames[27] = Form("%s_%d"  ,jesNames[27].Data(),year); // TimePtEta
+  jesNames[ 3] = Form("%s_%d"  ,jesNames[ 3].Data(),theYear); // AbsoluteStat
+  jesNames[13] = Form("%s_%d"  ,jesNames[13].Data(),theYear); // RelativeJEREC1
+  jesNames[14] = Form("%s_%d"  ,jesNames[14].Data(),theYear); // RelativeJEREC2
+  jesNames[17] = Form("%s_%d"  ,jesNames[17].Data(),theYear); // RelativePtEC1
+  jesNames[18] = Form("%s_%d"  ,jesNames[18].Data(),theYear); // RelativePtEC2
+  jesNames[21] = Form("%s_%d"  ,jesNames[21].Data(),theYear); // RelativeSample
+  jesNames[22] = Form("%s_%d"  ,jesNames[22].Data(),theYear); // RelativeStatEC
+  jesNames[23] = Form("%s_%d"  ,jesNames[23].Data(),theYear); // RelativeStatFSR
+  jesNames[24] = Form("%s_%d"  ,jesNames[24].Data(),theYear); // RelativeStatHF
+  jesNames[27] = Form("%s_%d"  ,jesNames[27].Data(),theYear); // TimePtEta
 
   TString nameSyst[nSystDataCardTotal];
-  nameSyst[  0] = "CMS_eff_m_recoUp";
-  nameSyst[  1] = "CMS_eff_m_recoDown";
-  nameSyst[  2] = "CMS_eff_m_idUp";
-  nameSyst[  3] = "CMS_eff_m_idDown";
-  nameSyst[  4] = "CMS_eff_m_isoUp";
-  nameSyst[  5] = "CMS_eff_m_isoDown";
-  nameSyst[  6] = "CMS_eff_e_recoUp";
-  nameSyst[  7] = "CMS_eff_e_recoDown";
-  nameSyst[  8] = "CMS_eff_e_idUp";
-  nameSyst[  9] = "CMS_eff_e_idDown";
+  nameSyst[  0] = Form("CMS_eff_m_reco_%dUp",theYear);
+  nameSyst[  1] = Form("CMS_eff_m_reco_%dDown",theYear);
+  nameSyst[  2] = Form("CMS_eff_m_id_%dUp",theYear);
+  nameSyst[  3] = Form("CMS_eff_m_id_%dDown",theYear);
+  nameSyst[  4] = Form("CMS_eff_m_iso_%dUp",theYear);
+  nameSyst[  5] = Form("CMS_eff_m_iso_%dDown",theYear);
+  nameSyst[  6] = Form("CMS_eff_e_reco_%dUp",theYear);
+  nameSyst[  7] = Form("CMS_eff_e_reco_%dDown",theYear);
+  nameSyst[  8] = Form("CMS_eff_e_id_%dUp",theYear);
+  nameSyst[  9] = Form("CMS_eff_e_id_%dDown",theYear);
   nameSyst[10 ] = "pileupUp";
   nameSyst[11 ] = "pileupDown";
-  nameSyst[12 ] = "CMS_SMPXXXXX_WWtriggerUp";
-  nameSyst[13 ] = "CMS_SMPXXXXX_WWtriggerDown";
+  nameSyst[12 ] = Form("CMS_SMPXXXXX_WWtrigger_%dUp",year);
+  nameSyst[13 ] = Form("CMS_SMPXXXXX_WWtrigger_%dDown",year);
   nameSyst[14 ] = Form("%sUp"  ,BtagSFBCNames[ 0].Data());
   nameSyst[15 ] = Form("%sDown",BtagSFBCNames[ 0].Data());
   nameSyst[16 ] = Form("%sUp"  ,BtagSFBCNames[ 1].Data());
@@ -113,74 +113,76 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[39 ] = Form("%s_%dDown",BtagSFBCNames[12].Data(),year);
   nameSyst[40 ] = "CMS_lf_btagUp";
   nameSyst[41 ] = "CMS_lf_btagDown";
-  nameSyst[42 ] = "CMS_scale_mUp";
-  nameSyst[43 ] = "CMS_scale_mDown";
-  nameSyst[44 ] = "CMS_scale_eUp";
-  nameSyst[45 ] = "CMS_scale_eDown";
-  nameSyst[46 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 0].Data());
-  nameSyst[47 ] = Form("CMS_scale_j_%sDown",jesNames[ 0].Data());
-  nameSyst[48 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 1].Data());
-  nameSyst[49 ] = Form("CMS_scale_j_%sDown",jesNames[ 1].Data());
-  nameSyst[50 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 2].Data());
-  nameSyst[51 ] = Form("CMS_scale_j_%sDown",jesNames[ 2].Data());
-  nameSyst[52 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 3].Data());
-  nameSyst[53 ] = Form("CMS_scale_j_%sDown",jesNames[ 3].Data());
-  nameSyst[54 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 4].Data());
-  nameSyst[55 ] = Form("CMS_scale_j_%sDown",jesNames[ 4].Data());
-  nameSyst[56 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 5].Data());
-  nameSyst[57 ] = Form("CMS_scale_j_%sDown",jesNames[ 5].Data());
-  nameSyst[58 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 6].Data());
-  nameSyst[59 ] = Form("CMS_scale_j_%sDown",jesNames[ 6].Data());
-  nameSyst[60 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 7].Data());
-  nameSyst[61 ] = Form("CMS_scale_j_%sDown",jesNames[ 7].Data());
-  nameSyst[62 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 8].Data());
-  nameSyst[63 ] = Form("CMS_scale_j_%sDown",jesNames[ 8].Data());
-  nameSyst[64 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 9].Data());
-  nameSyst[65 ] = Form("CMS_scale_j_%sDown",jesNames[ 9].Data());
-  nameSyst[66 ] = Form("CMS_scale_j_%sUp"  ,jesNames[10].Data());
-  nameSyst[67 ] = Form("CMS_scale_j_%sDown",jesNames[10].Data());
-  nameSyst[68 ] = Form("CMS_scale_j_%sUp"  ,jesNames[11].Data());
-  nameSyst[69 ] = Form("CMS_scale_j_%sDown",jesNames[11].Data());
-  nameSyst[70 ] = Form("CMS_scale_j_%sUp"  ,jesNames[12].Data());
-  nameSyst[71 ] = Form("CMS_scale_j_%sDown",jesNames[12].Data());
-  nameSyst[72 ] = Form("CMS_scale_j_%sUp"  ,jesNames[13].Data());
-  nameSyst[73 ] = Form("CMS_scale_j_%sDown",jesNames[13].Data());
-  nameSyst[74 ] = Form("CMS_scale_j_%sUp"  ,jesNames[14].Data());
-  nameSyst[75 ] = Form("CMS_scale_j_%sDown",jesNames[14].Data());
-  nameSyst[76 ] = Form("CMS_scale_j_%sUp"  ,jesNames[15].Data());
-  nameSyst[77 ] = Form("CMS_scale_j_%sDown",jesNames[15].Data());
-  nameSyst[78 ] = Form("CMS_scale_j_%sUp"  ,jesNames[16].Data());
-  nameSyst[79 ] = Form("CMS_scale_j_%sDown",jesNames[16].Data());
-  nameSyst[80 ] = Form("CMS_scale_j_%sUp"  ,jesNames[17].Data());
-  nameSyst[81 ] = Form("CMS_scale_j_%sDown",jesNames[17].Data());
-  nameSyst[82 ] = Form("CMS_scale_j_%sUp"  ,jesNames[18].Data());
-  nameSyst[83 ] = Form("CMS_scale_j_%sDown",jesNames[18].Data());
-  nameSyst[84 ] = Form("CMS_scale_j_%sUp"  ,jesNames[19].Data());
-  nameSyst[85 ] = Form("CMS_scale_j_%sDown",jesNames[19].Data());
-  nameSyst[86 ] = Form("CMS_scale_j_%sUp"  ,jesNames[20].Data());
-  nameSyst[87 ] = Form("CMS_scale_j_%sDown",jesNames[20].Data());
-  nameSyst[88 ] = Form("CMS_scale_j_%sUp"  ,jesNames[21].Data());
-  nameSyst[89 ] = Form("CMS_scale_j_%sDown",jesNames[21].Data());
-  nameSyst[90 ] = Form("CMS_scale_j_%sUp"  ,jesNames[22].Data());
-  nameSyst[91 ] = Form("CMS_scale_j_%sDown",jesNames[22].Data());
-  nameSyst[92 ] = Form("CMS_scale_j_%sUp"  ,jesNames[23].Data());
-  nameSyst[93 ] = Form("CMS_scale_j_%sDown",jesNames[23].Data());
-  nameSyst[94 ] = Form("CMS_scale_j_%sUp"  ,jesNames[24].Data());
-  nameSyst[95 ] = Form("CMS_scale_j_%sDown",jesNames[24].Data());
-  nameSyst[96 ] = Form("CMS_scale_j_%sUp"  ,jesNames[25].Data());
-  nameSyst[97 ] = Form("CMS_scale_j_%sDown",jesNames[25].Data());
-  nameSyst[98 ] = Form("CMS_scale_j_%sUp"  ,jesNames[26].Data());
-  nameSyst[99 ] = Form("CMS_scale_j_%sDown",jesNames[26].Data());
-  nameSyst[100] = Form("CMS_scale_j_%sUp"  ,jesNames[27].Data());
-  nameSyst[101] = Form("CMS_scale_j_%sDown",jesNames[27].Data());
-  nameSyst[102] = "CMS_res_jUp";
-  nameSyst[103] = "CMS_res_jDown";
-  nameSyst[104] = "CMS_met_jerUp";
-  nameSyst[105] = "CMS_met_jerDown";
-  nameSyst[106] = "CMS_met_jesUp";
-  nameSyst[107] = "CMS_met_jesDown";
-  nameSyst[108] = "CMS_met_unclusteredUp";
-  nameSyst[109] = "CMS_met_unclusteredDown";
+  nameSyst[42 ] = "ewkCorrUp";
+  nameSyst[43 ] = "ewkCorrDown";
+  nameSyst[44 ] = Form("CMS_scale_m_%dUp",theYear);
+  nameSyst[45 ] = Form("CMS_scale_m_%dDown",theYear);
+  nameSyst[46 ] = Form("CMS_scale_e_%dUp",theYear);
+  nameSyst[47 ] = Form("CMS_scale_e_%dDown",theYear);
+  nameSyst[48 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 0].Data());
+  nameSyst[49 ] = Form("CMS_scale_j_%sDown",jesNames[ 0].Data());
+  nameSyst[50 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 1].Data());
+  nameSyst[51 ] = Form("CMS_scale_j_%sDown",jesNames[ 1].Data());
+  nameSyst[52 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 2].Data());
+  nameSyst[53 ] = Form("CMS_scale_j_%sDown",jesNames[ 2].Data());
+  nameSyst[54 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 3].Data());
+  nameSyst[55 ] = Form("CMS_scale_j_%sDown",jesNames[ 3].Data());
+  nameSyst[56 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 4].Data());
+  nameSyst[57 ] = Form("CMS_scale_j_%sDown",jesNames[ 4].Data());
+  nameSyst[58 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 5].Data());
+  nameSyst[59 ] = Form("CMS_scale_j_%sDown",jesNames[ 5].Data());
+  nameSyst[60 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 6].Data());
+  nameSyst[61 ] = Form("CMS_scale_j_%sDown",jesNames[ 6].Data());
+  nameSyst[62 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 7].Data());
+  nameSyst[63 ] = Form("CMS_scale_j_%sDown",jesNames[ 7].Data());
+  nameSyst[64 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 8].Data());
+  nameSyst[65 ] = Form("CMS_scale_j_%sDown",jesNames[ 8].Data());
+  nameSyst[66 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 9].Data());
+  nameSyst[67 ] = Form("CMS_scale_j_%sDown",jesNames[ 9].Data());
+  nameSyst[68 ] = Form("CMS_scale_j_%sUp"  ,jesNames[10].Data());
+  nameSyst[69 ] = Form("CMS_scale_j_%sDown",jesNames[10].Data());
+  nameSyst[70 ] = Form("CMS_scale_j_%sUp"  ,jesNames[11].Data());
+  nameSyst[71 ] = Form("CMS_scale_j_%sDown",jesNames[11].Data());
+  nameSyst[72 ] = Form("CMS_scale_j_%sUp"  ,jesNames[12].Data());
+  nameSyst[73 ] = Form("CMS_scale_j_%sDown",jesNames[12].Data());
+  nameSyst[74 ] = Form("CMS_scale_j_%sUp"  ,jesNames[13].Data());
+  nameSyst[75 ] = Form("CMS_scale_j_%sDown",jesNames[13].Data());
+  nameSyst[76 ] = Form("CMS_scale_j_%sUp"  ,jesNames[14].Data());
+  nameSyst[77 ] = Form("CMS_scale_j_%sDown",jesNames[14].Data());
+  nameSyst[78 ] = Form("CMS_scale_j_%sUp"  ,jesNames[15].Data());
+  nameSyst[79 ] = Form("CMS_scale_j_%sDown",jesNames[15].Data());
+  nameSyst[80 ] = Form("CMS_scale_j_%sUp"  ,jesNames[16].Data());
+  nameSyst[81 ] = Form("CMS_scale_j_%sDown",jesNames[16].Data());
+  nameSyst[82 ] = Form("CMS_scale_j_%sUp"  ,jesNames[17].Data());
+  nameSyst[83 ] = Form("CMS_scale_j_%sDown",jesNames[17].Data());
+  nameSyst[84 ] = Form("CMS_scale_j_%sUp"  ,jesNames[18].Data());
+  nameSyst[85 ] = Form("CMS_scale_j_%sDown",jesNames[18].Data());
+  nameSyst[86 ] = Form("CMS_scale_j_%sUp"  ,jesNames[19].Data());
+  nameSyst[87 ] = Form("CMS_scale_j_%sDown",jesNames[19].Data());
+  nameSyst[88 ] = Form("CMS_scale_j_%sUp"  ,jesNames[20].Data());
+  nameSyst[89 ] = Form("CMS_scale_j_%sDown",jesNames[20].Data());
+  nameSyst[90 ] = Form("CMS_scale_j_%sUp"  ,jesNames[21].Data());
+  nameSyst[91 ] = Form("CMS_scale_j_%sDown",jesNames[21].Data());
+  nameSyst[92 ] = Form("CMS_scale_j_%sUp"  ,jesNames[22].Data());
+  nameSyst[93 ] = Form("CMS_scale_j_%sDown",jesNames[22].Data());
+  nameSyst[94 ] = Form("CMS_scale_j_%sUp"  ,jesNames[23].Data());
+  nameSyst[95 ] = Form("CMS_scale_j_%sDown",jesNames[23].Data());
+  nameSyst[96 ] = Form("CMS_scale_j_%sUp"  ,jesNames[24].Data());
+  nameSyst[97 ] = Form("CMS_scale_j_%sDown",jesNames[24].Data());
+  nameSyst[98 ] = Form("CMS_scale_j_%sUp"  ,jesNames[25].Data());
+  nameSyst[99 ] = Form("CMS_scale_j_%sDown",jesNames[25].Data());
+  nameSyst[100] = Form("CMS_scale_j_%sUp"  ,jesNames[26].Data());
+  nameSyst[101] = Form("CMS_scale_j_%sDown",jesNames[26].Data());
+  nameSyst[102] = Form("CMS_scale_j_%sUp"  ,jesNames[27].Data());
+  nameSyst[103] = Form("CMS_scale_j_%sDown",jesNames[27].Data());
+  nameSyst[104] = Form("CMS_res_j_%dUp",theYear);
+  nameSyst[105] = Form("CMS_res_j_%dDown",theYear);
+  nameSyst[106] = Form("CMS_met_jer_%dUp",theYear);
+  nameSyst[107] = Form("CMS_met_jer_%dDown",theYear);
+  nameSyst[108] = Form("CMS_met_jes_%dUp",theYear);
+  nameSyst[109] = Form("CMS_met_jes_%dDown",theYear);
+  nameSyst[110] = Form("CMS_met_unclustered_%dUp",theYear);
+  nameSyst[111] = Form("CMS_met_unclustered_%dDown",theYear);
 
   int BinXF = 100; double minXF = 0; double maxXF = 1; TString nameFakeSyst = "random";
   if    (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002") || anaSel.Contains("sswwAnalysis1003")) {
@@ -222,7 +224,25 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     for(int ic=0; ic<nPlotCategories; ic++) histo_Syst[j][ic] = new TH1D(Form("histo_%s_%d",plotBaseNames[ic].Data(),j),Form("histo_%s_%d",plotBaseNames[ic].Data(),j), BinXF, minXF, maxXF);
   }
   for(int j=0; j<nSystDataCardTotal; j++){
-    for(int ic=0; ic<nPlotCategories; ic++) histo_SystDataCard[j][ic] = new TH1D(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()), BinXF, minXF, maxXF);
+    for(int ic=0; ic<nPlotCategories; ic++) {
+      if(
+        (ic == kPlotEWKSSWW ||
+         ic == kPlotSignal0 ||
+         ic == kPlotSignal1 ||
+         ic == kPlotSignal2 ||
+         ic == kPlotSignal3) &&
+         nameSyst[j].Contains("ewkCorr")) {
+        histo_SystDataCard[j][ic] = new TH1D(Form("histo_%s_WW%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_WW%s",plotBaseNames[ic].Data(),nameSyst[j].Data()), BinXF, minXF, maxXF);
+      }
+      else if(
+        (ic == kPlotEWKWZ) &&
+         nameSyst[j].Contains("ewkCorr")) {
+        histo_SystDataCard[j][ic] = new TH1D(Form("histo_%s_WZ%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_WZ%s",plotBaseNames[ic].Data(),nameSyst[j].Data()), BinXF, minXF, maxXF);
+      }
+      else {
+        histo_SystDataCard[j][ic] = new TH1D(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()), BinXF, minXF, maxXF);
+      }
+    }
   }
   for(int j=0; j<101; j++){
     for(int ic=0; ic<nPlotCategories; ic++) histo_PDFUp  [j][ic] = new TH1D(Form("histo_%s_pdf%dUp"  ,plotBaseNames[ic].Data(),j),Form("histo_%s_pdf%dUp"  ,plotBaseNames[ic].Data(),j), BinXF, minXF, maxXF);
@@ -239,10 +259,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   for(int j=0; j<nSystTotal; j++){
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()), "read");
     for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
-      if(j%40==0&&ic!=30) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
       histo_Syst[j][ic] = (TH1D*)inputFile->Get(Form("histo%s%d", postFixHist.Data(), ic)); assert(histo_Syst[j][ic]); histo_Syst[j][ic]->SetDirectory(0);
-      if(j%40==0&&ic!=30) printf("RANDOM %d %s %d\n",j,Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()),ic);
-      histo_Syst[j][ic]->SetNameTitle(Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()),Form("histo_%s_%s",plotBaseNames[ic].Data(),nameSyst[j].Data()));
 
       // Renormalize distributions
       if(
@@ -255,9 +272,9 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
          ic == kPlotEWKWZ
         ) && histo_Baseline[ic]->GetSumOfWeights() > 0 &&
         (j == 0 || j == 1 || j == 2 || j == 3 ||
-         j == 4 || j == 5 || j == 6 || j == 7 || j == 8 || j == 9)
+         j == 4 || j == 5 || j == 6 || j == 7 || j == 8 || j == 9 ||
+         j == 134)
         ) histo_Syst[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_Syst[j][ic]->GetSumOfWeights());
-
     }
     delete inputFile;
   }
@@ -763,7 +780,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_eff_m_reco shape ");
+  newcardShape << Form("CMS_eff_m_reco_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -772,7 +789,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_eff_m_id shape ");
+  newcardShape << Form("CMS_eff_m_id_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -781,7 +798,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_eff_m_iso shape ");
+  newcardShape << Form("CMS_eff_m_iso_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -790,7 +807,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_eff_e_reco shape ");
+  newcardShape << Form("CMS_eff_e_reco_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -799,7 +816,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
  
-  newcardShape << Form("CMS_eff_e_id shape ");
+  newcardShape << Form("CMS_eff_e_id_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -1060,7 +1077,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
  
-  newcardShape << Form("CMS_res_j shape ");
+  newcardShape << Form("CMS_res_j_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -1069,7 +1086,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
  
-  newcardShape << Form("CMS_scale_m shape ");
+  newcardShape << Form("CMS_scale_m_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -1078,7 +1095,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
  
-  newcardShape << Form("CMS_scale_e shape ");
+  newcardShape << Form("CMS_scale_e_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -1087,7 +1104,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_met_jer shape ");
+  newcardShape << Form("CMS_met_jer_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -1096,7 +1113,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_met_jes shape ");
+  newcardShape << Form("CMS_met_jes_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -1105,7 +1122,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_met_unclustered shape ");
+  newcardShape << Form("CMS_met_unclustered_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -1163,6 +1180,30 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
             ic != kPlotEWKSSWW
            ) newcardShape << Form("- ");
     else     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("WWewkCorr shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic != kPlotSignal0 &&
+            ic != kPlotSignal1 &&
+            ic != kPlotSignal2 &&
+            ic != kPlotSignal3 &&
+            ic != kPlotEWKSSWW
+            ) newcardShape << Form("- ");
+    else      newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("WZewkCorr shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if     (ic != kPlotEWKWZ
+            ) newcardShape << Form("- ");
+    else      newcardShape << Form("1.0 ");
   }
   newcardShape << Form("\n");
 
