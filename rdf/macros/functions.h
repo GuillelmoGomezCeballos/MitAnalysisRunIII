@@ -1358,12 +1358,12 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     else                typeSelAux1 = 3;
   
     int typeSelAux2 = -1;
-    if     (detajj < 3.50) typeSelAux2 = 0;
-    else if(detajj < 4.50) typeSelAux2 = 1;
+    if     (detajj < 3.75) typeSelAux2 = 0;
+    else if(detajj < 4.75) typeSelAux2 = 1;
     else                   typeSelAux2 = 2;
 
     float typeSelAux3 = -1;
-    if     (zepvv >= 0.35) typeSelAux3 = 0;
+    if     (zepvv >= 0.25) typeSelAux3 = 0;
     else                   typeSelAux3 = 1;
 
     if     (var == 10){ // VBS WZ SR cut-based
@@ -1377,7 +1377,7 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
   else if(var == 12){ // VBS WZ SR MVA based
     float bdtNew = std::min(std::max(bdt+1.0,0.001),1.999);
     float typeSelAux3 = -1;
-    if     (zepvv >= 0.35) typeSelAux3 = 0;
+    if     (zepvv >= 0.25) typeSelAux3 = 0;
     else                   typeSelAux3 = 1;
 
     return (float)(bdtNew+2.0*typeSelAux3);
