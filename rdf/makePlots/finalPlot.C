@@ -131,6 +131,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   if     (plotName.Contains("fiducial6"))                                    isVBS[0] = 2;
   else if(plotName.Contains("ww_output"))                                    isVBS[0] = 3;
   else if(_hist[kPlotEWKSSWW] && _hist[kPlotEWKSSWW]->GetSumOfWeights() > 0) isVBS[0] = 1;
+  else if(_hist[kPlotSignal0] && _hist[kPlotSignal0]->GetSumOfWeights() > 0) isVBS[0] = 1;
   else if(_hist[kPlotSignal1] && _hist[kPlotSignal1]->GetSumOfWeights() > 0) isVBS[0] = 1;
   else if(_hist[kPlotSignal2] && _hist[kPlotSignal2]->GetSumOfWeights() > 0) isVBS[0] = 1;
   else if(_hist[kPlotSignal3] && _hist[kPlotSignal3]->GetSumOfWeights() > 0) isVBS[0] = 1;
@@ -214,9 +215,10 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
     else if(isVBS[0] == 2 && ic == kPlotSignal1)                  {_hist[kPlotBSM]->Add(_hist[ic]);_hist[ic]->Scale(0);}
     else if(isVBS[0] == 1 && ic == kPlotqqWW)                     {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
     else if(isVBS[0] == 1 && ic == kPlotQCDSSWW)                  {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
-    else if(isVBS[0] == 1 && ic == kPlotSignal1 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); /*_hist[ic]->Scale(0);*/}
-    else if(isVBS[0] == 1 && ic == kPlotSignal2 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); /*_hist[ic]->Scale(0);*/}
-    else if(isVBS[0] == 1 && ic == kPlotSignal3 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); /*_hist[ic]->Scale(0);*/}
+    else if(isVBS[0] == 1 && ic == kPlotSignal0 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
+    else if(isVBS[0] == 1 && ic == kPlotSignal1 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
+    else if(isVBS[0] == 1 && ic == kPlotSignal2 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
+    else if(isVBS[0] == 1 && ic == kPlotSignal3 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
 
     else if(isVBS[1] == 1 && ic == kPlotggWW)    {_hist[kPlotEWKWZ]  ->Add(_hist[ic]); _hist[ic]->Scale(0);}
 

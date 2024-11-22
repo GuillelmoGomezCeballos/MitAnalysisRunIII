@@ -185,25 +185,25 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[111] = Form("CMS_met_unclustered_%dDown",theYear);
 
   int BinXF = 100; double minXF = 0; double maxXF = 1; TString nameFakeSyst = "random";
-  if    (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002") || anaSel.Contains("sswwAnalysis1003")) {
+  if     (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002") || anaSel.Contains("sswwAnalysis1003")) {
     if     (fidAna == 0) {BinXF = 36; minXF = -0.5; maxXF = 35.5; nameFakeSyst = "ssww";}
     else if(fidAna == 1) {BinXF = 12; minXF = -0.5; maxXF = 11.5; nameFakeSyst = "ssww";}
   }
-  else if(anaSel.Contains("wzAnalysis1001") || anaSel.Contains("wzAnalysis1005")) {
+  else if(anaSel.Contains("sswwAnalysis1004") || anaSel.Contains("sswwAnalysis1005")) {
+    if     (fidAna == 0) {BinXF = 8; minXF = -0.5; maxXF = 7.5; nameFakeSyst = "ssww";}
+    else if(fidAna == 1) {BinXF = 8; minXF = -0.5; maxXF = 7.5; nameFakeSyst = "ssww";}
+  }
+  else if(anaSel.Contains("wzAnalysis1001")) {
     if     (fidAna == 0) {BinXF = 24; minXF = -0.5; maxXF = 23.5; nameFakeSyst = "wz";}
     else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
   }
-  else if(anaSel.Contains("wzAnalysis1002") || anaSel.Contains("wzAnalysis1006")) {
+  else if(anaSel.Contains("wzAnalysis1002")) {
     if     (fidAna == 0) {BinXF = 20; minXF =  0.0; maxXF =  4.0; nameFakeSyst = "wz";}
     else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
   }
   else if(anaSel.Contains("wzAnalysis1003")) {
-    if     (fidAna == 0) {BinXF = 12; minXF = -0.5; maxXF = 11.5; nameFakeSyst = "wz";}
-    else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
-  }
-  else if(anaSel.Contains("wzAnalysis1004")) {
-    if     (fidAna == 0) {BinXF = 10; minXF =  0.0; maxXF =  2.0; nameFakeSyst = "wz";}
-    else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
+    if     (fidAna == 0) {BinXF = 8; minXF = -0.5; maxXF = 7.5; nameFakeSyst = "wz";}
+    else if(fidAna == 1) {BinXF = 8; minXF = -0.5; maxXF = 7.5; nameFakeSyst = "wz";}
   }
   else {
     printf("Wrong option\n");
@@ -260,7 +260,6 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()), "read");
     for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
       histo_Syst[j][ic] = (TH1D*)inputFile->Get(Form("histo%s%d", postFixHist.Data(), ic)); assert(histo_Syst[j][ic]); histo_Syst[j][ic]->SetDirectory(0);
-
       // Renormalize distributions
       if(
         (ic == kPlotEWKSSWW ||
@@ -406,7 +405,9 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
     for(int j=0; j<totalNumberFakeSyst; j++){
       for(int nb=1; nb<=histo_Baseline[kPlotNonPrompt]->GetNbinsX(); nb++){
-        if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
+        histo_NonPromtUnc[j+                  0]->SetBinContent(nb, TMath::Max((float)histo_NonPromtUnc[j+                  0]->GetBinContent(nb),0.0f));
+        histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb, TMath::Max((float)histo_NonPromtUnc[j+totalNumberFakeSyst]->GetBinContent(nb),0.0f));
+       if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
           systValue = histo_NonPromtUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotNonPrompt]->GetBinContent(nb);
           if     (systValue > 1.15) systValue = 1.15;
           else if(systValue < 0.85) systValue = 0.85;
@@ -441,6 +442,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
     for(int j=0; j<totalNumberWSSyst; j++){
       for(int nb=1; nb<=histo_Baseline[kPlotWS]->GetNbinsX(); nb++){
+        histo_WSUnc[j+                0]->SetBinContent(nb, TMath::Max((float)histo_WSUnc[j+                0]->GetBinContent(nb),0.0f));
+        histo_WSUnc[j+totalNumberWSSyst]->SetBinContent(nb, TMath::Max((float)histo_WSUnc[j+totalNumberWSSyst]->GetBinContent(nb),0.0f));
         if(histo_Baseline[kPlotWS]->GetBinContent(nb) > 0) {
           systValue = histo_WSUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotWS]->GetBinContent(nb);
           if     (systValue > 1.15) systValue = 1.15;

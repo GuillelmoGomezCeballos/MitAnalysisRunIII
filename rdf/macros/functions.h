@@ -1350,6 +1350,32 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
       return (float)(typeSelAux1+4*typeSelAux3);
     }
   }
+  else if(var == 20){ // mjj
+    int typeSelAux1 = -1;
+    if     (mjj <  650) typeSelAux1 = 0;
+    else if(mjj <  800) typeSelAux1 = 1;
+    else if(mjj < 1000) typeSelAux1 = 2;
+    else if(mjj < 1200) typeSelAux1 = 3;
+    else if(mjj < 1500) typeSelAux1 = 4;
+    else if(mjj < 1800) typeSelAux1 = 5;
+    else if(mjj < 2200) typeSelAux1 = 6;
+    else                typeSelAux1 = 7;
+
+    return (float)(typeSelAux1);
+  }
+  else if(var == 21){ // mll
+    float typeSelAux2 = -1;
+    if     (mll <  50) typeSelAux2 = 0;
+    else if(mll <  80) typeSelAux2 = 1;
+    else if(mll < 110) typeSelAux2 = 2;
+    else if(mll < 140) typeSelAux2 = 3;
+    else if(mll < 190) typeSelAux2 = 4;
+    else if(mll < 240) typeSelAux2 = 5;
+    else if(mll < 340) typeSelAux2 = 6;
+    else               typeSelAux2 = 7;
+
+    return (float)(typeSelAux2);
+  }
   else if(var == 10 || var == 11){
     int typeSelAux1 = -1;
     if     (mjj <  800) typeSelAux1 = 0;

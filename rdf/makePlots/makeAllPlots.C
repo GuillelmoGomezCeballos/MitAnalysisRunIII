@@ -7,7 +7,7 @@
 #include "finalPlot.C"
 
 void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob = 1001, bool doMerging = true){
-  if((year == 2022 || year == 2023 || year == 2024 || year == 2025 || year == 2026 || year == 2027) and nsel != "combine" && doMerging == true) {
+  if((year == 2022 || year == 2023 || year == 2024 || year == 2025 || year == 2026 || year == 2027) && nsel.Contains("combine") == false && doMerging == true) {
     gSystem->Exec(Form("./MitAnalysisRunIII/rdf/makePlots/merge_histograms_year.sh %s %d %d",Form("fillhisto_%sAnalysis",nsel.Data()),whichCondorJob,year));    
   }
   TString legendBSM="";
@@ -1035,7 +1035,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{llp_{T}^{miss}}","GeV",Form("anaZ/fillhisto_wwAnalysis%d_%d_75.root",whichCondorJob,year),"ww_sel0_ztt_ptww",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{llp_{T}^{miss}}","GeV",Form("anaZ/fillhisto_wwAnalysis%d_%d_76.root",whichCondorJob,year),"ww_sel0_top_ptww",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
   }
-  else if(nsel == "combine"){
+  else if(nsel == "combine_smp24001"){
     legendBSM="";
     isNeverBlinded=1;
     isBlinded=0;
@@ -1147,5 +1147,43 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"Lepton category","",Form("vv/ww_output_zz_2002_prefit.root"),"ww_output_zz_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"ZZ CR",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"WZ                                 ZZ              ","",Form("vv/ww_output_vv_2002.root"),"ww_output_vv",0,year,legendBSM.Data(),1.0,isBlinded,"WZ/ZZ CRs",1,applyScaling,mlfitResult.Data(),channelName.Data());
+ }
+ else if(nsel == "combine_vbs"){
+    legendBSM="";
+    isNeverBlinded=1;
+    isBlinded=0;
+    fidAnaName="";
+    mlfitResult="";
+    channelName="XXX"; 
+    SF_DY=1;
+    
+    applyScaling = 1;
+    year = 2027;
+
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1003_bin0.root")       ,"ssww_sswwAnalysis1003_bin0"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1003_bin1.root")       ,"ssww_sswwAnalysis1003_bin1"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1004_bin0.root")       ,"ssww_sswwAnalysis1004_bin0"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1004_bin1.root")       ,"ssww_sswwAnalysis1004_bin1"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1005_bin0.root")       ,"ssww_sswwAnalysis1005_bin0"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1005_bin1.root")       ,"ssww_sswwAnalysis1005_bin1"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1001_bin0.root")         ,"ssww_wzAnalysis1001_bin0"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1001_bin1.root")         ,"ssww_wzAnalysis1001_bin1"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1002_bin0.root")         ,"ssww_wzAnalysis1002_bin0"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1002_bin1.root")         ,"ssww_wzAnalysis1002_bin1"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin0.root")         ,"ssww_wzAnalysis1003_bin0"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin1.root")         ,"ssww_wzAnalysis1003_bin1"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1003_bin0_prefit.root"),"ssww_sswwAnalysis1003_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1003_bin1_prefit.root"),"ssww_sswwAnalysis1003_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1004_bin0_prefit.root"),"ssww_sswwAnalysis1004_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1004_bin1_prefit.root"),"ssww_sswwAnalysis1004_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1005_bin0_prefit.root"),"ssww_sswwAnalysis1005_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1005_bin1_prefit.root"),"ssww_sswwAnalysis1005_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1001_bin0_prefit.root"  ),"ssww_wzAnalysis1001_bin0_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1001_bin1_prefit.root"  ),"ssww_wzAnalysis1001_bin1_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1002_bin0_prefit.root"  ),"ssww_wzAnalysis1002_bin0_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1002_bin1_prefit.root"  ),"ssww_wzAnalysis1002_bin1_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin0_prefit.root"  ),"ssww_wzAnalysis1003_bin0_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin1_prefit.root"  ),"ssww_wzAnalysis1003_bin1_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
  }
 }

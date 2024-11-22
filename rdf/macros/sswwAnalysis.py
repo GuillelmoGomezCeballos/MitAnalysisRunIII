@@ -9,7 +9,12 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 import tmva_helper_xml
 
 correctionString = "_correction"
-makeDataCards = 1
+makeDataCards = 1 # 1 (mjj diff), 2 (mll diff), 3 (njets diff), 4 (mjj), 5 (mll)
+genVBSSel = makeDataCards
+if(genVBSSel == 4):
+    genVBSSel = 1
+elif(genVBSSel == 5):
+    genVBSSel = 2
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
@@ -309,7 +314,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfwwcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
 
         if((x == plotCategory("kPlotEWKSSWW")) and isData == "false"):
-            dfwwcat[x] = (dfwwcat[x].Define("theGenCat", "compute_vbs_gen_category({0},ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,0)".format(makeDataCards))
+            dfwwcat[x] = (dfwwcat[x].Define("theGenCat", "compute_vbs_gen_category({0},ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,0)".format(genVBSSel))
                                     )
         else:
             dfwwcat[x] = (dfwwcat[x].Define("theGenCat", "{0}".format(0))
@@ -560,12 +565,16 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         BinXF2 = 10
         minXF2 = 0
         maxXF2 = 1
-        if(makeDataCards == 1 or makeDataCards == 2 or makeDataCards == 3):
+        if(makeDataCards == 1 or makeDataCards == 2 or makeDataCards == 3 or makeDataCards == 4 or makeDataCards == 5):
             BinYF = 5
             minYF = -0.5
             maxYF = 4.5
 
             varSel = 0
+            if(makeDataCards == 4):
+                varSel = 20
+            elif(makeDataCards == 5):
+                varSel = 21
             dfwwvbscat             [x] = dfwwvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,0.0,0.0,mll{0},ngood_jets,{1})".format(altMass,varSel))
             dfwwvbscatMuonMomUp    [x] = dfwwvbscatMuonMomUp    [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,0.0,0.0,mllMuonMomUp,ngood_jets,{1})".format(altMass,varSel))
             dfwwvbscatElectronMomUp[x] = dfwwvbscatElectronMomUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,0.0,0.0,mllElectronMomUp,ngood_jets,{1})".format(altMass,varSel))
@@ -603,6 +612,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfwwvbscatUnclusteredUp[x] = dfwwvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,0.0,0.0,mll{0},ngood_jets,{1})".format(altMass,varSel))
 
             varSel = 1
+            if(makeDataCards == 4):
+                varSel = 20
+            elif(makeDataCards == 5):
+                varSel = 21
             dfwwbvbscat             [x] = dfwwbvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,0.0,0.0,mll{0},ngood_jets,{1})".format(altMass,varSel))
             dfwwbvbscatMuonMomUp    [x] = dfwwbvbscatMuonMomUp    [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,0.0,0.0,mllMuonMomUp,ngood_jets,{1})".format(altMass,varSel))
             dfwwbvbscatElectronMomUp[x] = dfwwbvbscatElectronMomUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,0.0,0.0,mllElectronMomUp,ngood_jets,{1})".format(altMass,varSel))
@@ -643,6 +656,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             BinXF1 = 36
             minXF1 = -0.5
             maxXF1 = 35.5
+            if(makeDataCards == 4 or makeDataCards == 5):
+                BinXF1 = 8
+                minXF1 = -0.5
+                maxXF1 =  7.5
             histo[110][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(110,x), "histo_{0}_{1}".format(110,x),BinXF1,minXF1,maxXF1), "finalVar","weight")
 
             for nv in range(0,136):
@@ -698,6 +715,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             BinXF2 = 12
             minXF2 = -0.5
             maxXF2 = 11.5
+            if(makeDataCards == 4 or makeDataCards == 5):
+                BinXF2 = 8
+                minXF2 = -0.5
+                maxXF2 =  7.5
             histo[111][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(111,x), "histo_{0}_{1}".format(111,x),BinXF2,minXF2,maxXF2), "finalVar","weight")
 
             for nv in range(0,136):
@@ -756,7 +777,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         print("---------------- SUMMARY {0} -------------".format(x))
         report[x].Print()
 
-    if(makeDataCards == 1 or makeDataCards == 2 or makeDataCards == 3):
+    if(makeDataCards == 1 or makeDataCards == 2 or makeDataCards == 3 or makeDataCards == 4 or makeDataCards == 5):
         for j in range(0,nHistoMVA):
             if(j < 200):
                 for x in range(nCat):

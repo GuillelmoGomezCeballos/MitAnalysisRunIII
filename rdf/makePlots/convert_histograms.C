@@ -46,8 +46,13 @@ void convert_histograms(bool isModify = false, TString inputSampleName = "/home/
     histo[kPlotData]->SetDirectory(0);
   }
   // Special for NonPromptWZ
-  if((TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "NonPromptWZ"))){
+  if     ((TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "NonPromptWZ"))){
     histo[kPlotNonPrompt] = (TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "NonPromptWZ"));
+    histo[kPlotNonPrompt]->SetNameTitle(Form("histo%d",kPlotNonPrompt),Form("histo%d",kPlotNonPrompt));
+    histo[kPlotNonPrompt]->SetDirectory(0);
+  }
+  else if((TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "NonWZPrompt"))){
+    histo[kPlotNonPrompt] = (TH1F*)fileInput->Get(Form("%s/histo_%s",subFoldersName.Data(), "NonWZPrompt"));
     histo[kPlotNonPrompt]->SetNameTitle(Form("histo%d",kPlotNonPrompt),Form("histo%d",kPlotNonPrompt));
     histo[kPlotNonPrompt]->SetDirectory(0);
   }
