@@ -217,10 +217,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
                     .Define("theCat","compute_category({0},kPlotNonPrompt,kPlotWS,nFake,nTight,0)".format(theCat))
-                    #.Define("bdt_vbfinc", ROOT.computeModel, ROOT.model.GetVariableNames())
                     )
 
-    dfbase = tmva_helper.run_inference(dfbase,"bdt_vbfinc")
+    dfbase = tmva_helper.run_inference(dfbase,"bdt_vbfinc",0)
 
     dfwzcatMuonMomUp        = []
     dfwzcatElectronMomUp    = []
@@ -652,9 +651,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[59][x] = dfwzcat[x].Filter("TriLepton_flavor==2").Histo1D(("histo_{0}_{1}".format(59,x), "histo_{0}_{1}".format(59,x), 4,-0.5, 3.5), "ngood_jets","weight")
         histo[60][x] = dfwzcat[x].Filter("TriLepton_flavor==3").Histo1D(("histo_{0}_{1}".format(60,x), "histo_{0}_{1}".format(60,x), 4,-0.5, 3.5), "ngood_jets","weight")
 
-        #dfwzvbscat[x] = (dfwzvbscat[x].Redefine("vbs_mjj","vbs_mjjJes0Up")
-        #                             .Define("bdt_vbfincJes0Up", ROOT.computeModel, ROOT.model.GetVariableNames()))
-        #histo[91][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 20,-1,1), "bdt_vbfincJes0Up","weight")
+        histo[90][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(90,x), "histo_{0}_{1}".format(90,x), 20,-1,1), "bdt_vbfinc","weight")
+        #histo[90][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(90,x), "histo_{0}_{1}".format(90,x), 20,500,2500), "vbs_mjj","weight")
+        dfwzvbscat[x] = dfwzvbscat[x].Redefine("vbs_mjj","vbs_mjjJes00Up")
+        dfwzvbscat[x] = tmva_helper.run_inference(dfwzvbscat[x],"bdt_vbfincJes00Up",1)
+        histo[91][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 20,-1,1), "bdt_vbfincJes00Up","weight")
+        #histo[91][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 20,500,2500), "vbs_mjj","weight")
 
         histo[ 99][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 99,x), "histo_{0}_{1}".format( 99,x), 4,-0.5, 3.5), "TriLepton_flavor","weight")
         histo[100][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(100,x), "histo_{0}_{1}".format(100,x), 4,-0.5, 3.5), "TriLepton_flavor","weight0")

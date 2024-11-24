@@ -13,7 +13,7 @@ class TMVAHelperXML():
         self.tmva_helper = ROOT.tmva_helper_xml(self.model_input, self.nthreads)
         self.var_col = f"tmva_vars_{self.model_name}"
 
-    def run_inference(self, df, col_name = "mva_score"):
+    def run_inference(self, df, col_name = "mva_score", theType = 0):
 
         # check if columns exist in the dataframe
         cols = df.GetColumnNames()
@@ -22,6 +22,9 @@ class TMVAHelperXML():
                 raise Exception(f"Variable {var} not defined in dataframe.")
 
         vars_str = ', '.join(self.variables)
-        df = df.Define(self.var_col, f"ROOT::VecOps::RVec<float>{{{vars_str}}}")
+        if(theType == 0):
+            df = df.Define(self.var_col, f"ROOT::VecOps::RVec<float>{{{vars_str}}}")
+        else:
+            df = df.Redefine(self.var_col, f"ROOT::VecOps::RVec<float>{{{vars_str}}}")
         df = df.DefineSlot(col_name, self.tmva_helper, [self.var_col])
         return df
