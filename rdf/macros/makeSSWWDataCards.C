@@ -197,7 +197,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     if     (fidAna == 0) {BinXF = 24; minXF = -0.5; maxXF = 23.5; nameFakeSyst = "wz";}
     else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
   }
-  else if(anaSel.Contains("wzAnalysis1002")) {
+  else if(anaSel.Contains("wzAnalysis1002") || anaSel.Contains("wzAnalysis1004")) {
     if     (fidAna == 0) {BinXF = 20; minXF =  0.0; maxXF =  4.0; nameFakeSyst = "wz";}
     else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
   }
