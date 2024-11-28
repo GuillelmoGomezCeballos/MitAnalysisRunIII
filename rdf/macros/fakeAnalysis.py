@@ -239,8 +239,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
             dfbjet20cat[2*y+ltype] = dfbjet20cat[2*y+ltype].Filter("drljet > 0.7", "drljet > 0.7")
 
             strLep = "mu"
+            strMVA = "fake_Muon_promptMVA"
             if(ltype == 1):
                strLep = "el"
+               strMVA = "fake_Electron_promptMVA"
+
+            histo[ltype+148][y] = dfjet30cat [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+148,y), "histo_{0}_{1}".format(ltype+148,y),100, 0, 1.0), "{0}".format(strMVA),"weight")
+            histo[ltype+150][y] = dfjet50cat [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+150,y), "histo_{0}_{1}".format(ltype+150,y),100, 0, 1.0), "{0}".format(strMVA),"weight")
+            histo[ltype+152][y] = dfbjet20cat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+152,y), "histo_{0}_{1}".format(ltype+152,y),100, 0, 1.0), "{0}".format(strMVA),"weight")
 
             for ptbin in range(2):
                 nHist = ptbin*100
