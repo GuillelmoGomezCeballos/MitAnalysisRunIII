@@ -5,7 +5,9 @@ ROOT.ROOT.EnableImplicitMT(4)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection4LVar, selectionTrigger2L, selectionElMu, selectionWeigths, makeFinalVariable
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection4LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariable
+from utilsMVA import redefineMVAVariables
+import tmva_helper_xml
 
 makeDataCards = 2
 
@@ -185,23 +187,28 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     ]:
         branchList.push_back(branchName)
 
-    ROOT.gInterpreter.ProcessLine('''
-    TMVA::Experimental::RReader model("weights_mva/bdt_BDTG_vbfinc_v0.weights.xml");
-    computeModel = TMVA::Experimental::Compute<15, float>(model);
-    ''')
-
-    variables = ROOT.model.GetVariableNames()
-    print(variables)
+    MVAweights = "weights_mva/bdt_BDTG_vbfinc_v0.weights.xml"
+    tmva_helper = tmva_helper_xml.TMVAHelperXML(MVAweights)
+    print(tmva_helper.variables)
 
     dftag = selectionLL(df,year,PDType,isData,count)
+
+    if(isData == "false"):
+        dftag = selectionGenLepJet(dftag,20,30,5.0)
+        dftag = (dftag.Define("mjjGen", "compute_vbs_gen_variables(0,ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass)")
+                      )
+    else:
+        dftag = (dftag.Define("mjjGen", "{0}".format(0))
+                      )
 
     dfbase = selectionWeigths(dftag,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,"",0)
 
     dfbase = (dfbase.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                     .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
                     .Define("theCat","compute_category({0},kPlotNonPrompt,kPlotWS,nFake,nTight,0)".format(theCat))
-                    .Define("bdt_vbfinc", ROOT.computeModel, ROOT.model.GetVariableNames())
                     )
+
+    dfbase = tmva_helper.run_inference(dfbase,"bdt_vbfinc",0)
 
     dfzzcatMuonMomUp       = []
     dfzzcatElectronMomUp   = []

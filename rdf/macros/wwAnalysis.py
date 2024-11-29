@@ -197,6 +197,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     print("Total number of trigger paths: {0}".format(len(list_TRIGGER)))
 
     dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count)
+    dfbase = dfbase.Define("mjjGen", "{0}".format(0))
 
     global useFR
     if(year == 2023): useFR = 0

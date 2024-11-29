@@ -154,6 +154,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     ROOT.initJSONSFs(year)
 
     dftag = selectionLL(df,year,PDType,isData,count)
+    dftag = dftag.Define("mjjGen", "{0}".format(0))
 
     dfbase = selectionWeigths(dftag,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,"",0)
 
