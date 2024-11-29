@@ -517,7 +517,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfwzbvbscatJerUp  [x] = redefineMVAVariables(dfwzbvbscatJerUp  [x],tmva_helper,"JerUp"  ,1)
  
         if(makeDataCards >= 3):
-            dfwzcat[x] = dfwzcat[x].Filter("nvbs_jets >= 2")
+            dfwzcat[x] = dfwzcat[x].Filter("nvbs_jets >= 2 && vbs_mjj > 150")
 
         dfzgcat.append(dfwzcat[x].Filter("mll{0} > 10 && mll{0} < 110 && ptl1Z{0} > 25 && ptl2Z{0} > 20 && ptlW{0} > 20".format(altMass)))
 
