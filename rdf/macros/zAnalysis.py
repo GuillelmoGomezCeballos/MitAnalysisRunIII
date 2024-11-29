@@ -6,7 +6,7 @@ ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet
 #from utilsAna import loadCorrectionSet
 
 print_info = False
@@ -209,6 +209,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     print("Total number of trigger paths: {0}".format(len(list_TRIGGER)))
 
     dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count)
+
+    if(isData == "false"):
+        dfbase = selectionGenLepJet(dfbase,20,30,5.0)
+        dfbase = (dfbase.Define("mjjGen", "compute_vbs_gen_variables(0,ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass)")
+                      )
+    else:
+        dfbase = (dfbase.Define("mjjGen", "{0}".format(0))
+                      )
 
     global useFR
     if(year == 2023): useFR = 0

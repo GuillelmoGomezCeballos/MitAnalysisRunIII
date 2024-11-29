@@ -6,7 +6,7 @@ ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger1L, selectionTrigger2L, selectionElMu, selectionWeigths
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger1L, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet
 #from utilsAna import loadCorrectionSet
 
 # 0 = T, 1 = M, 2 = L
@@ -235,6 +235,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count)
 
+    if(isData == "false"):
+        dfbase = selectionGenLepJet(dfbase,20,30,5.0)
+        dfbase = (dfbase.Define("mjjGen", "compute_vbs_gen_variables(0,ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass)")
+                      )
+    else:
+        dfbase = (dfbase.Define("mjjGen", "{0}".format(0))
+                      )
+
     dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,"",0)
 
     TRIGGERFAKEMU = getTriggerFromJson(overallTriggers, "TRIGGERFAKEMU", year)
@@ -247,6 +255,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     print("Total number of fake trigger paths: {0}".format(len(list_TRIGGERFAKE)))
 
     dffake = selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count)
+
+    if(isData == "false"):
+        dffake = selectionGenLepJet(dffake,20,30,5.0)
+        dffake = (dffake.Define("mjjGen", "compute_vbs_gen_variables(0,ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass)")
+                      )
+    else:
+        dffake = (dffake.Define("mjjGen", "{0}".format(0))
+                      )
 
     dffake = selectionWeigths(dffake,isData,year,PDType,weight,0,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,"",0)
     if(theCat == plotCategory("kPlotData")):

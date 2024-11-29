@@ -11,7 +11,7 @@ from utilsMVA import redefineMVAVariables
 import tmva_helper_xml
 
 makeDataCards = 4 # 1 (njets), 2 (lepton flavor), 3 (3D), 4 (BDT 2D), 5 (mjj)
-correctionString = ""
+correctionString = "_correction"
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
@@ -41,12 +41,12 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 VBSSEL = jsonObject['VBSSEL']
 VBSQCDSEL = jsonObject['VBSQCDSEL']
 
-muSelChoice = 2
+muSelChoice = 8
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 MUOWP = "Medium"
 
-elSelChoice = 3
+elSelChoice = 8
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 ELEWP = "DUMMY"
