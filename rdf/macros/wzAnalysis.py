@@ -22,7 +22,8 @@ useFR = 1
 whichAna = 1 # 0 (inclusive) / 1 (VBS)
 
 altMass = "Def"
-jetEtaCut = 5.0
+jetEtaCut = 2.5
+if(makeDataCards >= 3): jetEtaCut = 5.0
 metCut = 30.0
 
 selectionJsonPath = "config/selection.json"

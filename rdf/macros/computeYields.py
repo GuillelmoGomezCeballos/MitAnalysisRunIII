@@ -48,7 +48,7 @@ if __name__ == "__main__":
         histo.append(8)
         signalDict0.append(plotCategory("kPlotZZ"))
         signalDict1.append(plotCategory("kPlotZZ"))
-        histo.append(11)
+        histo.append(16)
         signalDict0.append(plotCategory("kPlotZZ"))
         signalDict1.append(plotCategory("kPlotZZ"))
     elif('wzAna' in path):
