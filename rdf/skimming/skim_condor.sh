@@ -18,7 +18,7 @@ voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 
 cp /tmp/x509up_u${USERPROXY} /home/submit/ceballos/x509up_u${USERPROXY}
 
-tar cvzf skim.tgz \
+tar cvzf skim.tgz --exclude='*.csv' \
 skim.py skim_*.cfg \
 functions_skim.h haddnanoaod.py \
 jsns/* config/*
