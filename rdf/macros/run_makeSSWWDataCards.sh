@@ -38,4 +38,15 @@ elif [ $theOption -eq 1 ]; then
   root -l -q -b makeSSWWDataCards.C'(0,0,"anaZ","'${theAna}'",20231)'
   root -l -q -b makeSSWWDataCards.C'(0,1,"anaZ","'${theAna}'",20231)'
 
+elif [ $theOption -eq 2 ]; then
+  export theAna=zzAnalysis$1
+
+  root -l -q -b makeSSWWDataCards.C'(0,0,"anaZ","'${theAna}'",20220)'
+
+  root -l -q -b makeSSWWDataCards.C'(0,0,"anaZ","'${theAna}'",20221)'
+
+  root -l -q -b makeSSWWDataCards.C'(0,0,"anaZ","'${theAna}'",20230)'
+
+  root -l -q -b makeSSWWDataCards.C'(0,0,"anaZ","'${theAna}'",20231)'
+
 fi

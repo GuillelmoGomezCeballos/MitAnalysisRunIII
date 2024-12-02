@@ -21,8 +21,10 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
   if(fidAna < 0 || fidAna > 2) printf("Wrong fidAna(%d)\n",fidAna);
 
+  int isTypeFakeSyst = 2;
   plotBaseNames[kPlotNonPrompt] = "NonPrompt";
-  if(anaSel.Contains("wzAnalysis")) plotBaseNames[kPlotNonPrompt] = "NonWZPrompt";
+  if     (anaSel.Contains("wzAnalysis")) {plotBaseNames[kPlotNonPrompt] = "NonWZPrompt";}
+  else if(anaSel.Contains("zzAnalysis")) {plotBaseNames[kPlotNonPrompt] = "NonZZPrompt"; isTypeFakeSyst = 0;}
 
   int theYear = 0;
   double triggerEffUnc = 1.000;
@@ -35,7 +37,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   int startHistogram = 0;
   TString postFixFile = "_mva";
   TString postFixHist = "MVA";
-  if(anaSel.Contains("wzAnalysis")) {startHistogram = 300; postFixFile = ""; postFixHist = "";}
+  if     (anaSel.Contains("wzAnalysis")) {startHistogram = 300; postFixFile = ""; postFixHist = "";}
+  else if(anaSel.Contains("zzAnalysis")) {startHistogram = 300; postFixFile = ""; postFixHist = "";}
 
   double systValue;
   TFile *inputFile;
@@ -387,7 +390,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   const int totalNumberFakeSyst = 6;
   TH1D *histo_InputNonPromtUnc[totalNumberFakeSyst];
   TH1D *histo_NonPromtUnc[nNonPromptSyst];
-  if(1){
+  if(isTypeFakeSyst != 0){
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_nonprompt.root",InputDir.Data(),anaSel.Data(),year), "read");
     int startH = 0; if(fidAna == 1) startH = totalNumberFakeSyst;
     for(int j=0; j<totalNumberFakeSyst; j++){
@@ -406,7 +409,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
           if     (systValue > 1.15) systValue = 1.15;
           else if(systValue < 0.85) systValue = 0.85;
           histo_NonPromtUnc[j+0]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)*systValue);
-          printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
+          if(fabs(systValue-1) > 0.10) printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
           if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
         }
       }
@@ -473,7 +476,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
       histo_PDFDown[npdf][ic]->Write();
     }
   }
-  for(int j=0; j<nNonPromptSyst; j++) histo_NonPromtUnc[j]->Write();
+  if(isTypeFakeSyst != 0) for(int j=0; j<nNonPromptSyst; j++) histo_NonPromtUnc[j]->Write();
   if(anaSel.Contains("sswwAnalysis")) for(int j=0; j<nwrongsignSyst; j++) histo_WSUnc[j]->Write();
   outputFile->Close();
 
@@ -536,8 +539,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  bool isTraditionalSyst = false;
-  if(isTraditionalSyst == true){
+  if(isTypeFakeSyst == 1){
     newcardShape << Form("CMS_SMPXXXXXX_fake_%s_m      lnN ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
@@ -556,7 +558,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     }
     newcardShape << Form("\n");
   } // isTraditionalSyst == true
-  else {
+  else if(isTypeFakeSyst == 2){
     newcardShape << Form("CMS_SMPXXXXXX_fake_%s_m0 shape ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
