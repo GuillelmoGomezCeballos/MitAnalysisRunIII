@@ -185,25 +185,14 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[111] = Form("CMS_met_unclustered_%dDown",theYear);
 
   int BinXF = 100; double minXF = 0; double maxXF = 1; TString nameFakeSyst = "random";
-  if     (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1002") || anaSel.Contains("sswwAnalysis1003")) {
-    if     (fidAna == 0) {BinXF = 36; minXF = -0.5; maxXF = 35.5; nameFakeSyst = "ssww";}
-    else if(fidAna == 1) {BinXF = 12; minXF = -0.5; maxXF = 11.5; nameFakeSyst = "ssww";}
+  if     (anaSel.Contains("sswwAnalysis")) {
+    nameFakeSyst = "ssww";
   }
-  else if(anaSel.Contains("sswwAnalysis1004") || anaSel.Contains("sswwAnalysis1005")) {
-    if     (fidAna == 0) {BinXF = 8; minXF = -0.5; maxXF = 7.5; nameFakeSyst = "ssww";}
-    else if(fidAna == 1) {BinXF = 8; minXF = -0.5; maxXF = 7.5; nameFakeSyst = "ssww";}
+  else if(anaSel.Contains("wzAnalysis")) {
+    nameFakeSyst = "wz";
   }
-  else if(anaSel.Contains("wzAnalysis1001")) {
-    if     (fidAna == 0) {BinXF = 24; minXF = -0.5; maxXF = 23.5; nameFakeSyst = "wz";}
-    else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
-  }
-  else if(anaSel.Contains("wzAnalysis1002") || anaSel.Contains("wzAnalysis1004")) {
-    if     (fidAna == 0) {BinXF = 20; minXF =  0.0; maxXF =  4.0; nameFakeSyst = "wz";}
-    else if(fidAna == 1) {BinXF =  4; minXF = -0.5; maxXF =  3.5; nameFakeSyst = "wz";}
-  }
-  else if(anaSel.Contains("wzAnalysis1003")) {
-    if     (fidAna == 0) {BinXF = 8; minXF = -0.5; maxXF = 7.5; nameFakeSyst = "wz";}
-    else if(fidAna == 1) {BinXF = 8; minXF = -0.5; maxXF = 7.5; nameFakeSyst = "wz";}
+  else if(anaSel.Contains("zzAnalysis")) {
+    nameFakeSyst = "zz";
   }
   else {
     printf("Wrong option\n");
@@ -212,6 +201,11 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
   for(int ic=0; ic<nPlotCategories; ic++) {
     histo_Baseline[ic] = new TH1D(Form("histo_%s",plotBaseNames[ic].Data()),Form("histo_%s",plotBaseNames[ic].Data()), BinXF, minXF, maxXF);
+    if(ic == 0){
+      BinXF = histo_Baseline[ic]->GetNbinsX();
+      minXF = histo_Baseline[ic]->GetXaxis()->GetBinLowEdge(1);
+      maxXF = histo_Baseline[ic]->GetXaxis()->GetBinUpEdge(BinXF);
+    }
     TString plotBaseNamesTemp =  plotBaseNames[ic];
     if     (ic == kPlotSignal0 || ic == kPlotSignal1 || ic == kPlotSignal2 || ic == kPlotSignal3 || ic == kPlotEWKSSWW) plotBaseNamesTemp = "EWKSSWW";
     histo_QCDScaleUp  [ic] = (TH1D*)histo_Baseline[ic]->Clone(Form("histo_%s_QCD_scale_%s_ACCEPTUp"  , plotBaseNames[ic].Data(), plotBaseNamesTemp.Data()));
