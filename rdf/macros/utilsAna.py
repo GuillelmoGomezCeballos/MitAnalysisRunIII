@@ -11,7 +11,7 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 17.8, 9.5, 100.0]
+    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 17.8, 9.5, 109.0]
 
     lumiBit = -999
     if(year == 2016): lumiBit = 0
@@ -426,16 +426,15 @@ def getDATAlist(type, year, skimType):
             filesL.push_back(x)
 
     ##### 2024 ####
-    elif(year == 2024 and type == 1020):
-        filesL   = findDIR("{0}/MuonEG+Run2024A-PromptReco-v1+NANOAOD".format(dirT2))
-    elif(year == 2024 and type == 1021):
-        filesL   = findDIR("{0}/MuonEG+Run2024B-PromptReco-v1+NANOAOD".format(dirT2))
     elif(year == 2024 and type == 1022):
         filesL   = findDIR("{0}/MuonEG+Run2024C-PromptReco-v1+NANOAOD".format(dirT2))
     elif(year == 2024 and type == 1023):
         filesL   = findDIR("{0}/MuonEG+Run2024D-PromptReco-v1+NANOAOD".format(dirT2))
     elif(year == 2024 and type == 1024):
-        filesL   = findDIR("{0}/MuonEG+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
+        filesL   = findDIR("{0}/MuonEG+Run2024E-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/MuonEG+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
     elif(year == 2024 and type == 1025):
         filesL   = findDIR("{0}/MuonEG+Run2024F-PromptReco-v1+NANOAOD".format(dirT2))
     elif(year == 2024 and type == 1026):
@@ -444,17 +443,10 @@ def getDATAlist(type, year, skimType):
         filesL   = findDIR("{0}/MuonEG+Run2024H-PromptReco-v1+NANOAOD".format(dirT2))
     elif(year == 2024 and type == 1028):
         filesL   = findDIR("{0}/MuonEG+Run2024I-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/MuonEG+Run2024I-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
 
-    elif(year == 2024 and type == 1030):
-        filesL   = findDIR("{0}/EGamma0+Run2024A-PromptReco-v1+NANOAOD".format(dirT2))
-        filesAux = findDIR("{0}/EGamma1+Run2024A-PromptReco-v1+NANOAOD".format(dirT2))
-        for x in filesAux:
-            filesL.push_back(x)
-    elif(year == 2024 and type == 1031):
-        filesL   = findDIR("{0}/EGamma0+Run2024B-PromptReco-v1+NANOAOD".format(dirT2))
-        filesAux = findDIR("{0}/EGamma1+Run2024B-PromptReco-v1+NANOAOD".format(dirT2))
-        for x in filesAux:
-            filesL.push_back(x)
     elif(year == 2024 and type == 1032):
         filesL   = findDIR("{0}/EGamma0+Run2024C-PromptReco-v1+NANOAOD".format(dirT2))
         filesAux = findDIR("{0}/EGamma1+Run2024C-PromptReco-v1+NANOAOD".format(dirT2))
@@ -466,7 +458,13 @@ def getDATAlist(type, year, skimType):
         for x in filesAux:
             filesL.push_back(x)
     elif(year == 2024 and type == 1034):
-        filesL   = findDIR("{0}/EGamma0+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
+        filesL   = findDIR("{0}/EGamma0+Run2024E-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/EGamma1+Run2024E-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma0+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
         filesAux = findDIR("{0}/EGamma1+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
@@ -490,17 +488,13 @@ def getDATAlist(type, year, skimType):
         filesAux = findDIR("{0}/EGamma1+Run2024I-PromptReco-v1+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma0+Run2024I-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma1+Run2024I-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
 
-    elif(year == 2024 and type == 1040):
-        filesL   = findDIR("{0}/Muon0+Run2024A-PromptReco-v1+NANOAOD".format(dirT2))
-        filesAux = findDIR("{0}/Muon1+Run2024A-PromptReco-v1+NANOAOD".format(dirT2))
-        for x in filesAux:
-            filesL.push_back(x)
-    elif(year == 2024 and type == 1041):
-        filesL   = findDIR("{0}/Muon0+Run2024B-PromptReco-v1+NANOAOD".format(dirT2))
-        filesAux = findDIR("{0}/Muon1+Run2024B-PromptReco-v1+NANOAOD".format(dirT2))
-        for x in filesAux:
-            filesL.push_back(x)
     elif(year == 2024 and type == 1042):
         filesL   = findDIR("{0}/Muon0+Run2024C-PromptReco-v1+NANOAOD".format(dirT2))
         filesAux = findDIR("{0}/Muon1+Run2024C-PromptReco-v1+NANOAOD".format(dirT2))
@@ -512,7 +506,13 @@ def getDATAlist(type, year, skimType):
         for x in filesAux:
             filesL.push_back(x)
     elif(year == 2024 and type == 1044):
-        filesL   = findDIR("{0}/Muon0+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
+        filesL   = findDIR("{0}/Muon0+Run2024E-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/Muon1+Run2024E-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon0+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
         filesAux = findDIR("{0}/Muon1+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
@@ -536,17 +536,13 @@ def getDATAlist(type, year, skimType):
         filesAux = findDIR("{0}/Muon1+Run2024I-PromptReco-v1+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon0+Run2024I-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon1+Run2024I-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
 
-    elif(year == 2024 and type == 1050):
-        filesL   = findDIR("{0}/JetMET0+Run2024A-PromptReco-v1+NANOAOD".format(dirT2))
-        filesAux = findDIR("{0}/JetMET1+Run2024A-PromptReco-v1+NANOAOD".format(dirT2))
-        for x in filesAux:
-            filesL.push_back(x)
-    elif(year == 2024 and type == 1051):
-        filesL   = findDIR("{0}/JetMET0+Run2024B-PromptReco-v1+NANOAOD".format(dirT2))
-        filesAux = findDIR("{0}/JetMET1+Run2024B-PromptReco-v1+NANOAOD".format(dirT2))
-        for x in filesAux:
-            filesL.push_back(x)
     elif(year == 2024 and type == 1052):
         filesL   = findDIR("{0}/JetMET0+Run2024C-PromptReco-v1+NANOAOD".format(dirT2))
         filesAux = findDIR("{0}/JetMET1+Run2024C-PromptReco-v1+NANOAOD".format(dirT2))
@@ -558,7 +554,13 @@ def getDATAlist(type, year, skimType):
         for x in filesAux:
             filesL.push_back(x)
     elif(year == 2024 and type == 1054):
-        filesL   = findDIR("{0}/JetMET0+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
+        filesL   = findDIR("{0}/JetMET0+Run2024E-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/JetMET1+Run2024E-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET0+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
         filesAux = findDIR("{0}/JetMET1+Run2024E-PromptReco-v2+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
@@ -580,6 +582,12 @@ def getDATAlist(type, year, skimType):
     elif(year == 2024 and type == 1058):
         filesL   = findDIR("{0}/JetMET0+Run2024I-PromptReco-v1+NANOAOD".format(dirT2))
         filesAux = findDIR("{0}/JetMET1+Run2024I-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET0+Run2024I-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET1+Run2024I-PromptReco-v2+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
 
