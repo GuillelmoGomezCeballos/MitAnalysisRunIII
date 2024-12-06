@@ -20,7 +20,7 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
-    nCat, nHisto = plotCategory("kPlotCategories"), 500
+    nCat, nHisto = plotCategory("kPlotCategories"), 900
     histo   = [[0 for x in range(nCat)] for y in range(nHisto)]
     histo2D = [[0 for y in range(nCat)] for x in range(nHisto)]
 
@@ -64,19 +64,19 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
 
     dfwwxgen = selectionGenLepJet(dfcat,20,30,jetEtaCut).Filter("ngood_GenDressedLeptons >= 2", "ngood_GenDressedLeptons >= 2")
     dfwwxgen = (dfwwxgen.Define("theGenCat0", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,0)-1.0".format(0))
-                      .Define("theGenCat1", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,1)-1.0".format(0))
-                      .Define("theGenCat2", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,2)-1.0".format(0))
-                      .Define("theGenCat" , "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,3)-1.0".format(0))
-                      .Filter("theGenCat0 >= 0","theGenCat0 >= 0")
-                      .Filter("theGenCat1 >= 0","theGenCat1 >= 0")
-                      .Filter("theGenCat2 >= 0","theGenCat2 >= 0")
-                      .Filter("theGenCat  >= 0","theGenCat  >= 0")
-                      .Define("theNNLOWeight0", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,0)")
-                      .Define("theNNLOWeight1", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,1)")
-                      .Define("theNNLOWeight2", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,2)")
-                      .Define("theNNLOWeight3", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,3)")
-                      .Define("theNNLOWeight4", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,4)")
-                      )
+                        .Define("theGenCat1", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,1)-1.0".format(0))
+                        .Define("theGenCat2", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,2)-1.0".format(0))
+                        .Define("theGenCat" , "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,3)-1.0".format(0))
+                        .Filter("theGenCat0 >= 0","theGenCat0 >= 0")
+                        .Filter("theGenCat1 >= 0","theGenCat1 >= 0")
+                        .Filter("theGenCat2 >= 0","theGenCat2 >= 0")
+                        .Filter("theGenCat  >= 0","theGenCat  >= 0")
+                        .Define("theNNLOWeight0", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,0)")
+                        .Define("theNNLOWeight1", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,1)")
+                        .Define("theNNLOWeight2", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,2)")
+                        .Define("theNNLOWeight3", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,3)")
+                        .Define("theNNLOWeight4", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,4)")
+                        )
 
     # Z->ll + X study
     histo[ 9][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format( 9,x), "histo_{0}_{1}".format( 9,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
@@ -137,6 +137,23 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     histo[6][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(6,x), "histo_{0}_{1}".format(6,x), 30, 30.,  330.), "good_GenJet_pt","weight")
     histo[7][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(7,x), "histo_{0}_{1}".format(7,x), 25, -2.5,  2.5), "good_GenJet_eta","weight")
     histo[8][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(8,x), "histo_{0}_{1}".format(8,x), 4, -0.5,  3.5), "ngood_GenJets","weight")
+
+    histo[500][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[0]) == 13")                      .Histo1D(("histo_{0}_{1}".format(500,x), "histo_{0}_{1}".format(500,x), 30, 20., 320.), "ptl1","weight")
+    histo[501][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[1]) == 13")                      .Histo1D(("histo_{0}_{1}".format(501,x), "histo_{0}_{1}".format(501,x), 30, 20., 320.), "ptl2","weight")
+    histo[502][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[0]) == 11")                      .Histo1D(("histo_{0}_{1}".format(502,x), "histo_{0}_{1}".format(502,x), 30, 20., 320.), "ptl1","weight")
+    histo[503][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[1]) == 11")                      .Histo1D(("histo_{0}_{1}".format(503,x), "histo_{0}_{1}".format(503,x), 30, 20., 320.), "ptl2","weight")
+    histo[504][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[0]) == 13 && ngood_GenJets == 0").Histo1D(("histo_{0}_{1}".format(504,x), "histo_{0}_{1}".format(504,x), 30, 20., 320.), "ptl1","weight")
+    histo[505][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[1]) == 13 && ngood_GenJets == 0").Histo1D(("histo_{0}_{1}".format(505,x), "histo_{0}_{1}".format(505,x), 30, 20., 320.), "ptl2","weight")
+    histo[506][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[0]) == 11 && ngood_GenJets == 0").Histo1D(("histo_{0}_{1}".format(506,x), "histo_{0}_{1}".format(506,x), 30, 20., 320.), "ptl1","weight")
+    histo[507][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[1]) == 11 && ngood_GenJets == 0").Histo1D(("histo_{0}_{1}".format(507,x), "histo_{0}_{1}".format(507,x), 30, 20., 320.), "ptl2","weight")
+    histo[508][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[0]) == 13 && ngood_GenJets == 1").Histo1D(("histo_{0}_{1}".format(508,x), "histo_{0}_{1}".format(508,x), 30, 20., 320.), "ptl1","weight")
+    histo[509][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[1]) == 13 && ngood_GenJets == 1").Histo1D(("histo_{0}_{1}".format(509,x), "histo_{0}_{1}".format(509,x), 30, 20., 320.), "ptl2","weight")
+    histo[510][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[0]) == 11 && ngood_GenJets == 1").Histo1D(("histo_{0}_{1}".format(510,x), "histo_{0}_{1}".format(510,x), 30, 20., 320.), "ptl1","weight")
+    histo[511][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[1]) == 11 && ngood_GenJets == 1").Histo1D(("histo_{0}_{1}".format(511,x), "histo_{0}_{1}".format(511,x), 30, 20., 320.), "ptl2","weight")
+    histo[512][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[0]) == 13 && ngood_GenJets >= 2").Histo1D(("histo_{0}_{1}".format(512,x), "histo_{0}_{1}".format(512,x), 30, 20., 320.), "ptl1","weight")
+    histo[513][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[1]) == 13 && ngood_GenJets >= 2").Histo1D(("histo_{0}_{1}".format(513,x), "histo_{0}_{1}".format(513,x), 30, 20., 320.), "ptl2","weight")
+    histo[514][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[0]) == 11 && ngood_GenJets >= 2").Histo1D(("histo_{0}_{1}".format(514,x), "histo_{0}_{1}".format(514,x), 30, 20., 320.), "ptl1","weight")
+    histo[515][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[1]) == 11 && ngood_GenJets >= 2").Histo1D(("histo_{0}_{1}".format(515,x), "histo_{0}_{1}".format(515,x), 30, 20., 320.), "ptl2","weight")
 
     BinXF = 3
     minXF = -0.5
