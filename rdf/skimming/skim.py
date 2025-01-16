@@ -149,7 +149,7 @@ if __name__ == "__main__":
     elif("Run3Summer23" in sampleToSkim):
         year = 2023
         isSkimData = 0
-    elif("Run3Summer24" in sampleToSkim):
+    elif("2024Summer24" in sampleToSkim):
         year = 2024
         isSkimData = 0
 
