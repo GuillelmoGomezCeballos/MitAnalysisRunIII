@@ -32,6 +32,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   else if(year == 20221) {triggerEffUnc = 1.005; theYear = 2022;}
   else if(year == 20230) {triggerEffUnc = 1.005; theYear = 2023;}
   else if(year == 20231) {triggerEffUnc = 1.005; theYear = 2023;}
+  else {printf("Wrong year!\n"); return;}
 
   int jumpValue = 200;
   int startHistogram = 0;
