@@ -887,7 +887,7 @@ float compute_TriggerSF(float ptl1, float ptl2, float etal1, float etal2, int lt
   else if(etal1 >  1.5 && etal2 >  1.5 && ltype == 3) hcorr = histoTriggerSFEtaPt_3_3;
   else printf("Problem trigger type (%d) %f %f\n",ltype,etal1,etal2);
   float sf = getValFromTH2(hcorr, ptl1, ptl2, unc);
-  if(sf == 0) {sf = 1.0; printf("PROBLEM sf==0! %.3f %.3f %.2f %.2f %d\n",ptl1,ptl2,etal1,etal2,ltype);}
+  if(sf == 0) {sf = 1.0; /*printf("PROBLEM sf==0! %.3f %.3f %.2f %.2f %d\n",ptl1,ptl2,etal1,etal2,ltype);*/}
   return sf;
 }
 
