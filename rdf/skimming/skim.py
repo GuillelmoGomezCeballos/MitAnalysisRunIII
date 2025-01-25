@@ -460,6 +460,9 @@ if __name__ == "__main__":
                 returncode = 0
                 if(atLeastOneFile[0] == True):
                     returncode = buildcommand(msgMerge1)
+                else:
+                    fOutName1 = "output_1l_%d_%d.txt" % (whichSample,i)
+                    returntestcode = buildcommand("touch {0}".format(fOutName1))
                 if returncode == 0:
                     copy_result = True
                     if(isSkimData == 0):
@@ -487,6 +490,9 @@ if __name__ == "__main__":
                 returncode = 0
                 if(atLeastOneFile[1] == True):
                     returncode = buildcommand(msgMerge2)
+                else:
+                    fOutName2 = "output_2l_%d_%d.txt" % (whichSample,i)
+                    returntestcode = buildcommand("touch {0}".format(fOutName2))
                 if returncode == 0:
                     copy_result = True
                     if(isSkimData == 0):
@@ -514,6 +520,9 @@ if __name__ == "__main__":
                 returncode = 0
                 if(atLeastOneFile[2] == True):
                     returncode = buildcommand(msgMerge3)
+                else:
+                    fOutName3 = "output_3l_%d_%d.txt" % (whichSample,i)
+                    returntestcode = buildcommand("touch {0}".format(fOutName3))
                 if returncode == 0:
                     copy_result = True
                     if(isSkimData == 0):
@@ -541,6 +550,9 @@ if __name__ == "__main__":
                 returncode = 0
                 if(atLeastOneFile[3] == True):
                     returncode = buildcommand(msgMerge4)
+                else:
+                    fOutName4 = "output_met_%d_%d.txt" % (whichSample,i)
+                    returntestcode = buildcommand("touch {0}".format(fOutName4))
                 if returncode == 0:
                     copy_result = True
                     if(isSkimData == 0):
@@ -569,6 +581,9 @@ if __name__ == "__main__":
                 returncode = 0
                 if(atLeastOneFile[4] == True):
                     returncode = buildcommand(msgMerge5)
+                else:
+                    fOutName5 = "output_pho_%d_%d.txt" % (whichSample,i)
+                    returntestcode = buildcommand("touch {0}".format(fOutName5))
                 if returncode == 0:
                     copy_result = True
                     if(isSkimData == 0):
