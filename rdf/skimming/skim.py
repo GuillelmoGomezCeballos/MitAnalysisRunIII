@@ -462,7 +462,7 @@ if __name__ == "__main__":
                     returncode = buildcommand(msgMerge1)
                 if returncode == 0:
                     copy_result = True
-                    if(isSkimData == 0 or isSkimData == 1):
+                    if(isSkimData == 0):
                         try:
                             dftest = ROOT.RDataFrame("Events", fOutName1)
                             nevents = dftest.Count().GetValue()
@@ -489,7 +489,7 @@ if __name__ == "__main__":
                     returncode = buildcommand(msgMerge2)
                 if returncode == 0:
                     copy_result = True
-                    if(isSkimData == 0 or isSkimData == 1):
+                    if(isSkimData == 0):
                         try:
                             dftest = ROOT.RDataFrame("Events", fOutName2)
                             nevents = dftest.Count().GetValue()
@@ -516,7 +516,7 @@ if __name__ == "__main__":
                     returncode = buildcommand(msgMerge3)
                 if returncode == 0:
                     copy_result = True
-                    if(isSkimData == 0 or isSkimData == 1):
+                    if(isSkimData == 0):
                         try:
                             dftest = ROOT.RDataFrame("Events", fOutName3)
                             nevents = dftest.Count().GetValue()
@@ -543,7 +543,7 @@ if __name__ == "__main__":
                     returncode = buildcommand(msgMerge4)
                 if returncode == 0:
                     copy_result = True
-                    if(isSkimData == 0 or isSkimData == 1):
+                    if(isSkimData == 0):
                         try:
                             dftest = ROOT.RDataFrame("Events", fOutName4)
                             nevents = dftest.Count().GetValue()
@@ -571,7 +571,7 @@ if __name__ == "__main__":
                     returncode = buildcommand(msgMerge5)
                 if returncode == 0:
                     copy_result = True
-                    if(isSkimData == 0 or isSkimData == 1):
+                    if(isSkimData == 0):
                         try:
                             dftest = ROOT.RDataFrame("Events", fOutName5)
                             nevents = dftest.Count().GetValue()
