@@ -63,24 +63,24 @@ std::map<int, TString> plotBaseNames={
 
 std::map<int, int> plotColors={
   { kPlotData	   , kBlack},
-  { kPlotqqWW	   , cmsstyle::p10::kBlue},
-  { kPlotggWW	   , cmsstyle::p10::kBlue-3},
-  { kPlotTT	   , cmsstyle::p10::kYellow},
-  { kPlotTW	   , cmsstyle::p10::kYellow-3},
-  { kPlotDY	   , cmsstyle::p10::kAsh},
-  { kPlotEWKSSWW   , kViolet},
-  { kPlotQCDSSWW   , cmsstyle::p10::kBrown-3},
-  { kPlotEWKWZ     , 841},
-  { kPlotWZ	   , cmsstyle::p10::kRed},
-  { kPlotZZ	   , cmsstyle::p10::kCyan},
-  { kPlotNonPrompt , cmsstyle::p10::kGray},
-  { kPlotVVV	   , cmsstyle::p10::kViolet},
-  { kPlotTVX	   , cmsstyle::p10::kOrange},
-  { kPlotVG	   , cmsstyle::p10::kBrown},
-  { kPlotHiggs     , cmsstyle::p10::kGreen},
-  { kPlotWS	   , 840},
+  { kPlotqqWW	   , cmsstyle::p10::kBlue},     // 1
+  { kPlotggWW	   , cmsstyle::p10::kBlue-3},   // not shown
+  { kPlotTT	   , cmsstyle::p10::kYellow},   // 2
+  { kPlotTW	   , cmsstyle::p10::kYellow-3}, // not shown
+  { kPlotDY	   , kYellow},                  // 3 cmsstyle::p10::kAsh
+  { kPlotEWKSSWW   , cmsstyle::p10::kBlue},     // 01
+  { kPlotQCDSSWW   , cmsstyle::p10::kBlue-3},   // not shown
+  { kPlotEWKWZ     , cmsstyle::p10::kYellow},   // 02
+  { kPlotWZ	   , cmsstyle::p10::kRed},      // 4
+  { kPlotZZ	   , cmsstyle::p10::kCyan},     // 5
+  { kPlotNonPrompt , cmsstyle::p10::kViolet},   // 6
+  { kPlotVVV	   , cmsstyle::p10::kGray},     // 7
+  { kPlotTVX	   , cmsstyle::p10::kOrange},   // 8
+  { kPlotVG	   , cmsstyle::p10::kBrown},    // 9
+  { kPlotHiggs     , cmsstyle::p10::kGreen},    // 10
+  { kPlotWS	   , cmsstyle::p10::kAsh},      // 03
   { kPlotOther     , kViolet+7},
-  { kPlotEM	   , cmsstyle::p10::kCyan-3},
+  { kPlotEM	   , cmsstyle::p10::kBlue},     // 11
   { kPlotBSM	   , kAzure+1},
   { kPlotSignal0   , kAzure+2},
   { kPlotSignal1   , kAzure+3},

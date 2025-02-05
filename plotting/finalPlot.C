@@ -326,18 +326,19 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   if(isLogSpecial) {c1->SetLogx();pad1->SetLogx();pad2->SetLogx();}
 
   float theLumi = 999;
-  if     (year == 2022)  theLumi = 34.8;
-  else if(year == 20220) theLumi = 8.1;
-  else if(year == 20221) theLumi = 26.7;
-  if     (year == 2023)  theLumi = 27.1;
-  else if(year == 20230) theLumi = 17.6;
-  else if(year == 20231) theLumi = 9.5;
-  else if(year == 2027)  theLumi = 61.9;
-  else if(year == 20240) theLumi = 109;
+  TString theYear = Form("%d",year);
+  if     (year == 2022)  {theLumi = 34.8; theYear = Form("%d",2022);}
+  else if(year == 20220) {theLumi = 8.1;}
+  else if(year == 20221) {theLumi = 26.7;}
+  if     (year == 2023)  {theLumi = 27.1; theYear = Form("%d",2023);}
+  else if(year == 20230) {theLumi = 17.6;}
+  else if(year == 20231) {theLumi = 9.5;}
+  else if(year == 2027)  {theLumi = 61.9; theYear = Form("Run 3");}
+  else if(year == 20240) {theLumi = 109; theYear = Form("%d",2024);}
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
   cmsstyle::SetExtraText("");
-  cmsstyle::SetLumi(Form("%d, %.1f fb^{#minus1}",year,theLumi));
+  cmsstyle::SetLumi(Form("%s, %.1f fb^{#minus1}",theYear.Data(),theLumi));
   cmsstyle::SetEnergy(13.6);
   cmsstyle::CMS_lumi( pad1, 11);
 
