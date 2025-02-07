@@ -845,15 +845,15 @@ float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
   double sf = 1.0;
   if     (type == 0){
     const TH1D& hcorr = puWeights;
-    sf = getValFromTH1(hcorr, std::min(nPU,74.999f));
+    sf = getValFromTH1(hcorr, std::min(nPU,70.999f));
   }
   else if(type == 1){
     const TH1D& hcorr = puWeightsUp;
-    sf = getValFromTH1(hcorr, std::min(nPU,74.999f));
+    sf = getValFromTH1(hcorr, std::min(nPU,70.999f));
   }
   else if(type == 2){
     const TH1D& hcorr = puWeightsDown;
-    sf = getValFromTH1(hcorr, std::min(nPU,74.999f));
+    sf = getValFromTH1(hcorr, std::min(nPU,70.999f));
   }
   else {
     printf("Wrong type %d\n",type);
