@@ -203,17 +203,17 @@ MyCorrections::MyCorrections(int the_input_year) {
     jecDATAName[6] = "NULL";   jetVetoMapName[6] = "NULL"; // G
   }
   else if(year == 20240)  {
-    jecMCName = "Summer23BPixPrompt23_V1_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
-    jecDATAName[0] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[0] = "Summer23BPixPrompt23_RunD_V1"; // A
-    jecDATAName[1] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[1] = "Summer23BPixPrompt23_RunD_V1"; // B
-    jecDATAName[2] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[2] = "Summer23BPixPrompt23_RunD_V1"; // C
-    jecDATAName[3] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[3] = "Summer23BPixPrompt23_RunD_V1"; // D
-    jecDATAName[4] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[4] = "Summer23BPixPrompt23_RunD_V1"; // E
-    jecDATAName[5] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[5] = "Summer23BPixPrompt23_RunD_V1"; // F
-    jecDATAName[6] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[6] = "Summer23BPixPrompt23_RunD_V1"; // G
-    jecDATAName[7] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[7] = "Summer23BPixPrompt23_RunD_V1"; // H
-    jecDATAName[8] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[8] = "Summer23BPixPrompt23_RunD_V1"; // I
-    jecDATAName[9] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[9] = "Summer23BPixPrompt23_RunD_V1"; // J
+    jecMCName = "Winter24Prompt24_V2_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
+    jecDATAName[0] = "NULL";                            jetVetoMapName[0] = "Winter24Prompt2024BCDEFGHI_V1"; // A
+    jecDATAName[1] = "Winter24Prompt24_RunBCD_V2_DATA"; jetVetoMapName[1] = "Winter24Prompt2024BCDEFGHI_V1"; // B
+    jecDATAName[2] = "Winter24Prompt24_RunBCD_V2_DATA"; jetVetoMapName[2] = "Winter24Prompt2024BCDEFGHI_V1"; // C
+    jecDATAName[3] = "Winter24Prompt24_RunBCD_V2_DATA"; jetVetoMapName[3] = "Winter24Prompt2024BCDEFGHI_V1"; // D
+    jecDATAName[4] = "Winter24Prompt24_RunE_V2_DATA";   jetVetoMapName[4] = "Winter24Prompt2024BCDEFGHI_V1"; // E
+    jecDATAName[5] = "Winter24Prompt24_RunF_V2_DATA";   jetVetoMapName[5] = "Winter24Prompt2024BCDEFGHI_V1"; // F
+    jecDATAName[6] = "Winter24Prompt24_RunG_V2_DATA";   jetVetoMapName[6] = "Winter24Prompt2024BCDEFGHI_V1"; // G
+    jecDATAName[7] = "Winter24Prompt24_RunH_V2_DATA";   jetVetoMapName[7] = "Winter24Prompt2024BCDEFGHI_V1"; // H
+    jecDATAName[8] = "Winter24Prompt24_RunI_V2_DATA";   jetVetoMapName[8] = "Winter24Prompt2024BCDEFGHI_V1"; // I
+    jecDATAName[9] = "NULL";                            jetVetoMapName[9] = "Winter24Prompt2024BCDEFGHI_V1"; // J
   }
 
   std::string tagName = jecMCName + "_" + "L1L2L3Res" + "_" + algoName;
