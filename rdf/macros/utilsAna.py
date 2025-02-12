@@ -11,7 +11,9 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 17.8, 9.5, 109.0]
+    #lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 17.8, 9.5, 109.0]
+    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 17.8, 9.5, 101.7]
+    print("LUMI AND PU WEIGHTS TEMPORARILY HACKED!")
 
     lumiBit = -999
     if(year == 2016): lumiBit = 0
@@ -986,7 +988,7 @@ def SwitchSample(argument, skimType):
        533: (dirT2+"/WGtoLNuG-1Jets_PTG-10to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",668.91538*1000,plotCategory("kPlotVG")),
        534: (dirT2+"/WGtoLNuG-1Jets_PTG-100to200_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",2.22141*1000,plotCategory("kPlotVG")),
        535: (dirT2+"/WGtoLNuG-1Jets_PTG-200to400_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3+NANOAODSIMFAKE",0.291367*1000,plotCategory("kPlotVG")),
-       536: (dirT2+"/WWto4Q_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3+NANOAODSIMFAKE",1000000*(118.7*1.06-ggWWXS_LO_MCFM)*(1-0.1086*3)*(1-0.1086*3)*1000,plotCategory("kPlotNonPrompt")),
+       536: (dirT2+"/VBFWto2Q_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2+NANOAODSIM",1000000,plotCategory("kPlotNonPrompt")),
        537: (dirT2+"/GluGluHToTauTau_M-125_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2+NANOAODSIMFAKE",52.230*0.06272*1000,plotCategory("kPlotHiggs")),
        538: (dirT2+"/VBFHToTauTau_M125_TuneCP5_13p6TeV_powheg-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",4.0780*0.06272*1000,plotCategory("kPlotHiggs")),
        539: (dirT2+"/DYGto2LG-1Jets_MLL-4to50_PTG-10to100_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2+NANOAODSIMFAKE",87.73210*1000,plotCategory("kPlotVG")),

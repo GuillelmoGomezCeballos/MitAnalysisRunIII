@@ -679,6 +679,10 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
         triggerFAKE = triggerFAKEMU
     elif(year == 2023 and PDType == "EGamma"):
         triggerFAKE =  triggerFAKEEL
+    elif(year == 2024 and PDType == "Muon"):
+        triggerFAKE = triggerFAKEMU
+    elif(year == 2024 and PDType == "EGamma"):
+        triggerFAKE =  triggerFAKEEL
     elif(PDType == "MuonEG"):
         triggerFAKE =  "0"
     elif(year == 2018):
@@ -686,6 +690,8 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
     elif(year == 2022):
         triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     elif(year == 2023):
+        triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
+    elif(year == 2024):
         triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     else:
         print("PROBLEM with triggers!!!")

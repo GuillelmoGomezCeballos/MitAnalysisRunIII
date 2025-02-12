@@ -845,20 +845,20 @@ float compute_PURecoSF(const Vec_f& mu_pt, const Vec_f& mu_eta,
   double sf = 1.0;
   if     (type == 0){
     const TH1D& hcorr = puWeights;
-    sf = getValFromTH1(hcorr, std::min(nPU,70.999f));
+    sf = getValFromTH1(hcorr, std::min(nPU,72.999f));
   }
   else if(type == 1){
     const TH1D& hcorr = puWeightsUp;
-    sf = getValFromTH1(hcorr, std::min(nPU,70.999f));
+    sf = getValFromTH1(hcorr, std::min(nPU,72.999f));
   }
   else if(type == 2){
     const TH1D& hcorr = puWeightsDown;
-    sf = getValFromTH1(hcorr, std::min(nPU,70.999f));
+    sf = getValFromTH1(hcorr, std::min(nPU,72.999f));
   }
   else {
     printf("Wrong type %d\n",type);
   }
-  sfTot = sfTot*sf;
+  sfTot = sfTot*std::min(sf,4.0);
   if(debug) printf("pu %.3f %.3f %.3f\n",nPU,sf,sfTot);
 
   return sfTot;
@@ -971,13 +971,26 @@ float compute_TriggerForSingleLegsSF(float ptl1, float ptl2, float etal1, float 
 float compute_lumiFakeRate(const Vec_f& mu_pt, const Vec_f& el_pt, const int nTrigger, const int year){
   double lumiPrescalesM[3] = {0.182/1000., 0.769/1000., 0.769/1000.}; // Mu8/17/19
   double lumiPrescalesE[3] = {0.134/1000., 0.754/1000., 0.754/1000.}; // El8/12/23
-  if(year == 20230 || year == 20231){
+  if     (year == 20220 || year == 20221){
+  }
+  else if(year == 20230 || year == 20231){
     lumiPrescalesM[0] =  5.8/27693.1;
     lumiPrescalesM[1] = 79.6/27693.1;
     lumiPrescalesM[2] = 79.6/27693.1;
     lumiPrescalesE[0] =  4.8/27693.1;
     lumiPrescalesE[1] = 27.6/27693.1;
     lumiPrescalesE[2] = 27.6/27693.1;
+  }
+  else if(year == 20240){
+    lumiPrescalesM[0] =  12.3/108296.7;
+    lumiPrescalesM[1] = 333.2/108296.7;
+    lumiPrescalesM[2] = 333.2/108296.7;
+    lumiPrescalesE[0] =  12.0/108296.7;
+    lumiPrescalesE[1] =  69.9/108296.7;
+    lumiPrescalesE[2] =  69.9/108296.7;
+  }
+  else {
+    printf("compute_lumiFakeRate error year (%d)\n",year);
   }
   if     (nTrigger == -1 && mu_pt.size() == 1 && mu_pt[0] <  20) return lumiPrescalesM[0];
   else if(nTrigger == -1 && mu_pt.size() == 1 && mu_pt[0] >= 20) return lumiPrescalesM[1];
