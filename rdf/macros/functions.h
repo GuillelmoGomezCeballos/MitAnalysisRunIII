@@ -1334,66 +1334,114 @@ float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   return theVar;
 }
 // Jet-lepton final variables
-float compute_jet_lepton_final_var(const float mjj, const float detajj, const float zepvv, const float bdt, const float mll, const int njets, unsigned int var)
+float compute_jet_lepton_final_var(const float mjj, const float detajj, const float dphijj, const float zepvv, const float bdt, const float mll, const int njets, unsigned int var)
 {
-  if     (var == 0 || var == 1){
+  if     (var < 10){
     int typeSelAux1 = -1;
-    if     (mjj <  800) typeSelAux1 = 0;
-    else if(mjj < 1200) typeSelAux1 = 1;
-    else if(mjj < 1800) typeSelAux1 = 2;
+    if     (mjj <  900) typeSelAux1 = 0;
+    else if(mjj < 1300) typeSelAux1 = 1;
+    else if(mjj < 2000) typeSelAux1 = 2;
     else                typeSelAux1 = 3;
   
     float typeSelAux2 = -1;
     if     (mll <  80) typeSelAux2 = 0;
     else if(mll < 140) typeSelAux2 = 1;
-    else if(mll < 240) typeSelAux2 = 2;
+    else if(mll < 220) typeSelAux2 = 2;
     else               typeSelAux2 = 3;
     
     float typeSelAux3 = -1;
     if     (njets <= 2) typeSelAux3 = 0;
     else if(njets == 3) typeSelAux3 = 1;
     else                typeSelAux3 = 2;
+  
+    float typeSelAux4 = -1;
+    if     (detajj < 3.6) typeSelAux4 = 0;
+    else if(detajj < 4.5) typeSelAux4 = 1;
+    else if(detajj < 5.5) typeSelAux4 = 2;
+    else                  typeSelAux4 = 3;
+  
+    float typeSelAux5 = -1;
+    if     (dphijj < 1.8) typeSelAux5 = 0;
+    else if(dphijj < 2.5) typeSelAux5 = 1;
+    else if(dphijj < 2.9) typeSelAux5 = 2;
+    else                  typeSelAux5 = 3;
 
-    if     (var == 0){ // VBS W+W+ SR
-      //return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
-      if(njets >=4) return (float)(32.0+typeSelAux1);
-      else          return (float)(typeSelAux1+4*typeSelAux2+16*typeSelAux3);
+    if     (var == 1 | var == 2){ // VBS W+W+ SR mjj - mll
+      return (float)(typeSelAux1+4*typeSelAux2);
     }
-    else if(var == 1){ // VBS W+W+ btagged CR
+    else if(var == 3){ // VBS W+W+ SR mjj - njets
       return (float)(typeSelAux1+4*typeSelAux3);
     }
+    else if(var == 4){ // VBS W+W+ SR mjj - detajj
+      if(typeSelAux4 == 3) typeSelAux1 = std::max(typeSelAux1-1.0,0.0);
+      return (float)(typeSelAux1+4*typeSelAux4);
+    }
+    else if(var == 5){ // VBS W+W+ SR mjj - dphijj
+      return (float)(typeSelAux1+4*typeSelAux5);
+    }
+    else if(var == 9){ // VBS W+W+ btagged CR
+      return (float)(typeSelAux1);
+    }
+    
+    return 0.0;
   }
   else if(var == 20){ // mjj
-    int typeSelAux1 = -1;
-    if     (mjj <  650) typeSelAux1 = 0;
-    else if(mjj <  800) typeSelAux1 = 1;
-    else if(mjj < 1000) typeSelAux1 = 2;
-    else if(mjj < 1200) typeSelAux1 = 3;
-    else if(mjj < 1500) typeSelAux1 = 4;
-    else if(mjj < 1800) typeSelAux1 = 5;
-    else if(mjj < 2200) typeSelAux1 = 6;
-    else                typeSelAux1 = 7;
+    int typeSelAux = -1;
+    if     (mjj <  700) typeSelAux = 0;
+    else if(mjj <  900) typeSelAux = 1;
+    else if(mjj < 1100) typeSelAux = 2;
+    else if(mjj < 1300) typeSelAux = 3;
+    else if(mjj < 1600) typeSelAux = 4;
+    else if(mjj < 2000) typeSelAux = 5;
+    else if(mjj < 2700) typeSelAux = 6;
+    else                typeSelAux = 7;
 
-    return (float)(typeSelAux1);
+    return (float)(typeSelAux);
   }
   else if(var == 21){ // mll
-    float typeSelAux2 = -1;
-    if     (mll <  50) typeSelAux2 = 0;
-    else if(mll <  80) typeSelAux2 = 1;
-    else if(mll < 110) typeSelAux2 = 2;
-    else if(mll < 140) typeSelAux2 = 3;
-    else if(mll < 190) typeSelAux2 = 4;
-    else if(mll < 240) typeSelAux2 = 5;
-    else if(mll < 340) typeSelAux2 = 6;
-    else               typeSelAux2 = 7;
+    float typeSelAux = -1;
+    if     (mll <  50) typeSelAux = 0;
+    else if(mll <  80) typeSelAux = 1;
+    else if(mll < 110) typeSelAux = 2;
+    else if(mll < 140) typeSelAux = 3;
+    else if(mll < 170) typeSelAux = 4;
+    else if(mll < 220) typeSelAux = 5;
+    else if(mll < 300) typeSelAux = 6;
+    else               typeSelAux = 7;
 
-    return (float)(typeSelAux2);
+    return (float)(typeSelAux);
+  }
+  else if(var == 22){ // detajj
+    float typeSelAux = -1;
+    if     (detajj < 3.1) typeSelAux = 0;
+    else if(detajj < 3.6) typeSelAux = 1;
+    else if(detajj < 4.0) typeSelAux = 2;
+    else if(detajj < 4.5) typeSelAux = 3;
+    else if(detajj < 5.0) typeSelAux = 4;
+    else if(detajj < 5.5) typeSelAux = 5;
+    else if(detajj < 6.5) typeSelAux = 6;
+    else                  typeSelAux = 7;
+
+    return (float)(typeSelAux);
+  }
+  else if(var == 23){ // dphijj
+    float typeSelAux = -1;
+    if     (dphijj < 1.1) typeSelAux = 0;
+    else if(dphijj < 1.8) typeSelAux = 1;
+    else if(dphijj < 2.2) typeSelAux = 2;
+    else if(dphijj < 2.5) typeSelAux = 3;
+    else if(dphijj < 2.7) typeSelAux = 4;
+    else if(dphijj < 2.9) typeSelAux = 5;
+    else if(dphijj < 3.0) typeSelAux = 6;
+    else                  typeSelAux = 7;
+
+    return (float)(typeSelAux);
   }
   else if(var == 10 || var == 11){
     int typeSelAux1 = -1;
-    if     (mjj <  800) typeSelAux1 = 0;
-    else if(mjj < 1200) typeSelAux1 = 1;
-    else if(mjj < 1800) typeSelAux1 = 2;
+    if     (mjj <  900) typeSelAux1 = 0;
+    else if(mjj < 1300) typeSelAux1 = 1;
+    else if(mjj < 2000) typeSelAux1 = 2;
     else                typeSelAux1 = 3;
   
     int typeSelAux2 = -1;
@@ -1407,7 +1455,6 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
 
     if     (var == 10){ // VBS WZ SR cut-based
       return (float)(typeSelAux1+4*typeSelAux2+12*typeSelAux3);
-      //return (float)(typeSelAux1+4*typeSelAux2);
     }
     else if(var == 11){ // VBS WZ btagged CR
       return (float)(typeSelAux1);
@@ -2184,7 +2231,6 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
                              const int applyTightSel){
 
   if(ngood_GenDressedLeptons <= 1) return 0;
-  if(GenDressedLepton_pdgId[0] * GenDressedLepton_pdgId[1] < 0) return 0;
   if(ngood_GenJets < 2) return 0;
 
   float mjjGen = Minv2(good_GenJet_pt[0], good_GenJet_eta[0], good_GenJet_phi[0], good_GenJet_mass[0],
@@ -2193,35 +2239,60 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
   float mllGen = Minv2(GenDressedLepton_pt[0], GenDressedLepton_eta[0], GenDressedLepton_phi[0], GenDressedLepton_mass[0],
                        GenDressedLepton_pt[1], GenDressedLepton_eta[1], GenDressedLepton_phi[1], GenDressedLepton_mass[1]).first;
 
-  if(applyTightSel >= 1) {
+  float detajjGen = fabs(good_GenJet_eta[0]-good_GenJet_eta[1]);
+  float dphijjGen = deltaPhi(good_GenJet_phi[0],good_GenJet_phi[1]);
+ 
+  if(applyTightSel >= 1 && applyTightSel <= 10) {
     if(GenDressedLepton_pt[1] > GenDressedLepton_pt[0]) {printf("PROBLEM, ptl2 > ptl1 at gen level\n");}
-    bool passTightGenSel = GenDressedLepton_pt[0] > 25 &&  GenDressedLepton_pt[1] > 20;
+    bool passTightGenSel = ngood_GenDressedLeptons == 2 && GenDressedLepton_pdgId[0] * GenDressedLepton_pdgId[1] > 0 &&
+                           GenDressedLepton_pt[0] > 25 &&  GenDressedLepton_pt[1] > 20;
     if(applyTightSel >= 2) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0;
     if(applyTightSel >= 3) {
       passTightGenSel = passTightGenSel && mllGen > 20;
     }
     if(applyTightSel >= 4) {
-      float detajjGen = fabs(good_GenJet_eta[0]-good_GenJet_eta[1]);
+      passTightGenSel = passTightGenSel && mjjGen > 500 && detajjGen > 2.5;
+    }
+    if(passTightGenSel == false) return 0;
+  }
+  else if(applyTightSel >= 11 && applyTightSel <= 20) {
+    if(GenDressedLepton_pt[1] > GenDressedLepton_pt[0] || GenDressedLepton_pt[2] > GenDressedLepton_pt[1]) {printf("PROBLEM, ptl2 > ptl1 at gen level\n");}
+    bool passTightGenSel = ngood_GenDressedLeptons == 3 &&
+                           GenDressedLepton_pt[0] > 25 && GenDressedLepton_pt[1] > 20 && GenDressedLepton_pt[2] > 15;
+    if(applyTightSel >= 12) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0 && GenDressedLepton_hasTauAnc[2] == 0;
+    if(applyTightSel >= 13) {
       passTightGenSel = passTightGenSel && mjjGen > 500 && detajjGen > 2.5;
     }
     if(passTightGenSel == false) return 0;
   }
 
   if     (nSel == 1){
-    if     (mjjGen <  800) return 1;
-    else if(mjjGen < 1200) return 2;
-    else if(mjjGen < 1800) return 3;
+    if     (mjjGen <  900) return 1;
+    else if(mjjGen < 1300) return 2;
+    else if(mjjGen < 2000) return 3;
     else                   return 4;
   }
   else if(nSel == 2){
     if     (mllGen <  80) return 1;
     else if(mllGen < 140) return 2;
-    else if(mllGen < 240) return 3;
+    else if(mllGen < 220) return 3;
     else                  return 4;
   }
   else if(nSel == 3){
     if     (ngood_GenJets == 2) return 1;
     else if(ngood_GenJets >= 3) return 2;
+  }
+  else if(nSel == 4){
+    if     (detajjGen < 3.6) return 1;
+    else if(detajjGen < 4.5) return 2;
+    else if(detajjGen < 5.5) return 3;
+    else                     return 4;
+  }
+  else if(nSel == 5){
+    if     (dphijjGen < 1.8) return 1;
+    else if(dphijjGen < 2.5) return 2;
+    else if(dphijjGen < 2.9) return 3;
+    else                     return 4;
   }
   
   return 0;

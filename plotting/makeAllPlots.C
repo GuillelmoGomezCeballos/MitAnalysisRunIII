@@ -578,7 +578,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
   else if(nsel == "wz"){
     legendBSM="";
     isNeverBlinded=0;
-    isBlinded=0;
+    isBlinded=1;
     fidAnaName="";
     mlfitResult="";
     channelName="XXX"; 
@@ -720,7 +720,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
   else if(nsel == "ssww"){
     legendBSM="";
     isNeverBlinded=0;
-    isBlinded=0;
+    isBlinded=1;
     fidAnaName="";
     mlfitResult="";
     channelName="XXX"; 

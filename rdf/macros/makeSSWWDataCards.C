@@ -1228,10 +1228,13 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   newcardShape << Form("\n");
 
   if(anaSel.Contains("sswwAnalysis") || anaSel.Contains("wzAnalysis")){
+    if(histo_Baseline[kPlotWZ]->GetSumOfWeights() > 0)
     newcardShape << Form("CMS_ssww_wznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotWZ].Data());
+    if(histo_Baseline[kPlotEWKWZ]->GetSumOfWeights() > 0)
     newcardShape << Form("CMS_ssww_ewkwznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotEWKWZ].Data());
   }
   if(anaSel.Contains("sswwAnalysis")){
+    if(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights() > 0)
     newcardShape << Form("CMS_ssww_nonpromptnorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotNonPrompt].Data());
   }
   //newcardShape << Form("CMS_ssww_zznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotZZ].Data());
