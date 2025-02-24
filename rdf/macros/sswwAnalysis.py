@@ -124,7 +124,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     elif(theCat == plotCategory("kPlotHiggs")):
         theCat = plotCategory("kPlotVVV")
 
-    nCat, nHisto, nhistoWS, nhistoNonPrompt, nHistoMVA = plotCategory("kPlotCategories"), 600, 4, 30, 400
+    nCat, nHisto, nhistoWS, nhistoNonPrompt, nHistoMVA = plotCategory("kPlotCategories"), 600, 20, 50, 1200
     histo = [[0 for y in range(nCat)] for x in range(nHisto)]
     histoWS = [0 for y in range(nhistoWS)]
     histoNonPrompt = [0 for y in range(nhistoNonPrompt)]
@@ -204,7 +204,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             "vbs_pttot",
             "vbs_detavvj1",
             "vbs_detavvj2",
-	    "vbs_ptbalance"
+            "vbs_ptbalance"
     ]:
         branchList.push_back(branchName)
 
@@ -245,71 +245,77 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfwwjjcat = []
     dfwwbjjcat = []
 
+    dfwwvbs2Jcat              = []
+    dfwwvbs3Jcat              = []
+    dfwwvbs4Jcat              = []
     dfwwvbscatMuonMomUp       = []
     dfwwvbscatElectronMomUp   = []
-    dfwwvbscatJes00Up	      = []
-    dfwwvbscatJes01Up	      = []
-    dfwwvbscatJes02Up	      = []
-    dfwwvbscatJes03Up	      = []
-    dfwwvbscatJes04Up	      = []
-    dfwwvbscatJes05Up	      = []
-    dfwwvbscatJes06Up	      = []
-    dfwwvbscatJes07Up	      = []
-    dfwwvbscatJes08Up	      = []
-    dfwwvbscatJes09Up	      = []
-    dfwwvbscatJes10Up	      = []
-    dfwwvbscatJes11Up	      = []
-    dfwwvbscatJes12Up	      = []
-    dfwwvbscatJes13Up	      = []
-    dfwwvbscatJes14Up	      = []
-    dfwwvbscatJes15Up	      = []
-    dfwwvbscatJes16Up	      = []
-    dfwwvbscatJes17Up	      = []
-    dfwwvbscatJes18Up	      = []
-    dfwwvbscatJes19Up	      = []
-    dfwwvbscatJes20Up	      = []
-    dfwwvbscatJes21Up	      = []
-    dfwwvbscatJes22Up	      = []
-    dfwwvbscatJes23Up	      = []
-    dfwwvbscatJes24Up	      = []
-    dfwwvbscatJes25Up	      = []
-    dfwwvbscatJes26Up	      = []
-    dfwwvbscatJes27Up	      = []
+    dfwwvbscatJes00Up         = []
+    dfwwvbscatJes01Up         = []
+    dfwwvbscatJes02Up         = []
+    dfwwvbscatJes03Up         = []
+    dfwwvbscatJes04Up         = []
+    dfwwvbscatJes05Up         = []
+    dfwwvbscatJes06Up         = []
+    dfwwvbscatJes07Up         = []
+    dfwwvbscatJes08Up         = []
+    dfwwvbscatJes09Up         = []
+    dfwwvbscatJes10Up         = []
+    dfwwvbscatJes11Up         = []
+    dfwwvbscatJes12Up         = []
+    dfwwvbscatJes13Up         = []
+    dfwwvbscatJes14Up         = []
+    dfwwvbscatJes15Up         = []
+    dfwwvbscatJes16Up         = []
+    dfwwvbscatJes17Up         = []
+    dfwwvbscatJes18Up         = []
+    dfwwvbscatJes19Up         = []
+    dfwwvbscatJes20Up         = []
+    dfwwvbscatJes21Up         = []
+    dfwwvbscatJes22Up         = []
+    dfwwvbscatJes23Up         = []
+    dfwwvbscatJes24Up         = []
+    dfwwvbscatJes25Up         = []
+    dfwwvbscatJes26Up         = []
+    dfwwvbscatJes27Up         = []
     dfwwvbscatJerUp           = []
     dfwwvbscatJERUp           = []
     dfwwvbscatJESUp           = []
     dfwwvbscatUnclusteredUp   = []
 
+    dfwwbvbs2Jcat             = []
+    dfwwbvbs3Jcat             = []
+    dfwwbvbs4Jcat             = []
     dfwwbvbscatMuonMomUp      = []
     dfwwbvbscatElectronMomUp  = []
-    dfwwbvbscatJes00Up	      = []
-    dfwwbvbscatJes01Up	      = []
-    dfwwbvbscatJes02Up	      = []
-    dfwwbvbscatJes03Up	      = []
-    dfwwbvbscatJes04Up	      = []
-    dfwwbvbscatJes05Up	      = []
-    dfwwbvbscatJes06Up	      = []
-    dfwwbvbscatJes07Up	      = []
-    dfwwbvbscatJes08Up	      = []
-    dfwwbvbscatJes09Up	      = []
-    dfwwbvbscatJes10Up	      = []
-    dfwwbvbscatJes11Up	      = []
-    dfwwbvbscatJes12Up	      = []
-    dfwwbvbscatJes13Up	      = []
-    dfwwbvbscatJes14Up	      = []
-    dfwwbvbscatJes15Up	      = []
-    dfwwbvbscatJes16Up	      = []
-    dfwwbvbscatJes17Up	      = []
-    dfwwbvbscatJes18Up	      = []
-    dfwwbvbscatJes19Up	      = []
-    dfwwbvbscatJes20Up	      = []
-    dfwwbvbscatJes21Up	      = []
-    dfwwbvbscatJes22Up	      = []
-    dfwwbvbscatJes23Up	      = []
-    dfwwbvbscatJes24Up	      = []
-    dfwwbvbscatJes25Up	      = []
-    dfwwbvbscatJes26Up	      = []
-    dfwwbvbscatJes27Up	      = []
+    dfwwbvbscatJes00Up        = []
+    dfwwbvbscatJes01Up        = []
+    dfwwbvbscatJes02Up        = []
+    dfwwbvbscatJes03Up        = []
+    dfwwbvbscatJes04Up        = []
+    dfwwbvbscatJes05Up        = []
+    dfwwbvbscatJes06Up        = []
+    dfwwbvbscatJes07Up        = []
+    dfwwbvbscatJes08Up        = []
+    dfwwbvbscatJes09Up        = []
+    dfwwbvbscatJes10Up        = []
+    dfwwbvbscatJes11Up        = []
+    dfwwbvbscatJes12Up        = []
+    dfwwbvbscatJes13Up        = []
+    dfwwbvbscatJes14Up        = []
+    dfwwbvbscatJes15Up        = []
+    dfwwbvbscatJes16Up        = []
+    dfwwbvbscatJes17Up        = []
+    dfwwbvbscatJes18Up        = []
+    dfwwbvbscatJes19Up        = []
+    dfwwbvbscatJes20Up        = []
+    dfwwbvbscatJes21Up        = []
+    dfwwbvbscatJes22Up        = []
+    dfwwbvbscatJes23Up        = []
+    dfwwbvbscatJes24Up        = []
+    dfwwbvbscatJes25Up        = []
+    dfwwbvbscatJes26Up        = []
+    dfwwbvbscatJes27Up        = []
     dfwwbvbscatJerUp          = []
     dfwwbvbscatJERUp          = []
     dfwwbvbscatJESUp          = []
@@ -393,75 +399,75 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfwwbvbscatJESUp        .append(dfwwcat[x])
         dfwwbvbscatUnclusteredUp.append(dfwwcat[x])
 
-        dfwwvbscatMuonMomUp     [x] = dfwwvbscatMuonMomUp     [x].Filter("mllMuonMomUp     > 20 && ptl1MuonMomUp     > 25 && ptl2MuonMomUp     > 20 && (DiLepton_flavor != 2 || abs(mllMuonMomUp     -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_pt		 > {0}".format(metCut))
-        dfwwvbscatElectronMomUp [x] = dfwwvbscatElectronMomUp [x].Filter("mllElectronMomUp > 20 && ptl1ElectronMomUp > 25 && ptl2ElectronMomUp > 20 && (DiLepton_flavor != 2 || abs(mllElectronMomUp -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_pt		 > {0}".format(metCut))
-        dfwwvbscatJes00Up	[x] = dfwwvbscatJes00Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes00Up == 0 && nvbs_jetsJes00Up >= 2 && vbs_mjjJes00Up > 500 && vbs_detajjJes00Up > 2.5 && vbs_zepvvJes00Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes01Up	[x] = dfwwvbscatJes01Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes01Up == 0 && nvbs_jetsJes01Up >= 2 && vbs_mjjJes01Up > 500 && vbs_detajjJes01Up > 2.5 && vbs_zepvvJes01Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes02Up	[x] = dfwwvbscatJes02Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes02Up == 0 && nvbs_jetsJes02Up >= 2 && vbs_mjjJes02Up > 500 && vbs_detajjJes02Up > 2.5 && vbs_zepvvJes02Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes03Up	[x] = dfwwvbscatJes03Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes03Up == 0 && nvbs_jetsJes03Up >= 2 && vbs_mjjJes03Up > 500 && vbs_detajjJes03Up > 2.5 && vbs_zepvvJes03Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes04Up	[x] = dfwwvbscatJes04Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes04Up == 0 && nvbs_jetsJes04Up >= 2 && vbs_mjjJes04Up > 500 && vbs_detajjJes04Up > 2.5 && vbs_zepvvJes04Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes05Up	[x] = dfwwvbscatJes05Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes05Up == 0 && nvbs_jetsJes05Up >= 2 && vbs_mjjJes05Up > 500 && vbs_detajjJes05Up > 2.5 && vbs_zepvvJes05Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes06Up	[x] = dfwwvbscatJes06Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes06Up == 0 && nvbs_jetsJes06Up >= 2 && vbs_mjjJes06Up > 500 && vbs_detajjJes06Up > 2.5 && vbs_zepvvJes06Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes07Up	[x] = dfwwvbscatJes07Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes07Up == 0 && nvbs_jetsJes07Up >= 2 && vbs_mjjJes07Up > 500 && vbs_detajjJes07Up > 2.5 && vbs_zepvvJes07Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes08Up	[x] = dfwwvbscatJes08Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes08Up == 0 && nvbs_jetsJes08Up >= 2 && vbs_mjjJes08Up > 500 && vbs_detajjJes08Up > 2.5 && vbs_zepvvJes08Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes09Up	[x] = dfwwvbscatJes09Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes09Up == 0 && nvbs_jetsJes09Up >= 2 && vbs_mjjJes09Up > 500 && vbs_detajjJes09Up > 2.5 && vbs_zepvvJes09Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes10Up	[x] = dfwwvbscatJes10Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes10Up == 0 && nvbs_jetsJes10Up >= 2 && vbs_mjjJes10Up > 500 && vbs_detajjJes10Up > 2.5 && vbs_zepvvJes10Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes11Up	[x] = dfwwvbscatJes11Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes11Up == 0 && nvbs_jetsJes11Up >= 2 && vbs_mjjJes11Up > 500 && vbs_detajjJes11Up > 2.5 && vbs_zepvvJes11Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes12Up	[x] = dfwwvbscatJes12Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes12Up == 0 && nvbs_jetsJes12Up >= 2 && vbs_mjjJes12Up > 500 && vbs_detajjJes12Up > 2.5 && vbs_zepvvJes12Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes13Up	[x] = dfwwvbscatJes13Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes13Up == 0 && nvbs_jetsJes13Up >= 2 && vbs_mjjJes13Up > 500 && vbs_detajjJes13Up > 2.5 && vbs_zepvvJes13Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes14Up	[x] = dfwwvbscatJes14Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes14Up == 0 && nvbs_jetsJes14Up >= 2 && vbs_mjjJes14Up > 500 && vbs_detajjJes14Up > 2.5 && vbs_zepvvJes14Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes15Up	[x] = dfwwvbscatJes15Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes15Up == 0 && nvbs_jetsJes15Up >= 2 && vbs_mjjJes15Up > 500 && vbs_detajjJes15Up > 2.5 && vbs_zepvvJes15Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes16Up	[x] = dfwwvbscatJes16Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes16Up == 0 && nvbs_jetsJes16Up >= 2 && vbs_mjjJes16Up > 500 && vbs_detajjJes16Up > 2.5 && vbs_zepvvJes16Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes17Up	[x] = dfwwvbscatJes17Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes17Up == 0 && nvbs_jetsJes17Up >= 2 && vbs_mjjJes17Up > 500 && vbs_detajjJes17Up > 2.5 && vbs_zepvvJes17Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes18Up	[x] = dfwwvbscatJes18Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes18Up == 0 && nvbs_jetsJes18Up >= 2 && vbs_mjjJes18Up > 500 && vbs_detajjJes18Up > 2.5 && vbs_zepvvJes18Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes19Up	[x] = dfwwvbscatJes19Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes19Up == 0 && nvbs_jetsJes19Up >= 2 && vbs_mjjJes19Up > 500 && vbs_detajjJes19Up > 2.5 && vbs_zepvvJes19Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes20Up	[x] = dfwwvbscatJes20Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes20Up == 0 && nvbs_jetsJes20Up >= 2 && vbs_mjjJes20Up > 500 && vbs_detajjJes20Up > 2.5 && vbs_zepvvJes20Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes21Up	[x] = dfwwvbscatJes21Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes21Up == 0 && nvbs_jetsJes21Up >= 2 && vbs_mjjJes21Up > 500 && vbs_detajjJes21Up > 2.5 && vbs_zepvvJes21Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes22Up	[x] = dfwwvbscatJes22Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes22Up == 0 && nvbs_jetsJes22Up >= 2 && vbs_mjjJes22Up > 500 && vbs_detajjJes22Up > 2.5 && vbs_zepvvJes22Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes23Up	[x] = dfwwvbscatJes23Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes23Up == 0 && nvbs_jetsJes23Up >= 2 && vbs_mjjJes23Up > 500 && vbs_detajjJes23Up > 2.5 && vbs_zepvvJes23Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes24Up	[x] = dfwwvbscatJes24Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes24Up == 0 && nvbs_jetsJes24Up >= 2 && vbs_mjjJes24Up > 500 && vbs_detajjJes24Up > 2.5 && vbs_zepvvJes24Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes25Up	[x] = dfwwvbscatJes25Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes25Up == 0 && nvbs_jetsJes25Up >= 2 && vbs_mjjJes25Up > 500 && vbs_detajjJes25Up > 2.5 && vbs_zepvvJes25Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes26Up	[x] = dfwwvbscatJes26Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes26Up == 0 && nvbs_jetsJes26Up >= 2 && vbs_mjjJes26Up > 500 && vbs_detajjJes26Up > 2.5 && vbs_zepvvJes26Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJes27Up	[x] = dfwwvbscatJes27Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes27Up == 0 && nvbs_jetsJes27Up >= 2 && vbs_mjjJes27Up > 500 && vbs_detajjJes27Up > 2.5 && vbs_zepvvJes27Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJerUp  	[x] = dfwwvbscatJerUp	      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJerUp   == 0 && nvbs_jetsJerUp	>= 2 && vbs_mjjJerUp   > 500 && vbs_detajjJerUp   > 2.5 && vbs_zepvvJerUp   < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwvbscatJERUp         [x] = dfwwvbscatJERUp	      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_ptJERUp	 > {1}".format(altMass,metCut))
-        dfwwvbscatJESUp         [x] = dfwwvbscatJESUp	      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_ptJESUp	 > {1}".format(altMass,metCut))
-        dfwwvbscatUnclusteredUp [x] = dfwwvbscatUnclusteredUp [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_ptUnclusteredUp > {1}".format(altMass,metCut))
+        dfwwvbscatMuonMomUp     [x] = dfwwvbscatMuonMomUp     [x].Filter("mllMuonMomUp     > 20 && ptl1MuonMomUp     > 25 && ptl2MuonMomUp     > 20 && (DiLepton_flavor != 2 || abs(mllMuonMomUp     -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_pt              > {0}".format(metCut))
+        dfwwvbscatElectronMomUp [x] = dfwwvbscatElectronMomUp [x].Filter("mllElectronMomUp > 20 && ptl1ElectronMomUp > 25 && ptl2ElectronMomUp > 20 && (DiLepton_flavor != 2 || abs(mllElectronMomUp -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_pt              > {0}".format(metCut))
+        dfwwvbscatJes00Up       [x] = dfwwvbscatJes00Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes00Up == 0 && nvbs_jetsJes00Up >= 2 && vbs_mjjJes00Up > 500 && vbs_detajjJes00Up > 2.5 && vbs_zepvvJes00Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes01Up       [x] = dfwwvbscatJes01Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes01Up == 0 && nvbs_jetsJes01Up >= 2 && vbs_mjjJes01Up > 500 && vbs_detajjJes01Up > 2.5 && vbs_zepvvJes01Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes02Up       [x] = dfwwvbscatJes02Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes02Up == 0 && nvbs_jetsJes02Up >= 2 && vbs_mjjJes02Up > 500 && vbs_detajjJes02Up > 2.5 && vbs_zepvvJes02Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes03Up       [x] = dfwwvbscatJes03Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes03Up == 0 && nvbs_jetsJes03Up >= 2 && vbs_mjjJes03Up > 500 && vbs_detajjJes03Up > 2.5 && vbs_zepvvJes03Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes04Up       [x] = dfwwvbscatJes04Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes04Up == 0 && nvbs_jetsJes04Up >= 2 && vbs_mjjJes04Up > 500 && vbs_detajjJes04Up > 2.5 && vbs_zepvvJes04Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes05Up       [x] = dfwwvbscatJes05Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes05Up == 0 && nvbs_jetsJes05Up >= 2 && vbs_mjjJes05Up > 500 && vbs_detajjJes05Up > 2.5 && vbs_zepvvJes05Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes06Up       [x] = dfwwvbscatJes06Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes06Up == 0 && nvbs_jetsJes06Up >= 2 && vbs_mjjJes06Up > 500 && vbs_detajjJes06Up > 2.5 && vbs_zepvvJes06Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes07Up       [x] = dfwwvbscatJes07Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes07Up == 0 && nvbs_jetsJes07Up >= 2 && vbs_mjjJes07Up > 500 && vbs_detajjJes07Up > 2.5 && vbs_zepvvJes07Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes08Up       [x] = dfwwvbscatJes08Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes08Up == 0 && nvbs_jetsJes08Up >= 2 && vbs_mjjJes08Up > 500 && vbs_detajjJes08Up > 2.5 && vbs_zepvvJes08Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes09Up       [x] = dfwwvbscatJes09Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes09Up == 0 && nvbs_jetsJes09Up >= 2 && vbs_mjjJes09Up > 500 && vbs_detajjJes09Up > 2.5 && vbs_zepvvJes09Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes10Up       [x] = dfwwvbscatJes10Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes10Up == 0 && nvbs_jetsJes10Up >= 2 && vbs_mjjJes10Up > 500 && vbs_detajjJes10Up > 2.5 && vbs_zepvvJes10Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes11Up       [x] = dfwwvbscatJes11Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes11Up == 0 && nvbs_jetsJes11Up >= 2 && vbs_mjjJes11Up > 500 && vbs_detajjJes11Up > 2.5 && vbs_zepvvJes11Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes12Up       [x] = dfwwvbscatJes12Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes12Up == 0 && nvbs_jetsJes12Up >= 2 && vbs_mjjJes12Up > 500 && vbs_detajjJes12Up > 2.5 && vbs_zepvvJes12Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes13Up       [x] = dfwwvbscatJes13Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes13Up == 0 && nvbs_jetsJes13Up >= 2 && vbs_mjjJes13Up > 500 && vbs_detajjJes13Up > 2.5 && vbs_zepvvJes13Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes14Up       [x] = dfwwvbscatJes14Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes14Up == 0 && nvbs_jetsJes14Up >= 2 && vbs_mjjJes14Up > 500 && vbs_detajjJes14Up > 2.5 && vbs_zepvvJes14Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes15Up       [x] = dfwwvbscatJes15Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes15Up == 0 && nvbs_jetsJes15Up >= 2 && vbs_mjjJes15Up > 500 && vbs_detajjJes15Up > 2.5 && vbs_zepvvJes15Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes16Up       [x] = dfwwvbscatJes16Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes16Up == 0 && nvbs_jetsJes16Up >= 2 && vbs_mjjJes16Up > 500 && vbs_detajjJes16Up > 2.5 && vbs_zepvvJes16Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes17Up       [x] = dfwwvbscatJes17Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes17Up == 0 && nvbs_jetsJes17Up >= 2 && vbs_mjjJes17Up > 500 && vbs_detajjJes17Up > 2.5 && vbs_zepvvJes17Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes18Up       [x] = dfwwvbscatJes18Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes18Up == 0 && nvbs_jetsJes18Up >= 2 && vbs_mjjJes18Up > 500 && vbs_detajjJes18Up > 2.5 && vbs_zepvvJes18Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes19Up       [x] = dfwwvbscatJes19Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes19Up == 0 && nvbs_jetsJes19Up >= 2 && vbs_mjjJes19Up > 500 && vbs_detajjJes19Up > 2.5 && vbs_zepvvJes19Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes20Up       [x] = dfwwvbscatJes20Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes20Up == 0 && nvbs_jetsJes20Up >= 2 && vbs_mjjJes20Up > 500 && vbs_detajjJes20Up > 2.5 && vbs_zepvvJes20Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes21Up       [x] = dfwwvbscatJes21Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes21Up == 0 && nvbs_jetsJes21Up >= 2 && vbs_mjjJes21Up > 500 && vbs_detajjJes21Up > 2.5 && vbs_zepvvJes21Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes22Up       [x] = dfwwvbscatJes22Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes22Up == 0 && nvbs_jetsJes22Up >= 2 && vbs_mjjJes22Up > 500 && vbs_detajjJes22Up > 2.5 && vbs_zepvvJes22Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes23Up       [x] = dfwwvbscatJes23Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes23Up == 0 && nvbs_jetsJes23Up >= 2 && vbs_mjjJes23Up > 500 && vbs_detajjJes23Up > 2.5 && vbs_zepvvJes23Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes24Up       [x] = dfwwvbscatJes24Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes24Up == 0 && nvbs_jetsJes24Up >= 2 && vbs_mjjJes24Up > 500 && vbs_detajjJes24Up > 2.5 && vbs_zepvvJes24Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes25Up       [x] = dfwwvbscatJes25Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes25Up == 0 && nvbs_jetsJes25Up >= 2 && vbs_mjjJes25Up > 500 && vbs_detajjJes25Up > 2.5 && vbs_zepvvJes25Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes26Up       [x] = dfwwvbscatJes26Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes26Up == 0 && nvbs_jetsJes26Up >= 2 && vbs_mjjJes26Up > 500 && vbs_detajjJes26Up > 2.5 && vbs_zepvvJes26Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJes27Up       [x] = dfwwvbscatJes27Up       [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes27Up == 0 && nvbs_jetsJes27Up >= 2 && vbs_mjjJes27Up > 500 && vbs_detajjJes27Up > 2.5 && vbs_zepvvJes27Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJerUp         [x] = dfwwvbscatJerUp         [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJerUp   == 0 && nvbs_jetsJerUp   >= 2 && vbs_mjjJerUp   > 500 && vbs_detajjJerUp   > 2.5 && vbs_zepvvJerUp   < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwvbscatJERUp         [x] = dfwwvbscatJERUp         [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_ptJERUp         > {1}".format(altMass,metCut))
+        dfwwvbscatJESUp         [x] = dfwwvbscatJESUp         [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_ptJESUp         > {1}".format(altMass,metCut))
+        dfwwvbscatUnclusteredUp [x] = dfwwvbscatUnclusteredUp [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_ptUnclusteredUp > {1}".format(altMass,metCut))
 
-        dfwwbvbscatMuonMomUp    [x] = dfwwbvbscatMuonMomUp    [x].Filter("mllMuonMomUp     > 20 && ptl1MuonMomUp     > 25 && ptl2MuonMomUp     > 20 && (DiLepton_flavor != 2 || abs(mllMuonMomUp     -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_pt		 > {0}".format(metCut))
-        dfwwbvbscatElectronMomUp[x] = dfwwbvbscatElectronMomUp[x].Filter("mllElectronMomUp > 20 && ptl1ElectronMomUp > 25 && ptl2ElectronMomUp > 20 && (DiLepton_flavor != 2 || abs(mllElectronMomUp -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_pt		 > {0}".format(metCut))
-        dfwwbvbscatJes00Up	[x] = dfwwbvbscatJes00Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes00Up >  0 && nvbs_jetsJes00Up >= 2 && vbs_mjjJes00Up > 500 && vbs_detajjJes00Up > 2.5 && vbs_zepvvJes00Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes01Up	[x] = dfwwbvbscatJes01Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes01Up >  0 && nvbs_jetsJes01Up >= 2 && vbs_mjjJes01Up > 500 && vbs_detajjJes01Up > 2.5 && vbs_zepvvJes01Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes02Up	[x] = dfwwbvbscatJes02Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes02Up >  0 && nvbs_jetsJes02Up >= 2 && vbs_mjjJes02Up > 500 && vbs_detajjJes02Up > 2.5 && vbs_zepvvJes02Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes03Up	[x] = dfwwbvbscatJes03Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes03Up >  0 && nvbs_jetsJes03Up >= 2 && vbs_mjjJes03Up > 500 && vbs_detajjJes03Up > 2.5 && vbs_zepvvJes03Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes04Up	[x] = dfwwbvbscatJes04Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes04Up >  0 && nvbs_jetsJes04Up >= 2 && vbs_mjjJes04Up > 500 && vbs_detajjJes04Up > 2.5 && vbs_zepvvJes04Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes05Up	[x] = dfwwbvbscatJes05Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes05Up >  0 && nvbs_jetsJes05Up >= 2 && vbs_mjjJes05Up > 500 && vbs_detajjJes05Up > 2.5 && vbs_zepvvJes05Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes06Up	[x] = dfwwbvbscatJes06Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes06Up >  0 && nvbs_jetsJes06Up >= 2 && vbs_mjjJes06Up > 500 && vbs_detajjJes06Up > 2.5 && vbs_zepvvJes06Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes07Up	[x] = dfwwbvbscatJes07Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes07Up >  0 && nvbs_jetsJes07Up >= 2 && vbs_mjjJes07Up > 500 && vbs_detajjJes07Up > 2.5 && vbs_zepvvJes07Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes08Up	[x] = dfwwbvbscatJes08Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes08Up >  0 && nvbs_jetsJes08Up >= 2 && vbs_mjjJes08Up > 500 && vbs_detajjJes08Up > 2.5 && vbs_zepvvJes08Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes09Up	[x] = dfwwbvbscatJes09Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes09Up >  0 && nvbs_jetsJes09Up >= 2 && vbs_mjjJes09Up > 500 && vbs_detajjJes09Up > 2.5 && vbs_zepvvJes09Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes10Up	[x] = dfwwbvbscatJes10Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes10Up >  0 && nvbs_jetsJes10Up >= 2 && vbs_mjjJes10Up > 500 && vbs_detajjJes10Up > 2.5 && vbs_zepvvJes10Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes11Up	[x] = dfwwbvbscatJes11Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes11Up >  0 && nvbs_jetsJes11Up >= 2 && vbs_mjjJes11Up > 500 && vbs_detajjJes11Up > 2.5 && vbs_zepvvJes11Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes12Up	[x] = dfwwbvbscatJes12Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes12Up >  0 && nvbs_jetsJes12Up >= 2 && vbs_mjjJes12Up > 500 && vbs_detajjJes12Up > 2.5 && vbs_zepvvJes12Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes13Up	[x] = dfwwbvbscatJes13Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes13Up >  0 && nvbs_jetsJes13Up >= 2 && vbs_mjjJes13Up > 500 && vbs_detajjJes13Up > 2.5 && vbs_zepvvJes13Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes14Up	[x] = dfwwbvbscatJes14Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes14Up >  0 && nvbs_jetsJes14Up >= 2 && vbs_mjjJes14Up > 500 && vbs_detajjJes14Up > 2.5 && vbs_zepvvJes14Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes15Up	[x] = dfwwbvbscatJes15Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes15Up >  0 && nvbs_jetsJes15Up >= 2 && vbs_mjjJes15Up > 500 && vbs_detajjJes15Up > 2.5 && vbs_zepvvJes15Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes16Up	[x] = dfwwbvbscatJes16Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes16Up >  0 && nvbs_jetsJes16Up >= 2 && vbs_mjjJes16Up > 500 && vbs_detajjJes16Up > 2.5 && vbs_zepvvJes16Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes17Up	[x] = dfwwbvbscatJes17Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes17Up >  0 && nvbs_jetsJes17Up >= 2 && vbs_mjjJes17Up > 500 && vbs_detajjJes17Up > 2.5 && vbs_zepvvJes17Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes18Up	[x] = dfwwbvbscatJes18Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes18Up >  0 && nvbs_jetsJes18Up >= 2 && vbs_mjjJes18Up > 500 && vbs_detajjJes18Up > 2.5 && vbs_zepvvJes18Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes19Up	[x] = dfwwbvbscatJes19Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes19Up >  0 && nvbs_jetsJes19Up >= 2 && vbs_mjjJes19Up > 500 && vbs_detajjJes19Up > 2.5 && vbs_zepvvJes19Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes20Up	[x] = dfwwbvbscatJes20Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes20Up >  0 && nvbs_jetsJes20Up >= 2 && vbs_mjjJes20Up > 500 && vbs_detajjJes20Up > 2.5 && vbs_zepvvJes20Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes21Up	[x] = dfwwbvbscatJes21Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes21Up >  0 && nvbs_jetsJes21Up >= 2 && vbs_mjjJes21Up > 500 && vbs_detajjJes21Up > 2.5 && vbs_zepvvJes21Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes22Up	[x] = dfwwbvbscatJes22Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes22Up >  0 && nvbs_jetsJes22Up >= 2 && vbs_mjjJes22Up > 500 && vbs_detajjJes22Up > 2.5 && vbs_zepvvJes22Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes23Up	[x] = dfwwbvbscatJes23Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes23Up >  0 && nvbs_jetsJes23Up >= 2 && vbs_mjjJes23Up > 500 && vbs_detajjJes23Up > 2.5 && vbs_zepvvJes23Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes24Up	[x] = dfwwbvbscatJes24Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes24Up >  0 && nvbs_jetsJes24Up >= 2 && vbs_mjjJes24Up > 500 && vbs_detajjJes24Up > 2.5 && vbs_zepvvJes24Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes25Up	[x] = dfwwbvbscatJes25Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes25Up >  0 && nvbs_jetsJes25Up >= 2 && vbs_mjjJes25Up > 500 && vbs_detajjJes25Up > 2.5 && vbs_zepvvJes25Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes26Up	[x] = dfwwbvbscatJes26Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes26Up >  0 && nvbs_jetsJes26Up >= 2 && vbs_mjjJes26Up > 500 && vbs_detajjJes26Up > 2.5 && vbs_zepvvJes26Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJes27Up	[x] = dfwwbvbscatJes27Up      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes27Up >  0 && nvbs_jetsJes27Up >= 2 && vbs_mjjJes27Up > 500 && vbs_detajjJes27Up > 2.5 && vbs_zepvvJes27Up < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJerUp  	[x] = dfwwbvbscatJerUp	      [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJerUp   >  0 && nvbs_jetsJerUp	>= 2 && vbs_mjjJerUp   > 500 && vbs_detajjJerUp   > 2.5 && vbs_zepvvJerUp   < 1.0 && thePuppiMET_pt		 > {1}".format(altMass,metCut))
-        dfwwbvbscatJERUp        [x] = dfwwbvbscatJERUp        [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_ptJERUp	 > {1}".format(altMass,metCut))
-        dfwwbvbscatJESUp        [x] = dfwwbvbscatJESUp        [x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_ptJESUp	 > {1}".format(altMass,metCut))
-        dfwwbvbscatUnclusteredUp[x] = dfwwbvbscatUnclusteredUp[x].Filter("mll{0}	   > 20 && ptl1{0}	     > 25 && ptl2{0}	       > 20 && (DiLepton_flavor != 2 || abs(mll{0}	     -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && thePuppiMET_ptUnclusteredUp > {1}".format(altMass,metCut))
+        dfwwbvbscatMuonMomUp    [x] = dfwwbvbscatMuonMomUp    [x].Filter("mllMuonMomUp     > 20 && ptl1MuonMomUp     > 25 && ptl2MuonMomUp     > 20 && (DiLepton_flavor != 2 || abs(mllMuonMomUp     -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_pt              > {0}".format(metCut))
+        dfwwbvbscatElectronMomUp[x] = dfwwbvbscatElectronMomUp[x].Filter("mllElectronMomUp > 20 && ptl1ElectronMomUp > 25 && ptl2ElectronMomUp > 20 && (DiLepton_flavor != 2 || abs(mllElectronMomUp -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_pt              > {0}".format(metCut))
+        dfwwbvbscatJes00Up      [x] = dfwwbvbscatJes00Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes00Up >  0 && nvbs_jetsJes00Up >= 2 && vbs_mjjJes00Up > 500 && vbs_detajjJes00Up > 2.5 && vbs_zepvvJes00Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes01Up      [x] = dfwwbvbscatJes01Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes01Up >  0 && nvbs_jetsJes01Up >= 2 && vbs_mjjJes01Up > 500 && vbs_detajjJes01Up > 2.5 && vbs_zepvvJes01Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes02Up      [x] = dfwwbvbscatJes02Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes02Up >  0 && nvbs_jetsJes02Up >= 2 && vbs_mjjJes02Up > 500 && vbs_detajjJes02Up > 2.5 && vbs_zepvvJes02Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes03Up      [x] = dfwwbvbscatJes03Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes03Up >  0 && nvbs_jetsJes03Up >= 2 && vbs_mjjJes03Up > 500 && vbs_detajjJes03Up > 2.5 && vbs_zepvvJes03Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes04Up      [x] = dfwwbvbscatJes04Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes04Up >  0 && nvbs_jetsJes04Up >= 2 && vbs_mjjJes04Up > 500 && vbs_detajjJes04Up > 2.5 && vbs_zepvvJes04Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes05Up      [x] = dfwwbvbscatJes05Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes05Up >  0 && nvbs_jetsJes05Up >= 2 && vbs_mjjJes05Up > 500 && vbs_detajjJes05Up > 2.5 && vbs_zepvvJes05Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes06Up      [x] = dfwwbvbscatJes06Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes06Up >  0 && nvbs_jetsJes06Up >= 2 && vbs_mjjJes06Up > 500 && vbs_detajjJes06Up > 2.5 && vbs_zepvvJes06Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes07Up      [x] = dfwwbvbscatJes07Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes07Up >  0 && nvbs_jetsJes07Up >= 2 && vbs_mjjJes07Up > 500 && vbs_detajjJes07Up > 2.5 && vbs_zepvvJes07Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes08Up      [x] = dfwwbvbscatJes08Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes08Up >  0 && nvbs_jetsJes08Up >= 2 && vbs_mjjJes08Up > 500 && vbs_detajjJes08Up > 2.5 && vbs_zepvvJes08Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes09Up      [x] = dfwwbvbscatJes09Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes09Up >  0 && nvbs_jetsJes09Up >= 2 && vbs_mjjJes09Up > 500 && vbs_detajjJes09Up > 2.5 && vbs_zepvvJes09Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes10Up      [x] = dfwwbvbscatJes10Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes10Up >  0 && nvbs_jetsJes10Up >= 2 && vbs_mjjJes10Up > 500 && vbs_detajjJes10Up > 2.5 && vbs_zepvvJes10Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes11Up      [x] = dfwwbvbscatJes11Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes11Up >  0 && nvbs_jetsJes11Up >= 2 && vbs_mjjJes11Up > 500 && vbs_detajjJes11Up > 2.5 && vbs_zepvvJes11Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes12Up      [x] = dfwwbvbscatJes12Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes12Up >  0 && nvbs_jetsJes12Up >= 2 && vbs_mjjJes12Up > 500 && vbs_detajjJes12Up > 2.5 && vbs_zepvvJes12Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes13Up      [x] = dfwwbvbscatJes13Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes13Up >  0 && nvbs_jetsJes13Up >= 2 && vbs_mjjJes13Up > 500 && vbs_detajjJes13Up > 2.5 && vbs_zepvvJes13Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes14Up      [x] = dfwwbvbscatJes14Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes14Up >  0 && nvbs_jetsJes14Up >= 2 && vbs_mjjJes14Up > 500 && vbs_detajjJes14Up > 2.5 && vbs_zepvvJes14Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes15Up      [x] = dfwwbvbscatJes15Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes15Up >  0 && nvbs_jetsJes15Up >= 2 && vbs_mjjJes15Up > 500 && vbs_detajjJes15Up > 2.5 && vbs_zepvvJes15Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes16Up      [x] = dfwwbvbscatJes16Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes16Up >  0 && nvbs_jetsJes16Up >= 2 && vbs_mjjJes16Up > 500 && vbs_detajjJes16Up > 2.5 && vbs_zepvvJes16Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes17Up      [x] = dfwwbvbscatJes17Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes17Up >  0 && nvbs_jetsJes17Up >= 2 && vbs_mjjJes17Up > 500 && vbs_detajjJes17Up > 2.5 && vbs_zepvvJes17Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes18Up      [x] = dfwwbvbscatJes18Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes18Up >  0 && nvbs_jetsJes18Up >= 2 && vbs_mjjJes18Up > 500 && vbs_detajjJes18Up > 2.5 && vbs_zepvvJes18Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes19Up      [x] = dfwwbvbscatJes19Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes19Up >  0 && nvbs_jetsJes19Up >= 2 && vbs_mjjJes19Up > 500 && vbs_detajjJes19Up > 2.5 && vbs_zepvvJes19Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes20Up      [x] = dfwwbvbscatJes20Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes20Up >  0 && nvbs_jetsJes20Up >= 2 && vbs_mjjJes20Up > 500 && vbs_detajjJes20Up > 2.5 && vbs_zepvvJes20Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes21Up      [x] = dfwwbvbscatJes21Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes21Up >  0 && nvbs_jetsJes21Up >= 2 && vbs_mjjJes21Up > 500 && vbs_detajjJes21Up > 2.5 && vbs_zepvvJes21Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes22Up      [x] = dfwwbvbscatJes22Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes22Up >  0 && nvbs_jetsJes22Up >= 2 && vbs_mjjJes22Up > 500 && vbs_detajjJes22Up > 2.5 && vbs_zepvvJes22Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes23Up      [x] = dfwwbvbscatJes23Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes23Up >  0 && nvbs_jetsJes23Up >= 2 && vbs_mjjJes23Up > 500 && vbs_detajjJes23Up > 2.5 && vbs_zepvvJes23Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes24Up      [x] = dfwwbvbscatJes24Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes24Up >  0 && nvbs_jetsJes24Up >= 2 && vbs_mjjJes24Up > 500 && vbs_detajjJes24Up > 2.5 && vbs_zepvvJes24Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes25Up      [x] = dfwwbvbscatJes25Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes25Up >  0 && nvbs_jetsJes25Up >= 2 && vbs_mjjJes25Up > 500 && vbs_detajjJes25Up > 2.5 && vbs_zepvvJes25Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes26Up      [x] = dfwwbvbscatJes26Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes26Up >  0 && nvbs_jetsJes26Up >= 2 && vbs_mjjJes26Up > 500 && vbs_detajjJes26Up > 2.5 && vbs_zepvvJes26Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJes27Up      [x] = dfwwbvbscatJes27Up      [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJes27Up >  0 && nvbs_jetsJes27Up >= 2 && vbs_mjjJes27Up > 500 && vbs_detajjJes27Up > 2.5 && vbs_zepvvJes27Up < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJerUp        [x] = dfwwbvbscatJerUp        [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjetJerUp   >  0 && nvbs_jetsJerUp   >= 2 && vbs_mjjJerUp   > 500 && vbs_detajjJerUp   > 2.5 && vbs_zepvvJerUp   < 1.0 && thePuppiMET_pt              > {1}".format(altMass,metCut))
+        dfwwbvbscatJERUp        [x] = dfwwbvbscatJERUp        [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_ptJERUp         > {1}".format(altMass,metCut))
+        dfwwbvbscatJESUp        [x] = dfwwbvbscatJESUp        [x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_ptJESUp         > {1}".format(altMass,metCut))
+        dfwwbvbscatUnclusteredUp[x] = dfwwbvbscatUnclusteredUp[x].Filter("mll{0}           > 20 && ptl1{0}           > 25 && ptl2{0}           > 20 && (DiLepton_flavor != 2 || abs(mll{0}           -91.1876) > 15) && nbtag_goodbtag_Jet_bjet        >  0 && nvbs_jets        >= 2 && vbs_mjj        > 500 && vbs_detajj        > 2.5 && vbs_zepvv        < 1.0 && thePuppiMET_ptUnclusteredUp > {1}".format(altMass,metCut))
 
         histo[ 0][x] = dfwwcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),40, 20, 220), "mll{0}".format(altMass),"weightNoBTag")
         dfwwcat[x] = dfwwcat[x].Filter("DiLepton_flavor != 2 || abs(mll{0}-91.1876) > 15".format(altMass),"Z veto")
@@ -615,10 +621,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfwwvbscatJes26Up      [x] = dfwwvbscatJes26Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes26Up,vbs_detajjJes26Up,vbs_dphijjJes26Up,0.0,0.0,mll{0},ngood_jetsJes26Up,{1})".format(altMass,varSel))
             dfwwvbscatJes27Up      [x] = dfwwvbscatJes27Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes27Up,vbs_detajjJes27Up,vbs_dphijjJes27Up,0.0,0.0,mll{0},ngood_jetsJes27Up,{1})".format(altMass,varSel))
             dfwwvbscatJerUp        [x] = dfwwvbscatJerUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJerUp  ,vbs_detajjJerUp  ,vbs_dphijjJerUp  ,0.0,0.0,mll{0},ngood_jetsJerUp  ,{1})".format(altMass,varSel))
-            dfwwvbscatJERUp        [x] = dfwwvbscatJERUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets	,{1})".format(altMass,varSel))
-            dfwwvbscatJESUp        [x] = dfwwvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets	,{1})".format(altMass,varSel))
-            dfwwvbscatUnclusteredUp[x] = dfwwvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets	,{1})".format(altMass,varSel))
-
+            dfwwvbscatJERUp        [x] = dfwwvbscatJERUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets       ,{1})".format(altMass,varSel))
+            dfwwvbscatJESUp        [x] = dfwwvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets       ,{1})".format(altMass,varSel))
+            dfwwvbscatUnclusteredUp[x] = dfwwvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets       ,{1})".format(altMass,varSel))
 
             varSel = 9
             if(makeDataCards == 6):
@@ -661,12 +666,20 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfwwbvbscatJes26Up      [x] = dfwwbvbscatJes26Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes26Up,vbs_detajjJes26Up,vbs_dphijjJes26Up,0.0,0.0,mll{0},ngood_jetsJes26Up,{1})".format(altMass,varSel))
             dfwwbvbscatJes27Up      [x] = dfwwbvbscatJes27Up      [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJes27Up,vbs_detajjJes27Up,vbs_dphijjJes27Up,0.0,0.0,mll{0},ngood_jetsJes27Up,{1})".format(altMass,varSel))
             dfwwbvbscatJerUp        [x] = dfwwbvbscatJerUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjjJerUp  ,vbs_detajjJerUp  ,vbs_dphijjJerUp  ,0.0,0.0,mll{0},ngood_jetsJerUp  ,{1})".format(altMass,varSel))
-            dfwwbvbscatJERUp        [x] = dfwwbvbscatJERUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj	 ,0.0,0.0,mll{0},ngood_jets	  ,{1})".format(altMass,varSel))
-            dfwwbvbscatJESUp        [x] = dfwwbvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj	 ,0.0,0.0,mll{0},ngood_jets	  ,{1})".format(altMass,varSel))
-            dfwwbvbscatUnclusteredUp[x] = dfwwbvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj	 ,0.0,0.0,mll{0},ngood_jets	  ,{1})".format(altMass,varSel))
+            dfwwbvbscatJERUp        [x] = dfwwbvbscatJERUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets       ,{1})".format(altMass,varSel))
+            dfwwbvbscatJESUp        [x] = dfwwbvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets       ,{1})".format(altMass,varSel))
+            dfwwbvbscatUnclusteredUp[x] = dfwwbvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets       ,{1})".format(altMass,varSel))
 
+            njString2JCut = " >= 2" # " == 2"
+            njString3JCut = " == 3"
+            njString4JCut = " >= 4"
+            dfwwvbs2Jcat .append(dfwwvbscat[x] .Filter("ngood_jets{0}".format(njString2JCut)))
+            dfwwvbs3Jcat .append(dfwwvbscat[x] .Filter("ngood_jets{0}".format(njString3JCut)))
+            dfwwvbs4Jcat .append(dfwwvbscat[x] .Filter("ngood_jets{0}".format(njString4JCut)))
+            dfwwbvbs2Jcat.append(dfwwbvbscat[x].Filter("ngood_jets{0}".format(njString2JCut)))
+            dfwwbvbs3Jcat.append(dfwwbvbscat[x].Filter("ngood_jets{0}".format(njString3JCut)))
+            dfwwbvbs4Jcat.append(dfwwbvbscat[x].Filter("ngood_jets{0}".format(njString4JCut)))
 
-            startF = 0
             if(makeDataCards == 1 or makeDataCards == 2 or makeDataCards == 5):
                 BinXF1 = 16
                 minXF1 = -0.5
@@ -685,56 +698,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 maxXF1 =  7.5
             histo[110][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(110,x), "histo_{0}_{1}".format(110,x),BinXF1,minXF1,maxXF1), "finalVar","weight")
 
-            for nv in range(0,136):
-                histo2D[startF+nv][x] = makeFinalVariable2D(dfwwvbscat[x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,nv)
-            histo2D[startF+136][x]    = makeFinalVariable2D(dfwwvbscatMuonMomUp    [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,136)
-            histo2D[startF+137][x]    = makeFinalVariable2D(dfwwvbscatElectronMomUp[x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,137)
-            histo2D[startF+138][x]    = makeFinalVariable2D(dfwwvbscatJes00Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,138)
-            histo2D[startF+139][x]    = makeFinalVariable2D(dfwwvbscatJes01Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,139)
-            histo2D[startF+140][x]    = makeFinalVariable2D(dfwwvbscatJes02Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,140)
-            histo2D[startF+141][x]    = makeFinalVariable2D(dfwwvbscatJes03Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,141)
-            histo2D[startF+142][x]    = makeFinalVariable2D(dfwwvbscatJes04Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,142)
-            histo2D[startF+143][x]    = makeFinalVariable2D(dfwwvbscatJes05Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,143)
-            histo2D[startF+144][x]    = makeFinalVariable2D(dfwwvbscatJes06Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,144)
-            histo2D[startF+145][x]    = makeFinalVariable2D(dfwwvbscatJes07Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,145)
-            histo2D[startF+146][x]    = makeFinalVariable2D(dfwwvbscatJes08Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,146)
-            histo2D[startF+147][x]    = makeFinalVariable2D(dfwwvbscatJes09Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,147)
-            histo2D[startF+148][x]    = makeFinalVariable2D(dfwwvbscatJes10Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,148)
-            histo2D[startF+149][x]    = makeFinalVariable2D(dfwwvbscatJes11Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,149)
-            histo2D[startF+150][x]    = makeFinalVariable2D(dfwwvbscatJes12Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,150)
-            histo2D[startF+151][x]    = makeFinalVariable2D(dfwwvbscatJes13Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,151)
-            histo2D[startF+152][x]    = makeFinalVariable2D(dfwwvbscatJes14Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,152)
-            histo2D[startF+153][x]    = makeFinalVariable2D(dfwwvbscatJes15Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,153)
-            histo2D[startF+154][x]    = makeFinalVariable2D(dfwwvbscatJes16Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,154)
-            histo2D[startF+155][x]    = makeFinalVariable2D(dfwwvbscatJes17Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,155)
-            histo2D[startF+156][x]    = makeFinalVariable2D(dfwwvbscatJes18Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,156)
-            histo2D[startF+157][x]    = makeFinalVariable2D(dfwwvbscatJes19Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,157)
-            histo2D[startF+158][x]    = makeFinalVariable2D(dfwwvbscatJes20Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,158)
-            histo2D[startF+159][x]    = makeFinalVariable2D(dfwwvbscatJes21Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,159)
-            histo2D[startF+160][x]    = makeFinalVariable2D(dfwwvbscatJes22Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,160)
-            histo2D[startF+161][x]    = makeFinalVariable2D(dfwwvbscatJes23Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,161)
-            histo2D[startF+162][x]    = makeFinalVariable2D(dfwwvbscatJes24Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,162)
-            histo2D[startF+163][x]    = makeFinalVariable2D(dfwwvbscatJes25Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,163)
-            histo2D[startF+164][x]    = makeFinalVariable2D(dfwwvbscatJes26Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,164)
-            histo2D[startF+165][x]    = makeFinalVariable2D(dfwwvbscatJes27Up	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,165)
-            histo2D[startF+166][x]    = makeFinalVariable2D(dfwwvbscatJerUp	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,166)
-            histo2D[startF+167][x]    = makeFinalVariable2D(dfwwvbscatJERUp	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,167)
-            histo2D[startF+168][x]    = makeFinalVariable2D(dfwwvbscatJESUp	   [x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,168)
-            histo2D[startF+169][x]    = makeFinalVariable2D(dfwwvbscatUnclusteredUp[x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,169)
-            if(x == plotCategory("kPlotWS")):
-                startWS = 0
-                histoWS[0+startWS] = dfwwvbscat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF1,minXF1,maxXF1), "finalVar","weightWSUnc0")
-                histoWS[1+startWS] = dfwwvbscat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF1,minXF1,maxXF1), "finalVar","weightWSUnc1")
-            if(x == plotCategory("kPlotNonPrompt")):
-                startNonPrompt = 0
-                histoNonPrompt[0+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm0")
-                histoNonPrompt[1+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm2")
-                histoNonPrompt[3+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte0")
-                histoNonPrompt[4+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte1")
-                histoNonPrompt[5+startNonPrompt] = dfwwvbscat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte2")
-
-            startF = 200
             BinXF2 = 4
             minXF2 = -0.5
             maxXF2 =  3.5
@@ -744,54 +707,169 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 maxXF2 =  7.5
             histo[111][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(111,x), "histo_{0}_{1}".format(111,x),BinXF2,minXF2,maxXF2), "finalVar","weight")
 
-            for nv in range(0,136):
-                histo2D[startF+nv][x] = makeFinalVariable2D(dfwwbvbscat[x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,nv)
-            histo2D[startF+136][x]    = makeFinalVariable2D(dfwwbvbscatMuonMomUp    [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,136)
-            histo2D[startF+137][x]    = makeFinalVariable2D(dfwwbvbscatElectronMomUp[x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,137)
-            histo2D[startF+138][x]    = makeFinalVariable2D(dfwwbvbscatJes00Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,138)
-            histo2D[startF+139][x]    = makeFinalVariable2D(dfwwbvbscatJes01Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,139)
-            histo2D[startF+140][x]    = makeFinalVariable2D(dfwwbvbscatJes02Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,140)
-            histo2D[startF+141][x]    = makeFinalVariable2D(dfwwbvbscatJes03Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,141)
-            histo2D[startF+142][x]    = makeFinalVariable2D(dfwwbvbscatJes04Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,142)
-            histo2D[startF+143][x]    = makeFinalVariable2D(dfwwbvbscatJes05Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,143)
-            histo2D[startF+144][x]    = makeFinalVariable2D(dfwwbvbscatJes06Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,144)
-            histo2D[startF+145][x]    = makeFinalVariable2D(dfwwbvbscatJes07Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,145)
-            histo2D[startF+146][x]    = makeFinalVariable2D(dfwwbvbscatJes08Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,146)
-            histo2D[startF+147][x]    = makeFinalVariable2D(dfwwbvbscatJes09Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,147)
-            histo2D[startF+148][x]    = makeFinalVariable2D(dfwwbvbscatJes10Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,148)
-            histo2D[startF+149][x]    = makeFinalVariable2D(dfwwbvbscatJes11Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,149)
-            histo2D[startF+150][x]    = makeFinalVariable2D(dfwwbvbscatJes12Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,150)
-            histo2D[startF+151][x]    = makeFinalVariable2D(dfwwbvbscatJes13Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,151)
-            histo2D[startF+152][x]    = makeFinalVariable2D(dfwwbvbscatJes14Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,152)
-            histo2D[startF+153][x]    = makeFinalVariable2D(dfwwbvbscatJes15Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,153)
-            histo2D[startF+154][x]    = makeFinalVariable2D(dfwwbvbscatJes16Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,154)
-            histo2D[startF+155][x]    = makeFinalVariable2D(dfwwbvbscatJes17Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,155)
-            histo2D[startF+156][x]    = makeFinalVariable2D(dfwwbvbscatJes18Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,156)
-            histo2D[startF+157][x]    = makeFinalVariable2D(dfwwbvbscatJes19Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,157)
-            histo2D[startF+158][x]    = makeFinalVariable2D(dfwwbvbscatJes20Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,158)
-            histo2D[startF+159][x]    = makeFinalVariable2D(dfwwbvbscatJes21Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,159)
-            histo2D[startF+160][x]    = makeFinalVariable2D(dfwwbvbscatJes22Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,160)
-            histo2D[startF+161][x]    = makeFinalVariable2D(dfwwbvbscatJes23Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,161)
-            histo2D[startF+162][x]    = makeFinalVariable2D(dfwwbvbscatJes24Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,162)
-            histo2D[startF+163][x]    = makeFinalVariable2D(dfwwbvbscatJes25Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,163)
-            histo2D[startF+164][x]    = makeFinalVariable2D(dfwwbvbscatJes26Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,164)
-            histo2D[startF+165][x]    = makeFinalVariable2D(dfwwbvbscatJes27Up      [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,165)
-            histo2D[startF+166][x]    = makeFinalVariable2D(dfwwbvbscatJerUp	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,166)
-            histo2D[startF+167][x]    = makeFinalVariable2D(dfwwbvbscatJERUp	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,167)
-            histo2D[startF+168][x]    = makeFinalVariable2D(dfwwbvbscatJESUp	    [x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,168)
-            histo2D[startF+169][x]    = makeFinalVariable2D(dfwwbvbscatUnclusteredUp[x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,169)
-            if(x == plotCategory("kPlotWS")):
-                startWS = 2
-                histoWS[0+startWS] = dfwwbvbscat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF2,minXF2,maxXF2), "finalVar","weightWSUnc0")
-                histoWS[1+startWS] = dfwwbvbscat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF2,minXF2,maxXF2), "finalVar","weightWSUnc1")
-            if(x == plotCategory("kPlotNonPrompt")):
-                startNonPrompt = 6
-                histoNonPrompt[0+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm0")
-                histoNonPrompt[1+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm1")
-                histoNonPrompt[2+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm2")
-                histoNonPrompt[3+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte0")
-                histoNonPrompt[4+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte1")
-                histoNonPrompt[5+startNonPrompt] = dfwwbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte2")
+            # loop over Njets for ssww and sswwb regions (not used)
+            for nj in range(0,1):
+                njStringCut = njString2JCut
+                if(nj == 1):   njStringCut = njString3JCut
+                elif(nj == 2): njStringCut = njString4JCut
+
+                startF = 0+nj*400
+                if(nj == 0):
+                    for nv in range(0,136):
+                        histo2D[startF+nv][x] = makeFinalVariable2D(dfwwvbs2Jcat[x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,nv)
+                elif(nj == 1):
+                    for nv in range(0,136):
+                        histo2D[startF+nv][x] = makeFinalVariable2D(dfwwvbs3Jcat[x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,nv)
+                elif(nj == 2):
+                    for nv in range(0,136):
+                        histo2D[startF+nv][x] = makeFinalVariable2D(dfwwvbs4Jcat[x],"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,nv)
+                histo2D[startF+136][x]    = makeFinalVariable2D(dfwwvbscatMuonMomUp    [x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,136)
+                histo2D[startF+137][x]    = makeFinalVariable2D(dfwwvbscatElectronMomUp[x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,137)
+                histo2D[startF+138][x]    = makeFinalVariable2D(dfwwvbscatJes00Up      [x].Filter("ngood_jetsJes00Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,138)
+                histo2D[startF+139][x]    = makeFinalVariable2D(dfwwvbscatJes01Up      [x].Filter("ngood_jetsJes01Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,139)
+                histo2D[startF+140][x]    = makeFinalVariable2D(dfwwvbscatJes02Up      [x].Filter("ngood_jetsJes02Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,140)
+                histo2D[startF+141][x]    = makeFinalVariable2D(dfwwvbscatJes03Up      [x].Filter("ngood_jetsJes03Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,141)
+                histo2D[startF+142][x]    = makeFinalVariable2D(dfwwvbscatJes04Up      [x].Filter("ngood_jetsJes04Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,142)
+                histo2D[startF+143][x]    = makeFinalVariable2D(dfwwvbscatJes05Up      [x].Filter("ngood_jetsJes05Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,143)
+                histo2D[startF+144][x]    = makeFinalVariable2D(dfwwvbscatJes06Up      [x].Filter("ngood_jetsJes06Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,144)
+                histo2D[startF+145][x]    = makeFinalVariable2D(dfwwvbscatJes07Up      [x].Filter("ngood_jetsJes07Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,145)
+                histo2D[startF+146][x]    = makeFinalVariable2D(dfwwvbscatJes08Up      [x].Filter("ngood_jetsJes08Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,146)
+                histo2D[startF+147][x]    = makeFinalVariable2D(dfwwvbscatJes09Up      [x].Filter("ngood_jetsJes09Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,147)
+                histo2D[startF+148][x]    = makeFinalVariable2D(dfwwvbscatJes10Up      [x].Filter("ngood_jetsJes10Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,148)
+                histo2D[startF+149][x]    = makeFinalVariable2D(dfwwvbscatJes11Up      [x].Filter("ngood_jetsJes11Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,149)
+                histo2D[startF+150][x]    = makeFinalVariable2D(dfwwvbscatJes12Up      [x].Filter("ngood_jetsJes12Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,150)
+                histo2D[startF+151][x]    = makeFinalVariable2D(dfwwvbscatJes13Up      [x].Filter("ngood_jetsJes13Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,151)
+                histo2D[startF+152][x]    = makeFinalVariable2D(dfwwvbscatJes14Up      [x].Filter("ngood_jetsJes14Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,152)
+                histo2D[startF+153][x]    = makeFinalVariable2D(dfwwvbscatJes15Up      [x].Filter("ngood_jetsJes15Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,153)
+                histo2D[startF+154][x]    = makeFinalVariable2D(dfwwvbscatJes16Up      [x].Filter("ngood_jetsJes16Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,154)
+                histo2D[startF+155][x]    = makeFinalVariable2D(dfwwvbscatJes17Up      [x].Filter("ngood_jetsJes17Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,155)
+                histo2D[startF+156][x]    = makeFinalVariable2D(dfwwvbscatJes18Up      [x].Filter("ngood_jetsJes18Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,156)
+                histo2D[startF+157][x]    = makeFinalVariable2D(dfwwvbscatJes19Up      [x].Filter("ngood_jetsJes19Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,157)
+                histo2D[startF+158][x]    = makeFinalVariable2D(dfwwvbscatJes20Up      [x].Filter("ngood_jetsJes20Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,158)
+                histo2D[startF+159][x]    = makeFinalVariable2D(dfwwvbscatJes21Up      [x].Filter("ngood_jetsJes21Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,159)
+                histo2D[startF+160][x]    = makeFinalVariable2D(dfwwvbscatJes22Up      [x].Filter("ngood_jetsJes22Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,160)
+                histo2D[startF+161][x]    = makeFinalVariable2D(dfwwvbscatJes23Up      [x].Filter("ngood_jetsJes23Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,161)
+                histo2D[startF+162][x]    = makeFinalVariable2D(dfwwvbscatJes24Up      [x].Filter("ngood_jetsJes24Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,162)
+                histo2D[startF+163][x]    = makeFinalVariable2D(dfwwvbscatJes25Up      [x].Filter("ngood_jetsJes25Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,163)
+                histo2D[startF+164][x]    = makeFinalVariable2D(dfwwvbscatJes26Up      [x].Filter("ngood_jetsJes26Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,164)
+                histo2D[startF+165][x]    = makeFinalVariable2D(dfwwvbscatJes27Up      [x].Filter("ngood_jetsJes27Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,165)
+                histo2D[startF+166][x]    = makeFinalVariable2D(dfwwvbscatJerUp        [x].Filter("ngood_jetsJerUp  {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,166)
+                histo2D[startF+167][x]    = makeFinalVariable2D(dfwwvbscatJERUp        [x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,167)
+                histo2D[startF+168][x]    = makeFinalVariable2D(dfwwvbscatJESUp        [x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,168)
+                histo2D[startF+169][x]    = makeFinalVariable2D(dfwwvbscatUnclusteredUp[x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF1,minXF1,maxXF1,BinYF,minYF,maxYF,169)
+                if(x == plotCategory("kPlotWS")):
+                    startWS = 0+nj*4
+                    if(nj == 0):
+                        histoWS[0+startWS] = dfwwvbs2Jcat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF1,minXF1,maxXF1), "finalVar","weightWSUnc0")
+                        histoWS[1+startWS] = dfwwvbs2Jcat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF1,minXF1,maxXF1), "finalVar","weightWSUnc1")
+                    elif(nj == 1):
+                        histoWS[0+startWS] = dfwwvbs3Jcat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF1,minXF1,maxXF1), "finalVar","weightWSUnc0")
+                        histoWS[1+startWS] = dfwwvbs3Jcat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF1,minXF1,maxXF1), "finalVar","weightWSUnc1")
+                    elif(nj == 2):
+                        histoWS[0+startWS] = dfwwvbs4Jcat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF1,minXF1,maxXF1), "finalVar","weightWSUnc0")
+                        histoWS[1+startWS] = dfwwvbs4Jcat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF1,minXF1,maxXF1), "finalVar","weightWSUnc1")
+                if(x == plotCategory("kPlotNonPrompt")):
+                    startNonPrompt = 0+nj*12
+                    if(nj == 0):
+                        histoNonPrompt[0+startNonPrompt] = dfwwvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm0")
+                        histoNonPrompt[1+startNonPrompt] = dfwwvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm1")
+                        histoNonPrompt[2+startNonPrompt] = dfwwvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm2")
+                        histoNonPrompt[3+startNonPrompt] = dfwwvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte0")
+                        histoNonPrompt[4+startNonPrompt] = dfwwvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte1")
+                        histoNonPrompt[5+startNonPrompt] = dfwwvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte2")
+                    elif(nj == 1):
+                        histoNonPrompt[0+startNonPrompt] = dfwwvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm0")
+                        histoNonPrompt[1+startNonPrompt] = dfwwvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm1")
+                        histoNonPrompt[2+startNonPrompt] = dfwwvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm2")
+                        histoNonPrompt[3+startNonPrompt] = dfwwvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte0")
+                        histoNonPrompt[4+startNonPrompt] = dfwwvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte1")
+                        histoNonPrompt[5+startNonPrompt] = dfwwvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte2")
+                    elif(nj == 2):
+                        histoNonPrompt[0+startNonPrompt] = dfwwvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm0")
+                        histoNonPrompt[1+startNonPrompt] = dfwwvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm1")
+                        histoNonPrompt[2+startNonPrompt] = dfwwvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAltm2")
+                        histoNonPrompt[3+startNonPrompt] = dfwwvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte0")
+                        histoNonPrompt[4+startNonPrompt] = dfwwvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte1")
+                        histoNonPrompt[5+startNonPrompt] = dfwwvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF1,minXF1,maxXF1), "finalVar","weightFakeAlte2")
+
+                startF = 200+nj*400
+                if(nj == 0):
+                    for nv in range(0,136):
+                        histo2D[startF+nv][x] = makeFinalVariable2D(dfwwbvbs2Jcat[x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,nv)
+                elif(nj == 1):
+                    for nv in range(0,136):
+                        histo2D[startF+nv][x] = makeFinalVariable2D(dfwwbvbs3Jcat[x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,nv)
+                elif(nj == 2):
+                    for nv in range(0,136):
+                        histo2D[startF+nv][x] = makeFinalVariable2D(dfwwbvbs4Jcat[x],"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,nv)
+                histo2D[startF+136][x]    = makeFinalVariable2D(dfwwbvbscatMuonMomUp    [x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,136)
+                histo2D[startF+137][x]    = makeFinalVariable2D(dfwwbvbscatElectronMomUp[x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,137)
+                histo2D[startF+138][x]    = makeFinalVariable2D(dfwwbvbscatJes00Up      [x].Filter("ngood_jetsJes00Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,138)
+                histo2D[startF+139][x]    = makeFinalVariable2D(dfwwbvbscatJes01Up      [x].Filter("ngood_jetsJes01Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,139)
+                histo2D[startF+140][x]    = makeFinalVariable2D(dfwwbvbscatJes02Up      [x].Filter("ngood_jetsJes02Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,140)
+                histo2D[startF+141][x]    = makeFinalVariable2D(dfwwbvbscatJes03Up      [x].Filter("ngood_jetsJes03Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,141)
+                histo2D[startF+142][x]    = makeFinalVariable2D(dfwwbvbscatJes04Up      [x].Filter("ngood_jetsJes04Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,142)
+                histo2D[startF+143][x]    = makeFinalVariable2D(dfwwbvbscatJes05Up      [x].Filter("ngood_jetsJes05Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,143)
+                histo2D[startF+144][x]    = makeFinalVariable2D(dfwwbvbscatJes06Up      [x].Filter("ngood_jetsJes06Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,144)
+                histo2D[startF+145][x]    = makeFinalVariable2D(dfwwbvbscatJes07Up      [x].Filter("ngood_jetsJes07Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,145)
+                histo2D[startF+146][x]    = makeFinalVariable2D(dfwwbvbscatJes08Up      [x].Filter("ngood_jetsJes08Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,146)
+                histo2D[startF+147][x]    = makeFinalVariable2D(dfwwbvbscatJes09Up      [x].Filter("ngood_jetsJes09Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,147)
+                histo2D[startF+148][x]    = makeFinalVariable2D(dfwwbvbscatJes10Up      [x].Filter("ngood_jetsJes10Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,148)
+                histo2D[startF+149][x]    = makeFinalVariable2D(dfwwbvbscatJes11Up      [x].Filter("ngood_jetsJes11Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,149)
+                histo2D[startF+150][x]    = makeFinalVariable2D(dfwwbvbscatJes12Up      [x].Filter("ngood_jetsJes12Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,150)
+                histo2D[startF+151][x]    = makeFinalVariable2D(dfwwbvbscatJes13Up      [x].Filter("ngood_jetsJes13Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,151)
+                histo2D[startF+152][x]    = makeFinalVariable2D(dfwwbvbscatJes14Up      [x].Filter("ngood_jetsJes14Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,152)
+                histo2D[startF+153][x]    = makeFinalVariable2D(dfwwbvbscatJes15Up      [x].Filter("ngood_jetsJes15Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,153)
+                histo2D[startF+154][x]    = makeFinalVariable2D(dfwwbvbscatJes16Up      [x].Filter("ngood_jetsJes16Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,154)
+                histo2D[startF+155][x]    = makeFinalVariable2D(dfwwbvbscatJes17Up      [x].Filter("ngood_jetsJes17Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,155)
+                histo2D[startF+156][x]    = makeFinalVariable2D(dfwwbvbscatJes18Up      [x].Filter("ngood_jetsJes18Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,156)
+                histo2D[startF+157][x]    = makeFinalVariable2D(dfwwbvbscatJes19Up      [x].Filter("ngood_jetsJes19Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,157)
+                histo2D[startF+158][x]    = makeFinalVariable2D(dfwwbvbscatJes20Up      [x].Filter("ngood_jetsJes20Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,158)
+                histo2D[startF+159][x]    = makeFinalVariable2D(dfwwbvbscatJes21Up      [x].Filter("ngood_jetsJes21Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,159)
+                histo2D[startF+160][x]    = makeFinalVariable2D(dfwwbvbscatJes22Up      [x].Filter("ngood_jetsJes22Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,160)
+                histo2D[startF+161][x]    = makeFinalVariable2D(dfwwbvbscatJes23Up      [x].Filter("ngood_jetsJes23Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,161)
+                histo2D[startF+162][x]    = makeFinalVariable2D(dfwwbvbscatJes24Up      [x].Filter("ngood_jetsJes24Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,162)
+                histo2D[startF+163][x]    = makeFinalVariable2D(dfwwbvbscatJes25Up      [x].Filter("ngood_jetsJes25Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,163)
+                histo2D[startF+164][x]    = makeFinalVariable2D(dfwwbvbscatJes26Up      [x].Filter("ngood_jetsJes26Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,164)
+                histo2D[startF+165][x]    = makeFinalVariable2D(dfwwbvbscatJes27Up      [x].Filter("ngood_jetsJes27Up{0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,165)
+                histo2D[startF+166][x]    = makeFinalVariable2D(dfwwbvbscatJerUp        [x].Filter("ngood_jetsJerUp  {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,166)
+                histo2D[startF+167][x]    = makeFinalVariable2D(dfwwbvbscatJERUp        [x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,167)
+                histo2D[startF+168][x]    = makeFinalVariable2D(dfwwbvbscatJESUp        [x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,168)
+                histo2D[startF+169][x]    = makeFinalVariable2D(dfwwbvbscatUnclusteredUp[x].Filter("ngood_jets       {0}".format(njStringCut)),"finalVar","theGenCat",theCat,startF,x,BinXF2,minXF2,maxXF2,BinYF,minYF,maxYF,169)
+                if(x == plotCategory("kPlotWS")):
+                    startWS = 2+nj*4
+                    if(nj == 0):
+                        histoWS[0+startWS] = dfwwbvbs2Jcat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF2,minXF2,maxXF2), "finalVar","weightWSUnc0")
+                        histoWS[1+startWS] = dfwwbvbs2Jcat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF2,minXF2,maxXF2), "finalVar","weightWSUnc1")
+                    elif(nj == 1):
+                        histoWS[0+startWS] = dfwwbvbs3Jcat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF2,minXF2,maxXF2), "finalVar","weightWSUnc0")
+                        histoWS[1+startWS] = dfwwbvbs3Jcat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF2,minXF2,maxXF2), "finalVar","weightWSUnc1")
+                    elif(nj == 2):
+                        histoWS[0+startWS] = dfwwbvbs4Jcat[x].Histo1D(("histoWS_{0}".format(0+startWS), "histoWS_{0}".format(0+startWS), BinXF2,minXF2,maxXF2), "finalVar","weightWSUnc0")
+                        histoWS[1+startWS] = dfwwbvbs4Jcat[x].Histo1D(("histoWS_{0}".format(1+startWS), "histoWS_{0}".format(1+startWS), BinXF2,minXF2,maxXF2), "finalVar","weightWSUnc1")
+                if(x == plotCategory("kPlotNonPrompt")):
+                    startNonPrompt = 6+nj*12
+                    if(nj == 0):
+                        histoNonPrompt[0+startNonPrompt] = dfwwbvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm0")
+                        histoNonPrompt[1+startNonPrompt] = dfwwbvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm1")
+                        histoNonPrompt[2+startNonPrompt] = dfwwbvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm2")
+                        histoNonPrompt[3+startNonPrompt] = dfwwbvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte0")
+                        histoNonPrompt[4+startNonPrompt] = dfwwbvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte1")
+                        histoNonPrompt[5+startNonPrompt] = dfwwbvbs2Jcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte2")
+                    elif(nj == 1):
+                        histoNonPrompt[0+startNonPrompt] = dfwwbvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm0")
+                        histoNonPrompt[1+startNonPrompt] = dfwwbvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm1")
+                        histoNonPrompt[2+startNonPrompt] = dfwwbvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm2")
+                        histoNonPrompt[3+startNonPrompt] = dfwwbvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte0")
+                        histoNonPrompt[4+startNonPrompt] = dfwwbvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte1")
+                        histoNonPrompt[5+startNonPrompt] = dfwwbvbs3Jcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte2")
+                    elif(nj == 2):
+                        histoNonPrompt[0+startNonPrompt] = dfwwbvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm0")
+                        histoNonPrompt[1+startNonPrompt] = dfwwbvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(1+startNonPrompt), "histoNonPrompt_{0}".format(1+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm1")
+                        histoNonPrompt[2+startNonPrompt] = dfwwbvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(2+startNonPrompt), "histoNonPrompt_{0}".format(2+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAltm2")
+                        histoNonPrompt[3+startNonPrompt] = dfwwbvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(3+startNonPrompt), "histoNonPrompt_{0}".format(3+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte0")
+                        histoNonPrompt[4+startNonPrompt] = dfwwbvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte1")
+                        histoNonPrompt[5+startNonPrompt] = dfwwbvbs4Jcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte2")
 
     report = []
     for x in range(nCat):
@@ -802,7 +880,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     if(makeDataCards >= 1):
         for j in range(0,nHistoMVA):
-            if(j < 200):
+            if((j >= 0 and j < 200) or (j >= 400 and j < 600) or (j >= 800 and j < 1000)):
                 for x in range(nCat):
                     histoMVA[j][x] = ROOT.TH1D("histoMVA_{0}_{1}".format(j,x), "histoMVA_{0}_{1}".format(j,x), BinXF1,minXF1,maxXF1)
             else:

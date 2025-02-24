@@ -36,7 +36,7 @@ if __name__ == "__main__":
     inputDataFolders = glob.glob(paths_to_watch)
     print("Total found files: {0}".format(len(inputDataFolders)))
 
-    nCat, nHisto, nhistoNonPrompt, nhistoWS = plotCategory("kPlotCategories"), 1600, 50, 4
+    nCat, nHisto, nhistoNonPrompt, nhistoWS = plotCategory("kPlotCategories"), 1600, 50, 20
 
     myfile = [0 for x in range(len(inputDataFolders))]
     for nf in range(len(inputDataFolders)):

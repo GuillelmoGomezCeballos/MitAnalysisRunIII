@@ -14,12 +14,12 @@
 
 #include "../makePlots/common.h"
 
-// whichAna = 0 (SSWW), fidAna = 0 (WW), 1 (WWb)
+// whichAna = 0 (SSWW), fidAna = 0/2/4 (WW), 1/3/5 (WWb)
 // whichAna = 0 (WZ), fidAna = 0 (WZ), 1 (WZb)
 
 void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ", TString anaSel = "sswwAnalysis1001", int year = 20220){
 
-  if(fidAna < 0 || fidAna > 2) printf("Wrong fidAna(%d)\n",fidAna);
+  if(fidAna < 0 || fidAna > 6) printf("Wrong fidAna(%d)\n",fidAna);
 
   int isTypeFakeSyst = 2;
   plotBaseNames[kPlotNonPrompt] = "NonPrompt";
@@ -393,7 +393,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   TH1D *histo_NonPromtUnc[nNonPromptSyst];
   if(isTypeFakeSyst != 0){
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_nonprompt.root",InputDir.Data(),anaSel.Data(),year), "read");
-    int startH = 0; if(fidAna == 1) startH = totalNumberFakeSyst;
+    int startH = totalNumberFakeSyst*fidAna;
     for(int j=0; j<totalNumberFakeSyst; j++){
       histo_InputNonPromtUnc[j] = (TH1D*)inputFile->Get(Form("histoNonPrompt_%d", j+startH));
       histo_NonPromtUnc[j+                  0] = (TH1D*)histo_InputNonPromtUnc[j]->Clone(Form("histo_%s_%s", plotBaseNames[kPlotNonPrompt].Data(), namenonPromptSyst[j+                  0].Data())); histo_NonPromtUnc[j+		    0]->SetDirectory(0);
@@ -430,7 +430,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   TH1D *histo_WSUnc[nwrongsignSyst];
   if(anaSel.Contains("sswwAnalysis")){
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_wrongsign.root",InputDir.Data(),anaSel.Data(),year), "read");
-    int startH = 0; if(fidAna == 1) startH = totalNumberWSSyst;
+    int startH = totalNumberWSSyst*fidAna;
     for(int j=0; j<totalNumberWSSyst; j++){
       histo_InputWSUnc[j] = (TH1D*)inputFile->Get(Form("histoWS_%d", j+startH));
       histo_WSUnc[j+                0] = (TH1D*)histo_InputWSUnc[j]->Clone(Form("histo_%s_%s", plotBaseNames[kPlotWS].Data(), namewrongsignSyst[j+                0].Data())); histo_WSUnc[j+                0]->SetDirectory(0);
@@ -1235,7 +1235,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   if(anaSel.Contains("sswwAnalysis")){
     if(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights() > 0)
-    newcardShape << Form("CMS_ssww_nonpromptnorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotNonPrompt].Data());
+    newcardShape << Form("CMS_ssww_nonpromptnorm_%d  rateParam * %s 1 [0.1,4.9]\n",(int)(fidAna/2),plotBaseNames[kPlotNonPrompt].Data());
   }
   //newcardShape << Form("CMS_ssww_zznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotZZ].Data());
 
