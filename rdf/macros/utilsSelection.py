@@ -880,14 +880,14 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
             dftag = (dftag
                      .Define("weight","weightMC*weightFake*weightWS*weightEWKCorr*weightBtagSF*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
                      .Define("weightMuoCorr","weightMuoSFJSON*weightMuonSF")
-                     .Define("weightEleCorr","weightEleSFJSON*weightMuonSF")
+                     .Define("weightEleCorr","weightEleSFJSON*weightElectronSF")
                     )
         else:
             print("BtagCorr/AddCorr: 0/1")
             dftag = (dftag
                      .Define("weight","weightMC*weightFake*weightWS*weightEWKCorr*weightPURecoSF*weightTriggerSF*weightMuoSFJSON*weightEleSFJSON*weightMuonSF*weightElectronSF")
                      .Define("weightMuoCorr","weightMuoSFJSON*weightMuonSF")
-                     .Define("weightEleCorr","weightEleSFJSON*weightMuonSF")
+                     .Define("weightEleCorr","weightEleSFJSON*weightElectronSF")
                     )
 
     else:

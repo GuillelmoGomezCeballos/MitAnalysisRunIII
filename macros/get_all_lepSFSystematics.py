@@ -5,7 +5,7 @@ from array import array
 
 xPtBins = array('d', [10.0,15.0,20.0,25.0,30.0,35.0,40.0,45.0,50.0,55.0,60.0,65.0,70.0,75.0,80.0,85.0,90.0,95.0,100.0])
 xEtaBins = array('d', [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4])
-yearVal = [20220, 20221]
+yearVal = [20220, 20221, 20230, 20231]
 
 
 if __name__ == "__main__":
@@ -43,8 +43,14 @@ if __name__ == "__main__":
         elif(yearVal[ny] == 20221):
             elTag = "2022Re-recoE+PromptFG"
             jsnFolder = "2022_Summer22EE"
+        elif(yearVal[ny] == 20230):
+            elTag = "2023PromptC"
+            jsnFolder = "2023_Summer23"
+        elif(yearVal[ny] == 20231):
+            elTag = "2023PromptD"
+            jsnFolder = "2023_Summer23BPix"
 
-        print("************** {0} **************".format(yearVal[ny]))
+        print("************** {0} / {1} **************".format(yearVal[ny],jsnFolder))
 
         evaluator_el = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/EGM/{0}/electron.json.gz".format(jsnFolder))
         evaluator_mu = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/MUO/{0}/muon_Z.json.gz".format(jsnFolder))
@@ -58,6 +64,8 @@ if __name__ == "__main__":
         histo_mu3[ny] = ROOT.TH2D("histo_{0}_mu3".format(yearVal[ny]), "histo_{0}_mu3".format(yearVal[ny]), len(etaVal)-1, etaVal, len(ptVal)-1, ptVal)
         histo_el0[ny] = ROOT.TH2D("histo_{0}_el0".format(yearVal[ny]), "histo_{0}_el0".format(yearVal[ny]), len(etaVal)-1, etaVal, len(ptVal)-1, ptVal)
 
+        thePhi = 0.5 # electrons
+
         for eta in range(len(etaVal)-1):
             for pt in range(len(ptVal)-1):
 
@@ -70,7 +78,11 @@ if __name__ == "__main__":
                 histo_mu2[ny].SetBinContent(eta+1,pt+1,systm2)
                 histo_mu3[ny].SetBinContent(eta+1,pt+1,systm3)
 
-                syste0 = evaluator_el["Electron-ID-SF"].evaluate(elTag,"sfup","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001)-evaluator_el["Electron-ID-SF"].evaluate(elTag,"sf","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001)
+                syste0 = 0
+                if(yearVal[ny] // 10 <= 2022):
+                  syste0 = evaluator_el["Electron-ID-SF"].evaluate(elTag,"sfup","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001)       -evaluator_el["Electron-ID-SF"].evaluate(elTag,"sf","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001)
+                else:
+                  syste0 = evaluator_el["Electron-ID-SF"].evaluate(elTag,"sfup","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001,thePhi)-evaluator_el["Electron-ID-SF"].evaluate(elTag,"sf","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001,thePhi)
                 histo_el0[ny].SetBinContent(eta+1,pt+1,syste0)
 
                 if(debug == 1):
