@@ -33,7 +33,7 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 
 VBSSEL = jsonObject['VBSSEL']
 
-muSelChoice = 2
+muSelChoice = 0
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 TIGHT_MU0 = jsonObject['TIGHT_MU0']
@@ -47,7 +47,7 @@ TIGHT_MU7 = jsonObject['TIGHT_MU7']
 TIGHT_MU8 = jsonObject['TIGHT_MU8']
 MUOWP = "Medium"
 
-elSelChoice = 3
+elSelChoice = 0
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
