@@ -557,17 +557,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             outputFile = "ntupleSSWWAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob)
             dfwwvbscat[x].Snapshot("events", outputFile, branchList)
 
-        histo[ 99][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format( 99,x), "histo_{0}_{1}".format( 99,x), 8,500,2500), "vbs_mjj","weight")
-        histo[100][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(100,x), "histo_{0}_{1}".format(100,x), 8,500,2500), "vbs_mjj","weight0")
-        histo[101][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(101,x), "histo_{0}_{1}".format(101,x), 8,500,2500), "vbs_mjj","weight1")
-        histo[102][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(102,x), "histo_{0}_{1}".format(102,x), 8,500,2500), "vbs_mjj","weight2")
-        histo[103][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(103,x), "histo_{0}_{1}".format(103,x), 8,500,2500), "vbs_mjj","weight3")
-        histo[104][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(104,x), "histo_{0}_{1}".format(104,x), 8,500,2500), "vbs_mjj","weight4")
-        histo[105][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(105,x), "histo_{0}_{1}".format(105,x), 8,500,2500), "vbs_mjj","weight5")
-        histo[106][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(106,x), "histo_{0}_{1}".format(106,x), 8,500,2500), "vbs_mjj","weight6")
-        histo[107][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(107,x), "histo_{0}_{1}".format(107,x), 8,500,2500), "vbs_mjj","weight7")
-        histo[108][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(108,x), "histo_{0}_{1}".format(108,x), 8,500,2500), "vbs_mjj","weightWSUnc0")
-        histo[109][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(109,x), "histo_{0}_{1}".format(109,x), 8,500,2500), "vbs_mjj","weightWSUnc1")
+        histo[ 99][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format( 99,x), "histo_{0}_{1}".format( 99,x),12,500,3500), "vbs_mjj","weight")
+        histo[100][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(100,x), "histo_{0}_{1}".format(100,x),12,500,3500), "vbs_mjj","weight0")
+        histo[101][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(101,x), "histo_{0}_{1}".format(101,x),12,500,3500), "vbs_mjj","weight1")
+        histo[102][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(102,x), "histo_{0}_{1}".format(102,x),12,500,3500), "vbs_mjj","weight2")
+        histo[103][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(103,x), "histo_{0}_{1}".format(103,x),12,500,3500), "vbs_mjj","weight3")
+        histo[104][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(104,x), "histo_{0}_{1}".format(104,x),12,500,3500), "vbs_mjj","weight4")
+        histo[105][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(105,x), "histo_{0}_{1}".format(105,x),12,500,3500), "vbs_mjj","weight5")
+        histo[106][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(106,x), "histo_{0}_{1}".format(106,x),12,500,3500), "vbs_mjj","weight6")
+        histo[107][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(107,x), "histo_{0}_{1}".format(107,x),12,500,3500), "vbs_mjj","weight7")
+        histo[108][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(108,x), "histo_{0}_{1}".format(108,x),12,500,3500), "vbs_mjj","weightWSUnc0")
+        histo[109][x] = dfwwvbscat[x].Histo1D(("histo_{0}_{1}".format(109,x), "histo_{0}_{1}".format(109,x),12,500,3500), "vbs_mjj","weightWSUnc1")
 
         BinXF1 = 10
         minXF1 = 0

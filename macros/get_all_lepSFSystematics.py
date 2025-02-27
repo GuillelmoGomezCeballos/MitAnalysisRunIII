@@ -8,6 +8,21 @@ xEtaBins = array('d', [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1
 yearVal = [20220, 20221, 20230, 20231]
 
 
+def syst_electron(year, evaluator_el, elTag, sfSyst, sfDef, selVal, etaVal, ptVal, phiVal):
+    etaVal = etaVal+0.001
+    ptVal  =  ptVal+0.001
+    phiVal = phiVal+0.001
+    syst = 0.0
+
+    if(year // 10 <= 2022):
+        syst= (evaluator_el(elTag,sfSyst,selVal,etaVal,ptVal)-
+               evaluator_el(elTag, sfDef,selVal,etaVal,ptVal))
+    else:
+        syst= (evaluator_el(elTag,sfSyst,selVal,etaVal,ptVal,phiVal)-
+               evaluator_el(elTag, sfDef,selVal,etaVal,ptVal,phiVal))
+
+    return syst
+
 if __name__ == "__main__":
     debug = 0
 
@@ -64,7 +79,7 @@ if __name__ == "__main__":
         histo_mu3[ny] = ROOT.TH2D("histo_{0}_mu3".format(yearVal[ny]), "histo_{0}_mu3".format(yearVal[ny]), len(etaVal)-1, etaVal, len(ptVal)-1, ptVal)
         histo_el0[ny] = ROOT.TH2D("histo_{0}_el0".format(yearVal[ny]), "histo_{0}_el0".format(yearVal[ny]), len(etaVal)-1, etaVal, len(ptVal)-1, ptVal)
 
-        thePhi = 0.5 # electrons
+        phiVal = 0.5 # electrons
 
         for eta in range(len(etaVal)-1):
             for pt in range(len(ptVal)-1):
@@ -78,11 +93,7 @@ if __name__ == "__main__":
                 histo_mu2[ny].SetBinContent(eta+1,pt+1,systm2)
                 histo_mu3[ny].SetBinContent(eta+1,pt+1,systm3)
 
-                syste0 = 0
-                if(yearVal[ny] // 10 <= 2022):
-                  syste0 = evaluator_el["Electron-ID-SF"].evaluate(elTag,"sfup","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001)       -evaluator_el["Electron-ID-SF"].evaluate(elTag,"sf","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001)
-                else:
-                  syste0 = evaluator_el["Electron-ID-SF"].evaluate(elTag,"sfup","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001,thePhi)-evaluator_el["Electron-ID-SF"].evaluate(elTag,"sf","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001,thePhi)
+                syste0 = syst_electron(yearVal[ny], evaluator_el["Electron-ID-SF"].evaluate, elTag, "sfup", "sf", "wp80iso", etaVal[eta], ptVal[pt], phiVal)
                 histo_el0[ny].SetBinContent(eta+1,pt+1,syste0)
 
                 if(debug == 1):

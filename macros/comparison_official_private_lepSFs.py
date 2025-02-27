@@ -9,8 +9,20 @@ xMuPtBins = array('d', [10.0,15.0,20.0,25.0,30.0,40.0,50.0,60.0,120.0,200.0])
 xMuEtaBins = array('d', [0.0,0.9,1.2,2.1,2.5])
 xElPtBins = array('d', [10.0,20.0,35.0,50.0,100.0,200.0])
 xElEtaBins = array('d', [0.0,0.8,1.444,1.566,2.0,2.5])
-yearVal = [20220, 20221]
+yearVal = [20220, 20221, 20230, 20231]
 
+def sf_electron(year, evaluator_el, elTag, sfDef, selVal, etaVal, ptVal, phiVal):
+    etaVal = etaVal+0.001
+    ptVal  =  ptVal+0.001
+    phiVal = phiVal+0.001
+    sf = 0.0
+
+    if(year // 10 <= 2022):
+        sf= evaluator_el(elTag,sfDef,selVal,etaVal,ptVal)
+    else:
+        sf= evaluator_el(elTag,sfDef,selVal,etaVal,ptVal,phiVal)
+
+    return sf
 
 if __name__ == "__main__":
     input = "data/"
@@ -44,8 +56,8 @@ if __name__ == "__main__":
     for ny in range(len(yearVal)):
         lepSFPath = "{0}histoLepSFEtaPt_{1}.root".format(input,yearVal[ny])
         fLepSFFile = ROOT.TFile(lepSFPath)
-        histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(2))
-        histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_{0}".format(3))
+        histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(0)) # Medium
+        histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_{0}".format(0)) # Medium
         histoLepSFEtaPt_mu.SetDirectory(0)
         histoLepSFEtaPt_el.SetDirectory(0)
         fLepSFFile.Close()
@@ -60,11 +72,19 @@ if __name__ == "__main__":
         elif(yearVal[ny] == 20221):
             elTag = "2022Re-recoE+PromptFG"
             jsnFolder = "2022_Summer22EE"
+        elif(yearVal[ny] == 20230):
+            elTag = "2023PromptC"
+            jsnFolder = "2023_Summer23"
+        elif(yearVal[ny] == 20231):
+            elTag = "2023PromptD"
+            jsnFolder = "2023_Summer23BPix"
 
         print("************** {0} **************".format(yearVal[ny]))
 
         evaluator_el = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/EGM/{0}/electron.json.gz".format(jsnFolder))
         evaluator_mu = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/MUO/{0}/muon_Z.json.gz".format(jsnFolder))
+
+        phiVal = 0.5 # electrons
 
         for ltype in range(2):
             etaVal = xEtaBins
@@ -100,7 +120,7 @@ if __name__ == "__main__":
                         binX = histoLepSFEtaPt_el.GetXaxis().FindFixBin(etaVal[eta]+0.001)
                         binY = histoLepSFEtaPt_el.GetYaxis().FindFixBin(ptVal[pt]+0.001)
                         sfPri = histoLepSFEtaPt_el.GetBinContent(binX,binY)
-                        sfOff = evaluator_el["Electron-ID-SF"].evaluate(elTag,"sf","wp80iso",etaVal[eta]+0.001,ptVal[pt]+0.001)
+                        sfOff = sf_electron(yearVal[ny], evaluator_el["Electron-ID-SF"].evaluate, elTag, "sf",  "Medium", etaVal[eta], ptVal[pt], phiVal)
                         sf = sfOff/sfPri
                         histo_el[ny].SetBinContent(eta+1,pt+1,sf)
 

@@ -758,7 +758,7 @@ float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
   }
 
   if(debug) printf("EWKCorr: %d %s %f %f\n",type,theCat.Data(),mjjGen,sf);
-
+  sf = 1.0; // CAREFUL!!!
   return sf;
 }
 
