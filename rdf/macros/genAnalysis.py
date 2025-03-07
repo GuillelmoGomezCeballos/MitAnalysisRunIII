@@ -224,37 +224,47 @@ def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt):
 
     df = ROOT.RDataFrame("Events", files)
 
-    runTree = ROOT.TChain("Runs")
-    for f in range(len(files)):
-        runTree.AddFile(files[f])
-
     genEventSumWeight = 0
     genEventSumNoWeight = 0
     nTheoryReplicas = [103, 9, 4]
     genEventSumLHEScaleWeight = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     genEventSumPSWeight = [0, 0, 0, 0, 0]
-    for i in range(runTree.GetEntries()):
-        runTree.GetEntry(i)
-        genEventSumWeight += runTree.genEventSumw
-        genEventSumNoWeight += runTree.genEventCount
-        if(runTree.FindBranch("nLHEPdfSumw") and runTree.nLHEPdfSumw < nTheoryReplicas[0]):
-            nTheoryReplicas[0] = runTree.nLHEPdfSumw
-        for n in range(9):
-            if(n < runTree.nLHEScaleSumw):
-                genEventSumLHEScaleWeight[n] += runTree.LHEScaleSumw[n]
+
+    dfRuns = ROOT.RDataFrame("Runs", files)
+    genEventSumWeight = dfRuns.Sum("genEventSumw").GetValue()
+    genEventSumNoWeight = dfRuns.Sum("genEventCount").GetValue()
+    try:
+        if(dfRuns.Min("nLHEPdfSumw").GetValue() < nTheoryReplicas[0]):
+            nTheoryReplicas[0] = int(dfRuns.Min("nLHEPdfSumw").GetValue())
+    except Exception as e:
+        nTheoryReplicas[0] = 0
+    for n in range(9):
+        try:
+            if(dfRuns.Min("nLHEScaleSumw").GetValue() > n):
+                dfRuns = dfRuns.Define("genEventSumLHEScaleWeight{0}".format(n),"LHEScaleSumw[{0}]".format(n))
+                genEventSumLHEScaleWeight[n] = dfRuns.Sum("genEventSumLHEScaleWeight{0}".format(n)).GetValue()
             else:
-                genEventSumLHEScaleWeight[n] += 1.0
-                nTheoryReplicas[1] = runTree.nLHEScaleSumw
-        for n in range(4):
-            if(runTree.FindBranch("nPSSumw")):
-                if(n < runTree.nPSSumw):
-                    genEventSumPSWeight[n] += runTree.PSSumw[n]
-                else:
-                    genEventSumPSWeight[n] += 1.0
-                    nTheoryReplicas[2] = runTree.nPSSumw
+                genEventSumLHEScaleWeight[n] = dfRuns.Count().GetValue()
+                nTheoryReplicas[1] = int(dfRuns.Min("nLHEScaleSumw").GetValue())
+        except Exception as e:
+            genEventSumLHEScaleWeight[n] = dfRuns.Count().GetValue()
+            nTheoryReplicas[1] = n
+            print("Problem with LHEScaleWeights {0}".format(e))
+    for n in range(4):
+        try:
+            if(dfRuns.Min("nPSSumw").GetValue() > n):
+                dfRuns = dfRuns.Define("genEventSumPSWeight{0}".format(n),"PSSumw[{0}]".format(n))
+                genEventSumPSWeight[n] = dfRuns.Sum("genEventSumPSWeight{0}".format(n)).GetValue()
             else:
-                genEventSumPSWeight[n] += 1.0
-        genEventSumPSWeight[4] += 1
+                genEventSumPSWeight[n] = dfRuns.Count().GetValue()
+                nTheoryReplicas[2] = int(dfRuns.Min("nPSSumw").GetValue())
+        except Exception as e:
+            genEventSumPSWeight[n] = dfRuns.Count().GetValue()
+            nTheoryReplicas[2] = n
+            print("Problem with PSWeights {0}".format(e))
+    genEventSumPSWeight[4] = dfRuns.Count().GetValue()
+    runGetEntries = dfRuns.Count().GetValue()
+
     print("Number of Theory replicas: {0} / {1} / {2}".format(nTheoryReplicas[0],nTheoryReplicas[1],nTheoryReplicas[2]))
 
     genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]
@@ -276,7 +286,7 @@ def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt):
 
     nevents = df.Count().GetValue()
 
-    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
+    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runGetEntries,genEventSumWeight,genEventSumNoWeight,nevents))
     print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
     analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false",histo_wwpt,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
