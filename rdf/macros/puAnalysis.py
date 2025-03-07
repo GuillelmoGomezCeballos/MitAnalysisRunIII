@@ -4,7 +4,7 @@ from array import array
 
 ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
-from utilsAna import getMClist, getDATAlist, getTriggerFromJson, getLumi
+from utilsAna import getMClist, getDATAlist, groupFiles, getTriggerFromJson, getLumi
 from utilsAna import SwitchSample
 #from utilsSelectionNanoV9 import getBTagCut
 #from utilsSelectionNanoV9 import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
@@ -65,12 +65,12 @@ def selectionWW(df,year,PDType,isData,count):
 
     return dftag
 
-def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,puWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
+def analysis(df,count,category,weight,year,PDType,isData,whichJob,histo_wwpt,puWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
     xPtBins = array('d', [20,25,30,35,40,50,60,80,100,150,250,500,1000])
     xEtaBins = array('d', [0.0,0.3,0.6,0.9,1.2,1.5,1.8,2.1,2.5])
 
-    print("starting {0} / {1} / {2} / {3} / {4} / {5}".format(count,category,weight,year,PDType,isData))
+    print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
@@ -361,7 +361,7 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,puWeights,nT
     report3.Print()
     report4.Print()
 
-    myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}_job-1.root".format(count,year),'RECREATE')
+    myfile = ROOT.TFile("fillhisto_puAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for nc in range(nCat):
         for j in range(nHisto):
             if(histo[j][nc] == 0): continue
@@ -395,42 +395,53 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,puWeights,nT
 
     print("ending {0} / {1} / {2} / {3} / {4} / {5}".format(count,category,weight,year,PDType,isData))
 
-def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt, puWeights):
+def readMCSample(sampleNOW, year, PDType, skimType, whichJob, group, histo_wwpt, puWeights):
 
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
 
     df = ROOT.RDataFrame("Events", files)
 
-    runTree = ROOT.TChain("Runs")
-    for f in range(len(files)):
-        runTree.AddFile(files[f])
-
     genEventSumWeight = 0
     genEventSumNoWeight = 0
     nTheoryReplicas = [103, 9, 4]
     genEventSumLHEScaleWeight = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     genEventSumPSWeight = [0, 0, 0, 0, 0]
-    for i in range(runTree.GetEntries()):
-        runTree.GetEntry(i)
-        genEventSumWeight += runTree.genEventSumw
-        genEventSumNoWeight += runTree.genEventCount
-        if(runTree.FindBranch("nLHEPdfSumw") and runTree.nLHEPdfSumw < nTheoryReplicas[0]):
-            nTheoryReplicas[0] = runTree.nLHEPdfSumw
-        for n in range(9):
-            if(n < runTree.nLHEScaleSumw):
-                genEventSumLHEScaleWeight[n] += runTree.LHEScaleSumw[n]
+
+    dfRuns = ROOT.RDataFrame("Runs", files)
+    genEventSumWeight = dfRuns.Sum("genEventSumw").GetValue()
+    genEventSumNoWeight = dfRuns.Sum("genEventCount").GetValue()
+    try:
+        if(dfRuns.Min("nLHEPdfSumw").GetValue() < nTheoryReplicas[0]):
+            nTheoryReplicas[0] = int(dfRuns.Min("nLHEPdfSumw").GetValue())
+    except Exception as e:
+        nTheoryReplicas[0] = 0
+    for n in range(9):
+        try:
+            if(dfRuns.Min("nLHEScaleSumw").GetValue() > n):
+                dfRuns = dfRuns.Define("genEventSumLHEScaleWeight{0}".format(n),"LHEScaleSumw[{0}]".format(n))
+                genEventSumLHEScaleWeight[n] = dfRuns.Sum("genEventSumLHEScaleWeight{0}".format(n)).GetValue()
             else:
-                genEventSumLHEScaleWeight[n] += 1.0
-                nTheoryReplicas[1] = runTree.nLHEScaleSumw
-        for n in range(4):
-            if(n < runTree.nPSSumw):
-                genEventSumPSWeight[n] += runTree.PSSumw[n]
+                genEventSumLHEScaleWeight[n] = dfRuns.Count().GetValue()
+                nTheoryReplicas[1] = int(dfRuns.Min("nLHEScaleSumw").GetValue())
+        except Exception as e:
+            genEventSumLHEScaleWeight[n] = dfRuns.Count().GetValue()
+            nTheoryReplicas[1] = n
+            print("Problem with LHEScaleWeights {0}".format(e))
+    for n in range(4):
+        try:
+            if(dfRuns.Min("nPSSumw").GetValue() > n):
+                dfRuns = dfRuns.Define("genEventSumPSWeight{0}".format(n),"PSSumw[{0}]".format(n))
+                genEventSumPSWeight[n] = dfRuns.Sum("genEventSumPSWeight{0}".format(n)).GetValue()
             else:
-                genEventSumPSWeight[n] += 1.0
-                nTheoryReplicas[2] = runTree.nPSSumw
-        genEventSumPSWeight[4] += 1
-    print("Number of Theory replicas: {0} / {1} / {2}".format(nTheoryReplicas[0],nTheoryReplicas[1],nTheoryReplicas[2]))
+                genEventSumPSWeight[n] = dfRuns.Count().GetValue()
+                nTheoryReplicas[2] = int(dfRuns.Min("nPSSumw").GetValue())
+        except Exception as e:
+            genEventSumPSWeight[n] = dfRuns.Count().GetValue()
+            nTheoryReplicas[2] = n
+            print("Problem with PSWeights {0}".format(e))
+    genEventSumPSWeight[4] = dfRuns.Count().GetValue()
+    runGetEntries = dfRuns.Count().GetValue()
 
     genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]
     genEventSumPSRenorm = [1, 1, 1, 1]
@@ -449,23 +460,34 @@ def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt, puWeights):
     weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)
     weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)
 
+    if(whichJob != -1):
+        groupedFile = groupFiles(files, group)
+        files = groupedFile[whichJob]
+        if(len(files) == 0):
+            print("no files in job/group: {0} / {1}".format(whichJob, group))
+            return 0
+        print("Used files: {0}".format(len(files)))
+
     nevents = df.Count().GetValue()
 
-    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
+    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runGetEntries,genEventSumWeight,genEventSumNoWeight,nevents))
     print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
-    analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false",histo_wwpt,puWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
+    analysis(df, sampleNOW, SwitchSample(sampleNOW,skimType)[2], weight, year, PDType, "false",whichJob,histo_wwpt,puWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm)
 
 if __name__ == "__main__":
+
+    group = 10
 
     year = 2022
     process = 399
     skimType = "2l"
+    whichJob = -1
 
     valid = ['year=', "process=", 'whichJob=', 'help']
     usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
     usage +=  "              --process=<{0}>\n".format(process)
-    usage +=  "              --whichJob=<not used>"
+    usage +=  "              --whichJob=<{0}>".format(whichJob)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -481,6 +503,8 @@ if __name__ == "__main__":
             year = int(arg)
         if opt == "--process":
             process = int(arg)
+        if opt == "--whichJob":
+            whichJob = int(arg)
 
     puWeights = []
     puPath = "data/puWeights_UL_{0}.root".format(year)
@@ -504,6 +528,6 @@ if __name__ == "__main__":
     fPtwwWeightPath.Close()
 
     try:
-        readMCSample(process,year,"All", skimType, histo_wwpt, puWeights)
+        readMCSample(process,year,"All",skimType,whichJob,group,histo_wwpt,puWeights)
     except Exception as e:
         print("FAILED {0}".format(e))

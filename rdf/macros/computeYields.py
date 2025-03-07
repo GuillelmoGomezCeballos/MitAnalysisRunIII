@@ -100,7 +100,13 @@ if __name__ == "__main__":
         signalDict0.append(plotCategory("kPlotHiggs"))
         signalDict1.append(plotCategory("kPlotHiggs"))
     elif('zAna' in path):
+        histo.append(27)
+        signalDict0.append(plotCategory("kPlotDY"))
+        signalDict1.append(plotCategory("kPlotDY"))
         histo.append(28)
+        signalDict0.append(plotCategory("kPlotDY"))
+        signalDict1.append(plotCategory("kPlotDY"))
+        histo.append(29)
         signalDict0.append(plotCategory("kPlotDY"))
         signalDict1.append(plotCategory("kPlotDY"))
 

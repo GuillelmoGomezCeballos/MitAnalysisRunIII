@@ -88,8 +88,9 @@ def findDIR(directory):
     print(directory)
 
     maxFiles = 1000000000
-    if("TTToSemiLeptonic" in directory):
-        maxFiles = 300
+    if("/1l/" in directory and "NANOAODSIM" in directory and
+       "TTto4Q" not in directory and "WWto4Q" not in directory):
+        maxFiles = 200
 
     counter = 0
     rootFiles = ROOT.vector('string')()

@@ -322,16 +322,10 @@ def readMCSample(sampleNOW, year, skimType, whichJob, group, puWeights):
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
 
-    runTree = ROOT.TChain("Runs")
-    for f in range(len(files)):
-        runTree.AddFile(files[f])
-
-    genEventSumWeight = 0
-    genEventSumNoWeight = 0
-    for i in range(runTree.GetEntries()):
-        runTree.GetEntry(i)
-        genEventSumWeight += runTree.genEventSumw
-        genEventSumNoWeight += runTree.genEventCount
+    dfRuns = ROOT.RDataFrame("Runs", files)
+    genEventSumWeight = dfRuns.Sum("genEventSumw").GetValue()
+    genEventSumNoWeight = dfRuns.Sum("genEventCount").GetValue()
+    runGetEntries = dfRuns.Count().GetValue()
 
     weight = (SwitchSample(sampleNOW, skimType)[1] / genEventSumWeight)*getLumi(year)
     weightApprox = (SwitchSample(sampleNOW, skimType)[1] / genEventSumNoWeight)*getLumi(year)
@@ -347,7 +341,7 @@ def readMCSample(sampleNOW, year, skimType, whichJob, group, puWeights):
     df = ROOT.RDataFrame("Events", files)
     nevents = df.Count().GetValue()
 
-    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runTree.GetEntries(),genEventSumWeight,genEventSumNoWeight,nevents))
+    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runGetEntries,genEventSumWeight,genEventSumNoWeight,nevents))
     print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
     PDType = os.path.basename(SwitchSample(sampleNOW, skimType)[0]).split('+')[0]

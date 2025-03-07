@@ -4,7 +4,9 @@ echo "hostname"
 hostname
 whoami
 
-cd ~/releases/CMSSW_13_3_1/src/;eval `scramv1 runtime -sh`;cd -;
+cd ~/releases/CMSSW_14_1_4/src/;eval `scramv1 runtime -sh`;cd -;
+
+echo "Parameters: " $1 $2 $3 $4 $5
 
 time python3 $5.py --process=$1 --year=$2 --whichJob=$3
 status=$?

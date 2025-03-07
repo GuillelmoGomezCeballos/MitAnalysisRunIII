@@ -10,11 +10,11 @@ whichAna="DUMMY"
 group=9
 
 condorJob=1001
-if [ $# -ge 1 ]; then
+if [ $# -gt 1 ]; then
   condorJob=$2
 fi
 
-runAlma9=1
+runAlma9=0
 if [ $# -ge 4 ]; then
   runAlma9=$4
 fi
@@ -59,6 +59,9 @@ elif [ $theAna -eq 7 ]; then
 elif [ $theAna -eq 8 ]; then
  whichAna="wwAnalysis"
 
+elif [ $theAna -eq 9 ]; then
+ whichAna="puAnalysis"
+
 fi
 
 if [ ${whichAna} = "DUMMY" ]; then
@@ -73,12 +76,11 @@ whichSample=$1
 whichYear=$2
 passSel=$3
 
-if [ "${passSel}" != "no" ]; then
+if [ "${passSel}" != "no" ] && [ ${whichYear} = "20240" ]; then
 
 for whichJob in $(seq 0 $group)
 do
 
-#cc7
 if [ ${runAlma9} -eq 0 ]; then
 cat << EOF > submit
 #!/bin/bash
@@ -89,7 +91,6 @@ cat << EOF > submit
 srun ./analysis_singularity_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 EOF
 
-#Alma9
 else
 
 cat << EOF > submit
