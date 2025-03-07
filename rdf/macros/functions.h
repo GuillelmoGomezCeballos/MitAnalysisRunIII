@@ -736,7 +736,8 @@ float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
   if(mjjGen < 500) {
     sf = 1.0;
   }
-  else if(theCat.Contains("VBS-SSWW") || theCat.Contains("WWto2L2Nu-2Jets_OS_noTop_EW") || theCat.Contains("WWto2L2Nu-2Jets_SS_noTop_EW")) {
+  else if(theCat.Contains("VBS-SSWW") || theCat.Contains("WWto2L2Nu-2Jets_OS_noTop_EW") || theCat.Contains("WWto2L2Nu-2Jets_SS_noTop_EW")
+                                      || theCat.Contains("WWJJto2L2Nu-OS-noTop-EWK")    || theCat.Contains("WWJJto2L2Nu-SS-noTop-EWK")) {
     if(type == 0) {
       const TH1D& hcorr = hVV_KF_EWK[0];
       sf = getValFromTH1(hcorr, mjjGen);
@@ -746,7 +747,8 @@ float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
       sf = getValFromTH1(hcorr, mjjGen);
     }
   }
-  else if(theCat.Contains("WZto3LNu-2Jets_EW")) {
+  else if(theCat.Contains("WZto3LNu-2Jets_EW")
+       || theCat.Contains("WZJJto3LNu-EWK")) {
     if(type == 0) {
       const TH1D& hcorr = hVV_KF_EWK[1];
       sf = getValFromTH1(hcorr, mjjGen);
