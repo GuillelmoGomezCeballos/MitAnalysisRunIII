@@ -92,6 +92,10 @@ def findDIR(directory):
        "TTto4Q" not in directory and "WWto4Q" not in directory):
         maxFiles = 200
 
+    # HACK!
+    if("/2l/" in directory and "NANOAODSIM" in directory):
+        maxFiles = 600
+
     counter = 0
     rootFiles = ROOT.vector('string')()
 

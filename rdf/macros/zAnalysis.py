@@ -14,6 +14,8 @@ print_info = False
 bTagSel = 1
 useBTaggingWeights = 0
 
+correctionString = "_correction"
+
 useFR = 0
 
 altMass = "Def"
@@ -220,7 +222,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     global useFR
     if(year == 2023): useFR = 0
-    dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,"",0)
+    dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,0)
 
     overallMETFilters = jsonObject['met_filters']
     METFILTERS = getTriggerFromJson(overallMETFilters, "All", year)
@@ -739,7 +741,7 @@ if __name__ == "__main__":
         histoFakeEtaPt_el[x].SetDirectory(0)
     fFakeFile.Close()
 
-    lepSFPath = "data/histoLepSFEtaPt_{0}.root".format(year)
+    lepSFPath = "data/histoLepSFEtaPt_{0}{1}.root".format(year,correctionString)
     fLepSFFile = ROOT.TFile(lepSFPath)
     histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(muSelChoice))
     histoLepSFEtaPt_el = fLepSFFile.Get("histoLepSFEtaPt_1_{0}".format(elSelChoice))

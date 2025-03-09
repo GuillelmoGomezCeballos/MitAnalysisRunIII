@@ -11,7 +11,7 @@ import tmva_helper_xml
 
 makeDataCards = 2 # 1 (njets), 2 (lepton flavor), 3 (mjj)
 
-correctionString = ""
+correctionString = "_correction"
 
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
