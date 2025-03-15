@@ -82,8 +82,6 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
                   )
 
-    global useFR
-    if(year == 2023): useFR = 0
     if(useFR == 0):
         dftag = dftag.Filter("nTight == 2","Two tight leptons")
 
@@ -199,8 +197,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfbase = selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count)
     dfbase = dfbase.Define("mjjGen", "{0}".format(0))
 
-    global useFR
-    if(year == 2023): useFR = 0
     dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,0)
 
     overallMETFilters = jsonObject['met_filters']
