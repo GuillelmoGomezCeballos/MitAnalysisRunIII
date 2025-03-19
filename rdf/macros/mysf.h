@@ -24,7 +24,7 @@ class MyCorrections {
 
     double eval_btvSF     (const char *valType, char *workingPoint, double eta, double pt, int flavor);
 
-    double eval_jetCORR   (double area, double eta, double phi, double pt, double rho, int type);
+    double eval_jetCORR   (double area, double eta, double phi, double pt, double rho, int run, int type);
     double eval_jesUnc    (double eta, double pt, int type);
     double eval_jerMethod1(double eta, double pt, int type);
     double eval_jerMethod2(double eta, double pt, double rho);
@@ -203,17 +203,17 @@ MyCorrections::MyCorrections(int the_input_year) {
     jecDATAName[6] = "NULL";   jetVetoMapName[6] = "NULL"; // G
   }
   else if(year == 20240)  {
-    jecMCName = "Winter24Prompt24_V2_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
-    jecDATAName[0] = "NULL";                            jetVetoMapName[0] = "Winter24Prompt2024BCDEFGHI_V1"; // A
-    jecDATAName[1] = "Winter24Prompt24_RunBCD_V2_DATA"; jetVetoMapName[1] = "Winter24Prompt2024BCDEFGHI_V1"; // B
-    jecDATAName[2] = "Winter24Prompt24_RunBCD_V2_DATA"; jetVetoMapName[2] = "Winter24Prompt2024BCDEFGHI_V1"; // C
-    jecDATAName[3] = "Winter24Prompt24_RunBCD_V2_DATA"; jetVetoMapName[3] = "Winter24Prompt2024BCDEFGHI_V1"; // D
-    jecDATAName[4] = "Winter24Prompt24_RunE_V2_DATA";   jetVetoMapName[4] = "Winter24Prompt2024BCDEFGHI_V1"; // E
-    jecDATAName[5] = "Winter24Prompt24_RunF_V2_DATA";   jetVetoMapName[5] = "Winter24Prompt2024BCDEFGHI_V1"; // F
-    jecDATAName[6] = "Winter24Prompt24_RunG_V2_DATA";   jetVetoMapName[6] = "Winter24Prompt2024BCDEFGHI_V1"; // G
-    jecDATAName[7] = "Winter24Prompt24_RunH_V2_DATA";   jetVetoMapName[7] = "Winter24Prompt2024BCDEFGHI_V1"; // H
-    jecDATAName[8] = "Winter24Prompt24_RunI_V2_DATA";   jetVetoMapName[8] = "Winter24Prompt2024BCDEFGHI_V1"; // I
-    jecDATAName[9] = "NULL";                            jetVetoMapName[9] = "Winter24Prompt2024BCDEFGHI_V1"; // J
+    jecMCName = "Winter24Prompt24_V3_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
+    jecDATAName[0] = "NULL";                     jetVetoMapName[0] = "Winter24Prompt2024BCDEFGHI_V1"; // A
+    jecDATAName[1] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[1] = "Winter24Prompt2024BCDEFGHI_V1"; // B
+    jecDATAName[2] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[2] = "Winter24Prompt2024BCDEFGHI_V1"; // C
+    jecDATAName[3] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[3] = "Winter24Prompt2024BCDEFGHI_V1"; // D
+    jecDATAName[4] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[4] = "Winter24Prompt2024BCDEFGHI_V1"; // E
+    jecDATAName[5] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[5] = "Winter24Prompt2024BCDEFGHI_V1"; // F
+    jecDATAName[6] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[6] = "Winter24Prompt2024BCDEFGHI_V1"; // G
+    jecDATAName[7] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[7] = "Winter24Prompt2024BCDEFGHI_V1"; // H
+    jecDATAName[8] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[8] = "Winter24Prompt2024BCDEFGHI_V1"; // I
+    jecDATAName[9] = "NULL";                     jetVetoMapName[9] = "Winter24Prompt2024BCDEFGHI_V1"; // J
   }
 
   std::string tagName = jecMCName + "_" + "L1L2L3Res" + "_" + algoName;
@@ -397,15 +397,15 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
     return btvLFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
 };
 
-double MyCorrections::eval_jetCORR(double area, double eta, double phi, double pt, double rho, int type) {
+double MyCorrections::eval_jetCORR(double area, double eta, double phi, double pt, double rho, int run, int type) {
   // data
-  if     (type >= 0 && year == 20231) return JECDATA_[type]->evaluate({area, eta, phi, pt, rho});
-  else if(type >= 0 && year == 20240) return JECDATA_[type]->evaluate({area, eta, phi, pt, rho});
-  else if(type >= 0                 ) return JECDATA_[type]->evaluate({area, eta,      pt, rho});
+  if     (type >= 0 && year == 20231) return JECDATA_[type]->evaluate({area, eta, phi,  pt, rho});
+  else if(type >= 0 && year == 20240) return JECDATA_[type]->evaluate({area, eta,  pt, rho, phi, (float)run});
+  else if(type >= 0                 ) return JECDATA_[type]->evaluate({area, eta,       pt, rho});
   // MC
-  if     (year == 20231) return JECMC_->evaluate({area, eta, phi, pt, rho});
-  else if(year == 20240) return JECMC_->evaluate({area, eta, phi, pt, rho});
-  else                   return JECMC_->evaluate({area, eta,      pt, rho});
+  if     (year == 20231) return JECMC_->evaluate({area, eta, phi,  pt, rho});
+  else if(year == 20240) return JECMC_->evaluate({area, eta,  pt, rho, phi});
+  else                   return JECMC_->evaluate({area, eta,       pt, rho});
   printf("ERROR in eval_jetCORR!\n");
   return 1.0;
 };

@@ -29,8 +29,8 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 VBSSEL = jsonObject['VBSSEL']
 
 muSelChoice = 0
-FAKE_MU0   = "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && abs(Muon_dxy) < 0.1 && abs(Muon_dz) < 0.2"
-FAKE_MU1   = "abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2"
+FAKE_MU0   = "abs(Muon_eta)      < 2.4 && Muon_pt      > 10 && Muon_looseId      == true"
+FAKE_MU1   = "abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true"
 FAKE_MU   = jsonObject['FAKE_MU']
 TIGHT_MU0 = jsonObject['TIGHT_MU0']
 TIGHT_MU1 = jsonObject['TIGHT_MU1']
@@ -45,8 +45,8 @@ TIGHT_MU9 = jsonObject['TIGHT_MU9']
 MUOWP = "Medium"
 
 elSelChoice = 0
-FAKE_EL0   = "abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1 && abs(Electron_dxy) < 0.1 && abs(Electron_dz) < 0.2 && Electron_mvaIso > -0.99"
-FAKE_EL1   = "abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 1 && abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && fake_Electron_mvaIso > -0.99"
+FAKE_EL0   = "abs(Electron_eta)      < 2.5 && Electron_pt      > 10 && Electron_cutBased      >= 1"
+FAKE_EL1   = "abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 1"
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL0 = jsonObject['TIGHT_EL0']
 TIGHT_EL1 = jsonObject['TIGHT_EL1']
@@ -120,7 +120,7 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
     dftag = selectionJetMet (dftag,year,bTagSel,isData,count,5.0)
     dftag = selection2LVar  (dftag,year,isData)
 
-    dftag = (dftag.Filter("mll{0} > 80 && mll{0} < 100".format(altMass),"mll{0} cut".format(altMass))
+    dftag = (dftag.Filter("mll{0} > 55 && mll{0} < 125".format(altMass),"mll{0} loose cut".format(altMass))
                   .Filter("(Sum(fake_mu) == 2 and triggerSMU > 0) or (Sum(fake_el) == 2 and triggerSEL > 0)","Single trigger requirement")
                   )
 
@@ -297,6 +297,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                                    .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,kPlotWS,nFake,nTight,0)".format(theCat))
                                    .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                                    )
+
+            histo[ltype+62][x] = dfcat[2*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0").Histo1D(("histo_{0}_{1}".format(ltype+62,x), "histo_{0}_{1}".format(ltype+62,x), 140, xMllMin[ltype]-25, xMllMax[ltype]+25), "mll{0}".format(altMass),"weightNoLepSF")
+            dfcat[2*x+ltype] = dfcat[2*x+ltype].Filter("mll{0} > {1} && mll{0} < {2}".format(altMass,xMllMin[ltype],xMllMax[ltype]),"mll{0} tight cut".format(altMass))
+
             # Fake lepton study
             for trgfake in range(3):
                 if(ltype == 0):
@@ -308,7 +312,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
             for ltag in range(2):
                 # Real lepton study
-                theLeptonSel = "((Sum(fake_mu) == 2 and tight_mu6[{0}] == true) or (Sum(fake_el) == 2 and tight_el3[{1}] == true))".format(ltag,ltag)
+                theLeptonSel = "((Sum(fake_mu) == 2 and tight_mu8[{0}] == true) or (Sum(fake_el) == 2 and tight_el8[{1}] == true))".format(ltag,ltag)
                 dfzoscat.append(dfcat[2*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 and {0}".format(theLeptonSel), "Opposite-sign leptons ({0})".format(ltag)))
                 dfzsscat.append(dfcat[2*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0 and {0}".format(theLeptonSel), "Same-sign leptons ({0})".format(ltag)))
 

@@ -93,8 +93,9 @@ def findDIR(directory):
         maxFiles = 200
 
     # HACK!
-    if("/2l/" in directory and "NANOAODSIM" in directory):
-        maxFiles = 600
+    #if("/2l/" in directory and "NANOAODSIM" in directory and
+    #   ("DY" in directory or "TT" in directory)):
+    #    maxFiles = 100
 
     counter = 0
     rootFiles = ROOT.vector('string')()
