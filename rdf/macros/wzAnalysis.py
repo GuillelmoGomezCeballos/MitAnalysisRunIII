@@ -88,7 +88,6 @@ def selectionLL(df,year,PDType,isData,count):
 
     dftag =(dftag.Filter("nLoose == 3","Only three loose leptons")
                  .Filter("nFake == 3","Three fake leptons")
-                 .Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 1", "+/- 1 net charge")
                  .Define("eventNum", "event")
                  .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
                  )
@@ -243,6 +242,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfwzbvbscat = []
     dfzgcat = []
     dfwhcat = []
+    dfsscat = []
     dfwzvbsBDTcat = []
     dfEMMcat = []
     dfMEEcat = []
@@ -318,6 +318,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     dfwzbvbscatUnclusteredUp  = []
     for x in range(nCat):
         dfwzcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
+
+        dfsscat.append(dfwzcat[x].Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 3", "+/- 3 net charge"))
+
+        dfwzcat[x] = dfwzcat[x].Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 1", "+/- 1 net charge")
 
         if((x == plotCategory("kPlotEWKWZ") or x == plotCategory("kPlotWZ")) and isData == "false"):
             dfwzcat[x] = (dfwzcat[x].Define("theGenCat", "compute_vbs_gen_category({0},ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,0)".format(genVBSSel))
@@ -593,6 +597,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[74][x] = dfwzcat[x].Filter("(TriLepton_flavor==1||TriLepton_flavor==3) && ptlW{0} < 110".format(altMass)).Histo1D(("histo_{0}_{1}".format(74,x), "histo_{0}_{1}".format(74,x),40, 10, 110), "ptlW{0}".format(altMass),"weight")
         histo[75][x] = dfwzcat[x].Filter("(TriLepton_flavor==0||TriLepton_flavor==2) && ptlW{0} < 40".format(altMass)).Histo1D(("histo_{0}_{1}".format(75,x), "histo_{0}_{1}".format(75,x),25, 0.0, 2.5), "etalW","weight")
         histo[76][x] = dfwzcat[x].Filter("(TriLepton_flavor==1||TriLepton_flavor==3) && ptlW{0} < 40".format(altMass)).Histo1D(("histo_{0}_{1}".format(76,x), "histo_{0}_{1}".format(76,x),25, 0.0, 2.5), "etalW","weight")
+
+        histo[77][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(77,x), "histo_{0}_{1}".format(77,x), 4,-0.5, 3.5), "TriLepton_flavor","weightNoBTag")
+        histo[78][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(78,x), "histo_{0}_{1}".format(78,x),60,  0, 120), "mllAllmin{0}".format(altMass),"weightNoBTag")
+        histo[79][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(79,x), "histo_{0}_{1}".format(79,x),40,  0, 40), "mllSSZ{0}".format(altMass),"weightNoBTag")
+        histo[80][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(80,x), "histo_{0}_{1}".format(80,x),20, 10, 110), "ptl3{0}".format(altMass),"weightNoBTag")
 
         histo[ 3][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 50, 10, 210), "ptlW{0}".format(altMass),"weightNoBTag")
         dfwzcat                [x] = dfwzcat                [x].Filter("ptlW{0}             > 20".format(altMass),"ptlW cut")

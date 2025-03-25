@@ -653,6 +653,11 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,2,"p_{T}^{e-W}"  ,"GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_74.root",whichCondorJob,year),"wzsel_ptew", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"|#eta^{#mu-W}|","",Form("anaZ/fillhisto_wzAnalysis%d_%d_75.root",whichCondorJob,year),"wzsel_etamw", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"|#eta^{e-W}|" ,"",Form("anaZ/fillhisto_wzAnalysis%d_%d_76.root",whichCondorJob,year),"wzsel_etaew", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Lepton type","",Form("anaZ/fillhisto_wzAnalysis%d_%d_77.root",whichCondorJob,year),"sssel_ltype", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Min(m_{ll})","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_78.root",whichCondorJob,year),"sssel_mllmin", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"|m_{ll}-m_{Z}|","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_79.root",whichCondorJob,year),"sssel_mllz", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"p_{T}^{l3}","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_80.root",whichCondorJob,year),"sssel_ptmin", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+
 
     finalPlot(0,1,"Output","",Form("anaZ/fillhisto_wzAnalysis%d_%d_300.root",whichCondorJob,year),"wzvbssel_output", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Output","",Form("anaZ/fillhisto_wzAnalysis%d_%d_500.root",whichCondorJob,year),"wzbvbssel_output", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
