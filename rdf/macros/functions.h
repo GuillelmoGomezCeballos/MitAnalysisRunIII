@@ -452,9 +452,11 @@ Vec_b cleaningJetVetoMapMask(const Vec_f& jet_eta, const Vec_f& jet_phi, int jet
   return jet_vetoMap_mask;
 }
 
-Vec_f compute_MUOPT_Unc(const int year, const Vec_f& mu_pt, const Vec_f& mu_eta, int type){
+Vec_f compute_MUOPT_Unc(const int year, const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_i& mu_charge, const Vec_f& mu_nTrackerLayers, int type){
   Vec_f new_mu_pt(mu_pt.size(), 1.0);
-  if     (year == 20220){
+  bool debug = false;
+  if(debug) printf("muonEnergy: %lu %d\n",mu_pt.size(),type);
+  /*if     (year == 20220){
     for(unsigned int i=0;i<mu_pt.size();i++) {
        if     (type == +1 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(1.0014+gRandom->Gaus(0.0,0.0030));
        else if(type ==  0 && abs(mu_eta[i]) <  1.5) new_mu_pt[i] = mu_pt[i]*(0.9994+gRandom->Gaus(0.0,0.0030));
@@ -496,6 +498,29 @@ Vec_f compute_MUOPT_Unc(const int year, const Vec_f& mu_pt, const Vec_f& mu_eta,
        else if(type ==  0 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9988+gRandom->Gaus(0.0,0.0110));
        else if(type == -1 && abs(mu_eta[i]) >= 1.5) new_mu_pt[i] = mu_pt[i]*(0.9968+gRandom->Gaus(0.0,0.0110));
        else printf("PROBLEM in compute_MUOPT_Unc\n");
+    }
+  }*/
+  if(year == 20220 || year == 20221 || year == 20230 || year == 20231 || year == 20240){
+    for(unsigned int i=0;i<mu_pt.size();i++) {
+      if(type == 10) new_mu_pt[i] = corrSFs.eval_muon_pt_scale(1, mu_pt[i], mu_eta[i], mu_phi[i], mu_charge[i]);
+      else {
+        float pt_scale_corr = corrSFs.eval_muon_pt_scale(0, mu_pt[i], mu_eta[i], mu_phi[i], mu_charge[i]);
+        float pt_corr = corrSFs.eval_muon_pt_resol(pt_scale_corr, mu_eta[i], float(mu_nTrackerLayers[i]));
+        if     (type ==  0) new_mu_pt[i] = pt_corr;
+        else if(type == +1) {
+          float pt_scale_unc = corrSFs.eval_muon_pt_scale_var(pt_corr, mu_eta[i], mu_phi[i], mu_charge[i], "up");
+          float pt_resol_unc = corrSFs.eval_muon_pt_resol_var(pt_scale_corr, pt_corr, mu_eta[i], "up");
+          if(fabs(pt_scale_unc-pt_corr) > fabs(pt_resol_unc-pt_corr)) new_mu_pt[i] = pt_scale_unc;
+          else                                                        new_mu_pt[i] = pt_resol_unc;
+        }
+        else if(type == -1) {
+          float pt_scale_unc = corrSFs.eval_muon_pt_scale_var(pt_corr, mu_eta[i], mu_phi[i], mu_charge[i], "dn");
+          float pt_resol_unc = corrSFs.eval_muon_pt_resol_var(pt_scale_corr, pt_corr, mu_eta[i], "dn");
+          if(fabs(pt_scale_unc-pt_corr) > fabs(pt_resol_unc-pt_corr)) new_mu_pt[i] = pt_scale_unc;
+          else                                                        new_mu_pt[i] = pt_resol_unc;
+        }
+      }
+      if(debug) printf("muon(%d)-%d: %.3f %.3f\n",i,type,mu_pt[i],new_mu_pt[i]);
     }
   }
   else {

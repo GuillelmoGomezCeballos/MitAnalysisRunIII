@@ -3,6 +3,8 @@
 #include <string.h>
 #include <iostream>
 
+#include "muonCrystalBall.h"
+
 //g++ $(correction config --cflags --ldflags) mysf.cpp -shared -fPIC -o mysf.so
 
 class MyCorrections {
@@ -31,8 +33,24 @@ class MyCorrections {
     double eval_puJetIDSF (char *valType, char *workingPoint, double eta, double pt);
     double eval_jetVetoMap(double eta, double phi, int type);
 
+    double eval_muon_pt_resol(double pt, double eta, float nL);
+    double eval_muon_pt_resol_var(double pt_woresol, double pt_wresol, double eta, string updn);
+    double eval_muon_pt_scale(bool is_data, double pt, double eta, double phi, int charge);
+    double eval_muon_pt_scale_var(double pt, double eta, double phi, int charge, string updn);
+
   private:
+    double muon_get_rndm(double eta, float nL);
+    double muon_get_std(double pt, double eta, float nL);
+    double muon_get_k(double eta, string var);
     correction::Correction::Ref puSF_;
+    correction::Correction::Ref muonScale_cb_params_;
+    correction::Correction::Ref muonScale_poly_params_;
+    correction::Correction::Ref muonScale_k_data_;
+    correction::Correction::Ref muonScale_a_data_;
+    correction::Correction::Ref muonScale_m_data_;
+    correction::Correction::Ref muonScale_k_mc_;
+    correction::Correction::Ref muonScale_a_mc_;
+    correction::Correction::Ref muonScale_m_mc_;
     correction::Correction::Ref muonTRKSF_;
     correction::Correction::Ref muonIDSF_;
     correction::Correction::Ref muonISOSF_;
@@ -92,7 +110,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
-  
+
   std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
   auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
   btvHFSF_ = csetHFBTV->at("robustParticleTransformer_comb");
@@ -100,6 +118,17 @@ MyCorrections::MyCorrections(int the_input_year) {
   std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
   auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
   btvLFSF_ = csetLFBTV->at("robustParticleTransformer_light");
+
+  std::string fileNameScaleMu = dirName+"MUO/"+subDirName+"muon_scale_res.json";
+  auto csetScaleMu = correction::CorrectionSet::from_file(fileNameScaleMu);
+  muonScale_cb_params_   = csetScaleMu->at("cb_params");
+  muonScale_poly_params_ = csetScaleMu->at("poly_params");
+  muonScale_k_data_ = csetScaleMu->at("k_data");
+  muonScale_a_data_ = csetScaleMu->at("a_data");
+  muonScale_m_data_ = csetScaleMu->at("m_data");
+  muonScale_k_mc_   = csetScaleMu->at("k_mc");
+  muonScale_a_mc_   = csetScaleMu->at("a_mc");
+  muonScale_m_mc_   = csetScaleMu->at("m_mc");
 
   std::string fileNameMu = dirName+"MUO/"+subDirName+"muon_Z.json.gz";
   auto csetMu = correction::CorrectionSet::from_file(fileNameMu);
@@ -448,3 +477,119 @@ double MyCorrections::eval_jetVetoMap(double eta, double phi, int type) {
   if(type >= 0) return jetVetoMap_[type]->evaluate({"jetvetomap", eta, phi});
   return 0;
 };
+
+// Muon momentum scale and resolution
+double MyCorrections::muon_get_rndm(double eta, float nL) {
+
+    // obtain parameters from correctionlib
+    double mean = muonScale_cb_params_->evaluate({abs(eta), nL, 0});
+    double sigma = muonScale_cb_params_->evaluate({abs(eta), nL, 1});
+    double n = muonScale_cb_params_->evaluate({abs(eta), nL, 2});
+    double alpha = muonScale_cb_params_->evaluate({abs(eta), nL, 3});
+    
+    // instantiate CB and get random number following the CB
+    CrystalBall cb(mean, sigma, alpha, n);
+    TRandom3 rnd(time(0));
+    double rndm = gRandom->Rndm();
+    return cb.invcdf(rndm);
+}
+
+double MyCorrections::muon_get_std(double pt, double eta, float nL) {
+
+    // obtain paramters from correctionlib
+    double param_0 = muonScale_poly_params_->evaluate({abs(eta), nL, 0});
+    double param_1 = muonScale_poly_params_->evaluate({abs(eta), nL, 1});
+    double param_2 = muonScale_poly_params_->evaluate({abs(eta), nL, 2});
+
+    // calculate value and return max(0, val)
+    double sigma = param_0 + param_1 * pt + param_2 * pt*pt;
+    if (sigma < 0) sigma = 0;
+    return sigma; 
+}
+
+double MyCorrections::muon_get_k(double eta, string var) {
+
+    // obtain parameters from correctionlib
+    double k_data = muonScale_k_data_->evaluate({abs(eta), var});
+    double k_mc = muonScale_k_mc_->evaluate({abs(eta), var});
+
+    // calculate residual smearing factor
+    // return 0 if smearing in MC already larger than in data
+    double k = 0;
+    if (k_mc < k_data) k = sqrt(k_data*k_data - k_mc*k_mc);
+    return k;
+}
+
+double MyCorrections::eval_muon_pt_resol(double pt, double eta, float nL) {
+
+    // load correction values
+    double rndm = (double) muon_get_rndm(eta, nL);
+    double std = (double) muon_get_std(pt, eta, nL);
+    double k = (double) muon_get_k(eta, "nom");
+
+    // calculate corrected value and return original value if a parameter is nan
+    double ptc = pt * ( 1 + k * std * rndm);
+    if (isnan(ptc)) ptc = pt;
+    return ptc;
+}
+
+double MyCorrections::eval_muon_pt_resol_var(double pt_woresol, double pt_wresol, double eta, string updn){
+    
+    double k = (double) muon_get_k(eta, "nom");
+
+    if (k==0) return pt_wresol;
+
+    double k_unc = muonScale_k_mc_->evaluate({abs(eta), "stat"});
+
+    double std_x_rndm = (pt_wresol / pt_woresol - 1) / k;
+
+    double pt_var = pt_wresol;
+
+    if (updn=="up"){
+        pt_var = pt_woresol * (1 + (k+k_unc) * std_x_rndm);
+    }
+    else if (updn=="dn"){
+        pt_var = pt_woresol * (1 + (k-k_unc) * std_x_rndm);
+    }
+    else {
+        cout << "ERROR: updn must be 'up' or 'dn'" << endl;
+    }
+
+    return pt_var;
+}
+
+double MyCorrections::eval_muon_pt_scale(bool is_data, double pt, double eta, double phi, int charge) {
+        
+    double a = 0.0;
+    double m = 1.0;
+
+    if (is_data) {
+      a = muonScale_a_data_->evaluate({eta, phi, "nom"});
+      m = muonScale_m_data_->evaluate({eta, phi, "nom"});
+    }
+    else {
+      a = muonScale_a_mc_->evaluate({eta, phi, "nom"});
+      m = muonScale_m_mc_->evaluate({eta, phi, "nom"});
+    }
+    return 1. / (m/pt + charge * a);
+}
+
+double MyCorrections::eval_muon_pt_scale_var(double pt, double eta, double phi, int charge, string updn) {
+        
+    double stat_a = muonScale_a_mc_->evaluate({eta, phi, "stat"});
+    double stat_m = muonScale_m_mc_->evaluate({eta, phi, "stat"});
+    double stat_rho = muonScale_m_mc_->evaluate({eta, phi, "rho_stat"});
+
+    double unc = pt*pt*sqrt(stat_m*stat_m / (pt*pt) + stat_a*stat_a + 2*charge*stat_rho*stat_m/pt*stat_a);
+
+    double pt_var = pt;
+    
+    if (updn=="up"){
+        pt_var = pt + unc;
+    }
+    else if (updn=="dn"){
+        pt_var = pt - unc;
+    }
+
+    return pt_var;
+}
