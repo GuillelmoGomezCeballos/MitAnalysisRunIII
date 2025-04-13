@@ -603,6 +603,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[79][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(79,x), "histo_{0}_{1}".format(79,x),40,  0, 40), "mllSSZ{0}".format(altMass),"weightNoBTag")
         histo[80][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(80,x), "histo_{0}_{1}".format(80,x),20, 10, 110), "ptl3{0}".format(altMass),"weightNoBTag")
 
+        dfsscat[x] = dfsscat[x].Filter("Sum(fake_el) == 0 or Min(fake_Electron_tightCharge) == 2")
+        histo[81][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(81,x), "histo_{0}_{1}".format(81,x), 4,-0.5, 3.5), "TriLepton_flavor","weightNoBTag")
+        histo[82][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(82,x), "histo_{0}_{1}".format(82,x),40,  0, 40), "mllSSZ{0}".format(altMass),"weightNoBTag")
+
         histo[ 3][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 50, 10, 210), "ptlW{0}".format(altMass),"weightNoBTag")
         dfwzcat                [x] = dfwzcat                [x].Filter("ptlW{0}             > 20".format(altMass),"ptlW cut")
         dfwzcatMuonMomUp       [x] = dfwzcatMuonMomUp       [x].Filter("ptlWMuonMomUp       > 20")
