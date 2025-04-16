@@ -206,6 +206,65 @@ float compute_JSONS_PUJetID_SF(Vec_f jet_pt, Vec_f jet_eta, unsigned int sel)
   return sfTot;
 }
 
+// JetSel Veto
+Vec_b cleaningJetSelMask(unsigned int sel, Vec_f jet_eta, Vec_f jet_chHEF, Vec_f jet_neHEF, Vec_f jet_chEmEF, Vec_f jet_neEmEF, Vec_f jet_muEF, Vec_f jet_chMultiplicity, Vec_f jet_neMultiplicity, Vec_ui jet_jetId, int year){
+
+  Vec_b jet_Sel_mask(jet_eta.size(), true);
+  bool debug = false;
+  if(debug) printf("seljetID: %lu %d\n",jet_eta.size(),sel);
+  float result = 0.0;
+
+  for(unsigned int i=0;i<jet_eta.size();i++) {
+    if(year >= 20240) {
+      result = corrSFs.eval_jetSel(sel, jet_eta[i], jet_chHEF[i], jet_neHEF[i], jet_chEmEF[i], jet_neEmEF[i], jet_muEF[i], jet_chMultiplicity[i], jet_neMultiplicity[i]);
+
+      if(debug) {
+        float resultTest = 0.0;
+        if(sel >= 0){
+          bool jet_passJetIdTight = false;
+          if      (abs(jet_eta[i]) <= 2.6) jet_passJetIdTight = (jet_neHEF[i] < 0.99) && (jet_neEmEF[i] < 0.9) && (jet_chMultiplicity[i]+jet_neMultiplicity[i] > 1) && (jet_chHEF[i] > 0.01) && (jet_chMultiplicity[i] > 0);
+          else if (abs(jet_eta[i]) > 2.6 && abs(jet_eta[i]) <= 2.7) jet_passJetIdTight = (jet_neHEF[i] < 0.90) && (jet_neEmEF[i] < 0.99);
+          else if (abs(jet_eta[i]) > 2.7 && abs(jet_eta[i]) < 3.0) jet_passJetIdTight = (jet_neHEF[i] < 0.99);
+          else if (abs(jet_eta[i]) >= 3.0) jet_passJetIdTight = (jet_neMultiplicity[i] >= 2) && (jet_neEmEF[i] < 0.4);
+          if(jet_passJetIdTight == true) resultTest = 1.0;
+
+          if(sel == 1) {
+            bool jet_passJetIdTightLepVeto = false;
+            if (abs(jet_eta[i]) <= 2.7) jet_passJetIdTightLepVeto = jet_passJetIdTight && (jet_muEF[i] < 0.8) && (jet_chEmEF[i] < 0.8);
+            else jet_passJetIdTightLepVeto = jet_passJetIdTight;
+            if(jet_passJetIdTightLepVeto == true) resultTest = 1.0;
+          } // sel == 1
+          if(result != resultTest) printf("Different jetID results! %f / %f\n",result,resultTest);
+        } // sel == 0 / 1
+      } // debug == true
+    }
+    else {
+      result = 0.0;
+      if(sel >= 0){
+        bool jet_passJetIdTight = false;
+        if      (abs(jet_eta[i]) <= 2.7) jet_passJetIdTight = jet_jetId[i] & (1 << 1);
+        else if (abs(jet_eta[i]) > 2.7 && abs(jet_eta[i]) <= 3.0) jet_passJetIdTight = (jet_jetId[i] & (1 << 1)) && (jet_neHEF[i] < 0.99);
+        else if (abs(jet_eta[i]) > 3.0) jet_passJetIdTight = (jet_jetId[i] & (1 << 1)) && (jet_neEmEF[i] < 0.4);
+
+        if(sel == 0 && jet_passJetIdTight == true) result = 1.0;
+
+        if(sel == 1) {
+          bool jet_passJetIdTightLepVeto = false;
+          if (abs(jet_eta[i]) <= 2.7) jet_passJetIdTightLepVeto = jet_passJetIdTight && (jet_muEF[i] < 0.8) && (jet_chEmEF[i] < 0.8);
+          else jet_passJetIdTightLepVeto = jet_passJetIdTight;
+
+          if(jet_passJetIdTightLepVeto == true) result = 1.0;
+        } // sel == 1
+      } // sel == 0 / 1
+    }
+
+    if(result == 0) jet_Sel_mask[i] = false;
+    if(debug) printf("seljetID(%d/%d): %.1f / %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i, sel, result, jet_eta[i], jet_chHEF[i], jet_neHEF[i], jet_chEmEF[i], jet_neEmEF[i], jet_muEF[i], jet_chMultiplicity[i], jet_neMultiplicity[i]);
+  }
+
+  return jet_Sel_mask;
+}
+
 float compute_JSON_PU_SF(double NumTrueInteractions, std::string type){
   bool debug = false;
   double sf = corrSFs.eval_puSF(std::min((float)NumTrueInteractions,74.999f),type);
@@ -377,16 +436,16 @@ Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
 
   for (unsigned int idx = 0; idx < jet_pt.size(); ++idx) {
     if(jet_genJetIdx[idx] >= 0 && GenJet_pt.size() > (unsigned)jet_genJetIdx[idx]) {
-      double s_jer = max(corrSFs.eval_jerMethod1(jet_eta[idx], jet_pt[idx], type)-1.0, 0.0);
+      double s_jer = corrSFs.eval_jerMethod1(jet_eta[idx], jet_pt[idx], type)-1.0;
       double pt_diff_rel = (jet_pt[idx]-GenJet_pt[jet_genJetIdx[idx]])/jet_pt[idx];
-      double sf = max(1 + s_jer*pt_diff_rel, 0.0);
+      double sf = max(1.0 + s_jer*pt_diff_rel, 0.0);
       new_jet_pt[idx] = jet_pt[idx] * sf;
       if(debug) printf("jermethod1(%d): %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,s_jer,pt_diff_rel,sf,jet_eta[idx],jet_pt[idx],new_jet_pt[idx]);
     }
     else {
-    double eval_jerMethod2(double eta, double pt, double rho);
+      if(fabs(jet_eta[idx]) >= 2.5 && fabs(jet_eta[idx]) <= 3.0) continue; // JME recommendation
       double s_jer = max(corrSFs.eval_jerMethod2(jet_eta[idx], jet_pt[idx], rho), 0.0);
-      double sf = 1 + gRandom->Gaus(0.0,0.1) * s_jer;
+      double sf = max(1.0 + gRandom->Gaus(0.0,0.1) * s_jer, 0.0);
       new_jet_pt[idx] = jet_pt[idx] * sf;
       if(debug) printf("jermethod2(%d): %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,jet_eta[idx],jet_pt[idx],rho,s_jer,sf,new_jet_pt[idx]);
     }

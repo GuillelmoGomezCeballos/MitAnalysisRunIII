@@ -141,7 +141,7 @@ def makeJES(df,year,postFix,bTagSel,jetEtaCut):
         postFitDef = "Def"
         postFitMet = ""
 
-    dftag =(df.Define("good_jet{0}".format(postFix), "abs(clean_Jet_eta) < {0} && clean_Jet_pt{1} > 30".format(jetEtaCut,postFitDef))
+    dftag =(df.Define("good_jet{0}".format(postFix), "abs(clean_Jet_eta) < {0} && clean_Jet_pt{1} > 30 && (clean_Jet_pt{1} > 50 or abs(clean_Jet_eta) < 2.5 or abs(clean_Jet_eta) > 3.0)".format(jetEtaCut,postFitDef))
               .Define("ngood_jets{0}".format(postFix), "Sum(good_jet{0})*1.0f".format(postFix))
               .Define("good_Jet_pt{0}".format(postFix), "clean_Jet_pt{0}[good_jet{1}]".format(postFitDef,postFix))
               .Define("good_Jet_eta{0}".format(postFix), "clean_Jet_eta[good_jet{0}]".format(postFix))
@@ -213,10 +213,22 @@ def selectionJetMet(df,year,bTagSel,isData,count,jetEtaCut):
     BTAGName = "UParTAK4"
     if((year // 10) < 2024): BTAGName = "RobustParTAK4"
 
+    JMEName0 = "Jet_chMultiplicity"
+    JMEName1 = "Jet_neMultiplicity"
+    JMEName2 = "Jet_jetId"
+    # set to DUMMY! Not used
+    if((year // 10) < 2024):
+        JMEName0 = "Jet_nElectrons"
+        JMEName1 = "Jet_nElectrons"
+        JMEName2 = "Jet_jetId"
+
     dftag =(df.Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
               .Define("jet_mask2", "cleaningMask(Electron_jetIdx[fake_el],nJet)")
               .Define("jet_VetoMapMask", "cleaningJetVetoMapMask(Jet_eta,Jet_phi,{0},{1})".format(jetTypeCorr,year))
-              .Define("clean_jet", "Jet_pt > 10 && jet_mask1 && jet_mask2 && jet_VetoMapMask > 0 && Jet_jetId > 0")
+              .Define("jet_SelMask0", "cleaningJetSelMask(0,Jet_eta,Jet_chHEF,Jet_neHEF,Jet_chEmEF,Jet_neEmEF,Jet_muEF,{0},{1},{2},{3})".format(JMEName0,JMEName1,JMEName2,year))
+              .Define("jet_SelMask1", "cleaningJetSelMask(1,Jet_eta,Jet_chHEF,Jet_neHEF,Jet_chEmEF,Jet_neEmEF,Jet_muEF,{0},{1},{2},{3})".format(JMEName0,JMEName1,JMEName2,year))
+              #.Define("clean_jet", "Jet_pt > 10 && jet_mask1 && jet_mask2 && jet_VetoMapMask > 0 && jet_SelMask0 && jet_SelMask1")
+              .Define("clean_jet", "Jet_pt > 10 && jet_mask1 && jet_mask2 && jet_VetoMapMask > 0 && jet_SelMask0") # No Tight lepton veto
               .Define("clean_Jet_pt", "Jet_pt[clean_jet]")
               .Define("clean_Jet_eta", "Jet_eta[clean_jet]")
               .Define("clean_Jet_phi", "Jet_phi[clean_jet]")

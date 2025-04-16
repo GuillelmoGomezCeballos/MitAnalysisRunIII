@@ -606,6 +606,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfsscat[x] = dfsscat[x].Filter("Sum(fake_el) == 0 or Min(fake_Electron_tightCharge) == 2")
         histo[81][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(81,x), "histo_{0}_{1}".format(81,x), 4,-0.5, 3.5), "TriLepton_flavor","weightNoBTag")
         histo[82][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(82,x), "histo_{0}_{1}".format(82,x),40,  0, 40), "mllSSZ{0}".format(altMass),"weightNoBTag")
+        dfsscat[x] = dfsscat[x].Filter("mllSSZ{0} > 15".format(altMass))
+        histo[83][x] = dfsscat[x].Histo1D(("histo_{0}_{1}".format(83,x), "histo_{0}_{1}".format(83,x), 4,-0.5, 3.5), "TriLepton_flavor","weightNoBTag")
 
         histo[ 3][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 3,x), "histo_{0}_{1}".format( 3,x), 50, 10, 210), "ptlW{0}".format(altMass),"weightNoBTag")
         dfwzcat                [x] = dfwzcat                [x].Filter("ptlW{0}             > 20".format(altMass),"ptlW cut")

@@ -659,7 +659,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,2,"p_{T}^{l3}","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_80.root",whichCondorJob,year),"sssel_ptmin", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Lepton type","",Form("anaZ/fillhisto_wzAnalysis%d_%d_81.root",whichCondorJob,year),"sssel_tight_ltype", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,2,"|m_{ll}-m_{Z}|","GeV",Form("anaZ/fillhisto_wzAnalysis%d_%d_82.root",whichCondorJob,year),"sssel_tight_mllz", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-
+    finalPlot(0,1,"Lepton type","",Form("anaZ/fillhisto_wzAnalysis%d_%d_83.root",whichCondorJob,year),"sssel_verytight_ltype", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"Output","",Form("anaZ/fillhisto_wzAnalysis%d_%d_300.root",whichCondorJob,year),"wzvbssel_output", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Output","",Form("anaZ/fillhisto_wzAnalysis%d_%d_500.root",whichCondorJob,year),"wzbvbssel_output", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());

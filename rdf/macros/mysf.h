@@ -32,6 +32,7 @@ class MyCorrections {
     double eval_jerMethod2(double eta, double pt, double rho);
     double eval_puJetIDSF (char *valType, char *workingPoint, double eta, double pt);
     double eval_jetVetoMap(double eta, double phi, int type);
+    double eval_jetSel    (unsigned int sel, float eta, float chHEF, float neHEF, float chEmEF, float neEmEF, float muEF, float chMultiplicity, float neMultiplicity);
 
     double eval_muon_pt_resol(double pt, double eta, float nL);
     double eval_muon_pt_resol_var(double pt_woresol, double pt_wresol, double eta, string updn);
@@ -72,8 +73,9 @@ class MyCorrections {
     correction::Correction::Ref jerMethod1Unc_;
     correction::Correction::Ref jerMethod2Unc_;
     correction::Correction::Ref puJetIDSF_;
+    correction::Correction::Ref jetTightSel_;
+    correction::Correction::Ref jetTightLeptonVetoSel_;
     int year;
-    bool isJan24JME = false;
 };
 
 MyCorrections::MyCorrections(int the_input_year) {
@@ -87,7 +89,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20221) subDirName = "2022_Summer22EE/";
   else if(year == 20230) subDirName = "2023_Summer23/";
   else if(year == 20231) subDirName = "2023_Summer23BPix/";
-  else if(year == 20240) subDirName = "2024_Summer24/";
+  else if(year == 20240) subDirName = "2024_Winter24/";
   else return;
 
   std::cout << "subDirName/year: " << subDirName << " " << year << std::endl;
@@ -174,12 +176,10 @@ MyCorrections::MyCorrections(int the_input_year) {
   tauJETSF_ = csetTAU->at("DeepTau2018v2p5VSjet");
 
   std::string fileNameJER = dirName+"JME/"+subDirName+"jet_jerc.json.gz";
-  if(isJan24JME == true) fileNameJER = dirName+"JME/"+subDirName+"jerc_only_jan24.json.gz";
   //std::cout << fileNameJER << std::endl;
   auto csetJER = correction::CorrectionSet::from_file(fileNameJER);
 
   std::string fileNameJEC = dirName+"JME/"+subDirName+"jet_jerc.json.gz";
-  if(isJan24JME == true) fileNameJEC = dirName+"JME/"+subDirName+"jet_jerc_jan24.json.gz";
   //std::cout << fileNameJEC << std::endl;
   auto csetJEC = correction::CorrectionSet::from_file(fileNameJEC);
 
@@ -191,7 +191,6 @@ MyCorrections::MyCorrections(int the_input_year) {
 
   if      (year == 20220)  {
     jecMCName = "Summer22_22Sep2023_V2_MC"; jerName = "Summer22_22Sep2023_JRV1_MC";
-    if(isJan24JME == true) jerName = "JR_Winter22Run3_V1_MC";
     jecDATAName[0] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[0] = "Summer22_23Sep2023_RunCD_V1"; // A
     jecDATAName[1] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[1] = "Summer22_23Sep2023_RunCD_V1"; // B
     jecDATAName[2] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[2] = "Summer22_23Sep2023_RunCD_V1"; // C
@@ -202,7 +201,6 @@ MyCorrections::MyCorrections(int the_input_year) {
   }
   else if(year == 20221)  {
     jecMCName = "Summer22EE_22Sep2023_V2_MC"; jerName = "Summer22EE_22Sep2023_JRV1_MC";
-    if(isJan24JME == true) jerName = "Summer22EEPrompt22_JRV1_MC";
     jecDATAName[0] = "NULL";   jetVetoMapName[0] = "NULL"; // A
     jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
     jecDATAName[2] = "NULL";   jetVetoMapName[2] = "NULL"; // C
@@ -360,6 +358,12 @@ MyCorrections::MyCorrections(int the_input_year) {
     jetVetoMap_[i] = csetJetVetoMap->at(jetVetoMapName[i]);
   }
 
+  std::string fileNameJetSel = dirName+"JME/"+subDirName+"jetid.json.gz";
+  //std::cout << fileNameJetSel << std::endl;
+  auto csetJetSel = correction::CorrectionSet::from_file(fileNameJetSel);
+  jetTightSel_           = csetJetSel->at("AK4PUPPI_Tight");
+  jetTightLeptonVetoSel_ = csetJetSel->at("AK4PUPPI_TightLeptonVeto");
+
 };
 
 double MyCorrections::eval_puSF(double int1, std::string str1) {
@@ -444,18 +448,6 @@ double MyCorrections::eval_jesUnc(double eta, double pt, int type) {
 };
 
 double MyCorrections::eval_jerMethod1(double eta, double pt, int type) {
-  if(isJan24JME == true) {
-    if     (year == 20220){
-      if     (type ==  0) return jerMethod1Unc_->evaluate({eta,pt,"nom"});
-      else if(type == +1) return jerMethod1Unc_->evaluate({eta,pt,"up"});
-      else if(type == -1) return jerMethod1Unc_->evaluate({eta,pt,"down"});
-    }
-    else if(year == 20221){
-      if     (type ==  0) return jerMethod1Unc_->evaluate({eta,"nom"});
-      else if(type == +1) return jerMethod1Unc_->evaluate({eta,"up"});
-      else if(type == -1) return jerMethod1Unc_->evaluate({eta,"down"});
-    }
-  }
   if     (type ==  0) return jerMethod1Unc_->evaluate({eta,pt,"nom"});
   else if(type == +1) return jerMethod1Unc_->evaluate({eta,pt,"up"});
   else if(type == -1) return jerMethod1Unc_->evaluate({eta,pt,"down"});
@@ -476,6 +468,19 @@ double MyCorrections::eval_jetVetoMap(double eta, double phi, int type) {
   phi = std::min(std::max(phi,-3.1415),3.1415);
   if(type >= 0) return jetVetoMap_[type]->evaluate({"jetvetomap", eta, phi});
   return 0;
+};
+
+double MyCorrections::eval_jetSel(unsigned int sel, float eta, float chHEF, float neHEF, float chEmEF, float neEmEF, float muEF, float chMultiplicity, float neMultiplicity) {
+  eta = fabs(eta);
+  float result = 0;
+  float multiplicity = chMultiplicity + neMultiplicity;
+  if(sel == 0) {
+    result = jetTightSel_          ->evaluate({eta, chHEF, neHEF,         neEmEF,       chMultiplicity, neMultiplicity, multiplicity});
+  }
+  else if(sel == 1) {
+    result = jetTightLeptonVetoSel_->evaluate({eta, chHEF, neHEF, chEmEF, neEmEF, muEF, chMultiplicity, neMultiplicity, multiplicity});
+  }
+  return result;
 };
 
 // Muon momentum scale and resolution

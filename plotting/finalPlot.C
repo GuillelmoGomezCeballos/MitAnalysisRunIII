@@ -334,7 +334,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   else if(year == 20230) {theLumi = 17.6;}
   else if(year == 20231) {theLumi = 9.5;}
   else if(year == 2027)  {theLumi = 164; theYear = Form("Run 3");}
-  else if(year == 20240) {theLumi = 109; theYear = Form("%d",2024);}
+  else if(year == 20240) {theLumi = 102; theYear = Form("%d",2024);}
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
   cmsstyle::SetExtraText("");
