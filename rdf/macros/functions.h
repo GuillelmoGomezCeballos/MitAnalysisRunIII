@@ -435,20 +435,26 @@ Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
   Vec_f new_jet_pt(jet_pt.size(), 1.0);
 
   for (unsigned int idx = 0; idx < jet_pt.size(); ++idx) {
+    double s_jer = corrSFs.eval_jerScaleFactor(jet_eta[idx], jet_pt[idx], type);
+    double pt_res_gen = corrSFs.eval_jerPtResolution(jet_eta[idx], jet_pt[idx], rho);
+    double pt_diff_rel = 100.0;
+    double sf = 1.0;
+
+    bool isMatchedJet = false;
     if(jet_genJetIdx[idx] >= 0 && GenJet_pt.size() > (unsigned)jet_genJetIdx[idx]) {
-      double s_jer = corrSFs.eval_jerMethod1(jet_eta[idx], jet_pt[idx], type)-1.0;
-      double pt_diff_rel = (jet_pt[idx]-GenJet_pt[jet_genJetIdx[idx]])/jet_pt[idx];
-      double sf = max(1.0 + s_jer*pt_diff_rel, 0.0);
-      new_jet_pt[idx] = jet_pt[idx] * sf;
-      if(debug) printf("jermethod1(%d): %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,s_jer,pt_diff_rel,sf,jet_eta[idx],jet_pt[idx],new_jet_pt[idx]);
+      pt_diff_rel = (jet_pt[idx]-GenJet_pt[jet_genJetIdx[idx]])/jet_pt[idx];
+      double maxSigmaPtRel = 3;
+      if(pt_diff_rel < maxSigmaPtRel*pt_res_gen){
+          isMatchedJet = true;
+          sf = max(1.0 + (s_jer-1.0)*pt_diff_rel, 0.0);
+      }
+    } // gen matched jets
+    if(isMatchedJet == false && (fabs(jet_eta[idx]) < 2.5 || fabs(jet_eta[idx]) > 3.0)) {
+      sf = max(1.0 + gRandom->Gaus(0.0,pt_res_gen) * sqrt(max(s_jer*s_jer-1.0, 0.0)), 0.0);
     }
-    else {
-      if(fabs(jet_eta[idx]) >= 2.5 && fabs(jet_eta[idx]) <= 3.0) continue; // JME recommendation
-      double s_jer = max(corrSFs.eval_jerMethod2(jet_eta[idx], jet_pt[idx], rho), 0.0);
-      double sf = max(1.0 + gRandom->Gaus(0.0,0.1) * s_jer, 0.0);
-      new_jet_pt[idx] = jet_pt[idx] * sf;
-      if(debug) printf("jermethod2(%d): %.3f %.3f %.3f %.3f %.3f %.3f\n",idx,jet_eta[idx],jet_pt[idx],rho,s_jer,sf,new_jet_pt[idx]);
-    }
+    // new jet pt
+    new_jet_pt[idx] = jet_pt[idx] * sf;
+    if(debug) printf("jerScaleFactor(%d): %.3f %.3f %.3f / %.3f / %d %.3f %.3f / %.3f %.3f\n",idx,jet_eta[idx],jet_pt[idx],rho,new_jet_pt[idx],isMatchedJet,pt_diff_rel,sf,s_jer,pt_res_gen);
   }
 
   return new_jet_pt;

@@ -28,8 +28,8 @@ class MyCorrections {
 
     double eval_jetCORR   (double area, double eta, double phi, double pt, double rho, int run, int type);
     double eval_jesUnc    (double eta, double pt, int type);
-    double eval_jerMethod1(double eta, double pt, int type);
-    double eval_jerMethod2(double eta, double pt, double rho);
+    double eval_jerScaleFactor(double eta, double pt, int type);
+    double eval_jerPtResolution(double eta, double pt, double rho);
     double eval_puJetIDSF (char *valType, char *workingPoint, double eta, double pt);
     double eval_jetVetoMap(double eta, double phi, int type);
     double eval_jetSel    (unsigned int sel, float eta, float chHEF, float neHEF, float chEmEF, float neEmEF, float muEF, float chMultiplicity, float neMultiplicity);
@@ -70,8 +70,8 @@ class MyCorrections {
     correction::Correction::Ref JECL2ResDATA_[10];
     correction::Correction::Ref jetVetoMap_[10];
     correction::Correction::Ref jesSourcesUnc_[28];
-    correction::Correction::Ref jerMethod1Unc_;
-    correction::Correction::Ref jerMethod2Unc_;
+    correction::Correction::Ref jerScaleFactor_;
+    correction::Correction::Ref jerPtResolution__;
     correction::Correction::Ref puJetIDSF_;
     correction::Correction::Ref jetTightSel_;
     correction::Correction::Ref jetTightLeptonVetoSel_;
@@ -210,7 +210,7 @@ MyCorrections::MyCorrections(int the_input_year) {
     jecDATAName[6] = "Summer22EE_22Sep2023_RunG_V2_DATA"; jetVetoMapName[6] = "Summer22EE_23Sep2023_RunEFG_V1";  // G
   }
   else if(year == 20230)  {
-    jecMCName = "Summer23Prompt23_V1_MC"; jerName = "Summer23Prompt23_RunCv4_JRV1_MC";
+    jecMCName = "Summer23Prompt23_V1_MC"; jerName = "Summer23Prompt23_RunCv1234_JRV1_MC";
     jecDATAName[0] = "NULL";   jetVetoMapName[0] = "NULL"; // A
     jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
     jecDATAName[2] = "Summer23Prompt23_RunCv123_V1_DATA";   jetVetoMapName[2] = "Summer23Prompt23_RunC_V1"; // C
@@ -340,10 +340,10 @@ MyCorrections::MyCorrections(int the_input_year) {
 
   tagName = jerName + "_" + "ScaleFactor" + "_" + algoName;
   //std::cout << tagName << std::endl;
-  jerMethod1Unc_ = csetJER->at(tagName);
+  jerScaleFactor_ = csetJER->at(tagName);
 
   tagName = jerName + "_" + "PtResolution" + "_" + algoName;
-  jerMethod2Unc_ = csetJER->at(tagName);
+  jerPtResolution__ = csetJER->at(tagName);
 
   //std::string fileNamePUJetID = dirName+"JME/"+subDirName+"jmar.json.gz";
   //auto csetPUJetID = correction::CorrectionSet::from_file(fileNamePUJetID);
@@ -447,16 +447,16 @@ double MyCorrections::eval_jesUnc(double eta, double pt, int type) {
   return std::abs(jesSourcesUnc_[type]->evaluate({eta, pt}));
 };
 
-double MyCorrections::eval_jerMethod1(double eta, double pt, int type) {
-  if     (type ==  0) return jerMethod1Unc_->evaluate({eta,pt,"nom"});
-  else if(type == +1) return jerMethod1Unc_->evaluate({eta,pt,"up"});
-  else if(type == -1) return jerMethod1Unc_->evaluate({eta,pt,"down"});
+double MyCorrections::eval_jerScaleFactor(double eta, double pt, int type) {
+  if     (type ==  0) return jerScaleFactor_->evaluate({eta,pt,"nom"});
+  else if(type == +1) return jerScaleFactor_->evaluate({eta,pt,"up"});
+  else if(type == -1) return jerScaleFactor_->evaluate({eta,pt,"down"});
   std::cout << "0 JER correction!" << std::endl;
   return 0.0;
 };
 
-double MyCorrections::eval_jerMethod2(double eta, double pt, double rho) {
-  return jerMethod2Unc_->evaluate({eta,pt,rho});
+double MyCorrections::eval_jerPtResolution(double eta, double pt, double rho) {
+  return jerPtResolution__->evaluate({eta,pt,rho});
 };
 
 double MyCorrections::eval_puJetIDSF(char *valType, char *workingPoint, double eta, double pt) {

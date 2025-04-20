@@ -45,7 +45,7 @@ VBSSEL = jsonObject['VBSSEL']
 VBSQCDSEL = jsonObject['VBSQCDSEL']
 
 altMass = "Def"
-jetEtaCut = 5.0
+jetEtaCut = 4.9
 metCut = 30.0
 
 muSelChoice = 8

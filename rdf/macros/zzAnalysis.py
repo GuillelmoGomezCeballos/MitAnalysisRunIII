@@ -23,7 +23,7 @@ useFR = 0
 altMass = "Def"
 
 jetEtaCut = 2.5
-if(makeDataCards >= 3): jetEtaCut = 5.0
+if(makeDataCards >= 3): jetEtaCut = 4.9
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):

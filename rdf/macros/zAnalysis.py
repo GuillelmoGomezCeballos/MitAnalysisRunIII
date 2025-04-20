@@ -20,7 +20,7 @@ useFR = 0
 
 altMass = "Def"
 
-jetEtaCut = 5.0
+jetEtaCut = 4.9
 
 selectionJsonPath = "config/selection.json"
 
