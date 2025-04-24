@@ -973,7 +973,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weightPhoSFJSON","compute_JSON_PHO_SFs(PHOYEAR,\"sf\",PHOWP,good_Photons_pt,good_Photons_eta,good_Photons_phi)")
                  .Filter("weightPhoSFJSON > 0","weightPhoSFJSON > 0")
 
-                 .Define("weightTauSFJSON","compute_JSON_TAU_SFs(good_Tau_pt,good_Tau_eta,good_Tau_decayMode,good_Tau_genPartFlav,\"default\")")
+                 .Define("weightTauSFJSON","compute_JSON_TAU_SFs(good_Tau_pt,good_Tau_eta,good_Tau_decayMode,good_Tau_genPartFlav,\"nom\")")
                  .Filter("weightTauSFJSON > 0","weightTauSFJSON > 0")
 
                  .Define("weightFakeAltm0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,tight_el,{1},{2})".format(fakeRateSel[1],fakeRateSel[0],whichAna))

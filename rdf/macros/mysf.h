@@ -417,6 +417,7 @@ double MyCorrections::eval_photonSF(const char *the_input_year, const char *valT
 
 double MyCorrections::eval_tauJETSF(double pt, int dm, int genmatch, const char *workingPoint, const char *workingPoint_VSe, const char *valType) {
   pt = std::min(std::max(pt,20.001),1999.999);
+  if(dm == 5 || dm == 6) dm = 0;
   return tauJETSF_->evaluate({pt, dm, genmatch, workingPoint, workingPoint_VSe, valType, "dm"});
 };
 
