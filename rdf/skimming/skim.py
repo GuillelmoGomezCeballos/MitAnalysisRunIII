@@ -111,8 +111,8 @@ if __name__ == "__main__":
         isLocal = True
         print("T3 node ({0}), outputDir = {1} / msgCPOutput = {2}".format(theHost,outputDir,msgCPOutput))
 
-    elif("submitxxx" in theHost):
-        outputDir = outputDir.replace("root://t3serv017.mit.edu/","/mnt/T3_US_MIT/hadoop")
+    elif("submit" in theHost):
+        outputDir = outputDir.replace("root://submit50.mit.edu/","/ceph/submit/data/group/cms")
         msgCPOutput = "cp"
         isLocal = True
         print("submit node ({0}), outputDir = {1} / msgCPOutput = {2}".format(theHost,outputDir,msgCPOutput))
