@@ -7,13 +7,15 @@ if __name__ == "__main__":
     missingFilesCfg = "skim_input_condor_missing_jobs_fromDAS.cfg"
     debug = 0
     type = 0
+    deleteFiles = 0
 
-    valid = ['outputDir=', "outputForCondorCfg=", "missingFilesCfg=", "debug=", "type=", "help"]
+    valid = ['outputDir=', "outputForCondorCfg=", "missingFilesCfg=", "debug=", "type=", "delete=", "help"]
     usage  =  "Usage: ana.py --outputDir=<{0}>\n".format(outputDir)
     usage +=  "              --outputForCondorCfg=<{0}>\n".format(outputForCondorCfg)
     usage +=  "              --missingFilesCfg=<{0}>\n".format(missingFilesCfg)
     usage +=  "              --debug=<{0}>\n".format(debug)
-    usage +=  "              --type=<{0}>".format(type)
+    usage +=  "              --type=<{0}>\n".format(type)
+    usage +=  "              --delete=<{0}>".format(deleteFiles)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -35,6 +37,8 @@ if __name__ == "__main__":
             type = int(arg)
         if opt == "--debug":
             debug = int(arg)
+        if opt == "--delete":
+            deleteFiles = int(arg)
 
     missingFile = open(missingFilesCfg, 'w')
 
@@ -120,6 +124,10 @@ if __name__ == "__main__":
           ):
             missingFile.writelines(lineRaw)
             countMissingFiles[5] += 1
+            if(deleteFiles == 1):
+                fileNameDelete = os.path.join(outputDir, "*", line[3], "output_*_{0}_{1}.*".format(line[0],line[1]))
+                print("rm -f {0}".format(fileNameDelete))
+                os.system("rm -f {0}".format(fileNameDelete))
 
     missingFile.close()
 
