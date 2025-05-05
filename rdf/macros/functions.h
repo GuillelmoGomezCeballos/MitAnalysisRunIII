@@ -854,6 +854,27 @@ float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
   return sf;
 }
 
+float compute_PTWWCorr(const int type, const TString theCat, const float ptww){
+
+  bool debug = false;
+  float sf = 1.0;
+
+  // Careful here, names will need be added to the list!
+  if(ptww > 100) {
+    sf = 1.0;
+  }
+  else if(theCat.Contains("WWto2L2Nu_TuneCP5")
+       || theCat.Contains("GluGlutoContintoWW")
+       || theCat.Contains("ggWWto2L2Nu")) {
+    float p[3] = {1.36457, -0.0140161, 6.97266e-05};
+    sf = p[0] + ptww * p[1] + ptww * ptww * p[2];
+  }
+
+  if(debug) printf("PTWWCorr: %d %s %f %f\n",type,theCat.Data(),ptww,sf);
+
+  return sf;
+}
+
 float compute_fakeRate(const bool isData,
                        const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& tight_mu, const int mType,
                        const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& tight_el, const int eType,

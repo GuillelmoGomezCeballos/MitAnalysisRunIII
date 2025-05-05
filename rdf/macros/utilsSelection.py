@@ -895,6 +895,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
               .Define("weightWS", "compute_WSSF({0},fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)".format(whichAna))
 
               .Define("weightEWKCorr", "compute_EWKCorr(0,PDType,mjjGen)")
+
+              .Define("weightPTWWCorr", "compute_PTWWCorr(0,PDType,ptww)")
               )
 
     if(correctionString == "_correction"):
