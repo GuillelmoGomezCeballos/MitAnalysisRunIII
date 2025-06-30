@@ -80,9 +80,9 @@ def getBTagCut(type,year):
        value[1] = 0.3494
        value[2] = 0.0683
     elif(year == 20240):
-       value[0] = 0.7994
-       value[1] = 0.3494
-       value[2] = 0.0683
+       value[0] = 0.4648
+       value[1] = 0.1272
+       value[2] = 0.0246
 
     return value[type]
 
@@ -215,11 +215,10 @@ def selectionJetMet(df,year,bTagSel,isData,count,jetEtaCut):
 
     JMEName0 = "Jet_chMultiplicity"
     JMEName1 = "Jet_neMultiplicity"
-    JMEName2 = "Jet_jetId"
-    # set to DUMMY! Not used
+    JMEName2 = "Jet_nElectrons" # dummy
     if((year // 10) < 2024):
-        JMEName0 = "Jet_nElectrons"
-        JMEName1 = "Jet_nElectrons"
+        JMEName0 = "Jet_nElectrons" # dummy
+        JMEName1 = "Jet_nElectrons" # dummy
         JMEName2 = "Jet_jetId"
 
     dftag =(df.Define("jet_mask1", "cleaningMask(Muon_jetIdx[fake_mu],nJet)")
@@ -896,7 +895,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
 
               .Define("weightEWKCorr", "compute_EWKCorr(0,PDType,mjjGen)")
 
-              .Define("weightPTWWCorr", "compute_PTWWCorr(0,PDType,ptww)")
+              #.Define("weightPTWWCorr", "compute_PTWWCorr(0,PDType,ptww)")
               )
 
     if(correctionString == "_correction"):
