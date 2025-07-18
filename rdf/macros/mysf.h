@@ -32,7 +32,7 @@ class MyCorrections {
     double eval_jerPtResolution(double eta, double pt, double rho);
     double eval_puJetIDSF (char *valType, char *workingPoint, double eta, double pt);
     double eval_jetVetoMap(double eta, double phi, int type);
-    double eval_jetSel    (unsigned int sel, float eta, float chHEF, float neHEF, float chEmEF, float neEmEF, float muEF, float chMultiplicity, float neMultiplicity);
+    double eval_jetSel    (unsigned int sel, float eta, float chHEF, float neHEF, float chEmEF, float neEmEF, float muEF, int chMultiplicity, int neMultiplicity);
 
     double eval_muon_pt_resol(double pt, double eta, float nL);
     double eval_muon_pt_resol_var(double pt_woresol, double pt_wresol, double eta, string updn);
@@ -210,21 +210,21 @@ MyCorrections::MyCorrections(int the_input_year) {
     jecDATAName[6] = "Summer22EE_22Sep2023_RunG_V2_DATA"; jetVetoMapName[6] = "Summer22EE_23Sep2023_RunEFG_V1";  // G
   }
   else if(year == 20230)  {
-    jecMCName = "Summer23Prompt23_V1_MC"; jerName = "Summer23Prompt23_RunCv1234_JRV1_MC";
+    jecMCName = "Summer23Prompt23_V2_MC"; jerName = "Summer23Prompt23_RunCv1234_JRV1_MC";
     jecDATAName[0] = "NULL";   jetVetoMapName[0] = "NULL"; // A
     jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
-    jecDATAName[2] = "Summer23Prompt23_RunCv123_V1_DATA";   jetVetoMapName[2] = "Summer23Prompt23_RunC_V1"; // C
+    jecDATAName[2] = "Summer23Prompt23_V2_DATA";   jetVetoMapName[2] = "Summer23Prompt23_RunC_V1"; // C
     jecDATAName[3] = "NULL";   jetVetoMapName[3] = "NULL"; // D
     jecDATAName[4] = "NULL";   jetVetoMapName[4] = "NULL"; // E
     jecDATAName[5] = "NULL";   jetVetoMapName[5] = "NULL"; // F
     jecDATAName[6] = "NULL";   jetVetoMapName[6] = "NULL"; // G
   }
   else if(year == 20231)  {
-    jecMCName = "Summer23BPixPrompt23_V1_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
+    jecMCName = "Summer23BPixPrompt23_V3_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
     jecDATAName[0] = "NULL";   jetVetoMapName[0] = "NULL"; // A
     jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
     jecDATAName[2] = "NULL";   jetVetoMapName[2] = "NULL"; // C
-    jecDATAName[3] = "Summer23BPixPrompt23_RunD_V1_DATA";   jetVetoMapName[3] = "Summer23BPixPrompt23_RunD_V1"; // D
+    jecDATAName[3] = "Summer23BPixPrompt23_V3_DATA";   jetVetoMapName[3] = "Summer23BPixPrompt23_RunD_V1"; // D
     jecDATAName[4] = "NULL";   jetVetoMapName[4] = "NULL"; // E
     jecDATAName[5] = "NULL";   jetVetoMapName[5] = "NULL"; // F
     jecDATAName[6] = "NULL";   jetVetoMapName[6] = "NULL"; // G
@@ -433,13 +433,12 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
 
 double MyCorrections::eval_jetCORR(double area, double eta, double phi, double pt, double rho, int run, int type) {
   // data
-  if     (type >= 0 && year == 20231) return JECDATA_[type]->evaluate({area, eta, phi,  pt, rho});
-  else if(type >= 0 && year == 20240) return JECDATA_[type]->evaluate({area, eta,  pt, rho, phi, (float)run});
-  else if(type >= 0                 ) return JECDATA_[type]->evaluate({area, eta,       pt, rho});
+  if(type >= 0 && (year == 20231 || year == 20240)) return JECDATA_[type]->evaluate({area, eta, pt, rho, phi, (float)run});
+  else if(type >= 0 && year == 20230)               return JECDATA_[type]->evaluate({area, eta, pt, rho,      (float)run});
+  else if(type >= 0)                                return JECDATA_[type]->evaluate({area, eta, pt, rho});
   // MC
-  if     (year == 20231) return JECMC_->evaluate({area, eta, phi,  pt, rho});
-  else if(year == 20240) return JECMC_->evaluate({area, eta,  pt, rho, phi});
-  else                   return JECMC_->evaluate({area, eta,       pt, rho});
+  if     (year == 20231 || year == 20240) return JECMC_->evaluate({area, eta, pt, rho, phi});
+  else                                    return JECMC_->evaluate({area, eta, pt, rho});
   printf("ERROR in eval_jetCORR!\n");
   return 1.0;
 };
@@ -471,12 +470,12 @@ double MyCorrections::eval_jetVetoMap(double eta, double phi, int type) {
   return 0;
 };
 
-double MyCorrections::eval_jetSel(unsigned int sel, float eta, float chHEF, float neHEF, float chEmEF, float neEmEF, float muEF, float chMultiplicity, float neMultiplicity) {
+double MyCorrections::eval_jetSel(unsigned int sel, float eta, float chHEF, float neHEF, float chEmEF, float neEmEF, float muEF, int chMultiplicity, int neMultiplicity) {
   eta = fabs(eta);
   float result = 0;
-  float multiplicity = chMultiplicity + neMultiplicity;
+  int multiplicity = chMultiplicity + neMultiplicity;
   if(sel == 0) {
-    result = jetTightSel_          ->evaluate({eta, chHEF, neHEF,         neEmEF,       chMultiplicity, neMultiplicity, multiplicity});
+    result = jetTightSel_          ->evaluate({eta, chHEF, neHEF, chEmEF, neEmEF, muEF, chMultiplicity, neMultiplicity, multiplicity});
   }
   else if(sel == 1) {
     result = jetTightLeptonVetoSel_->evaluate({eta, chHEF, neHEF, chEmEF, neEmEF, muEF, chMultiplicity, neMultiplicity, multiplicity});

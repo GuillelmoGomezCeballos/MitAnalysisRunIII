@@ -76,8 +76,6 @@ while IFS= read -r line; do
 set -- $line
 whichSample=$1
 whichYear=$2
-whichSample=$1
-whichYear=$2
 passSel=$3
 
 if [ "${passSel}" != "no" ]; then

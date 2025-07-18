@@ -2271,12 +2271,24 @@ std::pair<float, float>  Minv2(const float& pt, const float& eta, const float& p
   return pairRECO;
 }
 
+float compute_gen_ptvv(const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_phi, const float met_pt, const float met_phi){
+
+  if(GenDressedLepton_pt.size() < 2) return 0.0;
+
+  PtEtaPhiMVector p4mom = PtEtaPhiMVector(met_pt,0.0,met_phi,0.0);
+  for(unsigned int i=0; i<GenDressedLepton_pt.size(); i++){
+    p4mom = p4mom + PtEtaPhiMVector(GenDressedLepton_pt[i],0.0,GenDressedLepton_phi[i],0.0);
+  }
+
+  return p4mom.Pt();
+}
+
 float compute_ptww_weight(const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_phi, const float met_pt, const float met_phi, int nsel){
 
   if(GenDressedLepton_pt.size() < 2) return 1.0;
 
   PtEtaPhiMVector p4mom = PtEtaPhiMVector(met_pt,0.0,met_phi,0.0);
-  for(unsigned int i=1; i<GenDressedLepton_pt.size(); i++){
+  for(unsigned int i=0; i<GenDressedLepton_pt.size(); i++){
     p4mom = p4mom + PtEtaPhiMVector(GenDressedLepton_pt[i],0.0,GenDressedLepton_phi[i],0.0);
   }
   double ptww = std::min(p4mom.Pt(),499.999);

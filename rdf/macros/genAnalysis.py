@@ -9,6 +9,7 @@ from utilsAna import SwitchSample
 from utilsSelection import selectionGenLepJet, selectionTheoryWeigths, makeFinalVariable
 
 jetEtaCut = 2.5
+isRun3Sel = False
 
 def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
@@ -63,7 +64,9 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
             )
 
     dfwwxgen = selectionGenLepJet(dfcat,20,30,jetEtaCut).Filter("ngood_GenDressedLeptons >= 2", "ngood_GenDressedLeptons >= 2")
-    dfwwxgen = (dfwwxgen.Define("theGenCat0", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,0)-1.0".format(0))
+    if(isRun3Sel == True):
+        dfwwxgen = (dfwwxgen
+                        .Define("theGenCat0", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,0)-1.0".format(0))
                         .Define("theGenCat1", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,1)-1.0".format(0))
                         .Define("theGenCat2", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,2)-1.0".format(0))
                         .Define("theGenCat" , "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,3)-1.0".format(0))
@@ -78,10 +81,25 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
                         .Define("theNNLOWeight4", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,4)")
                         )
 
+    else:
+        dfwwxgen = (dfwwxgen
+                        .Define("theGenCat0", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,0)-1.0".format(0))
+                        .Define("theGenCat1", "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,1)-1.0".format(0))
+                        .Define("theGenCat",  "compute_gen_category({0},ngood_GenJets,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,2)-1.0".format(0))
+                        .Filter("theGenCat0 >= 0","theGenCat0 >= 0")
+                        .Filter("theGenCat1 >= 0","theGenCat1 >= 0")
+                        .Filter("theGenCat  >= 0","theGenCat  >= 0")
+                        .Define("theNNLOWeight0", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,0)")
+                        .Define("theNNLOWeight1", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,1)")
+                        .Define("theNNLOWeight2", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,2)")
+                        .Define("theNNLOWeight3", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,3)")
+                        .Define("theNNLOWeight4", "weight*compute_ptww_weight(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi,4)")
+                        )
+
     # Z->ll + X study
-    histo[ 9][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format( 9,x), "histo_{0}_{1}".format( 9,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
-    histo[10][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 40,  0, 200), "Zpt","weight")
-    histo[11][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 50, 0., 5.0), "Zrap","weight")
+    histo[10][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 60, 91.1876-15, 91.1876+15), "Zmass","weight")
+    histo[11][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 40,  0, 200), "Zpt","weight")
+    histo[12][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 50, 0., 5.0), "Zrap","weight")
     histo2D[100][x] = dfzllgen.Histo2D(("histo2d_{0}_{1}".format(100,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 100),"Zrap","Zpt","weight")
 
     startF = 260
@@ -98,16 +116,15 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     dfzllgen = dfzllgen.Filter("abs(filter_GenDressedLepton_eta[0]) < 2.5 && abs(filter_GenDressedLepton_eta[1]) < 2.5","eta requirements")
     dfzllgen = dfzllgen.Filter("filter_GenDressedLepton_pt[0] > 10 && filter_GenDressedLepton_pt[1] > 10","Minimal pt requirements")
 
-    histo[12][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 40,  0, 200), "Zpt","weight")
-    histo[13][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 50, 0., 5.0), "Zrap","weight")
+    histo[13][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 40,  0, 200), "Zpt","weight")
+    histo[14][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 50, 0., 5.0), "Zrap","weight")
 
     dfzllgen = dfzllgen.Filter("filter_GenDressedLepton_pt[0] > 25 && filter_GenDressedLepton_pt[1] > 20","Tighter pt requirements")
 
     dfzllgen = selectionGenLepJet(dfzllgen,20,30,jetEtaCut)
 
-    histo[14][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 40,  0, 200), "Zpt","weight")
-    histo[15][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 50, 0., 5.0), "Zrap","weight")
-    histo[16][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 4, -0.5,  3.5), "ngood_GenJets","weight")
+    histo[15][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 40,  0, 200), "Zpt","weight")
+    histo[16][x] = dfzllgen.Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 50, 0., 5.0), "Zrap","weight")
     histo[17][x] = dfzllgen.Filter("ngood_GenJets == 0").Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 40,  0, 200), "Zpt","weight")
     histo[18][x] = dfzllgen.Filter("ngood_GenJets == 1").Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 40,  0, 200), "Zpt","weight")
     histo[19][x] = dfzllgen.Filter("ngood_GenJets >= 2").Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 40,  0, 200), "Zpt","weight")
@@ -127,7 +144,20 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
                         .Define("etal2Gen","good_GenDressedLepton_eta[1]")
                         .Define("mllGen",  "Minv2(good_GenDressedLepton_pt[0], good_GenDressedLepton_eta[0], good_GenDressedLepton_phi[0], good_GenDressedLepton_mass[0],good_GenDressedLepton_pt[1], good_GenDressedLepton_eta[1], good_GenDressedLepton_phi[1], good_GenDressedLepton_mass[1]).first")
                         .Define("ptllGen", "Minv2(good_GenDressedLepton_pt[0], good_GenDressedLepton_eta[0], good_GenDressedLepton_phi[0], good_GenDressedLepton_mass[0],good_GenDressedLepton_pt[1], good_GenDressedLepton_eta[1], good_GenDressedLepton_phi[1], good_GenDressedLepton_mass[1]).second")
+                        .Define("ptvvGen", "compute_gen_ptvv(good_GenDressedLepton_pt,good_GenDressedLepton_phi,GenMET_pt,GenMET_phi)")
                         )
+
+    if(isRun3Sel == True):
+        dfwwxgen = (dfwwxgen
+                       .Filter("mllGen > 85", "mllGen > 85")
+                       )
+    else:
+        dfwwxgen = (dfwwxgen
+                       .Filter("mllGen > 20", "mllGen > 20")
+                       .Filter("ptllGen > 30", "ptllGen > 30")
+                       .Filter("GenMET_pt > 20", "GenMET_pt > 20")
+                       )
+
     histo[0][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(0,x), "histo_{0}_{1}".format(0,x), 30, 85., 385.), "mllGen","weight")
     histo[1][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(1,x), "histo_{0}_{1}".format(1,x), 30, 0.,  240.), "ptllGen","weight")
     histo[2][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(2,x), "histo_{0}_{1}".format(2,x), 30, 25., 325.), "ptl1Gen","weight")
@@ -137,6 +167,7 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     histo[6][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(6,x), "histo_{0}_{1}".format(6,x), 30, 30.,  330.), "good_GenJet_pt","weight")
     histo[7][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(7,x), "histo_{0}_{1}".format(7,x), 25, -2.5,  2.5), "good_GenJet_eta","weight")
     histo[8][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(8,x), "histo_{0}_{1}".format(8,x), 4, -0.5,  3.5), "ngood_GenJets","weight")
+    histo[9][x] = dfwwxgen.Histo1D(("histo_{0}_{1}".format(9,x), "histo_{0}_{1}".format(9,x), 20, 0.0, 200.0), "ptvvGen","weight")
 
     histo[500][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[0]) == 13")                      .Histo1D(("histo_{0}_{1}".format(500,x), "histo_{0}_{1}".format(500,x), 20, 20., 320.), "ptl1Gen","weight")
     histo[501][x] = dfwwxgen.Filter("abs(GenDressedLepton_pdgId[1]) == 13")                      .Histo1D(("histo_{0}_{1}".format(501,x), "histo_{0}_{1}".format(501,x), 20, 20., 320.), "ptl2Gen","weight")
@@ -252,12 +283,15 @@ def readMCSample(sampleNOW, year, PDType, skimType, histo_wwpt):
             print("Problem with LHEScaleWeights {0}".format(e))
     for n in range(4):
         try:
-            if(dfRuns.Min("nPSSumw").GetValue() > n):
+            if(hasattr(dfRuns,"nPSSumw") and dfRuns.Min("nPSSumw").GetValue() > n):
                 dfRuns = dfRuns.Define("genEventSumPSWeight{0}".format(n),"PSSumw[{0}]".format(n))
                 genEventSumPSWeight[n] = dfRuns.Sum("genEventSumPSWeight{0}".format(n)).GetValue()
-            else:
+            elif(hasattr(dfRuns,"nPSSumw")):
                 genEventSumPSWeight[n] = dfRuns.Count().GetValue()
                 nTheoryReplicas[2] = int(dfRuns.Min("nPSSumw").GetValue())
+            else:
+                genEventSumPSWeight[n] = 1.0
+                nTheoryReplicas[2] = 4
         except Exception as e:
             genEventSumPSWeight[n] = dfRuns.Count().GetValue()
             nTheoryReplicas[2] = n

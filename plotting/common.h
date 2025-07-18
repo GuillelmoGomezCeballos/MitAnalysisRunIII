@@ -79,7 +79,7 @@ std::map<int, int> plotColors={
   { kPlotVG	   , cmsstyle::p10::kBrown},    // 9
   { kPlotHiggs     , cmsstyle::p10::kGreen},    // 10
   { kPlotWS	   , cmsstyle::p10::kAsh},      // 03
-  { kPlotOther     , kViolet+7},
+  { kPlotOther     , cmsstyle::p10::kAsh},
   { kPlotEM	   , cmsstyle::p10::kBlue},     // 11
   { kPlotBSM	   , kAzure+1},
   { kPlotSignal0   , kAzure+2},

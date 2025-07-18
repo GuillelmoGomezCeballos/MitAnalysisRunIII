@@ -123,8 +123,8 @@ if __name__ == "__main__":
                     sfe = 0.
                     if(eff0 > 0 and eff1 > 0):
                         sf = eff0/eff1
-                        if(year == 20240 and nlep == 0): sf = sf*0.985
-                        elif(year == 20240 and nlep == 1): sf = sf*0.960
+                        if(year == 20240 and nlep == 0): sf = sf*0.975
+                        elif(year == 20240 and nlep == 1): sf = sf*0.975
                         sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
 
                     histoLepEffSelDAEtaPt[nlep][theSel - 1].SetBinContent(i+1,j+1,eff0)

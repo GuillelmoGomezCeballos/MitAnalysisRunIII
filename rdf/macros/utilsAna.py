@@ -1014,7 +1014,7 @@ def SwitchSample(argument, skimType):
        906:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/TTto2L2Nu_2022_postEE",0.950*923.6*0.1086*0.1086*9*1000,plotCategory("kPlotTT")),
        907:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/TWminusto2L2Nu_2022_postEE",23.97*1000*2.0,plotCategory("kPlotTW")),
 
-       960:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/qqWW_2016_preVFP",(118.7-3.974)*0.1086*0.1086*9*1000,plotCategory("kPlotqqWW")),
+       960:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/qqWW_2018",(118.7-3.974)*0.1086*0.1086*9*1000,plotCategory("kPlotqqWW")),
 
        961:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/qqWW_2022_postEE",(118.7*1.06-ggWWXS_LO_MCFM)*0.1086*0.1086*9*1000,plotCategory("kPlotqqWW")),
 
@@ -1033,11 +1033,14 @@ def SwitchSample(argument, skimType):
        973:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/ggWWto2L2Nu_OS_PolarizationTL_postEE",0.08268*(ggWWXS_LO_MCFM/ggWWXS_LO_MADGRAPH)*ggWWXS_kFactor*1000,plotCategory("kPlotggWW")),
        974:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/ggWWto2L2Nu_OS_PolarizationTT_postEE",3.10724*(ggWWXS_LO_MCFM/ggWWXS_LO_MADGRAPH)*ggWWXS_kFactor*1000,plotCategory("kPlotggWW")),
 
-       975:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WW_MINNLO",12.80173*1000,plotCategory("kPlotqqWW")),
+       975:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WW_MINNLO_13p0TeV",(118.7-3.974)*0.1086*0.1086*9*1000,plotCategory("kPlotqqWW")),
 
-       976:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WZ3l_2022_postEE",4.924*1.08*1000,plotCategory("kPlotWZ")),
+       976:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WW_MINNLO_13p6TeV",12.80173*1000,plotCategory("kPlotqqWW")),
 
-       977:("/ceph/submit/data/user/c/ceballos/test_samples/mcdelta_polarizationVBSLL",1.0*1000,plotCategory("kPlotEWKSSWW")),
+       977:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WZ3l_2022_postEE",4.924*1.08*1000,plotCategory("kPlotWZ")),
+
+       978:("/ceph/submit/data/user/c/ceballos/test_samples/WpWpJJ-EWK_TuneCP5_13p6TeV-powheg-pythia8",0.5*0.0295255*1000,plotCategory("kPlotEWKSSWW")),
+       979:("/ceph/submit/data/user/c/ceballos/test_samples/WmWmJJ-EWK_TuneCP5_13p6TeV-powheg-pythia8",0.5*0.0295255*1000,plotCategory("kPlotEWKSSWW")),
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")
