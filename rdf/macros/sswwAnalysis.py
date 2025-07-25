@@ -5,7 +5,7 @@ ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
-from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariable2D
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMuAlt, selectionWeigths, selectionGenLepJet, makeFinalVariable2D
 import tmva_helper_xml
 
 correctionString = "_correction"
@@ -56,6 +56,7 @@ MUOWP = "Medium"
 elSelChoice = 7
 FAKE_EL   = jsonObject['FAKE_EL']
 TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
+TIGHT_ELALT = jsonObject['TIGHT_ELALT{0}'.format(elSelChoice)]
 ELEWP = "DUMMY"
 if(elSelChoice == 0):
     ELEWP = "Medium"
@@ -89,7 +90,7 @@ def selectionLL(df,year,PDType,isData,count):
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
-    dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
+    dftag = selectionElMuAlt(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL,TIGHT_ELALT)
 
     dftag =(dftag.Filter("nLoose == 2","Only two loose leptons")
                  .Filter("nFake == 2","Two fake leptons")

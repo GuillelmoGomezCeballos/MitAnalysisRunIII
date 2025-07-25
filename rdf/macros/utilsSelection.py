@@ -730,6 +730,15 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
 
     return dftag
 
+def selectionElMuAlt(df,year,fake_mu,tight_mu,fake_el,tight_el,tight_elalt):
+
+    if((year // 10) < 2024):
+        print("Electron selection: {0}".format(tight_elalt))
+        return selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_elalt)
+    else:
+        print("Electron selection: {0}".format(tight_el))
+        return selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el)
+
 def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
     MVAName = "promptMVA"
     if((year // 10) < 2024): MVAName = "mvaTTH"
