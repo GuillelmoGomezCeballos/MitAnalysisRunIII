@@ -5,7 +5,7 @@ from array import array
 ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist, getLumi
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLeptomSelFromJson
 from utilsSelection import selection2LVar, selectionElMu
 
 selectionJsonPath = "config/selection.json"
@@ -21,12 +21,8 @@ JSON = jsonObject['JSON']
 VBSSEL = jsonObject['VBSSEL']
 
 muSelChoice = 0
-FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 
 elSelChoice = 0
-FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 
 def selectionLL(df,year,PDType,isData):
 
@@ -45,6 +41,13 @@ def selectionLL(df,year,PDType,isData):
               .Define("applyJson","{}".format(JSON)).Filter("applyJson","pass JSON")
               .Define("triggerMET","{0}".format(TRIGGERMET))
               )
+
+    overallLeptonSel = jsonObject['leptonSel']
+    FAKE_MU   = getLeptomSelFromJson(overallLeptonSel, "FAKE_MU",   year)
+    TIGHT_MU  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU{0}".format(muSelChoice),  year, 1)
+
+    FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year)
+    TIGHT_EL  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL{0}".format(elSelChoice),  year, 1)
 
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 

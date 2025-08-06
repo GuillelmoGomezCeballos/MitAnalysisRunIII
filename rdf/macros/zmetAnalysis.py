@@ -4,7 +4,7 @@ import os, sys, getopt, json
 ROOT.ROOT.EnableImplicitMT(4)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLeptomSelFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionLGVar, selectionTrigger2L, selectionElMu, selectionWeigths, makeFinalVariable
 
 correctionString = ""
@@ -30,13 +30,9 @@ JSON = jsonObject['JSON']
 VBSSEL = jsonObject['VBSSEL']
 
 muSelChoice = 0
-FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 MUOWP = "Medium"
 
 elSelChoice = 0
-FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 ELEWP = "DUMMY"
 if(elSelChoice == 0):
     ELEWP = "Medium"
@@ -69,6 +65,13 @@ def selectionLL(df,year,PDType,isData,count):
     TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+    overallLeptonSel = jsonObject['leptonSel']
+    FAKE_MU   = getLeptomSelFromJson(overallLeptonSel, "FAKE_MU",   year)
+    TIGHT_MU  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU{0}".format(muSelChoice),  year, 1)
+
+    FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year)
+    TIGHT_EL  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL{0}".format(elSelChoice),  year, 1)
 
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 
@@ -193,11 +196,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
             dfzllcat[2*x+ltype] = dfzllcat[2*x+ltype].Filter("dphillmet > 2.5","dphillmet > 2.5")
 
-            histo[ltype+10][x] = dfzllcat[2*x+ltype].Filter("ngood_jets == 0").Histo1D(("histo_{0}_{1}".format(ltype+10,x), "histo_{0}_{1}".format(ltype+10,x), 40,0,80), "MET_significance","weight")
-            histo[ltype+12][x] = dfzllcat[2*x+ltype].Filter("ngood_jets == 1").Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x), 40,0,80), "MET_significance","weight")
-            histo[ltype+14][x] = dfzllcat[2*x+ltype].Filter("ngood_jets >= 2").Histo1D(("histo_{0}_{1}".format(ltype+14,x), "histo_{0}_{1}".format(ltype+14,x), 40,0,80), "MET_significance","weight")
+            #histo[ltype+10][x] = dfzllcat[2*x+ltype].Filter("ngood_jets == 0").Histo1D(("histo_{0}_{1}".format(ltype+10,x), "histo_{0}_{1}".format(ltype+10,x), 40,0,80), "MET_significance","weight")
+            #histo[ltype+12][x] = dfzllcat[2*x+ltype].Filter("ngood_jets == 1").Histo1D(("histo_{0}_{1}".format(ltype+12,x), "histo_{0}_{1}".format(ltype+12,x), 40,0,80), "MET_significance","weight")
+            #histo[ltype+14][x] = dfzllcat[2*x+ltype].Filter("ngood_jets >= 2").Histo1D(("histo_{0}_{1}".format(ltype+14,x), "histo_{0}_{1}".format(ltype+14,x), 40,0,80), "MET_significance","weight")
 
-            dfzllcat[2*x+ltype] = dfzllcat[2*x+ltype].Filter("MET_significance > 20","MET_significance > 20")
+            #dfzllcat[2*x+ltype] = dfzllcat[2*x+ltype].Filter("MET_significance > 20","MET_significance > 20")
 
             histo[ltype+36][x] = dfzllcat[2*x+ltype].Filter("ngood_jets >= 1").Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 31, 0, 3.1), "dphijmet","weight")
 
@@ -234,7 +237,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[ltype+108][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+108,x), "histo_{0}_{1}".format(ltype+108,x), 20, 100, 300), "thePuppiMET_pt","weight")
             histo[ltype+110][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+110,x), "histo_{0}_{1}".format(ltype+110,x), 20,0,400), "mtg","weight")
             histo[ltype+112][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+112,x), "histo_{0}_{1}".format(ltype+112,x), 10,-0.5, 9.5), "ngood_jets","weight")
-            histo[ltype+114][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+114,x), "histo_{0}_{1}".format(ltype+114,x), 40,0,80), "MET_significance","weight")
+            #histo[ltype+114][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+114,x), "histo_{0}_{1}".format(ltype+114,x), 40,0,80), "MET_significance","weight")
             histo[ltype+116][x] =dfzllgcat[2*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+116,x), "histo_{0}_{1}".format(ltype+116,x), 20,0,1), "jetPtgFrac","weight")
 
     reporta = []

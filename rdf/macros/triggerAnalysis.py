@@ -5,7 +5,7 @@ from array import array
 ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLeptomSelFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger1L, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet
 #from utilsAna import loadCorrectionSet
 
@@ -31,33 +31,11 @@ VBSSEL = jsonObject['VBSSEL']
 muSelChoice = 0
 FAKE_MU0   = "abs(Muon_eta)      < 2.4 && Muon_pt      > 10 && Muon_looseId      == true"
 FAKE_MU1   = "abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true"
-FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU0 = jsonObject['TIGHT_MU0']
-TIGHT_MU1 = jsonObject['TIGHT_MU1']
-TIGHT_MU2 = jsonObject['TIGHT_MU2']
-TIGHT_MU3 = jsonObject['TIGHT_MU3']
-TIGHT_MU4 = jsonObject['TIGHT_MU4']
-TIGHT_MU5 = jsonObject['TIGHT_MU5']
-TIGHT_MU6 = jsonObject['TIGHT_MU6']
-TIGHT_MU7 = jsonObject['TIGHT_MU7']
-TIGHT_MU8 = jsonObject['TIGHT_MU8']
-TIGHT_MU9 = jsonObject['TIGHT_MU9']
 MUOWP = "Medium"
 
 elSelChoice = 0
 FAKE_EL0   = "abs(Electron_eta)      < 2.5 && Electron_pt      > 10 && Electron_cutBased      >= 1"
 FAKE_EL1   = "abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 1"
-FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL0 = jsonObject['TIGHT_EL0']
-TIGHT_EL1 = jsonObject['TIGHT_EL1']
-TIGHT_EL2 = jsonObject['TIGHT_EL2']
-TIGHT_EL3 = jsonObject['TIGHT_EL3']
-TIGHT_EL4 = jsonObject['TIGHT_EL4']
-TIGHT_EL5 = jsonObject['TIGHT_EL5']
-TIGHT_EL6 = jsonObject['TIGHT_EL6']
-TIGHT_EL7 = jsonObject['TIGHT_EL7']
-TIGHT_EL8 = jsonObject['TIGHT_EL8']
-TIGHT_EL9 = jsonObject['TIGHT_EL9']
 ELEWP = "DUMMY"
 if(elSelChoice == 0):
     ELEWP = "Medium"
@@ -86,6 +64,29 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 
     # This is a hack to avoid fakeable objects
     dftag = selectionElMu(dftag,year,FAKE_MU0,FAKE_MU1,FAKE_EL0,FAKE_EL1)
+
+    overallLeptonSel = jsonObject['leptonSel']
+    TIGHT_MU0 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU0", year)
+    TIGHT_MU1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU1", year)
+    TIGHT_MU2 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU2", year)
+    TIGHT_MU3 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU3", year)
+    TIGHT_MU4 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU4", year)
+    TIGHT_MU5 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU5", year)
+    TIGHT_MU6 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU6", year)
+    TIGHT_MU7 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU7", year)
+    TIGHT_MU8 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU8", year)
+    TIGHT_MU9 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU9", year)
+
+    TIGHT_EL0 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL0", year)
+    TIGHT_EL1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL1", year)
+    TIGHT_EL2 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL2", year)
+    TIGHT_EL3 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL3", year)
+    TIGHT_EL4 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL4", year)
+    TIGHT_EL5 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL5", year)
+    TIGHT_EL6 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL6", year)
+    TIGHT_EL7 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL7", year)
+    TIGHT_EL8 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL8", year)
+    TIGHT_EL9 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL9", year)
 
     dftag = (dftag.Define("tight_mu0", "{0}".format(TIGHT_MU0))
                   .Define("tight_mu1", "{0}".format(TIGHT_MU1))
@@ -129,6 +130,13 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
 def selectionFF(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count):
 
     dftag = selectionTrigger1L(df,year,PDType,JSON,isData,TRIGGERFAKEMU,TRIGGERFAKEEL)
+
+    overallLeptonSel = jsonObject['leptonSel']
+    FAKE_MU   = getLeptomSelFromJson(overallLeptonSel, "FAKE_MU",   year, 1)
+    TIGHT_MU1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU1", year)
+
+    FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year, 1)
+    TIGHT_EL1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL1", year)
 
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU1,FAKE_EL,TIGHT_EL1)
 

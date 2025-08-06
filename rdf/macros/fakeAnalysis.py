@@ -5,7 +5,7 @@ from array import array
 ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLeptomSelFromJson, getLumi
 from utilsSelection import selectionJetMet, selectionElMu, selectionTrigger1L
 
 # 0 = T, 1 = M, 2 = L
@@ -23,31 +23,32 @@ JSON = jsonObject['JSON']
 
 VBSSEL = jsonObject['VBSSEL']
 
-FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU0 = jsonObject['TIGHT_MU0']
-TIGHT_MU1 = jsonObject['TIGHT_MU1']
-TIGHT_MU2 = jsonObject['TIGHT_MU2']
-TIGHT_MU3 = jsonObject['TIGHT_MU3']
-TIGHT_MU4 = jsonObject['TIGHT_MU4']
-TIGHT_MU5 = jsonObject['TIGHT_MU5']
-TIGHT_MU6 = jsonObject['TIGHT_MU6']
-TIGHT_MU7 = jsonObject['TIGHT_MU7']
-TIGHT_MU8 = jsonObject['TIGHT_MU8']
-
-FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL0 = jsonObject['TIGHT_EL0']
-TIGHT_EL1 = jsonObject['TIGHT_EL1']
-TIGHT_EL2 = jsonObject['TIGHT_EL2']
-TIGHT_EL3 = jsonObject['TIGHT_EL3']
-TIGHT_EL4 = jsonObject['TIGHT_EL4']
-TIGHT_EL5 = jsonObject['TIGHT_EL5']
-TIGHT_EL6 = jsonObject['TIGHT_EL6']
-TIGHT_EL7 = jsonObject['TIGHT_EL7']
-TIGHT_EL8 = jsonObject['TIGHT_EL8']
-
 def selection1L(df,year,PDType,isData,TRIGGERFAKEMU,TRIGGERFAKEEL,count):
 
     dftag = selectionTrigger1L(df,year,PDType,JSON,isData,TRIGGERFAKEMU,TRIGGERFAKEEL)
+
+    overallLeptonSel = jsonObject['leptonSel']
+    FAKE_MU   = getLeptomSelFromJson(overallLeptonSel, "FAKE_MU",   year)
+    TIGHT_MU0 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU0", year)
+    TIGHT_MU1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU1", year)
+    TIGHT_MU2 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU2", year)
+    TIGHT_MU3 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU3", year)
+    TIGHT_MU4 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU4", year)
+    TIGHT_MU5 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU5", year)
+    TIGHT_MU6 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU6", year)
+    TIGHT_MU7 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU7", year)
+    TIGHT_MU8 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU8", year)
+
+    FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year)
+    TIGHT_EL0 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL0", year)
+    TIGHT_EL1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL1", year)
+    TIGHT_EL2 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL2", year)
+    TIGHT_EL3 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL3", year)
+    TIGHT_EL4 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL4", year)
+    TIGHT_EL5 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL5", year)
+    TIGHT_EL6 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL6", year)
+    TIGHT_EL7 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL7", year)
+    TIGHT_EL8 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL8", year)
 
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU0,FAKE_EL,TIGHT_EL0)
 
@@ -244,9 +245,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
                strLep = "el"
                strMVA = "fake_Electron_promptMVA"
 
-            histo[ltype+148][y] = dfjet30cat [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+148,y), "histo_{0}_{1}".format(ltype+148,y),100, 0, 1.0), "{0}".format(strMVA),"weight")
-            histo[ltype+150][y] = dfjet50cat [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+150,y), "histo_{0}_{1}".format(ltype+150,y),100, 0, 1.0), "{0}".format(strMVA),"weight")
-            histo[ltype+152][y] = dfbjet20cat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+152,y), "histo_{0}_{1}".format(ltype+152,y),100, 0, 1.0), "{0}".format(strMVA),"weight")
+            histo[ltype+148][y] = dfjet30cat [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+148,y), "histo_{0}_{1}".format(ltype+148,y),100, -1.0, 1.0), "{0}".format(strMVA),"weight")
+            histo[ltype+150][y] = dfjet50cat [2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+150,y), "histo_{0}_{1}".format(ltype+150,y),100, -1.0, 1.0), "{0}".format(strMVA),"weight")
+            histo[ltype+152][y] = dfbjet20cat[2*y+ltype].Histo1D(("histo_{0}_{1}".format(ltype+152,y), "histo_{0}_{1}".format(ltype+152,y),100, -1.0, 1.0), "{0}".format(strMVA),"weight")
 
             for ptbin in range(2):
                 nHist = ptbin*100

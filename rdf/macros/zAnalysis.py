@@ -5,7 +5,7 @@ from array import array
 ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLeptomSelFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet
 #from utilsAna import loadCorrectionSet
 
@@ -14,7 +14,7 @@ print_info = False
 bTagSel = 1
 useBTaggingWeights = 0
 
-correctionString = "_correction"
+correctionString = ""
 
 useFR = 0
 
@@ -36,31 +36,9 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 VBSSEL = jsonObject['VBSSEL']
 
 muSelChoice = 0
-FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
-TIGHT_MU0 = jsonObject['TIGHT_MU0']
-TIGHT_MU1 = jsonObject['TIGHT_MU1']
-TIGHT_MU2 = jsonObject['TIGHT_MU2']
-TIGHT_MU3 = jsonObject['TIGHT_MU3']
-TIGHT_MU4 = jsonObject['TIGHT_MU4']
-TIGHT_MU5 = jsonObject['TIGHT_MU5']
-TIGHT_MU6 = jsonObject['TIGHT_MU6']
-TIGHT_MU7 = jsonObject['TIGHT_MU7']
-TIGHT_MU8 = jsonObject['TIGHT_MU8']
 MUOWP = "Medium"
 
 elSelChoice = 0
-FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
-TIGHT_EL0 = jsonObject['TIGHT_EL0']
-TIGHT_EL1 = jsonObject['TIGHT_EL1']
-TIGHT_EL2 = jsonObject['TIGHT_EL2']
-TIGHT_EL3 = jsonObject['TIGHT_EL3']
-TIGHT_EL4 = jsonObject['TIGHT_EL4']
-TIGHT_EL5 = jsonObject['TIGHT_EL5']
-TIGHT_EL6 = jsonObject['TIGHT_EL6']
-TIGHT_EL7 = jsonObject['TIGHT_EL7']
-TIGHT_EL8 = jsonObject['TIGHT_EL8']
 ELEWP = "DUMMY"
 if(elSelChoice == 0):
     ELEWP = "Medium"
@@ -86,6 +64,31 @@ elif(elSelChoice == 9):
 def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERDEL,TRIGGERSEL,count):
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+    overallLeptonSel = jsonObject['leptonSel']
+    FAKE_MU   = getLeptomSelFromJson(overallLeptonSel, "FAKE_MU",   year)
+    TIGHT_MU  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU{0}".format(muSelChoice),  year, 1)
+    TIGHT_MU0 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU0", year)
+    TIGHT_MU1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU1", year)
+    TIGHT_MU2 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU2", year)
+    TIGHT_MU3 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU3", year)
+    TIGHT_MU4 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU4", year)
+    TIGHT_MU5 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU5", year)
+    TIGHT_MU6 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU6", year)
+    TIGHT_MU7 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU7", year)
+    TIGHT_MU8 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU8", year)
+
+    FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year)
+    TIGHT_EL  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL{0}".format(elSelChoice),  year, 1)
+    TIGHT_EL0 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL0", year)
+    TIGHT_EL1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL1", year)
+    TIGHT_EL2 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL2", year)
+    TIGHT_EL3 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL3", year)
+    TIGHT_EL4 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL4", year)
+    TIGHT_EL5 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL5", year)
+    TIGHT_EL6 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL6", year)
+    TIGHT_EL7 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL7", year)
+    TIGHT_EL8 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL8", year)
 
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 
@@ -115,8 +118,6 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
                   .Filter("(Sum(fake_mu) > 0 and Max(fake_Muon_pt) > 25) or (Sum(fake_el) > 0 and Max(fake_Electron_pt) > 25)","At least one high pt lepton")
                   )
 
-    global useFR
-    if(year == 2023): useFR = 0
     if(useFR == 0):
         dftag = dftag.Filter("nTight == 2","Two tight leptons")
 
@@ -220,8 +221,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfbase = (dfbase.Define("mjjGen", "{0}".format(0))
                       )
 
-    global useFR
-    if(year == 2023): useFR = 0
+    if(year == 20240): correctionString = "_correction"
     dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,0)
 
     overallMETFilters = jsonObject['met_filters']
@@ -384,6 +384,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[ltype+197][x] = dfzllcat[3*x+ltype].Filter("triggerMUEG == 0 && triggerDMU == 0 && triggerSMU > 0")                                      .Histo1D(("histo_{0}_{1}".format(ltype+197,x), "histo_{0}_{1}".format(ltype+197,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
             histo[ltype+200][x] = dfzllcat[3*x+ltype].Filter("triggerMUEG == 0 && triggerDMU == 0 && triggerSMU == 0 && triggerDEL > 0")                   .Histo1D(("histo_{0}_{1}".format(ltype+200,x), "histo_{0}_{1}".format(ltype+200,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
             histo[ltype+203][x] = dfzllcat[3*x+ltype].Filter("triggerMUEG == 0 && triggerDMU == 0 && triggerSMU == 0 && triggerDEL == 0 && triggerSEL > 0").Histo1D(("histo_{0}_{1}".format(ltype+203,x), "histo_{0}_{1}".format(ltype+203,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll","weight")
+            # em
             if(ltype == 1):
                 dfzmecat.append(dfzllcat[3*x+ltype].Filter("triggerSMU > 0 && fake_Muon_pt[0] > 30")
                                                   .Define("pttag","Max(fake_Muon_pt)")
@@ -410,14 +411,21 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo[214][x] = dfzmecat[x].Filter("triggerSEL  > 0").Histo1D(("histo_{0}_{1}".format(214,x), "histo_{0}_{1}".format(214,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
                 histo[215][x] = dfzemcat[x].Filter("triggerSMU  > 0").Histo1D(("histo_{0}_{1}".format(215,x), "histo_{0}_{1}".format(215,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
 
-            histo[ltype+216][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+216,x), "histo_{0}_{1}".format(ltype+216,x), len(xPtBins)-1, xPtBins), "ptl1","weight0")
-            histo[ltype+219][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+219,x), "histo_{0}_{1}".format(ltype+219,x), len(xPtBins)-1, xPtBins), "ptl1","weight1")
-            histo[ltype+222][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+222,x), "histo_{0}_{1}".format(ltype+222,x), len(xPtBins)-1, xPtBins), "ptl1","weight2")
-            histo[ltype+225][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+225,x), "histo_{0}_{1}".format(ltype+225,x), len(xPtBins)-1, xPtBins), "ptl1","weight3")
-            histo[ltype+228][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+228,x), "histo_{0}_{1}".format(ltype+228,x), len(xPtBins)-1, xPtBins), "ptl1","weight4")
-            histo[ltype+231][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+231,x), "histo_{0}_{1}".format(ltype+231,x), len(xPtBins)-1, xPtBins), "ptl1","weight5")
-            histo[ltype+234][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+234,x), "histo_{0}_{1}".format(ltype+234,x), len(xPtBins)-1, xPtBins), "ptl1","weightBTag")
-            histo[ltype+237][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+237,x), "histo_{0}_{1}".format(ltype+237,x), len(xPtBins)-1, xPtBins), "ptl1","weightNoBTag")
+            # mm or ee
+            else:
+                varPlot = 0
+                if(ltype == 2): varPlot = 1
+                histo[varPlot+216][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+216,x), "histo_{0}_{1}".format(varPlot+216,x), len(xPtBins)-1, xPtBins), "ptl1","weight")
+                histo[varPlot+218][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+218,x), "histo_{0}_{1}".format(varPlot+218,x), len(xPtBins)-1, xPtBins), "ptl1","weight0")
+                histo[varPlot+220][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+220,x), "histo_{0}_{1}".format(varPlot+220,x), len(xPtBins)-1, xPtBins), "ptl1","weight1")
+                histo[varPlot+222][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+222,x), "histo_{0}_{1}".format(varPlot+222,x), len(xPtBins)-1, xPtBins), "ptl1","weight2")
+                histo[varPlot+224][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+224,x), "histo_{0}_{1}".format(varPlot+224,x), len(xPtBins)-1, xPtBins), "ptl1","weight3")
+                histo[varPlot+226][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+226,x), "histo_{0}_{1}".format(varPlot+226,x), len(xPtBins)-1, xPtBins), "ptl1","weight4")
+                histo[varPlot+228][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+228,x), "histo_{0}_{1}".format(varPlot+228,x), len(xPtBins)-1, xPtBins), "ptl1","weight5")
+                histo[varPlot+230][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+230,x), "histo_{0}_{1}".format(varPlot+230,x), len(xPtBins)-1, xPtBins), "ptl1","weight6")
+                histo[varPlot+232][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+232,x), "histo_{0}_{1}".format(varPlot+232,x), len(xPtBins)-1, xPtBins), "ptl1","weight7")
+                histo[varPlot+234][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+234,x), "histo_{0}_{1}".format(varPlot+234,x), len(xPtBins)-1, xPtBins), "ptl1","weightBTag")
+                histo[varPlot+236][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(varPlot+236,x), "histo_{0}_{1}".format(varPlot+236,x), len(xPtBins)-1, xPtBins), "ptl1","weightNoBTag")
 
             isBB = "(etal1<1.5 and etal2<1.5)"
             isEB = "true" # "((etal1>1.5 and etal2<1.5) || (etal1<1.5 and etal2>1.5))"
@@ -741,6 +749,7 @@ if __name__ == "__main__":
         histoFakeEtaPt_el[x].SetDirectory(0)
     fFakeFile.Close()
 
+    if(year == 20240): correctionString = "_correction"
     lepSFPath = "data/histoLepSFEtaPt_{0}{1}.root".format(year,correctionString)
     fLepSFFile = ROOT.TFile(lepSFPath)
     histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(muSelChoice))

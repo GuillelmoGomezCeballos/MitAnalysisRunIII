@@ -5,7 +5,7 @@ from array import array
 ROOT.ROOT.EnableImplicitMT(4)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLumi
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLeptomSelFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection3LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariable, makeFinalVariable2D
 from utilsMVA import redefineMVAVariables
 import tmva_helper_xml
@@ -20,7 +20,7 @@ bTagSel = 0
 useBTaggingWeights = 1
 
 useFR = 1
-whichAna = 1 # 0 (inclusive) / 1 (VBS)
+whichAna = 0 # 0 (inclusive) / 1 (VBS)
 
 altMass = "Def"
 jetEtaCut = 2.5
@@ -44,13 +44,9 @@ VBSSEL = jsonObject['VBSSEL']
 VBSQCDSEL = jsonObject['VBSQCDSEL']
 
 muSelChoice = 8
-FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
 MUOWP = "Medium"
 
 elSelChoice = 8
-FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
 ELEWP = "DUMMY"
 if(elSelChoice == 0):
     ELEWP = "Medium"
@@ -83,6 +79,13 @@ def selectionLL(df,year,PDType,isData,count):
     TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
 
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
+
+    overallLeptonSel = jsonObject['leptonSel']
+    FAKE_MU   = getLeptomSelFromJson(overallLeptonSel, "FAKE_MU",   year)
+    TIGHT_MU  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU{0}".format(muSelChoice),  year, 1)
+
+    FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year)
+    TIGHT_EL  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL{0}".format(elSelChoice),  year, 1)
 
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 

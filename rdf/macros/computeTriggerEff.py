@@ -13,7 +13,7 @@ if __name__ == "__main__":
     path = "fillhisto_metAnalysis1001"
     year = 2022
     output = "anaZ"
-    format = "pdf"
+    formatOutput = "pdf"
 
     doSavePtEtaHist = False
 
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
     usage +=  "              --output=<{0}>\n".format(output)
-    usage +=  "              --format=<{0}>".format(format)
+    usage +=  "              --format=<{0}>".format(formatOutput)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
     except getopt.GetoptError as ex:
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         if opt == "--output":
             output = str(arg)
         if opt == "--format":
-            format = str(arg)
+            formatOutput = str(arg)
 
     nCat = plotCategory("kPlotCategories")
 
@@ -295,25 +295,26 @@ if __name__ == "__main__":
             histoTriggerV2MCEtaPt[nlep][nsel].Write()
     outfileTriggerEff.Close()
 
-    canvasPtMax = [[[0 for z in range(len(xPtMinBins)-1)] for y in range(numberOfSel)] for x in range(numberOfLep)]
-    canvasPtMin = [[[0 for z in range(len(xPtMaxBins)-1)] for y in range(numberOfSel)] for x in range(numberOfLep)]
+    if(formatOutput != "none"):
+        canvasPtMax = [[[0 for z in range(len(xPtMinBins)-1)] for y in range(numberOfSel)] for x in range(numberOfLep)]
+        canvasPtMin = [[[0 for z in range(len(xPtMaxBins)-1)] for y in range(numberOfSel)] for x in range(numberOfLep)]
 
-    for nlep in range(numberOfLep):
-        if(nlep > 3): continue
-        for nsel in range(numberOfSel):
-            if(nsel > 3): continue
-            for npt in range(len(xPtMinBins)-1):
-                canvasPtMax[nlep][nsel][npt] = TCanvas("canvasPtMax_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), "canvasPtMax_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), 10, 10, 500, 500)
-                canvasPtMax[nlep][nsel][npt].Divide(1,1)
-                canvasPtMax[nlep][nsel][npt].cd(1)
-                histoTriggerV1SFPtMax[nlep][nsel][npt].DrawCopy()
-                canvasPtMax[nlep][nsel][npt].Draw()
-                canvasPtMax[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMax_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,format))
+        for nlep in range(numberOfLep):
+            if(nlep > 3): continue
+            for nsel in range(numberOfSel):
+                if(nsel > 3): continue
+                for npt in range(len(xPtMinBins)-1):
+                    canvasPtMax[nlep][nsel][npt] = TCanvas("canvasPtMax_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), "canvasPtMax_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), 10, 10, 500, 500)
+                    canvasPtMax[nlep][nsel][npt].Divide(1,1)
+                    canvasPtMax[nlep][nsel][npt].cd(1)
+                    histoTriggerV1SFPtMax[nlep][nsel][npt].DrawCopy()
+                    canvasPtMax[nlep][nsel][npt].Draw()
+                    canvasPtMax[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMax_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,format))
 
-            for npt in range(len(xPtMaxBins)-1):
-                canvasPtMin[nlep][nsel][npt] = TCanvas("canvasPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), "canvasPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), 10, 10, 500, 500)
-                canvasPtMin[nlep][nsel][npt].Divide(1,1)
-                canvasPtMin[nlep][nsel][npt].cd(1)
-                histoTriggerV1SFPtMin[nlep][nsel][npt].DrawCopy()
-                canvasPtMin[nlep][nsel][npt].Draw()
-                canvasPtMin[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMin_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,format))
+                for npt in range(len(xPtMaxBins)-1):
+                   canvasPtMin[nlep][nsel][npt] = TCanvas("canvasPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), "canvasPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), 10, 10, 500, 500)
+                   canvasPtMin[nlep][nsel][npt].Divide(1,1)
+                   canvasPtMin[nlep][nsel][npt].cd(1)
+                   histoTriggerV1SFPtMin[nlep][nsel][npt].DrawCopy()
+                   canvasPtMin[nlep][nsel][npt].Draw()
+                   canvasPtMin[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMin_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,format))

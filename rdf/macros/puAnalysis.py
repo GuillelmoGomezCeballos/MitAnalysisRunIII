@@ -4,7 +4,7 @@ from array import array
 
 ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
-from utilsAna import getMClist, getDATAlist, groupFiles, getTriggerFromJson, getLumi
+from utilsAna import getMClist, getDATAlist, groupFiles, getTriggerFromJson, getLeptomSelFromJson, getLumi
 from utilsAna import SwitchSample
 #from utilsSelectionNanoV9 import getBTagCut
 #from utilsSelectionNanoV9 import selectionTrigger2L,selectionElMu,selection2LVar,selectionJetMet
@@ -27,15 +27,18 @@ useBTaggingWeights = 1
 
 jetEtaCut = 2.5
 
-muSelChoice = 1
-FAKE_MU   = jsonObject['FAKE_MU']
-TIGHT_MU = jsonObject['TIGHT_MU{0}'.format(muSelChoice)]
+muSelChoice = 0
 
-elSelChoice = 1
-FAKE_EL   = jsonObject['FAKE_EL']
-TIGHT_EL = jsonObject['TIGHT_EL{0}'.format(elSelChoice)]
+elSelChoice = 0
 
 def selectionWW(df,year,PDType,isData,count):
+
+    overallLeptonSel = jsonObject['leptonSel']
+    FAKE_MU   = getLeptomSelFromJson(overallLeptonSel, "FAKE_MU",   year)
+    TIGHT_MU  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU{0}".format(muSelChoice),  year, 1)
+
+    FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year)
+    TIGHT_EL  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL{0}".format(elSelChoice),  year, 1)
 
     dftag = selectionElMu(df,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
     dftag = (dftag.Filter("nLoose >= 2","At least two loose leptons")
@@ -170,6 +173,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,histo_wwpt,puW
 
     BTAGName = "UParTAK4"
     if((year // 10) < 2024): BTAGName = "RobustParTAK4"
+
+    overallLeptonSel = jsonObject['leptonSel']
+    FAKE_MU   = getLeptomSelFromJson(overallLeptonSel, "FAKE_MU",   year)
+    FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year)
 
     dfcat = (dfcat
           .Define("loose_mu", "abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
