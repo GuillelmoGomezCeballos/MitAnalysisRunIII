@@ -17,9 +17,12 @@ class MyCorrections {
     double eval_muonIDSF  (double eta, double pt, const char *valType);
     double eval_muonISOSF (double eta, double pt, const char *valType);
 
-    double eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
+    double eval_electronTRKSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
+    double eval_electronIDSF (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
     double eval_electronScale(const char *valType, const int gain, const double run, const double eta, const double r9, const double et);
     double eval_electronSmearing(const char *valType, const double eta, const double r9);
+    double eval_electronEtDependentScale(const char *valType, const double run, const double eta, const double r9, const double pt, const double gain);
+    double eval_electronEtDependentSmearing(const char *valType, const double pt, const double r9, const double eta);
     double eval_photonSF  (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
 
     double eval_tauJETSF  (double pt, int dm, int genmatch, const char *workingPoint, const char *workingPoint_VSe, const char *valType);
@@ -38,6 +41,7 @@ class MyCorrections {
     double eval_muon_pt_resol_var(double pt_woresol, double pt_wresol, double eta, string updn);
     double eval_muon_pt_scale(bool is_data, double pt, double eta, double phi, int charge);
     double eval_muon_pt_scale_var(double pt, double eta, double phi, int charge, string updn);
+    double eval_met_corr(const char *pt_phi, const char *met_type, const char *epoch, const char *dtmc, const char *variation, float met_pt, float met_phi, float npvGood);
 
   private:
     double muon_get_rndm(double eta, float nL);
@@ -58,9 +62,12 @@ class MyCorrections {
     correction::Correction::Ref muonHighPtTRKSF_;
     correction::Correction::Ref muonHighPtIDSF_;
     correction::Correction::Ref muonHighPtISOSF_;
-    correction::Correction::Ref electronSF_;
+    correction::Correction::Ref electronTRKSF_;
+    correction::Correction::Ref electronIDSF_;
     correction::Correction::Ref electronScale_;
     correction::Correction::Ref electronSmearing_;
+    correction::CompoundCorrection::Ref electronEtDependentScale_;
+    correction::Correction::Ref electronEtDependentSmearing_;
     correction::Correction::Ref photonSF_;
     correction::Correction::Ref tauJETSF_;
     correction::Correction::Ref btvHFSF_;
@@ -75,6 +82,7 @@ class MyCorrections {
     correction::Correction::Ref puJetIDSF_;
     correction::Correction::Ref jetTightSel_;
     correction::Correction::Ref jetTightLeptonVetoSel_;
+    correction::Correction::Ref metCorr_;
     int year;
 };
 
@@ -139,10 +147,12 @@ MyCorrections::MyCorrections(int the_input_year) {
   muonISOSF_ = csetMu->at("NUM_TightPFIso_DEN_MediumID");
 
   std::string fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
+  if(year == 20240) fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_RECO_2024_schemaV2.json.gz";
   auto csetHighPtRECOMu = correction::CorrectionSet::from_file(fileNameHighPtRECOMu);
   muonHighPtTRKSF_ = csetHighPtRECOMu->at("NUM_GlobalMuons_DEN_TrackerMuonProbes");
 
   std::string fileNameHighPtIDISOMu = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
+  if(year == 20240) fileNameHighPtIDISOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_IDISO_2024_schemaV2.json.gz";
   auto csetHighPtIDISOMu = correction::CorrectionSet::from_file(fileNameHighPtIDISOMu);
   muonHighPtIDSF_ = csetHighPtIDISOMu->at("NUM_MediumID_DEN_GlobalMuonProbes");
   muonHighPtISOSF_ = csetHighPtIDISOMu->at("NUM_probe_TightRelTkIso_DEN_MediumIDProbes");
@@ -155,13 +165,23 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20231) photonSF_ = csetPH->at("Photon-ID-SF");
   else if(year == 20240) photonSF_ = csetPH->at("Photon-ID-SF");
 
-  std::string fileNameELE = dirName+"EGM/"+subDirName+"electron.json.gz";
-  auto csetELE = correction::CorrectionSet::from_file(fileNameELE);
-  if     (year == 20220) electronSF_ = csetELE->at("Electron-ID-SF");
-  else if(year == 20221) electronSF_ = csetELE->at("Electron-ID-SF");
-  else if(year == 20230) electronSF_ = csetELE->at("Electron-ID-SF");
-  else if(year == 20231) electronSF_ = csetELE->at("Electron-ID-SF");
-  else if(year == 20240) electronSF_ = csetELE->at("Electron-ID-SF");
+  std::string fileNameTRKELE = dirName+"EGM/"+subDirName+"electron.json.gz";
+  if(year == 20240) fileNameTRKELE = dirName+"EGM/"+subDirName+"electronTRK.json.gz";
+  auto csetTRKELE = correction::CorrectionSet::from_file(fileNameTRKELE);
+  if     (year == 20220) electronTRKSF_ = csetTRKELE->at("Electron-ID-SF");
+  else if(year == 20221) electronTRKSF_ = csetTRKELE->at("Electron-ID-SF");
+  else if(year == 20230) electronTRKSF_ = csetTRKELE->at("Electron-ID-SF");
+  else if(year == 20231) electronTRKSF_ = csetTRKELE->at("Electron-ID-SF");
+  else if(year == 20240) electronTRKSF_ = csetTRKELE->at("Electron-ID-SF");
+
+  std::string fileNameIDELE = dirName+"EGM/"+subDirName+"electron.json.gz";
+  if(year == 20240) fileNameIDELE = dirName+"EGM/"+subDirName+"electronID.json.gz";
+  auto csetIDELE = correction::CorrectionSet::from_file(fileNameIDELE);
+  if     (year == 20220) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
+  else if(year == 20221) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
+  else if(year == 20230) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
+  else if(year == 20231) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
+  else if(year == 20240) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
 
   std::string fileNameEnergyELE = dirName+"EGM/"+subDirName+"electronSS.json.gz";
   auto csetEnergyELE = correction::CorrectionSet::from_file(fileNameEnergyELE);
@@ -170,6 +190,14 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20230) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
   else if(year == 20231) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
   else if(year == 20240) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
+
+  std::string fileNameEnergyEtDependentELE = dirName+"EGM/"+subDirName+"electronSS_EtDependent.json.gz";
+  auto csetEnergyEtDependentELE = correction::CorrectionSet::from_file(fileNameEnergyEtDependentELE);
+  if     (year == 20220) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2022preEE");    electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2022preEE");}
+  else if(year == 20221) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2022postEE");   electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2022postEE");}
+  else if(year == 20230) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2023preBPIX");  electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2023preBPIX");}
+  else if(year == 20231) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2023postBPIX"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2023postBPIX");}
+  else if(year == 20240) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2024");         electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2024");}
 
   std::string fileNameTAU = dirName+"TAU/"+subDirName+"tau_DeepTau2018v2p5.json.gz";
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);
@@ -364,6 +392,10 @@ MyCorrections::MyCorrections(int the_input_year) {
   jetTightSel_           = csetJetSel->at("AK4PUPPI_Tight");
   jetTightLeptonVetoSel_ = csetJetSel->at("AK4PUPPI_TightLeptonVeto");
 
+  std::string fileNameMetCorr = dirName+"JME/"+subDirName+"met_xyCorrections.json.gz";
+  auto csetMetCorr = correction::CorrectionSet::from_file(fileNameMetCorr);
+  metCorr_ = csetMetCorr->at("met_xy_corrections");
+
 };
 
 double MyCorrections::eval_puSF(double int1, std::string str1) {
@@ -373,7 +405,7 @@ double MyCorrections::eval_puSF(double int1, std::string str1) {
 double MyCorrections::eval_muonTRKSF(double eta, double pt, double p, const char *valType) {
   eta = std::max(std::min(eta,2.399),-2.399);
   pt = std::max(pt,15.001);
-  if(pt > 200)                            return muonHighPtTRKSF_->evaluate({eta, p, valType});
+  if(pt > 200)                            return muonHighPtTRKSF_->evaluate({fabs(eta), p, valType});
   else if(strcmp(valType,"nominal") == 0) return 1.0;
   else                                    return 0.0;
   return 1.0;
@@ -382,7 +414,7 @@ double MyCorrections::eval_muonTRKSF(double eta, double pt, double p, const char
 double MyCorrections::eval_muonIDSF(double eta, double pt, const char *valType) {
   eta = std::max(std::min(eta,2.399),-2.399);
   pt = std::max(pt,15.001);
-  if(pt > 200) return muonHighPtIDSF_->evaluate({eta, pt, valType});
+  if(pt > 200) return muonHighPtIDSF_->evaluate({fabs(eta), pt, valType});
   else         return muonIDSF_->evaluate({eta, pt, valType});
   return 1.0;
 };
@@ -390,15 +422,21 @@ double MyCorrections::eval_muonIDSF(double eta, double pt, const char *valType) 
 double MyCorrections::eval_muonISOSF(double eta, double pt, const char *valType) {
   eta = std::max(std::min(eta,2.399),-2.399);
   pt = std::max(pt,15.001);
-  if(pt > 200) return muonHighPtISOSF_->evaluate({eta, pt, valType});
+  if(pt > 200) return muonHighPtISOSF_->evaluate({fabs(eta), pt, valType});
   else         return muonISOSF_->evaluate({eta, pt, valType});
   return 1.0;
 };
 
-double MyCorrections::eval_electronSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi) {
-  pt = std::max(pt,10.001);
-  if(year <= 20221) return electronSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
-  return electronSF_->evaluate({the_input_year, valType, workingPoint, eta, pt, phi});
+double MyCorrections::eval_electronTRKSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi) {
+  pt = std::min(std::max(pt,10.001),999.9);
+  if(year <= 20221 || year >= 20240) return electronTRKSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
+  return electronTRKSF_->evaluate({the_input_year, valType, workingPoint, eta, pt, phi});
+};
+
+double MyCorrections::eval_electronIDSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi) {
+  pt = std::min(std::max(pt,10.001),999.9);
+  if(year <= 20221 || year >= 20240) return electronIDSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
+  return electronIDSF_->evaluate({the_input_year, valType, workingPoint, eta, pt, phi});
 };
 
 double MyCorrections::eval_electronScale(const char *valType, const int gain, const double run, const double eta, const double r9, const double et) {
@@ -409,9 +447,18 @@ double MyCorrections::eval_electronSmearing(const char *valType, const double et
   return electronSmearing_->evaluate({valType, eta, r9});
 };
 
+double MyCorrections::eval_electronEtDependentScale(const char *valType, const double run, const double eta, const double r9, const double pt, const double gain) {
+  return electronEtDependentScale_->evaluate({valType, run, eta, r9, fabs(eta), pt, gain});
+};
+
+double MyCorrections::eval_electronEtDependentSmearing(const char *valType, const double pt, const double r9, const double eta) {
+  return electronEtDependentSmearing_->evaluate({valType, pt, r9, fabs(eta)});
+};
+
+
 double MyCorrections::eval_photonSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi) {
   pt = std::max(pt,20.001);
-  if(year <= 20221) return photonSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
+  if(year <= 20221 || year >= 20240) return photonSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
   return photonSF_->evaluate({the_input_year, valType, workingPoint, eta, pt, phi});
 };
 
@@ -481,6 +528,13 @@ double MyCorrections::eval_jetSel(unsigned int sel, float eta, float chHEF, floa
     result = jetTightLeptonVetoSel_->evaluate({eta, chHEF, neHEF, chEmEF, neEmEF, muEF, chMultiplicity, neMultiplicity, multiplicity});
   }
   return result;
+};
+
+double MyCorrections::eval_met_corr(const char *pt_phi, const char *met_type, const char *epoch, const char *dtmc, const char *variation, float met_pt, float met_phi, float npvGood) {
+
+  float result = metCorr_->evaluate({pt_phi, met_type, epoch, dtmc, variation, met_pt, met_phi, npvGood});
+  return result;
+
 };
 
 // Muon momentum scale and resolution

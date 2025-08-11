@@ -355,11 +355,12 @@ float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string
 
   for(unsigned int i=0;i<el_pt.size();i++) {
     char *recoNameAux = (char*)"RecoAbove75";
-    if     (el_pt[i] < 20) recoNameAux = (char*)"RecoBelow20";
-    else if(el_pt[i] < 75) recoNameAux = (char*)"Reco20to75";
+    double pt_used = max(el_pt[i],20.001f);
+    if     (pt_used < 20) recoNameAux = (char*)"RecoBelow20";
+    else if(pt_used < 75) recoNameAux = (char*)"Reco20to75";
     const char *recoName = recoNameAux;
-    double sf0 = corrSFs.eval_electronSF(year,valType0,    recoName,el_eta[i],el_pt[i],el_phi[i]);
-    double sf1 = corrSFs.eval_electronSF(year,valType1,workingPoint,el_eta[i],el_pt[i],el_phi[i]);
+    double sf0 = corrSFs.eval_electronTRKSF(year,valType0,    recoName,el_eta[i],pt_used,el_phi[i]);
+    double sf1 = corrSFs.eval_electronIDSF (year,valType1,workingPoint,el_eta[i],pt_used,el_phi[i]);
     sfTot = sfTot*sf0*sf1;
     if(debug) printf("eleff(%d-%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,el_pt[i],el_eta[i],el_phi[i],sf0,sf1,sf0*sf1,sfTot);
   }
@@ -496,6 +497,31 @@ const Vec_f& Jet_pt_def, const Vec_f& Jet_pt_mod, const Vec_f& Jet_eta, const Ve
   return 0;
 }
 
+float compute_JSON_MET(const std::string pt_phiS, const std::string met_typeS, const int year, const std::string dtmcS, const std::string variationS, const float met_pt, const float met_phi, const float npvGood) {
+
+  const char *pt_phi = pt_phiS.c_str();
+  const char *met_type = met_typeS.c_str();
+  const char *epoch = "";
+  if     (year == 20220) epoch = (char*)"2022";
+  else if(year == 20221) epoch = (char*)"2022EE";
+  else if(year == 20230) epoch = (char*)"2023";
+  else if(year == 20231) epoch = (char*)"2023BPix";
+  else if(year == 20240) epoch = (char*)"2023BPix";
+  const char *dtmc = dtmcS.c_str();
+  const char *variation = variationS.c_str();
+
+  float result = corrSFs.eval_met_corr(pt_phi, met_type, epoch, dtmc, variation, met_pt,met_phi,npvGood);
+
+  // NO CORRECTION APPLIED FOR 2024!!!
+  if     (year == 20240 && pt_phiS == "pt") result = met_pt;
+  else if(year == 20240 && pt_phiS == "phi") result = met_phi;
+
+  bool debug = false;
+  if(debug) printf("MET: %s / %s / %s / %s / %s / %.2f / %.2f / %.2f: %.2f\n",pt_phi,met_type,epoch,dtmc,variation,met_pt,met_phi,npvGood,result);
+
+  return result;
+}
+
 Vec_b cleaningJetVetoMapMask(const Vec_f& jet_eta, const Vec_f& jet_phi, int jetTypeCorr, const int year) {
   Vec_b jet_vetoMap_mask(jet_eta.size(), true);
 
@@ -602,75 +628,21 @@ Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const
   bool debug = false;
   if(debug) printf("eleEnergy: %lu %d\n",pt.size(),type);
 
-  /*if     (year == 20220 && type != 10){
-    for(unsigned int i=0;i<pt.size();i++) {
-       if     (type == +1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(1.0006+gRandom->Gaus(0.0,0.0150));
-       else if(type ==  0 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9986+gRandom->Gaus(0.0,0.0150));
-       else if(type == -1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9966+gRandom->Gaus(0.0,0.0150));
-       else if(type == +1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0057+gRandom->Gaus(0.0,0.0200));
-       else if(type ==  0 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0037+gRandom->Gaus(0.0,0.0200));
-       else if(type == -1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0017+gRandom->Gaus(0.0,0.0200));
-       else printf("PROBLEM in compute_ELEPT_Unc\n");
-    }
-  }
-  else if(year == 20220 && type == 10){
-    for(unsigned int i=0;i<pt.size();i++) new_pt[i] = pt[i];
-  }
-  else if(year == 20221 && type != 10){
-    for(unsigned int i=0;i<pt.size();i++) {
-       if     (type == +1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9970+gRandom->Gaus(0.0,0.0150));
-       else if(type ==  0 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9950+gRandom->Gaus(0.0,0.0150));
-       else if(type == -1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9930+gRandom->Gaus(0.0,0.0150));
-       else if(type == +1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0029+gRandom->Gaus(0.0,0.0200));
-       else if(type ==  0 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(1.0009+gRandom->Gaus(0.0,0.0200));
-       else if(type == -1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(0.9989+gRandom->Gaus(0.0,0.0200));
-       else printf("PROBLEM in compute_ELEPT_Unc\n");
-    }
-  }
-  else if(year == 20221 && type == 10){
-    for(unsigned int i=0;i<pt.size();i++) new_pt[i] = pt[i];
-  }
-  else if(year == 20230 && type != 10){
-    for(unsigned int i=0;i<pt.size();i++) {
-       if     (type == +1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9981+gRandom->Gaus(0.0,0.0140));
-       else if(type ==  0 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9961+gRandom->Gaus(0.0,0.0140));
-       else if(type == -1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9941+gRandom->Gaus(0.0,0.0140));
-       else if(type == +1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(0.9925+gRandom->Gaus(0.0,0.0200));
-       else if(type ==  0 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(0.9905+gRandom->Gaus(0.0,0.0200));
-       else if(type == -1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(0.9885+gRandom->Gaus(0.0,0.0200));
-       else printf("PROBLEM in compute_ELEPT_Unc\n");
-    }
-  }
-  else if(year == 20230 && type == 10){
-    for(unsigned int i=0;i<pt.size();i++) new_pt[i] = pt[i];
-  }
-  else if(year == 20231 && type != 10){
-    for(unsigned int i=0;i<pt.size();i++) {
-       if     (type == +1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9935+gRandom->Gaus(0.0,0.0150));
-       else if(type ==  0 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9915+gRandom->Gaus(0.0,0.0150));
-       else if(type == -1 && abs(eta[i]) <  1.5) new_pt[i] = pt[i]*(0.9895+gRandom->Gaus(0.0,0.0150));
-       else if(type == +1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(0.9941+gRandom->Gaus(0.0,0.0220));
-       else if(type ==  0 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(0.9921+gRandom->Gaus(0.0,0.0220));
-       else if(type == -1 && abs(eta[i]) >= 1.5) new_pt[i] = pt[i]*(0.9901+gRandom->Gaus(0.0,0.0220));
-       else printf("PROBLEM in compute_ELEPT_Unc\n");
-    }
-  }
-  else if(year == 20231 && type == 10){
-    for(unsigned int i=0;i<pt.size();i++) new_pt[i] = pt[i];
-  }*/
+  const bool applySSEtDependent = true;
 
-  if(year == 20220 || year == 20221 || year == 20230 || year == 20231){
+  if(applySSEtDependent == false &&
+     (year == 20220 || year == 20221 || year == 20230 || year == 20231 || year == 20240)){
     if    (type == 10) { // data
       for(unsigned int i=0;i<pt.size();i++) {
         new_pt[i] = pt[i]*corrSFs.eval_electronScale((char*)"total_correction", gain[i], (double)run, eta[i], r9[i], pt[i]);
-        if(debug) printf("ele(%d)-%d: %.3f %.3f\n",i,type,pt[i],new_pt[i]);
+        if(debug) printf("eleSS(%d)-%d: %.3f %.3f\n",i,type,pt[i],new_pt[i]);
       }
     }
     else if(type == 0) { // MC default
       for(unsigned int i=0;i<pt.size();i++) {
         double rho = corrSFs.eval_electronSmearing((char*)"rho", eta[i], r9[i]);
         new_pt[i] = pt[i]*gRandom->Gaus(1.0,rho);
-        if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f\n",i,type,pt[i],new_pt[i],rho);
+        if(debug) printf("eleSS(%d)-%d: %.3f %.3f %.6f\n",i,type,pt[i],new_pt[i],rho);
       }
     }
     else if(type == -1 || type == +1) { // MC smearing uncertainty
@@ -679,7 +651,31 @@ Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const
         double rho_unc = corrSFs.eval_electronSmearing((char*)"err_rho", eta[i], r9[i]);
         double scale_unc = corrSFs.eval_electronScale((char*)"total_uncertainty", gain[i], 1.0, eta[i], r9[i], pt[i]);
         new_pt[i] = pt[i]*gRandom->Gaus(1.0,rho+(double)type*(rho_unc+scale_unc));
-        if(debug) printf("ele(%d)-%d: %.3f %.3f %.6f %.6f %.6f\n",i,type,pt[i],new_pt[i],rho,rho_unc,scale_unc);
+        if(debug) printf("eleSS(%d)-%d: %.3f %.3f %.6f %.6f %.6f\n",i,type,pt[i],new_pt[i],rho,rho_unc,scale_unc);
+      }
+    }
+  }
+  else if(applySSEtDependent == true &&
+     (year == 20220 || year == 20221 || year == 20230 || year == 20231 || year == 20240)){
+    if    (type == 10) { // data
+      for(unsigned int i=0;i<pt.size();i++) {
+        new_pt[i] = pt[i]*corrSFs.eval_electronEtDependentScale((char*)"scale", (double)run, eta[i], r9[i], pt[i], gain[i]);
+        if(debug) printf("eleSSEtDependent(%d)-%d: %.3f %.3f\n",i,type,pt[i],new_pt[i]);
+      }
+    }
+    else if(type == 0) { // MC default
+      for(unsigned int i=0;i<pt.size();i++) {
+        double smear = corrSFs.eval_electronEtDependentSmearing((char*)"smear", pt[i], r9[i], eta[i]);
+        new_pt[i] = pt[i]*(1.0 + smear * gRandom->Gaus(0.0,1.0));
+        if(debug) printf("eleSSEtDependent(%d)-%d: %.3f %.3f %.6f\n",i,type,pt[i],new_pt[i],smear);
+      }
+    }
+    else if(type == -1 || type == +1) { // MC smearing uncertainty
+      for(unsigned int i=0;i<pt.size();i++) {
+        double smear  = corrSFs.eval_electronEtDependentSmearing((char*)"smear",  pt[i], r9[i], eta[i]);
+        double esmear = corrSFs.eval_electronEtDependentSmearing((char*)"esmear", pt[i], r9[i], eta[i]);
+        new_pt[i] = pt[i]*(1.0 + (smear + (double)type*esmear) * gRandom->Gaus(0.0,1.0));
+        if(debug) printf("eleSSEtDependent(%d)-%d: %.3f %.3f %.6f %.6f\n",i,type,pt[i],new_pt[i],smear,esmear);
       }
     }
   }

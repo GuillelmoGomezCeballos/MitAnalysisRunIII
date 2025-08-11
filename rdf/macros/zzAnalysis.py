@@ -40,7 +40,7 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 
 VBSSEL = jsonObject['VBSSEL']
 
-muSelChoice = 2
+muSelChoice = 0
 MUOWP = "Medium"
 
 elSelChoice = 0

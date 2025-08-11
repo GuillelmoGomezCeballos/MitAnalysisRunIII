@@ -23,7 +23,7 @@ def readDASample(sampleNOW,year,skimType,jsnName,lumiName):
 
     report = lumidf.Report()
     report.Print()
-    print("Total lumi({0}): {1}".format(sampleNOW,lumisum.GetValue()))
+    print("Total lumi({0:}): {1:6.3f}".format(sampleNOW,lumisum.GetValue()))
 
 if __name__ == "__main__":
 

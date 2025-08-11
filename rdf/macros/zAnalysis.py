@@ -221,7 +221,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfbase = (dfbase.Define("mjjGen", "{0}".format(0))
                       )
 
-    if(year == 20240): correctionString = "_correction"
     dfbase = selectionWeigths(dfbase,isData,year,PDType,weight,useFR,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,0)
 
     overallMETFilters = jsonObject['met_filters']
@@ -749,7 +748,6 @@ if __name__ == "__main__":
         histoFakeEtaPt_el[x].SetDirectory(0)
     fFakeFile.Close()
 
-    if(year == 20240): correctionString = "_correction"
     lepSFPath = "data/histoLepSFEtaPt_{0}{1}.root".format(year,correctionString)
     fLepSFFile = ROOT.TFile(lepSFPath)
     histoLepSFEtaPt_mu = fLepSFFile.Get("histoLepSFEtaPt_0_{0}".format(muSelChoice))

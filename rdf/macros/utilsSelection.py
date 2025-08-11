@@ -278,14 +278,14 @@ def selectionJetMet(df,year,bTagSel,isData,count,jetEtaCut):
                      .Define("clean_Jet_ptJes25Up", "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_phi,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,run,+26,{0})".format(jetTypeCorr))
                      .Define("clean_Jet_ptJes26Up", "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_phi,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,run,+27,{0})".format(jetTypeCorr))
                      .Define("clean_Jet_ptJes27Up", "compute_JSON_JES_Unc(clean_Jet_ptDef,clean_Jet_eta,clean_Jet_phi,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,run,+28,{0})".format(jetTypeCorr))
-                     .Define("thePuppiMET_phi"             ,"PuppiMET_phi")
-                     .Define("thePuppiMET_phiJERUp"        ,"PuppiMET_phi")
-                     .Define("thePuppiMET_phiJESUp"        ,"PuppiMET_phi")
-                     .Define("thePuppiMET_phiUnclusteredUp","PuppiMET_phiUnclusteredUp")
-                     .Define("thePuppiMET_pt"              ,"PuppiMET_pt")
-                     .Define("thePuppiMET_ptJERUp"         ,"PuppiMET_pt")
-                     .Define("thePuppiMET_ptJESUp"         ,"PuppiMET_pt")
-                     .Define("thePuppiMET_ptUnclusteredUp" ,"PuppiMET_ptUnclusteredUp")
+                     .Define("thePuppiMET_phi"             ,"compute_JSON_MET(\"phi\",\"PuppiMET\",{0},\"MC\",\"nom\"  ,PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_phiJERUp"        ,"compute_JSON_MET(\"phi\",\"PuppiMET\",{0},\"MC\",\"pu_up\",PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_phiJESUp"        ,"compute_JSON_MET(\"phi\",\"PuppiMET\",{0},\"MC\",\"pu_dn\",PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_phiUnclusteredUp","compute_JSON_MET(\"phi\",\"PuppiMET\",{0},\"MC\",\"nom\",PuppiMET_ptUnclusteredUp,PuppiMET_phiUnclusteredUp,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_pt"              ,"compute_JSON_MET(\"pt\",\"PuppiMET\",{0},\"MC\",\"nom\"  ,PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_ptJERUp"         ,"compute_JSON_MET(\"pt\",\"PuppiMET\",{0},\"MC\",\"pu_up\",PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_ptJESUp"         ,"compute_JSON_MET(\"pt\",\"PuppiMET\",{0},\"MC\",\"pu_dn\",PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_ptUnclusteredUp" ,"compute_JSON_MET(\"pt\",\"PuppiMET\",{0},\"MC\",\"nom\",PuppiMET_ptUnclusteredUp,PuppiMET_phiUnclusteredUp,PV_npvsGood)".format(year))
                      )
 
     else:
@@ -323,14 +323,14 @@ def selectionJetMet(df,year,bTagSel,isData,count,jetEtaCut):
                      .Define("clean_Jet_ptJes26Up", "clean_Jet_ptDef")
                      .Define("clean_Jet_ptJes27Up", "clean_Jet_ptDef")
                      .Define("clean_Jet_ptJerUp"  , "clean_Jet_ptDef")
-                     .Define("thePuppiMET_phi"             ,"PuppiMET_phi")
-                     .Define("thePuppiMET_phiJERUp"        ,"PuppiMET_phi")
-                     .Define("thePuppiMET_phiJESUp"        ,"PuppiMET_phi")
-                     .Define("thePuppiMET_phiUnclusteredUp","PuppiMET_phi")
-                     .Define("thePuppiMET_pt"              ,"PuppiMET_pt")
-                     .Define("thePuppiMET_ptJERUp"         ,"PuppiMET_pt")
-                     .Define("thePuppiMET_ptJESUp"         ,"PuppiMET_pt")
-                     .Define("thePuppiMET_ptUnclusteredUp" ,"PuppiMET_pt")
+                     .Define("thePuppiMET_phi"             ,"compute_JSON_MET(\"phi\",\"PuppiMET\",{0},\"DATA\",\"nom\",PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_phiJERUp"        ,"thePuppiMET_phi")
+                     .Define("thePuppiMET_phiJESUp"        ,"thePuppiMET_phi")
+                     .Define("thePuppiMET_phiUnclusteredUp","thePuppiMET_phi")
+                     .Define("thePuppiMET_pt"              ,"compute_JSON_MET(\"pt\",\"PuppiMET\",{0},\"DATA\",\"nom\",PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_ptJERUp"         ,"thePuppiMET_pt")
+                     .Define("thePuppiMET_ptJESUp"         ,"thePuppiMET_pt")
+                     .Define("thePuppiMET_ptUnclusteredUp" ,"thePuppiMET_pt")
                      )
 
     dftag = makeJES(dftag,year,""        ,bTagSel,jetEtaCut)
@@ -844,13 +844,13 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
     elif(year == 20221): ELEYEAR = "2022Re-recoE+PromptFG"
     elif(year == 20230): ELEYEAR = "2023PromptC"
     elif(year == 20231): ELEYEAR = "2023PromptD"
-    elif(year == 20240): ELEYEAR = "2023PromptD"
+    elif(year == 20240): ELEYEAR = "2024Prompt"
     PHOYEAR = "NULL"
     if  (year == 20220): PHOYEAR = "2022Re-recoBCD"
     elif(year == 20221): PHOYEAR = "2022Re-recoE+PromptFG"
     elif(year == 20230): PHOYEAR = "2023PromptC"
     elif(year == 20231): PHOYEAR = "2023PromptD"
-    elif(year == 20240): PHOYEAR = "2023PromptD"
+    elif(year == 20240): PHOYEAR = "2024_ID"
     if(correctionString == "_correction"):
         MUOWP = "Medium"
         ELEWP = "Medium"

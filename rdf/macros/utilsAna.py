@@ -11,7 +11,7 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 109.0]
+    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 107.0]
 
     lumiBit = -999
     if(year == 2016): lumiBit = 0
@@ -458,6 +458,9 @@ def getDATAlist(type, year, skimType):
         filesL   = findDIR("{0}/MuonEG+Run2024H-MINIv6NANOv15-v2+NANOAOD".format(dirT2))
     elif(year == 2024 and type == 1028):
         filesL   = findDIR("{0}/MuonEG+Run2024I-MINIv6NANOv15-v2+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/MuonEG+Run2024I-MINIv6NANOv15_v2-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
 
     elif(year == 2024 and type == 1032):
         filesL   = findDIR("{0}/EGamma0+Run2024C-MINIv6NANOv15-v1+NANOAOD".format(dirT2))
@@ -494,6 +497,12 @@ def getDATAlist(type, year, skimType):
         filesAux = findDIR("{0}/EGamma1+Run2024I-MINIv6NANOv15-v1+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma0+Run2024I-MINIv6NANOv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma1+Run2024I-MINIv6NANOv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
 
     elif(year == 2024 and type == 1042):
         filesL   = findDIR("{0}/Muon0+Run2024C-MINIv6NANOv15-v1+NANOAOD".format(dirT2))
@@ -526,8 +535,14 @@ def getDATAlist(type, year, skimType):
         for x in filesAux:
             filesL.push_back(x)
     elif(year == 2024 and type == 1048):
-        filesL   = findDIR("{0}/Muon0+Run2024H-MINIv6NANOv15-v1+NANOAOD".format(dirT2))
-        filesAux = findDIR("{0}/Muon1+Run2024H-MINIv6NANOv15-v2+NANOAOD".format(dirT2))
+        filesL   = findDIR("{0}/Muon0+Run2024I-MINIv6NANOv15-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/Muon1+Run2024I-MINIv6NANOv15-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon0+Run2024I-MINIv6NANOv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon1+Run2024I-MINIv6NANOv15_v2-v1+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
 
@@ -564,6 +579,12 @@ def getDATAlist(type, year, skimType):
     elif(year == 2024 and type == 1058):
         filesL   = findDIR("{0}/JetMET0+Run2024I-MINIv6NANOv15-v2+NANOAOD".format(dirT2))
         filesAux = findDIR("{0}/JetMET1+Run2024I-MINIv6NANOv15-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET0+Run2024I-MINIv6NANOv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET1+Run2024I-MINIv6NANOv15_v2-v2+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
 
@@ -947,8 +968,8 @@ def SwitchSample(argument, skimType):
        518: (dirT2+"/WZGtoLNuZG_TuneCP5_13p6TeV_amcatnlo-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.08425*1000,plotCategory("kPlotVVV")),
        519: (dirT2+"/TTWW_TuneCP5_13p6TeV_madgraph-madspin-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.0081651*1000,plotCategory("kPlotTVX")),
        520: (dirT2+"/TTZZ_TuneCP5_13p6TeV_madgraph-madspin-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.0015617*1000,plotCategory("kPlotTVX")),
-       521: (dirT2+"/GluGluHtoZZto4L_M-125_TuneCP5_13p6TeV_powheg-jhugen-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",52.230*0.02619*0.101*0.101*1000,plotCategory("kPlotHiggs")),
-       522: (dirT2+"/VBFHto2Zto4L_M-125_TuneCP5_13p6TeV_powheg-jhugen-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",4.0780*0.02619*0.101*0.101*1000,plotCategory("kPlotHiggs")),
+       521: (dirT2+"/GluGluHto2Zto4L_Par-M-125_TuneCP5_13p6TeV_powhegMINNLO-jhugen-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",52.230*0.02619*0.101*0.101*1000,plotCategory("kPlotHiggs")),
+       522: (dirT2+"/VBFH-Hto2Zto4L_Par-M-125_TuneCP5_13p6TeV_powheg-jhugen-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",4.0780*0.02619*0.101*0.101*1000,plotCategory("kPlotHiggs")),
        523: (dirT2+"/TTLL_MLL-4to50_TuneCP5_13p6TeV_amcatnlo-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.03949*1000,plotCategory("kPlotTVX")),
        524: (dirT2+"/TTLL_MLL-50_TuneCP5_13p6TeV_amcatnlo-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.08646*1000,plotCategory("kPlotTVX")),
        525: (dirT2+"/DYto2Mu_Bin-MLL-10to50_TuneCP5_13p6TeV_powheg-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",19982.5*1000/3.,plotCategory("kPlotDY")),
@@ -1001,15 +1022,15 @@ def SwitchSample(argument, skimType):
        572: (dirT2+"/GluGluWWtoTauNuMuNu_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",(0.1086*0.1086)*ggWWXS_LO_MCFM*1.4*1000,plotCategory("kPlotggWW")),
        573: (dirT2+"/GluGluWWto2Tau2Nu_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",(0.1086*0.1086)*ggWWXS_LO_MCFM*1.4*1000,plotCategory("kPlotggWW")),
        574: (dirT2+"/WWJJto2L2Nu-OS-noTop-EWK_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                         0.3301419*1000,plotCategory("kPlotqqWW")),
-       575: (dirT2+"/WWJJto2L2Nu-OS-noTop-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2+NANOAODSIM",                         2.6758028*1000,plotCategory("kPlotqqWW")),
-       576: (dirT2+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2+NANOAODSIM",                         0.0295255*1000,plotCategory("kPlotEWKSSWW")),
-       577: (dirT2+"/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2+NANOAODSIM",                         0.0279662*1000,plotCategory("kPlotQCDSSWW")),
+       575: (dirT2+"/WWJJto2L2Nu-OS-noTop-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                         2.6758028*1000,plotCategory("kPlotqqWW")),
+       576: (dirT2+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                         0.0295255*1000,plotCategory("kPlotEWKSSWW")),
+       577: (dirT2+"/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                         0.0279662*1000,plotCategory("kPlotQCDSSWW")),
        578: (dirT2+"/WZJJto3LNu-EWK_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                                   0.0429366*1000,plotCategory("kPlotEWKWZ")),
-       579: (dirT2+"/WZJJto3LNu-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2+NANOAODSIM",                                   0.4958618*1000*0.70,plotCategory("kPlotWZ")),
-       580: (dirT2+"/ZZJJto2L2Nu-EWK_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2+NANOAODSIM",                                  0.0051721*1000,plotCategory("kPlotZZ")),
-       581: (dirT2+"/ZZJJto2L2Nu-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2+NANOAODSIM",                                  0.0912313*1000*1.40,plotCategory("kPlotZZ")),
-       582: (dirT2+"/ZZJJto4L-EWK_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2+NANOAODSIM",                                     0.0011422*1000,plotCategory("kPlotZZ")),
-       583: (dirT2+"/ZZJJto4L-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAOD-140X_mcRun3_2024_realistic_v26-v2+NANOAODSIM",                                     0.0202984*1000*1.40,plotCategory("kPlotZZ")),
+       579: (dirT2+"/WZJJto3LNu-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                                   0.4958618*1000*0.70,plotCategory("kPlotWZ")),
+       580: (dirT2+"/ZZJJto2L2Nu-EWK_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                                  0.0051721*1000,plotCategory("kPlotZZ")),
+       581: (dirT2+"/ZZJJto2L2Nu-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                                  0.0912313*1000*1.40,plotCategory("kPlotZZ")),
+       582: (dirT2+"/ZZJJto4L-EWK_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                                     0.0011422*1000,plotCategory("kPlotZZ")),
+       583: (dirT2+"/ZZJJto4L-QCD_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",                                     0.0202984*1000*1.40,plotCategory("kPlotZZ")),
        584: (dirT2+"/WpWpJJ-EWK_TuneCP5_13p6TeV-powheg-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.5*0.0295255*1000,plotCategory("kPlotEWKSSWW")),
        585: (dirT2+"/WmWmJJ-EWK_TuneCP5_13p6TeV-powheg-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.5*0.0295255*1000,plotCategory("kPlotEWKSSWW")),
        586: (dirT2+"/ZH-HtoNon2B_Par-M-125_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",(0.9439)*(1-0.577)*1000,plotCategory("kPlotHiggs")),
