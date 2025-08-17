@@ -85,6 +85,7 @@ if __name__ == "__main__":
         startHisto[0] = startHisto[0] + 100
         startHisto[1] = startHisto[1] + 100
 
+    anaTypeFileName = anaType
     anaType = anaType%100
 
     nCat = plotCategory("kPlotCategories")
@@ -138,7 +139,7 @@ if __name__ == "__main__":
             histoFakeEffSelEta[thePlot][j] = TH1D("histoFakeEffSelEta_{0}_{1}_{2}_anaType{3}".format(thePlot,j,path.split("fillhisto_")[1],anaType), "histoFakeEffSelEta_{0}_{1}_{2}_anaType{3}".format(thePlot,j,path.split("fillhisto_")[1],anaType), len(xEtaBins)-1, xEtaBins)
             histoFakeDenSelEta[thePlot][j] = TH1D("histoFakeDenSelEta_{0}_{1}_{2}_anaType{3}".format(thePlot,j,path.split("fillhisto_")[1],anaType), "histoFakeDenSelEta_{0}_{1}_{2}_anaType{3}".format(thePlot,j,path.split("fillhisto_")[1],anaType), len(xEtaBins)-1, xEtaBins)
 
-    fileFakeRateName = "histoFakeEtaPt_{0}_{1}_anaType{2}.root".format(path.split("fillhisto_")[1],year,anaType)
+    fileFakeRateName = "histoFakeEtaPt_{0}_{1}_anaType{2}.root".format(path.split("fillhisto_")[1],year,anaTypeFileName)
     outFileFakeRate = TFile(fileFakeRateName,"recreate")
     outFileFakeRate.cd()
     for thePlot in range(2):
@@ -210,10 +211,10 @@ if __name__ == "__main__":
             canvasPt[thePlot][nsel].Divide(1,1)
             histoFakeEffSelPt[thePlot][nsel].DrawCopy()
             canvasPt[thePlot][nsel].Draw()
-            canvasPt[thePlot][nsel].SaveAs("histoFakePt_{0}_{1}_anaType{2}_chan{3}_nsel{4}.{5}".format(path.split("fillhisto_")[1],year,anaType,thePlot,nsel,format))
+            canvasPt[thePlot][nsel].SaveAs("histoFakePt_{0}_{1}_anaType{2}_chan{3}_nsel{4}.{5}".format(path.split("fillhisto_")[1],year,anaTypeFileName,thePlot,nsel,format))
 
             canvasEta[thePlot][nsel] = TCanvas("canvasEta{0}_{1}".format(thePlot,nsel), "canvasEta{0}_{1}".format(thePlot,nsel), 10, 10, 500, 500)
             canvasEta[thePlot][nsel].Divide(1,1)
             histoFakeEffSelEta[thePlot][nsel].DrawCopy()
             canvasEta[thePlot][nsel].Draw()
-            canvasEta[thePlot][nsel].SaveAs("histoFakeEta_{0}_{1}_anaType{2}_chan{3}_nsel{4}.{5}".format(path.split("fillhisto_")[1],year,anaType,thePlot,nsel,format))
+            canvasEta[thePlot][nsel].SaveAs("histoFakeEta_{0}_{1}_anaType{2}_chan{3}_nsel{4}.{5}".format(path.split("fillhisto_")[1],year,anaTypeFileName,thePlot,nsel,format))

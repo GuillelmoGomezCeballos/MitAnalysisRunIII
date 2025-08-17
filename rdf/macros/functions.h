@@ -872,8 +872,8 @@ float compute_PTWWCorr(const int type, const TString theCat, const float ptww){
 }
 
 float compute_fakeRate(const bool isData,
-                       const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& tight_mu, const int mType,
-                       const Vec_f& el_pt, const Vec_f& el_eta, const Vec_i& tight_el, const int eType,
+                       const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_jetRelIso, const Vec_i& tight_mu, const int mType,
+                       const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_jetRelIso, const Vec_i& tight_el, const int eType,
                        const int whichAna){
 
   bool debug = false;
@@ -884,7 +884,6 @@ float compute_fakeRate(const bool isData,
   // 6/7/8 - 1001/1002/1003 anaType 3 nbjets50 > 0
   // def 2, unc 5 / 1 / 8
 
-  // whichAna = 1 (ssww)
   double addSF[2] {1.0, 1.0};
   if(whichAna == 1) {addSF[0] = 1.0; addSF[1] = 1.0;}
 
@@ -897,17 +896,21 @@ float compute_fakeRate(const bool isData,
   for(unsigned int i=0;i<mu_pt.size();i++) {
     if(tight_mu[i] == 1) continue;
     const TH2D& hcorr = histoFakeEtaPt_mu[mType];
-    double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),mu_pt[i]) * addSF[0];
+    float ptFakeVar = mu_pt[i];
+    if(whichAna == 3) ptFakeVar = mu_pt[i]*(1+std::max(mu_jetRelIso[i],0.0f))*0.9;
+    double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),ptFakeVar) * addSF[0];
     sfTot = -sfTot*sf/(1-sf);
-    if(debug) printf("fakemu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sf/(1-sf),sfTot);
+    if(debug) printf("fakemu(%d) %.3f %.3f %.3f %.3f %.3f\n",i,ptFakeVar,mu_eta[i],sf,sf/(1-sf),sfTot);
   }
 
   for(unsigned int i=0;i<el_pt.size();i++) {
     if(tight_el[i] == 1) continue;
     const TH2D& hcorr = histoFakeEtaPt_el[eType];
-    double sf = getValFromTH2(hcorr, fabs(el_eta[i]), el_pt[i]) * addSF[1];
+    float ptFakeVar = el_pt[i];
+    if(whichAna == 3) ptFakeVar = el_pt[i]*(1+std::max(el_jetRelIso[i],0.0f))*0.9;
+    double sf = getValFromTH2(hcorr, fabs(el_eta[i]), ptFakeVar) * addSF[1];
     sfTot = -sfTot*sf/(1-sf);
-    if(debug) printf("fakeel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sf/(1-sf),sfTot);
+    if(debug) printf("fakeel(%d) %.3f %.3f %.3f %.3f %.3f\n",i,el_pt[i],ptFakeVar,sf,sf/(1-sf),sfTot);
   }
       
   if(sfTot != 1 && isData) sfTot = -sfTot;

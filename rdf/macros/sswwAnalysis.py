@@ -1132,6 +1132,8 @@ if __name__ == "__main__":
     histoFakeEtaPt_mu = []
     histoFakeEtaPt_el = []
     fakePath = "data/histoFakeEtaPt_{0}.root".format(year)
+    if(whichAna == 3):
+        fakePath = "data/histoFakeEtaPt_ptlcone_{0}.root".format(year)
     fFakeFile = ROOT.TFile(fakePath)
     histoFakeEtaPt_mu.append(fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}_fakeAnalysis1001_anaType1".format(muSelChoice)))
     histoFakeEtaPt_mu.append(fFakeFile.Get("histoFakeEffSelEtaPt_0_{0}_fakeAnalysis1002_anaType1".format(muSelChoice)))
