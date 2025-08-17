@@ -760,6 +760,7 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
               .Define("fake_Muon_nTrackerLayers"  ,"Muon_nTrackerLayers[fake_mu]")
               .Define("fake_Muon_pfRelIso03_chg"  ,"Muon_pfRelIso03_chg[fake_mu]")
               .Define("fake_Muon_p"               ,"computeMomentum(fake_Muon_pt,fake_Muon_eta,fake_Muon_phi,fake_Muon_mass)")
+              .Define("fakeable_mu"               ,"(abs(fake_Muon_dxy) < 0.05 && abs(fake_Muon_dz) < 0.10 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 1 && fake_Muon_jetRelIso < 0.5)")
               .Define("tight_mu"                  ,"{0}".format(tight_mu))
 
               .Define("loose_el"                          ,"abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 1")
@@ -787,6 +788,7 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
               .Define("fake_Electron_r9"                  ,"Electron_r9[fake_el]")
               .Define("fake_Electron_pfRelIso03_chg"      ,"Electron_pfRelIso03_chg[fake_el]")
               .Define("fake_Electron_seedGain"            ,"Electron_seedGain[fake_el]")
+              .Define("fakeable_el"                       ,"(abs(fake_Electron_dxy) < 0.05 && abs(fake_Electron_dz) < 0.10 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_jetRelIso < 0.5)")
               .Define("tight_el"                          ,"{0}".format(tight_el))
 
               .Define("nLoose","Sum(loose_mu)+Sum(loose_el)")
@@ -1132,6 +1134,11 @@ def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeight
         fakeRateSel[1] = 4
         fakeRateSel[2] = 3
         fakeRateSel[3] = 7
+    elif(whichAna == 2):
+        fakeRateSel[0] = 0
+        fakeRateSel[1] = 1
+        fakeRateSel[2] = 3
+        fakeRateSel[3] = 6
 
     if(isData == "true"): return selectionDAWeigths(df,year,PDType,whichAna,fakeRateSel)
     else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,whichAna,fakeRateSel)

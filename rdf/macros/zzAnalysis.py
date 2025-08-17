@@ -756,7 +756,7 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoBTVEffEta
 
 if __name__ == "__main__":
 
-    group = 10
+    group = 2
 
     skimType = "3l"
     year = 2022

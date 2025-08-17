@@ -14,23 +14,20 @@ if [ $# -gt 1 ]; then
   condorJob=$2
 fi
 
-runAlma9=0
-if [ $# -ge 4 ]; then
-  runAlma9=$4
-fi
-
-
 if [ $theAna -eq 0 ]; then
  whichAna="zAnalysis"
 
 elif [ $theAna -eq 1 ]; then
  whichAna="wzAnalysis"
+ group=1
 
 elif [ $theAna -eq 2 ]; then
  whichAna="zzAnalysis"
+ group=1
 
 elif [ $theAna -eq 3 ]; then
  whichAna="sswwAnalysis"
+ group=3
 
 elif [ $theAna -eq 4 ]; then
  whichAna="zmetAnalysis"
@@ -49,15 +46,18 @@ elif [ $theAna -eq 5 ]; then
    nohup ./analysis_slurm.sh 510 20240 -1 1002 fakeAnalysis >& logs/log_510 &
    nohup ./analysis_slurm.sh 536 20240 -1 1003 fakeAnalysis >& logs/log_536 &
  fi
+ group=4
 
 elif [ $theAna -eq 6 ]; then
  whichAna="triggerAnalysis"
 
 elif [ $theAna -eq 7 ]; then
  whichAna="metAnalysis"
+ group=4
 
 elif [ $theAna -eq 8 ]; then
  whichAna="wwAnalysis"
+ group=4
 
 elif [ $theAna -eq 9 ]; then
  whichAna="puAnalysis"
@@ -81,7 +81,8 @@ if [ "${passSel}" != "no" ]; then
 for whichJob in $(seq 0 $group)
 do
 
-if [ ${runAlma9} -eq 0 ]; then
+if [ $theAna -ne 1 ]; then
+
 cat << EOF > submit
 #!/bin/bash
 #SBATCH --job-name=simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}
@@ -99,8 +100,7 @@ cat << EOF > submit
 #SBATCH --output=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.out
 #SBATCH --error=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.error
 #SBATCH --cpus-per-task=4
-#SBATCH --partition=submit-alma9
-#SBATCH --exclude=submit[30,08]
+#SBATCH --mem-per-cpu=3000M
 srun ./analysis_singularity_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 EOF
 

@@ -1107,7 +1107,7 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,puWeights,histoTriggerDA
 
 if __name__ == "__main__":
 
-    group = 10
+    group = 5
 
     skimType = "2l"
     year = 2022

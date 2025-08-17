@@ -26,7 +26,7 @@ bTagSel = 2
 useBTaggingWeights = 1
 
 useFR = 1
-whichAna = 1
+whichAna = 2
 
 selectionJsonPath = "config/selection.json"
 if(not os.path.exists(selectionJsonPath)):
@@ -1069,7 +1069,7 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,ewkCorrWeights,wsWeights
 
 if __name__ == "__main__":
 
-    group = 10
+    group = 4
 
     skimType = "3l"
     year = 2022

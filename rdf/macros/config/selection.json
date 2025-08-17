@@ -6,225 +6,225 @@
 	{
 	    "name": "FAKE_MU",
 	    "version": 12,
-	    "definition": "(abs(Muon_dxy) < 0.1 && abs(Muon_dz) < 0.2 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 1.0 && Muon_mvaTTH > -0.7)"
+	    "definition": "(abs(Muon_dxy) < 0.05 && abs(Muon_dz) < 0.10 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 0.5)"
 	},
 	{
 	    "name": "TIGHT_MU0",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 4)"
+	    "definition": "(fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 4)"
 	},
 	{
 	    "name": "TIGHT_MU1",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_tightId == true && fake_Muon_pfIsoId >= 4)"
+	    "definition": "(fakeable_mu && fake_Muon_tightId == true && fake_Muon_pfIsoId >= 4)"
 	},
 	{
 	    "name": "TIGHT_MU2",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 4)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 4)"
 	},
 	{
 	    "name": "TIGHT_MU3",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_tightId == true && fake_Muon_miniIsoId >= 3)"
+	    "definition": "(fakeable_mu && fake_Muon_tightId == true && fake_Muon_miniIsoId >= 3)"
 	},
 	{
 	    "name": "TIGHT_MU4",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_miniIsoId >= 3)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_miniIsoId >= 3)"
 	},
 	{
 	    "name": "TIGHT_MU5",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_promptMVA > 0.5)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_promptMVA > 0.5)"
 	},
 	{
 	    "name": "TIGHT_MU6",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_tightId == true && fake_Muon_promptMVA > 0.7)"
+	    "definition": "(fakeable_mu && fake_Muon_tightId == true && fake_Muon_promptMVA > 0.7)"
 	},
 	{
 	    "name": "TIGHT_MU7",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_miniIsoId >= 4)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_miniIsoId >= 4)"
 	},
 	{
 	    "name": "TIGHT_MU8",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_promptMVA > 0.7)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_promptMVA > 0.7)"
 	},
 	{
 	    "name": "TIGHT_MU9",
 	    "version": 12,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 1 && fake_Muon_jetRelIso < 1.0)"
+	    "definition": "(fakeable_mu)"
 	},
 
 	{
 	    "name": "FAKE_EL",
 	    "version": 12,
-	    "definition": "(abs(Electron_dxy) < 0.1 && abs(Electron_dz) < 0.2 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_mvaIso > 0 && Electron_jetRelIso < 1.0 && Electron_mvaTTH > -0.7)"
+	    "definition": "(abs(Electron_dxy) < 0.05 && abs(Electron_dz) < 0.10 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_jetRelIso < 0.5)"
 	},
 	{
 	    "name": "TIGHT_EL0",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_cutBased >= 3)"
+	    "definition": "(fake_Electron_cutBased >= 3)"
 	},
 	{
 	    "name": "TIGHT_EL1",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_cutBased >= 4)"
+	    "definition": "(fakeable_el && fake_Electron_cutBased >= 4)"
 	},
 	{
 	    "name": "TIGHT_EL2",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaNoIso_WP80 == true && fake_Electron_pfRelIso03_chg < 0.15)"
+	    "definition": "(fakeable_el && fake_Electron_mvaNoIso_WP80 == true && fake_Electron_pfRelIso03_chg < 0.15)"
 	},
 	{
 	    "name": "TIGHT_EL3",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaIso_WP80 == true)"
+	    "definition": "(fakeable_el && fake_Electron_mvaIso_WP80 == true)"
 	},
 	{
 	    "name": "TIGHT_EL4",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_promptMVA > 0.2)"
+	    "definition": "(fakeable_el && fake_Electron_promptMVA > 0.3)"
 	},
 	{
 	    "name": "TIGHT_EL5",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaIso_WP90 == true)"
+	    "definition": "(fakeable_el && fake_Electron_mvaIso_WP90 == true)"
 	},
 	{
 	    "name": "TIGHT_EL6",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaIso_WP80 == true && fake_Electron_tightCharge == 2)"
+	    "definition": "(fakeable_el && fake_Electron_mvaIso_WP80 == true && fake_Electron_tightCharge == 2)"
 	},
 	{
 	    "name": "TIGHT_EL7",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_promptMVA > 0.2 && fake_Electron_tightCharge == 2)"
+	    "definition": "(fakeable_el && fake_Electron_promptMVA > 0.3 && fake_Electron_tightCharge == 2)"
 	},
 	{
 	    "name": "TIGHT_EL8",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_promptMVA > 0.0)"
+	    "definition": "(fakeable_el && fake_Electron_promptMVA > 0.0)"
 	},
 	{
 	    "name": "TIGHT_EL9",
 	    "version": 12,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_mvaIso > 0 && fake_Electron_jetRelIso < 1.0)"
+	    "definition": "(fakeable_el)"
 	},
 
 	{
 	    "name": "FAKE_MU",
 	    "version": 15,
-	    "definition": "(abs(Muon_dxy) < 0.1 && abs(Muon_dz) < 0.2 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 1.0 && Muon_promptMVA > -0.7)"
+	    "definition": "(abs(Muon_dxy) < 0.05 && abs(Muon_dz) < 0.10 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 0.5)"
 	},
 	{
 	    "name": "TIGHT_MU0",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 4)"
+	    "definition": "(fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 4)"
 	},
 	{
 	    "name": "TIGHT_MU1",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_tightId == true && fake_Muon_pfIsoId >= 4)"
+	    "definition": "(fakeable_mu && fake_Muon_tightId == true && fake_Muon_pfIsoId >= 4)"
 	},
 	{
 	    "name": "TIGHT_MU2",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 4)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 4)"
 	},
 	{
 	    "name": "TIGHT_MU3",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_tightId == true && fake_Muon_miniIsoId >= 3)"
+	    "definition": "(fakeable_mu && fake_Muon_tightId == true && fake_Muon_miniIsoId >= 3)"
 	},
 	{
 	    "name": "TIGHT_MU4",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_miniIsoId >= 3)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_miniIsoId >= 3)"
 	},
 	{
 	    "name": "TIGHT_MU5",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_promptMVA > 0.5)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_promptMVA > 0.5)"
 	},
 	{
 	    "name": "TIGHT_MU6",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_tightId == true && fake_Muon_promptMVA > 0.7)"
+	    "definition": "(fakeable_mu && fake_Muon_tightId == true && fake_Muon_promptMVA > 0.7)"
 	},
 	{
 	    "name": "TIGHT_MU7",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_miniIsoId >= 4)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_miniIsoId >= 4)"
 	},
 	{
 	    "name": "TIGHT_MU8",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_promptMVA > 0.7)"
+	    "definition": "(fakeable_mu && fake_Muon_mediumPromptId == true && fake_Muon_promptMVA > 0.7)"
 	},
 	{
 	    "name": "TIGHT_MU9",
 	    "version": 15,
-	    "definition": "(abs(fake_Muon_dxy) < 0.1 && abs(fake_Muon_dz) < 0.2 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 1 && fake_Muon_jetRelIso < 1.0)"
+	    "definition": "(fakeable_mu)"
 	},
 
 	{
 	    "name": "FAKE_EL",
 	    "version": 15,
-	    "definition": "(abs(Electron_dxy) < 0.1 && abs(Electron_dz) < 0.2 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_mvaIso > 0 && Electron_jetRelIso < 1.0 && Electron_promptMVA > -0.7)"
+	    "definition": "(abs(Electron_dxy) < 0.05 && abs(Electron_dz) < 0.10 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_jetRelIso < 0.5)"
 	},
 	{
 	    "name": "TIGHT_EL0",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_cutBased >= 3)"
+	    "definition": "(fake_Electron_cutBased >= 3)"
 	},
 	{
 	    "name": "TIGHT_EL1",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_cutBased >= 4)"
+	    "definition": "(fakeable_el && fake_Electron_cutBased >= 4)"
 	},
 	{
 	    "name": "TIGHT_EL2",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaNoIso_WP80 == true && fake_Electron_pfRelIso03_chg < 0.15)"
+	    "definition": "(fakeable_el && fake_Electron_mvaNoIso_WP80 == true && fake_Electron_pfRelIso03_chg < 0.15)"
 	},
 	{
 	    "name": "TIGHT_EL3",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaIso_WP80 == true)"
+	    "definition": "(fakeable_el && fake_Electron_mvaIso_WP80 == true)"
 	},
 	{
 	    "name": "TIGHT_EL4",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_promptMVA > 0.9)"
+	    "definition": "(fakeable_el && fake_Electron_promptMVA > 0.9)"
 	},
 	{
 	    "name": "TIGHT_EL5",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaIso_WP90 == true)"
+	    "definition": "(fakeable_el && fake_Electron_mvaIso_WP90 == true)"
 	},
 	{
 	    "name": "TIGHT_EL6",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_mvaIso_WP80 == true && fake_Electron_tightCharge == 2)"
+	    "definition": "(fakeable_el && fake_Electron_mvaIso_WP80 == true && fake_Electron_tightCharge == 2)"
 	},
 	{
 	    "name": "TIGHT_EL7",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_promptMVA > 0.9 && fake_Electron_tightCharge == 2)"
+	    "definition": "(fakeable_el && fake_Electron_promptMVA > 0.9 && fake_Electron_tightCharge == 2)"
 	},
 	{
 	    "name": "TIGHT_EL8",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_promptMVA > 0.8)"
+	    "definition": "(fakeable_el && fake_Electron_promptMVA > 0.8)"
 	},
 	{
 	    "name": "TIGHT_EL9",
 	    "version": 15,
-	    "definition": "(abs(fake_Electron_dxy) < 0.1 && abs(fake_Electron_dz) < 0.2 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_mvaIso > 0 && fake_Electron_jetRelIso < 1.0)"
+	    "definition": "(fakeable_el)"
 	}
 
 ],

@@ -32,4 +32,5 @@ hadd -f histoFakeEtaPt_${YEAR}.root histoFakeEtaPt_fakeAnalysis100?_${YEAR}_anaT
 
 if [ ${removePDFFiles} -eq 1 ]; then
   rm -f histoFake*.pdf;
+  rm -f histoFakeEtaPt_fakeAnalysis100?_${YEAR}_anaType?.root
 fi

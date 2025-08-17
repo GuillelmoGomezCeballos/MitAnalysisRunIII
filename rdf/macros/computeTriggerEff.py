@@ -309,7 +309,7 @@ if __name__ == "__main__":
                     canvasPtMax[nlep][nsel][npt].cd(1)
                     histoTriggerV1SFPtMax[nlep][nsel][npt].DrawCopy()
                     canvasPtMax[nlep][nsel][npt].Draw()
-                    canvasPtMax[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMax_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,format))
+                    canvasPtMax[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMax_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,formatOutput))
 
                 for npt in range(len(xPtMaxBins)-1):
                    canvasPtMin[nlep][nsel][npt] = TCanvas("canvasPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), "canvasPtMin_{0}_{1}_{2}".format(nLepName[nlep],nSelName[nsel],npt), 10, 10, 500, 500)
@@ -317,4 +317,4 @@ if __name__ == "__main__":
                    canvasPtMin[nlep][nsel][npt].cd(1)
                    histoTriggerV1SFPtMin[nlep][nsel][npt].DrawCopy()
                    canvasPtMin[nlep][nsel][npt].Draw()
-                   canvasPtMin[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMin_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,format))
+                   canvasPtMin[nlep][nsel][npt].SaveAs("histoTriggerV1SFPtMin_{0}_{1}_{2}_{3}.{4}".format(year,nLepName[nlep],nSelName[nsel],npt,formatOutput))
