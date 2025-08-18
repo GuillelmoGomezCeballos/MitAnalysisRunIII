@@ -129,7 +129,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
   btvLFSF_ = csetLFBTV->at("robustParticleTransformer_light");
 
-  std::string fileNameScaleMu = dirName+"MUO/"+subDirName+"muon_scale_res.json";
+  std::string fileNameScaleMu = dirName+"MUO/"+subDirName+"muon_scalesmearing.json.gz";
   auto csetScaleMu = correction::CorrectionSet::from_file(fileNameScaleMu);
   muonScale_cb_params_   = csetScaleMu->at("cb_params");
   muonScale_poly_params_ = csetScaleMu->at("poly_params");
@@ -146,13 +146,13 @@ MyCorrections::MyCorrections(int the_input_year) {
   muonIDSF_ = csetMu->at("NUM_MediumID_DEN_TrackerMuons");
   muonISOSF_ = csetMu->at("NUM_TightPFIso_DEN_MediumID");
 
-  std::string fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
+  std::string fileNameHighPtRECOMu       = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
   if(year == 20240) fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_RECO_2024_schemaV2.json.gz";
   auto csetHighPtRECOMu = correction::CorrectionSet::from_file(fileNameHighPtRECOMu);
   muonHighPtTRKSF_ = csetHighPtRECOMu->at("NUM_GlobalMuons_DEN_TrackerMuonProbes");
 
-  std::string fileNameHighPtIDISOMu = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
-  if(year == 20240) fileNameHighPtIDISOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_IDISO_2024_schemaV2.json.gz";
+  std::string fileNameHighPtIDISOMu       = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
+  if(year == 20240) fileNameHighPtIDISOMu = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
   auto csetHighPtIDISOMu = correction::CorrectionSet::from_file(fileNameHighPtIDISOMu);
   muonHighPtIDSF_ = csetHighPtIDISOMu->at("NUM_MediumID_DEN_GlobalMuonProbes");
   muonHighPtISOSF_ = csetHighPtIDISOMu->at("NUM_probe_TightRelTkIso_DEN_MediumIDProbes");
@@ -448,11 +448,13 @@ double MyCorrections::eval_electronSmearing(const char *valType, const double et
 };
 
 double MyCorrections::eval_electronEtDependentScale(const char *valType, const double run, const double eta, const double r9, const double pt, const double gain) {
-  return electronEtDependentScale_->evaluate({valType, run, eta, r9, fabs(eta), pt, gain});
+  if(year < 20240) return electronEtDependentScale_->evaluate({valType, run, eta, r9, fabs(eta), pt, gain});
+  else             return electronEtDependentScale_->evaluate({valType, run, eta, r9,            pt, gain});
 };
 
 double MyCorrections::eval_electronEtDependentSmearing(const char *valType, const double pt, const double r9, const double eta) {
-  return electronEtDependentSmearing_->evaluate({valType, pt, r9, fabs(eta)});
+  double eta_bounds = std::max(std::min(eta,2.399),-2.399);
+  return electronEtDependentSmearing_->evaluate({valType, pt, r9, eta_bounds});
 };
 
 
