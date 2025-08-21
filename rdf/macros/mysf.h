@@ -116,14 +116,21 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20221) corrNameLUM = "Collisions2022_359022_362760_eraEFG_GoldenJson";
   else if(year == 20230) corrNameLUM = "Collisions2023_366403_369802_eraBC_GoldenJson";
   else if(year == 20231) corrNameLUM = "Collisions2023_369803_370790_eraD_GoldenJson";
-  else if(year == 20240) corrNameLUM = "Collisions2023_369803_370790_eraD_GoldenJson";
+  else if(year == 20240) corrNameLUM = "Collisions2024_378981_386951_GoldenJson";
   
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
 
-  std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
-  auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
-  btvHFSF_ = csetHFBTV->at("robustParticleTransformer_comb");
+  if(year == 20240) {
+    std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_preliminary.json.gz";
+    auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
+    btvHFSF_ = csetHFBTV->at("UParTAK4_kinfit");
+  }
+  else {
+    std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
+    auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
+    btvHFSF_ = csetHFBTV->at("robustParticleTransformer_comb");
+  }
 
   std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
   auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
@@ -474,10 +481,13 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
   if(eta <= -2.5 || eta >= 2.5) return 0.0;
   eta = std::min(std::abs(eta),2.399);
   pt = std::min(pt,999.999);
-  if(flavor != 0)
-    return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
-  else
+  if(flavor != 0) {
+    if(year == 20240) return btvHFSF_->evaluate({valType, workingPoint,      5, eta, pt});
+    else              return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
+  }
+  else {
     return btvLFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
+  }
 };
 
 double MyCorrections::eval_jetCORR(double area, double eta, double phi, double pt, double rho, int run, int type) {

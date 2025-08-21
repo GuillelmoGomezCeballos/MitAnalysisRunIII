@@ -1,10 +1,10 @@
 import ROOT
 import correctionlib
 
-year=20230
+year=20240
 correctionlib.register_pyroot_binding()
 ROOT.gInterpreter.Declare('#include "mysf.h"')
-print("eval_20230")
+print("eval_20240")
 if(year==20220):
     ROOT.gInterpreter.ProcessLine('auto corr = MyCorrections(20220);')
     ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2022Re-recoBCD", (char*)"sf", (char*)"wp80iso", 1.1, 34.0,0.3)')
@@ -67,9 +67,9 @@ elif(year==20231):
     ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"phi", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"pu_up", 100, 1.5, 45)')
 elif(year==20240):
     ROOT.gInterpreter.ProcessLine('auto corr = MyCorrections(20240);')
-    ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2024", (char*)"sf", (char*)"wp80iso", 1.1, 34.0,0.3)')
-    ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2024", (char*)"sfup", (char*)"wp80iso", 1.1, 34.0,0.3)')
-    ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2024", (char*)"sfdown", (char*)"Medium", 1.1, 34.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2024Prompt", (char*)"sf", (char*)"wp80iso", 1.1, 34.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2024Prompt", (char*)"sfup", (char*)"wp80iso", 1.1, 34.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2024Prompt", (char*)"sfdown", (char*)"Medium", 1.1, 34.0,0.3)')
     ROOT.gInterpreter.ProcessLine('corr.eval_electronTRKSF((char*)"2024Prompt", (char*)"sf", (char*)"Reco20to75", 1.1, 20.0,0.3)')
     ROOT.gInterpreter.ProcessLine('corr.eval_electronTRKSF((char*)"2024Prompt", (char*)"sf", (char*)"RecoAbove75", 1.1, 75.0,0.3)')
     ROOT.gInterpreter.ProcessLine('corr.eval_photonSF((char*)"2024_ID", (char*)"sf", (char*)"Medium", 1.1, 30.0,0.3)')
