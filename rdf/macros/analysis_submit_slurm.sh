@@ -81,7 +81,7 @@ if [ "${passSel}" != "no" ]; then
 for whichJob in $(seq 0 $group)
 do
 
-if [ $theAna -ne 1 ]; then
+if [ $theAna -ne 1 ] && [ $theAna -ne 2 ]; then
 
 cat << EOF > submit
 #!/bin/bash
