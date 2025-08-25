@@ -273,7 +273,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
         ) && histo_Baseline[ic]->GetSumOfWeights() > 0 &&
         (j == 0 || j == 1 || j == 2 || j == 3 ||
          j == 4 || j == 5 || j == 6 || j == 7 || j == 8 || j == 9 ||
-         j == 134)
+         j == 118)
         ) histo_Syst[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_Syst[j][ic]->GetSumOfWeights());
     }
     delete inputFile;
