@@ -107,6 +107,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob):
             dfcat.append(dfbase.Filter("ltype=={0}".format(ltype), "flavor type == {0}".format(ltype))
                                .Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                                .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
+                               .Define("kPlotEWKWZ", "{0}".format(plotCategory("kPlotEWKWZ")))
+                               .Filter("{0} != kPlotEWKWZ || nGenJet_bParton == 0".format(theCat), "EWKWZ requirement")
                                .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,kPlotWS,2,2,0)".format(theCat))
                                .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x)))
 

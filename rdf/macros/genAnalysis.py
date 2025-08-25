@@ -130,13 +130,20 @@ def analysis(df,count,category,weight,year,PDType,isData,histo_wwpt,nTheoryRepli
     histo[19][x] = dfzllgen.Filter("ngood_GenJets >= 2").Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 40,  0, 200), "Zpt","weight")
     histo2D[101][x] = dfzllgen.Histo2D(("histo2d_{0}_{1}".format(101,x),"histo2d_{0}_{1}".format(100,x),10, 0, 5, 40, 0, 101),"Zrap","Zpt","weight")
 
-    dfzllgen = (dfzllgen.Filter("Sum(genLep) == 3","genLep == 3")
-                        .Filter("abs(filter_GenDressedLepton_eta[2]) < 2.5 && filter_GenDressedLepton_pt[2] > 10","3rd lepton requirement")
-                        )
+    df3lgen = (dfzllgen.Filter("Sum(genLep) == 3","genLep == 3")
+                       .Filter("abs(filter_GenDressedLepton_eta[2]) < 2.5 && filter_GenDressedLepton_pt[2] > 10","3rd lepton requirement")
+                       .Define("GenJet_bHadron","GenJet_pt > 20 && GenJet_hadronFlavour == 5")
+                       .Define("nGenJet_bHadron","Sum(GenJet_bHadron)")
+                       .Define("GenJet_bParton","GenJet_pt > 20 && abs(GenJet_eta) < 2.5 && abs(GenJet_partonFlavour) == 5")
+                       .Define("nGenJet_bParton","Sum(GenJet_bParton)")
+                       )
 
-    startF = 380
-    for nv in range(0,114):
-        histo[startF+0+nv][x] = makeFinalVariable(dfzllgen,"weightForBTag",theCat,startF+0,x,BinXF,minXF,maxXF,nv)
+    histo[380][x] = df3lgen                               .Histo1D(("histo_{0}_{1}".format(380,x), "histo_{0}_{1}".format(380,x), 5, -0.5, 4.5), "nGenJet_bHadron","weight")
+    histo[381][x] = df3lgen                               .Histo1D(("histo_{0}_{1}".format(381,x), "histo_{0}_{1}".format(381,x), 5, -0.5, 4.5), "nGenJet_bParton","weight")
+    histo[382][x] = df3lgen.Filter("nGenJet_bParton == 0").Histo1D(("histo_{0}_{1}".format(382,x), "histo_{0}_{1}".format(382,x), 5, -0.5, 4.5), "nGenJet_bHadron","weight")
+    histo[383][x] = df3lgen.Filter("nGenJet_bHadron == 0").Histo1D(("histo_{0}_{1}".format(383,x), "histo_{0}_{1}".format(383,x), 5, -0.5, 4.5), "nGenJet_bParton","weight")
+    histo[384][x] = df3lgen.Filter("nGenJet_bParton >= 1").Histo1D(("histo_{0}_{1}".format(384,x), "histo_{0}_{1}".format(384,x), 5, -0.5, 4.5), "nGenJet_bHadron","weight")
+    histo[385][x] = df3lgen.Filter("nGenJet_bHadron >= 1").Histo1D(("histo_{0}_{1}".format(385,x), "histo_{0}_{1}".format(385,x), 5, -0.5, 4.5), "nGenJet_bParton","weight")
 
     dfwwxgen = (dfwwxgen.Define("ptl1Gen", "good_GenDressedLepton_pt[0]")
                         .Define("ptl2Gen", "good_GenDressedLepton_pt[1]")

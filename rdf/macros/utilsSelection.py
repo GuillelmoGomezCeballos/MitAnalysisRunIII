@@ -805,6 +805,7 @@ def selectionDAWeigths(df,year,PDType,whichAna,fakeRateSel):
     dftag =(df.Define("PDType","\"{0}\"".format(PDType))
               .Define("weightFake","compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(fakeRateSel[0],fakeRateSel[0],whichAna))
               .Define("weight","weightFake*1.0")
+              .Define("nGenJet_bParton","0")
               .Define("nWS","0")
               .Define("weightWS", "1.0")
               .Define("weightEWKCorr", "1.0")
@@ -878,6 +879,11 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
               .Filter("weightMC != 0","MC weight")
 
               .Define("nWS", "compute_number_WS(fake_Muon_pt,fake_Muon_eta,fake_Muon_charge,fake_Muon_genPartIdx,fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)")
+
+              .Define("GenJet_bHadron","GenJet_pt > 20 && GenJet_hadronFlavour == 5")
+              .Define("nGenJet_bHadron","Sum(GenJet_bHadron)")
+              .Define("GenJet_bParton","GenJet_pt > 20 && abs(GenJet_eta) < 2.5 && abs(GenJet_partonFlavour) == 5")
+              .Define("nGenJet_bParton","Sum(GenJet_bParton)")
 
               .Define("MUOYEAR","\"{0}\"".format(MUOYEAR))
               .Define("ELEYEAR","\"{0}\"".format(ELEYEAR))

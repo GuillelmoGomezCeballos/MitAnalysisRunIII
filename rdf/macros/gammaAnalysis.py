@@ -222,6 +222,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights,hist
 
     dftag = (dftag.Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                   .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
+                  .Define("kPlotEWKWZ", "{0}".format(plotCategory("kPlotEWKWZ")))
+                  .Filter("{0} != kPlotEWKWZ || nGenJet_bParton == 0".format(theCat), "EWKWZ requirement")
                   .Define("theCat","compute_category({0},kPlotNonPrompt,kPlotWS,0,0,0)".format(theCat))
                     )
 
