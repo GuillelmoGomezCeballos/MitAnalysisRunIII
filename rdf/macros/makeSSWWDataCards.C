@@ -261,20 +261,6 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     inputFile = new TFile(Form("%s/fillhisto_%s_%d_%d%s.root",InputDir.Data(),anaSel.Data(),year,startHistogram+fidAna*jumpValue+1+j,postFixFile.Data()), "read");
     for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
       histo_Syst[j][ic] = (TH1D*)inputFile->Get(Form("histo%s%d", postFixHist.Data(), ic)); assert(histo_Syst[j][ic]); histo_Syst[j][ic]->SetDirectory(0);
-      // Renormalize distributions
-      if(
-        (ic == kPlotEWKSSWW ||
-         ic == kPlotSignal0 ||
-         ic == kPlotSignal1 ||
-         ic == kPlotSignal2 ||
-         ic == kPlotSignal3 ||
-         ic == kPlotWZ ||
-         ic == kPlotEWKWZ
-        ) && histo_Baseline[ic]->GetSumOfWeights() > 0 &&
-        (j == 0 || j == 1 || j == 2 || j == 3 ||
-         j == 4 || j == 5 || j == 6 || j == 7 || j == 8 || j == 9 ||
-         j == 118)
-        ) histo_Syst[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_Syst[j][ic]->GetSumOfWeights());
     }
     delete inputFile;
   }
@@ -462,6 +448,34 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   if(whichAna != 0){ 
     additionalSuffix = "_alt";
   }
+
+  // Begin renormalize
+  for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
+    if(histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(!(ic == kPlotEWKSSWW ||
+         ic == kPlotSignal0 ||
+         ic == kPlotSignal1 ||
+         ic == kPlotSignal2 ||
+         ic == kPlotSignal3 ||
+         ic == kPlotWZ ||
+         ic == kPlotEWKWZ
+        ))  continue;
+     histo_QCDScaleUp  [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleUp  [ic]->GetSumOfWeights());
+     histo_QCDScaleDown[ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleDown[ic]->GetSumOfWeights());
+     histo_PSUp        [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSUp	   [ic]->GetSumOfWeights());
+     histo_PSDown      [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSDown	   [ic]->GetSumOfWeights());
+     for(int npdf=0; npdf<101; npdf++){
+       histo_PDFUp  [npdf][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PDFUp  [npdf][ic]->GetSumOfWeights());
+       histo_PDFDown[npdf][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PDFDown[npdf][ic]->GetSumOfWeights());
+     }
+     for(int j=0; j<nSystDataCardTotal; j++) {
+       TString histName = histo_SystDataCard[j][ic]->GetName();
+       if(histName.Contains("pileup")) {
+          histo_SystDataCard[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/ histo_SystDataCard[j][ic]->GetSumOfWeights());
+       }
+     }
+  }
+  // End renormalize
 
   TString outputLimits = Form("output_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna,additionalSuffix.Data());
   outputFile = new TFile(outputLimits, "RECREATE");
