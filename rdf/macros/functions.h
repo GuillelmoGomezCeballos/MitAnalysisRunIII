@@ -2378,23 +2378,25 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
     if(GenDressedLepton_pt[1] > GenDressedLepton_pt[0]) {printf("PROBLEM, ptl2 > ptl1 at gen level\n");}
     bool passTightGenSel = ngood_GenDressedLeptons == 2 && GenDressedLepton_pdgId[0] * GenDressedLepton_pdgId[1] > 0 &&
                            GenDressedLepton_pt[0] > 25 &&  GenDressedLepton_pt[1] > 20;
-    if(applyTightSel >= 2) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0;
-    if(applyTightSel >= 3) {
+    if(applyTightSel >= 2) {
       passTightGenSel = passTightGenSel && mllGen > 20;
     }
-    if(applyTightSel >= 4) {
+    if(applyTightSel >= 3) {
       passTightGenSel = passTightGenSel && mjjGen > 500 && detajjGen > 2.5;
     }
+    if(applyTightSel >= 4) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0;
     if(passTightGenSel == false) return 0;
   }
   else if(applyTightSel >= 11 && applyTightSel <= 20) {
-    if(GenDressedLepton_pt[1] > GenDressedLepton_pt[0] || GenDressedLepton_pt[2] > GenDressedLepton_pt[1]) {printf("PROBLEM, ptl2 > ptl1 at gen level\n");}
-    bool passTightGenSel = ngood_GenDressedLeptons == 3 &&
-                           GenDressedLepton_pt[0] > 25 && GenDressedLepton_pt[1] > 20 && GenDressedLepton_pt[2] > 15;
-    if(applyTightSel >= 12) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0 && GenDressedLepton_hasTauAnc[2] == 0;
-    if(applyTightSel >= 13) {
-      passTightGenSel = passTightGenSel && mjjGen > 500 && detajjGen > 2.5;
+    bool passTightGenSel = mjjGen > 500 && detajjGen > 2.5;
+    if(applyTightSel >= 12) {
+      passTightGenSel = passTightGenSel && ngood_GenDressedLeptons == 3;
     }
+    if(applyTightSel >= 13) {
+      if(GenDressedLepton_pt[1] > GenDressedLepton_pt[0] || GenDressedLepton_pt[2] > GenDressedLepton_pt[1]) {printf("PROBLEM, ptl2 > ptl1 at gen level\n");}
+      passTightGenSel = passTightGenSel && GenDressedLepton_pt[0] > 25 && GenDressedLepton_pt[1] > 20 && GenDressedLepton_pt[2] > 15;
+    }
+    if(applyTightSel >= 14) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0 && GenDressedLepton_hasTauAnc[2] == 0;
     if(passTightGenSel == false) return 0;
   }
 

@@ -470,7 +470,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
      }
      for(int j=0; j<nSystDataCardTotal; j++) {
        TString histName = histo_SystDataCard[j][ic]->GetName();
-       if(histName.Contains("pileup") || histName.Contains("ewkCorr")) {
+       if(histName.Contains("pileup")) {
           histo_SystDataCard[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/ histo_SystDataCard[j][ic]->GetSumOfWeights());
        }
      }
