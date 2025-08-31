@@ -396,13 +396,15 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
         histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb, TMath::Max((float)histo_NonPromtUnc[j+totalNumberFakeSyst]->GetBinContent(nb),0.0f));
        if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
           systValue = histo_NonPromtUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotNonPrompt]->GetBinContent(nb);
-          if     (systValue > 1.15) systValue = 1.15;
-          else if(systValue < 0.85) systValue = 0.85;
+          if(fabs(systValue-1) > 0.15) printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
+          if     (systValue >   3.0) systValue =   3.0;
+          else if(systValue < 1/3.0) systValue = 1/3.0;
           histo_NonPromtUnc[j+0]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)*systValue);
-          if(fabs(systValue-1) > 0.10) printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
           if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
         }
       }
+      histo_NonPromtUnc[j+                  0]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+                  0]->GetSumOfWeights());
+      histo_NonPromtUnc[j+totalNumberFakeSyst]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+totalNumberFakeSyst]->GetSumOfWeights());
     }
   }
   // End Nonprompt study
@@ -462,8 +464,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
         ))  continue;
      histo_QCDScaleUp  [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleUp  [ic]->GetSumOfWeights());
      histo_QCDScaleDown[ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleDown[ic]->GetSumOfWeights());
-     histo_PSUp        [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSUp	   [ic]->GetSumOfWeights());
-     histo_PSDown      [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSDown	   [ic]->GetSumOfWeights());
+     histo_PSUp        [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSUp        [ic]->GetSumOfWeights());
+     histo_PSDown      [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSDown      [ic]->GetSumOfWeights());
      for(int npdf=0; npdf<101; npdf++){
        histo_PDFUp  [npdf][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PDFUp  [npdf][ic]->GetSumOfWeights());
        histo_PDFDown[npdf][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PDFDown[npdf][ic]->GetSumOfWeights());
@@ -916,7 +918,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   if(anaSel.Contains("sswwAnalysis")){
     if(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights() > 0)
-    newcardShape << Form("CMS_ssww_nonpromptnorm_%d  rateParam * %s 1 [0.1,4.9]\n",(int)(fidAna/2),plotBaseNames[kPlotNonPrompt].Data());
+    //newcardShape << Form("CMS_ssww_nonpromptnorm_%d  rateParam * %s 1 [0.1,4.9]\n",(int)(fidAna/2),plotBaseNames[kPlotNonPrompt].Data());
+    newcardShape << Form("CMS_ssww_nonpromptnorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotNonPrompt].Data());
   }
   //newcardShape << Form("CMS_ssww_zznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotZZ].Data());
 
