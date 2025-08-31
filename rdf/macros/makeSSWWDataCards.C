@@ -30,8 +30,10 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   double triggerEffUnc = 1.000;
   if     (year == 20220) {triggerEffUnc = 1.005; theYear = 2022;}
   else if(year == 20221) {triggerEffUnc = 1.005; theYear = 2022;}
+  else if(year ==  2022) {triggerEffUnc = 1.005; theYear = 2022;}
   else if(year == 20230) {triggerEffUnc = 1.005; theYear = 2023;}
   else if(year == 20231) {triggerEffUnc = 1.005; theYear = 2023;}
+  else if(year ==  2023) {triggerEffUnc = 1.005; theYear = 2023;}
   else if(year == 20240) {triggerEffUnc = 1.005; theYear = 2024;}
   else {printf("Wrong year!\n"); return;}
 

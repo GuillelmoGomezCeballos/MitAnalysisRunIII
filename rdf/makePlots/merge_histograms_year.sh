@@ -12,7 +12,19 @@ group=9
 
 if [ ${theYear} = 2027 ]; then
 
-for i in `seq 0 600`;
+    if [[ -f anaZ/${theAna}${theCondor}_20220_nonprompt.root ]]; then
+
+    hadd -f anaZ/${theAna}${theCondor}_${theYear}_nonprompt.root anaZ/${theAna}${theCondor}_2022?_nonprompt.root anaZ/${theAna}${theCondor}_2023?_nonprompt.root anaZ/${theAna}${theCondor}_2024?_nonprompt.root
+
+    fi
+
+    if [[ -f anaZ/${theAna}${theCondor}_20220_wrongsign.root ]]; then
+
+    hadd -f anaZ/${theAna}${theCondor}_${theYear}_wrongsign.root anaZ/${theAna}${theCondor}_2022?_wrongsign.root anaZ/${theAna}${theCondor}_2023?_wrongsign.root anaZ/${theAna}${theCondor}_2024?_wrongsign.root
+
+    fi
+
+for i in `seq 0 999`;
 do
     if [[ -f anaZ/${theAna}${theCondor}_20220_${i}.root ]]; then
 
@@ -25,12 +37,30 @@ do
     hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_2d.root anaZ/${theAna}${theCondor}_2022?_${i}_2d.root anaZ/${theAna}${theCondor}_2023?_${i}_2d.root anaZ/${theAna}${theCondor}_2024?_${i}_2d.root
 
     fi
+ 
+    if [[ -f anaZ/${theAna}${theCondor}_20220_${i}_mva.root ]]; then
+
+    hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_mva.root anaZ/${theAna}${theCondor}_2022?_${i}_mva.root anaZ/${theAna}${theCondor}_2023?_${i}_mva.root anaZ/${theAna}${theCondor}_2024?_${i}_mva.root
+
+    fi
 
 done
 
 else
 
-for i in `seq 0 600`;
+    if [[ -f anaZ/${theAna}${theCondor}_${theYear}0_nonprompt.root ]]; then
+
+    hadd -f anaZ/${theAna}${theCondor}_${theYear}_nonprompt.root anaZ/${theAna}${theCondor}_${theYear}?_nonprompt.root
+
+    fi
+
+    if [[ -f anaZ/${theAna}${theCondor}_${theYear}0_wrongsign.root ]]; then
+
+    hadd -f anaZ/${theAna}${theCondor}_${theYear}_wrongsign.root anaZ/${theAna}${theCondor}_${theYear}?_wrongsign.root
+
+    fi
+
+for i in `seq 0 999`;
 do
     if [[ -f anaZ/${theAna}${theCondor}_${theYear}0_${i}.root ]]; then
 
@@ -41,6 +71,12 @@ do
     if [[ -f anaZ/${theAna}${theCondor}_${theYear}0_${i}_2d.root ]]; then
 
     hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_2d.root anaZ/${theAna}${theCondor}_${theYear}?_${i}_2d.root
+
+    fi
+
+    if [[ -f anaZ/${theAna}${theCondor}_${theYear}0_${i}_mva.root ]]; then
+
+    hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_mva.root anaZ/${theAna}${theCondor}_${theYear}?_${i}_mva.root
 
     fi
 
