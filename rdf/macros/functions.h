@@ -507,14 +507,15 @@ float compute_JSON_MET(const std::string pt_phiS, const std::string met_typeS, c
   else if(year == 20230) epoch = (char*)"2023";
   else if(year == 20231) epoch = (char*)"2023BPix";
   else if(year == 20240) epoch = (char*)"2023BPix";
+  else if(year == 20250) epoch = (char*)"2023BPix";
   const char *dtmc = dtmcS.c_str();
   const char *variation = variationS.c_str();
 
   float result = corrSFs.eval_met_corr(pt_phi, met_type, epoch, dtmc, variation, met_pt,met_phi,npvGood);
 
-  // NO CORRECTION APPLIED FOR 2024!!!
-  if     (year == 20240 && pt_phiS == "pt") result = met_pt;
-  else if(year == 20240 && pt_phiS == "phi") result = met_phi;
+  // NO CORRECTION APPLIED FOR >= 2024!!!
+  if     (year >= 20240 && pt_phiS == "pt") result = met_pt;
+  else if(year >= 20240 && pt_phiS == "phi") result = met_phi;
 
   bool debug = false;
   if(debug) printf("MET: %s / %s / %s / %s / %s / %.2f / %.2f / %.2f: %.2f\n",pt_phi,met_type,epoch,dtmc,variation,met_pt,met_phi,npvGood,result);
@@ -1093,7 +1094,7 @@ float compute_lumiFakeRate(const Vec_f& mu_pt, const Vec_f& el_pt, const int nTr
     lumiPrescalesE[1] = 27.6/27693.1;
     lumiPrescalesE[2] = 27.6/27693.1;
   }
-  else if(year == 20240){
+  else if(year == 20240 || year == 20250){
     lumiPrescalesM[0] =  12.3/108296.7;
     lumiPrescalesM[1] = 333.2/108296.7;
     lumiPrescalesM[2] = 333.2/108296.7;

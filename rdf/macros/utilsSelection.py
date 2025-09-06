@@ -27,6 +27,10 @@ def getBTagCut_DeepJet(type,year):
        value[0] = 0.6563
        value[1] = 0.2435
        value[2] = 0.0480
+    elif(year == 20250):
+       value[0] = 0.6563
+       value[1] = 0.2435
+       value[2] = 0.0480
 
     return value[type]
 
@@ -55,6 +59,10 @@ def getBTagCut_PNet(type,year):
        value[0] = 0.6133
        value[1] = 0.1919
        value[2] = 0.0359
+    elif(year == 20250):
+       value[0] = 0.6133
+       value[1] = 0.1919
+       value[2] = 0.0359
 
     return value[type]
 
@@ -80,6 +88,10 @@ def getBTagCut(type,year):
        value[1] = 0.3494
        value[2] = 0.0683
     elif(year == 20240):
+       value[0] = 0.4648
+       value[1] = 0.1272
+       value[2] = 0.0246
+    elif(year == 20250):
        value[0] = 0.4648
        value[1] = 0.1272
        value[2] = 0.0246
@@ -288,11 +300,56 @@ def selectionJetMet(df,year,bTagSel,isData,count,jetEtaCut):
                      .Define("thePuppiMET_ptUnclusteredUp" ,"compute_JSON_MET(\"pt\",\"PuppiMET\",{0},\"MC\",\"nom\",PuppiMET_ptUnclusteredUp,PuppiMET_phiUnclusteredUp,PV_npvsGood)".format(year))
                      )
 
-    else:
+    elif((year // 10) < 2025):
         dftag =(dftag.Define("clean_Jet_ptRaw"     ,"clean_Jet_pt*(1-clean_Jet_rawFactor)")
                      .Define("clean_Jet_ptNoJESJER","clean_Jet_pt")
                      .Define("clean_Jet_ptNoJES"   ,"clean_Jet_pt")
                      .Define("clean_Jet_ptNoJER"   ,"compute_JSON_JES_Unc(clean_Jet_pt,clean_Jet_eta,clean_Jet_phi,clean_Jet_rawFactor,clean_Jet_area,Rho_fixedGridRhoFastjetAll,run,0,{0})".format(jetTypeCorr))
+                     .Define("clean_Jet_ptDef"     ,"clean_Jet_ptNoJER")
+                     .Define("clean_Jet_ptJes00Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes01Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes02Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes03Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes04Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes05Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes06Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes07Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes08Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes09Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes10Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes11Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes12Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes13Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes14Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes15Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes16Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes17Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes18Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes19Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes20Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes21Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes22Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes23Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes24Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes25Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes26Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJes27Up", "clean_Jet_ptDef")
+                     .Define("clean_Jet_ptJerUp"  , "clean_Jet_ptDef")
+                     .Define("thePuppiMET_phi"             ,"compute_JSON_MET(\"phi\",\"PuppiMET\",{0},\"DATA\",\"nom\",PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_phiJERUp"        ,"thePuppiMET_phi")
+                     .Define("thePuppiMET_phiJESUp"        ,"thePuppiMET_phi")
+                     .Define("thePuppiMET_phiUnclusteredUp","thePuppiMET_phi")
+                     .Define("thePuppiMET_pt"              ,"compute_JSON_MET(\"pt\",\"PuppiMET\",{0},\"DATA\",\"nom\",PuppiMET_pt,PuppiMET_phi,PV_npvsGood)".format(year))
+                     .Define("thePuppiMET_ptJERUp"         ,"thePuppiMET_pt")
+                     .Define("thePuppiMET_ptJESUp"         ,"thePuppiMET_pt")
+                     .Define("thePuppiMET_ptUnclusteredUp" ,"thePuppiMET_pt")
+                     )
+
+    else:
+        dftag =(dftag.Define("clean_Jet_ptRaw"     ,"clean_Jet_pt*(1-clean_Jet_rawFactor)")
+                     .Define("clean_Jet_ptNoJESJER","clean_Jet_pt")
+                     .Define("clean_Jet_ptNoJES"   ,"clean_Jet_pt")
+                     .Define("clean_Jet_ptNoJER"   ,"clean_Jet_pt")
                      .Define("clean_Jet_ptDef"     ,"clean_Jet_ptNoJER")
                      .Define("clean_Jet_ptJes00Up", "clean_Jet_ptDef")
                      .Define("clean_Jet_ptJes01Up", "clean_Jet_ptDef")
@@ -663,6 +720,18 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
     elif(year == 2024):
         triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
 
+    elif(year == 2025 and PDType == "MuonEG"):
+        triggerLEP = "{0}".format(triggerMUEG)
+
+    elif(year == 2025 and PDType == "Muon"):
+        triggerLEP = "({0} or {1}) and not {2}".format(triggerDMU,triggerSMU,triggerMUEG)
+
+    elif(year == 2025 and PDType == "EGamma"):
+        triggerLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2025):
+        triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
     else:
         print("PROBLEM with triggers!!!")
 
@@ -705,6 +774,10 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
         triggerFAKE = triggerFAKEMU
     elif(year == 2024 and PDType == "EGamma"):
         triggerFAKE =  triggerFAKEEL
+    elif(year == 2025 and PDType == "Muon"):
+        triggerFAKE = triggerFAKEMU
+    elif(year == 2025 and PDType == "EGamma"):
+        triggerFAKE =  triggerFAKEEL
     elif(PDType == "MuonEG"):
         triggerFAKE =  "0"
     elif(year == 2018):
@@ -714,6 +787,8 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
     elif(year == 2023):
         triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     elif(year == 2024):
+        triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
+    elif(year == 2025):
         triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     else:
         print("PROBLEM with triggers!!!")
@@ -851,12 +926,14 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
     elif(year == 20230): ELEYEAR = "2023PromptC"
     elif(year == 20231): ELEYEAR = "2023PromptD"
     elif(year == 20240): ELEYEAR = "2024Prompt"
+    elif(year == 20250): ELEYEAR = "2024Prompt"
     PHOYEAR = "NULL"
     if  (year == 20220): PHOYEAR = "2022Re-recoBCD"
     elif(year == 20221): PHOYEAR = "2022Re-recoE+PromptFG"
     elif(year == 20230): PHOYEAR = "2023PromptC"
     elif(year == 20231): PHOYEAR = "2023PromptD"
     elif(year == 20240): PHOYEAR = "2024_ID"
+    elif(year == 20250): PHOYEAR = "2024_ID"
     if(correctionString == "_correction"):
         MUOWP = "Medium"
         ELEWP = "Medium"
@@ -1005,7 +1082,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
 
                  )
 
-    if(year != 20240):
+    if(year < 20240):
         dftag =(dftag.Define("weightBtagSFBC_00Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_01Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_02Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))

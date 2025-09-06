@@ -89,6 +89,7 @@ class MyCorrections {
 MyCorrections::MyCorrections(int the_input_year) {
 
   year = the_input_year;
+  if(year == 20250) year = 20240;
 
   std::string dirName    = "jsonpog-integration/POG/";
 
