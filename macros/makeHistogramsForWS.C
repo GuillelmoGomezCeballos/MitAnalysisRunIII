@@ -20,6 +20,9 @@ void makeHistogramsForWS(const int year){
   double WSSF20240[5]  = {1.402298,1.278017,1.219401,1.312565,1.514173};
   double WSSFE_mcanddata20240[5] = {0.093064,0.048789,0.028207,0.016338,0.016477};
 
+  double WSSF2027[5]  = {1.438031,1.380600,1.319140,1.335582,1.478607};
+  double WSSFE_mcanddata2027[5] = {0.072358,0.041273,0.021822,0.012272,0.011836};
+
   double WSEtaPtSF20220[6]  = {1.804524,1.407359,1.402951,1.304330,1.390058,1.319874};
   double WSEtaPtSFE_mcanddata20220[6] = {0.378111,0.123262,0.117446,0.151087,0.053140,0.044531};
 
@@ -34,6 +37,9 @@ void makeHistogramsForWS(const int year){
 
   double WSEtaPtSF20240[6]  = {1.737997,1.191758,1.218983,1.890194,1.467654,1.349380};
   double WSEtaPtSFE_mcanddata20240[6] = {0.116504,0.041533,0.033352,0.074990,0.019148,0.014472};
+
+  double WSEtaPtSF2027[6]  = {1.940193,1.285251,1.257935,1.638197,1.413288,1.370528};
+  double WSEtaPtSFE_mcanddata2027[6] = {0.081861,0.031048,0.026632,0.044586,0.013685,0.010951};
 
   double WSSF[nBinEta0];
   double WSSFE_mcanddataF[nBinEta0];
@@ -106,6 +112,19 @@ void makeHistogramsForWS(const int year){
     histoWSEtaPtSF->SetBinContent(2,1,WSEtaPtSF20240[3]);
     histoWSEtaPtSF->SetBinContent(2,2,WSEtaPtSF20240[4]);
     histoWSEtaPtSF->SetBinContent(2,3,WSEtaPtSF20240[5]);
+  }
+  else if(year == 2027){
+    for(int i=0; i<nBinEta0; i++){
+      histoWSEtaSF    ->SetBinContent(i+1,WSSF2027[i]);
+      histoWSEtaSF    ->SetBinError  (i+1,WSSFE_mcanddata2027[i]);
+      histoWSEtaSF_unc->SetBinContent(i+1,WSSF2027[i]+WSSFE_mcanddata2027[i]);
+    }
+    histoWSEtaPtSF->SetBinContent(1,1,WSEtaPtSF2027[0]);
+    histoWSEtaPtSF->SetBinContent(1,2,WSEtaPtSF2027[1]);
+    histoWSEtaPtSF->SetBinContent(1,3,WSEtaPtSF2027[2]);
+    histoWSEtaPtSF->SetBinContent(2,1,WSEtaPtSF2027[3]);
+    histoWSEtaPtSF->SetBinContent(2,2,WSEtaPtSF2027[4]);
+    histoWSEtaPtSF->SetBinContent(2,3,WSEtaPtSF2027[5]);
   }
   else {
     printf("WRONG year (%d)\n",year);
