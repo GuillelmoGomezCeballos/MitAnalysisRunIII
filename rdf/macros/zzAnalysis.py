@@ -9,7 +9,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 from utilsMVA import redefineMVAVariables
 import tmva_helper_xml
 
-makeDataCards = 2 # 1 (njets), 2 (lepton flavor), 3 (mjj)
+makeDataCards = 3 # 1 (njets), 2 (lepton flavor), 3 (mjj)
 
 correctionString = "_correction"
 

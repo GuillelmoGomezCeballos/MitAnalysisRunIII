@@ -10,7 +10,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 from utilsMVA import redefineMVAVariables
 import tmva_helper_xml
 
-makeDataCards = 2 # 1 (njets), 2 (lepton flavor), 3 (3D), 4 (BDT 2D), 5 (mjj), 6 (mjj diff)
+makeDataCards = 4 # 1 (njets), 2 (lepton flavor), 3 (3D), 4 (BDT 2D), 5 (mjj), 6 (mjj diff)
 genVBSSel = 1
 correctionString = "_correction"
 

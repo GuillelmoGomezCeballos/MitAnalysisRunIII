@@ -6,11 +6,11 @@ import math
 
 if __name__ == "__main__":
 
-    years = [20220, 20221, 20230, 20231, 20240]
-    wzPOW = ["103 ", "203 ", "303 ", "403 ", "503 "]
-    zzPOW = ["107 ", "207 ", "307 ", "407 ", "507 "]
-    wzMG  = ["179 ", "279 ", "379 ", "479 ", "579 "]
-    zzMG  = ["183 ", "283 ", "383 ", "483 ", "583 "]
+    years = [20220, 20221, 20230, 20231, 20240, 20250]
+    wzPOW = ["103 ", "203 ", "303 ", "403 ", "503 ", "503 "]
+    zzPOW = ["107 ", "207 ", "307 ", "407 ", "507 ", "507 "]
+    wzMG  = ["179 ", "279 ", "379 ", "479 ", "579 ", "579 "]
+    zzMG  = ["183 ", "283 ", "383 ", "483 ", "583 ", "583 "]
 
     inputCfg = "Analysis_input_condor_jobs.cfg"
     ana  = "zz"
@@ -51,22 +51,6 @@ if __name__ == "__main__":
     outputSamplesCfg = inputSamplesCfg.replace(".cfg","_new.cfg")
     outputSamplesFile = open(outputSamplesCfg, 'w')
 
-    inputSamplesFile = open(inputSamplesCfg, 'r')
-    while True:
-        line = inputSamplesFile.readline().strip()
-        if not line:
-            break
-        goodLine = True
-        for x in range(len(years)):
-            if  (isWZMG == 0 and wzMG[x]  in line): goodLine = False
-            elif(isZZMG == 0 and zzMG[x]  in line): goodLine = False
-            elif(isWZMG == 1 and wzPOW[x] in line): goodLine = False
-            elif(isZZMG == 1 and zzPOW[x] in line): goodLine = False
-        if(goodLine == False):
-            continue
-        print(line)
-        outputSamplesFile.write(line+"\n")
-
     for x in range(len(years)):
         if(isWZMG == 1):
             outputSamplesFile.write("{0}{1}\n".format(wzMG[x],years[x]))
@@ -77,5 +61,22 @@ if __name__ == "__main__":
             outputSamplesFile.write("{0}{1}\n".format(zzMG[x],years[x]))
         else:
             outputSamplesFile.write("{0}{1}\n".format(zzPOW[x],years[x]))
+
+    inputSamplesFile = open(inputSamplesCfg, 'r')
+    while True:
+        line = inputSamplesFile.readline().strip()
+        if not line:
+            break
+        goodLine = True
+        for x in range(len(years)):
+            # Must remove all vvMG and vvPOW lines
+            if  (wzMG[x]  in line): goodLine = False
+            elif(zzMG[x]  in line): goodLine = False
+            elif(wzPOW[x] in line): goodLine = False
+            elif(zzPOW[x] in line): goodLine = False
+        if(goodLine == False):
+            continue
+        print(line)
+        outputSamplesFile.write(line+"\n")
 
     outputSamplesFile.close()

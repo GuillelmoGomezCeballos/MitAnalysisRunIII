@@ -192,8 +192,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,puWeights):
             dfcat.append(dfbase.Filter("Sum(fake_mu)+2*Sum(fake_el)-1=={0}".format(ltype), "flavor type == {0}".format(ltype))
                                .Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                                .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
-                               .Define("kPlotEWKWZ", "{0}".format(plotCategory("kPlotEWKWZ")))
-                               .Filter("{0} != kPlotEWKWZ || nGenJet_bParton == 0".format(theCat), "EWKWZ requirement")
                                .Define("theCat{0}".format(y), "compute_category({0},kPlotNonPrompt,kPlotWS,1,1,0)".format(theCat))
                                .Filter("theCat{0}=={1}".format(y,y), "correct category ({0})".format(y))
                                .Filter("ptl < {0}".format(xPtDistBins[len(xPtDistBins)-1]), "ptl < {0}".format(xPtDistBins[len(xPtDistBins)-1]))
