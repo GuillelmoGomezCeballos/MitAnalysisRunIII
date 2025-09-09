@@ -29,13 +29,13 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   int theYear = 0;
   double triggerEffUnc = 1.000;
   double lumiE = 1.000;
-  if     (year == 20220) {triggerEffUnc = 1.005; theYear = 2022; lumiE = 1.014}
-  else if(year == 20221) {triggerEffUnc = 1.005; theYear = 2022; lumiE = 1.014}
-  else if(year ==  2022) {triggerEffUnc = 1.005; theYear = 2022; lumiE = 1.014}
-  else if(year == 20230) {triggerEffUnc = 1.005; theYear = 2023; lumiE = 1.013}
-  else if(year == 20231) {triggerEffUnc = 1.005; theYear = 2023; lumiE = 1.013}
-  else if(year ==  2023) {triggerEffUnc = 1.005; theYear = 2023; lumiE = 1.013}
-  else if(year == 20240) {triggerEffUnc = 1.005; theYear = 2024; lumiE = 1.020}
+  if     (year == 20220) {triggerEffUnc = 1.005; theYear = 2022; lumiE = 1.014;}
+  else if(year == 20221) {triggerEffUnc = 1.005; theYear = 2022; lumiE = 1.014;}
+  else if(year ==  2022) {triggerEffUnc = 1.005; theYear = 2022; lumiE = 1.014;}
+  else if(year == 20230) {triggerEffUnc = 1.005; theYear = 2023; lumiE = 1.013;}
+  else if(year == 20231) {triggerEffUnc = 1.005; theYear = 2023; lumiE = 1.013;}
+  else if(year ==  2023) {triggerEffUnc = 1.005; theYear = 2023; lumiE = 1.013;}
+  else if(year == 20240) {triggerEffUnc = 1.005; theYear = 2024; lumiE = 1.020;}
   else {printf("Wrong year!\n"); return;}
 
   int jumpValue = 200;
