@@ -979,7 +979,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
 
               .Define("weightPUSF_Nom","compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
 
-              .Define("weightWS", "compute_WSSF({0},fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)".format(whichAna))
+              .Define("weightWS", "compute_WSSF(1,fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)")
 
               .Define("weightEWKCorr", "compute_EWKCorr(0,PDType,mjjGen)")
 
@@ -1072,8 +1072,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(fakeRateSel[0],fakeRateSel[2],whichAna))
                  .Define("weightFakeAlte2","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(fakeRateSel[0],fakeRateSel[3],whichAna))
 
-                 .Define("weightWSUnc0","weight/weightWS*compute_WSSF({0},fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)".format(2))
-                 .Define("weightWSUnc1","weight/weightWS*compute_WSSF({0},fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)".format(3))
+                 .Define("weightWSUnc0","weight/weightWS*compute_WSSF(2,fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)")
+                 .Define("weightWSUnc1","weight/weightWS*compute_WSSF(3,fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)")
 
                  .Define("weightEWKCorrUnc","weight/weightEWKCorr*compute_EWKCorr(1,PDType,mjjGen)")
 
