@@ -9,15 +9,15 @@ xMuPtBins = array('d', [10.0,15.0,20.0,25.0,30.0,40.0,50.0,60.0,120.0,200.0])
 xMuEtaBins = array('d', [0.0,0.9,1.2,2.1,2.5])
 xElPtBins = array('d', [10.0,20.0,35.0,50.0,100.0,200.0])
 xElEtaBins = array('d', [0.0,0.8,1.444,1.566,2.0,2.5])
-yearVal = [20220, 20221, 20230, 20231]
+yearVal = [20220, 20221, 20230, 20231, 20240]
 
 def sf_electron(year, evaluator_el, elTag, sfDef, selVal, etaVal, ptVal, phiVal):
     etaVal = etaVal+0.001
-    ptVal  =  ptVal+0.001
+    ptVal  = max(ptVal,20.0)+0.001
     phiVal = phiVal+0.001
     sf = 0.0
 
-    if(year // 10 <= 2022):
+    if(year // 10 != 2023):
         sf= evaluator_el(elTag,sfDef,selVal,etaVal,ptVal)
     else:
         sf= evaluator_el(elTag,sfDef,selVal,etaVal,ptVal,phiVal)
@@ -66,6 +66,7 @@ if __name__ == "__main__":
         muISOTag = "NUM_TightPFIso_DEN_MediumID"
         elTag = ""
         jsnFolder = ""
+        elJsnFile = "electron.json.gz"
         if(yearVal[ny] == 20220):
             elTag = "2022Re-recoBCD"
             jsnFolder = "2022_Summer22"
@@ -78,10 +79,14 @@ if __name__ == "__main__":
         elif(yearVal[ny] == 20231):
             elTag = "2023PromptD"
             jsnFolder = "2023_Summer23BPix"
+        elif(yearVal[ny] == 20240):
+            elTag = "2024Prompt"
+            jsnFolder = "2024_Winter24"
+            elJsnFile = "electronID.json.gz"
 
         print("************** {0} **************".format(yearVal[ny]))
 
-        evaluator_el = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/EGM/{0}/electron.json.gz".format(jsnFolder))
+        evaluator_el = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/EGM/{0}/{1}".format(jsnFolder,elJsnFile))
         evaluator_mu = correctionlib._core.CorrectionSet.from_file("jsonpog-integration/POG/MUO/{0}/muon_Z.json.gz".format(jsnFolder))
 
         phiVal = 0.5 # electrons
