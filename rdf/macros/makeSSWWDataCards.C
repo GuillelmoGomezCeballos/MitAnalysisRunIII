@@ -417,10 +417,10 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   // Begin wrongsign study
   const int nwrongsignSyst = 4;
   TString namewrongsignSyst[nwrongsignSyst];
-  namewrongsignSyst[ 0] = "CMS_SMPXXXXXX_wrongsign_statUp";
-  namewrongsignSyst[ 1] = "CMS_SMPXXXXXX_wrongsign_methodUp";
-  namewrongsignSyst[ 2] = "CMS_SMPXXXXXX_wrongsign_statDown";
-  namewrongsignSyst[ 3] = "CMS_SMPXXXXXX_wrongsign_methodDown";
+  namewrongsignSyst[ 0] = Form("CMS_SMPXXXXXX_wrongsign_stat_%dUp",year);
+  namewrongsignSyst[ 1] =      "CMS_SMPXXXXXX_wrongsign_methodUp";
+  namewrongsignSyst[ 2] = Form("CMS_SMPXXXXXX_wrongsign_stat_%dDown",year);
+  namewrongsignSyst[ 3] =      "CMS_SMPXXXXXX_wrongsign_methodDown";
   const int totalNumberWSSyst = 2;
   TH1D *histo_InputWSUnc[totalNumberWSSyst];
   TH1D *histo_WSUnc[nwrongsignSyst];
@@ -658,7 +658,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   newcardShape << Form("\n");
 
   if(anaSel.Contains("sswwAnalysis")) {
-    newcardShape << Form("CMS_SMPXXXXXX_wrongsign_stat shape ");
+    newcardShape << Form("CMS_SMPXXXXXX_wrongsign_stat_%d shape ",year);
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
