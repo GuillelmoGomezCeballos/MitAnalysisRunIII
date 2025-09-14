@@ -959,7 +959,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
 
               .Define("GenJet_bHadron","GenJet_pt > 20 && GenJet_hadronFlavour == 5")
               .Define("nGenJet_bHadron","Sum(GenJet_bHadron)")
-              .Define("GenJet_bParton","GenJet_pt > 20 && abs(GenJet_eta) < 2.5 && abs(GenJet_partonFlavour) == 5")
+              .Define("GenJet_bParton","GenJet_pt > 20 && abs(GenJet_partonFlavour) == 5")
               .Define("nGenJet_bParton","Sum(GenJet_bParton)")
 
               .Define("MUOYEAR","\"{0}\"".format(MUOYEAR))

@@ -530,6 +530,7 @@ Vec_b cleaningJetVetoMapMask(const Vec_f& jet_eta, const Vec_f& jet_phi, int jet
   else if(jetTypeCorr == -1 && year == 20221) jetTypeCorr = 4;
   else if(jetTypeCorr == -1 && year == 20230) jetTypeCorr = 2;
   else if(jetTypeCorr == -1 && year == 20231) jetTypeCorr = 3;
+  else if(jetTypeCorr == -1 && year == 20240) jetTypeCorr = 0;
   else if(jetTypeCorr == -1) return jet_vetoMap_mask;
 
   bool debug = false;
@@ -1754,7 +1755,7 @@ float compute_ll_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
 // Trilepton variables
 float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_phi, const Vec_f& mu_mass, const Vec_f& mu_charge,
                      const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi, const Vec_f& el_mass, const Vec_f& el_charge,
-		     const float met_pt, const float met_phi, unsigned int var)
+                     const float met_pt, const float met_phi, unsigned int var)
 {
    if(mu_pt.size() + el_pt.size() != 3) return 0;
 
@@ -2385,7 +2386,8 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
     if(applyTightSel >= 3) {
       passTightGenSel = passTightGenSel && mjjGen > 500 && detajjGen > 2.5;
     }
-    if(applyTightSel >= 4) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0;
+    if(applyTightSel >= 4) passTightGenSel = passTightGenSel && good_GenJet_pt[0] > 50 && good_GenJet_pt[1] > 50;
+    if(applyTightSel >= 5) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0;
     if(passTightGenSel == false) return 0;
   }
   else if(applyTightSel >= 11 && applyTightSel <= 20) {
@@ -2395,9 +2397,10 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
     }
     if(applyTightSel >= 13) {
       if(GenDressedLepton_pt[1] > GenDressedLepton_pt[0] || GenDressedLepton_pt[2] > GenDressedLepton_pt[1]) {printf("PROBLEM, ptl2 > ptl1 at gen level\n");}
-      passTightGenSel = passTightGenSel && GenDressedLepton_pt[0] > 25 && GenDressedLepton_pt[1] > 20 && GenDressedLepton_pt[2] > 15;
+      passTightGenSel = passTightGenSel && GenDressedLepton_pt[0] > 20 && GenDressedLepton_pt[1] > 20 && GenDressedLepton_pt[2] > 20;
     }
-    if(applyTightSel >= 14) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0 && GenDressedLepton_hasTauAnc[2] == 0;
+    if(applyTightSel >= 14) passTightGenSel = passTightGenSel && good_GenJet_pt[0] > 50 && good_GenJet_pt[1] > 50;
+    if(applyTightSel >= 15) passTightGenSel = passTightGenSel && GenDressedLepton_hasTauAnc[0] == 0 && GenDressedLepton_hasTauAnc[1] == 0 && GenDressedLepton_hasTauAnc[2] == 0;
     if(passTightGenSel == false) return 0;
   }
 
@@ -2431,6 +2434,48 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
   }
   
   return 0;
+}
+
+// compute mll gen category
+int compute_mll_gen_category(const int var, 
+                             const Vec_i& GenDressedLepton_pdgId, const Vec_b& GenDressedLepton_hasTauAnc,
+                             const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_eta,
+                             const Vec_f& GenDressedLepton_phi, const Vec_f& GenDressedLepton_mass){
+
+  if(GenDressedLepton_pdgId.size() <= 2) return 10000;
+  bool debug = false;
+  double mllZ = 10000; double mllSSZ = 10000;
+
+  for(int i=0; i<GenDressedLepton_pdgId.size(); i++){
+    for(int j=i+1; j<GenDressedLepton_pdgId.size(); j++){  
+      float mllGen = Minv2(GenDressedLepton_pt[i], GenDressedLepton_eta[i], GenDressedLepton_phi[i], GenDressedLepton_mass[i],
+                           GenDressedLepton_pt[j], GenDressedLepton_eta[j], GenDressedLepton_phi[j], GenDressedLepton_mass[j]).first;
+      if(GenDressedLepton_pdgId[i] * GenDressedLepton_pdgId[j] < 0 && abs(GenDressedLepton_pdgId[i]) == abs(GenDressedLepton_pdgId[j])){
+        if(fabs(mllGen-91.1876) < fabs(mllZ-91.1876)) {
+          mllZ = mllGen;
+        }
+      }
+      else {
+        if(fabs(mllGen-91.1876) < fabs(mllSSZ-91.1876)) {
+          mllSSZ = mllGen;
+        }
+      }
+    } // loop over j
+  } // loop over i
+
+  float theVar = 10000;
+  if     (var == 0) theVar = mllZ;
+  else if(var == 1) theVar = mllSSZ;
+  else if(var == 2) theVar = fabs(mllZ-91.1876);
+  else if(var == 3) theVar = fabs(mllSSZ-91.1876);
+
+  if(debug == true && var == 0) {
+    printf("%zu %5.1f %5.1f / %5.1f %5.1f / ",GenDressedLepton_pdgId.size(),mllZ,fabs(mllZ-91.1876),mllSSZ,fabs(mllSSZ-91.1876));
+    for(int i=0; i<GenDressedLepton_pdgId.size(); i++) printf(" %3d",GenDressedLepton_pdgId[i]);
+    printf("\n");
+  }
+
+  return theVar;
 }
 
 // compute vbs gen variables
