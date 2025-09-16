@@ -27,12 +27,13 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0){
   const int number_unc_PDF      = 101;
 
   int startF=0; TString nameH = "";
-  if     (selectType == 0) {startF=386;  nameH = "hDVBSWZMJJ";}
-  else if(selectType == 1) {startF=530;  nameH = "hDVBSWWMJJ";}
-  else if(selectType == 2) {startF=650;  nameH = "hDVBSWWMLL";}
-  else if(selectType == 3) {startF=770;  nameH = "hDVBSWWNJET";}
-  else if(selectType == 4) {startF=890;  nameH = "hDVBSWWDELTAETAJJ";}
-  else if(selectType == 5) {startF=1010; nameH = "hDVBSWWDELTAPHIJJ";}
+  if     (selectType == 0) {startF=386;  nameH = "hDEWKWZMJJ";}
+  else if(selectType == 1) {startF=530;  nameH = "hDEWKWWMJJ";}
+  else if(selectType == 2) {startF=650;  nameH = "hDEWKWWMLL";}
+  else if(selectType == 3) {startF=770;  nameH = "hDEWKWWNJET";}
+  else if(selectType == 4) {startF=890;  nameH = "hDEWKWWDELTAETAJJ";}
+  else if(selectType == 5) {startF=1010; nameH = "hDEWKWWDELTAPHIJJ";}
+  else if(selectType == 6) {startF=386;  nameH = "hDQCDWZMJJ";}
 
   TH1D *histo_Aux[1+number_unc_PS+number_unc_QCDScale+number_unc_PDF];
   TH1D *histo_Baseline;
@@ -49,6 +50,7 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0){
   else if(selectType == 3) {histo_Baseline = new TH1D(Form("%s",nameH.Data()), Form("%s",nameH.Data()), nBin2, xbinsWWNJET      );}
   else if(selectType == 4) {histo_Baseline = new TH1D(Form("%s",nameH.Data()), Form("%s",nameH.Data()), nBin4, xbinsWWDELTAETAJJ);}
   else if(selectType == 5) {histo_Baseline = new TH1D(Form("%s",nameH.Data()), Form("%s",nameH.Data()), nBin4, xbinsWWDELTAPHIJJ);}
+  else if(selectType == 6) {histo_Baseline = new TH1D(Form("%s",nameH.Data()), Form("%s",nameH.Data()), nBin4, xbinsWZMJJ       );}
 
   for(int i=0; i<number_unc_PS; i++)       histo_PS[i]       = (TH1D*)histo_Baseline->Clone();
   for(int i=0; i<number_unc_QCDScale; i++) histo_QCDScale[i] = (TH1D*)histo_Baseline->Clone();
