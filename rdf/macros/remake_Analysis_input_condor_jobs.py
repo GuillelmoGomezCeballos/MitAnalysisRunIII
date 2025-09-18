@@ -76,7 +76,7 @@ if __name__ == "__main__":
             elif(zzPOW[x] in line): goodLine = False
         if(goodLine == False):
             continue
-        print(line)
+        #print(line)
         outputSamplesFile.write(line+"\n")
 
     outputSamplesFile.close()

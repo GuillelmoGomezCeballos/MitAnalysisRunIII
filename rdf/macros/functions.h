@@ -824,8 +824,8 @@ float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
   if(mjjGen < 500) {
     sf = 1.0;
   }
-  else if(theCat.Contains("VBS-SSWW") || theCat.Contains("WWto2L2Nu-2Jets_OS_noTop_EW") || theCat.Contains("WWto2L2Nu-2Jets_SS_noTop_EW")
-                                      || theCat.Contains("WWJJto2L2Nu-OS-noTop-EWK")    || theCat.Contains("WWJJto2L2Nu-SS-noTop-EWK")) {
+  else if(theCat.Contains("VBS-SSWW") || theCat.Contains("WWto2L2Nu-2Jets_OS_noTop_EW_Tune") || theCat.Contains("WWto2L2Nu-2Jets_SS_noTop_EW_Tune")
+                                      || theCat.Contains("WWJJto2L2Nu-OS-noTop-EWK_Tune")    || theCat.Contains("WWJJto2L2Nu-SS-noTop-EWK_Tune")) {
     if(type == 0) {
       const TH1D& hcorr = hVV_KF_EWK[0];
       sf = getValFromTH1(hcorr, mjjGen);

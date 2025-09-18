@@ -484,6 +484,19 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   // End renormalize
 
+  // Begin Fix a feature affecting first bin
+  for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
+    if(histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotData) {
+      histo_Baseline[ic]->SetBinError(1,sqrt(histo_Baseline[ic]->GetBinContent(1)));
+    } else {
+      float relativeUncBin2 = 0.01;
+      if(histo_Baseline[ic]->GetBinContent(2) > 0) relativeUncBin2 = histo_Baseline[ic]->GetBinError(2)/histo_Baseline[ic]->GetBinContent(2);
+      histo_Baseline[ic]->SetBinError(1,relativeUncBin2*histo_Baseline[ic]->GetBinContent(1));
+    }
+  }
+  // End Fix a feature affecting first bin
+
   TString outputLimits = Form("output_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna,additionalSuffix.Data());
   outputFile = new TFile(outputLimits, "RECREATE");
   outputFile->cd();
