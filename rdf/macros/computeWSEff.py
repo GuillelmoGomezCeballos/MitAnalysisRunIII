@@ -99,6 +99,16 @@ if __name__ == "__main__":
         sfe = 0.
         if(eff0 > 0 and eff1 > 0):
             sf = eff0/eff1
+            if(sf>5):
+                eff1 = eff0
+                unc1 = unc0
+                sf = eff0/eff1
+            sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
+        else:
+            eff0 = 0.010
+            unc0 = 0.010
+            eff1 = eff0
+            unc1 = unc0
             sfe = sf*pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)
 
         print("zA[{0:2d}]={1:.6f};errorzA[{0:2d}]={2:.6f};zB[{0:2d}]={3:.6f};errorzB[{0:2d}]={4:.6f}; // {5:.3f} / {6:.3f}".format(nbin,eff0,unc0,eff1,unc1,sf,sfe))

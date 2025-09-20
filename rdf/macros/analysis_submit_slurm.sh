@@ -45,6 +45,8 @@ elif [ $theAna -eq 5 ]; then
    nohup ./analysis_slurm.sh 436 20231 -1 1003 fakeAnalysis >& logs/log_436 &
    nohup ./analysis_slurm.sh 510 20240 -1 1002 fakeAnalysis >& logs/log_510 &
    nohup ./analysis_slurm.sh 536 20240 -1 1003 fakeAnalysis >& logs/log_536 &
+   nohup ./analysis_slurm.sh 510 20250 -1 1002 fakeAnalysis >& logs/log_610 &
+   nohup ./analysis_slurm.sh 536 20250 -1 1003 fakeAnalysis >& logs/log_636 &
  fi
  group=4
 
@@ -89,7 +91,6 @@ cat << EOF > submit
 #SBATCH --output=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.out
 #SBATCH --error=logs/simple_${whichAna}_${condorJob}_${whichSample}_${whichYear}_${whichJob}_%j.error
 #SBATCH --cpus-per-task=4
-#SBATCH --exclude=submit07
 srun ./analysis_singularity_slurm.sh ${whichSample} ${whichYear} ${whichJob} ${condorJob} ${whichAna}
 EOF
 

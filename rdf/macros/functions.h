@@ -807,6 +807,10 @@ float compute_WSSF(const int type,
         const TH2D& hcorr = histoWSEtaPtSF;
         sf = getValFromTH2(hcorr, std::min(fabs(el_eta[i]),2.4999f), std::min(el_pt[i],49.999f));
       }
+      if(sf <= 0) {
+	printf("PROBLEM IN WSSF %d (%d) %.3f %.3f %.3f %.3f\n",type,i,el_pt[i],el_eta[i],sf,sfTot);
+        sf = 1.0;
+      }
       sfTot = sfTot * sf;
       if(debug) printf("WSSF(%d) %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sfTot);
     }
@@ -1095,13 +1099,21 @@ float compute_lumiFakeRate(const Vec_f& mu_pt, const Vec_f& el_pt, const int nTr
     lumiPrescalesE[1] = 27.6/27693.1;
     lumiPrescalesE[2] = 27.6/27693.1;
   }
-  else if(year == 20240 || year == 20250){
+  else if(year == 20240){
     lumiPrescalesM[0] =  12.3/108296.7;
     lumiPrescalesM[1] = 333.2/108296.7;
     lumiPrescalesM[2] = 333.2/108296.7;
     lumiPrescalesE[0] =  12.0/108296.7;
     lumiPrescalesE[1] =  69.9/108296.7;
     lumiPrescalesE[2] =  69.9/108296.7;
+  }
+  else if(year == 20250){
+    lumiPrescalesM[0] =  13.7/60261.0;
+    lumiPrescalesM[1] = 369.7/60261.0;
+    lumiPrescalesM[2] = 369.7/60261.0;
+    lumiPrescalesE[0] =   6.6/60261.0;
+    lumiPrescalesE[1] =  30.2/60261.0;
+    lumiPrescalesE[2] =  30.2/60261.0;
   }
   else {
     printf("compute_lumiFakeRate error year (%d)\n",year);
