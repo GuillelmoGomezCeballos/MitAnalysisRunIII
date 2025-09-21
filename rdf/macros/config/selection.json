@@ -6,12 +6,12 @@
 	{
 	    "name": "FAKE_MU",
 	    "version": 12,
-	    "definition": "(abs(Muon_dxy) < 0.05 && abs(Muon_dz) < 0.10 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 0.5)"
+	    "definition": "(abs(Muon_dxy) < 0.05 && abs(Muon_dz) < 0.10 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumPromptId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 0.5)"
 	},
 	{
 	    "name": "TIGHT_MU0",
 	    "version": 12,
-	    "definition": "(fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 4)"
+	    "definition": "(fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 2)"
 	},
 	{
 	    "name": "TIGHT_MU1",
@@ -118,12 +118,12 @@
 	{
 	    "name": "FAKE_MU",
 	    "version": 15,
-	    "definition": "(abs(Muon_dxy) < 0.05 && abs(Muon_dz) < 0.10 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 0.5)"
+	    "definition": "(abs(Muon_dxy) < 0.05 && abs(Muon_dz) < 0.10 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumPromptId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 0.5)"
 	},
 	{
 	    "name": "TIGHT_MU0",
 	    "version": 15,
-	    "definition": "(fake_Muon_mediumId == true && fake_Muon_pfIsoId >= 4)"
+	    "definition": "(fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 2)"
 	},
 	{
 	    "name": "TIGHT_MU1",

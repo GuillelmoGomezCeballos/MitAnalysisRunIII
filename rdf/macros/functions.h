@@ -336,6 +336,7 @@ float compute_JSON_MUO_SFs(std::string valType0S, std::string valType1S, std::st
     double sf2 = corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,"nominal"); if(valType2S != "nominal") sf2 = sf2 + type * sqrt(TMath::Power(corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,valType2),2)+TMath::Power(corrSFs.eval_muonISOSF(mu_eta[i],mu_pt[i]        ,"stat"),2));
     sfTot = sfTot*sf0*sf1*sf2;
     if(debug) printf("muoeff(%d-%s/%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,valType2,mu_pt[i],mu_eta[i],mu_p[i],sf0,sf1,sf2,sf0*sf1*sf2,sfTot);
+    if(sfTot <= 0) printf("muoeffPROBLEM(%d-%s/%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,valType2,mu_pt[i],mu_eta[i],mu_p[i],sf0,sf1,sf2,sf0*sf1*sf2,sfTot);
   }
 
   return sfTot;
@@ -363,6 +364,7 @@ float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string
     double sf1 = corrSFs.eval_electronIDSF (year,valType1,workingPoint,el_eta[i],pt_used,el_phi[i]);
     sfTot = sfTot*sf0*sf1;
     if(debug) printf("eleff(%d-%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,el_pt[i],el_eta[i],el_phi[i],sf0,sf1,sf0*sf1,sfTot);
+    if(sfTot <= 0) printf("eleffPROBLEM(%d-%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,el_pt[i],el_eta[i],el_phi[i],sf0,sf1,sf0*sf1,sfTot);
   }
 
   return sfTot;
