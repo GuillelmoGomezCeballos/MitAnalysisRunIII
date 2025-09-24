@@ -11,25 +11,29 @@ inputFilesDA20231 = ["inputs/20221/da/Ele35_pt_eta_nominal_Ele_efficiency.txt", 
 inputFilesMC20231 = ["inputs/20221/mc/Ele35_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/IsoMu24_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg1_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg2_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu12_Ele23_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu23_Ele12_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt"]
 inputFilesDA20240 = ["inputs/20221/da/Ele35_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/IsoMu24_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg1_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Ele23_Ele12_leg2_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Mu17_Mu8_leg1_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Mu17_Mu8_leg2_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg1_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Mu12_Ele23_Muonleg_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Mu23_Ele12_Muonleg_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg2_pt_eta_nominal_Ele_efficiency.txt"]
 inputFilesMC20240 = ["inputs/20221/mc/Ele35_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/IsoMu24_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg1_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg2_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu12_Ele23_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu23_Ele12_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt"]
+inputFilesDA20250 = ["inputs/20221/da/Ele35_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/IsoMu24_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg1_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Ele23_Ele12_leg2_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Mu17_Mu8_leg1_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Mu17_Mu8_leg2_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg1_pt_eta_nominal_Ele_efficiency.txt",               "inputs/20221/da/Mu12_Ele23_Muonleg_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Mu23_Ele12_Muonleg_pt_eta_nominal_efficiency.txt",                  "inputs/20221/da/Ele23_Ele12_leg2_pt_eta_nominal_Ele_efficiency.txt"]
+inputFilesMC20250 = ["inputs/20221/mc/Ele35_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/IsoMu24_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg1_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu17_Mu8_leg2_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg1_pt_eta_nominalDY_Ele_efficiency.txt",             "inputs/20221/mc/Mu12_Ele23_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Mu23_Ele12_Muonleg_pt_eta_nominalDY_Mu_efficiency.txt",             "inputs/20221/mc/Ele23_Ele12_leg2_pt_eta_nominalDY_Ele_efficiency.txt"]
 
 thePlot = ["sel", "smu", "del0", "del1", "dmu0", "dmu1", "emu0", "emu1", "mue0", "mue1"]
-theID = ["20220_da", "20220_mc", "20221_da", "20221_mc", "20230_da", "20230_mc", "20231_da", "20231_mc", "20240_da", "20240_mc"]
+theID = ["20220_da", "20220_mc", "20221_da", "20221_mc", "20230_da", "20230_mc", "20231_da", "20231_mc", "20240_da", "20240_mc", "20250_da", "20250_mc"]
 
 histo = [[0 for y in range(len(theID))] for x in range(len(thePlot))]
 
 for nInp in range(len(theID)):
     for nType in range(len(thePlot)):
         inputFile = ""
-        if  (nInp == 0): inputFile = inputFilesDA20220[nType]
-        elif(nInp == 1): inputFile = inputFilesMC20220[nType]
-        elif(nInp == 2): inputFile = inputFilesDA20221[nType]
-        elif(nInp == 3): inputFile = inputFilesMC20221[nType]
-        elif(nInp == 4): inputFile = inputFilesDA20230[nType]
-        elif(nInp == 5): inputFile = inputFilesMC20230[nType]
-        elif(nInp == 6): inputFile = inputFilesDA20231[nType]
-        elif(nInp == 7): inputFile = inputFilesMC20231[nType]
-        elif(nInp == 8): inputFile = inputFilesDA20240[nType]
-        elif(nInp == 9): inputFile = inputFilesMC20240[nType]
+        if  (nInp ==  0): inputFile = inputFilesDA20220[nType]
+        elif(nInp ==  1): inputFile = inputFilesMC20220[nType]
+        elif(nInp ==  2): inputFile = inputFilesDA20221[nType]
+        elif(nInp ==  3): inputFile = inputFilesMC20221[nType]
+        elif(nInp ==  4): inputFile = inputFilesDA20230[nType]
+        elif(nInp ==  5): inputFile = inputFilesMC20230[nType]
+        elif(nInp ==  6): inputFile = inputFilesDA20231[nType]
+        elif(nInp ==  7): inputFile = inputFilesMC20231[nType]
+        elif(nInp ==  8): inputFile = inputFilesDA20240[nType]
+        elif(nInp ==  9): inputFile = inputFilesMC20240[nType]
+        elif(nInp == 10): inputFile = inputFilesDA20250[nType]
+        elif(nInp == 11): inputFile = inputFilesMC20250[nType]
         print(inputFile)
         xMin = array('d', [])
         xMax = array('d', [])
