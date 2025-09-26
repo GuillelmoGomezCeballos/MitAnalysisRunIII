@@ -980,7 +980,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 maxXF2  =  3.5
                 varSel2 = 11
             elif(makeDataCards == 4): # BDT 2D
-                BinXF1  = 16
+                BinXF1  = 20
                 minXF1  = 0.0
                 maxXF1  = 2.0
                 varSel1 = 12
@@ -989,11 +989,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 maxXF2  =  3.5
                 varSel2 = 11
             elif(makeDataCards == 5): # BDT 1D
-                BinXF1  = 8
+                BinXF1  = 10
                 minXF1  = 0.0
                 maxXF1  = 1.0
                 varSel1 = 13
-                BinXF2  = 8
+                BinXF2  = 10
                 minXF2  = 0.0
                 maxXF2  = 1.0
                 varSel2 = 13
@@ -1177,7 +1177,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             minYF = -0.5
             maxYF = 4.5
 
-            BinXF1  = 32
+            BinXF1  = 28
             minXF1  = 0.0
             maxXF1  = 4.0
             varSel1 = 14
