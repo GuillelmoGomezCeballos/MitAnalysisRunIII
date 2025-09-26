@@ -10,7 +10,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 from utilsMVA import redefineMVAVariables
 import tmva_helper_xml
 
-makeDataCards = 4 # 1 (njets), 2 (lepton flavor), 3 (3D), 4 (BDT 2D), 5 (mjj), 6 (mjj diff)
+makeDataCards = 4 # 1 (njets), 2-1005 (lepton flavor), 3-1002 (3D), 4-1001 (BDT 2D), 5-1003 (BDT 1D), 6-1004 (mjj), 7-1007 (mjj diff)
 genVBSSel = 1
 correctionString = "_correction"
 
@@ -328,7 +328,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
         dfwzcat[x] = dfwzcat[x].Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 1", "+/- 1 net charge")
 
-        if((x == plotCategory("kPlotEWKWZ") or x == plotCategory("kPlotWZ")) and isData == "false"):
+        if((x == plotCategory("kPlotEWKWZ")) and isData == "false"):
             dfwzcat[x] = (dfwzcat[x].Define("theGenCat",   "compute_vbs_gen_category({0},ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,11)".format(genVBSSel))
                                     )
         else:
@@ -963,7 +963,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histoNonPrompt[4+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAlte1")
                 histoNonPrompt[5+startNonPrompt] = dfwzbcat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF,minXF,maxXF), "TriLepton_flavor","weightFakeAlte2")
 
-        elif(makeDataCards == 3 or makeDataCards == 4 or makeDataCards == 5):
+        elif(makeDataCards == 3 or makeDataCards == 4 or makeDataCards == 5 or makeDataCards == 6):
             BinXF1 = 10
             minXF1 = 0
             maxXF1 = 1
@@ -980,15 +980,24 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 maxXF2  =  3.5
                 varSel2 = 11
             elif(makeDataCards == 4): # BDT 2D
-                BinXF1  = 20
+                BinXF1  = 16
                 minXF1  = 0.0
-                maxXF1  = 4.0
+                maxXF1  = 2.0
                 varSel1 = 12
                 BinXF2  = 4
                 minXF2  = -0.5
                 maxXF2  =  3.5
                 varSel2 = 11
-            elif(makeDataCards == 5): # mjj
+            elif(makeDataCards == 5): # BDT 1D
+                BinXF1  = 8
+                minXF1  = 0.0
+                maxXF1  = 1.0
+                varSel1 = 13
+                BinXF2  = 8
+                minXF2  = 0.0
+                maxXF2  = 1.0
+                varSel2 = 13
+            elif(makeDataCards == 6): # mjj
                 BinXF1  = 8
                 minXF1  = -0.5
                 maxXF1  =  7.5
@@ -1163,15 +1172,15 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histoNonPrompt[4+startNonPrompt] = dfwzbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte1")
                 histoNonPrompt[5+startNonPrompt] = dfwzbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), BinXF2,minXF2,maxXF2), "finalVar","weightFakeAlte2")
 
-        elif(makeDataCards == 6):
+        elif(makeDataCards == 7):
             BinYF = 5
             minYF = -0.5
             maxYF = 4.5
 
-            BinXF1  = 8
-            minXF1  = -0.5
-            maxXF1  =  7.5
-            varSel1 = 20
+            BinXF1  = 32
+            minXF1  = 0.0
+            maxXF1  = 4.0
+            varSel1 = 14
             BinXF2  = 4
             minXF2  = -0.5
             maxXF2  =  3.5
@@ -1349,7 +1358,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         print("---------------- SUMMARY {0} -------------".format(x))
         report[x].Print()
 
-    if(makeDataCards == 6):
+    if(makeDataCards == 7):
         for j in range(300,nHistoMVA):
             if(j < 500):
                 for x in range(nCat):
@@ -1374,7 +1383,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX()+1,i+1,0.0)
                 histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX()+1,i+1,0.0)
 
-            if(x == plotCategory("kPlotEWKWZ") or x == plotCategory("kPlotWZ")):
+            if(x == plotCategory("kPlotEWKWZ")):
                 histo[j][plotCategory("kPlotEWKWZ")]  .SetBinError(1,0.0)
                 histo[j][plotCategory("kPlotSignal0")].SetBinError(1,0.0)
                 histo[j][plotCategory("kPlotSignal1")].SetBinError(1,0.0)

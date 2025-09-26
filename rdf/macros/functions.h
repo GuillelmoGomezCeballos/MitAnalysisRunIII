@@ -1588,14 +1588,28 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
       return (float)(typeSelAux1);
     }
   }
-  else if(var == 12){ // VBS WZ SR MVA based
-    float bdtNew = std::min(std::max(bdt+1.0,0.001),1.999);
+  else if(var == 12){ // VBS WZ SR MVA based (2D)
+    float bdtNew = std::min(std::max(bdt+1.0,0.001),1.999)/2.0;
     float typeSelAux3 = -1;
     if     (zepvv >= 0.25) typeSelAux3 = 0;
     else                   typeSelAux3 = 1;
 
-    return (float)(bdtNew+2.0*typeSelAux3);
-    //return (float)(bdtNew);
+    return (float)(bdtNew+typeSelAux3);
+  }
+  else if(var == 13){ // VBS WZ SR MVA based (1D)
+    float bdtNew = std::min(std::max(bdt+1.0,0.001),1.999)/2.0;
+    return (float)(bdtNew);
+  }
+  else if(var == 14){ // VBS WZ SR MVA X mjj (2D)
+    int typeSelAux1 = -1;
+    if     (mjj <  900) typeSelAux1 = 0;
+    else if(mjj < 1300) typeSelAux1 = 1;
+    else if(mjj < 2000) typeSelAux1 = 2;
+    else                typeSelAux1 = 3;
+
+    float bdtNew = (std::min(std::max(bdt+1.0,0.001),1.999)/2.0)+typeSelAux1;
+
+    return (float)(bdtNew);
   }
   return 0.0;
 }
