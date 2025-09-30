@@ -66,29 +66,31 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
     dftag = selectionTrigger2L(df,year,PDType,JSON,isData,TRIGGERSEL,TRIGGERDEL,TRIGGERSMU,TRIGGERDMU,TRIGGERMUEG)
 
     overallLeptonSel = jsonObject['leptonSel']
-    FAKE_MU   = getLeptomSelFromJson(overallLeptonSel, "FAKE_MU",   year)
+    FAKE_MU   = "loose_mu"
+    TIGHT_FAKE_MU = getLeptomSelFromJson(overallLeptonSel, "TIGHT_FAKE_MU",   year)
     TIGHT_MU  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU{0}".format(muSelChoice),  year, 1)
-    TIGHT_MU0 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU0", year)
-    TIGHT_MU1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU1", year)
-    TIGHT_MU2 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU2", year)
-    TIGHT_MU3 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU3", year)
-    TIGHT_MU4 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU4", year)
-    TIGHT_MU5 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU5", year)
-    TIGHT_MU6 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU6", year)
-    TIGHT_MU7 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU7", year)
-    TIGHT_MU8 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU8", year)
+    TIGHT_MU0 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU0", year),TIGHT_FAKE_MU)
+    TIGHT_MU1 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU1", year),TIGHT_FAKE_MU)
+    TIGHT_MU2 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU2", year),TIGHT_FAKE_MU)
+    TIGHT_MU3 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU3", year),TIGHT_FAKE_MU)
+    TIGHT_MU4 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU4", year),TIGHT_FAKE_MU)
+    TIGHT_MU5 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU5", year),TIGHT_FAKE_MU)
+    TIGHT_MU6 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU6", year),TIGHT_FAKE_MU)
+    TIGHT_MU7 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU7", year),TIGHT_FAKE_MU)
+    TIGHT_MU8 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_MU8", year),TIGHT_FAKE_MU)
 
-    FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year)
+    FAKE_EL   = "loose_el"
+    TIGHT_FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "TIGHT_FAKE_EL",   year)
     TIGHT_EL  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL{0}".format(elSelChoice),  year, 1)
-    TIGHT_EL0 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL0", year)
-    TIGHT_EL1 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL1", year)
-    TIGHT_EL2 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL2", year)
-    TIGHT_EL3 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL3", year)
-    TIGHT_EL4 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL4", year)
-    TIGHT_EL5 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL5", year)
-    TIGHT_EL6 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL6", year)
-    TIGHT_EL7 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL7", year)
-    TIGHT_EL8 = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL8", year)
+    TIGHT_EL0 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL0", year),TIGHT_FAKE_EL)
+    TIGHT_EL1 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL1", year),TIGHT_FAKE_EL)
+    TIGHT_EL2 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL2", year),TIGHT_FAKE_EL)
+    TIGHT_EL3 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL3", year),TIGHT_FAKE_EL)
+    TIGHT_EL4 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL4", year),TIGHT_FAKE_EL)
+    TIGHT_EL5 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL5", year),TIGHT_FAKE_EL)
+    TIGHT_EL6 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL6", year),TIGHT_FAKE_EL)
+    TIGHT_EL7 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL7", year),TIGHT_FAKE_EL)
+    TIGHT_EL8 = "{0} and {1}".format(getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL8", year),TIGHT_FAKE_EL)
 
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 
@@ -260,7 +262,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
             histo[ltype+36][x] = dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 60 && mll{0} < 180".format(altMass)).Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 60, 60, 180), "mll{0}".format(altMass),"weight")
 
-            dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll{0}-91.1876) < 15) || (DiLepton_flavor == 1 && mll{0} > 30 && ptl2 > 25)".format(altMass),"mll cut")
+            #dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll{0}-91.1876) < 15) || (DiLepton_flavor == 1 && mll{0} > 30 && ptl2 > 25)".format(altMass),"mll cut")
+            dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(abs(mll{0}-91.1876) < 15)".format(altMass),"mll cut")
 
             dfzllcat.append(dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons"))
 
@@ -417,6 +420,58 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo[214][x] = dfzmecat[x].Filter("triggerSEL  > 0").Histo1D(("histo_{0}_{1}".format(214,x), "histo_{0}_{1}".format(214,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
                 histo[215][x] = dfzemcat[x].Filter("triggerSMU  > 0").Histo1D(("histo_{0}_{1}".format(215,x), "histo_{0}_{1}".format(215,x), len(xPtTrgbins)-1, xPtTrgbins), "ptprobe","weight")
 
+                # Lepton selection study
+                if(x == plotCategory("kPlotData")):
+                    xem =  plotCategory("kPlotEM")
+                    dfzllcat[3*x+ltype] = (dfzllcat[3*x+ltype].Define("ptm" ,"fake_Muon_pt[0]")
+                                                              .Define("etam","abs(fake_Muon_eta[0])")
+                                                              .Define("pte" ,"fake_Electron_pt[0]")
+                                                              .Define("etae","abs(fake_Electron_eta[0])")
+                                                              )
+                    histo2D[ 0][xem] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format( 0, xem), "histo2d_{0}_{1}".format( 0, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[ 1][xem] = dfzllcat[3*x+ltype].Filter("tight_mu0[0] == true").Histo2D(("histo2d_{0}_{1}".format( 1, xem), "histo2d_{0}_{1}".format( 1, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[ 2][xem] = dfzllcat[3*x+ltype].Filter("tight_mu1[0] == true").Histo2D(("histo2d_{0}_{1}".format( 2, xem), "histo2d_{0}_{1}".format( 2, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[ 3][xem] = dfzllcat[3*x+ltype].Filter("tight_mu2[0] == true").Histo2D(("histo2d_{0}_{1}".format( 3, xem), "histo2d_{0}_{1}".format( 3, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[ 4][xem] = dfzllcat[3*x+ltype].Filter("tight_mu3[0] == true").Histo2D(("histo2d_{0}_{1}".format( 4, xem), "histo2d_{0}_{1}".format( 4, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[ 5][xem] = dfzllcat[3*x+ltype].Filter("tight_mu4[0] == true").Histo2D(("histo2d_{0}_{1}".format( 5, xem), "histo2d_{0}_{1}".format( 5, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[ 6][xem] = dfzllcat[3*x+ltype].Filter("tight_mu5[0] == true").Histo2D(("histo2d_{0}_{1}".format( 6, xem), "histo2d_{0}_{1}".format( 6, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[ 7][xem] = dfzllcat[3*x+ltype].Filter("tight_mu6[0] == true").Histo2D(("histo2d_{0}_{1}".format( 7, xem), "histo2d_{0}_{1}".format( 7, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[ 8][xem] = dfzllcat[3*x+ltype].Filter("tight_mu7[0] == true").Histo2D(("histo2d_{0}_{1}".format( 8, xem), "histo2d_{0}_{1}".format( 8, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[ 9][xem] = dfzllcat[3*x+ltype].Filter("tight_mu8[0] == true").Histo2D(("histo2d_{0}_{1}".format( 9, xem), "histo2d_{0}_{1}".format( 9, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+
+                    histo2D[10][xem] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format(10, xem), "histo2d_{0}_{1}".format(10, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[11][xem] = dfzllcat[3*x+ltype].Filter("tight_mu0[0] == true").Histo2D(("histo2d_{0}_{1}".format(11, xem), "histo2d_{0}_{1}".format(11, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[12][xem] = dfzllcat[3*x+ltype].Filter("tight_mu1[0] == true").Histo2D(("histo2d_{0}_{1}".format(12, xem), "histo2d_{0}_{1}".format(12, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[13][xem] = dfzllcat[3*x+ltype].Filter("tight_mu2[0] == true").Histo2D(("histo2d_{0}_{1}".format(13, xem), "histo2d_{0}_{1}".format(13, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[14][xem] = dfzllcat[3*x+ltype].Filter("tight_mu3[0] == true").Histo2D(("histo2d_{0}_{1}".format(14, xem), "histo2d_{0}_{1}".format(14, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[15][xem] = dfzllcat[3*x+ltype].Filter("tight_mu4[0] == true").Histo2D(("histo2d_{0}_{1}".format(15, xem), "histo2d_{0}_{1}".format(15, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[16][xem] = dfzllcat[3*x+ltype].Filter("tight_mu5[0] == true").Histo2D(("histo2d_{0}_{1}".format(16, xem), "histo2d_{0}_{1}".format(16, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[17][xem] = dfzllcat[3*x+ltype].Filter("tight_mu6[0] == true").Histo2D(("histo2d_{0}_{1}".format(17, xem), "histo2d_{0}_{1}".format(17, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[18][xem] = dfzllcat[3*x+ltype].Filter("tight_mu7[0] == true").Histo2D(("histo2d_{0}_{1}".format(18, xem), "histo2d_{0}_{1}".format(18, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+                    histo2D[19][xem] = dfzllcat[3*x+ltype].Filter("tight_mu8[0] == true").Histo2D(("histo2d_{0}_{1}".format(19, xem), "histo2d_{0}_{1}".format(19, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etam", "ptm","weight")
+
+                    histo2D[20][xem] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format(20, xem), "histo2d_{0}_{1}".format(20, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[21][xem] = dfzllcat[3*x+ltype].Filter("tight_el0[0] == true").Histo2D(("histo2d_{0}_{1}".format(21, xem), "histo2d_{0}_{1}".format(21, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[22][xem] = dfzllcat[3*x+ltype].Filter("tight_el1[0] == true").Histo2D(("histo2d_{0}_{1}".format(22, xem), "histo2d_{0}_{1}".format(22, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[23][xem] = dfzllcat[3*x+ltype].Filter("tight_el2[0] == true").Histo2D(("histo2d_{0}_{1}".format(23, xem), "histo2d_{0}_{1}".format(23, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[24][xem] = dfzllcat[3*x+ltype].Filter("tight_el3[0] == true").Histo2D(("histo2d_{0}_{1}".format(24, xem), "histo2d_{0}_{1}".format(24, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[25][xem] = dfzllcat[3*x+ltype].Filter("tight_el4[0] == true").Histo2D(("histo2d_{0}_{1}".format(25, xem), "histo2d_{0}_{1}".format(25, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[26][xem] = dfzllcat[3*x+ltype].Filter("tight_el5[0] == true").Histo2D(("histo2d_{0}_{1}".format(26, xem), "histo2d_{0}_{1}".format(26, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[27][xem] = dfzllcat[3*x+ltype].Filter("tight_el6[0] == true").Histo2D(("histo2d_{0}_{1}".format(27, xem), "histo2d_{0}_{1}".format(27, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[28][xem] = dfzllcat[3*x+ltype].Filter("tight_el7[0] == true").Histo2D(("histo2d_{0}_{1}".format(28, xem), "histo2d_{0}_{1}".format(28, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[29][xem] = dfzllcat[3*x+ltype].Filter("tight_el8[0] == true").Histo2D(("histo2d_{0}_{1}".format(29, xem), "histo2d_{0}_{1}".format(29, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+
+                    histo2D[30][xem] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format(30, xem), "histo2d_{0}_{1}".format(30, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[31][xem] = dfzllcat[3*x+ltype].Filter("tight_el0[0] == true").Histo2D(("histo2d_{0}_{1}".format(31, xem), "histo2d_{0}_{1}".format(31, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[32][xem] = dfzllcat[3*x+ltype].Filter("tight_el1[0] == true").Histo2D(("histo2d_{0}_{1}".format(32, xem), "histo2d_{0}_{1}".format(32, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[33][xem] = dfzllcat[3*x+ltype].Filter("tight_el2[0] == true").Histo2D(("histo2d_{0}_{1}".format(33, xem), "histo2d_{0}_{1}".format(33, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[34][xem] = dfzllcat[3*x+ltype].Filter("tight_el3[0] == true").Histo2D(("histo2d_{0}_{1}".format(34, xem), "histo2d_{0}_{1}".format(34, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[35][xem] = dfzllcat[3*x+ltype].Filter("tight_el4[0] == true").Histo2D(("histo2d_{0}_{1}".format(35, xem), "histo2d_{0}_{1}".format(35, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[36][xem] = dfzllcat[3*x+ltype].Filter("tight_el5[0] == true").Histo2D(("histo2d_{0}_{1}".format(36, xem), "histo2d_{0}_{1}".format(36, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[37][xem] = dfzllcat[3*x+ltype].Filter("tight_el6[0] == true").Histo2D(("histo2d_{0}_{1}".format(37, xem), "histo2d_{0}_{1}".format(37, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[38][xem] = dfzllcat[3*x+ltype].Filter("tight_el7[0] == true").Histo2D(("histo2d_{0}_{1}".format(38, xem), "histo2d_{0}_{1}".format(38, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+                    histo2D[39][xem] = dfzllcat[3*x+ltype].Filter("tight_el8[0] == true").Histo2D(("histo2d_{0}_{1}".format(39, xem), "histo2d_{0}_{1}".format(39, xem), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae", "pte","weight")
+
             # mm or ee
             else:
                 varPlot = 0
@@ -471,7 +526,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo[262][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 81 and mll{1} < 101".format(isEB,altShapes[7])).Histo1D(("histo_{0}_{1}".format(262,x), "histo_{0}_{1}".format(262,x),100, 81, 101), "mll{0}".format(altShapes[7]),"weight")
                 histo[263][x] = dfzllcat[3*x+ltype].Filter("{0} and mll{1} > 81 and mll{1} < 101".format(isEE,altShapes[7])).Histo1D(("histo_{0}_{1}".format(263,x), "histo_{0}_{1}".format(263,x),100, 81, 101), "mll{0}".format(altShapes[7]),"weight")
 
-            if(ltype == 0):
+            if(ltype == 0 and x != plotCategory("kPlotEM")):
                 histo2D[ 0][x] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format( 0, x), "histo2d_{0}_{1}".format( 0, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal1", "ptl1","weight")
                 histo2D[ 1][x] = dfzllcat[3*x+ltype].Filter("tight_mu0[0] == true").Histo2D(("histo2d_{0}_{1}".format( 1, x), "histo2d_{0}_{1}".format( 1, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal1", "ptl1","weight")
                 histo2D[ 2][x] = dfzllcat[3*x+ltype].Filter("tight_mu1[0] == true").Histo2D(("histo2d_{0}_{1}".format( 2, x), "histo2d_{0}_{1}".format( 2, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal1", "ptl1","weight")
@@ -494,7 +549,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[18][x] = dfzllcat[3*x+ltype].Filter("tight_mu7[1] == true").Histo2D(("histo2d_{0}_{1}".format(18, x), "histo2d_{0}_{1}".format(18, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal2", "ptl2","weight")
                 histo2D[19][x] = dfzllcat[3*x+ltype].Filter("tight_mu8[1] == true").Histo2D(("histo2d_{0}_{1}".format(19, x), "histo2d_{0}_{1}".format(19, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal2", "ptl2","weight")
 
-            if(ltype == 2):
+            if(ltype == 2 and x != plotCategory("kPlotEM")):
                 histo2D[20][x] = dfzllcat[3*x+ltype]                               .Histo2D(("histo2d_{0}_{1}".format(20, x), "histo2d_{0}_{1}".format(20, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal1", "ptl1","weight")
                 histo2D[21][x] = dfzllcat[3*x+ltype].Filter("tight_el0[0] == true").Histo2D(("histo2d_{0}_{1}".format(21, x), "histo2d_{0}_{1}".format(21, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal1", "ptl1","weight")
                 histo2D[22][x] = dfzllcat[3*x+ltype].Filter("tight_el1[0] == true").Histo2D(("histo2d_{0}_{1}".format(22, x), "histo2d_{0}_{1}".format(22, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etal1", "ptl1","weight")

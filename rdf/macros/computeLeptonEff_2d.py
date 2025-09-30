@@ -7,10 +7,12 @@ if __name__ == "__main__":
     path = "fillhisto_zAnalysis1001"
     year = 2018
     output = "anaZ"
+    useEM = 1
 
-    valid = ['path=', "year=", 'output=', 'help']
+    valid = ['path=', "year=", 'output=', 'em=', 'help']
     usage  =  "Usage: ana.py --path=<{0}>\n".format(path)
     usage +=  "              --year=<{0}>\n".format(year)
+    usage +=  "              --em=<{0}>\n".format(useEM)
     usage +=  "              --output=<{0}>".format(output)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)
@@ -27,6 +29,8 @@ if __name__ == "__main__":
             path = str(arg)
         if opt == "--year":
             year = int(arg)
+        if opt == "--em":
+            useEM = int(arg)
         if opt == "--output":
             output = str(arg)
 
@@ -56,8 +60,8 @@ if __name__ == "__main__":
                 TFile("{0}/{1}_{2}_tightel8_2d.root".format(output,path,year))
                ]]
     print(fileLep[0][3].GetName())
-    print(fileLep[1][3].GetName())
-    print(fileLep[1][7].GetName())
+    print(fileLep[0][9].GetName())
+    print(fileLep[1][9].GetName())
 
     numberOfSel = 9
     histoLepEffSelDAEtaPt = [[0 for y in range(numberOfSel)] for x in range(2)]
@@ -68,12 +72,22 @@ if __name__ == "__main__":
     outFileLepEff = TFile(fileLepEffName,"recreate")
     outFileLepEff.cd()
 
+    histoMMDA = (fileLep[0][0].Get("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
+    histoEEDA = (fileLep[1][0].Get("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
+    k_factor = [pow(histoMMDA.GetSumOfWeights()/histoEEDA.GetSumOfWeights(),0.5), 1/pow(histoMMDA.GetSumOfWeights()/histoEEDA.GetSumOfWeights(),0.5)]
+    print("k_factors: {0} / {1}".format(k_factor[0],k_factor[1]))
+
     for nlep in range(2):
         histoLepDenDA = (fileLep[nlep][0].Get("histo2d{0}".format(plotCategory("kPlotData")))).Clone()
         histoLepDenDY = (fileLep[nlep][0].Get("histo2d{0}".format(plotCategory("kPlotDY")))).Clone()
         for nc in range(nCat):
             if(nc == plotCategory("kPlotData") or nc == plotCategory("kPlotDY")): continue
-            histoLepDenDA.Add(fileLep[nlep][0].Get("histo2d{0}".format(nc)),-1.0)
+            if(nc == plotCategory("kPlotEWKWZ") or nc == plotCategory("kPlotWZ") or nc == plotCategory("kPlotZZ")):
+                histoLepDenDA.Add(fileLep[nlep][0].Get("histo2d{0}".format(nc)),-1.0)
+            elif(nc == plotCategory("kPlotEM") and useEM == 1):
+                histoLepDenDA.Add(fileLep[nlep][0].Get("histo2d{0}".format(nc)),-1.0*k_factor[nlep])
+            elif(nc != plotCategory("kPlotEM") and useEM == 0):
+                histoLepDenDA.Add(fileLep[nlep][0].Get("histo2d{0}".format(nc)),-1.0)
         print("Den({0}) = {1}/{2} = {3}".format(nlep,histoLepDenDA.GetSumOfWeights(),histoLepDenDY.GetSumOfWeights(),
               histoLepDenDA.GetSumOfWeights()/histoLepDenDY.GetSumOfWeights()))
 
@@ -88,7 +102,12 @@ if __name__ == "__main__":
             histoLepNumDY = (fileLep[nlep][theSel].Get("histo2d{0}".format(plotCategory("kPlotDY")))).Clone()
             for nc in range(nCat):
                 if(nc == plotCategory("kPlotData") or nc == plotCategory("kPlotDY")): continue
-                histoLepNumDA.Add(fileLep[nlep][theSel].Get("histo2d{0}".format(nc)),-1.0)
+                if(nc == plotCategory("kPlotEWKWZ") or nc == plotCategory("kPlotWZ") or nc == plotCategory("kPlotZZ")):
+                    histoLepNumDA.Add(fileLep[nlep][theSel].Get("histo2d{0}".format(nc)),-1.0)
+                elif(nc == plotCategory("kPlotEM") and useEM == 1):
+                    histoLepNumDA.Add(fileLep[nlep][theSel].Get("histo2d{0}".format(nc)),-1.0*k_factor[nlep])
+                elif(nc != plotCategory("kPlotEM") and useEM == 0):
+                    histoLepNumDA.Add(fileLep[nlep][theSel].Get("histo2d{0}".format(nc)),-1.0)
 
             print("Num({0},{1}) = {2}/{3} = {4}".format(nlep,theSel-1,histoLepNumDA.GetSumOfWeights(),histoLepNumDY.GetSumOfWeights(),
                   histoLepNumDA.GetSumOfWeights()/histoLepNumDY.GetSumOfWeights()))

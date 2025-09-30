@@ -11,8 +11,13 @@ fi
 
 export year=$1
 
-if [ $# -eq 2 ]; then
+if [ $# -gt 1 ]; then
   export path="fillhisto_zAnalysis"$2
+fi
+
+isEM=1
+if [ $# -gt 2 ]; then
+  export isEM=$3
 fi
 
 hadd -f ${output}/${path}_${year}_loose_mu_2d.root ${output}/${path}_${year}_0_2d.root ${output}/${path}_${year}_10_2d.root
@@ -37,4 +42,4 @@ hadd -f ${output}/${path}_${year}_tightel6_2d.root ${output}/${path}_${year}_27_
 hadd -f ${output}/${path}_${year}_tightel7_2d.root ${output}/${path}_${year}_28_2d.root ${output}/${path}_${year}_38_2d.root
 hadd -f ${output}/${path}_${year}_tightel8_2d.root ${output}/${path}_${year}_29_2d.root ${output}/${path}_${year}_39_2d.root
 
-python3 computeLeptonEff_2d.py --path=${path} --year=${year} --output=${output}
+python3 computeLeptonEff_2d.py --path=${path} --year=${year} --output=${output} --em=${isEM}

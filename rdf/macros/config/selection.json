@@ -9,6 +9,11 @@
 	    "definition": "(abs(Muon_dxy) < 0.05 && abs(Muon_dz) < 0.10 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumPromptId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 0.5)"
 	},
 	{
+	    "name": "TIGHT_FAKE_MU",
+	    "version": 12,
+	    "definition": "(abs(fake_Muon_dxy) < 0.05 && abs(fake_Muon_dz) < 0.10 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 1 && fake_Muon_jetRelIso < 0.5)"
+	},
+	{
 	    "name": "TIGHT_MU0",
 	    "version": 12,
 	    "definition": "(fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 2)"
@@ -63,6 +68,11 @@
 	    "name": "FAKE_EL",
 	    "version": 12,
 	    "definition": "(abs(Electron_dxy) < 0.05 && abs(Electron_dz) < 0.10 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_jetRelIso < 0.5)"
+	},
+	{
+	    "name": "TIGHT_FAKE_EL",
+	    "version": 12,
+	    "definition": "(abs(fake_Electron_dxy) < 0.05 && abs(fake_Electron_dz) < 0.10 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_jetRelIso < 0.5)"
 	},
 	{
 	    "name": "TIGHT_EL0",
@@ -121,6 +131,11 @@
 	    "definition": "(abs(Muon_dxy) < 0.05 && abs(Muon_dz) < 0.10 && abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true && Muon_mediumPromptId == true && Muon_pfIsoId >= 1 && Muon_jetRelIso < 0.5)"
 	},
 	{
+	    "name": "TIGHT_FAKE_MU",
+	    "version": 15,
+	    "definition": "(abs(fake_Muon_dxy) < 0.05 && abs(fake_Muon_dz) < 0.10 && abs(fake_Muon_eta) < 2.4 && fake_Muon_pt > 10 && fake_Muon_looseId == true && fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 1 && fake_Muon_jetRelIso < 0.5)"
+	},
+	{
 	    "name": "TIGHT_MU0",
 	    "version": 15,
 	    "definition": "(fake_Muon_mediumPromptId == true && fake_Muon_pfIsoId >= 2)"
@@ -175,6 +190,11 @@
 	    "name": "FAKE_EL",
 	    "version": 15,
 	    "definition": "(abs(Electron_dxy) < 0.05 && abs(Electron_dz) < 0.10 && abs(Electron_eta) < 2.5 && Electron_pt > 10 && Electron_cutBased >= 2 && Electron_jetRelIso < 0.5)"
+	},
+	{
+	    "name": "TIGHT_FAKE_EL",
+	    "version": 15,
+	    "definition": "(abs(fake_Electron_dxy) < 0.05 && abs(fake_Electron_dz) < 0.10 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_jetRelIso < 0.5)"
 	},
 	{
 	    "name": "TIGHT_EL0",
