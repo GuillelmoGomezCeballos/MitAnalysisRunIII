@@ -1514,56 +1514,16 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     return 0.0;
   }
   else if(var == 20){ // mjj
-    int typeSelAux = -1;
-    if     (mjj <  700) typeSelAux = 0;
-    else if(mjj <  900) typeSelAux = 1;
-    else if(mjj < 1100) typeSelAux = 2;
-    else if(mjj < 1300) typeSelAux = 3;
-    else if(mjj < 1600) typeSelAux = 4;
-    else if(mjj < 2000) typeSelAux = 5;
-    else if(mjj < 2700) typeSelAux = 6;
-    else                typeSelAux = 7;
-
-    return (float)(typeSelAux);
+    return mjj;
   }
   else if(var == 21){ // mll
-    float typeSelAux = -1;
-    if     (mll <  50) typeSelAux = 0;
-    else if(mll <  80) typeSelAux = 1;
-    else if(mll < 110) typeSelAux = 2;
-    else if(mll < 140) typeSelAux = 3;
-    else if(mll < 170) typeSelAux = 4;
-    else if(mll < 220) typeSelAux = 5;
-    else if(mll < 300) typeSelAux = 6;
-    else               typeSelAux = 7;
-
-    return (float)(typeSelAux);
+    return mll;
   }
   else if(var == 22){ // detajj
-    float typeSelAux = -1;
-    if     (detajj < 3.1) typeSelAux = 0;
-    else if(detajj < 3.6) typeSelAux = 1;
-    else if(detajj < 4.0) typeSelAux = 2;
-    else if(detajj < 4.5) typeSelAux = 3;
-    else if(detajj < 5.0) typeSelAux = 4;
-    else if(detajj < 5.5) typeSelAux = 5;
-    else if(detajj < 6.5) typeSelAux = 6;
-    else                  typeSelAux = 7;
-
-    return (float)(typeSelAux);
+    return detajj;
   }
   else if(var == 23){ // dphijj
-    float typeSelAux = -1;
-    if     (dphijj < 1.1) typeSelAux = 0;
-    else if(dphijj < 1.8) typeSelAux = 1;
-    else if(dphijj < 2.2) typeSelAux = 2;
-    else if(dphijj < 2.5) typeSelAux = 3;
-    else if(dphijj < 2.7) typeSelAux = 4;
-    else if(dphijj < 2.9) typeSelAux = 5;
-    else if(dphijj < 3.0) typeSelAux = 6;
-    else                  typeSelAux = 7;
-
-    return (float)(typeSelAux);
+    return dphijj;
   }
   else if(var == 10 || var == 11){
     int typeSelAux1 = -1;

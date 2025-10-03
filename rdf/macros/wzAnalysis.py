@@ -10,7 +10,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 from utilsMVA import redefineMVAVariables
 import tmva_helper_xml
 
-makeDataCards = 4 # 1 (njets), 2-1005 (lepton flavor), 3-1002 (3D), 4-1001 (BDT 2D), 5-1003 (BDT 1D), 6-1004 (mjj), 7-1007 (mjj diff)
+makeDataCards = 4 # 1 (njets), 2-1006 (lepton flavor), 3-1002 (3D), 4-1001 (BDT 2D), 5-1003 (BDT 1D), 6-1004 (mjj), 7-1005 (mjj diff)
 genVBSSel = 1
 correctionString = "_correction"
 
@@ -20,7 +20,7 @@ bTagSel = 0
 useBTaggingWeights = 1
 
 useFR = 1
-whichAna = 0 # 0 (inclusive) / 1 (VBS)
+whichAna = 2
 
 altMass = "Def"
 jetEtaCut = 2.5
@@ -999,12 +999,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 varSel2 = 13
             elif(makeDataCards == 6): # mjj
                 BinXF1  = 8
-                minXF1  = -0.5
-                maxXF1  =  7.5
+                minXF1  = 500
+                maxXF1  = 2900
                 varSel1 = 20
                 BinXF2  = 8
-                minXF2  = -0.5
-                maxXF2  =  7.5
+                minXF2  = 500
+                maxXF2  = 2900
                 varSel2 = 20
 
             dfwzvbscat             [x] = dfwzvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,vbs_dphijj,vbs_zepvv,bdt_vbfinc[0],mll{0},ngood_jets,{1})".format(altMass,varSel1))

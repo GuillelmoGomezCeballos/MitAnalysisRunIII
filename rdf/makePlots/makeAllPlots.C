@@ -1186,8 +1186,10 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     //finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin0_prefit.root"  ),"ssww_wzAnalysis1003_bin0_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     //finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin1_prefit.root"  ),"ssww_wzAnalysis1003_bin1_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
-    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1001_bin0.root")         ,"ssww_wzAnalysis1001_bin0"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1001_bin1.root")         ,"ssww_wzAnalysis1001_bin1"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin0.root")         ,"ssww_wzAnalysis1003_bin0"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin1.root")         ,"ssww_wzAnalysis1003_bin1"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1004_bin0.root")         ,"ssww_wzAnalysis1004_bin0"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1004_bin1.root")         ,"ssww_wzAnalysis1004_bin1"         ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
  
     finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1006_bin0.root")       ,"ssww_sswwAnalysis1006_bin0"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1006_bin1.root")       ,"ssww_sswwAnalysis1006_bin1"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
@@ -1198,8 +1200,10 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1009_bin0.root")       ,"ssww_sswwAnalysis1009_bin0"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1009_bin1.root")       ,"ssww_sswwAnalysis1009_bin1"       ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
-    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1001_bin0_prefit.root")  ,"ssww_wzAnalysis1001_bin0_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1001_bin1_prefit.root")  ,"ssww_wzAnalysis1001_bin1_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin0_prefit.root")  ,"ssww_wzAnalysis1003_bin0_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1003_bin1_prefit.root")  ,"ssww_wzAnalysis1003_bin1_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1004_bin0_prefit.root")  ,"ssww_wzAnalysis1004_bin0_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"Output","",Form("ssww_wzAnalysis1004_bin1_prefit.root")  ,"ssww_wzAnalysis1004_bin1_prefit"  ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1006_bin0_prefit.root"),"ssww_sswwAnalysis1006_bin0_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Output","",Form("ssww_sswwAnalysis1006_bin1_prefit.root"),"ssww_sswwAnalysis1006_bin1_prefit",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());

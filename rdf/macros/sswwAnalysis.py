@@ -697,19 +697,31 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 BinXF1 = 15
                 minXF1 = -0.5
                 maxXF1 = 14.5
-            elif(makeDataCards == 6 or makeDataCards == 7 or makeDataCards == 8 or makeDataCards == 9):
-                BinXF1 = 8
-                minXF1 = -0.5
-                maxXF1 =  7.5
+            elif(makeDataCards == 6):
+                BinXF1  = 8
+                minXF1  = 500
+                maxXF1  = 2900
+            elif(makeDataCards == 7):
+                BinXF1  = 8
+                minXF1  = 20
+                maxXF1  = 340
+            elif(makeDataCards == 8):
+                BinXF1  = 8
+                minXF1  = 2.5
+                maxXF1  = 6.5
+            elif(makeDataCards == 9):
+                BinXF1  = 8
+                minXF1  = 0
+                maxXF1  = 3.1416
             histo[110][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(110,x), "histo_{0}_{1}".format(110,x),BinXF1,minXF1,maxXF1), "finalVar","weight")
 
             BinXF2 = 4
             minXF2 = -0.5
             maxXF2 =  3.5
             if(makeDataCards == 6 or makeDataCards == 7 or makeDataCards == 8 or makeDataCards == 9):
-                BinXF2 = 8
-                minXF2 = -0.5
-                maxXF2 =  7.5
+                BinXF2 = BinXF1
+                minXF2 = minXF1
+                maxXF2 = maxXF1
             histo[111][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(111,x), "histo_{0}_{1}".format(111,x),BinXF2,minXF2,maxXF2), "finalVar","weight")
 
             # loop over Njets for ssww and sswwb regions (not used)

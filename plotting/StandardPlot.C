@@ -18,12 +18,12 @@
 Bool_t isBSMOverlaid = true;
 
 //float xPos[nPlotCategories] = {0.70,0.70,0.70,0.70,0.70,0.70,0.70,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40};
-float xPos[nPlotCategories] = {0.67,0.67,0.67,0.67,0.67,0.67,0.67,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43};
+float xPos[nPlotCategories] = {0.61,0.61,0.61,0.61,0.61,0.61,0.61,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31};
 float yOff[nPlotCategories] = {   0,	1,   2,   3,   4,  5,   6,   0,   1,   2,   3,   4,   5,   6,   7};
 
-const Float_t _tsize   = 0.050;
+const Float_t _tsize   = 0.070;
 const Float_t _xoffset = 0.200;
-const Float_t _yoffset = 0.051;
+const Float_t _yoffset = 0.055;
 
 const double SFBinWidth = 1;
 
@@ -415,32 +415,32 @@ class StandardPlot {
 
             for (int ic=0; ic<nPlotCategories; ic++) {
 	      if     (ic==kPlotData){
-	        if(_hist[ic] && _hist[ic]->GetSumOfWeights() > 0) { DrawLegend(xPos[j], 0.84 - yOff[j]*_yoffset, _hist[ic], plotNames[ic].Data(), "ep"); j++;}
-                if(plotSystErrorBars == true) {DrawLegendTG(xPos[j], 0.84 - yOff[j]*_yoffset,gsyst, "Total unc.",  "f" ); j++;isThereSignal = true;}
+	        if(_hist[ic] && _hist[ic]->GetSumOfWeights() > 0) { DrawLegend(xPos[j], 0.81 - yOff[j]*_yoffset, _hist[ic], plotNames[ic].Data(), "ep"); j++;}
+                if(plotSystErrorBars == true) {DrawLegendTG(xPos[j], 0.81 - yOff[j]*_yoffset,gsyst, "Total unc.",  "f" ); j++;isThereSignal = true;}
               }
 	      else if(ic == kPlotBSM){
 	        double furtherXOffSet = 0.0;
 		if(higgsLabel.Contains("m_{H},m_{a}")) furtherXOffSet = -0.05;
 		if(higgsLabel.Contains("Z(ll)h_{125}")) furtherXOffSet = -0.05;
-                if     (_hist[ic] && isBSMOverlaid) { DrawLegend(xPos[j]+furtherXOffSet, 0.84 - yOff[j]*_yoffset, _hist[ic], higgsLabel, "f" ); j++; }
-                else if(_hist[ic])		    { DrawLegend(xPos[j]+furtherXOffSet, 0.84 - yOff[j]*_yoffset, _hist[ic], higgsLabel, "l" ); j++; }
+                if     (_hist[ic] && isBSMOverlaid) { DrawLegend(xPos[j]+furtherXOffSet, 0.81 - yOff[j]*_yoffset, _hist[ic], higgsLabel, "f" ); j++; }
+                else if(_hist[ic])		    { DrawLegend(xPos[j]+furtherXOffSet, 0.81 - yOff[j]*_yoffset, _hist[ic], higgsLabel, "l" ); j++; }
 	      }
 	      else if(ic == kPlotSignal0){
 	        double furtherXOffSet = 0.0;
 		if(higgs2Label.Contains("ADD")) furtherXOffSet = -0.05;
-                if     (_hist[ic] && isBSMOverlaid) { DrawLegend(xPos[j]+furtherXOffSet, 0.84 - yOff[j]*_yoffset*1.15, _hist[ic], higgs2Label, "f" ); j++; }
-                else if(_hist[ic])		    { DrawLegend(xPos[j]+furtherXOffSet, 0.84 - yOff[j]*_yoffset*1.15, _hist[ic], higgs2Label, "l" ); j++; }
+                if     (_hist[ic] && isBSMOverlaid) { DrawLegend(xPos[j]+furtherXOffSet, 0.81 - yOff[j]*_yoffset*1.15, _hist[ic], higgs2Label, "f" ); j++; }
+                else if(_hist[ic])		    { DrawLegend(xPos[j]+furtherXOffSet, 0.81 - yOff[j]*_yoffset*1.15, _hist[ic], higgs2Label, "l" ); j++; }
 	      }
 	      else if(ic == kPlotSignal1 || ic == kPlotSignal2 || ic == kPlotSignal3){
-                if     (_hist[ic] && isBSMOverlaid) { DrawLegend(xPos[j], 0.84 - yOff[j]*_yoffset*1.09, _hist[ic], plotNames[ic].Data(), "f" ); j++; }
-                else if(_hist[ic])		    { DrawLegend(xPos[j], 0.84 - yOff[j]*_yoffset*1.09, _hist[ic], plotNames[ic].Data(), "l" ); j++; }
+                if     (_hist[ic] && isBSMOverlaid) { DrawLegend(xPos[j], 0.81 - yOff[j]*_yoffset*1.09, _hist[ic], plotNames[ic].Data(), "f" ); j++; }
+                else if(_hist[ic])		    { DrawLegend(xPos[j], 0.81 - yOff[j]*_yoffset*1.09, _hist[ic], plotNames[ic].Data(), "l" ); j++; }
 	      }
 	      else {
-	        if(_hist[ic] && _hist[ic]->GetSumOfWeights() > 0) { DrawLegend(xPos[j], 0.84 - yOff[j]*_yoffset, _hist[ic], plotNames[ic].Data(), "f"); j++;}
+	        if(_hist[ic] && _hist[ic]->GetSumOfWeights() > 0) { DrawLegend(xPos[j], 0.81 - yOff[j]*_yoffset, _hist[ic], plotNames[ic].Data(), "f"); j++;}
 	      }
 	    }
 
-            if(plotSystErrorBars == true && isThereSignal == false) {DrawLegendTG(xPos[j], 0.84 - yOff[j]*_yoffset,gsyst, "Total unc.",  "f" ); j++;}
+            if(plotSystErrorBars == true && isThereSignal == false) {DrawLegendTG(xPos[j], 0.81 - yOff[j]*_yoffset,gsyst, "Total unc.",  "f" ); j++;}
 
             //TLatex* luminosity = new TLatex(0.9, 0.8, TString::Format("L = %.1f fb^{-1}",_lumi));
             //luminosity->SetNDC();
