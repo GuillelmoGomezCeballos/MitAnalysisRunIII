@@ -11,7 +11,7 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 108.5, 57.3]
+    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 108.5, 81.5]
 
     lumiBit = -999
     if(year == 2016): lumiBit = 0
@@ -605,6 +605,11 @@ def getDATAlist(type, year, skimType):
         filesL   = findDIR("{0}/MuonEG+Run2025E-PromptReco-v1+NANOAOD".format(dirT2))
     elif(year == 2025 and type == 1025):
         filesL   = findDIR("{0}/MuonEG+Run2025F-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/MuonEG+Run2025F-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2025 and type == 1026):
+        filesL   = findDIR("{0}/MuonEG+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
 
     elif(year == 2025 and type == 1031):
         filesL   = findDIR("{0}/EGamma0+Run2025B-PromptReco-v1+NANOAOD".format(dirT2))
@@ -673,6 +678,29 @@ def getDATAlist(type, year, skimType):
         filesAux = findDIR("{0}/EGamma3+Run2025F-PromptReco-v1+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma0+Run2025F-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma1+Run2025F-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma2+Run2025F-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma3+Run2025F-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2025 and type == 1036):
+        filesL   = findDIR("{0}/EGamma0+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/EGamma1+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma2+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma3+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
 
     elif(year == 2025 and type == 1041):
         filesL   = findDIR("{0}/Muon0+Run2025B-PromptReco-v1+NANOAOD".format(dirT2))
@@ -705,6 +733,17 @@ def getDATAlist(type, year, skimType):
         filesAux = findDIR("{0}/Muon1+Run2025F-PromptReco-v1+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon0+Run2025F-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon1+Run2025F-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2025 and type == 1046):
+        filesL   = findDIR("{0}/Muon0+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/Muon1+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
 
     elif(year == 2025 and type == 1051):
         filesL   = findDIR("{0}/JetMET0+Run2025B-PromptReco-v1+NANOAOD".format(dirT2))
@@ -735,6 +774,17 @@ def getDATAlist(type, year, skimType):
     elif(year == 2025 and type == 1055):
         filesL   = findDIR("{0}/JetMET0+Run2025F-PromptReco-v1+NANOAOD".format(dirT2))
         filesAux = findDIR("{0}/JetMET1+Run2025F-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET0+Run2025F-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET1+Run2025F-PromptReco-v2+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2025 and type == 1056):
+        filesL   = findDIR("{0}/JetMET0+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/JetMET1+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
 
@@ -1160,12 +1210,12 @@ def SwitchSample(argument, skimType):
        556: (dirT2+"/WGtoLNuG-1Jets_PTG-400to600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3+NANOAODSIMFAKE",0.022322*1000,plotCategory("kPlotVG")),
        557: (dirT2+"/WGtoLNuG-1Jets_PTG-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3+NANOAODSIMFAKE",0.004918*1000,plotCategory("kPlotVG")),
        558: (dirT2+"/WW-DPS_TuneCP5_13p6TeV_pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",2.14891*1000,plotCategory("kPlotOther")),
-       559: (dirT2+"/GluGlutoContinto2Zto4E_TuneCP5_13p6TeV_mcfm701-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.5*0.0061150*1000,plotCategory("kPlotZZ")),
-       560: (dirT2+"/GluGlutoContinto2Zto4Mu_TuneCP5_13p6TeV_mcfm701-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.5*0.0061150*1000,plotCategory("kPlotZZ")),
-       561: (dirT2+"/GluGlutoContinto2Zto4Tau_TuneCP5_13p6TeV_mcfm701-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.5*0.0061150*1000,plotCategory("kPlotZZ")),
-       562: (dirT2+"/GluGlutoContinto2Zto2E2Tau_TuneCP5_13p6TeV_mcfm701-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.0061150*1000,plotCategory("kPlotZZ")),
-       563: (dirT2+"/GluGlutoContinto2Zto2Mu2Tau_TuneCP5_13p6TeV_mcfm701-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.0061150*1000,plotCategory("kPlotZZ")),
-       564: (dirT2+"/GluGluToContinto2Zto2E2Mu_TuneCP5_13p6TeV_mcfm701-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIMFAKE",0.0061150*1000,plotCategory("kPlotZZ")),
+       559: (dirT2+"/GluGlu2Zto4E_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.5*0.0061150*1000,plotCategory("kPlotZZ")),
+       560: (dirT2+"/GluGlu2Zto4Mu_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.5*0.0061150*1000,plotCategory("kPlotZZ")),
+       561: (dirT2+"/GluGlu2Zto4Tau_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.5*0.0061150*1000,plotCategory("kPlotZZ")),
+       562: (dirT2+"/GluGlu2Zto2E2Tau_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0061150*1000,plotCategory("kPlotZZ")),
+       563: (dirT2+"/GluGlu2Zto2Mu2Tau_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0061150*1000,plotCategory("kPlotZZ")),
+       564: (dirT2+"/GluGlu2Zto2E2Mu_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0061150*1000,plotCategory("kPlotZZ")),
        565: (dirT2+"/GluGluWWto2E2Nu_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",(0.1086*0.1086)*ggWWXS_LO_MCFM*1.4*1000,plotCategory("kPlotggWW")),
        566: (dirT2+"/GluGluWWtoENuMuNu_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",(0.1086*0.1086)*ggWWXS_LO_MCFM*1.4*1000,plotCategory("kPlotggWW")),
        567: (dirT2+"/GluGluWWtoENuTauNu_TuneCP5_13p6TeV_mcfm-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",(0.1086*0.1086)*ggWWXS_LO_MCFM*1.4*1000,plotCategory("kPlotggWW")),
