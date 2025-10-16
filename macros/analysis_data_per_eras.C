@@ -46,13 +46,14 @@ TLegend *SetMyLegend()
 
 void analysis_data_per_eras(){
   const int numberEras = 16;
-  const int nHist = 21;
+  const int nHist = 23;
   const int refEra = 7;
   double lumi[numberEras] = {8.1,26.7, 18.1,9.7, 7.2,7.9,11.3,27.7,37.7,5.4,11.3, 19.0, 24.2, 14.0, 24.0, 0.0};
   TString nameEra[numberEras] = {"2022A", "2022B", "2023A", "2023B", "2024C", "2024D", "2024E", "2024F", "2024G", "2024H", "2024I",
                               "2025C", "2025D", "2025E", "2025F", "2025G"};
-  TString nameAna[nHist] = {"Zmm   ", "Zee   ", "Zmm1j ", "Zee1j ", "Zmm1b ", "Zee1b ", "ssmm  ", "ssee  ", "ssee  ",
-                            "wwem  ", "Zem   ", "em12b ", "em1b  ", "em2b  ", "ZZ4m  ", "ZZ2e2m", "ZZ4e  ", "WZ3m  ", "WZ2m1e", "WZ1m2e", "WZ3e  "};
+  TString nameAna[nHist] = {"Zmm   ", "Zee   ", "Zmm1j ", "Zee1j ", "Zmm1b ", "Zee1b ", "ssmm  ", "ssee  ", "ssem  ",
+                            "wwem  ", "Zem   ", "em12b ", "em1b  ", "em2b  ", "ZZ4l  ", "ZZ4m  ", "ZZ2e2m", "ZZ4e  ",
+                            "WZ3l  ", "WZ3m  ", "WZ2m1e", "WZ1m2e", "WZ3e  "};
  TString zSamples[numberEras] = {"anaZ/fillhisto_zAnalysis_20220.root",
                                   "anaZ/fillhisto_zAnalysis_20221.root",
 
@@ -154,14 +155,16 @@ void analysis_data_per_eras(){
      _hist[12] = (TH1D*)inputwwFile->Get(Form("histoMVA_600_0"))->Clone();
      _hist[13] = (TH1D*)inputwwFile->Get(Form("histoMVA_800_0"))->Clone();
      TFile *inputzzFile = new TFile(Form("%s",zzSamples[i].Data()));
-     _hist[14] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[14]->SetBinContent(2,0); _hist[14]->SetBinContent(3,0); //_hist[14]->Scale(100);
-     _hist[15] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[15]->SetBinContent(1,0); _hist[15]->SetBinContent(3,0); //_hist[15]->Scale(100);
-     _hist[16] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[16]->SetBinContent(1,0); _hist[16]->SetBinContent(2,0); //_hist[16]->Scale(100);
+     _hist[14] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone();
+     _hist[15] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[15]->SetBinContent(2,0); _hist[15]->SetBinContent(3,0);
+     _hist[16] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[16]->SetBinContent(1,0); _hist[16]->SetBinContent(3,0);
+     _hist[17] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[17]->SetBinContent(1,0); _hist[17]->SetBinContent(2,0);
      TFile *inputwzFile = new TFile(Form("%s",wzSamples[i].Data()));
-     _hist[17] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[17]->SetBinContent(2,0); _hist[17]->SetBinContent(3,0); _hist[17]->SetBinContent(4,0);
-     _hist[18] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[18]->SetBinContent(1,0); _hist[18]->SetBinContent(3,0); _hist[18]->SetBinContent(4,0);
-     _hist[19] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[19]->SetBinContent(1,0); _hist[19]->SetBinContent(2,0); _hist[19]->SetBinContent(4,0);
-     _hist[20] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[20]->SetBinContent(1,0); _hist[20]->SetBinContent(2,0); _hist[20]->SetBinContent(3,0);
+     _hist[18] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone();
+     _hist[19] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[19]->SetBinContent(2,0); _hist[19]->SetBinContent(3,0); _hist[19]->SetBinContent(4,0);
+     _hist[20] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[20]->SetBinContent(1,0); _hist[20]->SetBinContent(3,0); _hist[20]->SetBinContent(4,0);
+     _hist[21] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[21]->SetBinContent(1,0); _hist[21]->SetBinContent(2,0); _hist[21]->SetBinContent(4,0);
+     _hist[22] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[22]->SetBinContent(1,0); _hist[22]->SetBinContent(2,0); _hist[22]->SetBinContent(3,0);
      printf("%s (%4.1f):",nameEra[i].Data(),lumi[i]);
      for(int nh=0; nh<nHist; nh++) {
        sele[i][nh] = sqrt(_hist[nh]->GetSumOfWeights());
