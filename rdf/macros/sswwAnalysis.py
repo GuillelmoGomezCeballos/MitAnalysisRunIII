@@ -670,9 +670,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfwwbvbscatJESUp        [x] = dfwwbvbscatJESUp        [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets       ,{1})".format(altMass,varSel))
             dfwwbvbscatUnclusteredUp[x] = dfwwbvbscatUnclusteredUp[x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj       ,vbs_detajj       ,vbs_dphijj       ,0.0,0.0,mll{0},ngood_jets       ,{1})".format(altMass,varSel))
 
-            njString2JCut = " >= 2" # " == 2"
-            njString3JCut = " == 3"
-            njString4JCut = " >= 4"
+            njString2JCut = " >= 2"
+            njString3JCut = " >= 3" # not used
+            njString4JCut = " >= 4" # not used
             dfwwvbs2Jcat .append(dfwwvbscat[x] .Filter("ngood_jets{0}".format(njString2JCut)))
             dfwwvbs3Jcat .append(dfwwvbscat[x] .Filter("ngood_jets{0}".format(njString3JCut)))
             dfwwvbs4Jcat .append(dfwwvbscat[x] .Filter("ngood_jets{0}".format(njString4JCut)))
@@ -701,7 +701,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 x2Bins = x1Bins
             histo[111][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(111,x), "histo_{0}_{1}".format(111,x),len(x2Bins)-1,x2Bins), "finalVar","weight")
 
-            # loop over Njets for ssww and sswwb regions (not used)
+            # loop over Njets for ssww and sswwb regions (njets >= 2)
             for nj in range(0,1):
                 njStringCut = njString2JCut
                 if(nj == 1):   njStringCut = njString3JCut
@@ -1092,9 +1092,9 @@ if __name__ == "__main__":
     ewkCorrWeights = []
     ewkCorrPath = "data/VV_NLO_LO_CMS_mjj.root"
     fewkCorrFile = ROOT.TFile(ewkCorrPath)
-    ewkCorrWeights.append(fewkCorrFile.Get("hWW_KF_CMS"))
+    ewkCorrWeights.append(fewkCorrFile.Get("hWW13p6_KF_CMS"))
     ewkCorrWeights.append(fewkCorrFile.Get("hWZ_KF_CMS"))
-    ewkCorrWeights.append(fewkCorrFile.Get("hWW_KF_CMSUp"))
+    ewkCorrWeights.append(fewkCorrFile.Get("hWW13p6_KF_CMSUp"))
     ewkCorrWeights.append(fewkCorrFile.Get("hWZ_KF_CMSUp"))
     for x in range(4):
         ewkCorrWeights[x].SetDirectory(0)

@@ -486,9 +486,9 @@ if __name__ == "__main__":
     ewkCorrWeights = []
     ewkCorrPath = "data/VV_NLO_LO_CMS_mjj.root"
     fewkCorrFile = ROOT.TFile(ewkCorrPath)
-    ewkCorrWeights.append(fewkCorrFile.Get("hWW_KF_CMS"))
+    ewkCorrWeights.append(fewkCorrFile.Get("hWW13p6_KF_CMS"))
     ewkCorrWeights.append(fewkCorrFile.Get("hWZ_KF_CMS"))
-    ewkCorrWeights.append(fewkCorrFile.Get("hWW_KF_CMSUp"))
+    ewkCorrWeights.append(fewkCorrFile.Get("hWW13p6_KF_CMSUp"))
     ewkCorrWeights.append(fewkCorrFile.Get("hWZ_KF_CMSUp"))
     for x in range(4):
         ewkCorrWeights[x].SetDirectory(0)

@@ -202,7 +202,7 @@ std::map<int, TString> systNames={
 }; 
 
 void remake_VVewkCorr(
-TString inputName="data/VV_NLO_LO_CMS_mjj.root"
+TString inputName="data/VV_NLO_LO_CMS_mjj_run2.root"
 ) {
 
   TFile *infile = TFile::Open(Form("%s",inputName.Data()));
