@@ -5,6 +5,7 @@ if [ $# -lt 1 ]; then
    exit
 fi
 
+rm -rf /scratch/submit/cms/ceballos/analysis/macros1001
 rm -rf /scratch/submit/cms/ceballos/analysis/macros1002
 rm -rf /scratch/submit/cms/ceballos/analysis/macros1003
 rm -rf /scratch/submit/cms/ceballos/analysis/macros1004
@@ -14,6 +15,7 @@ rm -rf /scratch/submit/cms/ceballos/analysis/macros1007
 rm -rf /scratch/submit/cms/ceballos/analysis/macros1008
 rm -rf /scratch/submit/cms/ceballos/analysis/macros1009
 
+cp -r ../macros /scratch/submit/cms/ceballos/analysis/macros1001
 cp -r ../macros /scratch/submit/cms/ceballos/analysis/macros1002
 cp -r ../macros /scratch/submit/cms/ceballos/analysis/macros1003
 cp -r ../macros /scratch/submit/cms/ceballos/analysis/macros1004
@@ -62,6 +64,7 @@ cd -
 
 if [[ $1 == 1 ]]; then
 
+diff -r ../macros /scratch/submit/cms/ceballos/analysis/macros1001
 diff -r ../macros /scratch/submit/cms/ceballos/analysis/macros1002
 diff -r ../macros /scratch/submit/cms/ceballos/analysis/macros1003
 diff -r ../macros /scratch/submit/cms/ceballos/analysis/macros1004

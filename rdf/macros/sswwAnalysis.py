@@ -21,6 +21,7 @@ elif(genVBSSel == 8):
 elif(genVBSSel == 9):
     genVBSSel = 5
 
+versionMVA = 1
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 2
@@ -219,7 +220,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     #variables = ROOT.model.GetVariableNames()
     #print(variables)
 
-    MVAweights = "weights_mva/bdt_BDTG_vbfinc_v0.weights.xml"
+    MVAweights = "weights_mva/bdt_BDTG_vbfinc_v{0}.weights.xml".format(versionMVA)
     tmva_helper = tmva_helper_xml.TMVAHelperXML(MVAweights)
     print(tmva_helper.variables)
 

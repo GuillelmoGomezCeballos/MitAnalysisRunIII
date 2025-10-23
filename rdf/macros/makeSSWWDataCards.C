@@ -480,6 +480,9 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
        if(histName.Contains("pileup")) {
           histo_SystDataCard[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/ histo_SystDataCard[j][ic]->GetSumOfWeights());
        }
+       if(histName.Contains("ewkCorr")) {
+          histo_SystDataCard[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/ histo_SystDataCard[j][ic]->GetSumOfWeights());
+       }
      }
   }
   // End renormalize
