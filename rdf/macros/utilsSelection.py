@@ -925,8 +925,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
     elif(year == 20221): ELEYEAR = "2022Re-recoE+PromptFG"
     elif(year == 20230): ELEYEAR = "2023PromptC"
     elif(year == 20231): ELEYEAR = "2023PromptD"
-    elif(year == 20240): ELEYEAR = "2024Prompt"
-    elif(year == 20250): ELEYEAR = "2024Prompt"
+    elif(year == 20240): ELEYEAR = "2024"
+    elif(year == 20250): ELEYEAR = "2024"
     PHOYEAR = "NULL"
     if  (year == 20220): PHOYEAR = "2022Re-recoBCD"
     elif(year == 20221): PHOYEAR = "2022Re-recoE+PromptFG"
@@ -1306,6 +1306,50 @@ def makeFinalVariable(df,var,theCat,start,x,bin,min,max,type):
     elif(type == 135): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weightEWKCorrUnc")
 
     else:              return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),bin,min,max), "{0}".format(var),"weight")
+
+def makeFinalVariableVar(df,var,theCat,start,x,xBins,type):
+    histoNumber = start+type
+    if(theCat == plotCategory("kPlotData")):
+        return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weight")
+
+    if  (type ==  0): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weight")
+    elif(type ==  1): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightPS0")
+    elif(type ==  2): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightPS1")
+    elif(type ==  3): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightPS2")
+    elif(type ==  4): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightPS3")
+    elif(type ==  5): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightQCDScale0")
+    elif(type ==  6): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightQCDScale1")
+    elif(type ==  7): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightQCDScale2")
+    elif(type ==  8): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightQCDScale3")
+    elif(type ==  9): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightQCDScale4")
+    elif(type == 10): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightQCDScale5")
+    elif(type >= 11 and type <= 113):
+                      return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightPDF{0}".format(type-11))
+
+    elif(type == 114): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightMuoSFTRKUp")
+    elif(type == 115): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightMuoSFIDUp")
+    elif(type == 116): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightMuoSFISOUp")
+    elif(type == 117): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightEleSFTRKUp")
+    elif(type == 118): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightEleSFIDUp")
+    elif(type == 119): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightPUSF_Up")
+    elif(type == 120): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightTriggerSFUp")
+    elif(type == 121): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_00Up")
+    elif(type == 122): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_01Up")
+    elif(type == 123): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_02Up")
+    elif(type == 124): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_03Up")
+    elif(type == 125): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_04Up")
+    elif(type == 126): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_05Up")
+    elif(type == 127): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_06Up")
+    elif(type == 128): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_07Up")
+    elif(type == 129): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_08Up")
+    elif(type == 130): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_09Up")
+    elif(type == 131): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_10Up")
+    elif(type == 132): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_11Up")
+    elif(type == 133): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFBC_12Up")
+    elif(type == 134): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightBtagSFLF_00Up")
+    elif(type == 135): return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weightEWKCorrUnc")
+
+    else:              return df.Histo1D(("histo_{0}_{1}".format(histoNumber,x), "histo_{0}_{1}".format(histoNumber,x),len(xBins)-1,xBins), "{0}".format(var),"weight")
 
 def makeFinalVariable2D(df,varX,varY,theCat,start,x,binX,minX,maxX,binY,minY,maxY,type):
     histoNumber = start+type

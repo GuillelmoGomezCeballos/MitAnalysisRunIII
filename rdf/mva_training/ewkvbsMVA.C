@@ -17,8 +17,8 @@ void ewkvbsMVA(
   gROOT->ProcessLine("TMVA::gConfig().GetVariablePlotting().fMaxNumOfAllowedVariablesForScatterPlots = 50");
   TFile *output_file;
   TMVA::Factory *factory;
-  TString trainTreeEventSplitStr="(eventNum % 10)<4";
-  TString testTreeEventSplitStr="(eventNum % 10)>=4";
+  TString trainTreeEventSplitStr="(eventNum % 10)<5";
+  TString testTreeEventSplitStr="(eventNum % 10)>=5";
 
   // EW WZ vs. QCD WZ (nsel = 0 / 3)
   TString inputFileName = "/work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root";
@@ -78,8 +78,9 @@ void ewkvbsMVA(
   
   if(nsel == 0 || nsel == 1 || nsel == 2 || nsel == 5){
     //dataloader->AddVariable("ngood_jets"    ,"ngood_jets"    ,"",'F');
+    //dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
+    //dataloader->AddVariable("vbs_sumHT"     ,"vbs_sumHT"     ,"",'F');
     dataloader->AddVariable("vbs_mjj"       ,"vbs_mjj"       ,"",'F');
-    dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
     dataloader->AddVariable("vbs_detajj"    ,"vbs_detajj"    ,"",'F');
     dataloader->AddVariable("vbs_dphijj"    ,"vbs_dphijj"    ,"",'F');
     dataloader->AddVariable("vbs_ptj1"      ,"vbs_ptj1"      ,"",'F');
@@ -88,7 +89,6 @@ void ewkvbsMVA(
     dataloader->AddVariable("vbs_etaj2"     ,"vbs_etaj2"     ,"",'F');
     dataloader->AddVariable("vbs_zepvv"     ,"vbs_zepvv"     ,"",'F');
     dataloader->AddVariable("vbs_zepmax"    ,"vbs_zepmax"    ,"",'F');
-    //dataloader->AddVariable("vbs_sumHT"     ,"vbs_sumHT"     ,"",'F');
     dataloader->AddVariable("vbs_ptvv"      ,"vbs_ptvv"      ,"",'F');
     dataloader->AddVariable("vbs_pttot"     ,"vbs_pttot"     ,"",'F');
     dataloader->AddVariable("vbs_detavvj1"  ,"vbs_detavvj1"  ,"",'F');
@@ -98,6 +98,7 @@ void ewkvbsMVA(
   else if(nsel == 3){
     //dataloader->AddVariable("ngood_jets"    ,"ngood_jets"    ,"",'F');
     //dataloader->AddVariable("vbs_mjj"       ,"vbs_mjj"       ,"",'F');
+    //dataloader->AddVariable("vbs_sumHT"     ,"vbs_sumHT"     ,"",'F');
     dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
     dataloader->AddVariable("vbs_detajj"    ,"vbs_detajj"    ,"",'F');
     dataloader->AddVariable("vbs_dphijj"    ,"vbs_dphijj"    ,"",'F');
@@ -107,7 +108,6 @@ void ewkvbsMVA(
     dataloader->AddVariable("vbs_etaj2"     ,"vbs_etaj2"     ,"",'F');
     dataloader->AddVariable("vbs_zepvv"     ,"vbs_zepvv"     ,"",'F');
     dataloader->AddVariable("vbs_zepmax"    ,"vbs_zepmax"    ,"",'F');
-    //dataloader->AddVariable("vbs_sumHT"     ,"vbs_sumHT"     ,"",'F');
     dataloader->AddVariable("vbs_ptvv"      ,"vbs_ptvv"      ,"",'F');
     dataloader->AddVariable("vbs_pttot"     ,"vbs_pttot"     ,"",'F');
     dataloader->AddVariable("vbs_detavvj1"  ,"vbs_detavvj1"  ,"",'F');
@@ -116,8 +116,10 @@ void ewkvbsMVA(
   }
   else if(nsel == 4){
     //dataloader->AddVariable("ngood_jets"    ,"ngood_jets"    ,"",'F');
+    //dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
+    //dataloader->AddVariable("vbs_zepmax"    ,"vbs_zepmax"    ,"",'F');
+    //dataloader->AddVariable("vbs_sumHT"     ,"vbs_sumHT"     ,"",'F');
     dataloader->AddVariable("vbs_mjj"       ,"vbs_mjj"       ,"",'F');
-    dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
     dataloader->AddVariable("vbs_detajj"    ,"vbs_detajj"    ,"",'F');
     dataloader->AddVariable("vbs_dphijj"    ,"vbs_dphijj"    ,"",'F');
     dataloader->AddVariable("vbs_ptj1"      ,"vbs_ptj1"      ,"",'F');
@@ -125,8 +127,6 @@ void ewkvbsMVA(
     dataloader->AddVariable("vbs_etaj1"     ,"vbs_etaj1"     ,"",'F');
     dataloader->AddVariable("vbs_etaj2"     ,"vbs_etaj2"     ,"",'F');
     dataloader->AddVariable("vbs_zepvv"     ,"vbs_zepvv"     ,"",'F');
-    //dataloader->AddVariable("vbs_zepmax"    ,"vbs_zepmax"    ,"",'F');
-    //dataloader->AddVariable("vbs_sumHT"     ,"vbs_sumHT"     ,"",'F');
     dataloader->AddVariable("vbs_ptvv"      ,"vbs_ptvv"      ,"",'F');
     dataloader->AddVariable("vbs_pttot"     ,"vbs_pttot"     ,"",'F');
     dataloader->AddVariable("vbs_detavvj1"  ,"vbs_detavvj1"  ,"",'F');

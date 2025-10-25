@@ -19,8 +19,6 @@ class MyCorrections {
 
     double eval_electronTRKSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
     double eval_electronIDSF (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
-    double eval_electronScale(const char *valType, const int gain, const double run, const double eta, const double r9, const double et);
-    double eval_electronSmearing(const char *valType, const double eta, const double r9);
     double eval_electronEtDependentScale(const char *valType, const double run, const double eta, const double r9, const double pt, const double gain);
     double eval_electronEtDependentSmearing(const char *valType, const double pt, const double r9, const double eta);
     double eval_photonSF  (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
@@ -64,8 +62,6 @@ class MyCorrections {
     correction::Correction::Ref muonHighPtISOSF_;
     correction::Correction::Ref electronTRKSF_;
     correction::Correction::Ref electronIDSF_;
-    correction::Correction::Ref electronScale_;
-    correction::Correction::Ref electronSmearing_;
     correction::CompoundCorrection::Ref electronEtDependentScale_;
     correction::Correction::Ref electronEtDependentSmearing_;
     correction::Correction::Ref photonSF_;
@@ -94,11 +90,11 @@ MyCorrections::MyCorrections(int the_input_year) {
   std::string dirName    = "jsonpog-integration/POG/";
 
   std::string subDirName = "";
-  if     (year == 20220) subDirName = "2022_Summer22/";  
-  else if(year == 20221) subDirName = "2022_Summer22EE/";
-  else if(year == 20230) subDirName = "2023_Summer23/";
-  else if(year == 20231) subDirName = "2023_Summer23BPix/";
-  else if(year == 20240) subDirName = "2024_Winter24/";
+  if     (year == 20220) subDirName = "Run3-22CDSep23-Summer22-NanoAODv12/"; 
+  else if(year == 20221) subDirName = "Run3-22EFGSep23-Summer22EE-NanoAODv12/";
+  else if(year == 20230) subDirName = "Run3-23CSep23-Summer23-NanoAODv12/";
+  else if(year == 20231) subDirName = "Run3-23DSep23-Summer23BPix-NanoAODv12/";
+  else if(year == 20240) subDirName = "Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/";
   else return;
 
   std::cout << "subDirName/year: " << subDirName << " " << year << std::endl;
@@ -191,21 +187,13 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20231) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
   else if(year == 20240) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
 
-  std::string fileNameEnergyELE = dirName+"EGM/"+subDirName+"electronSS.json.gz";
-  auto csetEnergyELE = correction::CorrectionSet::from_file(fileNameEnergyELE);
-  if     (year == 20220) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
-  else if(year == 20221) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
-  else if(year == 20230) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
-  else if(year == 20231) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
-  else if(year == 20240) {electronScale_ = csetEnergyELE->at("Scale"); electronSmearing_ = csetEnergyELE->at("Smearing");}
-
   std::string fileNameEnergyEtDependentELE = dirName+"EGM/"+subDirName+"electronSS_EtDependent.json.gz";
   auto csetEnergyEtDependentELE = correction::CorrectionSet::from_file(fileNameEnergyEtDependentELE);
-  if     (year == 20220) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2022preEE");    electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2022preEE");}
-  else if(year == 20221) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2022postEE");   electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2022postEE");}
-  else if(year == 20230) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2023preBPIX");  electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2023preBPIX");}
-  else if(year == 20231) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2023postBPIX"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2023postBPIX");}
-  else if(year == 20240) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("EGMScale_Compound_Ele_2024");         electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("EGMSmearAndSyst_ElePTsplit_2024");}
+  if     (year == 20220) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+  else if(year == 20221) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+  else if(year == 20230) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+  else if(year == 20231) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+  else if(year == 20240) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
 
   std::string fileNameTAU = dirName+"TAU/"+subDirName+"tau_DeepTau2018v2p5.json.gz";
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);
@@ -226,24 +214,24 @@ MyCorrections::MyCorrections(int the_input_year) {
   std::string jetVetoMapName[10] = {"NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"};
 
   if      (year == 20220)  {
-    jecMCName = "Summer22_22Sep2023_V2_MC"; jerName = "Summer22_22Sep2023_JRV1_MC";
-    jecDATAName[0] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[0] = "Summer22_23Sep2023_RunCD_V1"; // A
-    jecDATAName[1] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[1] = "Summer22_23Sep2023_RunCD_V1"; // B
-    jecDATAName[2] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[2] = "Summer22_23Sep2023_RunCD_V1"; // C
-    jecDATAName[3] = "Summer22_22Sep2023_RunCD_V2_DATA";   jetVetoMapName[3] = "Summer22_23Sep2023_RunCD_V1"; // D
+    jecMCName = "Summer22_22Sep2023_V3_MC"; jerName = "Summer22_22Sep2023_JRV1_MC";
+    jecDATAName[0] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[0] = "Summer22_23Sep2023_RunCD_V1"; // A
+    jecDATAName[1] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[1] = "Summer22_23Sep2023_RunCD_V1"; // B
+    jecDATAName[2] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[2] = "Summer22_23Sep2023_RunCD_V1"; // C
+    jecDATAName[3] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[3] = "Summer22_23Sep2023_RunCD_V1"; // D
     jecDATAName[4] = "NULL"; jetVetoMapName[4] = "NULL";  // E
     jecDATAName[5] = "NULL"; jetVetoMapName[5] = "NULL";  // F
     jecDATAName[6] = "NULL"; jetVetoMapName[6] = "NULL";  // G
   }
   else if(year == 20221)  {
-    jecMCName = "Summer22EE_22Sep2023_V2_MC"; jerName = "Summer22EE_22Sep2023_JRV1_MC";
+    jecMCName = "Summer22EE_22Sep2023_V3_MC"; jerName = "Summer22EE_22Sep2023_JRV1_MC";
     jecDATAName[0] = "NULL";   jetVetoMapName[0] = "NULL"; // A
     jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
     jecDATAName[2] = "NULL";   jetVetoMapName[2] = "NULL"; // C
     jecDATAName[3] = "NULL";   jetVetoMapName[3] = "NULL"; // D
-    jecDATAName[4] = "Summer22EE_22Sep2023_RunE_V2_DATA"; jetVetoMapName[4] = "Summer22EE_23Sep2023_RunEFG_V1";  // E
-    jecDATAName[5] = "Summer22EE_22Sep2023_RunF_V2_DATA"; jetVetoMapName[5] = "Summer22EE_23Sep2023_RunEFG_V1";  // F
-    jecDATAName[6] = "Summer22EE_22Sep2023_RunG_V2_DATA"; jetVetoMapName[6] = "Summer22EE_23Sep2023_RunEFG_V1";  // G
+    jecDATAName[4] = "Summer22EE_22Sep2023_RunE_V3_DATA"; jetVetoMapName[4] = "Summer22EE_23Sep2023_RunEFG_V1";  // E
+    jecDATAName[5] = "Summer22EE_22Sep2023_RunF_V3_DATA"; jetVetoMapName[5] = "Summer22EE_23Sep2023_RunEFG_V1";  // F
+    jecDATAName[6] = "Summer22EE_22Sep2023_RunG_V3_DATA"; jetVetoMapName[6] = "Summer22EE_23Sep2023_RunEFG_V1";  // G
   }
   else if(year == 20230)  {
     jecMCName = "Summer23Prompt23_V2_MC"; jerName = "Summer23Prompt23_RunCv1234_JRV1_MC";
@@ -266,17 +254,17 @@ MyCorrections::MyCorrections(int the_input_year) {
     jecDATAName[6] = "NULL";   jetVetoMapName[6] = "NULL"; // G
   }
   else if(year == 20240)  {
-    jecMCName = "Winter24Prompt24_V3_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
-    jecDATAName[0] = "NULL";                     jetVetoMapName[0] = "Winter24Prompt2024BCDEFGHI_V1"; // A
-    jecDATAName[1] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[1] = "Winter24Prompt2024BCDEFGHI_V1"; // B
-    jecDATAName[2] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[2] = "Winter24Prompt2024BCDEFGHI_V1"; // C
-    jecDATAName[3] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[3] = "Winter24Prompt2024BCDEFGHI_V1"; // D
-    jecDATAName[4] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[4] = "Winter24Prompt2024BCDEFGHI_V1"; // E
-    jecDATAName[5] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[5] = "Winter24Prompt2024BCDEFGHI_V1"; // F
-    jecDATAName[6] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[6] = "Winter24Prompt2024BCDEFGHI_V1"; // G
-    jecDATAName[7] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[7] = "Winter24Prompt2024BCDEFGHI_V1"; // H
-    jecDATAName[8] = "Winter24Prompt24_V3_DATA"; jetVetoMapName[8] = "Winter24Prompt2024BCDEFGHI_V1"; // I
-    jecDATAName[9] = "NULL";                     jetVetoMapName[9] = "Winter24Prompt2024BCDEFGHI_V1"; // J
+    jecMCName = "Summer24Prompt24_V1_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
+    jecDATAName[0] = "NULL";                     jetVetoMapName[0] = "Summer24Prompt24_RunBCDEFGHI_V1"; // A
+    jecDATAName[1] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[1] = "Summer24Prompt24_RunBCDEFGHI_V1"; // B
+    jecDATAName[2] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[2] = "Summer24Prompt24_RunBCDEFGHI_V1"; // C
+    jecDATAName[3] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[3] = "Summer24Prompt24_RunBCDEFGHI_V1"; // D
+    jecDATAName[4] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[4] = "Summer24Prompt24_RunBCDEFGHI_V1"; // E
+    jecDATAName[5] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[5] = "Summer24Prompt24_RunBCDEFGHI_V1"; // F
+    jecDATAName[6] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[6] = "Summer24Prompt24_RunBCDEFGHI_V1"; // G
+    jecDATAName[7] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[7] = "Summer24Prompt24_RunBCDEFGHI_V1"; // H
+    jecDATAName[8] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[8] = "Summer24Prompt24_RunBCDEFGHI_V1"; // I
+    jecDATAName[9] = "NULL";                     jetVetoMapName[9] = "Summer24Prompt24_RunBCDEFGHI_V1"; // J
   }
 
   std::string tagName = jecMCName + "_" + "L1L2L3Res" + "_" + algoName;
@@ -447,17 +435,8 @@ double MyCorrections::eval_electronIDSF(const char *the_input_year, const char *
   return electronIDSF_->evaluate({the_input_year, valType, workingPoint, eta, pt, phi});
 };
 
-double MyCorrections::eval_electronScale(const char *valType, const int gain, const double run, const double eta, const double r9, const double et) {
-  return electronScale_->evaluate({valType, gain, run, eta, r9, et});
-};
-
-double MyCorrections::eval_electronSmearing(const char *valType, const double eta, const double r9) {
-  return electronSmearing_->evaluate({valType, eta, r9});
-};
-
 double MyCorrections::eval_electronEtDependentScale(const char *valType, const double run, const double eta, const double r9, const double pt, const double gain) {
-  if(year < 20240) return electronEtDependentScale_->evaluate({valType, run, eta, r9, fabs(eta), pt, gain});
-  else             return electronEtDependentScale_->evaluate({valType, run, eta, r9,            pt, gain});
+  return electronEtDependentScale_->evaluate({valType, run, eta, r9, pt, gain});
 };
 
 double MyCorrections::eval_electronEtDependentSmearing(const char *valType, const double pt, const double r9, const double eta) {

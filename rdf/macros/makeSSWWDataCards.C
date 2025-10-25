@@ -936,6 +936,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     newcardShape << Form("CMS_ssww_wznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotWZ].Data());
     if(histo_Baseline[kPlotEWKWZ]->GetSumOfWeights() > 0)
     newcardShape << Form("CMS_ssww_ewkwznorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotEWKWZ].Data());
+    if(histo_Baseline[kPlotTVX]->GetSumOfWeights() > 0)
+    newcardShape << Form("CMS_ssww_tvxnorm  rateParam * %s 1 [0.1,4.9]\n",plotBaseNames[kPlotTVX].Data());
   }
   if(anaSel.Contains("sswwAnalysis")){
     if(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights() > 0)
