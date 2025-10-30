@@ -19,6 +19,7 @@ class MyCorrections {
 
     double eval_electronTRKSF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
     double eval_electronIDSF (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
+    double eval_electronMVASF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
     double eval_electronEtDependentScale(const char *valType, const double run, const double eta, const double r9, const double pt, const double gain);
     double eval_electronEtDependentSmearing(const char *valType, const double pt, const double r9, const double eta);
     double eval_photonSF  (const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi);
@@ -62,6 +63,7 @@ class MyCorrections {
     correction::Correction::Ref muonHighPtISOSF_;
     correction::Correction::Ref electronTRKSF_;
     correction::Correction::Ref electronIDSF_;
+    correction::Correction::Ref electronMVASF_;
     correction::CompoundCorrection::Ref electronEtDependentScale_;
     correction::Correction::Ref electronEtDependentSmearing_;
     correction::Correction::Ref photonSF_;
@@ -186,6 +188,10 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20230) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
   else if(year == 20231) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
   else if(year == 20240) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
+
+  std::string fileNameMVAELE = dirName+"EGM/"+subDirName+"electron_mva.json.gz";
+  auto csetMVAELE = correction::CorrectionSet::from_file(fileNameMVAELE);
+  electronMVASF_ = csetMVAELE->at("Electron-ID-SF");
 
   std::string fileNameEnergyEtDependentELE = dirName+"EGM/"+subDirName+"electronSS_EtDependent.json.gz";
   auto csetEnergyEtDependentELE = correction::CorrectionSet::from_file(fileNameEnergyEtDependentELE);
@@ -433,6 +439,11 @@ double MyCorrections::eval_electronIDSF(const char *the_input_year, const char *
   pt = std::min(std::max(pt,10.001),999.9);
   if(year <= 20221 || year >= 20240) return electronIDSF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
   return electronIDSF_->evaluate({the_input_year, valType, workingPoint, eta, pt, phi});
+};
+
+double MyCorrections::eval_electronMVASF(const char *the_input_year, const char *valType, const char *workingPoint, double eta, double pt, double phi) {
+  pt = std::min(std::max(pt,10.001),999.9);
+  return electronMVASF_->evaluate({the_input_year, valType, workingPoint, eta, pt});
 };
 
 double MyCorrections::eval_electronEtDependentScale(const char *valType, const double run, const double eta, const double r9, const double pt, const double gain) {

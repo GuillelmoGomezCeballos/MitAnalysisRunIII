@@ -21,7 +21,7 @@ elif(genVBSSel == 8):
 elif(genVBSSel == 9):
     genVBSSel = 5
 
-versionMVA = 1
+versionMVA = 0
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 2

@@ -13,7 +13,7 @@ makeDataCards = 3 # 1 (njets), 2 (lepton flavor), 3 (mjj)
 
 correctionString = "_correction"
 
-versionMVA = 1
+versionMVA = 0
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 0
