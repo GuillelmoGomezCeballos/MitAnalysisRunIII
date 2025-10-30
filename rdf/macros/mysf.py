@@ -40,6 +40,7 @@ elif(year==20230):
     ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2023PromptC", (char*)"sf", (char*)"wp80iso", 1.1, 34.0,0.3)')
     ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2023PromptC", (char*)"sfup", (char*)"wp80iso", 1.1, 34.0,0.3)')
     ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2023PromptC", (char*)"sfdown", (char*)"Medium", 1.1, 34.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_electronMVASF((char*)"2023PromptC", (char*)"sf", (char*)"Medium", 1.1, 34.0,0.3)')
     ROOT.gInterpreter.ProcessLine('corr.eval_electronTRKSF((char*)"2023PromptC", (char*)"sf", (char*)"RecoBelow20", 1.1, 19.999,0.3)')
     ROOT.gInterpreter.ProcessLine('corr.eval_electronTRKSF((char*)"2023PromptC", (char*)"sf", (char*)"Reco20to75", 1.1, 20.0,0.3)')
     ROOT.gInterpreter.ProcessLine('corr.eval_electronTRKSF((char*)"2023PromptC", (char*)"sf", (char*)"RecoAbove75", 1.1, 75.0,0.3)')
