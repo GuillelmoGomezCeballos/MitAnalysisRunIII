@@ -361,11 +361,11 @@ float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string
     else if(pt_used < 75) recoNameAux = (char*)"Reco20to75";
     const char *recoName = recoNameAux;
     double sf0 = corrSFs.eval_electronTRKSF(year,valType0,    recoName,el_eta[i],pt_used,el_phi[i]);
-    //double sf1 = 1.0;
-    //if     (strcmp(workingPoint,"mediumMVA") == 0) sf1 = corrSFs.eval_electronMVASF(year,valType1,"Medium",el_eta[i],pt_used,el_phi[i]);
-    //else if(strcmp(workingPoint,"tightMVA") == 0)  sf1 = corrSFs.eval_electronMVASF(year,valType1, "Tight",el_eta[i],pt_used,el_phi[i]);
-    //else                                           sf1 = corrSFs.eval_electronIDSF (year,valType1,workingPoint,el_eta[i],pt_used,el_phi[i]);
-    double sf1 = corrSFs.eval_electronIDSF (year,valType1,workingPoint,el_eta[i],pt_used,el_phi[i]);
+    double sf1 = 1.0;
+    if     (strcmp(workingPoint,"mediumMVA") == 0) sf1 = corrSFs.eval_electronMVASF(year,valType1,"Medium",el_eta[i],pt_used,el_phi[i]);
+    else if(strcmp(workingPoint,"tightMVA") == 0)  sf1 = corrSFs.eval_electronMVASF(year,valType1, "Tight",el_eta[i],pt_used,el_phi[i]);
+    else                                           sf1 = corrSFs.eval_electronIDSF (year,valType1,workingPoint,el_eta[i],pt_used,el_phi[i]);
+    //double sf1 = corrSFs.eval_electronIDSF (year,valType1,workingPoint,el_eta[i],pt_used,el_phi[i]);
     sfTot = sfTot*sf0*sf1;
     if(debug) printf("eleff(%d-%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,el_pt[i],el_eta[i],el_phi[i],sf0,sf1,sf0*sf1,sfTot);
     if(sfTot <= 0) printf("eleffPROBLEM(%d-%s/%s) %.3f %.3f %.3f %.3f %.3f %.3f %.3f\n",i,valType0,valType1,el_pt[i],el_eta[i],el_phi[i],sf0,sf1,sf0*sf1,sfTot);
