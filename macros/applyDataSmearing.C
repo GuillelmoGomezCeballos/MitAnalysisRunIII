@@ -27,8 +27,8 @@ void theApplyDataSmearing(TString inputName, double factor){
 
   for(int nb=1; nb<=_hist[0]->GetNbinsX(); nb++){
     double systValue = 1.0+(_hist[0]->GetBinContent(nb)/hBck->GetBinContent(nb)-1.0)/factor;
-    //hBck->SetBinContent(nb,hBck->GetBinContent(nb)+systValue);
-    //printf("DA/MC = %d %f\n",nb, systValue);
+    hBck->SetBinContent(nb,hBck->GetBinContent(nb)+systValue);
+    printf("DA/MC = %d %f\n",nb, systValue);
     for(int ic=1; ic<nPlotCategories; ic++){
       _hist[ic]->SetBinContent(nb,_hist[ic]->GetBinContent(nb)*systValue);
     }
@@ -49,39 +49,12 @@ void theApplyDataSmearing(TString inputName, double factor){
   //printf("DA/MC = %f/%f\n", _hist[0]->GetSumOfWeights(),sumBck);
 }
 
-void applyDataSmearing(int nsel = -1, int condorJob = 1001){
-  double factor = 2.0;
+void applyDataSmearing(int nsel = -1, int condorJob = 1002){
+  double factor = 2.5;
   TString inputFolder = "anaZ/";
   vector<TString> infileName_;
   if      (nsel == 0){
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20220_243",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20220_244",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20220_245",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20221_243",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20221_244",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20221_245",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20220_255",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20220_256",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20220_257",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20221_255",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20221_256",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_20221_257",inputFolder.Data(),condorJob));
-  }
-  else if(nsel == 1){
-    infileName_.push_back(Form("%sfillhisto_wzAnalysis%d_20220_13",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_wzAnalysis%d_20220_14",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_wzAnalysis%d_20221_13",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_wzAnalysis%d_20221_14",inputFolder.Data(),condorJob));
-  }
-  else if(nsel == 2){
-    infileName_.push_back(Form("%sfillhisto_zzAnalysis%d_20220_11",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_zzAnalysis%d_20221_11",inputFolder.Data(),condorJob));
-  }
-  else if(nsel == 8){
-    infileName_.push_back(Form("%sfillhisto_wwAnalysis%d_20220_61",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_wwAnalysis%d_20220_63",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_wwAnalysis%d_20221_61",inputFolder.Data(),condorJob));
-    infileName_.push_back(Form("%sfillhisto_wwAnalysis%d_20221_63",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_2027_256",inputFolder.Data(),condorJob));
   }
   else {
     return;
