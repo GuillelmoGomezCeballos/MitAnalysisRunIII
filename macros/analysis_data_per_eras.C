@@ -23,9 +23,9 @@ void SetMyMultiGraph(TMultiGraph *gr, TAxis *xaxis, TAxis *yaxis, TString title)
   yaxis->SetLabelOffset(0.01);
   xaxis->SetLabelSize(0.04);
   yaxis->SetLabelSize(0.04);
-  xaxis->SetNdivisions(507);
-  yaxis->SetNdivisions(0);
-  xaxis->SetTitle(title.Data());
+  xaxis->SetNdivisions(0);
+  yaxis->SetNdivisions(507);
+  yaxis->SetTitle(title.Data());
   xaxis->SetTitleOffset(0.9);
   yaxis->SetTitleOffset(0.9);
   xaxis->SetTitleSize(0.05);
@@ -46,15 +46,15 @@ TLegend *SetMyLegend()
 
 void analysis_data_per_eras(){
   const int numberEras = 16;
-  const int nHist = 23;
+  const int nHist = 25;
   const int refEra = 7;
   double lumi[numberEras] = {8.1,26.7, 18.1,9.7, 7.2,7.9,11.3,27.7,37.7,5.4,11.3, 19.0, 24.2, 14.0, 24.0, 0.0};
   TString nameEra[numberEras] = {"2022A", "2022B", "2023A", "2023B", "2024C", "2024D", "2024E", "2024F", "2024G", "2024H", "2024I",
-                              "2025C", "2025D", "2025E", "2025F", "2025G"};
-  TString nameAna[nHist] = {"Zmm   ", "Zee   ", "Zmm1j ", "Zee1j ", "Zmm1b ", "Zee1b ", "ssmm  ", "ssee  ", "ssem  ",
-                            "wwem  ", "Zem   ", "em12b ", "em1b  ", "em2b  ", "ZZ4l  ", "ZZ4m  ", "ZZ2e2m", "ZZ4e  ",
-                            "WZ3l  ", "WZ3m  ", "WZ2m1e", "WZ1m2e", "WZ3e  "};
- TString zSamples[numberEras] = {"anaZ/fillhisto_zAnalysis_20220.root",
+                                 "2025C", "2025D", "2025E", "2025F", "2025G"};
+  TString nameAna[nHist] = {"Zmm   ", "Zee   ", "Zmm1j ", "Zee1j ", "Zmm1b ", "Zee1b ", "Zmm2j ", "Zee2j ", "ssmm  ",
+                            "ssee  ", "ssem  ", "wwem  ", "Zem   ", "em12b ", "em1b  ", "em2b  ", "ZZ4l  ", "ZZ4m  ",
+                            "ZZ2e2m", "ZZ4e  ", "WZ3l  ", "WZ3m  ", "WZ2m1e", "WZ1m2e", "WZ3e  "};
+ TString zSamples[numberEras] =  {"anaZ/fillhisto_zAnalysis_20220.root",
                                   "anaZ/fillhisto_zAnalysis_20221.root",
 
                                   "anaZ/fillhisto_zAnalysis_20230.root",
@@ -145,26 +145,28 @@ void analysis_data_per_eras(){
      _hist[ 3] = (TH1D*)inputzFile->Get(Form("histo_115_0"))->Clone();
      _hist[ 4] = (TH1D*)inputzFile->Get(Form("histo_119_0"))->Clone();
      _hist[ 5] = (TH1D*)inputzFile->Get(Form("histo_121_0"))->Clone();
+     _hist[ 6] = (TH1D*)inputzFile->Get(Form("histo_163_0"))->Clone();
+     _hist[ 7] = (TH1D*)inputzFile->Get(Form("histo_164_0"))->Clone();
      TFile *inputwwFile = new TFile(Form("%s",wwSamples[i].Data()));
-     _hist[ 6] = (TH1D*)inputwwFile->Get(Form("histo_71_0"))->Clone();
-     _hist[ 7] = (TH1D*)inputwwFile->Get(Form("histo_72_0"))->Clone();
-     _hist[ 8] = (TH1D*)inputwwFile->Get(Form("histo_22_0"))->Clone();
-     _hist[ 9] = (TH1D*)inputwwFile->Get(Form("histo_23_0"))->Clone();
-     _hist[10] = (TH1D*)inputwwFile->Get(Form("histo_24_0"))->Clone();
-     _hist[11] = (TH1D*)inputwwFile->Get(Form("histo_25_0"))->Clone();
-     _hist[12] = (TH1D*)inputwwFile->Get(Form("histoMVA_600_0"))->Clone();
-     _hist[13] = (TH1D*)inputwwFile->Get(Form("histoMVA_800_0"))->Clone();
+     _hist[ 8] = (TH1D*)inputwwFile->Get(Form("histo_71_0"))->Clone();
+     _hist[ 9] = (TH1D*)inputwwFile->Get(Form("histo_72_0"))->Clone();
+     _hist[10] = (TH1D*)inputwwFile->Get(Form("histo_22_0"))->Clone();
+     _hist[11] = (TH1D*)inputwwFile->Get(Form("histo_23_0"))->Clone();
+     _hist[12] = (TH1D*)inputwwFile->Get(Form("histo_24_0"))->Clone();
+     _hist[13] = (TH1D*)inputwwFile->Get(Form("histo_25_0"))->Clone();
+     _hist[14] = (TH1D*)inputwwFile->Get(Form("histoMVA_600_0"))->Clone();
+     _hist[15] = (TH1D*)inputwwFile->Get(Form("histoMVA_800_0"))->Clone();
      TFile *inputzzFile = new TFile(Form("%s",zzSamples[i].Data()));
-     _hist[14] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone();
-     _hist[15] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[15]->SetBinContent(2,0); _hist[15]->SetBinContent(3,0);
-     _hist[16] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[16]->SetBinContent(1,0); _hist[16]->SetBinContent(3,0);
-     _hist[17] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[17]->SetBinContent(1,0); _hist[17]->SetBinContent(2,0);
+     _hist[16] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone();
+     _hist[17] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[15]->SetBinContent(2,0); _hist[15]->SetBinContent(3,0);
+     _hist[18] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[16]->SetBinContent(1,0); _hist[16]->SetBinContent(3,0);
+     _hist[19] = (TH1D*)inputzzFile->Get(Form("histo_8_0"))->Clone(); _hist[17]->SetBinContent(1,0); _hist[17]->SetBinContent(2,0);
      TFile *inputwzFile = new TFile(Form("%s",wzSamples[i].Data()));
-     _hist[18] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone();
-     _hist[19] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[19]->SetBinContent(2,0); _hist[19]->SetBinContent(3,0); _hist[19]->SetBinContent(4,0);
-     _hist[20] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[20]->SetBinContent(1,0); _hist[20]->SetBinContent(3,0); _hist[20]->SetBinContent(4,0);
-     _hist[21] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[21]->SetBinContent(1,0); _hist[21]->SetBinContent(2,0); _hist[21]->SetBinContent(4,0);
-     _hist[22] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[22]->SetBinContent(1,0); _hist[22]->SetBinContent(2,0); _hist[22]->SetBinContent(3,0);
+     _hist[20] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone();
+     _hist[21] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[19]->SetBinContent(2,0); _hist[19]->SetBinContent(3,0); _hist[19]->SetBinContent(4,0);
+     _hist[22] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[20]->SetBinContent(1,0); _hist[20]->SetBinContent(3,0); _hist[20]->SetBinContent(4,0);
+     _hist[23] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[21]->SetBinContent(1,0); _hist[21]->SetBinContent(2,0); _hist[21]->SetBinContent(4,0);
+     _hist[24] = (TH1D*)inputwzFile->Get(Form("histo_11_0"))->Clone(); _hist[22]->SetBinContent(1,0); _hist[22]->SetBinContent(2,0); _hist[22]->SetBinContent(3,0);
      printf("%s (%4.1f):",nameEra[i].Data(),lumi[i]);
      for(int nh=0; nh<nHist; nh++) {
        sele[i][nh] = sqrt(_hist[nh]->GetSumOfWeights());
@@ -190,19 +192,19 @@ void analysis_data_per_eras(){
     double yVal[numberUsedEras]; for(int i=0; i<numberUsedEras; i++) yVal[i] = i;
     double yErr[numberUsedEras]; for(int i=0; i<numberUsedEras; i++) yErr[i] = 0.0;
 
-    double ranges[2] = {2.0, 0.0};
+    double ranges[2] = {0.8, 1.2};
     for(int i=0; i<numberUsedEras; i++) if(ranges[0] > dilVal[i]) ranges[0] = dilVal[i];
     for(int i=0; i<numberUsedEras; i++) if(ranges[1] < dilVal[i]) ranges[1] = dilVal[i];
 
     //----------------------------------------------------------------------------
     // Prepare the graph, canvas, legend
     //----------------------------------------------------------------------------
-    TGraphErrors* myGraph  = new TGraphErrors(numberUsedEras,dilVal,yVal,dilErr,yErr);
-    myGraph->SetMinimum(yVal[0          ]-0.2);
-    myGraph->SetMaximum(yVal[numberUsedEras-1]+0.2);
+    TGraphErrors* myGraph  = new TGraphErrors(numberUsedEras,yVal,dilVal,yErr,dilErr);
+    myGraph->SetMinimum(ranges[0]);
+    myGraph->SetMaximum(ranges[1]);
     TMultiGraph*  myMGraph = new TMultiGraph();
-    myMGraph->SetMinimum(yVal[0	        ]-0.2);
-    myMGraph->SetMaximum(yVal[numberUsedEras-1]+0.2);
+    myMGraph->SetMinimum(ranges[0]);
+    myMGraph->SetMaximum(ranges[1]);
     TCanvas* myCanvas = new TCanvas("mu","mu");
     TLegend* myLegend = SetMyLegend();
 
@@ -216,7 +218,7 @@ void analysis_data_per_eras(){
 
     myMGraph->SetTitle(Form("%s analysis",nameAna[nh].Data()));
     myMGraph->Draw("apz"); 
-    SetMyMultiGraph(myMGraph,xaxis,yaxis,Form("Ratio w.r.t. %s",nameEra[refEra].Data())); 
+    SetMyMultiGraph(myMGraph,yaxis,xaxis,Form("Ratio w.r.t. %s",nameEra[refEra].Data())); 
 
     //----------------------------------------------------------------------------
     // Draw the error of the combined result with a TFrame
@@ -250,7 +252,7 @@ void analysis_data_per_eras(){
     //myLegend->AddEntry(combined," Combined","l");
     //myLegend->Draw("same");
 
-    TLine *line0 = new TLine(1, yVal[0]-0.2, 1, yVal[numberUsedEras-1]+0.2);
+    TLine *line0 = new TLine(yVal[0]-0.5,1,yVal[numberUsedEras-1]+0.5,1);
     line0->SetLineColor(1);
     line0->SetLineStyle(4);
     line0->SetLineWidth(3);
@@ -264,7 +266,7 @@ void analysis_data_per_eras(){
     myText->SetTextFont(72);
     myText->SetTextSize(0.025);
 
-    for (int i=0; i<numberUsedEras; i++) myText->DrawText(ranges[0]*0.97,yVal[i],nameEra[i].Data());
+    for (int i=0; i<numberUsedEras; i++) myText->DrawText(yVal[i],ranges[0]*0.98,nameEra[i].Data());
 
     //----------------------------------------------------------------------------
     // Print to eps

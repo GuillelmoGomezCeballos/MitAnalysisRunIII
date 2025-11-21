@@ -135,8 +135,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     print("starting {0} / {1} / {2} / {3} / {4} / {5} / {6}".format(count,category,weight,year,PDType,isData,whichJob))
 
-    xPtBins = array('d', [10,15,20,25,30,35,40,50,60,70,85,100,200,1000])
-    xEtaBins = array('d', [0.0,0.3,0.6,0.9,1.2,1.5,1.8,2.1,2.5])
+    xPtBins = array('d', [10,12.5,15,17.5,20,25,30,35,40,45,50,60,70,85,100,200,1000])
+    xEtaBins = array('d', [0.0,0.3,0.6,0.9,1.2,1.5,1.7,1.9,2.1,2.3,2.5])
 
     xPtTrgbins = array('d', [25,30,35,40,45,50,55,60,65,70,75,80,90,105,120,150,200])
 
