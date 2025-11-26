@@ -908,7 +908,7 @@ float compute_MuonSF(const Vec_f& mu_pt, const Vec_f& mu_eta){
   double sfTot = 1.0;
   for(unsigned int i=0;i<mu_pt.size();i++) {
     const TH2D& hcorr = histoLepSFEtaPt_mu;
-    double sf = getValFromTH2(hcorr, fabs(mu_eta[i]),mu_pt[i]);
+    double sf = getValFromTH2(hcorr, mu_eta[i],mu_pt[i]);
     sfTot = sfTot*sf;
     if(debug) printf("lepmu(%d) %.3f %.3f %.3f %.3f\n",i,mu_pt[i],mu_eta[i],sf,sfTot);
   }
@@ -923,7 +923,7 @@ float compute_ElectronSF(const Vec_f& el_pt, const Vec_f& el_eta){
   double sfTot = 1.0;
   for(unsigned int i=0;i<el_pt.size();i++) {
     const TH2D& hcorr = histoLepSFEtaPt_el;
-    double sf = getValFromTH2(hcorr, fabs(el_eta[i]), el_pt[i]);
+    double sf = getValFromTH2(hcorr, el_eta[i], el_pt[i]);
     sfTot = sfTot*sf;
     if(debug) printf("lepel(%d) %.3f %.3f %.3f %.3f\n",i,el_pt[i],el_eta[i],sf,sfTot);
   }
