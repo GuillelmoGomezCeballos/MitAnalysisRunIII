@@ -63,8 +63,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   TH1D *histo_PDFUp  [101][nPlotCategories];
   TH1D *histo_PDFDown[101][nPlotCategories];
 
-  const int numberBTagSyst = 13;
-  TString BtagSFBCNames[numberBTagSyst] = {"CMS_bc_btag_00", "CMS_bc_btag_01", "CMS_bc_btag_02", "CMS_bc_btag_bfragmentation", "CMS_bc_btag_colorreconnection", "CMS_bc_btag_hdamp", "CMS_bc_btag_jer", "CMS_bc_btag_jes", "CMS_bc_btag_pdf", "CMS_bc_btag_pileup", "CMS_bc_btag_topmass", "CMS_bc_btag_type3", Form("CMS_bc_btag_statistic_%d",year)};
+  const int numberBTagSyst = 11;
+  TString BtagSFBCNames[numberBTagSyst] = {"CMS_bc_btag_02", "CMS_bc_btag_bfragmentation", "CMS_bc_btag_colorreconnection", "CMS_bc_btag_hdamp", "CMS_bc_btag_jer", "CMS_bc_btag_jes", "CMS_bc_btag_pdf", "CMS_bc_btag_pileup", "CMS_bc_btag_topmass", "CMS_bc_btag_type3", Form("CMS_bc_btag_statistic_%d",year)};
 
   const int numberJESSyst = 28;
   TString jesNames[numberJESSyst] = {"", "AbsoluteMPFBias", "AbsoluteScale", "AbsoluteStat", "FlavorQCD", "Fragmentation", "PileUpDataMC", "PileUpPtBB", "PileUpPtEC1", "PileUpPtEC2", "PileUpPtHF", "PileUpPtRef", "RelativeFSR", "RelativeJEREC1", "RelativeJEREC2", "RelativeJERHF", "RelativePtBB", "RelativePtEC1", "RelativePtEC2", "RelativePtHF", "RelativeBal", "RelativeSample", "RelativeStatEC", "RelativeStatFSR", "RelativeStatHF", "SinglePionECAL", "SinglePionHCAL", "TimePtEta"};
@@ -95,32 +95,32 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[11 ] = "pileupDown";
   nameSyst[12 ] = Form("CMS_SMP25013_WWtrigger_%dUp",year);
   nameSyst[13 ] = Form("CMS_SMP25013_WWtrigger_%dDown",year);
-  nameSyst[14 ] = Form("%sUp"  ,BtagSFBCNames[ 0].Data());
-  nameSyst[15 ] = Form("%sDown",BtagSFBCNames[ 0].Data());
-  nameSyst[16 ] = Form("%sUp"  ,BtagSFBCNames[ 1].Data());
-  nameSyst[17 ] = Form("%sDown",BtagSFBCNames[ 1].Data());
-  nameSyst[18 ] = Form("%sUp"  ,BtagSFBCNames[ 2].Data());
-  nameSyst[19 ] = Form("%sDown",BtagSFBCNames[ 2].Data());
-  nameSyst[20 ] = Form("%sUp"  ,BtagSFBCNames[ 3].Data());
-  nameSyst[21 ] = Form("%sDown",BtagSFBCNames[ 3].Data());
-  nameSyst[22 ] = Form("%sUp"  ,BtagSFBCNames[ 4].Data());
-  nameSyst[23 ] = Form("%sDown",BtagSFBCNames[ 4].Data());
-  nameSyst[24 ] = Form("%sUp"  ,BtagSFBCNames[ 5].Data());
-  nameSyst[25 ] = Form("%sDown",BtagSFBCNames[ 5].Data());
-  nameSyst[26 ] = Form("%sUp"  ,BtagSFBCNames[ 6].Data());
-  nameSyst[27 ] = Form("%sDown",BtagSFBCNames[ 6].Data());
-  nameSyst[28 ] = Form("%sUp"  ,BtagSFBCNames[ 7].Data());
-  nameSyst[29 ] = Form("%sDown",BtagSFBCNames[ 7].Data());
-  nameSyst[30 ] = Form("%sUp"  ,BtagSFBCNames[ 8].Data());
-  nameSyst[31 ] = Form("%sDown",BtagSFBCNames[ 8].Data());
-  nameSyst[32 ] = Form("%sUp"  ,BtagSFBCNames[ 9].Data());
-  nameSyst[33 ] = Form("%sDown",BtagSFBCNames[ 9].Data());
-  nameSyst[34 ] = Form("%sUp"  ,BtagSFBCNames[10].Data());
-  nameSyst[35 ] = Form("%sDown",BtagSFBCNames[10].Data());
-  nameSyst[36 ] = Form("%sUp"  ,BtagSFBCNames[11].Data());
-  nameSyst[37 ] = Form("%sDown",BtagSFBCNames[11].Data());
-  nameSyst[38 ] = Form("%sUp"  ,BtagSFBCNames[12].Data());
-  nameSyst[39 ] = Form("%sDown",BtagSFBCNames[12].Data());
+  nameSyst[14 ] = Form("CMS_eff_m_tightid_%dUp",theYear);
+  nameSyst[15 ] = Form("CMS_eff_m_tightid_%dDown",theYear);
+  nameSyst[16 ] = Form("CMS_eff_e_tightid_%dUp",theYear);
+  nameSyst[17 ] = Form("CMS_eff_e_tightid_%dDown",theYear);
+  nameSyst[18 ] = Form("%sUp"  ,BtagSFBCNames[ 0].Data());
+  nameSyst[19 ] = Form("%sDown",BtagSFBCNames[ 0].Data());
+  nameSyst[20 ] = Form("%sUp"  ,BtagSFBCNames[ 1].Data());
+  nameSyst[21 ] = Form("%sDown",BtagSFBCNames[ 1].Data());
+  nameSyst[22 ] = Form("%sUp"  ,BtagSFBCNames[ 2].Data());
+  nameSyst[23 ] = Form("%sDown",BtagSFBCNames[ 2].Data());
+  nameSyst[24 ] = Form("%sUp"  ,BtagSFBCNames[ 3].Data());
+  nameSyst[25 ] = Form("%sDown",BtagSFBCNames[ 3].Data());
+  nameSyst[26 ] = Form("%sUp"  ,BtagSFBCNames[ 4].Data());
+  nameSyst[27 ] = Form("%sDown",BtagSFBCNames[ 4].Data());
+  nameSyst[28 ] = Form("%sUp"  ,BtagSFBCNames[ 5].Data());
+  nameSyst[29 ] = Form("%sDown",BtagSFBCNames[ 5].Data());
+  nameSyst[30 ] = Form("%sUp"  ,BtagSFBCNames[ 6].Data());
+  nameSyst[31 ] = Form("%sDown",BtagSFBCNames[ 6].Data());
+  nameSyst[32 ] = Form("%sUp"  ,BtagSFBCNames[ 7].Data());
+  nameSyst[33 ] = Form("%sDown",BtagSFBCNames[ 7].Data());
+  nameSyst[34 ] = Form("%sUp"  ,BtagSFBCNames[ 8].Data());
+  nameSyst[35 ] = Form("%sDown",BtagSFBCNames[ 8].Data());
+  nameSyst[36 ] = Form("%sUp"  ,BtagSFBCNames[ 9].Data());
+  nameSyst[37 ] = Form("%sDown",BtagSFBCNames[ 9].Data());
+  nameSyst[38 ] = Form("%sUp"  ,BtagSFBCNames[10].Data());
+  nameSyst[39 ] = Form("%sDown",BtagSFBCNames[10].Data());
   nameSyst[40 ] = "CMS_lf_btagUp";
   nameSyst[41 ] = "CMS_lf_btagDown";
   nameSyst[42 ] = "ewkCorrUp";
@@ -694,8 +694,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     newcardShape << Form("\n");
   }
 
-  // BTagging uncertainties --> starting at 3, 0/1/2 not used
-  for(int n_unc=3; n_unc<numberBTagSyst; n_unc++){
+  // BTagging uncertainties --> starting at 1, "2" not used
+  for(int n_unc=1; n_unc<numberBTagSyst; n_unc++){
     newcardShape << Form("%s shape ",BtagSFBCNames[n_unc].Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
@@ -752,6 +752,24 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   newcardShape << Form("\n");
  
   newcardShape << Form("CMS_eff_e_id_%d shape ",theYear);
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("CMS_eff_m_tightid_%d shape ",theYear);
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+
+  newcardShape << Form("CMS_eff_e_tightid_%d shape ",theYear);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
