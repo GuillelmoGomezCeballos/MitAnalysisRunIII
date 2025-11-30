@@ -93,8 +93,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[  9] = Form("CMS_eff_e_id_%dDown",theYear);
   nameSyst[10 ] = "pileupUp";
   nameSyst[11 ] = "pileupDown";
-  nameSyst[12 ] = Form("CMS_SMPXXXXX_WWtrigger_%dUp",year);
-  nameSyst[13 ] = Form("CMS_SMPXXXXX_WWtrigger_%dDown",year);
+  nameSyst[12 ] = Form("CMS_SMP25013_WWtrigger_%dUp",year);
+  nameSyst[13 ] = Form("CMS_SMP25013_WWtrigger_%dDown",year);
   nameSyst[14 ] = Form("%sUp"  ,BtagSFBCNames[ 0].Data());
   nameSyst[15 ] = Form("%sDown",BtagSFBCNames[ 0].Data());
   nameSyst[16 ] = Form("%sUp"  ,BtagSFBCNames[ 1].Data());
@@ -368,18 +368,18 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   // Begin Nonprompt study
   const int nNonPromptSyst = 12;
   TString namenonPromptSyst[nNonPromptSyst];
-  namenonPromptSyst[ 0] = Form("CMS_SMPXXXXXX_fake_%s_m0Up",nameFakeSyst.Data());
-  namenonPromptSyst[ 1] = Form("CMS_SMPXXXXXX_fake_%s_m1Down",nameFakeSyst.Data());
-  namenonPromptSyst[ 2] = Form("CMS_SMPXXXXXX_fake_%s_m2Up",nameFakeSyst.Data());
-  namenonPromptSyst[ 3] = Form("CMS_SMPXXXXXX_fake_%s_e0Up",nameFakeSyst.Data());
-  namenonPromptSyst[ 4] = Form("CMS_SMPXXXXXX_fake_%s_e1Up",nameFakeSyst.Data());
-  namenonPromptSyst[ 5] = Form("CMS_SMPXXXXXX_fake_%s_e2Up",nameFakeSyst.Data());
-  namenonPromptSyst[ 6] = Form("CMS_SMPXXXXXX_fake_%s_m0Down",nameFakeSyst.Data());
-  namenonPromptSyst[ 7] = Form("CMS_SMPXXXXXX_fake_%s_m1Up",nameFakeSyst.Data());
-  namenonPromptSyst[ 8] = Form("CMS_SMPXXXXXX_fake_%s_m2Down",nameFakeSyst.Data());
-  namenonPromptSyst[ 9] = Form("CMS_SMPXXXXXX_fake_%s_e0Down",nameFakeSyst.Data());
-  namenonPromptSyst[10] = Form("CMS_SMPXXXXXX_fake_%s_e1Down",nameFakeSyst.Data());
-  namenonPromptSyst[11] = Form("CMS_SMPXXXXXX_fake_%s_e2Down",nameFakeSyst.Data());
+  namenonPromptSyst[ 0] = Form("CMS_SMP25013X_fake_%s_m0Up",nameFakeSyst.Data());
+  namenonPromptSyst[ 1] = Form("CMS_SMP25013X_fake_%s_m1Down",nameFakeSyst.Data());
+  namenonPromptSyst[ 2] = Form("CMS_SMP25013X_fake_%s_m2Up",nameFakeSyst.Data());
+  namenonPromptSyst[ 3] = Form("CMS_SMP25013X_fake_%s_e0Up",nameFakeSyst.Data());
+  namenonPromptSyst[ 4] = Form("CMS_SMP25013X_fake_%s_e1Up",nameFakeSyst.Data());
+  namenonPromptSyst[ 5] = Form("CMS_SMP25013X_fake_%s_e2Up",nameFakeSyst.Data());
+  namenonPromptSyst[ 6] = Form("CMS_SMP25013X_fake_%s_m0Down",nameFakeSyst.Data());
+  namenonPromptSyst[ 7] = Form("CMS_SMP25013X_fake_%s_m1Up",nameFakeSyst.Data());
+  namenonPromptSyst[ 8] = Form("CMS_SMP25013X_fake_%s_m2Down",nameFakeSyst.Data());
+  namenonPromptSyst[ 9] = Form("CMS_SMP25013X_fake_%s_e0Down",nameFakeSyst.Data());
+  namenonPromptSyst[10] = Form("CMS_SMP25013X_fake_%s_e1Down",nameFakeSyst.Data());
+  namenonPromptSyst[11] = Form("CMS_SMP25013X_fake_%s_e2Down",nameFakeSyst.Data());
   const int totalNumberFakeSyst = 6;
   TH1D *histo_InputNonPromtUnc[totalNumberFakeSyst];
   TH1D *histo_NonPromtUnc[nNonPromptSyst];
@@ -417,10 +417,10 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   // Begin wrongsign study
   const int nwrongsignSyst = 4;
   TString namewrongsignSyst[nwrongsignSyst];
-  namewrongsignSyst[ 0] = Form("CMS_SMPXXXXXX_wrongsign_stat_%dUp",year);
-  namewrongsignSyst[ 1] =      "CMS_SMPXXXXXX_wrongsign_methodUp";
-  namewrongsignSyst[ 2] = Form("CMS_SMPXXXXXX_wrongsign_stat_%dDown",year);
-  namewrongsignSyst[ 3] =      "CMS_SMPXXXXXX_wrongsign_methodDown";
+  namewrongsignSyst[ 0] = Form("CMS_SMP25013X_wrongsign_stat_%dUp",year);
+  namewrongsignSyst[ 1] =      "CMS_SMP25013X_wrongsign_methodUp";
+  namewrongsignSyst[ 2] = Form("CMS_SMP25013X_wrongsign_stat_%dDown",year);
+  namewrongsignSyst[ 3] =      "CMS_SMP25013X_wrongsign_methodDown";
   const int totalNumberWSSyst = 2;
   TH1D *histo_InputWSUnc[totalNumberWSSyst];
   TH1D *histo_WSUnc[nwrongsignSyst];
@@ -581,7 +581,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   newcardShape << Form("\n");
 
   if(isTypeFakeSyst == 1){
-    newcardShape << Form("CMS_SMPXXXXXX_fake_%s_m      lnN ",nameFakeSyst.Data());
+    newcardShape << Form("CMS_SMP25013X_fake_%s_m      lnN ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -590,7 +590,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     }
     newcardShape << Form("\n");
 
-    newcardShape << Form("CMS_SMPXXXXXX_fake_%s_e lnN ",nameFakeSyst.Data());
+    newcardShape << Form("CMS_SMP25013X_fake_%s_e lnN ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -600,7 +600,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     newcardShape << Form("\n");
   } // isTraditionalSyst == true
   else if(isTypeFakeSyst == 2){
-    newcardShape << Form("CMS_SMPXXXXXX_fake_%s_m0 shape ",nameFakeSyst.Data());
+    newcardShape << Form("CMS_SMP25013X_fake_%s_m0 shape ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -609,7 +609,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     }
     newcardShape << Form("\n");
 
-    newcardShape << Form("CMS_SMPXXXXXX_fake_%s_m1 shape ",nameFakeSyst.Data());
+    newcardShape << Form("CMS_SMP25013X_fake_%s_m1 shape ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -618,7 +618,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     }
     newcardShape << Form("\n");
 
-    newcardShape << Form("CMS_SMPXXXXXX_fake_%s_m2 shape ",nameFakeSyst.Data());
+    newcardShape << Form("CMS_SMP25013X_fake_%s_m2 shape ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -627,7 +627,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     }
     newcardShape << Form("\n");
 
-    newcardShape << Form("CMS_SMPXXXXXX_fake_%s_e0 shape ",nameFakeSyst.Data());
+    newcardShape << Form("CMS_SMP25013X_fake_%s_e0 shape ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -636,7 +636,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     }
     newcardShape << Form("\n");
 
-    newcardShape << Form("CMS_SMPXXXXXX_fake_%s_e1 shape ",nameFakeSyst.Data());
+    newcardShape << Form("CMS_SMP25013X_fake_%s_e1 shape ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -645,7 +645,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     }
     newcardShape << Form("\n");
 
-    newcardShape << Form("CMS_SMPXXXXXX_fake_%s_e2 shape ",nameFakeSyst.Data());
+    newcardShape << Form("CMS_SMP25013X_fake_%s_e2 shape ",nameFakeSyst.Data());
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -664,7 +664,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_SMPXXXXX_WWtrigger_%d   lnN     ",year);
+  newcardShape << Form("CMS_SMP25013_WWtrigger_%d   lnN     ",year);
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -674,7 +674,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   newcardShape << Form("\n");
 
   if(anaSel.Contains("sswwAnalysis")) {
-    newcardShape << Form("CMS_SMPXXXXXX_wrongsign_stat_%d shape ",year);
+    newcardShape << Form("CMS_SMP25013X_wrongsign_stat_%d shape ",year);
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -684,7 +684,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     newcardShape << Form("\n");
 
 
-    newcardShape << Form("CMS_SMPXXXXXX_wrongsign_method shape ");
+    newcardShape << Form("CMS_SMP25013X_wrongsign_method shape ");
     for (int ic=0; ic<nPlotCategories; ic++){
       if(!histo_Baseline[ic]) continue;
       if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;

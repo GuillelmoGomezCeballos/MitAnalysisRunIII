@@ -516,6 +516,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfwwbvbscat.append(dfwwbcat[x].Filter(VBSSEL, "VBS selection"))
         histo[16][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x),25,  0, 250), "thePuppiMET_pt","weight")
         histo[17][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x),25,  0, 250), "thePuppiMET_pt","weight")
+        histo[54][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(54,x), "histo_{0}_{1}".format(54,x),30, -3.16, 3.16), "thePuppiMET_phi","weight")
+        histo[55][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(55,x), "histo_{0}_{1}".format(55,x),30, -3.16, 3.16), "thePuppiMET_phi","weight")
 
         dfwwvbscat[x]  = dfwwvbscat[x] .Filter("thePuppiMET_pt > {0}".format(metCut), "thePuppiMET_pt > {0}".format(metCut))
         dfwwbvbscat[x] = dfwwbvbscat[x].Filter("thePuppiMET_pt > {0}".format(metCut), "thePuppiMET_pt > {0}".format(metCut))
@@ -542,6 +544,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[37][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(37,x), "histo_{0}_{1}".format(37,x),25, 0, 5), "vbs_etaj1","weight")
         histo[38][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(38,x), "histo_{0}_{1}".format(38,x),25, 0, 5), "vbs_etaj2","weight")
         histo[39][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(39,x), "histo_{0}_{1}".format(39,x),25, 0, 5), "vbs_etaj2","weight")
+        histo[56][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(56,x), "histo_{0}_{1}".format(56,x),30, -3.16, 3.16), "vbs_phij1","weight")
+        histo[57][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(57,x), "histo_{0}_{1}".format(57,x),30, -3.16, 3.16), "vbs_phij1","weight")
+        histo[58][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(58,x), "histo_{0}_{1}".format(58,x),30, -3.16, 3.16), "vbs_phij2","weight")
+        histo[59][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(59,x), "histo_{0}_{1}".format(59,x),30, -3.16, 3.16), "vbs_phij2","weight")
 
         dfwwjjcat .append(dfwwcat[x] .Filter("thePuppiMET_pt > {0}".format(metCut), "thePuppiMET_pt > {0}".format(metCut)).Filter(VBSQCDSEL, "dijet non-vbf selection"))
         dfwwbjjcat.append(dfwwbcat[x].Filter("thePuppiMET_pt > {0}".format(metCut), "thePuppiMET_pt > {0}".format(metCut)).Filter(VBSQCDSEL, "dijet non-vbf selection"))

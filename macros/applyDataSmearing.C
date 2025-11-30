@@ -56,6 +56,17 @@ void applyDataSmearing(int nsel = -1, int condorJob = 1002){
   if      (nsel == 0){
     infileName_.push_back(Form("%sfillhisto_zAnalysis%d_2027_256",inputFolder.Data(),condorJob));
   }
+  else if(nsel == 3){
+    factor = 1.45;
+    infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_20240_33",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_20240_35",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_20240_37",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_20240_39",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_2027_33",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_2027_35",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_2027_37",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_2027_39",inputFolder.Data(),condorJob));
+  }
   else {
     return;
   }

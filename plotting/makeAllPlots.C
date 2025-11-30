@@ -724,7 +724,7 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
   else if(nsel == "ssww"){
     legendBSM="";
     isNeverBlinded=0;
-    isBlinded=1;
+    isBlinded=0;
     fidAnaName="";
     mlfitResult="";
     channelName="XXX"; 
@@ -750,6 +750,8 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
 
     finalPlot(0,1,"p_{T}^{miss}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_16.root",whichCondorJob,year),"sswwvbs_ptmiss", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{miss}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_17.root",whichCondorJob,year),"sswwbvbs_ptmiss", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"#phi(p_{T}^{miss})","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_54.root",whichCondorJob,year),"sswwvbs_phimiss", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"#phi(p_{T}^{miss})","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_55.root",whichCondorJob,year),"sswwbvbs_phimiss", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"Lepton type","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_18.root",whichCondorJob,year),"sswwvbssel_ltype", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Lepton type","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_19.root",whichCondorJob,year),"sswwbvbssel_ltype", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
@@ -769,10 +771,14 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{j1}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_33.root",whichCondorJob,year),"sswwbvbssel_ptj1", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{j2}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_34.root",whichCondorJob,year),"sswwvbssel_ptj2", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{j2}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_35.root",whichCondorJob,year),"sswwbvbssel_ptj2", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"#eta_{T}^{j1}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_36.root",whichCondorJob,year),"sswwvbssel_etaj1", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"#eta_{T}^{j1}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_37.root",whichCondorJob,year),"sswwbvbssel_etaj1", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"#eta_{T}^{j2}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_38.root",whichCondorJob,year),"sswwvbssel_etaj2", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"#eta_{T}^{j2}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_39.root",whichCondorJob,year),"sswwbvbssel_etaj2", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"|#eta_{T}^{j1}|","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_36.root",whichCondorJob,year),"sswwvbssel_etaj1", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"|#eta_{T}^{j1}|","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_37.root",whichCondorJob,year),"sswwbvbssel_etaj1", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"|#eta_{T}^{j2}|","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_38.root",whichCondorJob,year),"sswwvbssel_etaj2", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"|#eta_{T}^{j2}|","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_39.root",whichCondorJob,year),"sswwbvbssel_etaj2", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"#phi_{T}^{j1}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_56.root",whichCondorJob,year),"sswwvbssel_phij1", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"#phi_{T}^{j1}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_57.root",whichCondorJob,year),"sswwbvbssel_phij1", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"#phi_{T}^{j2}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_58.root",whichCondorJob,year),"sswwvbssel_phij2", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"#phi_{T}^{j2}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_59.root",whichCondorJob,year),"sswwbvbssel_phij2", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"#Delta#eta_{jj}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_40.root",whichCondorJob,year),"sswwjjsel_detajj", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#Delta#eta_{jj}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_41.root",whichCondorJob,year),"sswwbjjsel_detajj", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());

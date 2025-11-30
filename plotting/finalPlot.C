@@ -340,7 +340,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
   cmsstyle::SetExtraText("");
-  cmsstyle::SetLumi(Form("%s, %.1f fb^{#minus1}",theYear.Data(),theLumi));
+  cmsstyle::SetLumi(Form("%s, %.0f fb^{#minus1}",theYear.Data(),theLumi));
   cmsstyle::SetEnergy(13.6);
   cmsstyle::CMS_lumi( pad1, 11);
 

@@ -1636,6 +1636,8 @@ float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, unsigned int v
   else if(var == 5) theVar = p2.Pt();
   else if(var == 6) theVar = abs(p1.Eta());
   else if(var == 7) theVar = abs(p2.Eta());
+  else if(var == 8) theVar = p1.Phi();
+  else if(var == 9) theVar = p2.Phi();
   return theVar;
 }
 

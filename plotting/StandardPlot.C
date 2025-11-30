@@ -18,7 +18,7 @@
 Bool_t isBSMOverlaid = true;
 
 //float xPos[nPlotCategories] = {0.70,0.70,0.70,0.70,0.70,0.70,0.70,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40};
-float xPos[nPlotCategories] = {0.61,0.61,0.61,0.61,0.61,0.61,0.61,0.41,0.41,0.41,0.41,0.41,0.41,0.41,0.41};
+float xPos[nPlotCategories] = {0.61,0.61,0.61,0.61,0.61,0.61,0.61,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33};
 float yOff[nPlotCategories] = {   0,	1,   2,   3,   4,  5,   6,   0,   1,   2,   3,   4,   5,   6,   7};
 
 const Float_t _tsize   = 0.065;
@@ -80,7 +80,7 @@ void AxisFonts(TAxis*  axis,
     axis->SetNdivisions (  505);
     axis->SetTitleFont  (   42);
     axis->SetTitleOffset(  0.9);
-    axis->SetTitleSize  (0.050);
+    axis->SetTitleSize  (0.035);
 
     if      (coordinate == "y" && doApplyBinWidth == true) axis->SetTitleOffset(0.9);
     else if (coordinate == "y")                            axis->SetTitleOffset(0.9);
