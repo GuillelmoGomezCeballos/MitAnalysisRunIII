@@ -89,8 +89,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   nameSyst[  5] = Form("CMS_eff_m_iso_%dDown",theYear);
   nameSyst[  6] = Form("CMS_eff_e_reco_%dUp",theYear);
   nameSyst[  7] = Form("CMS_eff_e_reco_%dDown",theYear);
-  nameSyst[  8] = Form("CMS_eff_e_id_%dUp",theYear);
-  nameSyst[  9] = Form("CMS_eff_e_id_%dDown",theYear);
+  nameSyst[  8] = Form("CMS_eff_e_idUp");
+  nameSyst[  9] = Form("CMS_eff_e_idDown");
   nameSyst[10 ] = "pileupUp";
   nameSyst[11 ] = "pileupDown";
   nameSyst[12 ] = Form("CMS_SMP25013_WWtrigger_%dUp",year);
@@ -751,7 +751,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   newcardShape << Form("\n");
  
-  newcardShape << Form("CMS_eff_e_id_%d shape ",theYear);
+  newcardShape << Form("CMS_eff_e_id shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
