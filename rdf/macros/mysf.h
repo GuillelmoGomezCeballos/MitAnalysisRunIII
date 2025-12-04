@@ -125,16 +125,19 @@ MyCorrections::MyCorrections(int the_input_year) {
     std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_preliminary.json.gz";
     auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
     btvHFSF_ = csetHFBTV->at("UParTAK4_kinfit");
+    std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging_preliminary.json.gz";
+    auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
+    btvLFSF_ = csetLFBTV->at("UParTAK4_negtagDY");
   }
   else {
     std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
     auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
     btvHFSF_ = csetHFBTV->at("robustParticleTransformer_comb");
+    std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
+    auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
+    btvLFSF_ = csetLFBTV->at("robustParticleTransformer_light");
   }
 
-  std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
-  auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
-  btvLFSF_ = csetLFBTV->at("robustParticleTransformer_light");
 
   std::string fileNameScaleMu = dirName+"MUO/"+subDirName+"muon_scalesmearing.json.gz";
   auto csetScaleMu = correction::CorrectionSet::from_file(fileNameScaleMu);

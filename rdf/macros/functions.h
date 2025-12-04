@@ -1078,12 +1078,12 @@ float compute_lumiFakeRate(const Vec_f& mu_pt, const Vec_f& el_pt, const int nTr
     lumiPrescalesE[2] = 27.6/27693.1;
   }
   else if(year == 20240){
-    lumiPrescalesM[0] =  12.3/108296.7;
-    lumiPrescalesM[1] = 333.2/108296.7;
-    lumiPrescalesM[2] = 333.2/108296.7;
-    lumiPrescalesE[0] =  12.0/108296.7;
-    lumiPrescalesE[1] =  69.9/108296.7;
-    lumiPrescalesE[2] =  69.9/108296.7;
+    lumiPrescalesM[0] =  12.4/109329.6;
+    lumiPrescalesM[1] = 336.4/109329.6;
+    lumiPrescalesM[2] = 336.4/109329.6;
+    lumiPrescalesE[0] =  12.1/109329.6;
+    lumiPrescalesE[1] =  70.5/109329.6;
+    lumiPrescalesE[2] =  70.5/109329.6;
   }
   else if(year == 20250){
     lumiPrescalesM[0] =  13.7/60261.0;

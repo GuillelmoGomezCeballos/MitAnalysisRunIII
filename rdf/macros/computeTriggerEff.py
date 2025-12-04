@@ -146,14 +146,14 @@ if __name__ == "__main__":
                         eff1 = 0.0
                         unc1 = min(pow(1.0/den1,0.5),0.999)
 
-                    sf = 0.
-                    sfe = 0.
+                    sf = 1.00
+                    sfe = 0.01
                     if(eff0 > 0 and eff1 > 0):
                         sf = eff0/eff1
                         sfe = sf*min(pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)/3.0,0.05)
                     elif(histoLepDenDY[nlep][nsel].GetXaxis().GetBinCenter(i+1) >= histoLepDenDY[nlep][nsel].GetXaxis().GetBinCenter(j+1)):
                         sf = 1.00
-                        sf = 0.05
+                        sfe = 0.05
 
                     histoTriggerV1SFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
                     histoTriggerV1SFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
@@ -167,7 +167,7 @@ if __name__ == "__main__":
                     histoTriggerV1SFPtMin[nlep][nsel][i].SetBinContent(j+1,sf)
                     histoTriggerV1SFPtMin[nlep][nsel][i].SetBinError  (j+1,sfe)
 
-                    print("BinLoose({0:2d},{1:2d}): ( {2:.3f} +/- {3:.3f} ) / ( {4:.3f} - {5:.3f} ) = {6:.3f} / {7:.3f}".format(i+1,j+1,
+                    print("BinLoose({0:2d},{1:2d}): ( {2:.3f} +/- {3:.3f} ) / ( {4:.3f} +/- {5:.3f} ) = {6:.3f} +/- {7:.3f}".format(i+1,j+1,
                           eff0,unc0,eff1,unc1,sf,sfe))
 
 
@@ -250,14 +250,14 @@ if __name__ == "__main__":
                         eff1 = 0.0
                         unc1 = min(pow(1.0/den1,0.5),0.999)
 
-                    sf = 0.
-                    sfe = 0.
+                    sf = 1.00
+                    sfe = 0.01
                     if(eff0 > 0 and eff1 > 0):
                         sf = eff0/eff1
                         sfe = sf*min(pow(pow(unc0/eff0,2)+pow(unc1/eff1,2),0.5)/3.0,0.05)
                     elif(histoLepDenDY[nlep][nsel].GetXaxis().GetBinCenter(i+1) >= histoLepDenDY[nlep][nsel].GetYaxis().GetBinCenter(j+1)):
                         sf = 1.00
-                        sf = 0.05
+                        sfe = 0.05
 
                     histoTriggerV2SFEtaPt[nlep][nsel].SetBinContent(i+1,j+1,sf)
                     histoTriggerV2SFEtaPt[nlep][nsel].SetBinError  (i+1,j+1,sfe)
@@ -266,7 +266,7 @@ if __name__ == "__main__":
                     histoTriggerV2MCEtaPt[nlep][nsel].SetBinContent(i+1,j+1,eff1)
                     histoTriggerV2MCEtaPt[nlep][nsel].SetBinError  (i+1,j+1,unc1)
 
-                    print("BinTight({0:2d},{1:2d}): ( {2:.3f} +/- {3:.3f} ) / ( {4:.3f} - {5:.3f} ) = {6:.3f} / {7:.3f}".format(i+1,j+1,
+                    print("BinTight({0:2d},{1:2d}): ( {2:.3f} +/- {3:.3f} ) / ( {4:.3f} +/- {5:.3f} ) = {6:.3f} +/- {7:.3f}".format(i+1,j+1,
                           eff0,unc0,eff1,unc1,sf,sfe))
 
     fileTriggerEffName = "histoTriggerSFEtaPt_{0}.root".format(year)

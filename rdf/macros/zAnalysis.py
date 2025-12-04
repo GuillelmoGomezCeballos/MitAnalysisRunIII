@@ -310,6 +310,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo[ 59][x] = dftightsscat[x].Histo1D(("histo_{0}_{1}".format( 59,x), "histo_{0}_{1}".format( 59,x),60, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altMass),"weight5")
                 histo[390][x] = dftightoscat[x].Histo1D(("histo_{0}_{1}".format(390,x), "histo_{0}_{1}".format(390,x),60, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altMass),"weight")
                 histo[391][x] = dftightsscat[x].Histo1D(("histo_{0}_{1}".format(391,x), "histo_{0}_{1}".format(391,x),60, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altMass),"weight")
+                histo[392][x] = dftightoscat[x].Histo1D(("histo_{0}_{1}".format(392,x), "histo_{0}_{1}".format(392,x),20,  25, 125), "fake_Electron_pt","weight")
+                histo[393][x] = dftightsscat[x].Histo1D(("histo_{0}_{1}".format(393,x), "histo_{0}_{1}".format(393,x),20,  25, 125), "fake_Electron_pt","weight")
+                histo[394][x] = dftightoscat[x].Histo1D(("histo_{0}_{1}".format(394,x), "histo_{0}_{1}".format(394,x), 20, -2.5,2.5), "fake_Electron_eta","weight")
+                histo[395][x] = dftightsscat[x].Histo1D(("histo_{0}_{1}".format(395,x), "histo_{0}_{1}".format(395,x), 20, -2.5,2.5), "fake_Electron_eta","weight")
                 coutWSStudy = 0
                 for j1 in (0.0, 0.5, 1.0, 1.5, 2.0):
                     for j2 in (0.0, 0.5, 1.0, 1.5, 2.0):
