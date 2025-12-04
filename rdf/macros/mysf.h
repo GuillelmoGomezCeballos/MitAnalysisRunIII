@@ -138,7 +138,6 @@ MyCorrections::MyCorrections(int the_input_year) {
     btvLFSF_ = csetLFBTV->at("robustParticleTransformer_light");
   }
 
-
   std::string fileNameScaleMu = dirName+"MUO/"+subDirName+"muon_scalesmearing.json.gz";
   auto csetScaleMu = correction::CorrectionSet::from_file(fileNameScaleMu);
   muonScale_cb_params_   = csetScaleMu->at("cb_params");
@@ -172,12 +171,10 @@ MyCorrections::MyCorrections(int the_input_year) {
   photonSF_ = csetPH->at("Photon-ID-SF");
 
   std::string fileNameTRKELE = dirName+"EGM/"+subDirName+"electron.json.gz";
-  if(year == 20240 || year == 20250) fileNameTRKELE = dirName+"EGM/"+subDirName+"electronTRK.json.gz";
   auto csetTRKELE = correction::CorrectionSet::from_file(fileNameTRKELE);
   electronTRKSF_ = csetTRKELE->at("Electron-ID-SF");
 
   std::string fileNameIDELE = dirName+"EGM/"+subDirName+"electron.json.gz";
-  if(year == 20240 || year == 20250) fileNameIDELE = dirName+"EGM/"+subDirName+"electronID.json.gz";
   auto csetIDELE = correction::CorrectionSet::from_file(fileNameIDELE);
   electronIDSF_ = csetIDELE->at("Electron-ID-SF");
 
@@ -253,16 +250,16 @@ MyCorrections::MyCorrections(int the_input_year) {
     jecDATAName[6] = "NULL";   jetVetoMapName[6] = "NULL"; // G
   }
   else if(year == 20240)  {
-    jecMCName = "Summer24Prompt24_V1_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
+    jecMCName = "Summer24Prompt24_V2_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
     jecDATAName[0] = "NULL";                     jetVetoMapName[0] = "Summer24Prompt24_RunBCDEFGHI_V1"; // A
-    jecDATAName[1] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[1] = "Summer24Prompt24_RunBCDEFGHI_V1"; // B
-    jecDATAName[2] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[2] = "Summer24Prompt24_RunBCDEFGHI_V1"; // C
-    jecDATAName[3] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[3] = "Summer24Prompt24_RunBCDEFGHI_V1"; // D
-    jecDATAName[4] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[4] = "Summer24Prompt24_RunBCDEFGHI_V1"; // E
-    jecDATAName[5] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[5] = "Summer24Prompt24_RunBCDEFGHI_V1"; // F
-    jecDATAName[6] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[6] = "Summer24Prompt24_RunBCDEFGHI_V1"; // G
-    jecDATAName[7] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[7] = "Summer24Prompt24_RunBCDEFGHI_V1"; // H
-    jecDATAName[8] = "Summer24Prompt24_V1_DATA"; jetVetoMapName[8] = "Summer24Prompt24_RunBCDEFGHI_V1"; // I
+    jecDATAName[1] = "Summer24Prompt24_V2_DATA"; jetVetoMapName[1] = "Summer24Prompt24_RunBCDEFGHI_V1"; // B
+    jecDATAName[2] = "Summer24Prompt24_V2_DATA"; jetVetoMapName[2] = "Summer24Prompt24_RunBCDEFGHI_V1"; // C
+    jecDATAName[3] = "Summer24Prompt24_V2_DATA"; jetVetoMapName[3] = "Summer24Prompt24_RunBCDEFGHI_V1"; // D
+    jecDATAName[4] = "Summer24Prompt24_V2_DATA"; jetVetoMapName[4] = "Summer24Prompt24_RunBCDEFGHI_V1"; // E
+    jecDATAName[5] = "Summer24Prompt24_V2_DATA"; jetVetoMapName[5] = "Summer24Prompt24_RunBCDEFGHI_V1"; // F
+    jecDATAName[6] = "Summer24Prompt24_V2_DATA"; jetVetoMapName[6] = "Summer24Prompt24_RunBCDEFGHI_V1"; // G
+    jecDATAName[7] = "Summer24Prompt24_V2_DATA"; jetVetoMapName[7] = "Summer24Prompt24_RunBCDEFGHI_V1"; // H
+    jecDATAName[8] = "Summer24Prompt24_V2_DATA"; jetVetoMapName[8] = "Summer24Prompt24_RunBCDEFGHI_V1"; // I
     jecDATAName[9] = "NULL";                     jetVetoMapName[9] = "Summer24Prompt24_RunBCDEFGHI_V1"; // J
   }
   else if(year == 20250)  {

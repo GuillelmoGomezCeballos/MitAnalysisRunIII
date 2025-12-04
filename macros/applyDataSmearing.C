@@ -26,7 +26,10 @@ void theApplyDataSmearing(TString inputName, double factor){
   }
 
   for(int nb=1; nb<=_hist[0]->GetNbinsX(); nb++){
-    double systValue = 1.0+(_hist[0]->GetBinContent(nb)/hBck->GetBinContent(nb)-1.0)/factor;
+    double systValue = 1.0;
+    if(hBck->GetBinContent(nb) > 0 && _hist[0]->GetBinContent(nb) > 0){
+      systValue = 1.0+(_hist[0]->GetBinContent(nb)/hBck->GetBinContent(nb)-1.0)/factor;
+    }
     hBck->SetBinContent(nb,hBck->GetBinContent(nb)+systValue);
     printf("DA/MC = %d %f\n",nb, systValue);
     for(int ic=1; ic<nPlotCategories; ic++){
@@ -49,12 +52,19 @@ void theApplyDataSmearing(TString inputName, double factor){
   //printf("DA/MC = %f/%f\n", _hist[0]->GetSumOfWeights(),sumBck);
 }
 
-void applyDataSmearing(int nsel = -1, int condorJob = 1002){
+void applyDataSmearing(int nsel = -1, int condorJob = 1001){
   double factor = 2.5;
   TString inputFolder = "anaZ/";
   vector<TString> infileName_;
   if      (nsel == 0){
+    factor = 1.45;
     infileName_.push_back(Form("%sfillhisto_zAnalysis%d_2027_256",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_2027_390",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_2027_391",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_2027_392",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_2027_393",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_2027_394",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_zAnalysis%d_2027_395",inputFolder.Data(),condorJob));
   }
   else if(nsel == 3){
     factor = 1.45;
