@@ -737,19 +737,19 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[59][x] = dfwzcat[x].Filter("TriLepton_flavor==2").Histo1D(("histo_{0}_{1}".format(59,x), "histo_{0}_{1}".format(59,x), 4,-0.5, 3.5), "ngood_jets","weight")
         histo[60][x] = dfwzcat[x].Filter("TriLepton_flavor==3").Histo1D(("histo_{0}_{1}".format(60,x), "histo_{0}_{1}".format(60,x), 4,-0.5, 3.5), "ngood_jets","weight")
 
-        histo[90][x] = dfwzvbscat[x]                          .Histo1D(("histo_{0}_{1}".format(90,x), "histo_{0}_{1}".format(90,x),200,-1,1), "bdt_vbfinc","weight")
-        histo[91][x] = dfwzvbscat[x].Filter("vbs_zepvv>=0.25").Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x),200,-1,1), "bdt_vbfinc","weight")
-        histo[92][x] = dfwzvbscat[x].Filter("vbs_zepvv<0.25") .Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x),200,-1,1), "bdt_vbfinc","weight")
+        histo[88][x] = dfwzvbscat[x]                          .Histo1D(("histo_{0}_{1}".format(88,x), "histo_{0}_{1}".format(88,x),200,-1,1), "bdt_vbfinc","weight")
+        histo[89][x] = dfwzvbscat[x].Filter("vbs_zepvv>=0.25").Histo1D(("histo_{0}_{1}".format(89,x), "histo_{0}_{1}".format(89,x),200,-1,1), "bdt_vbfinc","weight")
+        histo[90][x] = dfwzvbscat[x].Filter("vbs_zepvv<0.25") .Histo1D(("histo_{0}_{1}".format(90,x), "histo_{0}_{1}".format(90,x),200,-1,1), "bdt_vbfinc","weight")
 
-        histo[ 99][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 99,x), "histo_{0}_{1}".format( 99,x), 4,-0.5, 3.5), "TriLepton_flavor","weight")
-        histo[100][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(100,x), "histo_{0}_{1}".format(100,x), 4,-0.5, 3.5), "TriLepton_flavor","weight0")
-        histo[101][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(101,x), "histo_{0}_{1}".format(101,x), 4,-0.5, 3.5), "TriLepton_flavor","weight1")
-        histo[102][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(102,x), "histo_{0}_{1}".format(102,x), 4,-0.5, 3.5), "TriLepton_flavor","weight2")
-        histo[103][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(103,x), "histo_{0}_{1}".format(103,x), 4,-0.5, 3.5), "TriLepton_flavor","weight3")
-        histo[104][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(104,x), "histo_{0}_{1}".format(104,x), 4,-0.5, 3.5), "TriLepton_flavor","weight4")
-        histo[105][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(105,x), "histo_{0}_{1}".format(105,x), 4,-0.5, 3.5), "TriLepton_flavor","weight5")
-        histo[106][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(106,x), "histo_{0}_{1}".format(106,x), 4,-0.5, 3.5), "TriLepton_flavor","weight6")
-        histo[107][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(107,x), "histo_{0}_{1}".format(107,x), 4,-0.5, 3.5), "TriLepton_flavor","weight7")
+        histo[91][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(91,x), "histo_{0}_{1}".format(91,x), 4,-0.5, 3.5), "TriLepton_flavor","weight")
+        histo[92][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(92,x), "histo_{0}_{1}".format(92,x), 4,-0.5, 3.5), "TriLepton_flavor","weight0")
+        histo[93][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(93,x), "histo_{0}_{1}".format(93,x), 4,-0.5, 3.5), "TriLepton_flavor","weight1")
+        histo[94][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(94,x), "histo_{0}_{1}".format(94,x), 4,-0.5, 3.5), "TriLepton_flavor","weight2")
+        histo[95][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(95,x), "histo_{0}_{1}".format(95,x), 4,-0.5, 3.5), "TriLepton_flavor","weight3")
+        histo[96][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(96,x), "histo_{0}_{1}".format(96,x), 4,-0.5, 3.5), "TriLepton_flavor","weight4")
+        histo[97][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(97,x), "histo_{0}_{1}".format(97,x), 4,-0.5, 3.5), "TriLepton_flavor","weight5")
+        histo[98][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(98,x), "histo_{0}_{1}".format(98,x), 4,-0.5, 3.5), "TriLepton_flavor","weight6")
+        histo[99][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format(99,x), "histo_{0}_{1}".format(99,x), 4,-0.5, 3.5), "TriLepton_flavor","weight7")
 
         x1Bins = array('d', [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0])
         x2Bins = array('d', [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0])
@@ -1324,10 +1324,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         for j in range(300,nHistoMVA):
             if(j < 500):
                 for x in range(nCat):
-                    histo[j][x] = ROOT.TH1D("histo_{0}_{1}".format(j,x), "histo_{0}_{1}".format(j,x), x1Bins)
+                    histo[j][x] = ROOT.TH1D("histo_{0}_{1}".format(j,x), "histo_{0}_{1}".format(j,x), len(x1Bins)-1, x1Bins)
             else:
                 for x in range(nCat):
-                    histo[j][x] = ROOT.TH1D("histo_{0}_{1}".format(j,x), "histo_{0}_{1}".format(j,x), x2Bins)
+                    histo[j][x] = ROOT.TH1D("histo_{0}_{1}".format(j,x), "histo_{0}_{1}".format(j,x), len(x1Bins)-1, x2Bins)
 
     for j in range(300,nHistoMVA):
         for x in range(nCat):

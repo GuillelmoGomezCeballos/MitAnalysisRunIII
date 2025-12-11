@@ -64,6 +64,7 @@ if __name__ == "__main__":
     doSkimSel = [True, True, True, True, False]
 
     outputDir = "root://submit50.mit.edu//store/user/ceballos/nanoaod/skims_submit/"
+    #outputDir = "root://submit30.mit.edu//cms/ceballos/nanoaod/skims_submit/"
     inputSamplesCfg = "skim_input_samples.cfg"
     inputFilesCfg = "skim_input_files.cfg"
     whichSample = 1

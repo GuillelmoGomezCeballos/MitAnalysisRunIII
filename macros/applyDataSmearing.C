@@ -76,6 +76,7 @@ void applyDataSmearing(int nsel = -1, int condorJob = 1001){
     infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_2027_35",inputFolder.Data(),condorJob));
     infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_2027_37",inputFolder.Data(),condorJob));
     infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_2027_39",inputFolder.Data(),condorJob));
+    infileName_.push_back(Form("%sfillhisto_sswwAnalysis%d_2027_111",inputFolder.Data(),condorJob));
   }
   else {
     return;

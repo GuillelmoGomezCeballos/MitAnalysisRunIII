@@ -6,7 +6,7 @@ if [ $# -lt 2 ]; then
 fi
 
 export option=$1
-export path="fillhisto_zAnalysis1001"
+export path="fillhisto_zAnalysis1002"
 export year=$2
 export output="anaZ"
 

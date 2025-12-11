@@ -356,7 +356,7 @@ float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string
 
   for(unsigned int i=0;i<el_pt.size();i++) {
     char *recoNameAux = (char*)"RecoAbove75";
-    double pt_used = max(el_pt[i],20.001f);
+    double pt_used = max(el_pt[i],10.001f);
     if     (pt_used < 20) recoNameAux = (char*)"RecoBelow20";
     else if(pt_used < 75) recoNameAux = (char*)"Reco20to75";
     const char *recoName = recoNameAux;

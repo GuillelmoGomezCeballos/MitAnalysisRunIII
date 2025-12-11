@@ -10,9 +10,12 @@ YEAR=$1
 USERPROXY=`id -u`
 echo ${USERPROXY}
 
+OUTPUT_FOLDER=/ceph/submit/data/group/cms/store/user/ceballos;
+#OUTPUT_FOLDER=/scratch/submit/cms/ceballos;
+
 #condor_q 1769874.0 -analyze
 #transfer_input_files = ""
-#transfer_output_remaps = "output_1l_${whichSample}_${whichJob}.root =  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/1l/${sampleName}/output_1l_${whichSample}_${whichJob}.root; output_2l_${whichSample}_${whichJob}.root =  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/2l/${sampleName}/output_2l_${whichSample}_${whichJob}.root; output_3l_${whichSample}_${whichJob}.root =  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/3l/${sampleName}/output_3l_${whichSample}_${whichJob}.root"
+#transfer_output_remaps = "output_1l_${whichSample}_${whichJob}.root =  ${OUTPUT_FOLDER}/nanoaod/skims_submit/1l/${sampleName}/output_1l_${whichSample}_${whichJob}.root; output_2l_${whichSample}_${whichJob}.root =  ${OUTPUT_FOLDER}/nanoaod/skims_submit/2l/${sampleName}/output_2l_${whichSample}_${whichJob}.root; output_3l_${whichSample}_${whichJob}.root =  ${OUTPUT_FOLDER}/nanoaod/skims_submit/3l/${sampleName}/output_3l_${whichSample}_${whichJob}.root"
 
 voms-proxy-init --voms cms --valid 168:00 -pwstdin < $HOME/.grid-cert-passphrase
 
@@ -33,13 +36,13 @@ whichJob=$2
 group=$3
 sampleName=$4
 
-if [ ! -d " /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/pho/${sampleName}" ]; then
-  echo "creating output folders"  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/nl/${sampleName}
-  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/1l/${sampleName}
-  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/2l/${sampleName}
-  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/3l/${sampleName}
-  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/met/${sampleName}
-  mkdir -p  /ceph/submit/data/group/cms/store/user/ceballos/nanoaod/skims_submit/pho/${sampleName}
+if [ ! -d " ${OUTPUT_FOLDER}/nanoaod/skims_submit/pho/${sampleName}" ]; then
+  echo "creating output folders"  ${OUTPUT_FOLDER}/nanoaod/skims_submit/nl/${sampleName}
+  mkdir -p  ${OUTPUT_FOLDER}/nanoaod/skims_submit/1l/${sampleName}
+  mkdir -p  ${OUTPUT_FOLDER}/nanoaod/skims_submit/2l/${sampleName}
+  mkdir -p  ${OUTPUT_FOLDER}/nanoaod/skims_submit/3l/${sampleName}
+  mkdir -p  ${OUTPUT_FOLDER}/nanoaod/skims_submit/met/${sampleName}
+  mkdir -p  ${OUTPUT_FOLDER}/nanoaod/skims_submit/pho/${sampleName}
 fi
 
 cat << EOF > submit
