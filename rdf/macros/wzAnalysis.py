@@ -954,14 +954,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 varSel1 = 10
                 varSel2 = 11
             elif(makeDataCards == 4): # BDT 2D
-                x1Bins = array('d', [0.000, 0.180, 0.305, 0.430, 0.535, 0.640, 0.740, 0.820, 0.895, 0.945, 1.000, 1.355, 1.505, 1.630, 1.720, 1.800, 1.855, 1.905, 1.940, 1.970, 2.000])
+                x1Bins = array('d', [0.000,0.125,0.250,0.375,0.500,0.625,0.750,0.875,1.000,1.125,1.250,1.375,1.500,1.625,1.750,1.875,2.000])
                 x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5])
                 varSel1 = 12
                 varSel2 = 11
-                if(versionMVA != 0):
-                    x1Bins = array('d', [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0])
             elif(makeDataCards == 5): # BDT 1D
-                x1Bins = array('d', [0.000, 0.265, 0.415, 0.540, 0.650, 0.745, 0.820, 0.880, 0.925, 0.960, 1.000])
+                x1Bins = array('d', [0.000,0.125,0.250,0.375,0.500,0.625,0.750,0.875,1.000])
                 x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5])
                 varSel1 = 13
                 varSel2 = 11
@@ -1139,13 +1137,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         elif(makeDataCards == 7):
             yBins = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5])
 
-            BinXF1  = 28
-            minXF1  = 0.0
-            maxXF1  = 4.0
+            x1Bins = array('d', [0.000,0.125,0.250,0.375,0.500,0.625,0.750,0.875,1.000,1.125,1.250,1.375,1.500,1.625,1.750,1.875,2.000,2.125,2.250,2.375,2.500,2.625,2.750,2.875,3.000,3.125,3.250,3.375,3.500,3.625,3.750,3.875,4.000])
+            x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5])
             varSel1 = 14
-            BinXF2  = 4
-            minXF2  = -0.5
-            maxXF2  =  3.5
             varSel2 = 11
 
             dfwzvbscat             [x] = dfwzvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,vbs_dphijj,vbs_zepvv,bdt_vbfinc[0],mll{0},ngood_jets,{1})".format(altMass,varSel1))
@@ -1254,10 +1248,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo2D[startF+163][x]    = makeFinalVariable2DVar(dfwzvbscatJes25Up	   [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,163)
             histo2D[startF+164][x]    = makeFinalVariable2DVar(dfwzvbscatJes26Up	   [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,164)
             histo2D[startF+165][x]    = makeFinalVariable2DVar(dfwzvbscatJes27Up	   [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,165)
-            histo2D[startF+166][x]    = makeFinalVariable2DVar(dfwzvbscatJerUp	   [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,166)
-            histo2D[startF+167][x]    = makeFinalVariable2DVar(dfwzvbscatJERUp	   [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,167)
-            histo2D[startF+168][x]    = makeFinalVariable2DVar(dfwzvbscatJESUp	   [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,168)
-            histo2D[startF+169][x]    = makeFinalVariable2DVar(dfwzvbscatUnclusteredUp[x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,169)
+            histo2D[startF+166][x]    = makeFinalVariable2DVar(dfwzvbscatJerUp	           [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,166)
+            histo2D[startF+167][x]    = makeFinalVariable2DVar(dfwzvbscatJERUp	           [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,167)
+            histo2D[startF+168][x]    = makeFinalVariable2DVar(dfwzvbscatJESUp	           [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,168)
+            histo2D[startF+169][x]    = makeFinalVariable2DVar(dfwzvbscatUnclusteredUp     [x],"finalVar","theGenCat",theCat,startF,x,x1Bins,yBins,169)
             if(x == plotCategory("kPlotNonPrompt")):
                 startNonPrompt = 0
                 histoNonPrompt[0+startNonPrompt] = dfwzvbscat[x].Histo1D(("histoNonPrompt_{0}".format(0+startNonPrompt), "histoNonPrompt_{0}".format(0+startNonPrompt), len(x1Bins)-1,x1Bins), "finalVar","weightFakeAltm0")
@@ -1300,9 +1294,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo2D[startF+163][x]    = makeFinalVariable2DVar(dfwzbvbscatJes25Up      [x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,163)
             histo2D[startF+164][x]    = makeFinalVariable2DVar(dfwzbvbscatJes26Up      [x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,164)
             histo2D[startF+165][x]    = makeFinalVariable2DVar(dfwzbvbscatJes27Up      [x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,165)
-            histo2D[startF+166][x]    = makeFinalVariable2DVar(dfwzbvbscatJerUp	    [x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,166)
-            histo2D[startF+167][x]    = makeFinalVariable2DVar(dfwzbvbscatJERUp	    [x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,167)
-            histo2D[startF+168][x]    = makeFinalVariable2DVar(dfwzbvbscatJESUp	    [x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,168)
+            histo2D[startF+166][x]    = makeFinalVariable2DVar(dfwzbvbscatJerUp	       [x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,166)
+            histo2D[startF+167][x]    = makeFinalVariable2DVar(dfwzbvbscatJERUp	       [x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,167)
+            histo2D[startF+168][x]    = makeFinalVariable2DVar(dfwzbvbscatJESUp	       [x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,168)
             histo2D[startF+169][x]    = makeFinalVariable2DVar(dfwzbvbscatUnclusteredUp[x],"finalVar","theGenCat",theCat,startF,x,x2Bins,yBins,169)
             if(x == plotCategory("kPlotNonPrompt")):
                 startNonPrompt = 6
@@ -1327,7 +1321,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                     histo[j][x] = ROOT.TH1D("histo_{0}_{1}".format(j,x), "histo_{0}_{1}".format(j,x), len(x1Bins)-1, x1Bins)
             else:
                 for x in range(nCat):
-                    histo[j][x] = ROOT.TH1D("histo_{0}_{1}".format(j,x), "histo_{0}_{1}".format(j,x), len(x1Bins)-1, x2Bins)
+                    histo[j][x] = ROOT.TH1D("histo_{0}_{1}".format(j,x), "histo_{0}_{1}".format(j,x), len(x2Bins)-1, x2Bins)
 
     for j in range(300,nHistoMVA):
         for x in range(nCat):
