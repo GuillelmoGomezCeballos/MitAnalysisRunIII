@@ -30,13 +30,13 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   TString theTagYear = "NULL";
   double triggerEffUnc = 1.000;
   double lumiU[3] = {1.000, 1.000, 1.000};
-  if     (year == 20220) {triggerEffUnc = 1.005; lumiU[0] = 1.0136; lumiU[1] = 1.0012; lumiU[2] = 1.0017; theYear = 2022; theTagYear = "2022";}
-  else if(year == 20221) {triggerEffUnc = 1.005; lumiU[0] = 1.0136; lumiU[1] = 1.0012; lumiU[2] = 1.0017; theYear = 2022; theTagYear = "2022EE";}
-  else if(year ==  2022) {triggerEffUnc = 1.005; lumiU[0] = 1.0136; lumiU[1] = 1.0012; lumiU[2] = 1.0017; theYear = 2022; theTagYear = "2022";}
-  else if(year == 20230) {triggerEffUnc = 1.005; lumiU[0] = 1.0000; lumiU[1] = 1.0115; lumiU[2] = 1.0056; theYear = 2023; theTagYear = "2023";}
-  else if(year == 20231) {triggerEffUnc = 1.005; lumiU[0] = 1.0000; lumiU[1] = 1.0115; lumiU[2] = 1.0056; theYear = 2023; theTagYear = "2023BPix";}
-  else if(year ==  2023) {triggerEffUnc = 1.005; lumiU[0] = 1.0000; lumiU[1] = 1.0115; lumiU[2] = 1.0056; theYear = 2023; theTagYear = "2023";}
-  else if(year == 20240) {triggerEffUnc = 1.005; lumiU[0] = 1.0000; lumiU[1] = 1.0000; lumiU[2] = 1.0161; theYear = 2024; theTagYear = "2024";}
+  if     (year == 20220) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022";}
+  else if(year == 20221) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022EE";}
+  else if(year ==  2022) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022";}
+  else if(year == 20230) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023";}
+  else if(year == 20231) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023BPix";}
+  else if(year ==  2023) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023";}
+  else if(year == 20240) {triggerEffUnc = 1.005; lumiU[0] = 1.0020; lumiU[1] = 1.0068; lumiU[2] = 1.0144; theYear = 2024; theTagYear = "2024";}
   else {printf("Wrong year!\n"); return;}
 
   int jumpValue = 200;
@@ -401,10 +401,10 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
           if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
         }
       }
-      if(anaSel.Contains("sswwAnalysis")){
-        histo_NonPromtUnc[j+                  0]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+                  0]->GetSumOfWeights());
-        histo_NonPromtUnc[j+totalNumberFakeSyst]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+totalNumberFakeSyst]->GetSumOfWeights());
-      }
+      //if(anaSel.Contains("sswwAnalysis")){
+      //  histo_NonPromtUnc[j+                  0]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+                  0]->GetSumOfWeights());
+      //  histo_NonPromtUnc[j+totalNumberFakeSyst]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+totalNumberFakeSyst]->GetSumOfWeights());
+      //}
     }
   }
   // End Nonprompt study
@@ -495,7 +495,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   // End Fix a feature affecting first bin
 
-  TString outputLimits = Form("output_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna,additionalSuffix.Data());
+  TString outputLimits = Form("datacard_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna,additionalSuffix.Data());
   outputFile = new TFile(outputLimits, "RECREATE");
   outputFile->cd();
   for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
