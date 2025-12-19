@@ -401,10 +401,10 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
           if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
         }
       }
-      //if(anaSel.Contains("sswwAnalysis")){
-      //  histo_NonPromtUnc[j+                  0]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+                  0]->GetSumOfWeights());
-      //  histo_NonPromtUnc[j+totalNumberFakeSyst]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+totalNumberFakeSyst]->GetSumOfWeights());
-      //}
+      if(anaSel.Contains("sswwAnalysis")){
+        histo_NonPromtUnc[j+		      0]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+  		0]->GetSumOfWeights());
+        histo_NonPromtUnc[j+totalNumberFakeSyst]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+totalNumberFakeSyst]->GetSumOfWeights());
+      }
     }
   }
   // End Nonprompt study
@@ -460,7 +460,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
          ic == kPlotSignal2 ||
          ic == kPlotSignal3 ||
          ic == kPlotWZ ||
-         ic == kPlotEWKWZ
+         ic == kPlotEWKWZ ||
+         ic == kPlotZZ
         ))  continue;
      histo_QCDScaleUp  [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleUp  [ic]->GetSumOfWeights());
      histo_QCDScaleDown[ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleDown[ic]->GetSumOfWeights());
