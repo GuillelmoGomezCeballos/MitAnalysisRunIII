@@ -38,7 +38,7 @@ Float_t GetMaximumIncludingErrors(TH1F* h, bool doApplyBinWidth)
 
         Float_t binHeight = h->GetBinContent(i) + h->GetBinError(i);
 
-        if(doApplyBinWidth) binHeight = binHeight/h->GetBinWidth(i)*SFBinWidth;
+        //if(doApplyBinWidth) binHeight = binHeight/h->GetBinWidth(i)*SFBinWidth;
 
         if (binHeight > maxWithErrors) maxWithErrors = binHeight;
     }
@@ -82,8 +82,8 @@ void AxisFonts(TAxis*  axis,
     axis->SetTitleOffset(  0.9);
     axis->SetTitleSize  (0.035);
 
-    if      (coordinate == "y" && doApplyBinWidth == true) axis->SetTitleOffset(0.9);
-    else if (coordinate == "y")                            axis->SetTitleOffset(0.9);
+    if      (coordinate == "y" && doApplyBinWidth == true) axis->SetTitleOffset(1.4);
+    else if (coordinate == "y")                            axis->SetTitleOffset(1.3);
 
     axis->SetTitle(title);
 }
@@ -219,7 +219,14 @@ class StandardPlot {
                 hstack->Add(_hist[ic]);
 		hSum  ->Add(_hist[ic]);
             }
-            if(_hist_total) for(int i=1; i<=_hist_total->GetNbinsX(); i++) {hSum->SetBinError(i,_hist_total->GetBinError(i));}
+            if(_hist_total) {
+              if(_hist_total->GetBinContent(1) > 0 && _hist_total->GetBinError(1)/_hist_total->GetBinContent(1) > 1.5) _hist_total->SetBinError(1,_hist_total->GetBinContent(1)*0.1);
+              TH1D* hist_total_aux = (TH1D*)_hist_total->Clone();
+              if(_doApplyBinWidth == true){
+                hist_total_aux->Scale(1,"width");
+              }
+              for(int i=1; i<=hist_total_aux->GetNbinsX(); i++) {hSum->SetBinError(i,hist_total_aux->GetBinError(i));}
+            }
 
             if(_hist[kPlotBSM]    ) _hist[kPlotBSM    ]->SetLineWidth(4);
             if(_hist[kPlotSignal0]) _hist[kPlotSignal0]->SetLineWidth(4);
