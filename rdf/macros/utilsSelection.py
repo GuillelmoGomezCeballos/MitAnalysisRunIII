@@ -1226,10 +1226,10 @@ def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeight
         fakeRateSel[2] = 3
         fakeRateSel[3] = 7
     elif(whichAna == 2 or whichAna == 3):
-        fakeRateSel[0] = 0
-        fakeRateSel[1] = 1
+        fakeRateSel[0] = 6
+        fakeRateSel[1] = 8
         fakeRateSel[2] = 3
-        fakeRateSel[3] = 6
+        fakeRateSel[3] = 0
 
     if(isData == "true"): return selectionDAWeigths(df,year,PDType,whichAna,fakeRateSel)
     else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,whichAna,fakeRateSel)
