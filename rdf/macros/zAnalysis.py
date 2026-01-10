@@ -234,11 +234,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     METFILTERS = getTriggerFromJson(overallMETFilters, "All", year)
     dfbase = dfbase.Define("METFILTERS", "{0}".format(METFILTERS))
 
+    VBSSELECTION = "Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 20 && ptl1{0} > 25 && ptl2{0} > 20 && (DiLepton_flavor != 2 || abs(mll{0}-91.1876) > 15) && nbtag_goodbtag_Jet_bjet == 0 && nvbs_jets >= 2 && vbs_mjj > 500 && vbs_detajj > 2.5 && vbs_zepvv < 1.0 && thePuppiMET_pt> {1}".format(altMass,30)
+
     xMllMin = [91.1876-15,  30, 91.1876-15]
     xMllMax = [91.1876+15, 330, 91.1876+15]
     dfcat = []
     dfzllcat = []
     dfjetcat = []
+    dfvbscat = []
     dfzgcat = []
     dfzemcat = []
     dfzmecat = []
@@ -254,6 +257,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                                .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,kPlotWS,nFake,nTight,0)".format(theCat))
                                .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
                                )
+
+            dfvbscat.append(dfcat[3*x+ltype].Filter("{0}".format(VBSSELECTION),"VBS selection"))
 
             dfzgcat.append(dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Muon_charge) == 0 && ptl1 > 25 && ptl2 > 20 && mll > 10 && Sum(good_Photons) > 0 && Max(good_Photons_pt) > 20")
               .Define("kPlotDY", "{0}".format(plotCategory("kPlotDY")))
@@ -388,10 +393,16 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
               histo[ltype+284][x] = dfjetcat[3*x+ltype].Filter("ngood_jets >= 3").Histo1D(("histo_{0}_{1}".format(ltype+284,x), "histo_{0}_{1}".format(ltype+284,x), 40, 25, 225), "ptl1","weight")
               histo[ltype+286][x] = dfjetcat[3*x+ltype].Filter("ngood_jets >= 3").Histo1D(("histo_{0}_{1}".format(ltype+286,x), "histo_{0}_{1}".format(ltype+286,x), 40, 10, 210), "ptl2","weight")
 
-            dfjetcat[3*x+ltype] = dfjetcat[3*x+ltype].Filter("ngood_jets >= 2", "At least two jets")
-            histo[ltype+157][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+157,x), "histo_{0}_{1}".format(ltype+157,x), 50,0,2000), "mjj","weight")
-            histo[ltype+160][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+160,x), "histo_{0}_{1}".format(ltype+160,x), 50,0,400), "ptjj","weight")
-            histo[ltype+163][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+163,x), "histo_{0}_{1}".format(ltype+163,x), 50,0,3.1416), "dphijj","weight")
+            histo[ltype+157][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+157,x), "histo_{0}_{1}".format(ltype+157,x), 40,500,2500), "mjj","weight")
+            histo[ltype+160][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+160,x), "histo_{0}_{1}".format(ltype+160,x), 40,0,400), "ptjj","weight")
+            if(ltype == 0):
+                dfvbscat[3*x+ltype] = (dfvbscat[3*x+ltype].Define("etamax","max(abs(fake_Muon_eta[0]),abs(fake_Muon_eta[1]))"))
+            elif(ltype == 1):
+                dfvbscat[3*x+ltype] = (dfvbscat[3*x+ltype].Define("etamax","abs(fake_Electron_eta[0])"))
+            elif(ltype == 2):
+                dfvbscat[3*x+ltype] = (dfvbscat[3*x+ltype].Define("etamax","max(abs(fake_Electron_eta[0]),abs(fake_Electron_eta[1]))"))
+
+            histo[ltype+163][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+163,x), "histo_{0}_{1}".format(ltype+163,x), 5, 0.0, 2.5), "etamax","weight")
 
             histo[ltype+166][x] = dfzllcat[3*x+ltype].Filter("METFILTERS > 0").Histo1D(("histo_{0}_{1}".format(ltype+166,x), "histo_{0}_{1}".format(ltype+166,x), 100, 0, 200), "thePuppiMET_pt","weight")
             histo[ltype+169][x] = dfzllcat[3*x+ltype].Filter("METFILTERS ==0").Histo1D(("histo_{0}_{1}".format(ltype+169,x), "histo_{0}_{1}".format(ltype+169,x), 100, 0, 200), "thePuppiMET_pt","weight")

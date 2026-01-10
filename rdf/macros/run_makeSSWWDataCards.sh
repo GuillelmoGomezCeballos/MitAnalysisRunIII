@@ -6,6 +6,10 @@ if [ $# -lt 2 ]; then
 fi
 
 export theOption=$2
+export applyPostFitSF=0;
+if [ $# -eq 3 ]; then
+   export applyPostFitSF=1;
+fi
 
 if [ $theOption -eq 0 ]; then
 
@@ -19,7 +23,7 @@ if [ $theOption -eq 0 ]; then
   for bin in 0 1;
   do
 
-  root -l -q -b makeSSWWDataCards.C'(0,'${bin}',"anaZ","'${theAna}'",'${year}')';
+  root -l -q -b makeSSWWDataCards.C'(0,'${bin}',"anaZ","'${theAna}'",'${year}','${applyPostFitSF}')';
 
   done
   done
@@ -34,7 +38,7 @@ elif [ $theOption -eq 1 ]; then
   for bin in 0 1;
   do
 
-  root -l -q -b makeSSWWDataCards.C'(0,'${bin}',"anaZ","'${theAna}'",'${year}')';
+  root -l -q -b makeSSWWDataCards.C'(0,'${bin}',"anaZ","'${theAna}'",'${year}','${applyPostFitSF}')';
 
   done
   done
@@ -49,7 +53,7 @@ elif [ $theOption -eq 2 ]; then
   for bin in 0;
   do
 
-  root -l -q -b makeSSWWDataCards.C'(0,'${bin}',"anaZ","'${theAna}'",'${year}')';
+  root -l -q -b makeSSWWDataCards.C'(0,'${bin}',"anaZ","'${theAna}'",'${year}','${applyPostFitSF}')';
 
   done
   done

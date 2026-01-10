@@ -17,7 +17,7 @@
 // whichAna = 0 (SSWW), fidAna = 0/2/4 (WW), 1/3/5 (WWb)
 // whichAna = 0 (WZ), fidAna = 0 (WZ), 1 (WZb)
 
-void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ", TString anaSel = "sswwAnalysis1001", int year = 20220){
+void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ", TString anaSel = "sswwAnalysis1001", int year = 20220, bool applyPostFitSF = false){
 
   if(fidAna < 0 || fidAna > 6) printf("Wrong fidAna(%d)\n",fidAna);
 
@@ -45,6 +45,61 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   TString postFixHist = "MVA";
   if     (anaSel.Contains("wzAnalysis")) {startHistogram = 300; postFixFile = ""; postFixHist = "";}
   else if(anaSel.Contains("zzAnalysis")) {startHistogram = 300; postFixFile = ""; postFixHist = "";}
+
+  bool isTheorySignal[nPlotCategories];
+  double maxTheoryUnc[nPlotCategories];
+  double postFitSF[nPlotCategories];
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(ic == kPlotEWKSSWW ||
+       ic == kPlotSignal0 ||
+       ic == kPlotSignal1 ||
+       ic == kPlotSignal2 ||
+       ic == kPlotSignal3 ||
+       ic == kPlotWZ ||
+       ic == kPlotEWKWZ ||
+       ic == kPlotZZ ||
+       ic == kPlotTVX) {
+      isTheorySignal[ic] = true;
+      maxTheoryUnc[ic] = 1.0;
+    } else {
+      isTheorySignal[ic] = false;
+      maxTheoryUnc[ic] = 0.20;
+    }
+    postFitSF[ic] = 1.0; // default
+  }
+
+  // Begin scale expectations to observations (step 1)
+  if(applyPostFitSF == true){
+    if     (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1006")) {
+      postFitSF[kPlotSignal0] = 1.309;
+      postFitSF[kPlotSignal1] = 1.054;
+      postFitSF[kPlotSignal2] = 1.124;
+      postFitSF[kPlotSignal3] = 1.044;
+    }
+    else if(anaSel.Contains("sswwAnalysis1002") || anaSel.Contains("sswwAnalysis1007")) {
+      postFitSF[kPlotSignal0] = 1.227;
+      postFitSF[kPlotSignal1] = 0.996;
+      postFitSF[kPlotSignal2] = 1.117;
+      postFitSF[kPlotSignal3] = 1.031;
+    }
+    else if(anaSel.Contains("sswwAnalysis1003")) {
+      postFitSF[kPlotSignal0] = 1.293;
+      postFitSF[kPlotSignal1] = 0.616;
+    }
+    else if(anaSel.Contains("sswwAnalysis1004") || anaSel.Contains("sswwAnalysis1008")) {
+      postFitSF[kPlotSignal0] = 1.214;
+      postFitSF[kPlotSignal1] = 1.324;
+      postFitSF[kPlotSignal2] = 1.135;
+      postFitSF[kPlotSignal3] = 0.844;
+    }
+    else if(anaSel.Contains("sswwAnalysis1005") || anaSel.Contains("sswwAnalysis1009")) {
+      postFitSF[kPlotSignal0] = 1.101;
+      postFitSF[kPlotSignal1] = 1.045;
+      postFitSF[kPlotSignal2] = 1.321;
+      postFitSF[kPlotSignal3] = 0.967;
+    }
+  }
+  // End scale expectations to observations (step 1)
 
   double systValue;
   TFile *inputFile;
@@ -266,9 +321,11 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   for(unsigned ic=0; ic<nPlotCategories; ic++) {
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     for(int nb=1; nb<=histo_Baseline[ic]->GetNbinsX(); nb++){
-      histo_Baseline[ic]->SetBinContent(nb, TMath::Max((float)histo_Baseline[ic]->GetBinContent(nb),0.0f));
+      histo_Baseline[ic]->SetBinContent(nb, TMath::Max((float)histo_Baseline[ic]->GetBinContent(nb),0.000001f));
+      // Allow for maximum 50% stat. unc.
+      if(histo_Baseline[ic]->GetBinError(nb)/histo_Baseline[ic]->GetBinContent(nb) > 0.5) histo_Baseline[ic]->SetBinError(nb,0.5*histo_Baseline[ic]->GetBinContent(nb));
 
-      for(int j=0; j<nSystTotal; j++) histo_Syst[j][ic]->SetBinContent(nb, TMath::Max((float)histo_Syst[j][ic]->GetBinContent(nb),0.0f));
+      for(int j=0; j<nSystTotal; j++) histo_Syst[j][ic]->SetBinContent(nb, TMath::Max((float)histo_Syst[j][ic]->GetBinContent(nb),0.000001f));
 
       // compute QCD scale uncertainties bin-by-bin
       double diffQCDScale[6] = {
@@ -285,7 +342,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
       }
 
       if(histo_Baseline[ic]->GetBinContent(nb) > 0) 
-        systQCDScale = 1.0+systQCDScale/histo_Baseline[ic]->GetBinContent(nb);
+        systQCDScale = 1.0+TMath::Min(systQCDScale/histo_Baseline[ic]->GetBinContent(nb),maxTheoryUnc[ic]);
       else systQCDScale = 1;
 
       histo_QCDScaleUp  [ic]->SetBinContent(nb, histo_Baseline[ic]->GetBinContent(nb)*systQCDScale);
@@ -304,18 +361,18 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
       }
 
       if(histo_Baseline[ic]->GetBinContent(nb) > 0) 
-        systPS = 1.0+systPS/histo_Baseline[ic]->GetBinContent(nb);
+        systPS = 1.0+TMath::Min(systPS/histo_Baseline[ic]->GetBinContent(nb),maxTheoryUnc[ic]);
       else systPS = 1;
 
       histo_PSUp  [ic]->SetBinContent(nb, histo_Baseline[ic]->GetBinContent(nb)*systPS);
       histo_PSDown[ic]->SetBinContent(nb, histo_Baseline[ic]->GetBinContent(nb)/systPS);
 
-      histo_Baseline    [ic]->SetBinContent(nb, TMath::Max((float)histo_Baseline    [ic]->GetBinContent(nb),0.0f));
-      histo_QCDScaleUp  [ic]->SetBinContent(nb, TMath::Max((float)histo_QCDScaleUp  [ic]->GetBinContent(nb),0.0f));
-      histo_QCDScaleDown[ic]->SetBinContent(nb, TMath::Max((float)histo_QCDScaleDown[ic]->GetBinContent(nb),0.0f));
-      histo_PSUp        [ic]->SetBinContent(nb, TMath::Max((float)histo_PSUp        [ic]->GetBinContent(nb),0.0f));
-      histo_PSDown      [ic]->SetBinContent(nb, TMath::Max((float)histo_PSDown      [ic]->GetBinContent(nb),0.0f));
-      for(int j=0; j<nSystTotal; j++) histo_Syst[j][ic]->SetBinContent(nb, TMath::Max((float)histo_Syst[j][ic]->GetBinContent(nb),0.0f));
+      histo_Baseline    [ic]->SetBinContent(nb, TMath::Max((float)histo_Baseline    [ic]->GetBinContent(nb),0.000001f));
+      histo_QCDScaleUp  [ic]->SetBinContent(nb, TMath::Max((float)histo_QCDScaleUp  [ic]->GetBinContent(nb),0.000001f));
+      histo_QCDScaleDown[ic]->SetBinContent(nb, TMath::Max((float)histo_QCDScaleDown[ic]->GetBinContent(nb),0.000001f));
+      histo_PSUp        [ic]->SetBinContent(nb, TMath::Max((float)histo_PSUp        [ic]->GetBinContent(nb),0.000001f));
+      histo_PSDown      [ic]->SetBinContent(nb, TMath::Max((float)histo_PSDown      [ic]->GetBinContent(nb),0.000001f));
+      for(int j=0; j<nSystTotal; j++) histo_Syst[j][ic]->SetBinContent(nb, TMath::Max((float)histo_Syst[j][ic]->GetBinContent(nb),0.000001f));
 
       // compute PDF uncertainties
       if(histo_Baseline[ic]->GetBinContent(nb) > 0 && TMath::Abs(histo_Baseline[ic]->GetBinContent(nb)-histo_Syst[10][ic]->GetBinContent(nb))/histo_Baseline[ic]->GetBinContent(nb) > 0.001) printf("PDF problem %f %f %f\n", histo_Baseline[ic]->GetBinContent(nb),histo_Syst[10][ic]->GetBinContent(nb),TMath::Abs(histo_Baseline[ic]->GetBinContent(nb)-histo_Syst[10][ic]->GetBinContent(nb)));
@@ -392,8 +449,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
     for(int j=0; j<totalNumberFakeSyst; j++){
       for(int nb=1; nb<=histo_Baseline[kPlotNonPrompt]->GetNbinsX(); nb++){
-        histo_NonPromtUnc[j+                  0]->SetBinContent(nb, TMath::Max((float)histo_NonPromtUnc[j+                  0]->GetBinContent(nb),0.0f));
-        histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb, TMath::Max((float)histo_NonPromtUnc[j+totalNumberFakeSyst]->GetBinContent(nb),0.0f));
+        histo_NonPromtUnc[j+                  0]->SetBinContent(nb, TMath::Max((float)histo_NonPromtUnc[j+                  0]->GetBinContent(nb),0.000001f));
+        histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb, TMath::Max((float)histo_NonPromtUnc[j+totalNumberFakeSyst]->GetBinContent(nb),0.000001f));
        if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
           systValue = histo_NonPromtUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotNonPrompt]->GetBinContent(nb);
           if(fabs(systValue-1) > 0.15) printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
@@ -433,8 +490,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
 
     for(int j=0; j<totalNumberWSSyst; j++){
       for(int nb=1; nb<=histo_Baseline[kPlotWS]->GetNbinsX(); nb++){
-        histo_WSUnc[j+                0]->SetBinContent(nb, TMath::Max((float)histo_WSUnc[j+                0]->GetBinContent(nb),0.0f));
-        histo_WSUnc[j+totalNumberWSSyst]->SetBinContent(nb, TMath::Max((float)histo_WSUnc[j+totalNumberWSSyst]->GetBinContent(nb),0.0f));
+        histo_WSUnc[j+                0]->SetBinContent(nb, TMath::Max((float)histo_WSUnc[j+                0]->GetBinContent(nb),0.000001f));
+        histo_WSUnc[j+totalNumberWSSyst]->SetBinContent(nb, TMath::Max((float)histo_WSUnc[j+totalNumberWSSyst]->GetBinContent(nb),0.000001f));
         if(histo_Baseline[kPlotWS]->GetBinContent(nb) > 0) {
           systValue = histo_WSUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotWS]->GetBinContent(nb);
           if     (systValue > 1.15) systValue = 1.15;
@@ -449,39 +506,31 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   // End wrongsign study
 
   TString additionalSuffix = "";
-  if(whichAna != 0){ 
+  if(whichAna != 0){
     additionalSuffix = "_alt";
   }
 
   // Begin renormalize
   for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
     if(histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(!(ic == kPlotEWKSSWW ||
-         ic == kPlotSignal0 ||
-         ic == kPlotSignal1 ||
-         ic == kPlotSignal2 ||
-         ic == kPlotSignal3 ||
-         ic == kPlotWZ ||
-         ic == kPlotEWKWZ ||
-         ic == kPlotZZ
-        ))  continue;
-     histo_QCDScaleUp  [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleUp  [ic]->GetSumOfWeights());
-     histo_QCDScaleDown[ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleDown[ic]->GetSumOfWeights());
-     histo_PSUp        [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSUp        [ic]->GetSumOfWeights());
-     histo_PSDown      [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSDown      [ic]->GetSumOfWeights());
-     for(int npdf=0; npdf<101; npdf++){
-       histo_PDFUp  [npdf][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PDFUp  [npdf][ic]->GetSumOfWeights());
-       histo_PDFDown[npdf][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PDFDown[npdf][ic]->GetSumOfWeights());
-     }
-     for(int j=0; j<nSystDataCardTotal; j++) {
-       TString histName = histo_SystDataCard[j][ic]->GetName();
-       if(histName.Contains("pileup")) {
-          histo_SystDataCard[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/ histo_SystDataCard[j][ic]->GetSumOfWeights());
-       }
-       if(histName.Contains("ewkCorr")) {
-          histo_SystDataCard[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/ histo_SystDataCard[j][ic]->GetSumOfWeights());
-       }
-     }
+    if(isTheorySignal[ic] == false)  continue;
+    histo_QCDScaleUp  [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleUp  [ic]->GetSumOfWeights());
+    histo_QCDScaleDown[ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_QCDScaleDown[ic]->GetSumOfWeights());
+    histo_PSUp        [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSUp        [ic]->GetSumOfWeights());
+    histo_PSDown      [ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PSDown      [ic]->GetSumOfWeights());
+    for(int npdf=0; npdf<101; npdf++){
+      histo_PDFUp  [npdf][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PDFUp  [npdf][ic]->GetSumOfWeights());
+      histo_PDFDown[npdf][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/histo_PDFDown[npdf][ic]->GetSumOfWeights());
+    }
+    for(int j=0; j<nSystDataCardTotal; j++) {
+      TString histName = histo_SystDataCard[j][ic]->GetName();
+      if(histName.Contains("pileup")) {
+        histo_SystDataCard[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/ histo_SystDataCard[j][ic]->GetSumOfWeights());
+      }
+      if(histName.Contains("ewkCorr")) {
+        histo_SystDataCard[j][ic]->Scale(histo_Baseline[ic]->GetSumOfWeights()/ histo_SystDataCard[j][ic]->GetSumOfWeights());
+      }
+    }
   }
   // End renormalize
 
@@ -491,12 +540,30 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     if(ic == kPlotData) {
       histo_Baseline[ic]->SetBinError(1,sqrt(histo_Baseline[ic]->GetBinContent(1)));
     } else {
-      float relativeUncBin2 = 0.01;
-      if(histo_Baseline[ic]->GetBinContent(2) > 0) relativeUncBin2 = histo_Baseline[ic]->GetBinError(2)/histo_Baseline[ic]->GetBinContent(2);
-      histo_Baseline[ic]->SetBinError(1,relativeUncBin2*histo_Baseline[ic]->GetBinContent(1));
+      if(histo_Baseline[ic]->GetBinContent(1) > 0 && histo_Baseline[ic]->GetBinError(1)/histo_Baseline[ic]->GetBinContent(1) > 0.10) {
+        float relativeUncBin2 = 0.01;
+        if(histo_Baseline[ic]->GetBinContent(2) > 0) relativeUncBin2 = histo_Baseline[ic]->GetBinError(2)/histo_Baseline[ic]->GetBinContent(2);
+        histo_Baseline[ic]->SetBinError(1,relativeUncBin2*histo_Baseline[ic]->GetBinContent(1));
+      }
     }
   }
   // End Fix a feature affecting first bin
+
+  // Begin scale expectations to observations (step 2)
+  for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
+    histo_Baseline[ic]->Scale(postFitSF[ic]);
+    for(int j=0; j<nSystDataCardTotal; j++) histo_SystDataCard[j][ic]->Scale(postFitSF[ic]);
+
+    histo_QCDScaleUp  [ic]->Scale(postFitSF[ic]);
+    histo_QCDScaleDown[ic]->Scale(postFitSF[ic]);
+    histo_PSUp        [ic]->Scale(postFitSF[ic]);
+    histo_PSDown      [ic]->Scale(postFitSF[ic]);
+    for(int npdf=0; npdf<101; npdf++){
+      histo_PDFUp  [npdf][ic]->Scale(postFitSF[ic]);
+      histo_PDFDown[npdf][ic]->Scale(postFitSF[ic]);
+    }
+  }
+  // End scale expectations to observations (step 2)
 
   TString outputLimits = Form("datacard_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna,additionalSuffix.Data());
   outputFile = new TFile(outputLimits, "RECREATE");

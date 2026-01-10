@@ -38,7 +38,7 @@ Float_t GetMaximumIncludingErrors(TH1F* h, bool doApplyBinWidth)
 
         Float_t binHeight = h->GetBinContent(i) + h->GetBinError(i);
 
-        //if(doApplyBinWidth) binHeight = binHeight/h->GetBinWidth(i)*SFBinWidth;
+        if(doApplyBinWidth) binHeight = h->GetBinContent(i) + h->GetBinError(i)/h->GetBinWidth(i);
 
         if (binHeight > maxWithErrors) maxWithErrors = binHeight;
     }
@@ -57,7 +57,7 @@ Float_t GetMinimumIncludingErrors(TH1F* h, bool doApplyBinWidth)
 
         Float_t binHeight = h->GetBinContent(i) + h->GetBinError(i);
 
-        if(doApplyBinWidth) binHeight = binHeight/h->GetBinWidth(i)*SFBinWidth;
+        if(doApplyBinWidth) binHeight = h->GetBinContent(i) + h->GetBinError(i)/h->GetBinWidth(i);
 
         if (binHeight < minWithErrors) minWithErrors = binHeight;
     }
