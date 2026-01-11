@@ -960,9 +960,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 varSel2 = 11
             elif(makeDataCards == 5): # BDT 1D
                 x1Bins = array('d', [0.000,0.125,0.250,0.375,0.500,0.625,0.750,0.875,1.000])
-                x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5])
+                x2Bins = array('d', [0.000,0.125,0.250,0.375,0.500,0.625,0.750,0.875,1.000])
                 varSel1 = 13
-                varSel2 = 11
+                varSel2 = 13
             elif(makeDataCards == 6): # mjj
                 x1Bins = array('d', [500,700,900,1100,1300,1650,2000,2450,2900])
                 x2Bins = array('d', [500,700,900,1100,1300,1650,2000,2450,2900])
