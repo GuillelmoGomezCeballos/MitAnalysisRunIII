@@ -13,7 +13,7 @@
 
 void theApplyDataSmearing(TString inputName, double factor){
   TFile* file = new TFile(inputName, "read");
-  const int nPlotCategories = 24;
+  const int nPlotCategories = 26;
   TH1F* _hist[nPlotCategories];
   
   for(int ic=0; ic<nPlotCategories; ic++){

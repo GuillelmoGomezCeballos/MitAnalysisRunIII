@@ -22,9 +22,6 @@ if [ ${whichAna} == 'z' ]; then
     hadd -f anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_948.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_148.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_150.root
     hadd -f anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_951.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_151.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_153.root
     hadd -f anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_954.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_154.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_156.root
-    hadd -f anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_957.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_157.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_159.root
-    hadd -f anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_960.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_160.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_162.root
-    hadd -f anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_963.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_163.root anaZ/fillhisto_${whichAna}Analysis${whichJob}_${year}_165.root
 
 elif [ ${whichAna} == 'trigger' ]; then
 

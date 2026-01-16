@@ -76,6 +76,7 @@ TH1D histo_wwpt_scaleup;
 TH1D histo_wwpt_scaledown;
 TH1D histo_wwpt_resumup;
 TH1D histo_wwpt_resumdown;
+TH1D histoWSEtaEff;
 TH1D histoWSEtaSF;
 TH1D histoWSEtaSF_unc;
 TH2D histoWSEtaPtSF;
@@ -163,6 +164,14 @@ void initHisto1D(TH1D h, int nsel){
   else if(nsel == 11) hVV_KF_EWK[1] = h;
   else if(nsel == 12) hVV_KF_EWK_unc[0] = h;
   else if(nsel == 13) hVV_KF_EWK_unc[1] = h;
+  else if(nsel == 14) {
+    const int nBinEta = 5; Float_t xbinsEta[nBinEta+1] = {0.0, 0.5, 1.0, 1.5, 2.0, 2.5};
+    double eff[nBinEta] = {0.000047,0.000102,0.000331,0.001151,0.001918};
+    histoWSEtaEff = TH1D("histoWSEtaEff", "histoWSEtaEff", nBinEta, xbinsEta);
+    for(int i=0; i<nBinEta; i++){
+      histoWSEtaEff.SetBinContent(i+1,eff[i]);
+    }
+  }
 }
 
 float getValFromTH1(const TH1& h, const float& x, const float& sumError=0.0) {
@@ -757,6 +766,25 @@ int compute_number_WS(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& mu_c
   }
 
   return nWS;
+}
+
+float compute_WSEfficiency(const Vec_f& el_eta){
+
+  bool debug = false;
+  if(el_eta.size() == 0) return 1.0;
+  if(el_eta.size() == 1) return getValFromTH1(histoWSEtaEff, std::min(fabs(el_eta[0]),2.4999f));
+  if(el_eta.size() >= 2) {
+    double eff[2] = {getValFromTH1(histoWSEtaEff, std::min(fabs(el_eta[0]),2.4999f)),
+                     getValFromTH1(histoWSEtaEff, std::min(fabs(el_eta[1]),2.4999f))};
+
+    double total_eff = (1.0-eff[0])*eff[1] + (1.0-eff[1])*eff[0];
+
+    if(debug) printf("WSSFEff: %lu %.2f %.2f / %.7f %.7f /  %.7f\n",el_eta.size(),fabs(el_eta[0]),fabs(el_eta[1]),eff[0],eff[1],total_eff);    
+
+    return total_eff;
+  }
+
+  return 1.0;
 }
 
 float compute_WSSF(const int type, 
@@ -1495,10 +1523,13 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
   else if(var == 21){ // mll
     return mll;
   }
-  else if(var == 22){ // detajj
+  else if(var == 22){ // njets
+    return njets;
+  }
+  else if(var == 23){ // detajj
     return detajj;
   }
-  else if(var == 23){ // dphijj
+  else if(var == 24){ // dphijj
     return dphijj;
   }
   else if(var == 10 || var == 11){

@@ -71,32 +71,32 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   // Begin scale expectations to observations (step 1)
   if(applyPostFitSF == true){
     if     (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1006")) {
-      postFitSF[kPlotSignal0] = 1.309;
-      postFitSF[kPlotSignal1] = 1.054;
-      postFitSF[kPlotSignal2] = 1.124;
-      postFitSF[kPlotSignal3] = 1.044;
+      postFitSF[kPlotSignal0] = 1.272;
+      postFitSF[kPlotSignal1] = 0.994;
+      postFitSF[kPlotSignal2] = 1.148;
+      postFitSF[kPlotSignal3] = 1.041;
     }
     else if(anaSel.Contains("sswwAnalysis1002") || anaSel.Contains("sswwAnalysis1007")) {
-      postFitSF[kPlotSignal0] = 1.227;
-      postFitSF[kPlotSignal1] = 0.996;
-      postFitSF[kPlotSignal2] = 1.117;
-      postFitSF[kPlotSignal3] = 1.031;
+      postFitSF[kPlotSignal0] = 1.148;
+      postFitSF[kPlotSignal1] = 1.012;
+      postFitSF[kPlotSignal2] = 1.126;
+      postFitSF[kPlotSignal3] = 1.034;
     }
-    else if(anaSel.Contains("sswwAnalysis1003")) {
-      postFitSF[kPlotSignal0] = 1.293;
-      postFitSF[kPlotSignal1] = 0.616;
+    else if(anaSel.Contains("sswwAnalysis1003") || anaSel.Contains("sswwAnalysis1008")) {
+      postFitSF[kPlotSignal0] = 1.270;
+      postFitSF[kPlotSignal1] = 0.562;
     }
-    else if(anaSel.Contains("sswwAnalysis1004") || anaSel.Contains("sswwAnalysis1008")) {
-      postFitSF[kPlotSignal0] = 1.214;
-      postFitSF[kPlotSignal1] = 1.324;
-      postFitSF[kPlotSignal2] = 1.135;
-      postFitSF[kPlotSignal3] = 0.844;
+    else if(anaSel.Contains("sswwAnalysis1004") || anaSel.Contains("sswwAnalysis1009")) {
+      postFitSF[kPlotSignal0] = 1.205;
+      postFitSF[kPlotSignal1] = 1.274;
+      postFitSF[kPlotSignal2] = 1.110;
+      postFitSF[kPlotSignal3] = 0.863;
     }
-    else if(anaSel.Contains("sswwAnalysis1005") || anaSel.Contains("sswwAnalysis1009")) {
-      postFitSF[kPlotSignal0] = 1.101;
-      postFitSF[kPlotSignal1] = 1.045;
-      postFitSF[kPlotSignal2] = 1.321;
-      postFitSF[kPlotSignal3] = 0.967;
+    else if(anaSel.Contains("sswwAnalysis1005") || anaSel.Contains("sswwAnalysis1010")) {
+      postFitSF[kPlotSignal0] = 1.083;
+      postFitSF[kPlotSignal1] = 0.954;
+      postFitSF[kPlotSignal2] = 1.339;
+      postFitSF[kPlotSignal3] = 1.000;
     }
   }
   // End scale expectations to observations (step 1)
@@ -460,10 +460,10 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
           if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
         }
       }
-      if(anaSel.Contains("sswwAnalysis")){
-        histo_NonPromtUnc[j+		      0]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+  		0]->GetSumOfWeights());
-        histo_NonPromtUnc[j+totalNumberFakeSyst]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+totalNumberFakeSyst]->GetSumOfWeights());
-      }
+      //if(anaSel.Contains("sswwAnalysis")){
+      //  histo_NonPromtUnc[j+		      0]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+  		0]->GetSumOfWeights());
+      //  histo_NonPromtUnc[j+totalNumberFakeSyst]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+totalNumberFakeSyst]->GetSumOfWeights());
+      //}
     }
   }
   // End Nonprompt study

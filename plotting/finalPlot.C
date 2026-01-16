@@ -72,6 +72,31 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->SetMarkerStyle(kFullCircle);
 }
 
+Float_t GetEdgeIncludingErrors(TH1D* h, bool findMaximum, bool doApplyBinWidth = false)
+{
+  Float_t edgeWithErrors = 0;
+  if(findMaximum == false) edgeWithErrors = 100000000;
+
+  for (Int_t i=1; i<=h->GetNbinsX(); i++) {
+
+    if     (findMaximum == true){
+      Float_t binHeight = h->GetBinContent(i) + h->GetBinError(i);
+
+      if(doApplyBinWidth) binHeight = h->GetBinContent(i) + h->GetBinError(i)/h->GetBinWidth(i);
+
+      if(binHeight > edgeWithErrors) edgeWithErrors = binHeight;
+    } else {
+      Float_t binHeight = h->GetBinContent(i) - h->GetBinError(i);
+
+      if(doApplyBinWidth) binHeight = h->GetBinContent(i) - h->GetBinError(i)/h->GetBinWidth(i);
+
+      if(binHeight < edgeWithErrors) edgeWithErrors = binHeight;
+    }
+  }
+
+  return edgeWithErrors;
+}
+
 void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString units = "", TString plotName = "histoWW_56.root", TString outputName = "njets",
                 bool isLogY = false, int year = 2017, TString higgsLabel = "", double lumi = 1.0, bool isBlind = false, TString extraLabel = "",
 		bool show2D = true, bool applyScaling = false,
@@ -452,8 +477,8 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   // Set the y-axis range symmetric around y=0
   Double_t dy = TMath::Max(TMath::Abs(hRatio->GetMaximum()),
                            TMath::Abs(hRatio->GetMinimum())) + theLines[1];
-  minRatio = TMath::Min(TMath::Max(minRatio-0.03,0.000),0.810);
-  maxRatio = TMath::Min(TMath::Max(maxRatio+0.03,1.190),2.999);
+  minRatio = TMath::Min(GetEdgeIncludingErrors(hRatio,0),0.810f);
+  maxRatio = TMath::Min(GetEdgeIncludingErrors(hRatio,1),2.999f);
   if(showPulls) hBand->GetYaxis()->SetRangeUser(-dy, +dy);
   else          hBand->GetYaxis()->SetRangeUser(minRatio,maxRatio);
   hRatio->GetYaxis()->CenterTitle();
