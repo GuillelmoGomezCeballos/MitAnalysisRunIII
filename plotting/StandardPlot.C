@@ -76,14 +76,14 @@ void AxisFonts(TAxis*  axis,
 {
     axis->SetLabelFont  (   42);
     axis->SetLabelOffset(0.010);
-    axis->SetLabelSize  (0.045);
+    axis->SetLabelSize  (0.060);
     axis->SetNdivisions (  505);
     axis->SetTitleFont  (   42);
     axis->SetTitleOffset(  0.9);
     axis->SetTitleSize  (0.035);
 
-    if      (coordinate == "y" && doApplyBinWidth == true) axis->SetTitleOffset(1.4);
-    else if (coordinate == "y")                            axis->SetTitleOffset(1.3);
+    if      (coordinate == "y" && doApplyBinWidth == true) axis->SetTitleOffset(1.6);
+    else if (coordinate == "y")                            axis->SetTitleOffset(1.5);
 
     axis->SetTitle(title);
 }

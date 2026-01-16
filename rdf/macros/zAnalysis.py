@@ -241,8 +241,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     xDetajjBins = array('d', [2.5,3.0,3.6,4.0,4.5,5.0,5.5,6.0,7.0])
     VBSSELECTION = "Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 20 && ptl1{0} > 25 && ptl2{0} > 20 && (DiLepton_flavor == 1 || abs(mll{0}-85.1876) > 20) && nbtag_goodbtag_Jet_bjet == 0 && nvbs_jets >= 2 && vbs_mjj > 500 && vbs_detajj > 2.5 && vbs_zepvv < 1.0 && thePuppiMET_pt> {1}".format(altMass,30)
 
-    xMllMin = [91.1876-15,  30, 91.1876-15]
-    xMllMax = [91.1876+15, 330, 91.1876+15]
+    xMllMin = [91.1876-15, 91.1876-15, 91.1876-15]
+    xMllMax = [91.1876+15, 91.1876+15, 91.1876+15]
     dfcat = []
     dfzllcat = []
     dfjetcat = []

@@ -50,7 +50,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   }
   histo->GetXaxis()->SetLabelFont  (   42);
   histo->GetXaxis()->SetLabelOffset(0.015);
-  histo->GetXaxis()->SetLabelSize  (0.135);
+  histo->GetXaxis()->SetLabelSize  (0.150);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
   histo->GetXaxis()->SetTitleOffset( 1.00);
@@ -477,8 +477,8 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   // Set the y-axis range symmetric around y=0
   Double_t dy = TMath::Max(TMath::Abs(hRatio->GetMaximum()),
                            TMath::Abs(hRatio->GetMinimum())) + theLines[1];
-  minRatio = TMath::Min(GetEdgeIncludingErrors(hRatio,0),0.810f);
-  maxRatio = TMath::Min(GetEdgeIncludingErrors(hRatio,1),2.999f);
+  minRatio = TMath::Max(TMath::Min(GetEdgeIncludingErrors(hRatio,0)-0.01f,0.859f),0.301f);
+  maxRatio = TMath::Min(TMath::Max(GetEdgeIncludingErrors(hRatio,1)+0.01f,1.141f),2.999f);
   if(showPulls) hBand->GetYaxis()->SetRangeUser(-dy, +dy);
   else          hBand->GetYaxis()->SetRangeUser(minRatio,maxRatio);
   hRatio->GetYaxis()->CenterTitle();
