@@ -58,28 +58,4 @@ elif [ $theOption -eq 2 ]; then
   done
   done
 
-
-elif [ $theOption -eq 10 ]; then
-
-  for ana in sswwAnalysis$1 wzAnalysis$1 zzAnalysis$1;
-  do
-
-  for year in 2022 2023;
-  do
-
-  for bin in 0 1;
-  do
-
-    if [[ -f output_${ana}_${year}_bin${bin}.root ]]; then
-
-    mv output_${ana}_${year}_bin${bin}.root  output_${ana}_${year}0_bin${bin}.root
-    mv datacard_${ana}_${year}_bin${bin}.txt datacard_${ana}_${year}0_bin${bin}.txt
-    sed -i 's/output_${ana}_${year}_bin${bin}.root/output_${ana}_${year}0_bin${bin}.root/' datacard_${ana}_${year}0_bin${bin}.txt
-
-    fi
-
-  done
-  done
-  done
-
 fi

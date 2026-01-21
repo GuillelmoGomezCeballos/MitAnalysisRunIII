@@ -31,11 +31,16 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   if(fidAna <= 0 || fidAna >= 5) printf("Wrong fidAna(%d)\n",fidAna);
 
   int theYear = 0;
+  TString theTagYear = "NULL";
   double triggerEffUnc = 1.000;
-  if     (year == 20220) {triggerEffUnc = 1.005; theYear = 2022;}
-  else if(year == 20221) {triggerEffUnc = 1.005; theYear = 2022;}
-  else if(year == 20230) {triggerEffUnc = 1.005; theYear = 2023;}
-  else if(year == 20231) {triggerEffUnc = 1.005; theYear = 2023;}
+  double lumiU[3] = {1.000, 1.000, 1.000};
+  if     (year == 20220) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022";}
+  else if(year == 20221) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022EE";}
+  else if(year ==  2022) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022";}
+  else if(year == 20230) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023";}
+  else if(year == 20231) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023BPix";}
+  else if(year ==  2023) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023";}
+  else if(year == 20240) {triggerEffUnc = 1.005; lumiU[0] = 1.0020; lumiU[1] = 1.0068; lumiU[2] = 1.0144; theYear = 2024; theTagYear = "2024";}
   else {printf("Wrong year!\n"); return;}
 
   int jumpValue = 200;
@@ -71,68 +76,70 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   TH1D *histo_PDFUp  [101][nPlotCategories];
   TH1D *histo_PDFDown[101][nPlotCategories];
 
-  TString BtagSFBCNames[13] = {"CMS_bc_btag_00", "CMS_bc_btag_01", "CMS_bc_btag_02", "CMS_bc_btag_bfragmentation", "CMS_bc_btag_colorreconnection", "CMS_bc_btag_hdamp", "CMS_bc_btag_jer", "CMS_bc_btag_jes", "CMS_bc_btag_pdf", "CMS_bc_btag_pileup", "CMS_bc_btag_topmass", "CMS_bc_btag_type3", "CMS_bc_btag_statistic"};
+ const int numberBTagSyst = 11;
+  TString BtagSFBCNames[numberBTagSyst] = {"CMS_btag_fixedWP_bc_02", "CMS_btag_fixedWP_bc_bfragmentation", "CMS_btag_fixedWP_bc_colorreconnection", "CMS_btag_fixedWP_bc_hdamp", "CMS_btag_fixedWP_bc_jer", "CMS_btag_fixedWP_bc_jes", "CMS_btag_fixedWP_bc_pdf", "CMS_btag_fixedWP_bc_pileup", "CMS_btag_fixedWP_bc_topmass", "CMS_btag_fixedWP_bc_type3", Form("CMS_btag_fixedWP_bc_uncorrelated_%s",theTagYear.Data())};
 
-  TString jesNames[28] = {"", "AbsoluteMPFBias", "AbsoluteScale", "AbsoluteStat", "FlavorQCD", "Fragmentation", "PileUpDataMC", "PileUpPtBB", "PileUpPtEC1", "PileUpPtEC2", "PileUpPtHF", "PileUpPtRef", "RelativeFSR", "RelativeJEREC1", "RelativeJEREC2", "RelativeJERHF", "RelativePtBB", "RelativePtEC1", "RelativePtEC2", "RelativePtHF", "RelativeBal", "RelativeSample", "RelativeStatEC", "RelativeStatFSR", "RelativeStatHF", "SinglePionECAL", "SinglePionHCAL", "TimePtEta"};
+  const int numberJESSyst = 28;
+  TString jesNames[numberJESSyst] = {"", "AbsoluteMPFBias", "AbsoluteScale", "AbsoluteStat", "FlavorQCD", "Fragmentation", "PileUpDataMC", "PileUpPtBB", "PileUpPtEC1", "PileUpPtEC2", "PileUpPtHF", "PileUpPtRef", "RelativeFSR", "RelativeJEREC1", "RelativeJEREC2", "RelativeJERHF", "RelativePtBB", "RelativePtEC1", "RelativePtEC2", "RelativePtHF", "RelativeBal", "RelativeSample", "RelativeStatEC", "RelativeStatFSR", "RelativeStatHF", "SinglePionECAL", "SinglePionHCAL", "TimePtEta"};
 
-  jesNames[ 3] = Form("%s_%d"  ,jesNames[ 3].Data(),theYear); // AbsoluteStat
-  jesNames[13] = Form("%s_%d"  ,jesNames[13].Data(),theYear); // RelativeJEREC1
-  jesNames[14] = Form("%s_%d"  ,jesNames[14].Data(),theYear); // RelativeJEREC2
-  jesNames[17] = Form("%s_%d"  ,jesNames[17].Data(),theYear); // RelativePtEC1
-  jesNames[18] = Form("%s_%d"  ,jesNames[18].Data(),theYear); // RelativePtEC2
-  jesNames[21] = Form("%s_%d"  ,jesNames[21].Data(),theYear); // RelativeSample
-  jesNames[22] = Form("%s_%d"  ,jesNames[22].Data(),theYear); // RelativeStatEC
-  jesNames[23] = Form("%s_%d"  ,jesNames[23].Data(),theYear); // RelativeStatFSR
-  jesNames[24] = Form("%s_%d"  ,jesNames[24].Data(),theYear); // RelativeStatHF
-  jesNames[27] = Form("%s_%d"  ,jesNames[27].Data(),theYear); // TimePtEta
+  jesNames[ 3] = Form("%s_%s"  ,jesNames[ 3].Data(),theTagYear.Data()); // AbsoluteStat
+  jesNames[13] = Form("%s_%s"  ,jesNames[13].Data(),theTagYear.Data()); // RelativeJEREC1
+  jesNames[14] = Form("%s_%s"  ,jesNames[14].Data(),theTagYear.Data()); // RelativeJEREC2
+  jesNames[17] = Form("%s_%s"  ,jesNames[17].Data(),theTagYear.Data()); // RelativePtEC1
+  jesNames[18] = Form("%s_%s"  ,jesNames[18].Data(),theTagYear.Data()); // RelativePtEC2
+  jesNames[21] = Form("%s_%s"  ,jesNames[21].Data(),theTagYear.Data()); // RelativeSample
+  jesNames[22] = Form("%s_%s"  ,jesNames[22].Data(),theTagYear.Data()); // RelativeStatEC
+  jesNames[23] = Form("%s_%s"  ,jesNames[23].Data(),theTagYear.Data()); // RelativeStatFSR
+  jesNames[24] = Form("%s_%s"  ,jesNames[24].Data(),theTagYear.Data()); // RelativeStatHF
+  jesNames[27] = Form("%s_%s"  ,jesNames[27].Data(),theTagYear.Data()); // TimePtEta
 
   TString nameSyst[nSystDataCardTotal];
-  nameSyst[  0] = Form("CMS_eff_m_reco_%dUp",theYear);
-  nameSyst[  1] = Form("CMS_eff_m_reco_%dDown",theYear);
-  nameSyst[  2] = Form("CMS_eff_m_id_%dUp",theYear);
-  nameSyst[  3] = Form("CMS_eff_m_id_%dDown",theYear);
-  nameSyst[  4] = Form("CMS_eff_m_iso_%dUp",theYear);
-  nameSyst[  5] = Form("CMS_eff_m_iso_%dDown",theYear);
-  nameSyst[  6] = Form("CMS_eff_e_reco_%dUp",theYear);
-  nameSyst[  7] = Form("CMS_eff_e_reco_%dDown",theYear);
-  nameSyst[  8] = Form("CMS_eff_e_id_%dUp",theYear);
-  nameSyst[  9] = Form("CMS_eff_e_id_%dDown",theYear);
-  nameSyst[10 ] = "pileupUp";
-  nameSyst[11 ] = "pileupDown";
-  nameSyst[12 ] = "CMS_SMP24001_VVtriggerUp";
-  nameSyst[13 ] = "CMS_SMP24001_VVtriggerDown";
-  nameSyst[14 ] = Form("%sUp"  ,BtagSFBCNames[ 0].Data());
-  nameSyst[15 ] = Form("%sDown",BtagSFBCNames[ 0].Data());
-  nameSyst[16 ] = Form("%sUp"  ,BtagSFBCNames[ 1].Data());
-  nameSyst[17 ] = Form("%sDown",BtagSFBCNames[ 1].Data());
-  nameSyst[18 ] = Form("%sUp"  ,BtagSFBCNames[ 2].Data());
-  nameSyst[19 ] = Form("%sDown",BtagSFBCNames[ 2].Data());
-  nameSyst[20 ] = Form("%sUp"  ,BtagSFBCNames[ 3].Data());
-  nameSyst[21 ] = Form("%sDown",BtagSFBCNames[ 3].Data());
-  nameSyst[22 ] = Form("%sUp"  ,BtagSFBCNames[ 4].Data());
-  nameSyst[23 ] = Form("%sDown",BtagSFBCNames[ 4].Data());
-  nameSyst[24 ] = Form("%sUp"  ,BtagSFBCNames[ 5].Data());
-  nameSyst[25 ] = Form("%sDown",BtagSFBCNames[ 5].Data());
-  nameSyst[26 ] = Form("%sUp"  ,BtagSFBCNames[ 6].Data());
-  nameSyst[27 ] = Form("%sDown",BtagSFBCNames[ 6].Data());
-  nameSyst[28 ] = Form("%sUp"  ,BtagSFBCNames[ 7].Data());
-  nameSyst[29 ] = Form("%sDown",BtagSFBCNames[ 7].Data());
-  nameSyst[30 ] = Form("%sUp"  ,BtagSFBCNames[ 8].Data());
-  nameSyst[31 ] = Form("%sDown",BtagSFBCNames[ 8].Data());
-  nameSyst[32 ] = Form("%sUp"  ,BtagSFBCNames[ 9].Data());
-  nameSyst[33 ] = Form("%sDown",BtagSFBCNames[ 9].Data());
-  nameSyst[34 ] = Form("%sUp"  ,BtagSFBCNames[10].Data());
-  nameSyst[35 ] = Form("%sDown",BtagSFBCNames[10].Data());
-  nameSyst[36 ] = Form("%sUp"  ,BtagSFBCNames[11].Data());
-  nameSyst[37 ] = Form("%sDown",BtagSFBCNames[11].Data());
-  nameSyst[38 ] = Form("%s_%dUp"  ,BtagSFBCNames[12].Data(),year);
-  nameSyst[39 ] = Form("%s_%dDown",BtagSFBCNames[12].Data(),year);
-  nameSyst[40 ] = "CMS_lf_btagUp";
-  nameSyst[41 ] = "CMS_lf_btagDown";
-  nameSyst[42 ] = Form("CMS_scale_m_%dUp",theYear);
-  nameSyst[43 ] = Form("CMS_scale_m_%dDown",theYear);
-  nameSyst[44 ] = Form("CMS_scale_e_%dUp",theYear);
-  nameSyst[45 ] = Form("CMS_scale_e_%dDown",theYear);
+  nameSyst[  0] = Form("CMS_eff_m_reco_%sUp",theTagYear.Data());
+  nameSyst[  1] = Form("CMS_eff_m_reco_%sDown",theTagYear.Data());
+  nameSyst[  2] = Form("CMS_eff_m_id_%sUp",theTagYear.Data());
+  nameSyst[  3] = Form("CMS_eff_m_id_%sDown",theTagYear.Data());
+  nameSyst[  4] = Form("CMS_eff_m_iso_%sUp",theTagYear.Data());
+  nameSyst[  5] = Form("CMS_eff_m_iso_%sDown",theTagYear.Data());
+  nameSyst[  6] = Form("CMS_eff_e_reco_%sUp",theTagYear.Data());
+  nameSyst[  7] = Form("CMS_eff_e_reco_%sDown",theTagYear.Data());
+  nameSyst[  8] = Form("CMS_eff_e_idUp");
+  nameSyst[  9] = Form("CMS_eff_e_idDown");
+  nameSyst[10 ] = "pileup_13p6TeVUp";
+  nameSyst[11 ] = "pileup_13p6TeVDown";
+  nameSyst[12 ] = Form("CMS_SMP25013_WWtrigger_%sUp",theTagYear.Data());
+  nameSyst[13 ] = Form("CMS_SMP25013_WWtrigger_%sDown",theTagYear.Data());
+  nameSyst[14 ] = Form("CMS_SMP25013_eff_m_tightid_%sUp",theTagYear.Data());
+  nameSyst[15 ] = Form("CMS_SMP25013_eff_m_tightid_%sDown",theTagYear.Data());
+  nameSyst[16 ] = Form("CMS_SMP25013_eff_e_tightid_%sUp",theTagYear.Data());
+  nameSyst[17 ] = Form("CMS_SMP25013_eff_e_tightid_%sDown",theTagYear.Data());
+  nameSyst[18 ] = Form("%sUp"  ,BtagSFBCNames[ 0].Data());
+  nameSyst[19 ] = Form("%sDown",BtagSFBCNames[ 0].Data());
+  nameSyst[20 ] = Form("%sUp"  ,BtagSFBCNames[ 1].Data());
+  nameSyst[21 ] = Form("%sDown",BtagSFBCNames[ 1].Data());
+  nameSyst[22 ] = Form("%sUp"  ,BtagSFBCNames[ 2].Data());
+  nameSyst[23 ] = Form("%sDown",BtagSFBCNames[ 2].Data());
+  nameSyst[24 ] = Form("%sUp"  ,BtagSFBCNames[ 3].Data());
+  nameSyst[25 ] = Form("%sDown",BtagSFBCNames[ 3].Data());
+  nameSyst[26 ] = Form("%sUp"  ,BtagSFBCNames[ 4].Data());
+  nameSyst[27 ] = Form("%sDown",BtagSFBCNames[ 4].Data());
+  nameSyst[28 ] = Form("%sUp"  ,BtagSFBCNames[ 5].Data());
+  nameSyst[29 ] = Form("%sDown",BtagSFBCNames[ 5].Data());
+  nameSyst[30 ] = Form("%sUp"  ,BtagSFBCNames[ 6].Data());
+  nameSyst[31 ] = Form("%sDown",BtagSFBCNames[ 6].Data());
+  nameSyst[32 ] = Form("%sUp"  ,BtagSFBCNames[ 7].Data());
+  nameSyst[33 ] = Form("%sDown",BtagSFBCNames[ 7].Data());
+  nameSyst[34 ] = Form("%sUp"  ,BtagSFBCNames[ 8].Data());
+  nameSyst[35 ] = Form("%sDown",BtagSFBCNames[ 8].Data());
+  nameSyst[36 ] = Form("%sUp"  ,BtagSFBCNames[ 9].Data());
+  nameSyst[37 ] = Form("%sDown",BtagSFBCNames[ 9].Data());
+  nameSyst[38 ] = Form("%sUp"  ,BtagSFBCNames[10].Data());
+  nameSyst[39 ] = Form("%sDown",BtagSFBCNames[10].Data());
+  nameSyst[40 ] = "CMS_btag_fixedWP_light_simpleUp";
+  nameSyst[41 ] = "CMS_btag_fixedWP_light_simpleDown";
+  nameSyst[42 ] = Form("CMS_scale_m_%sUp",theTagYear.Data());
+  nameSyst[43 ] = Form("CMS_scale_m_%sDown",theTagYear.Data());
+  nameSyst[44 ] = Form("CMS_scale_e_%sUp",theTagYear.Data());
+  nameSyst[45 ] = Form("CMS_scale_e_%sDown",theTagYear.Data());
   nameSyst[46 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 0].Data());
   nameSyst[47 ] = Form("CMS_scale_j_%sDown",jesNames[ 0].Data());
   nameSyst[48 ] = Form("CMS_scale_j_%sUp"  ,jesNames[ 1].Data());
@@ -189,14 +196,14 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   nameSyst[99 ] = Form("CMS_scale_j_%sDown",jesNames[26].Data());
   nameSyst[100] = Form("CMS_scale_j_%sUp"  ,jesNames[27].Data());
   nameSyst[101] = Form("CMS_scale_j_%sDown",jesNames[27].Data());
-  nameSyst[102] = Form("CMS_res_j_%dUp",theYear);
-  nameSyst[103] = Form("CMS_res_j_%dDown",theYear);
-  nameSyst[104] = Form("CMS_met_jer_%dUp",theYear);
-  nameSyst[105] = Form("CMS_met_jer_%dDown",theYear);
-  nameSyst[106] = Form("CMS_met_jes_%dUp",theYear);
-  nameSyst[107] = Form("CMS_met_jes_%dDown",theYear);
-  nameSyst[108] = Form("CMS_met_unclustered_%dUp",theYear);
-  nameSyst[109] = Form("CMS_met_unclustered_%dDown",theYear);
+  nameSyst[102] = Form("CMS_res_j_%sUp",theTagYear.Data());
+  nameSyst[103] = Form("CMS_res_j_%sDown",theTagYear.Data());
+  nameSyst[104] = Form("CMS_scale_met_jer_%sUp",theTagYear.Data());
+  nameSyst[105] = Form("CMS_scale_met_jer_%sDown",theTagYear.Data());
+  nameSyst[106] = Form("CMS_scale_met_jes_%sUp",theTagYear.Data());
+  nameSyst[107] = Form("CMS_scale_met_jes_%sDown",theTagYear.Data());
+  nameSyst[108] = Form("CMS_scale_met_unclustered_energy_%sUp",theTagYear.Data());
+  nameSyst[109] = Form("CMS_scale_met_unclustered_energy_%sDown",theTagYear.Data());
 
   double scaleFactorFiducial[nSelTotal][nPlotCategories];
  for(unsigned nSel=0; nSel<nSelTotal; nSel++) for(int ic=0; ic<nPlotCategories; ic++) scaleFactorFiducial[nSel][ic] = 0.0;
@@ -536,7 +543,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     additionalSuffix = "_alt";
   }
 
-  TString outputLimits = Form("output_%s_%d_bin%d%s%s.root",anaSel.Data(),year,fidAna-1,additionalSuffix.Data(),addFiducialName.Data());
+  TString outputLimits = Form("datacard_%s_%d_bin%d%s%s.root",anaSel.Data(),year,fidAna-1,additionalSuffix.Data(),addFiducialName.Data());
   outputFile = new TFile(outputLimits, "RECREATE");
   outputFile->cd();
   for(unsigned ic=kPlotData; ic!=nPlotCategories; ic++) {
@@ -606,7 +613,9 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
             ic != kPlotSignal4 &&
             ic != kPlotSignal5 &&
             ic != kPlotqqWW    &&
-            ic != kPlotggWW
+            ic != kPlotggWW    &&
+            ic != kPlotWZ      &&
+            ic != kPlotZZ
             ) newcardShape << Form("%d  ", ic);
     else if(ic == kPlotSignal0) newcardShape << Form("%d  ", -1);
     else if(ic == kPlotSignal1) newcardShape << Form("%d  ", -2);
@@ -616,6 +625,8 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     else if(ic == kPlotSignal5) newcardShape << Form("%d  ", -6);
     else if(ic == kPlotqqWW)    newcardShape << Form("%d  ", -7);
     else if(ic == kPlotggWW)    newcardShape << Form("%d  ", -8);
+    else if(ic == kPlotWZ)      newcardShape << Form("%d  ", -9);
+    else if(ic == kPlotZZ)      newcardShape << Form("%d  ", -10);
   }
   newcardShape << Form("\n");
 
@@ -713,16 +724,19 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("luminosity_%d   lnN     ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("%6.3f ",1.014);
+  for(int nl=0; nl<3; nl++){
+    if(lumiU[nl] == 1) continue;
+    newcardShape << Form("lumi_13p6TeV_%d lnN ", nl);
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else                     newcardShape << Form("%6.3f ",lumiU[nl]);
+    }
+    newcardShape << Form("\n");
   }
-  newcardShape << Form("\n");
 
-  newcardShape << Form("CMS_SMP24001_WWtrigger_%d   lnN     ",year);
+  newcardShape << Form("CMS_SMP25013_trigger_%s   lnN     ",theTagYear.Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -731,7 +745,19 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 0].Data());
+  // BTagging uncertainties --> starting at 1, "2" not used
+  for(int n_unc=1; n_unc<numberBTagSyst; n_unc++){
+    newcardShape << Form("%s shape ",BtagSFBCNames[n_unc].Data());
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else                     newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
+  }
+
+  newcardShape << Form("CMS_btag_fixedWP_light_simple shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -740,7 +766,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 1].Data());
+  newcardShape << Form("CMS_eff_m_reco_%s shape ",theTagYear.Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -749,7 +775,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 2].Data());
+  newcardShape << Form("CMS_eff_m_id_%s shape ",theTagYear.Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -758,7 +784,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 3].Data());
+  newcardShape << Form("CMS_eff_m_iso_%s shape ",theTagYear.Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -767,7 +793,16 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 4].Data());
+  newcardShape << Form("CMS_eff_e_reco_%s shape ",theTagYear.Data());
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+ 
+  newcardShape << Form("CMS_eff_e_id shape ");
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -776,7 +811,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 5].Data());
+  newcardShape << Form("CMS_SMP25013_eff_m_tightid_%s shape ",theTagYear.Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -785,7 +820,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 6].Data());
+  newcardShape << Form("CMS_SMP25013_eff_e_tightid_%s shape ",theTagYear.Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -794,7 +829,46 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 7].Data());
+  newcardShape << Form("pileup_13p6TeV shape ");
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+ 
+  // JES uncertainties --> starting at 1, 0 == total (not used)
+  for(int n_unc=1; n_unc<numberJESSyst; n_unc++){
+    newcardShape << Form("CMS_scale_j_%s shape ",jesNames[n_unc].Data());
+    for (int ic=0; ic<nPlotCategories; ic++){
+      if(!histo_Baseline[ic]) continue;
+      if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+      if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
+      else                          newcardShape << Form("1.0 ");
+    }
+    newcardShape << Form("\n");
+  }
+
+  newcardShape << Form("CMS_res_j_%s shape ",theTagYear.Data());
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+ 
+  newcardShape << Form("CMS_scale_m_%s shape ",theTagYear.Data());
+  for (int ic=0; ic<nPlotCategories; ic++){
+    if(!histo_Baseline[ic]) continue;
+    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+    else                     newcardShape << Form("1.0 ");
+  }
+  newcardShape << Form("\n");
+ 
+  newcardShape << Form("CMS_scale_e_%s shape ",theTagYear.Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -803,403 +877,25 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
   }
   newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 8].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
+  //newcardShape << Form("CMS_scale_met_jer_%s shape ",theTagYear.Data());
+  //for (int ic=0; ic<nPlotCategories; ic++){
+  //  if(!histo_Baseline[ic]) continue;
+  //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+  //  if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+  //  else		     newcardShape << Form("1.0 ");
+  //}
+  //newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[ 9].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
+  //newcardShape << Form("CMS_scale_met_jes_%s shape ",theTagYear.Data());
+  //for (int ic=0; ic<nPlotCategories; ic++){
+  //  if(!histo_Baseline[ic]) continue;
+  //  if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
+  //  if(ic == kPlotNonPrompt) newcardShape << Form("- ");
+  //  else		     newcardShape << Form("1.0 ");
+  //}
+  //newcardShape << Form("\n");
 
-  newcardShape << Form("%s shape ",BtagSFBCNames[10].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("%s shape ",BtagSFBCNames[11].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("%s_%d shape ",BtagSFBCNames[12].Data(),year);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("CMS_lf_btag shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("CMS_eff_m_reco_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("CMS_eff_m_id_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("CMS_eff_m_iso_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("CMS_eff_e_reco_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_eff_e_id_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("pileup shape ");
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[1].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[2].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[3].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[4].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[5].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[6].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[7].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[8].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[9].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[10].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[11].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[12].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[13].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[14].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[15].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[16].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[17].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[18].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[19].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[20].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[21].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[22].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[23].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[24].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[25].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[26].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_j_%s shape ",jesNames[27].Data());
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if     (ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                          newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_res_j_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_m_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
- 
-  newcardShape << Form("CMS_scale_e_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("CMS_met_jer_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("CMS_met_jes_%d shape ",theYear);
-  for (int ic=0; ic<nPlotCategories; ic++){
-    if(!histo_Baseline[ic]) continue;
-    if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
-    if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else		     newcardShape << Form("1.0 ");
-  }
-  newcardShape << Form("\n");
-
-  newcardShape << Form("CMS_met_unclustered_%d shape ",theYear);
+  newcardShape << Form("CMS_scale_met_unclustered_energy_%s shape ",theTagYear.Data());
   for (int ic=0; ic<nPlotCategories; ic++){
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
@@ -1378,7 +1074,7 @@ void makeWWDataCards(int whichAna = 0, int fidAna = 1, TString InputDir = "anaZ"
     if(!histo_Baseline[ic]) continue;
     if(ic == kPlotData || histo_Baseline[ic]->GetSumOfWeights() <= 0) continue;
     if(ic == kPlotNonPrompt) newcardShape << Form("- ");
-    else                     newcardShape << Form("%6.3f ",1.005);
+    else                     newcardShape << Form("%6.3f ",1.01);
   }
   newcardShape << Form("\n");
 

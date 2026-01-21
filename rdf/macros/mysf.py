@@ -1,7 +1,7 @@
 import ROOT
 import correctionlib
 
-year=20240
+year=20250
 correctionlib.register_pyroot_binding()
 ROOT.gInterpreter.Declare('#include "mysf.h"')
 print("eval_{0}".format(year))
@@ -80,6 +80,20 @@ elif(year==20240):
     ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"phi", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"nom", 100, 1.5, 45)')
     ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"phi", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"pu_dn", 100, 1.5, 45)')
     ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"phi", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"pu_up", 100, 1.5, 45)')
+elif(year==20250):
+    ROOT.gInterpreter.ProcessLine('auto corr = MyCorrections(20250);')
+    ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2024Prompt", (char*)"sf", (char*)"wp80iso", 1.1, 34.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2024Prompt", (char*)"sfup", (char*)"wp80iso", 1.1, 34.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_electronIDSF ((char*)"2024Prompt", (char*)"sfdown", (char*)"Medium", 1.1, 34.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_electronTRKSF((char*)"2024Prompt", (char*)"sf", (char*)"Reco20to75", 1.1, 20.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_electronTRKSF((char*)"2024Prompt", (char*)"sf", (char*)"RecoAbove75", 1.1, 75.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_photonSF((char*)"2024Prompt", (char*)"sf", (char*)"Medium", 1.1, 30.0,0.3)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"pt", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"nom", 100, 1.5, 45)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"pt", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"pu_dn", 100, 1.5, 45)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"pt", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"pu_up", 100, 1.5, 45)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"phi", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"nom", 100, 1.5, 45)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"phi", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"pu_dn", 100, 1.5, 45)')
+    ROOT.gInterpreter.ProcessLine('corr.eval_met_corr((char*)"phi", (char*)"PuppiMET", (char*)"2023BPix", (char*)"MC",(char*)"pu_up", 100, 1.5, 45)')
 print("eval_el_EtDependent_scale_smeaer")
 ROOT.gInterpreter.ProcessLine('corr.eval_electronEtDependentScale((char*)"scale", 357900, 0.5, 0.99, 40, 1.0)')
 ROOT.gInterpreter.ProcessLine('corr.eval_electronEtDependentSmearing((char*)"smear", 40, 0.99, 0.5)')
@@ -146,7 +160,7 @@ ROOT.gInterpreter.ProcessLine('corr.eval_jesUnc(1.5,30,25)')
 ROOT.gInterpreter.ProcessLine('corr.eval_jesUnc(1.5,30,26)')
 ROOT.gInterpreter.ProcessLine('corr.eval_jesUnc(1.5,30,27)')
 print("eval_jetCORR_others")
-#ROOT.gInterpreter.ProcessLine('corr.eval_jetCORR(0.5,1.,2.,150,15,380000,3)')
+ROOT.gInterpreter.ProcessLine('corr.eval_jetCORR(0.5,1.,2.,150,15,397853,3)')
 ROOT.gInterpreter.ProcessLine('corr.eval_jerScaleFactor(1.5,30, 0)')
 ROOT.gInterpreter.ProcessLine('corr.eval_jerScaleFactor(1.5,30,+1)')
 ROOT.gInterpreter.ProcessLine('corr.eval_jerScaleFactor(1.5,30,-1)')

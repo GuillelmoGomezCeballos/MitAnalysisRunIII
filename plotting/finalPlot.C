@@ -53,8 +53,8 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetXaxis()->SetLabelSize  (0.150);
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   42);
-  histo->GetXaxis()->SetTitleOffset( 1.00);
-  histo->GetXaxis()->SetTitleSize  (0.120);
+  histo->GetXaxis()->SetTitleOffset( 0.9);
+  histo->GetXaxis()->SetTitleSize  (0.150);
   //histo->GetXaxis()->SetTickLength (0.07 );
 
   histo->GetYaxis()->SetTitle(ytitle.Data());
@@ -359,9 +359,9 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   else if(year == 20230) {theLumi = 17.6;}
   else if(year == 20231) {theLumi = 9.5;}
   else if(year == 2027)  {theLumi = 171; theYear = Form("Run 3");}
-  else if(year == 2028)  {theLumi = 230; theYear = Form("Run 3");}
+  else if(year == 2028)  {theLumi = 280; theYear = Form("Run 3");}
   else if(year == 20240) {theLumi = 109; theYear = Form("%d",2024);}
-  else if(year == 20250) {theLumi = 60; theYear = Form("%d",2025);}
+  else if(year == 20250) {theLumi = 109; theYear = Form("%d",2025);}
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
   cmsstyle::SetExtraText("");

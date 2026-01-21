@@ -73,7 +73,7 @@ if __name__ == "__main__":
         jsnName = "jsns/Cert_Collisions2024_378981_386951_Golden.json"
         lumiName = "jsns/lumi_2024.csv"
     elif(year == 2025):
-        jsnName = "jsns/Cert_Collisions2025_391658_398860_Golden.json"
+        jsnName = "jsns/Cert_Collisions2025_391658_398903_Golden.json"
         lumiName = "jsns/lumi_2025.csv"
 
     readDASample(process,year,skimType,jsnName,lumiName)

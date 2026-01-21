@@ -11,7 +11,7 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 109.6, 109.0]
+    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 109.6, 105.0]
 
     lumiBit = -999
     if(year == 2016): lumiBit = 0
@@ -205,7 +205,7 @@ def getDATAlist(type, year, skimType):
     elif(year == 2024):
         jsnName = "Cert_Collisions2024_378981_386951_Golden.json"
     elif(year == 2025):
-        jsnName = "Cert_Collisions2025_391658_398860_Golden.json"
+        jsnName = "Cert_Collisions2025_391658_398903_Golden.json"
 
     if os.path.exists(os.path.join("jsns",jsnName)):
         loadJSON(os.path.join("jsns",jsnName))

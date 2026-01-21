@@ -546,6 +546,7 @@ Vec_b cleaningJetVetoMapMask(const Vec_f& jet_eta, const Vec_f& jet_phi, int jet
   else if(jetTypeCorr == -1 && year == 20230) jetTypeCorr = 2;
   else if(jetTypeCorr == -1 && year == 20231) jetTypeCorr = 3;
   else if(jetTypeCorr == -1 && year == 20240) jetTypeCorr = 0;
+  else if(jetTypeCorr == -1 && year == 20250) jetTypeCorr = 0;
   else if(jetTypeCorr == -1) return jet_vetoMap_mask;
 
   bool debug = false;

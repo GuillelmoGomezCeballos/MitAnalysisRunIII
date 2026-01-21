@@ -37,11 +37,11 @@ ENDCAPphotons = jsonObject['ENDCAPphotons']
 VBSSEL = jsonObject['VBSSEL']
 
 #2/4/5/8
-muSelChoice = 8
+muSelChoice = 2
 MUOWP = "Medium"
 
 #1/3/4/8
-elSelChoice = 8
+elSelChoice = 3
 ELEWP = "DUMMY"
 if(elSelChoice == 0):
     ELEWP = "Medium"

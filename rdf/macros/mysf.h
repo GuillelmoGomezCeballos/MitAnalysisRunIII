@@ -485,9 +485,12 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
 };
 
 double MyCorrections::eval_jetCORR(double area, double eta, double phi, double pt, double rho, int run, int type) {
+  int theRun = run;
+  if     (year == 20250 && theRun < 392159) theRun = 392159;
+  else if(year == 20250 && theRun > 397852) theRun = 397852;
   // data
-  if(type >= 0 && (year == 20231 || year == 20240 || year == 20250)) return JECDATA_[type]->evaluate({area, eta, pt, rho, phi, (float)run});
-  else if(type >= 0 && year == 20230)                                return JECDATA_[type]->evaluate({area, eta, pt, rho,      (float)run});
+  if(type >= 0 && (year == 20231 || year == 20240 || year == 20250)) return JECDATA_[type]->evaluate({area, eta, pt, rho, phi, (float)theRun});
+  else if(type >= 0 && year == 20230)                                return JECDATA_[type]->evaluate({area, eta, pt, rho,      (float)theRun});
   else if(type >= 0)                                                 return JECDATA_[type]->evaluate({area, eta, pt, rho});
   // MC
   if     (year == 20231 || year == 20240 || year == 20250) return JECMC_->evaluate({area, eta, pt, rho, phi});
