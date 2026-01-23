@@ -71,6 +71,11 @@ mv zzAnalysis_input_condor_jobs_new.cfg zzAnalysis_input_condor_jobs.cfg
 mv wzAnalysis_input_condor_jobs_new.cfg wzAnalysis_input_condor_jobs.cfg
 cd -
 
+sed -i 's/no//' /scratch/submit/cms/ceballos/analysis/macros1001/sswwAnalysis_input_condor_jobs.cfg
+sed -i 's/no//' /scratch/submit/cms/ceballos/analysis/macros1001/wwAnalysis_input_condor_jobs.cfg
+sed -i 's/no//' /scratch/submit/cms/ceballos/analysis/macros1001/zzAnalysis_input_condor_jobs.cfg
+sed -i 's/no//' /scratch/submit/cms/ceballos/analysis/macros1001/wzAnalysis_input_condor_jobs.cfg
+
 if [[ $1 == 1 ]]; then
 
 diff -r ../macros /scratch/submit/cms/ceballos/analysis/macros1001
