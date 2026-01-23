@@ -465,11 +465,11 @@ class StandardPlot {
         void setUnits(const TString &s) { _units = s; }
         void setBreakdown(const bool &b = true) { _breakdown = b; }
         void addLabel(const std::string &s) {
-            _extraLabel = new TLatex(0.216, 0.70, TString(s));
+            _extraLabel = new TLatex(0.150, 0.70, TString(s));
             _extraLabel->SetNDC();
             _extraLabel->SetTextAlign(13);
             _extraLabel->SetTextFont(62);
-            _extraLabel->SetTextSize(0.055);
+            _extraLabel->SetTextSize(0.050);
         }
 
     private: 
