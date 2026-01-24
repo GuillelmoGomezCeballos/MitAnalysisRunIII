@@ -48,12 +48,18 @@ void analysis_data_per_eras(){
   const int numberEras = 16;
   const int nHist = 25;
   const int refEra = 7;
-  double lumi[numberEras] = {8.1,26.7, 18.1,9.7, 7.2,7.9,11.3,27.7,37.7,5.4,11.3, 19.0, 24.2, 14.0, 24.0, 0.0};
-  TString nameEra[numberEras] = {"2022A", "2022B", "2023A", "2023B", "2024C", "2024D", "2024E", "2024F", "2024G", "2024H", "2024I",
+  double lumi[numberEras] = {8.1,26.7,
+                             18.1,9.7,
+                             7.2,8.0,11.3,28.1,38.1,5.5,11.4, 
+                             19.9,24.6,14.0,26.0,21.8};
+  TString nameEra[numberEras] = {"2022A", "2022B",
+                                 "2023A", "2023B",
+                                 "2024C", "2024D", "2024E", "2024F", "2024G", "2024H", "2024I",
                                  "2025C", "2025D", "2025E", "2025F", "2025G"};
-  TString nameAna[nHist] = {"Zmm   ", "Zee   ", "Zmm1j ", "Zee1j ", "Zmm1b ", "Zee1b ", "Zmm2j ", "Zee2j ", "ssmm  ",
-                            "ssee  ", "ssem  ", "wwem  ", "Zem   ", "em12b ", "em1b  ", "em2b  ", "ZZ4l  ", "ZZ4m  ",
-                            "ZZ2e2m", "ZZ4e  ", "WZ3l  ", "WZ3m  ", "WZ2m1e", "WZ1m2e", "WZ3e  "};
+  TString nameAna[nHist] = {"Zmm   ", "Zee   ", "Zmm1j ", "Zee1j ", "Zmm1b ", "Zee1b ", "ZTmm  ", "ZTee  ",
+                            "ssmm  ", "ssee  ", "ssem  ", "wwem  ", "Zem   ", "em12b ", "em1b  ", "em2b  ",
+                            "ZZ4l  ", "ZZ4m  ", "ZZ2e2m", "ZZ4e  ",
+                            "WZ3l  ", "WZ3m  ", "WZ2m1e", "WZ1m2e", "WZ3e  "};
  TString zSamples[numberEras] =  {"anaZ/fillhisto_zAnalysis_20220.root",
                                   "anaZ/fillhisto_zAnalysis_20221.root",
 
@@ -71,7 +77,28 @@ void analysis_data_per_eras(){
                                   "anaZ/fillhisto_zAnalysis_20250.root",
                                   "anaZ/fillhisto_zAnalysis_20251.root",
                                   "anaZ/fillhisto_zAnalysis_20252.root",
-                                  "anaZ/fillhisto_zAnalysis_20253.root"};
+                                  "anaZ/fillhisto_zAnalysis_20253.root",
+                                  "anaZ/fillhisto_zAnalysis_20254.root"};
+
+ TString ztSamples[numberEras] = {"anaZ/fillhisto_ztAnalysis_20220.root",
+                                  "anaZ/fillhisto_ztAnalysis_20221.root",
+
+                                  "anaZ/fillhisto_ztAnalysis_20230.root",
+                                  "anaZ/fillhisto_ztAnalysis_20231.root",
+
+                                  "anaZ/fillhisto_ztAnalysis_20240.root",
+                                  "anaZ/fillhisto_ztAnalysis_20241.root",
+                                  "anaZ/fillhisto_ztAnalysis_20242.root",
+                                  "anaZ/fillhisto_ztAnalysis_20243.root",
+                                  "anaZ/fillhisto_ztAnalysis_20244.root",
+                                  "anaZ/fillhisto_ztAnalysis_20245.root",
+                                  "anaZ/fillhisto_ztAnalysis_20246.root",
+
+                                  "anaZ/fillhisto_ztAnalysis_20250.root",
+                                  "anaZ/fillhisto_ztAnalysis_20251.root",
+                                  "anaZ/fillhisto_ztAnalysis_20252.root",
+                                  "anaZ/fillhisto_ztAnalysis_20253.root",
+                                  "anaZ/fillhisto_ztAnalysis_20254.root"};
 
   TString wwSamples[numberEras] ={"anaZ/fillhisto_wwAnalysis_20220.root",
                                   "anaZ/fillhisto_wwAnalysis_20221.root",
@@ -90,7 +117,8 @@ void analysis_data_per_eras(){
                                   "anaZ/fillhisto_wwAnalysis_20250.root",
                                   "anaZ/fillhisto_wwAnalysis_20251.root",
                                   "anaZ/fillhisto_wwAnalysis_20252.root",
-                                  "anaZ/fillhisto_wwAnalysis_20253.root"};
+                                  "anaZ/fillhisto_wwAnalysis_20253.root",
+                                  "anaZ/fillhisto_wwAnalysis_20254.root"};
 
   TString zzSamples[numberEras] ={"anaZ/fillhisto_zzAnalysis_20220.root",
                                   "anaZ/fillhisto_zzAnalysis_20221.root",
@@ -109,7 +137,8 @@ void analysis_data_per_eras(){
                                   "anaZ/fillhisto_zzAnalysis_20250.root",
                                   "anaZ/fillhisto_zzAnalysis_20251.root",
                                   "anaZ/fillhisto_zzAnalysis_20252.root",
-                                  "anaZ/fillhisto_zzAnalysis_20253.root"};
+                                  "anaZ/fillhisto_zzAnalysis_20253.root",
+                                  "anaZ/fillhisto_zzAnalysis_20254.root"};
 
   TString wzSamples[numberEras] ={"anaZ/fillhisto_wzAnalysis_20220.root",
                                   "anaZ/fillhisto_wzAnalysis_20221.root",
@@ -128,15 +157,15 @@ void analysis_data_per_eras(){
                                   "anaZ/fillhisto_wzAnalysis_20250.root",
                                   "anaZ/fillhisto_wzAnalysis_20251.root",
                                   "anaZ/fillhisto_wzAnalysis_20252.root",
-                                  "anaZ/fillhisto_wzAnalysis_20253.root"};
+                                  "anaZ/fillhisto_wzAnalysis_20253.root",
+                                  "anaZ/fillhisto_wzAnalysis_20254.root"};
 
   double sel[numberEras][nHist],sele[numberEras][nHist];
   printf("             ");
   for(int nh=0; nh<nHist; nh++) printf(" %s",nameAna[nh].Data());
   printf("\n");
 
-  for(int i=0; i<numberEras-1; i++){
-     //if(lumi[i] <= 0) continue;
+  for(int i=0; i<numberEras; i++){
      TH1D* _hist[nHist];
      TFile *inputzFile = new TFile(Form("%s",zSamples[i].Data()));
      _hist[ 0] = (TH1D*)inputzFile->Get(Form("histo_0_0"))->Clone();
@@ -145,8 +174,9 @@ void analysis_data_per_eras(){
      _hist[ 3] = (TH1D*)inputzFile->Get(Form("histo_115_0"))->Clone();
      _hist[ 4] = (TH1D*)inputzFile->Get(Form("histo_119_0"))->Clone();
      _hist[ 5] = (TH1D*)inputzFile->Get(Form("histo_121_0"))->Clone();
-     _hist[ 6] = (TH1D*)inputzFile->Get(Form("histo_163_0"))->Clone();
-     _hist[ 7] = (TH1D*)inputzFile->Get(Form("histo_164_0"))->Clone();
+     TFile *inputztFile = new TFile(Form("%s",ztSamples[i].Data()));
+     _hist[ 6] = (TH1D*)inputztFile->Get(Form("histo_0_0"))->Clone();
+     _hist[ 7] = (TH1D*)inputztFile->Get(Form("histo_2_0"))->Clone();
      TFile *inputwwFile = new TFile(Form("%s",wwSamples[i].Data()));
      _hist[ 8] = (TH1D*)inputwwFile->Get(Form("histo_71_0"))->Clone();
      _hist[ 9] = (TH1D*)inputwwFile->Get(Form("histo_72_0"))->Clone();
@@ -178,7 +208,7 @@ void analysis_data_per_eras(){
      printf("\n");
   }
 
-  const int numberUsedEras = numberEras-1;
+  const int numberUsedEras = numberEras;
   for(int nh=0; nh<nHist; nh++) {
     // Reset first of all
     gROOT->Reset();
