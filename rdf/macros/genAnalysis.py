@@ -8,7 +8,7 @@ from utilsAna import getMClist, getDATAlist, getTriggerFromJson, getLumi
 from utilsAna import SwitchSample
 from utilsSelection import selectionGenLepJet, selectionTheoryWeigths, makeFinalVariable
 
-isRun3Sel = False
+isRun3Sel = True
 
 def analysis(df,count,category,weight,year,PDType,nSel,isData,histo_wwpt,ewkCorrWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm):
 
@@ -454,7 +454,7 @@ if __name__ == "__main__":
 
     valid = ['year=', "process=", "sel=", 'help']
     usage  =  "Usage: ana.py --year=<{0}>\n".format(year)
-    usage +=  "              --process=<{0}>".format(process)
+    usage +=  "              --process=<{0}>\n".format(process)
     usage +=  "              --sel=<{0}>".format(nSel)
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", valid)

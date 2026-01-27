@@ -8,7 +8,13 @@ fi
 theAna=$1;
 theCondor=$2;
 theYear=$3;
-group=9
+
+export OPTIONMVA=0;
+if [[ $# -eq 4 ]]; then
+
+export OPTIONMVA=$4;
+
+fi
 
 if [ ${theYear} = 2027 ]; then
 
@@ -38,9 +44,13 @@ do
 
     fi
  
-    if [[ -f anaZ/${theAna}${theCondor}_20220_${i}_mva.root ]]; then
+    if [[ ${OPTIONMVA} == 1 ]]; then
 
-    hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_mva.root anaZ/${theAna}${theCondor}_2022?_${i}_mva.root anaZ/${theAna}${theCondor}_2023?_${i}_mva.root anaZ/${theAna}${theCondor}_2024?_${i}_mva.root
+        if [[ -f anaZ/${theAna}${theCondor}_20220_${i}_mva.root ]]; then
+
+        hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_mva.root anaZ/${theAna}${theCondor}_2022?_${i}_mva.root anaZ/${theAna}${theCondor}_2023?_${i}_mva.root anaZ/${theAna}${theCondor}_2024?_${i}_mva.root
+
+        fi
 
     fi
 
@@ -74,9 +84,13 @@ do
 
     fi
  
-    if [[ -f anaZ/${theAna}${theCondor}_20220_${i}_mva.root ]]; then
+    if [[ ${OPTIONMVA} == 1 ]]; then
 
-    hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_mva.root anaZ/${theAna}${theCondor}_202??_${i}_mva.root
+        if [[ -f anaZ/${theAna}${theCondor}_20220_${i}_mva.root ]]; then
+
+        hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_mva.root anaZ/${theAna}${theCondor}_202??_${i}_mva.root
+
+        fi
 
     fi
 
@@ -110,9 +124,13 @@ do
 
     fi
 
-    if [[ -f anaZ/${theAna}${theCondor}_${theYear}0_${i}_mva.root ]]; then
+    if [[ ${OPTIONMVA} == 1 ]]; then
 
-    hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_mva.root anaZ/${theAna}${theCondor}_${theYear}?_${i}_mva.root
+        if [[ -f anaZ/${theAna}${theCondor}_${theYear}0_${i}_mva.root ]]; then
+
+        hadd -f anaZ/${theAna}${theCondor}_${theYear}_${i}_mva.root anaZ/${theAna}${theCondor}_${theYear}?_${i}_mva.root
+
+        fi
 
     fi
 
