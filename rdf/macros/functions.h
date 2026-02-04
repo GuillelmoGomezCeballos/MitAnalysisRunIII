@@ -837,13 +837,15 @@ float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
   }
   else if(theCat.Contains("VBS-SSWW") || theCat.Contains("WWto2L2Nu-2Jets_OS_noTop_EW_Tune") || theCat.Contains("WWto2L2Nu-2Jets_SS_noTop_EW_Tune")
                                       || theCat.Contains("WWJJto2L2Nu-OS-noTop-EWK_Tune")    || theCat.Contains("WWJJto2L2Nu-SS-noTop-EWK_Tune")) {
-    if(type == 0) {
-      const TH1D& hcorr = hVV_KF_EWK[0];
-      sf = getValFromTH1(hcorr, mjjGen);
-    }
-    else if(type == 1) {
-      const TH1D& hcorr = hVV_KF_EWK_unc[0];
-      sf = getValFromTH1(hcorr, mjjGen);
+    if(!theCat.Contains("sherpa")){ // no sherpa correction
+      if(type == 0) {
+        const TH1D& hcorr = hVV_KF_EWK[0];
+        sf = getValFromTH1(hcorr, mjjGen);
+      }
+      else if(type == 1) {
+        const TH1D& hcorr = hVV_KF_EWK_unc[0];
+        sf = getValFromTH1(hcorr, mjjGen);
+      }
     }
   }
   else if(theCat.Contains("WZto3LNu-2Jets_EW")

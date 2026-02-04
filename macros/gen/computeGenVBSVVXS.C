@@ -12,7 +12,7 @@
 #include "TLegend.h"
 #include <iostream>
 
-void computeGenVBSVVXS(TString input = "", int selectType = 0){
+void computeGenVBSVVXS(TString input = "", int selectType = 0, float addHocUnc = -1.0){
 
   const int nBin4 = 4; const int nBin2 = 2;
   const Float_t xbinsWZMJJ       [nBin4+1] = {500, 900, 1300, 1900, 2500};
@@ -92,8 +92,6 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0){
       systPS = 1.0+systPS/histo_Baseline->GetBinContent(nb);
     else systPS = 1;
 
-    histo_PS_unc->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systPS);
-
     // compute QCD scale uncertainties bin-by-bin
     double diffQCDScale[number_unc_QCDScale] = {
      TMath::Abs(histo_QCDScale[0]->GetBinContent(nb)-histo_Baseline->GetBinContent(nb)),
@@ -112,8 +110,6 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0){
       systQCDScale = 1.0+systQCDScale/histo_Baseline->GetBinContent(nb);
     else systQCDScale = 1;
 
-    histo_QCDScale_unc->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systQCDScale);
-
     // compute PDF uncertainties bin-by-bin
     double systPDF = 0.0;
     for(int i=0; i<number_unc_PDF; i++) {
@@ -127,7 +123,14 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0){
         systPDF = 1.0+systPDF/histo_Baseline->GetBinContent(nb);
     else systPDF = 1;
 
-    histo_PDF_unc->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systPDF);
+    if(addHocUnc > 0){ // Make the three uncertainty components equal
+      systPS       = (1+addHocUnc/sqrt(3.0));
+      systQCDScale = (1+addHocUnc/sqrt(3.0));
+      systPDF      = (1+addHocUnc/sqrt(3.0));
+    }
+    histo_PS_unc      ->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systPS);
+    histo_QCDScale_unc->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systQCDScale);
+    histo_PDF_unc     ->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systPDF);
 
     double tot = sqrt((systPS-1)*(systPS-1)+(systQCDScale-1)*(systQCDScale-1)+(systPDF-1)*(systPDF-1));
     printf("bin(%d): %6.2f / %.3f %.3f %.3f / %.3f %6.2f\n",nb,histo_Baseline->GetBinContent(nb),systPS-1,systQCDScale-1,systPDF-1,tot,histo_Baseline->GetBinContent(nb)*tot);

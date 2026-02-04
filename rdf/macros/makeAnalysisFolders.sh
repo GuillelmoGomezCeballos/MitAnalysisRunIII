@@ -82,6 +82,7 @@ sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/sswwAnalysis_input_condor_jobs.cfg
 sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/wwAnalysis_input_condor_jobs.cfg
 sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/zzAnalysis_input_condor_jobs.cfg
 sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/wzAnalysis_input_condor_jobs.cfg
+sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/zAnalysis_input_condor_jobs.cfg
 
 if [[ $1 == 1 ]]; then
 

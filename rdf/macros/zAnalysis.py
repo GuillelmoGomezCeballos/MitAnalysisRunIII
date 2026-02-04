@@ -239,7 +239,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     xMllBins = array('d', [20,50,80,110,140,180,220,280,340])
     xNjetsBins = array('d', [1.5,2.5,3.5,4.5])
     xDetajjBins = array('d', [2.5,3.0,3.6,4.0,4.5,5.0,5.5,6.0,7.0])
-    VBSSELECTION = "Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 20 && ptl1{0} > 25 && ptl2{0} > 20 && (DiLepton_flavor == 1 || abs(mll{0}-85.1876) > 20) && nbtag_goodbtag_Jet_bjet == 0 && nvbs_jets >= 2 && vbs_mjj > 500 && vbs_detajj > 2.5 && vbs_zepvv < 1.0 && thePuppiMET_pt> {1}".format(altMass,30)
+    VBSSELECTION0 = "(DiLepton_flavor != 0 && Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 20 && ptl1{0} > 25 && ptl2{0} > 20 && (DiLepton_flavor != 2 || abs(mll{0}-85.1876) > 20) && nbtag_goodbtag_Jet_bjet == 0 && nvbs_jets >= 2 && vbs_mjj > 500 && vbs_detajj > 2.5 && vbs_zepvv < 1.0 && thePuppiMET_pt> {1})".format(altMass,30)
+    VBSSELECTION1 = "(DiLepton_flavor == 0 && Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 15 && ptl1{0} > 25 && ptl2{0} > 20 && nbtag_goodbtag_Jet_bjet != 0 && ngood_jets >= 2 && mll{0} < 65)".format(altMass)
+    VBSSELECTION = "{0} || {1}".format(VBSSELECTION0,VBSSELECTION1)
 
     xMllMin = [91.1876-15, 91.1876-15, 91.1876-15]
     xMllMax = [91.1876+15, 91.1876+15, 91.1876+15]
@@ -399,15 +401,18 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
               histo[ltype+284][x] = dfjetcat[3*x+ltype].Filter("ngood_jets >= 3").Histo1D(("histo_{0}_{1}".format(ltype+284,x), "histo_{0}_{1}".format(ltype+284,x), 40, 25, 225), "ptl1","weight")
               histo[ltype+286][x] = dfjetcat[3*x+ltype].Filter("ngood_jets >= 3").Histo1D(("histo_{0}_{1}".format(ltype+286,x), "histo_{0}_{1}".format(ltype+286,x), 40, 10, 210), "ptl2","weight")
 
-            histo[ltype+157][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+157,x), "histo_{0}_{1}".format(ltype+157,x), len(xMllBins)-1, xMllBins), "mll{0}".format(altMass),"weightWSEff")
-            if(ltype == 1):
-               histo[160][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(160,x), "histo_{0}_{1}".format(160,x), len(xMjjBins)-1, xMjjBins), "mjj","weightWSEff")
-               histo[162][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(162,x), "histo_{0}_{1}".format(162,x), len(xNjetsBins)-1, xNjetsBins), "ngood_jets","weightWSEff")
-               histo[164][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(164,x), "histo_{0}_{1}".format(164,x), len(xDetajjBins)-1, xDetajjBins), "vbs_detajj","weightWSEff")
+            if(ltype == 0):
+                histo[157][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(157,x), "histo_{0}_{1}".format(157,x), 50, 15, 65), "mll{0}".format(altMass),"weight")
+            elif(ltype == 1):
+                histo[158][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(158,x), "histo_{0}_{1}".format(158,x), len(xMllBins)-1, xMllBins), "mll{0}".format(altMass),"weightWSEff")
+                histo[160][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(160,x), "histo_{0}_{1}".format(160,x), len(xMjjBins)-1, xMjjBins), "mjj","weightWSEff")
+                histo[162][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(162,x), "histo_{0}_{1}".format(162,x), len(xNjetsBins)-1, xNjetsBins), "ngood_jets","weightWSEff")
+                histo[164][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(164,x), "histo_{0}_{1}".format(164,x), len(xDetajjBins)-1, xDetajjBins), "vbs_detajj","weightWSEff")
             elif(ltype == 2):
-               histo[161][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(161,x), "histo_{0}_{1}".format(161,x), len(xMjjBins)-1, xMjjBins), "mjj","weightWSEff")
-               histo[163][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(163,x), "histo_{0}_{1}".format(163,x), len(xNjetsBins)-1, xNjetsBins), "ngood_jets","weightWSEff")
-               histo[165][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(165,x), "histo_{0}_{1}".format(165,x), len(xDetajjBins)-1, xDetajjBins), "vbs_detajj","weightWSEff")
+                histo[159][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(159,x), "histo_{0}_{1}".format(159,x), len(xMllBins)-1, xMllBins), "mll{0}".format(altMass),"weightWSEff")
+                histo[161][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(161,x), "histo_{0}_{1}".format(161,x), len(xMjjBins)-1, xMjjBins), "mjj","weightWSEff")
+                histo[163][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(163,x), "histo_{0}_{1}".format(163,x), len(xNjetsBins)-1, xNjetsBins), "ngood_jets","weightWSEff")
+                histo[165][x] = dfvbscat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(165,x), "histo_{0}_{1}".format(165,x), len(xDetajjBins)-1, xDetajjBins), "vbs_detajj","weightWSEff")
 
             histo[ltype+166][x] = dfzllcat[3*x+ltype].Filter("METFILTERS > 0").Histo1D(("histo_{0}_{1}".format(ltype+166,x), "histo_{0}_{1}".format(ltype+166,x), 100, 0, 200), "thePuppiMET_pt","weight")
             histo[ltype+169][x] = dfzllcat[3*x+ltype].Filter("METFILTERS ==0").Histo1D(("histo_{0}_{1}".format(ltype+169,x), "histo_{0}_{1}".format(ltype+169,x), 100, 0, 200), "thePuppiMET_pt","weight")
