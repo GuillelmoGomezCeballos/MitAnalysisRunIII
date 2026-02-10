@@ -77,6 +77,7 @@ TH1D histo_wwpt_scaledown;
 TH1D histo_wwpt_resumup;
 TH1D histo_wwpt_resumdown;
 TH1D histoWSEtaEff;
+TH2D histoWSEtaPtEff;
 TH1D histoWSEtaSF;
 TH1D histoWSEtaSF_unc;
 TH2D histoWSEtaPtSF;
@@ -147,6 +148,18 @@ void initHisto2D(TH2D h, int nsel){
   else if(nsel == 57) histoTriggerMCEtaPt[7] = h;
   else if(nsel == 58) histoTriggerMCEtaPt[8] = h;
   else if(nsel == 59) histoTriggerMCEtaPt[9] = h;
+  else if(nsel == 60) {
+    const int nBinEta1 = 2; Float_t xbinsEta1[nBinEta1+1] = {0.0, 1.5, 2.5};
+    const int nBinPt1  = 3; Float_t xbinsPt1 [nBinPt1+1]  = {10, 25, 40, 80};
+    double eff[nBinEta1*nBinPt1] = {0.000300,0.000156,0.000113,0.001053,0.001387,0.001557};
+    histoWSEtaPtEff = TH2D("histoWSEtaPtEff", "histoWSEtaPtEff", nBinEta1, xbinsEta1, nBinPt1, xbinsPt1);
+    histoWSEtaPtEff.SetBinContent(1,1,eff[0]);
+    histoWSEtaPtEff.SetBinContent(1,2,eff[1]);
+    histoWSEtaPtEff.SetBinContent(1,3,eff[2]);
+    histoWSEtaPtEff.SetBinContent(2,1,eff[3]);
+    histoWSEtaPtEff.SetBinContent(2,2,eff[4]);
+    histoWSEtaPtEff.SetBinContent(2,3,eff[5]);
+  }
 }
 
 void initHisto1D(TH1D h, int nsel){
@@ -769,20 +782,36 @@ int compute_number_WS(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_i& mu_c
   return nWS;
 }
 
-float compute_WSEfficiency(const Vec_f& el_eta){
+float compute_WSEfficiency(const int nsel, const Vec_f& el_pt, const Vec_f& el_eta){
 
   bool debug = false;
   if(el_eta.size() == 0) return 1.0;
-  if(el_eta.size() == 1) return getValFromTH1(histoWSEtaEff, std::min(fabs(el_eta[0]),2.4999f));
-  if(el_eta.size() >= 2) {
-    double eff[2] = {getValFromTH1(histoWSEtaEff, std::min(fabs(el_eta[0]),2.4999f)),
-                     getValFromTH1(histoWSEtaEff, std::min(fabs(el_eta[1]),2.4999f))};
 
-    double total_eff = (1.0-eff[0])*eff[1] + (1.0-eff[1])*eff[0];
+  if(nsel == 0){
+    if(el_eta.size() == 1) return getValFromTH1(histoWSEtaEff, std::min(fabs(el_eta[0]),2.4999f));
+    if(el_eta.size() >= 2) {
+      double eff[2] = {getValFromTH1(histoWSEtaEff, std::min(fabs(el_eta[0]),2.4999f)),
+                       getValFromTH1(histoWSEtaEff, std::min(fabs(el_eta[1]),2.4999f))};
 
-    if(debug) printf("WSSFEff: %lu %.2f %.2f / %.7f %.7f /  %.7f\n",el_eta.size(),fabs(el_eta[0]),fabs(el_eta[1]),eff[0],eff[1],total_eff);    
+      double total_eff = (1.0-eff[0])*eff[1] + (1.0-eff[1])*eff[0];
 
-    return total_eff;
+      if(debug) printf("WSSFEff0: %lu %.2f %.2f / %.7f %.7f /  %.7f\n",el_eta.size(),fabs(el_eta[0]),fabs(el_eta[1]),eff[0],eff[1],total_eff);    
+
+      return total_eff;
+    }
+  }
+  else if(nsel == 1){
+    if(el_eta.size() == 1) return getValFromTH2(histoWSEtaPtEff, std::min(fabs(el_eta[0]),2.4999f), std::min(el_pt[0],49.999f));
+    if(el_eta.size() >= 2) {
+      double eff[2] = {getValFromTH2(histoWSEtaPtEff, std::min(fabs(el_eta[0]),2.4999f), std::min(el_pt[0],49.999f)),
+                       getValFromTH2(histoWSEtaPtEff, std::min(fabs(el_eta[1]),2.4999f), std::min(el_pt[1],49.999f))};
+
+      double total_eff = (1.0-eff[0])*eff[1] + (1.0-eff[1])*eff[0];
+
+      if(debug) printf("WSSFEff1: %lu %.2f %.2f | %.2f %.2f / %.7f %.7f /  %.7f\n",el_eta.size(),fabs(el_eta[0]),fabs(el_pt[0]),fabs(el_eta[1]),fabs(el_pt[1]),eff[0],eff[1],total_eff);    
+
+      return total_eff;
+    }
   }
 
   return 1.0;
