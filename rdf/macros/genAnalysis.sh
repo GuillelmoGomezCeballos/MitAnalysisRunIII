@@ -33,6 +33,7 @@ elif [[ $1 == 3 ]]; then
     time python3 genAnalysis.py --process=980 --sel=vbs >& log_vbs_980 &
     time python3 genAnalysis.py --process=981 --sel=vbs >& log_vbs_981 &
     time python3 genAnalysis.py --process=982 --sel=vbs >& log_vbs_982 &
+    time python3 genAnalysis.py --process=983 --sel=vbs >& log_vbs_983 &
 
 elif [[ $1 == 18 ]]; then
 
@@ -53,6 +54,8 @@ elif [[ $1 == 18 ]]; then
     hadd -f histo_ww_minnlo_madgraph.root histo_ww_minnlo.root histo_ww_madgraph.root
 
 elif [[ $1 == 13 ]]; then
+
+    hadd -f histo_vbs_ewk_ssww_sherpa.root fillhisto_genAnalysis_sample983_year20240_job-1.root
 
     hadd -f histo_vbs_ewk_ssww.root fillhisto_genAnalysis_sample980_year20240_job-1.root
 

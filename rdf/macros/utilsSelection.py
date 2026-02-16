@@ -170,6 +170,13 @@ def makeJES(df,year,postFix,bTagSel,jetEtaCut,jetTypeCorr):
               .Define("good_jetVeto{0}".format(postFix), "good_Jet_VetoMapMask{0} > 0".format(postFix))
               .Define("ngood_jetsVeto{0}".format(postFix), "Sum(good_jetVeto{0})*1.0f".format(postFix))
 
+              .Define("good_cen_jet{0}".format(postFix), "abs(clean_Jet_eta) < 2.5".format(postFitDef))
+              .Define("ngood_cen_jets{0}".format(postFix), "Sum(good_cen_jet{0})*1.0f".format(postFix))
+              .Define("good_fwd_jet{0}".format(postFix), "abs(clean_Jet_eta) > 2.5".format(postFitDef))
+              .Define("ngood_fwd_jets{0}".format(postFix), "Sum(good_fwd_jet{0})*1.0f".format(postFix))
+              .Define("good_Jet_bjet{0}".format(postFix), "abs(good_Jet_eta{0}) < 2.5 && good_Jet_btagUnifiedParTB{0} > {1}".format(postFix,getBTagCut(bTagSel,year)))
+              .Define("nbtag_good_Jet_bjet{0}".format(postFix), "Sum(good_Jet_bjet{0})*1.0f".format(postFix))
+
               .Define("mjj{0}".format(postFix),	  "compute_jet_var(good_Jet_pt{0}, good_Jet_eta, good_Jet_phi, good_Jet_mass, 0)".format(postFix))
               .Define("ptjj{0}".format(postFix),  "compute_jet_var(good_Jet_pt{0}, good_Jet_eta, good_Jet_phi, good_Jet_mass, 1)".format(postFix))
               .Define("detajj{0}".format(postFix),"compute_jet_var(good_Jet_pt{0}, good_Jet_eta, good_Jet_phi, good_Jet_mass, 2)".format(postFix))
@@ -1195,6 +1202,15 @@ def selectionTheoryWeigths(dftag,weight,nTheoryReplicas,genEventSumLHEScaleRenor
                      .Define("weightQCDScale3" ,"weight*LHEScaleWeight[5]/{0}".format(genEventSumLHEScaleRenorm[3]))
                      .Define("weightQCDScale4" ,"weight*LHEScaleWeight[7]/{0}".format(genEventSumLHEScaleRenorm[4]))
                      .Define("weightQCDScale5" ,"weight*LHEScaleWeight[8]/{0}".format(genEventSumLHEScaleRenorm[5]))
+                     )
+    elif(hasTheoryColumnName[1] == True and nTheoryReplicas[1] == 7):
+        #LHEScaleWeight 3 not used
+        dftag =(dftag.Define("weightQCDScale0" ,"weight*LHEScaleWeight[0]/{0}".format(genEventSumLHEScaleRenorm[0]))
+                     .Define("weightQCDScale1" ,"weight*LHEScaleWeight[1]/{0}".format(genEventSumLHEScaleRenorm[1]))
+                     .Define("weightQCDScale2" ,"weight*LHEScaleWeight[2]/{0}".format(genEventSumLHEScaleRenorm[2]))
+                     .Define("weightQCDScale3" ,"weight*LHEScaleWeight[4]/{0}".format(genEventSumLHEScaleRenorm[3]))
+                     .Define("weightQCDScale4" ,"weight*LHEScaleWeight[5]/{0}".format(genEventSumLHEScaleRenorm[4]))
+                     .Define("weightQCDScale5" ,"weight*LHEScaleWeight[6]/{0}".format(genEventSumLHEScaleRenorm[5]))
                      )
     else:
         dftag =(dftag.Define("weightQCDScale0" ,"weight*1.0")

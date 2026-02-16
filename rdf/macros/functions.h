@@ -1642,14 +1642,19 @@ float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
 
   vector<PtEtaPhiMVector> p4mom;
 
+  PtEtaPhiMVector p4momJJ = p1 + p2;
+  PtEtaPhiMVector p4momLL;
+
   for(unsigned int i=0;i<mu_pt.size();i++) {
+    p4momLL += PtEtaPhiMVector(mu_pt[i],mu_eta[i],mu_phi[i],mu_mass[i]);
     p4mom.push_back(PtEtaPhiMVector(mu_pt[i],mu_eta[i],mu_phi[i],mu_mass[i]));
     if(fabs(mu_eta[i]-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ > maxZ) maxZ = fabs(mu_eta[i]-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
     sumHT += mu_pt[i];
   }
 
   for(unsigned int i=0;i<el_pt.size();i++) {
-    p4mom.push_back(PtEtaPhiMVector(el_pt[i],el_eta[i],el_phi[i],el_mass[i]));   
+    p4momLL += PtEtaPhiMVector(el_pt[i],el_eta[i],el_phi[i],el_mass[i]);
+    p4mom.push_back(PtEtaPhiMVector(el_pt[i],el_eta[i],el_phi[i],el_mass[i]));
     if(fabs(el_eta[i]-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ > maxZ) maxZ = fabs(el_eta[i]-(p1.Eta()+p2.Eta())/2.)/deltaEtaJJ;
     sumHT += el_pt[i];
   }
@@ -1670,6 +1675,7 @@ float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   else if(var == 5) theVar = fabs(p4momVV.Eta()-p1.Eta());
   else if(var == 6) theVar = fabs(p4momVV.Eta()-p2.Eta());
   else if(var == 7) theVar = (p4momVV.Pt()-(p1+p2).Pt())/(p1+p2).Pt();
+  else if(var == 8) theVar = deltaPhi(p4momJJ.Phi(), p4momLL.Phi());
   return theVar;
 }
 

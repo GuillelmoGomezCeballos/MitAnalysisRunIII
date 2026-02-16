@@ -151,6 +151,11 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
     _histo_total = (TH1F*)file->Get(Form("histo_total"));
   }
 
+  // HACK!!!
+  if(outputName.Contains("dy_xsel") && outputName.Contains("mll")){
+    for(int ic=0; ic<nPlotCategories; ic++) for(int nb=11; nb<20; nb++) _hist[ic]->SetBinContent(nb,0);
+  }
+
   int isVBS[2] = {0, 0};
   if     (plotName.Contains("fiducial6"))                                    isVBS[0] = 2;
   else if(plotName.Contains("ww_output"))                                    isVBS[0] = 3;
@@ -351,21 +356,23 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   if(isLogSpecial) {c1->SetLogx();pad1->SetLogx();pad2->SetLogx();}
 
   float theLumi = 999;
-  TString theYear = Form("%d",year);
-  if     (year == 2022)  {theLumi = 34.8; theYear = Form("%d",2022);}
+  if     (year == 2022)  {theLumi = 34.8;}
   else if(year == 20220) {theLumi = 8.1;}
   else if(year == 20221) {theLumi = 26.7;}
-  if     (year == 2023)  {theLumi = 27.1; theYear = Form("%d",2023);}
+  if     (year == 2023)  {theLumi = 27.1;}
   else if(year == 20230) {theLumi = 17.6;}
   else if(year == 20231) {theLumi = 9.5;}
-  else if(year == 2027)  {theLumi = 171; theYear = Form("");}
-  else if(year == 2028)  {theLumi = 280; theYear = Form("");}
-  else if(year == 20240) {theLumi = 109; theYear = Form("%d",2024);}
-  else if(year == 20250) {theLumi = 109; theYear = Form("%d",2025);}
+  else if(year == 2027)  {theLumi = 171;}
+  else if(year == 2028)  {theLumi = 280;}
+  else if(year == 20240) {theLumi = 109;}
+  else if(year == 20250) {theLumi = 109;}
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
-  cmsstyle::SetExtraText("Preliminary");
-  cmsstyle::SetLumi(Form("%s, %.0f fb^{#minus1}",theYear.Data(),theLumi));
+  if(year == 20250)
+      cmsstyle::SetExtraText("Preliminary");
+  else
+      cmsstyle::SetExtraText("");
+  cmsstyle::SetLumi(Form("%.0f fb^{#minus1}",theLumi));
   cmsstyle::SetEnergy(13.6);
   cmsstyle::CMS_lumi( pad1, 11);
 

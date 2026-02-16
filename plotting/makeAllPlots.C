@@ -146,20 +146,30 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"Charged energy fraction","",Form("anaZ/fillhisto_zAnalysis%d_%d_954.root",whichCondorJob,year),"dy_1jsel_prob_chEFll",1,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Charged energy fraction","",Form("anaZ/fillhisto_zAnalysis%d_%d_155.root",whichCondorJob,year),"dy_1jsel_prob_chEFem",1,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
-    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_166.root",whichCondorJob,year),"dy_zsel_metfilter_puppimetmm",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_167.root",whichCondorJob,year),"dy_zsel_metfilter_puppimetem",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_168.root",whichCondorJob,year),"dy_zsel_metfilter_puppimetee",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_157.root",whichCondorJob,year),"dy_zsel_metfilter_puppimetmm",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_158.root",whichCondorJob,year),"dy_zsel_metfilter_puppimetem",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_159.root",whichCondorJob,year),"dy_zsel_metfilter_puppimetee",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
-    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_169.root",whichCondorJob,year),"dy_zsel_nometfilter_puppimetmm",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_170.root",whichCondorJob,year),"dy_zsel_nometfilter_puppimetem",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_171.root",whichCondorJob,year),"dy_zsel_nometfilter_puppimetee",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_160.root",whichCondorJob,year),"dy_zsel_nometfilter_puppimetmm",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_161.root",whichCondorJob,year),"dy_zsel_nometfilter_puppimetem",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"PUPPI p_{T}^{miss}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_162.root",whichCondorJob,year),"dy_zsel_nometfilter_puppimetee",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
-    double sf_DYb = 2.0;
-    finalPlot(0,1,"p_{T}^{ll}/m_{ll}","",Form("anaZ/fillhisto_zAnalysis%d_%d_172.root",whichCondorJob,year),"dy_xsel_ptovermass",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"m_{ll}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_173.root",whichCondorJob,year),"dy_xsel_m0",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"m_{ll}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_174.root",whichCondorJob,year),"dy_xsel_m1",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"m_{ll}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_175.root",whichCondorJob,year),"dy_xsel_m2",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-    finalPlot(0,1,"m_{ll}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_176.root",whichCondorJob,year),"dy_xsel_m2",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    double sf_DYb = 1.0;
+    finalPlot(0,1,"p_{T}^{ll}/m_{ll}","" ,Form("anaZ/fillhisto_zAnalysis%d_%d_163.root",whichCondorJob,year),"dy_xsel_ptovermass",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"m_{ll}","GeV"         ,Form("anaZ/fillhisto_zAnalysis%d_%d_164.root",whichCondorJob,year),"dy_xsel_m0p0_srx_mll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"m_{ll}","GeV"         ,Form("anaZ/fillhisto_zAnalysis%d_%d_165.root",whichCondorJob,year),"dy_xsel_m1p7_srx_mll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"m_{ll}","GeV"         ,Form("anaZ/fillhisto_zAnalysis%d_%d_166.root",whichCondorJob,year),"dy_xsel_m0p0_sr1_mll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"m_{ll}","GeV"         ,Form("anaZ/fillhisto_zAnalysis%d_%d_167.root",whichCondorJob,year),"dy_xsel_m0p0_sr2_mll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"m_{ll}","GeV"         ,Form("anaZ/fillhisto_zAnalysis%d_%d_168.root",whichCondorJob,year),"dy_xsel_m0p0_sr3_mll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"m_{ll}","GeV"         ,Form("anaZ/fillhisto_zAnalysis%d_%d_169.root",whichCondorJob,year),"dy_xsel_m1p7_sr1_mll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"m_{ll}","GeV"         ,Form("anaZ/fillhisto_zAnalysis%d_%d_170.root",whichCondorJob,year),"dy_xsel_m1p7_sr2_mll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"m_{ll}","GeV"         ,Form("anaZ/fillhisto_zAnalysis%d_%d_171.root",whichCondorJob,year),"dy_xsel_m1p7_sr3_mll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"#Delta#eta_{jj,ll}","",Form("anaZ/fillhisto_zAnalysis%d_%d_172.root",whichCondorJob,year),"dy_xsel_m1p7_sr2_dphijjll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"N_{jets}",""          ,Form("anaZ/fillhisto_zAnalysis%d_%d_173.root",whichCondorJob,year),"dy_xsel_m1p7_srx_njets",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"N_{jets}",""          ,Form("anaZ/fillhisto_zAnalysis%d_%d_174.root",whichCondorJob,year),"dy_xsel_m1p7_srx_cjets",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"N_{jets}",""          ,Form("anaZ/fillhisto_zAnalysis%d_%d_175.root",whichCondorJob,year),"dy_xsel_m1p7_srx_fjets",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"N_{jets}",""          ,Form("anaZ/fillhisto_zAnalysis%d_%d_176.root",whichCondorJob,year),"dy_xsel_m1p7_srx_bjets",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"m_{ll}","GeV"         ,Form("anaZ/fillhisto_zAnalysis%d_%d_177.root",whichCondorJob,year),"dy_xsel_m1p7_dphijjll1p0_sr2_mll",0,year,legendBSM.Data(),sf_DYb,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
     finalPlot(0,1,"Output 1",""       ,Form("anaZ/fillhisto_zAnalysis%d_%d_178.root",whichCondorJob,year),"dy_vbs0selem_output1"   ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"Output 1",""       ,Form("anaZ/fillhisto_zAnalysis%d_%d_179.root",whichCondorJob,year),"dy_vbs0selee_output1"   ,0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());

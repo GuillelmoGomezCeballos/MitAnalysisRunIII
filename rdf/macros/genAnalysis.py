@@ -417,6 +417,12 @@ def readMCSample(sampleNOW, year, skimType, nSel, histo_wwpt, ewkCorrWeights):
     genEventSumPSWeight[4] = dfRuns.Count().GetValue()
     runGetEntries = dfRuns.Count().GetValue()
 
+    if(("WWJJto2L2Nu-SS" in SwitchSample(sampleNOW, skimType)[0]) and ("sherpa" in SwitchSample(sampleNOW, skimType)[0])):
+        print("WWJJto2L2Nu-SS sherpa sample")
+        nTheoryReplicas[0] = 103
+        nTheoryReplicas[1] = 7
+        nTheoryReplicas[2] = 0
+
     print("Number of Theory replicas: {0} / {1} / {2}".format(nTheoryReplicas[0],nTheoryReplicas[1],nTheoryReplicas[2]))
 
     genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]

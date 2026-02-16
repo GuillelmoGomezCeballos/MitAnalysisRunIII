@@ -12,7 +12,10 @@
 #include "TLegend.h"
 #include <iostream>
 
-void computeGenVBSVVXS(TString input = "", int selectType = 0, float addHocUnc = -1.0){
+void computeGenVBSVVXS(TString input = "", int selectType = 0, bool doPDFRMS = false){
+
+  //TH1D *histo_RMSPDF = new TH1D("histo_RMSPDF", "histo_RMSPDF", 100, 0.00, 0.10);
+  TH1D *histo_RMSPDF = new TH1D("histo_RMSPDF", "histo_RMSPDF", 200, 0.90, 1.10);
 
   const int nBin4 = 4; const int nBin2 = 2;
   const Float_t xbinsWZMJJ       [nBin4+1] = {500, 900, 1300, 1900, 2500};
@@ -110,24 +113,32 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0, float addHocUnc =
       systQCDScale = 1.0+systQCDScale/histo_Baseline->GetBinContent(nb);
     else systQCDScale = 1;
 
-    // compute PDF uncertainties bin-by-bin
     double systPDF = 0.0;
-    for(int i=0; i<number_unc_PDF; i++) {
-      double diff = TMath::Abs(histo_PDF[i]->GetBinContent(nb)-histo_Baseline->GetBinContent(nb));
-      systPDF = systPDF + TMath::Power(diff,2);
-      //printf("%d %d %f %f\n",nb,i,diff,sqrt(systPDF));
+    // compute PDF uncertainties bin-by-bin
+    if(histo_Baseline->GetBinContent(nb) <= 0){
+      systPDF = 1;
     }
-    systPDF = sqrt(systPDF);
+    else if(doPDFRMS == false){
+      for(int i=0; i<number_unc_PDF; i++) {
+        double diff = TMath::Abs(histo_PDF[i]->GetBinContent(nb)-histo_Baseline->GetBinContent(nb));
+        systPDF = systPDF + TMath::Power(diff,2);
+        //printf("%d %d %f %f\n",nb,i,diff,sqrt(systPDF));
+      }
+      systPDF = sqrt(systPDF);
 
-    if(histo_Baseline->GetBinContent(nb) > 0) 
-        systPDF = 1.0+systPDF/histo_Baseline->GetBinContent(nb);
-    else systPDF = 1;
-
-    if(addHocUnc > 0){ // Make the three uncertainty components equal
-      systPS       = (1+addHocUnc/sqrt(3.0));
-      systQCDScale = (1+addHocUnc/sqrt(3.0));
-      systPDF      = (1+addHocUnc/sqrt(3.0));
+      systPDF = 1.0+systPDF/histo_Baseline->GetBinContent(nb);
     }
+    else {
+      histo_RMSPDF->Reset();
+      for(int i=0; i<number_unc_PDF; i++) {
+        //double diff = TMath::Abs(histo_PDF[i]->GetBinContent(nb)-histo_Baseline->GetBinContent(nb))/histo_Baseline->GetBinContent(nb);
+        double diff = histo_PDF[i]->GetBinContent(nb)/histo_Baseline->GetBinContent(nb);
+        histo_RMSPDF->Fill(diff);
+      }
+      systPDF = 1.0 + histo_RMSPDF->GetRMS();
+      //printf("%d %f %f\n",nb,histo_RMSPDF->GetMean(),histo_RMSPDF->GetRMS());
+    }
+
     histo_PS_unc      ->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systPS);
     histo_QCDScale_unc->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systQCDScale);
     histo_PDF_unc     ->SetBinContent(nb, histo_Baseline->GetBinContent(nb)*systPDF);
