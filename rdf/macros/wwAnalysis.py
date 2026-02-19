@@ -88,13 +88,13 @@ def selectionLL(df,year,PDType,isData,TRIGGERMUEG,TRIGGERDMU,TRIGGERSMU,TRIGGERD
     if(useFR == 0):
         dftag = dftag.Filter("nTight == 2","Two tight leptons")
 
+    dftag = selectionTauVeto(dftag,year,isData)
+    dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
+    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,jetEtaCut)
     dftag = selection2LVar  (dftag,year,isData)
 
     dftag = dftag.Filter("mll{0} > 20".format(altMass),"mll > 20")
 
-    dftag = selectionTauVeto(dftag,year,isData)
-    dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
-    dftag = selectionJetMet (dftag,year,bTagSel,isData,count,jetEtaCut)
 
     return dftag
 
@@ -339,10 +339,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[12][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 100, 0, 200), "minPMET{0}".format(altMass),"weightWW")
         histo[13][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 100, 0, 200), "minPMET{0}".format(altMass),"weightWW")
 
-        histo[14][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 100, 0, 200), "thePuppiMET_pt","weightWW")
-        histo[15][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 100, 0, 200), "thePuppiMET_pt","weightWW")
-        histo[16][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 100, 0, 200), "thePuppiMET_pt","weightWW")
-        histo[17][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 100, 0, 200), "thePuppiMET_pt","weightWW")
+        histo[14][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 100, 0, 200), "PuppiMET_pt{0}".format(altMass),"weightWW")
+        histo[15][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 100, 0, 200), "PuppiMET_pt{0}".format(altMass),"weightWW")
+        histo[16][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 100, 0, 200), "PuppiMET_pt{0}".format(altMass),"weightWW")
+        histo[17][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 100, 0, 200), "PuppiMET_pt{0}".format(altMass),"weightWW")
 
         histo[18][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 50,  0, 5), "drll","weightWW")
         histo[19][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(19,x), "histo_{0}_{1}".format(19,x), 50,  0, 5), "drll","weightWW")
@@ -401,8 +401,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[62][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(62,x), "histo_{0}_{1}".format(62,x), 25,-2.5,2.5), "good_Jet_eta","weightWW")
         histo[63][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(63,x), "histo_{0}_{1}".format(63,x), 25,-2.5,2.5), "good_Jet_eta","weightWW")
 
-        histo[64][x] = dfwwx0cat[x].Filter("ptll{0} < 20 && thePuppiMET_pt < 20".format(altMass)).Histo1D(("histo_{0}_{1}".format(64,x), "histo_{0}_{1}".format(64,x), 20,25,185), "ptl1","weightWW")
-        histo[65][x] = dfwwx0cat[x].Filter("ptll{0} < 20 && thePuppiMET_pt < 20".format(altMass)).Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), 20,20,140), "ptl2","weightWW")
+        histo[64][x] = dfwwx0cat[x].Filter("ptll{0} < 20 && PuppiMET_pt{0} < 20".format(altMass)).Histo1D(("histo_{0}_{1}".format(64,x), "histo_{0}_{1}".format(64,x), 20,25,185), "ptl1","weightWW")
+        histo[65][x] = dfwwx0cat[x].Filter("ptll{0} < 20 && PuppiMET_pt{0} < 20".format(altMass)).Histo1D(("histo_{0}_{1}".format(65,x), "histo_{0}_{1}".format(65,x), 20,20,140), "ptl2","weightWW")
 
         histo[69][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(69,x), "histo_{0}_{1}".format(69,x), 60, 50, 410), "mll{0}".format(altMass),"weightWW")
         histo[70][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(70,x), "histo_{0}_{1}".format(70,x), 60, 50, 410), "mll{0}".format(altMass),"weightWW")
@@ -758,13 +758,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 BinXF1 = 20
                 minXF1 = 0
                 maxXF1 = 200
-                varToFit = "thePuppiMET_pt"
+                varToFit = "PuppiMET_pt"
                 varMuPtUnc = ""
                 varElPtUnc = ""
                 altMASS = ""
-                altMET0 = "JERUp"
-                altMET1 = "JESUp"
-                altMET2 = "UnclusteredUp"
+                altMET0 = ""
+                altMET1 = ""
+                altMET2 = ""
             elif(whichVarToFit == 6):
                 BinXF1 = 10
                 minXF1 = 25

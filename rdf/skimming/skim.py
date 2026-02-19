@@ -129,7 +129,13 @@ if __name__ == "__main__":
 
     year = -1
     isSkimData = -1
-    if("Run2018" in sampleToSkim):
+    if("Run2016" in sampleToSkim):
+        year = 2016
+        isSkimData = 1
+    elif("Run2017" in sampleToSkim):
+        year = 2017
+        isSkimData = 1
+    elif("Run2018" in sampleToSkim):
         year = 2018
         isSkimData = 1
     elif("Run2022" in sampleToSkim):
@@ -144,6 +150,12 @@ if __name__ == "__main__":
     elif("Run2025" in sampleToSkim):
         year = 2025
         isSkimData = 1
+    elif("RunIISummer20UL16" in sampleToSkim):
+        year = 2016
+        isSkimData = 0
+    elif("RunIISummer20UL17" in sampleToSkim):
+        year = 2017
+        isSkimData = 0
     elif("RunIISummer20UL18" in sampleToSkim):
         year = 2018
         isSkimData = 0

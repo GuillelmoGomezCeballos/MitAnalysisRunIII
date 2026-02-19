@@ -292,6 +292,16 @@
 "met_filters": [
 	{
 	    "name": "All",
+	    "year": 2016,
+	    "definition": "(Flag_goodVertices&&Flag_globalSuperTightHalo2016Filter&&Flag_EcalDeadCellTriggerPrimitiveFilter&&Flag_BadPFMuonFilter&&Flag_BadPFMuonDzFilter&&Flag_hfNoisyHitsFilter&&Flag_eeBadScFilter&&Flag_ecalBadCalibFilter)"
+	},
+	{
+	    "name": "All",
+	    "year": 2017,
+	    "definition": "(Flag_goodVertices&&Flag_globalSuperTightHalo2016Filter&&Flag_EcalDeadCellTriggerPrimitiveFilter&&Flag_BadPFMuonFilter&&Flag_BadPFMuonDzFilter&&Flag_hfNoisyHitsFilter&&Flag_eeBadScFilter&&Flag_ecalBadCalibFilter)"
+	},
+	{
+	    "name": "All",
 	    "year": 2018,
 	    "definition": "(Flag_goodVertices&&Flag_globalSuperTightHalo2016Filter&&Flag_EcalDeadCellTriggerPrimitiveFilter&&Flag_BadPFMuonFilter&&Flag_BadPFMuonDzFilter&&Flag_hfNoisyHitsFilter&&Flag_eeBadScFilter&&Flag_ecalBadCalibFilter)"
 	},

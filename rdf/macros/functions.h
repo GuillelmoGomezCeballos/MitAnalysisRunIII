@@ -659,7 +659,7 @@ Vec_f compute_ELEPT_Unc(const int year, const int type, const Vec_i& gain, const
   bool debug = false;
   if(debug) printf("eleEnergy: %lu %d\n",pt.size(),type);
 
-  if(year == 20220 || year == 20221 || year == 20230 || year == 20231 || year == 20240){
+  if(year == 20220 || year == 20221 || year == 20230 || year == 20231 || year == 20240 || year == 20250){
     if    (type == 10) { // data
       for(unsigned int i=0;i<pt.size();i++) {
         new_pt[i] = pt[i]*corrSFs.eval_electronEtDependentScale((char*)"scale", (double)run, eta[i], r9[i], pt[i], gain[i]);
