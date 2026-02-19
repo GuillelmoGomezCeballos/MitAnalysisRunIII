@@ -634,6 +634,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[15][x] = dfwzcat[x] .Histo1D(("histo_{0}_{1}".format(15,x), "histo_{0}_{1}".format(15,x), 40,  0, 200), "PuppiMET_pt{0}".format(altMass),"weight")
         histo[16][x] = dfwzbcat[x].Histo1D(("histo_{0}_{1}".format(16,x), "histo_{0}_{1}".format(16,x), 40,  0, 200), "PuppiMET_pt{0}".format(altMass),"weight")
 
+        histo[29][x] = dfwzcat[x] .Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x), 40,  0, 200), "PuppiMET_ptUnclUp","weight")
+        histo[30][x] = dfwzbcat[x].Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x), 40,  0, 200), "PuppiMET_ptUnclUp","weight")
+
         dfwzcatJERUp          .append(dfwzcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
         dfwzcatJESUp          .append(dfwzcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
         dfwzcatUnclusteredUp  .append(dfwzcat[x].Filter("PuppiMET_ptUnclUp > {0}".format(metCut)))
