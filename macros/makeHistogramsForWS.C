@@ -5,6 +5,18 @@ void makeHistogramsForWS(const int year){
   const int nBinEta1 = 2; Float_t xbinsEta1[nBinEta1+1] = {0.0, 1.5, 2.5};
   const int nBinPt1  = 3; Float_t xbinsPt1 [nBinPt1+1]  = {10, 25, 40, 80};
  
+  double WSSF20160[5]  = {1.0, 1.0, 1.0, 1.0, 1.0};
+  double WSSFE_mcanddata20160[5] = {0.30, 0.30, 0.30, 0.30, 0.30};
+
+  double WSSF20161[5]  = {1.0, 1.0, 1.0, 1.0, 1.0};
+  double WSSFE_mcanddata20161[5] = {0.30, 0.30, 0.30, 0.30, 0.30};
+
+  double WSSF20170[5]  = {1.4, 1.4, 1.4, 1.4, 1.4};
+  double WSSFE_mcanddata20170[5] = {0.30, 0.30, 0.30, 0.30, 0.30};
+
+  double WSSF20180[5]  = {1.4, 1.4, 1.4, 1.4, 1.4};
+  double WSSFE_mcanddata20180[5] = {0.30, 0.30, 0.30, 0.30, 0.30};
+
   double WSSF20220[5]  = {1.724361,1.720582,1.316642,1.350376,1.388903};
   double WSSFE_mcanddata20220[5] = {0.320037,0.164859,0.085857,0.047020,0.045386};
 
@@ -25,6 +37,18 @@ void makeHistogramsForWS(const int year){
 
   double WSSF2027[5]  = {1.391573,1.365013,1.312266,1.355391,1.502695};
   double WSSFE_mcanddata2027[5] = {0.068158,0.038628,0.020889,0.012169,0.011969};
+
+  double WSEtaPtSF20160[6]  = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+  double WSEtaPtSFE_mcanddata20160[6] = {0.30, 0.30, 0.30, 0.30, 0.30, 0.30};
+
+  double WSEtaPtSF20161[6]  = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+  double WSEtaPtSFE_mcanddata20161[6] = {0.30, 0.30, 0.30, 0.30, 0.30, 0.30};
+
+  double WSEtaPtSF20170[6]  = {1.4, 1.4, 1.4, 1.4, 1.4, 1.4};
+  double WSEtaPtSFE_mcanddata20170[6] = {0.30, 0.30, 0.30, 0.30, 0.30, 0.30};
+
+  double WSEtaPtSF20180[6]  = {1.4, 1.4, 1.4, 1.4, 1.4, 1.4};
+  double WSEtaPtSFE_mcanddata20180[6] = {0.30, 0.30, 0.30, 0.30, 0.30, 0.30};
 
   double WSEtaPtSF20220[6]  = {1.641880,1.415508,1.407502,1.551702,1.363360,1.329818};
   double WSEtaPtSFE_mcanddata20220[6] = {0.342677,0.115449,0.116033,0.144459,0.051450,0.043702};
@@ -54,7 +78,59 @@ void makeHistogramsForWS(const int year){
   TH1D* histoWSEtaSF_unc = new TH1D("histoWSEtaSF_unc", "histoWSEtaSF_unc", nBinEta0, xbinsEta0);
   TH2D* histoWSEtaPtSF   = new TH2D("histoWSEtaPtSF",   "histoWSEtaPtSF",   nBinEta1, xbinsEta1, nBinPt1, xbinsPt1);
 
-  if     (year == 20220){
+  if     (year == 20160){
+    for(int i=0; i<nBinEta0; i++){
+      histoWSEtaSF    ->SetBinContent(i+1,WSSF20160[i]);
+      histoWSEtaSF    ->SetBinError  (i+1,WSSFE_mcanddata20160[i]);
+      histoWSEtaSF_unc->SetBinContent(i+1,WSSF20160[i]+WSSFE_mcanddata20160[i]);
+    }
+    histoWSEtaPtSF->SetBinContent(1,1,WSEtaPtSF20160[0]);
+    histoWSEtaPtSF->SetBinContent(1,2,WSEtaPtSF20160[1]);
+    histoWSEtaPtSF->SetBinContent(1,3,WSEtaPtSF20160[2]);
+    histoWSEtaPtSF->SetBinContent(2,1,WSEtaPtSF20160[3]);
+    histoWSEtaPtSF->SetBinContent(2,2,WSEtaPtSF20160[4]);
+    histoWSEtaPtSF->SetBinContent(2,3,WSEtaPtSF20160[5]);
+  }
+  else if(year == 20161){
+    for(int i=0; i<nBinEta0; i++){
+      histoWSEtaSF    ->SetBinContent(i+1,WSSF20161[i]);
+      histoWSEtaSF    ->SetBinError  (i+1,WSSFE_mcanddata20161[i]);
+      histoWSEtaSF_unc->SetBinContent(i+1,WSSF20161[i]+WSSFE_mcanddata20161[i]);
+    }
+    histoWSEtaPtSF->SetBinContent(1,1,WSEtaPtSF20161[0]);
+    histoWSEtaPtSF->SetBinContent(1,2,WSEtaPtSF20161[1]);
+    histoWSEtaPtSF->SetBinContent(1,3,WSEtaPtSF20161[2]);
+    histoWSEtaPtSF->SetBinContent(2,1,WSEtaPtSF20161[3]);
+    histoWSEtaPtSF->SetBinContent(2,2,WSEtaPtSF20161[4]);
+    histoWSEtaPtSF->SetBinContent(2,3,WSEtaPtSF20161[5]);
+  }
+  else if(year == 20170){
+    for(int i=0; i<nBinEta0; i++){
+      histoWSEtaSF    ->SetBinContent(i+1,WSSF20170[i]);
+      histoWSEtaSF    ->SetBinError  (i+1,WSSFE_mcanddata20170[i]);
+      histoWSEtaSF_unc->SetBinContent(i+1,WSSF20170[i]+WSSFE_mcanddata20170[i]);
+    }
+    histoWSEtaPtSF->SetBinContent(1,1,WSEtaPtSF20170[0]);
+    histoWSEtaPtSF->SetBinContent(1,2,WSEtaPtSF20170[1]);
+    histoWSEtaPtSF->SetBinContent(1,3,WSEtaPtSF20170[2]);
+    histoWSEtaPtSF->SetBinContent(2,1,WSEtaPtSF20170[3]);
+    histoWSEtaPtSF->SetBinContent(2,2,WSEtaPtSF20170[4]);
+    histoWSEtaPtSF->SetBinContent(2,3,WSEtaPtSF20170[5]);
+  }
+  else if(year == 20180){
+    for(int i=0; i<nBinEta0; i++){
+      histoWSEtaSF    ->SetBinContent(i+1,WSSF20180[i]);
+      histoWSEtaSF    ->SetBinError  (i+1,WSSFE_mcanddata20180[i]);
+      histoWSEtaSF_unc->SetBinContent(i+1,WSSF20180[i]+WSSFE_mcanddata20180[i]);
+    }
+    histoWSEtaPtSF->SetBinContent(1,1,WSEtaPtSF20180[0]);
+    histoWSEtaPtSF->SetBinContent(1,2,WSEtaPtSF20180[1]);
+    histoWSEtaPtSF->SetBinContent(1,3,WSEtaPtSF20180[2]);
+    histoWSEtaPtSF->SetBinContent(2,1,WSEtaPtSF20180[3]);
+    histoWSEtaPtSF->SetBinContent(2,2,WSEtaPtSF20180[4]);
+    histoWSEtaPtSF->SetBinContent(2,3,WSEtaPtSF20180[5]);
+  }
+  else if(year == 20220){
     for(int i=0; i<nBinEta0; i++){
       histoWSEtaSF    ->SetBinContent(i+1,WSSF20220[i]);
       histoWSEtaSF    ->SetBinError  (i+1,WSSFE_mcanddata20220[i]);

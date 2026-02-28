@@ -86,12 +86,18 @@ class MyCorrections {
 
 MyCorrections::MyCorrections(int the_input_year) {
 
+  int debug = 0;
+
   year = the_input_year;
 
   std::string dirName    = "jsonpog-integration/POG/";
 
   std::string subDirName = "";
-  if     (year == 20220) subDirName = "Run3-22CDSep23-Summer22-NanoAODv12/"; 
+  if     (year == 20160) subDirName = "Run2-2016preVFP-UL-NanoAODv15/"; 
+  else if(year == 20161) subDirName = "Run2-2016postVFP-UL-NanoAODv15/"; 
+  else if(year == 20170) subDirName = "Run2-2017-UL-NanoAODv15/"; 
+  else if(year == 20180) subDirName = "Run2-2018-UL-NanoAODv15/"; 
+  else if(year == 20220) subDirName = "Run3-22CDSep23-Summer22-NanoAODv12/"; 
   else if(year == 20221) subDirName = "Run3-22EFGSep23-Summer22EE-NanoAODv12/";
   else if(year == 20230) subDirName = "Run3-23CSep23-Summer23-NanoAODv12/";
   else if(year == 20231) subDirName = "Run3-23DSep23-Summer23BPix-NanoAODv12/";
@@ -101,17 +107,14 @@ MyCorrections::MyCorrections(int the_input_year) {
 
   std::cout << "subDirName/year: " << subDirName << " " << year << std::endl;
 
-  //std::string subDirNamePrime0 = ""; std::string subDirNamePrime1 = "";
-  //if     (yearPrime == 12016) {subDirNamePrime0 = "2016preVFP_UL/";   subDirNamePrime1 = "2016preVFP_UL/";}  
-  //else if(yearPrime == 22016) {subDirNamePrime0 = "2016postVFP_UL/";  subDirNamePrime1 = "2016postVFP_UL/";}
-  //else if(yearPrime == 2017)  {subDirNamePrime0 = "2017_UL/";         subDirNamePrime1 = "2017_UL/";}
-  //else if(yearPrime == 2018)  {subDirNamePrime0 = "2018_UL/";         subDirNamePrime1 = "2018_UL/";}
-  //else if(yearPrime == 2022)  {subDirNamePrime0 = "2022_Summer22EE/"; subDirNamePrime1 = "2022_Prompt/";}
-
   std::string fileNameLUM = dirName+"LUM/"+subDirName+"puWeights.json.gz";
 
   std::string corrNameLUM = "";  
-  if     (year == 20220) corrNameLUM = "Collisions2022_355100_357900_eraBCD_GoldenJson";
+  if     (year == 20160) corrNameLUM = "Collisions2022_355100_357900_eraBCD_GoldenJson";
+  else if(year == 20161) corrNameLUM = "Collisions2022_355100_357900_eraBCD_GoldenJson";
+  else if(year == 20170) corrNameLUM = "Collisions2022_355100_357900_eraBCD_GoldenJson";
+  else if(year == 20180) corrNameLUM = "Collisions2022_355100_357900_eraBCD_GoldenJson";
+  else if(year == 20220) corrNameLUM = "Collisions2022_355100_357900_eraBCD_GoldenJson";
   else if(year == 20221) corrNameLUM = "Collisions2022_359022_362760_eraEFG_GoldenJson";
   else if(year == 20230) corrNameLUM = "Collisions2023_366403_369802_eraBC_GoldenJson";
   else if(year == 20231) corrNameLUM = "Collisions2023_369803_370790_eraD_GoldenJson";
@@ -120,6 +123,8 @@ MyCorrections::MyCorrections(int the_input_year) {
   
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
+
+  if(debug > 0) std::cout << "pass lum" << std::endl;
 
   if(year == 20240 || year == 20250) {
     std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_preliminary.json.gz";
@@ -137,6 +142,8 @@ MyCorrections::MyCorrections(int the_input_year) {
     auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
     btvLFSF_ = csetLFBTV->at("robustParticleTransformer_light");
   }
+
+  if(debug > 0) std::cout << "pass btag" << std::endl;
 
   std::string fileNameScaleMu = dirName+"MUO/"+subDirName+"muon_scalesmearing.json.gz";
   auto csetScaleMu = correction::CorrectionSet::from_file(fileNameScaleMu);
@@ -165,18 +172,25 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetHighPtIDISOMu = correction::CorrectionSet::from_file(fileNameHighPtIDISOMu);
   muonHighPtIDSF_ = csetHighPtIDISOMu->at("NUM_MediumID_DEN_GlobalMuonProbes");
   muonHighPtISOSF_ = csetHighPtIDISOMu->at("NUM_probe_TightRelTkIso_DEN_MediumIDProbes");
+
+  if(debug > 0) std::cout << "pass muo" << std::endl;
   
   std::string fileNamePH = dirName+"EGM/"+subDirName+"photon.json.gz";
   auto csetPH = correction::CorrectionSet::from_file(fileNamePH);
-  photonSF_ = csetPH->at("Photon-ID-SF");
+  if(year >= 20220) photonSF_ = csetPH->at("Photon-ID-SF");
+  else              photonSF_ = csetPH->at("UL-Photon-ID-SF");
+
+  if(debug > 0) std::cout << "pass pho" << std::endl;
 
   std::string fileNameTRKELE = dirName+"EGM/"+subDirName+"electron.json.gz";
   auto csetTRKELE = correction::CorrectionSet::from_file(fileNameTRKELE);
-  electronTRKSF_ = csetTRKELE->at("Electron-ID-SF");
+  if(year >= 20220) electronTRKSF_ = csetTRKELE->at("Electron-ID-SF");
+  else              electronTRKSF_ = csetTRKELE->at("UL-Electron-ID-SF");
 
   std::string fileNameIDELE = dirName+"EGM/"+subDirName+"electron.json.gz";
   auto csetIDELE = correction::CorrectionSet::from_file(fileNameIDELE);
-  electronIDSF_ = csetIDELE->at("Electron-ID-SF");
+  if(year >= 20220) electronIDSF_ = csetIDELE->at("Electron-ID-SF");
+  else              electronIDSF_ = csetIDELE->at("UL-Electron-ID-SF");
 
   std::string fileNameMVAELE = dirName+"EGM/"+subDirName+"electron_mva.json.gz";
   auto csetMVAELE = correction::CorrectionSet::from_file(fileNameMVAELE);
@@ -184,12 +198,18 @@ MyCorrections::MyCorrections(int the_input_year) {
 
   std::string fileNameEnergyEtDependentELE = dirName+"EGM/"+subDirName+"electronSS_EtDependent.json.gz";
   auto csetEnergyEtDependentELE = correction::CorrectionSet::from_file(fileNameEnergyEtDependentELE);
-  if     (year == 20220) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+  if     (year == 20160) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+  else if(year == 20161) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+  else if(year == 20170) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+  else if(year == 20180) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+  else if(year == 20220) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
   else if(year == 20221) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
   else if(year == 20230) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
   else if(year == 20231) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
   else if(year == 20240 ||
           year == 20250) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+
+  if(debug > 0) std::cout << "pass egm" << std::endl;
 
   std::string fileNameTAU = dirName+"TAU/"+subDirName+"tau_DeepTau2018v2p5.json.gz";
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);
@@ -209,7 +229,37 @@ MyCorrections::MyCorrections(int the_input_year) {
   std::string jecDATAName[10]    = {"NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"};
   std::string jetVetoMapName[10] = {"NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"};
 
-  if      (year == 20220)  {
+  if(year == 20160 || year == 20161)  {
+    algoName = "AK4PFchs";
+    jecMCName = "Summer19UL16APV_V7_MC"; jerName = "Summer20UL16APV_JRV3_MC";
+    jecDATAName[0] = "Summer19UL16APV_RunBCD_V7_DATA";   jetVetoMapName[0] = "Summer19UL16_V1"; // A
+    jecDATAName[1] = "Summer19UL16APV_RunBCD_V7_DATA";   jetVetoMapName[1] = "Summer19UL16_V1"; // B
+    jecDATAName[2] = "Summer19UL16APV_RunBCD_V7_DATA";   jetVetoMapName[2] = "Summer19UL16_V1"; // C
+    jecDATAName[3] = "Summer19UL16APV_RunBCD_V7_DATA";   jetVetoMapName[3] = "Summer19UL16_V1"; // D
+    jecDATAName[4] = "Summer19UL16APV_RunEF_V7_DATA";    jetVetoMapName[4] = "Summer19UL16_V1"; // E
+    jecDATAName[5] = "Summer19UL16APV_RunEF_V7_DATA";    jetVetoMapName[5] = "Summer19UL16_V1"; // F 20160
+    jecDATAName[6] = "Summer19UL16APV_RunEF_V7_DATA";    jetVetoMapName[6] = "Summer19UL16_V1"; // F 20161
+    jecDATAName[7] = "Summer19UL16APV_RunEF_V7_DATA";    jetVetoMapName[7] = "Summer19UL16_V1"; // G
+    jecDATAName[8] = "Summer19UL16APV_RunEF_V7_DATA";    jetVetoMapName[8] = "Summer19UL16_V1"; // H
+  }
+  else if(year == 20170)  {
+    algoName = "AK4PFchs";
+    jecMCName = "Summer19UL17_V5_MC"; jerName = "Summer19UL17_JRV2_MC";
+    jecDATAName[1] = "Summer19UL17_RunB_V5_DATA";   jetVetoMapName[1] = "Summer19UL17_V1"; // B
+    jecDATAName[2] = "Summer19UL17_RunC_V5_DATA";   jetVetoMapName[2] = "Summer19UL17_V1"; // C
+    jecDATAName[3] = "Summer19UL17_RunD_V5_DATA";   jetVetoMapName[3] = "Summer19UL17_V1"; // D
+    jecDATAName[4] = "Summer19UL17_RunE_V5_DATA";   jetVetoMapName[4] = "Summer19UL17_V1"; // E
+    jecDATAName[5] = "Summer19UL17_RunF_V5_DATA";   jetVetoMapName[5] = "Summer19UL17_V1"; // F
+  }
+  else if(year == 20180)  {
+    algoName = "AK4PFchs";
+    jecMCName = "Summer19UL18_V5_MC"; jerName = "Summer19UL18_JRV2_MC";
+    jecDATAName[0] = "Summer19UL18_RunA_V5_DATA";   jetVetoMapName[0] = "Summer19UL18_V1"; // A
+    jecDATAName[1] = "Summer19UL18_RunB_V5_DATA";   jetVetoMapName[1] = "Summer19UL18_V1"; // B
+    jecDATAName[2] = "Summer19UL18_RunC_V5_DATA";   jetVetoMapName[2] = "Summer19UL18_V1"; // C
+    jecDATAName[3] = "Summer19UL18_RunD_V5_DATA";   jetVetoMapName[3] = "Summer19UL18_V1"; // D
+  }
+  else if(year == 20220)  {
     jecMCName = "Summer22_22Sep2023_V3_MC"; jerName = "Summer22_22Sep2023_JRV1_MC";
     jecDATAName[0] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[0] = "Summer22_23Sep2023_RunCD_V1"; // A
     jecDATAName[1] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[1] = "Summer22_23Sep2023_RunCD_V1"; // B
@@ -401,6 +451,8 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetMetCorr = correction::CorrectionSet::from_file(fileNameMetCorr);
   metCorr_ = csetMetCorr->at("met_xy_corrections");
 
+  if(debug > 0) std::cout << "pass jme" << std::endl;
+
 };
 
 double MyCorrections::eval_puSF(double int1, std::string str1) {
@@ -503,9 +555,15 @@ double MyCorrections::eval_jesUnc(double eta, double pt, int type) {
 };
 
 double MyCorrections::eval_jerScaleFactor(double eta, double pt, int type) {
-  if     (type ==  0) return jerScaleFactor_->evaluate({eta,pt,"nom"});
-  else if(type == +1) return jerScaleFactor_->evaluate({eta,pt,"up"});
-  else if(type == -1) return jerScaleFactor_->evaluate({eta,pt,"down"});
+  if(year < 20210){
+    if     (type ==  0) return jerScaleFactor_->evaluate({eta,"nom"});
+    else if(type == +1) return jerScaleFactor_->evaluate({eta,"up"});
+    else if(type == -1) return jerScaleFactor_->evaluate({eta,"down"});
+  } else {
+    if     (type ==  0) return jerScaleFactor_->evaluate({eta,pt,"nom"});
+    else if(type == +1) return jerScaleFactor_->evaluate({eta,pt,"up"});
+    else if(type == -1) return jerScaleFactor_->evaluate({eta,pt,"down"});
+  }
   std::cout << "0 JER correction!" << std::endl;
   return 0.0;
 };

@@ -283,18 +283,6 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"p_{T}^{l min}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_287.root",whichCondorJob,year),"dy_3jsel_ptl2em",0,year,legendBSM.Data(),1.0,isBlinded,"e#mu",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
   }
-  else if(nsel == "ztrigger"){
-    TString legendLL="";
-    for(int ltype=0; ltype<3; ltype++){
-      if     (ltype == 0) legendLL="mm";
-      else if(ltype == 1) legendLL="em";
-      else if(ltype == 2) legendLL="ee";
-      finalPlot(0,1,"p_{T}^{lmin}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_%d.root",whichCondorJob,year,ltype+300),Form("dy_z%strg_ptmin%d",legendLL.Data(),ltype),0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-      for(int nTrg=0; nTrg<18; nTrg++){
-         finalPlot(0,1,"p_{T}^{lmin}","GeV",Form("anaZ/fillhisto_zAnalysis%d_%d_%d.root",whichCondorJob,year,3*nTrg+ltype+303),Form("dy_z%strg_ptmin%d",legendLL.Data(),3*nTrg+ltype+300),0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
-      }
-    }
-  }
   else if(nsel == "trigger"){
     gSystem->Exec(Form("./MitAnalysisRunIII/rdf/makePlots/makeHaddVariables_Analyses.sh %s %d %d",nsel.Data(),whichCondorJob,year));
     finalPlot(0,1,"m_{ll}","GeVBinWidth",Form("anaZ/fillhisto_triggerAnalysis%d_%d_0.root",whichCondorJob,year),"dy_triggersel_os_mll_mm0",0,year,legendBSM.Data(),1.0,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());

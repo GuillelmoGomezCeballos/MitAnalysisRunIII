@@ -565,6 +565,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   }
   // End scale expectations to observations (step 2)
 
+  if(anaSel.Contains("wzAnalysis")) histo_Baseline[kPlotQCDSSWW]->Scale(0.0);
+
   TString outputLimits = Form("datacard_%s_%d_bin%d%s.root",anaSel.Data(),year,fidAna,additionalSuffix.Data());
   outputFile = new TFile(outputLimits, "RECREATE");
   outputFile->cd();

@@ -5,7 +5,7 @@ from array import array
 ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
-from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLeptomSelFromJson, getLumi
+from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getPrunedTriggers, getLeptomSelFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet
 #from utilsAna import loadCorrectionSet
 
@@ -142,6 +142,18 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     xPtTrgbins = array('d', [25,30,35,40,45,50,55,60,65,70,75,80,90,105,120,150,200])
 
+    x1Bins01 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5])
+    x1Bins02 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5])
+    x1Bins03 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5])
+    x1Bins04 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5])
+    x1Bins05 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5])
+    x1Bins09 = array('d', [-0.5,0.5,1.5,2.5,3.5])
+    x1Bins20 = array('d', [500,700,900,1100,1300,1650,2000,2450,2900])
+    x1Bins21 = array('d', [20,50,80,110,140,180,220,280,340])
+    x1Bins22 = array('d', [1.5,2.5,3.5,4.5])
+    x1Bins23 = array('d', [2.5,3.0,3.6,4.0,4.5,5.0,5.5,6.0,7.0])
+    x1Bins24 = array('d', [0.0,0.9,1.8,2.1,2.5,2.7,2.9,3.0,3.1416])
+
     theCat = category
     if(theCat > 100): theCat = plotCategory("kPlotData")
 
@@ -206,6 +218,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     TRIGGERSMU  = getTriggerFromJson(overallTriggers, "TRIGGERSMU", year)
     TRIGGERDEL  = getTriggerFromJson(overallTriggers, "TRIGGERDEL", year)
     TRIGGERSEL  = getTriggerFromJson(overallTriggers, "TRIGGERSEL", year)
+
+    TRIGGERMUEG  = getPrunedTriggers(df,TRIGGERMUEG  )
+    TRIGGERDMU   = getPrunedTriggers(df,TRIGGERDMU   )
+    TRIGGERSMU   = getPrunedTriggers(df,TRIGGERSMU   )
+    TRIGGERDEL   = getPrunedTriggers(df,TRIGGERDEL   )
+    TRIGGERSEL   = getPrunedTriggers(df,TRIGGERSEL   )
 
     list_TRIGGERMUEG = TRIGGERMUEG.split('(')[1].split(')')[0].split('||')
     list_TRIGGERDMU  = TRIGGERDMU .split('(')[1].split(')')[0].split('||')
@@ -302,14 +320,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             histo[ltype+27][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+27,x), "histo_{0}_{1}".format(ltype+27,x), 5,-0.5,4.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
             histo[ltype+30][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+30,x), "histo_{0}_{1}".format(ltype+30,x), 80,-0.5,79.5), "PV_npvsGood","weight")
             histo[ltype+33][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+33,x), "histo_{0}_{1}".format(ltype+33,x), 100, 0, 200), "CaloMET_pt","weight")
-            if((year // 10) < 2024):
+            if((year // 10) < 2024 and (year // 10) > 2021):
                 histo[ltype+39][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 100, 0, 200), "MET_pt","weight")
             else:
                 histo[ltype+39][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+39,x), "histo_{0}_{1}".format(ltype+39,x), 100, 0, 200), "PFMET_pt","weight")
             histo[ltype+42][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+42,x), "histo_{0}_{1}".format(ltype+42,x), 100, 0, 200), "PuppiMET_pt{0}".format(altMass),"weight")
             #histo[ltype+45][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+45,x), "histo_{0}_{1}".format(ltype+45,x), 100, 0, 200), "TkMET_pt","weight")
             histo[ltype+48][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+48,x), "histo_{0}_{1}".format(ltype+48,x), 80,-0.5,79.5), "Rho_fixedGridRhoFastjetAll","weight")
-            if((year // 10) < 2024):
+            if((year // 10) < 2024 and (year // 10) > 2021):
                 histo[ltype+51][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 100, -3.1416, 3.1416), "MET_phi","weight")
             else:
                 histo[ltype+51][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+51,x), "histo_{0}_{1}".format(ltype+51,x), 100, -3.1416, 3.1416), "PFMET_phi","weight")
@@ -422,17 +440,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                                                       .Define("dphiJJLL", "compute_jet_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, PuppiMET_pt, PuppiMET_phi, 8)")
                                                      )
 
-            x1Bins01 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5])
-            x1Bins02 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5])
-            x1Bins03 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5])
-            x1Bins04 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5])
-            x1Bins05 = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5])
-            x1Bins09 = array('d', [-0.5,0.5,1.5,2.5,3.5])
-            x1Bins20 = array('d', [500,700,900,1100,1300,1650,2000,2450,2900])
-            x1Bins21 = array('d', [20,50,80,110,140,180,220,280,340])
-            x1Bins22 = array('d', [1.5,2.5,3.5,4.5])
-            x1Bins23 = array('d', [2.5,3.0,3.6,4.0,4.5,5.0,5.5,6.0,7.0])
-            x1Bins24 = array('d', [0.0,0.9,1.8,2.1,2.5,2.7,2.9,3.0,3.1416])
             if(ltype == 0):
                 histo[163][x] = dfvbscat[3*x+ltype]                                                                        .Histo1D(("histo_{0}_{1}".format(163,x), "histo_{0}_{1}".format(163,x), 40, 0.0, 4.0), "ptOvermll","weight")
                 histo[164][x] = dfvbscat[3*x+ltype]                                                                        .Histo1D(("histo_{0}_{1}".format(164,x), "histo_{0}_{1}".format(164,x), 35, 15, 50), "mll{0}".format(altMass),"weight")
@@ -663,11 +670,6 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[37][x] = dfzllcat[3*x+ltype].Filter("tight_el6[1] == true").Histo2D(("histo2d_{0}_{1}".format(37, x), "histo2d_{0}_{1}".format(37, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae2", "pte2","weight")
                 histo2D[38][x] = dfzllcat[3*x+ltype].Filter("tight_el7[1] == true").Histo2D(("histo2d_{0}_{1}".format(38, x), "histo2d_{0}_{1}".format(38, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae2", "pte2","weight")
                 histo2D[39][x] = dfzllcat[3*x+ltype].Filter("tight_el8[1] == true").Histo2D(("histo2d_{0}_{1}".format(39, x), "histo2d_{0}_{1}".format(39, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae2", "pte2","weight")
-
-            dfzllcat[3*x+ltype] = dfzllcat[3*x+ltype].Filter("ptl1 > 25 && ptl2 > 25")
-            histo[ltype+300][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+300,x), "histo_{0}_{1}".format(ltype+300,x), 20, 25, 125), "ptl2","weight")
-            for nTrg in range(len(list_TRIGGER)):
-                histo[3*nTrg+ltype+303][x] = dfzllcat[3*x+ltype].Filter("{0} > 0".format(list_TRIGGER[nTrg])).Histo1D(("histo_{0}_{1}".format(3*nTrg+ltype+303,x), "histo_{0}_{1}".format(3*nTrg+ltype+303,x), 20, 25, 125), "ptl2","weight")
 
     report = []
     for x in range(nCat):

@@ -21,9 +21,9 @@ Bool_t isBSMOverlaid = true;
 float xPos[nPlotCategories] = {0.61,0.61,0.61,0.61,0.61,0.61,0.61,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33};
 float yOff[nPlotCategories] = {   0,	1,   2,   3,   4,  5,   6,   0,   1,   2,   3,   4,   5,   6,   7};
 
-const Float_t _tsize   = 0.065;
-const Float_t _xoffset = 0.200;
-const Float_t _yoffset = 0.055;
+const Float_t _tsize   = 0.050; 
+const Float_t _xoffset = 0.280;
+const Float_t _yoffset = 0.060;
 
 const double SFBinWidth = 1;
 
@@ -76,14 +76,14 @@ void AxisFonts(TAxis*  axis,
 {
     axis->SetLabelFont  (   42);
     axis->SetLabelOffset(0.010);
-    axis->SetLabelSize  (0.060);
+    axis->SetLabelSize  (0.045);
     axis->SetNdivisions (  505);
     axis->SetTitleFont  (   42);
-    axis->SetTitleOffset(  0.9);
-    axis->SetTitleSize  (0.035);
+    axis->SetTitleOffset(  2.0);
+    axis->SetTitleSize  (0.055);
 
-    if      (coordinate == "y" && doApplyBinWidth == true) axis->SetTitleOffset(1.6);
-    else if (coordinate == "y")                            axis->SetTitleOffset(1.5);
+    if      (coordinate == "y" && doApplyBinWidth == true) axis->SetTitleOffset(0.9);
+    else if (coordinate == "y")                            axis->SetTitleOffset(0.9);
 
     axis->SetTitle(title);
 }
@@ -121,7 +121,7 @@ void DrawLegend(Float_t x1,
     legend->SetBorderSize  (     0);
     legend->SetFillColor   (     0);
     legend->SetTextAlign   (    12);
-    legend->SetTextFont    (    62);
+    legend->SetTextFont    (    42);
     legend->SetTextSize    (_tsize);
     legend->SetShadowColor(      0);
 
@@ -144,7 +144,7 @@ void DrawLegendTG(Float_t x1,
     legend->SetBorderSize(     0);
     legend->SetFillColor (     0);
     legend->SetTextAlign (    12);
-    legend->SetTextFont  (    62);
+    legend->SetTextFont  (    42);
     legend->SetTextSize  (_tsize);
 
     legend->AddEntry(hist, label.Data(), option.Data());
@@ -395,14 +395,16 @@ class StandardPlot {
             } else {
                 if(_units.Sizeof() == 1) {
                     THStackAxisFonts(hstack, "x", _xLabel.Data(), _doApplyBinWidth);
-                    if     (_doApplyBinWidth == true && SFBinWidth == 1) THStackAxisFonts(hstack, "y", "Events / GeV", _doApplyBinWidth);
-                    else if(_doApplyBinWidth == true)                    THStackAxisFonts(hstack, "y", Form("Events / %.2f",SFBinWidth), _doApplyBinWidth);
-                    else                                                 THStackAxisFonts(hstack, "y", "Events / bin", _doApplyBinWidth);
+                    //THStackAxisFonts(hstack, "y", "Events / bin", _doApplyBinWidth);
+                    if     (_doApplyBinWidth == true && SFBinWidth == 1) THStackAxisFonts(hstack, "y", "Events / 1", _doApplyBinWidth);
+                    else if(_doApplyBinWidth == true)			 THStackAxisFonts(hstack, "y", Form("Events / %.1f",SFBinWidth), _doApplyBinWidth);
+                    else						 THStackAxisFonts(hstack, "y", "Events / bin", _doApplyBinWidth);
                 } else {
 		    if(_units.EndsWith("BIN") == false){
                       THStackAxisFonts(hstack, "x", TString::Format("%s [%s]",_xLabel.Data(),_units.Data()), _doApplyBinWidth);
-                      if(hSum->GetBinWidth(0) < 1) THStackAxisFonts(hstack, "y", TString::Format("Events / %.1f %s",hSum->GetBinWidth(0),_units.Data()), _doApplyBinWidth);
-		      else                         THStackAxisFonts(hstack, "y", TString::Format("Events / %.0f %s",hSum->GetBinWidth(0),_units.Data()), _doApplyBinWidth);
+                      if     (_doApplyBinWidth == true && SFBinWidth == 1) THStackAxisFonts(hstack, "y", "Events / GeV", _doApplyBinWidth);
+                      else if(_doApplyBinWidth == true)                    THStackAxisFonts(hstack, "y", Form("Events / %.1f GeV",SFBinWidth), _doApplyBinWidth);
+                      else                                                 THStackAxisFonts(hstack, "y", "Events / bin", _doApplyBinWidth);
                     }
 		    else {
 		      _units = _units.ReplaceAll("BIN","");
@@ -465,11 +467,11 @@ class StandardPlot {
         void setUnits(const TString &s) { _units = s; }
         void setBreakdown(const bool &b = true) { _breakdown = b; }
         void addLabel(const std::string &s) {
-            _extraLabel = new TLatex(0.150, 0.70, TString(s));
+            _extraLabel = new TLatex(0.216, 0.70, TString(s));
             _extraLabel->SetNDC();
             _extraLabel->SetTextAlign(13);
-            _extraLabel->SetTextFont(62);
-            _extraLabel->SetTextSize(0.050);
+            _extraLabel->SetTextFont(42);
+            _extraLabel->SetTextSize(0.055);
         }
 
     private: 

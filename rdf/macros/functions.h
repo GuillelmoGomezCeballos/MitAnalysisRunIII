@@ -237,7 +237,7 @@ Vec_b cleaningJetSelMask(unsigned int sel, Vec_f jet_eta, Vec_f jet_chHEF, Vec_f
   float result = 0.0;
 
   for(unsigned int i=0;i<jet_eta.size();i++) {
-    if(year >= 20240) {
+    if(year >= 20240 || year <= 20210) {
       result = corrSFs.eval_jetSel(sel, jet_eta[i], jet_chHEF[i], jet_neHEF[i], jet_chEmEF[i], jet_neEmEF[i], jet_muEF[i], jet_chMultiplicity[i], jet_neMultiplicity[i]);
 
       if(debug) {
@@ -364,11 +364,11 @@ float compute_JSON_MUO_SFs(std::string valType0S, std::string valType1S, std::st
   return sfTot;
 }
 
-float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string valType1S, 
+float compute_JSON_ELE_SFs(const int yearValue, std::string yearS, std::string valType0S, std::string valType1S, 
                            std::string workingPointS, const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_phi){
   if(el_pt.size() == 0) return 1.0;
   bool debug = false;
-  if(debug) printf("eleeff: %lu\n",el_pt.size());
+  if(debug) printf("eleeff: %lu / %d\n",el_pt.size(),yearValue);
   double sfTot = 1.0;
 
   const char *year = yearS.c_str();
@@ -381,6 +381,7 @@ float compute_JSON_ELE_SFs(std::string yearS, std::string valType0S, std::string
     double pt_used = max(el_pt[i],10.001f);
     if     (pt_used < 20) recoNameAux = (char*)"RecoBelow20";
     else if(pt_used < 75) recoNameAux = (char*)"Reco20to75";
+    if(yearValue < 20210 && pt_used >= 20) recoNameAux = (char*)"RecoAbove20";
     const char *recoName = recoNameAux;
     double sf0 = corrSFs.eval_electronTRKSF(year,valType0,    recoName,el_eta[i],pt_used,el_phi[i]);
     double sf1 = 1.0;
@@ -530,7 +531,11 @@ float compute_JSON_MET(const std::string pt_phiS, const std::string met_typeS, c
   const char *pt_phi = pt_phiS.c_str();
   const char *met_type = met_typeS.c_str();
   const char *epoch = "";
-  if     (year == 20220) epoch = (char*)"2022";
+  if     (year == 20160) epoch = (char*)"2022";
+  else if(year == 20161) epoch = (char*)"2022";
+  else if(year == 20170) epoch = (char*)"2022";
+  else if(year == 20180) epoch = (char*)"2022";
+  else if(year == 20220) epoch = (char*)"2022";
   else if(year == 20221) epoch = (char*)"2022EE";
   else if(year == 20230) epoch = (char*)"2023";
   else if(year == 20231) epoch = (char*)"2023BPix";
@@ -542,8 +547,8 @@ float compute_JSON_MET(const std::string pt_phiS, const std::string met_typeS, c
   float result = corrSFs.eval_met_corr(pt_phi, met_type, epoch, dtmc, variation, met_pt,met_phi,npvGood);
 
   // NO CORRECTION APPLIED FOR >= 2024!!!
-  if     (year >= 20240 && pt_phiS == "pt") result = met_pt;
-  else if(year >= 20240 && pt_phiS == "phi") result = met_phi;
+  if     ((year >= 20240 || year <= 20210) && pt_phiS == "pt") result = met_pt;
+  else if((year >= 20240 || year <= 20210) && pt_phiS == "phi") result = met_phi;
 
   bool debug = false;
   if(debug) printf("MET: %s / %s / %s / %s / %s / %.2f / %.2f / %.2f: %.2f\n",pt_phi,met_type,epoch,dtmc,variation,met_pt,met_phi,npvGood,result);
@@ -554,7 +559,11 @@ float compute_JSON_MET(const std::string pt_phiS, const std::string met_typeS, c
 Vec_b cleaningJetVetoMapMask(const Vec_f& jet_eta, const Vec_f& jet_phi, int jetTypeCorr, const int year) {
   Vec_b jet_vetoMap_mask(jet_eta.size(), true);
 
-  if     (jetTypeCorr == -1 && year == 20220) jetTypeCorr = 0;
+  if     (jetTypeCorr == -1 && year == 20160) jetTypeCorr = 0;
+  else if(jetTypeCorr == -1 && year == 20161) jetTypeCorr = 0;
+  else if(jetTypeCorr == -1 && year == 20170) jetTypeCorr = 0;
+  else if(jetTypeCorr == -1 && year == 20180) jetTypeCorr = 0;
+  else if(jetTypeCorr == -1 && year == 20220) jetTypeCorr = 0;
   else if(jetTypeCorr == -1 && year == 20221) jetTypeCorr = 4;
   else if(jetTypeCorr == -1 && year == 20230) jetTypeCorr = 2;
   else if(jetTypeCorr == -1 && year == 20231) jetTypeCorr = 3;
@@ -1127,7 +1136,9 @@ float compute_TriggerForSingleLegsSF(float ptl1, float ptl2, float etal1, float 
 float compute_lumiFakeRate(const Vec_f& mu_pt, const Vec_f& el_pt, const int nTrigger, const int year){
   double lumiPrescalesM[3] = {0.182/1000., 0.769/1000., 0.769/1000.}; // Mu8/17/19
   double lumiPrescalesE[3] = {0.134/1000., 0.754/1000., 0.754/1000.}; // El8/12/23
-  if     (year == 20220 || year == 20221){
+  if     (year == 20160 || year == 20161 || year == 20170 || year == 20180){
+  }
+  else if(year == 20220 || year == 20221){
   }
   else if(year == 20230 || year == 20231){
     lumiPrescalesM[0] =  5.8/27693.1;

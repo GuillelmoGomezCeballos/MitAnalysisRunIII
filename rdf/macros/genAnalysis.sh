@@ -63,10 +63,10 @@ elif [[ $1 == 13 ]]; then
 
     hadd -f histo_vbs_ewk_wmwm_powheg.root fillhisto_genAnalysis_sample979_year20240_job-1.root
 
-    hadd -f histo_vbs_ewk_wz.root fillhisto_genAnalysis_sample981_year20240_job-1.root
+    hadd -f histo_vbs_ewk_wz_madgraph.root fillhisto_genAnalysis_sample981_year20240_job-1.root
 
-    hadd -f histo_vbs_ewk_wz_madgraph.root fillhisto_genAnalysis_sample982_year20240_job-1.root
+    hadd -f histo_vbs_qcd_wz_madgraph.root fillhisto_genAnalysis_sample982_year20240_job-1.root
 
-    hadd -f histo_vbs_ewk_wz_powheg.root fillhisto_genAnalysis_sample977_year20240_job-1.root
+    hadd -f histo_vbs_qcd_wz_powheg.root fillhisto_genAnalysis_sample977_year20240_job-1.root
 
 fi

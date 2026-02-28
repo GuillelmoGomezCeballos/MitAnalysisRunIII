@@ -31,6 +31,22 @@ def getBTagCut_DeepJet(type,year):
        value[0] = 0.6563
        value[1] = 0.2435
        value[2] = 0.0480
+    elif(year == 20160):
+       value[0] = 0.6563
+       value[1] = 0.2435
+       value[2] = 0.0480
+    elif(year == 20161):
+       value[0] = 0.6563
+       value[1] = 0.2435
+       value[2] = 0.0480
+    elif(year == 20170):
+       value[0] = 0.6563
+       value[1] = 0.2435
+       value[2] = 0.0480
+    elif(year == 20180):
+       value[0] = 0.6563
+       value[1] = 0.2435
+       value[2] = 0.0480
 
     return value[type]
 
@@ -63,6 +79,22 @@ def getBTagCut_PNet(type,year):
        value[0] = 0.6133
        value[1] = 0.1919
        value[2] = 0.0359
+    elif(year == 20160):
+       value[0] = 0.6133
+       value[1] = 0.1919
+       value[2] = 0.0359
+    elif(year == 20161):
+       value[0] = 0.6133
+       value[1] = 0.1919
+       value[2] = 0.0359
+    elif(year == 20170):
+       value[0] = 0.6133
+       value[1] = 0.1919
+       value[2] = 0.0359
+    elif(year == 20180):
+       value[0] = 0.6133
+       value[1] = 0.1919
+       value[2] = 0.0359
 
     return value[type]
 
@@ -92,6 +124,22 @@ def getBTagCut(type,year):
        value[1] = 0.1272
        value[2] = 0.0246
     elif(year == 20250):
+       value[0] = 0.4648
+       value[1] = 0.1272
+       value[2] = 0.0246
+    elif(year == 20160):
+       value[0] = 0.4648
+       value[1] = 0.1272
+       value[2] = 0.0246
+    elif(year == 20161):
+       value[0] = 0.4648
+       value[1] = 0.1272
+       value[2] = 0.0246
+    elif(year == 20170):
+       value[0] = 0.4648
+       value[1] = 0.1272
+       value[2] = 0.0246
+    elif(year == 20180):
        value[0] = 0.4648
        value[1] = 0.1272
        value[2] = 0.0246
@@ -235,12 +283,12 @@ def selectionJetMet(df,year,bTagSel,isData,count,jetEtaCut):
     print("jetTypeCorr: {0}".format(jetTypeCorr))
 
     BTAGName = "UParTAK4"
-    if((year // 10) < 2024): BTAGName = "RobustParTAK4"
+    if((year // 10) > 2021 and (year // 10) < 2024): BTAGName = "RobustParTAK4"
 
     JMEName0 = "Jet_chMultiplicity"
     JMEName1 = "Jet_neMultiplicity"
     JMEName2 = "Jet_nElectrons" # dummy
-    if((year // 10) < 2024):
+    if((year // 10) > 2021 and (year // 10) < 2024):
         JMEName0 = "Jet_nElectrons" # dummy
         JMEName1 = "Jet_nElectrons" # dummy
         JMEName2 = "Jet_jetId"
@@ -637,7 +685,43 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
 
     triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
 
-    if(year == 2018 and PDType == "MuonEG"):
+    if(year == 2016 and PDType == "MuonEG"):
+        triggerLEP = "{0}".format(triggerMUEG)
+
+    elif(year == 2016 and PDType == "DoubleMuon"):
+        triggerLEP = "{0} and not {1}".format(triggerDMU,triggerMUEG)
+
+    elif(year == 2016 and PDType == "SingleMuon"):
+        triggerLEP = "{0} and not {1} and not {2}".format(triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2016 and PDType == "DoubleEG"):
+        triggerLEP = "{0} and not {1} and not {2} and not {3}".format(triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2016 and PDType == "SingleElectron"):
+        triggerLEP = "{0} and not {1} and not {2} and not {3} and not {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2016):
+        triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2017 and PDType == "MuonEG"):
+        triggerLEP = "{0}".format(triggerMUEG)
+
+    elif(year == 2017 and PDType == "DoubleMuon"):
+        triggerLEP = "{0} and not {1}".format(triggerDMU,triggerMUEG)
+
+    elif(year == 2017 and PDType == "SingleMuon"):
+        triggerLEP = "{0} and not {1} and not {2}".format(triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2017 and PDType == "DoubleEG"):
+        triggerLEP = "{0} and not {1} and not {2} and not {3}".format(triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2017 and PDType == "SingleElectron"):
+        triggerLEP = "{0} and not {1} and not {2} and not {3} and not {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2017):
+        triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2018 and PDType == "MuonEG"):
         triggerLEP = "{0}".format(triggerMUEG)
 
     elif(year == 2018 and PDType == "DoubleMuon"):
@@ -730,7 +814,15 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
 
     triggerFAKE = "0"
 
-    if(year == 2018 and PDType == "DoubleMuon"):
+    if(year == 2016 and PDType == "DoubleMuon"):
+        triggerFAKE = triggerFAKEMU
+    elif(year == 2016 and PDType == "DoubleEG"):
+        triggerFAKE =  triggerFAKEEL
+    elif(year == 2017 and PDType == "DoubleMuon"):
+        triggerFAKE = triggerFAKEMU
+    elif(year == 2017 and PDType == "DoubleEG"):
+        triggerFAKE =  triggerFAKEEL
+    elif(year == 2018 and PDType == "DoubleMuon"):
         triggerFAKE = triggerFAKEMU
     elif(year == 2018 and PDType == "EGamma"):
         triggerFAKE =  triggerFAKEEL
@@ -754,6 +846,10 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
         triggerFAKE =  triggerFAKEEL
     elif(PDType == "MuonEG"):
         triggerFAKE =  "0"
+    elif(year == 2016):
+        triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
+    elif(year == 2017):
+        triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     elif(year == 2018):
         triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     elif(year == 2022):
@@ -781,9 +877,9 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
 
 def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
     MVAName = "promptMVA"
-    if((year // 10) < 2024): MVAName = "mvaTTH"
+    if((year // 10) > 2021 and (year // 10) < 2024): MVAName = "mvaTTH"
     SCEtaName = "superclusterEta	"
-    if((year // 10) < 2024): SCEtaName = "eta"
+    if((year // 10) > 2021 and (year // 10) < 2024): SCEtaName = "eta"
     dftag =(df.Define("loose_mu"                  ,"abs(Muon_eta) < 2.4 && Muon_pt > 10 && Muon_looseId == true")
               .Define("fake_mu"                   ,"{0}".format(fake_mu))
               .Define("fake_Muon_pt"              ,"Muon_pt[fake_mu]")
@@ -895,14 +991,22 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
 
     MUOYEAR = year
     ELEYEAR = "NULL"
-    if  (year == 20220): ELEYEAR = "2022Re-recoBCD"
+    if  (year == 20160): ELEYEAR = "2016preVFP"
+    elif(year == 20161): ELEYEAR = "2016postVFP"
+    elif(year == 20170): ELEYEAR = "2017"
+    elif(year == 20180): ELEYEAR = "2018"
+    elif(year == 20220): ELEYEAR = "2022Re-recoBCD"
     elif(year == 20221): ELEYEAR = "2022Re-recoE+PromptFG"
     elif(year == 20230): ELEYEAR = "2023PromptC"
     elif(year == 20231): ELEYEAR = "2023PromptD"
     elif(year == 20240): ELEYEAR = "2024Prompt"
     elif(year == 20250): ELEYEAR = "2024Prompt"
     PHOYEAR = "NULL"
-    if  (year == 20220): PHOYEAR = "2022Re-recoBCD"
+    if  (year == 20160): PHOYEAR = "2016preVFP"
+    elif(year == 20161): PHOYEAR = "2016postVFP"
+    elif(year == 20170): PHOYEAR = "2017"
+    elif(year == 20180): PHOYEAR = "2018"
+    elif(year == 20220): PHOYEAR = "2022Re-recoBCD"
     elif(year == 20221): PHOYEAR = "2022Re-recoE+PromptFG"
     elif(year == 20230): PHOYEAR = "2023PromptC"
     elif(year == 20231): PHOYEAR = "2023PromptD"
@@ -949,7 +1053,7 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
 
               .Define("weightMuoSFJSON","compute_JSON_MUO_SFs(\"nominal\",\"nominal\",\"nominal\",fake_Muon_pt,fake_Muon_eta,fake_Muon_p,0)")
 
-              .Define("weightEleSFJSON","compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)")
+              .Define("weightEleSFJSON","compute_JSON_ELE_SFs({0},ELEYEAR,\"sf\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)".format(year))
 
               .Define("weightPUSF_Nom","compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
 
@@ -1038,11 +1142,11 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weightMuoSFIDDown" ,"weight/weightMuoSFJSON*compute_JSON_MUO_SFs(\"nominal\",\"syst\",\"nominal\",fake_Muon_pt,fake_Muon_eta,fake_Muon_p,-1)")
                  .Define("weightMuoSFISODown","weight/weightMuoSFJSON*compute_JSON_MUO_SFs(\"nominal\",\"nominal\",\"syst\",fake_Muon_pt,fake_Muon_eta,fake_Muon_p,-1)")
 
-                 .Define("weightEleSFTRKUp","weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sfup\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)")
-                 .Define("weightEleSFIDUp" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sfup\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)")
+                 .Define("weightEleSFTRKUp","weight/weightEleSFJSON*compute_JSON_ELE_SFs({0},ELEYEAR,\"sfup\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)".format(year))
+                 .Define("weightEleSFIDUp" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs({0},ELEYEAR,\"sf\",\"sfup\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)".format(year))
 
-                 .Define("weightEleSFTRKDown","weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sfdown\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)")
-                 .Define("weightEleSFIDDown" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs(ELEYEAR,\"sf\",\"sfdown\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)")
+                 .Define("weightEleSFTRKDown","weight/weightEleSFJSON*compute_JSON_ELE_SFs({0},ELEYEAR,\"sfdown\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)".format(year))
+                 .Define("weightEleSFIDDown" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs({0},ELEYEAR,\"sf\",\"sfdown\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)".format(year))
 
                  #.Define("weightPUSF_Up"  ,"weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"up\")")
                  #.Define("weightPUSF_Down","weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"down\")")

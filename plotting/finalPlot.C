@@ -152,9 +152,9 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   }
 
   // HACK!!!
-  if(outputName.Contains("dy_xsel") && outputName.Contains("mll")){
-    for(int ic=0; ic<nPlotCategories; ic++) for(int nb=11; nb<20; nb++) _hist[ic]->SetBinContent(nb,0);
-  }
+  //if(outputName.Contains("dy_xsel") && outputName.Contains("mll")){
+  //  for(int ic=0; ic<nPlotCategories; ic++) for(int nb=11; nb<20; nb++) _hist[ic]->SetBinContent(nb,0);
+  //}
 
   int isVBS[2] = {0, 0};
   if     (plotName.Contains("fiducial6"))                                    isVBS[0] = 2;
@@ -243,7 +243,6 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
 
     else if(isVBS[0] == 2 && ic == kPlotSignal1)                  {_hist[kPlotBSM]->Add(_hist[ic]);_hist[ic]->Scale(0);}
     else if(isVBS[0] == 1 && ic == kPlotqqWW)                     {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
-    else if(isVBS[0] == 1 && ic == kPlotQCDSSWW)                  {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
     else if(isVBS[0] == 1 && ic == kPlotSignal0 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
     else if(isVBS[0] == 1 && ic == kPlotSignal1 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
     else if(isVBS[0] == 1 && ic == kPlotSignal2 && !makeRootFile) {_hist[kPlotEWKSSWW]->Add(_hist[ic]); _hist[ic]->Scale(0);}
@@ -366,6 +365,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   else if(year == 2028)  {theLumi = 280;}
   else if(year == 20240) {theLumi = 109;}
   else if(year == 20250) {theLumi = 109;}
+  else if(year == 20190) {theLumi = 138;}
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
   if(year == 20250)
@@ -373,7 +373,11 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   else
       cmsstyle::SetExtraText("");
   cmsstyle::SetLumi(Form("%.0f fb^{#minus1}",theLumi));
-  cmsstyle::SetEnergy(13.6);
+  if(year != 20190){
+    cmsstyle::SetEnergy(13.6);
+  } else {
+    cmsstyle::SetEnergy(13);
+  }
   cmsstyle::CMS_lumi( pad1, 11);
 
   pad2->cd();

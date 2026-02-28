@@ -11,18 +11,20 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    lumi = [36.1, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 109.6, 105.0]
+    #lumi = [19.5, 16.8, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 109.6, 105.0]
+    lumi = [19.5, 16.8, 41.5, 101.5, 8.1, 26.7, 18.1, 9.7, 109.6, 105.0]
 
     lumiBit = -999
-    if(year == 2016): lumiBit = 0
-    elif(year == 2017): lumiBit = 1
-    elif(year == 2018): lumiBit = 2
-    elif(year == 20220): lumiBit = 3
-    elif(year == 20221): lumiBit = 4
-    elif(year == 20230): lumiBit = 5
-    elif(year == 20231): lumiBit = 6
-    elif(year == 20240): lumiBit = 7
-    elif(year == 20250): lumiBit = 8
+    if  (year == 20160): lumiBit = 0
+    elif(year == 20161): lumiBit = 1
+    elif(year == 20170): lumiBit = 2
+    elif(year == 20180): lumiBit = 3
+    elif(year == 20220): lumiBit = 4
+    elif(year == 20221): lumiBit = 5
+    elif(year == 20230): lumiBit = 6
+    elif(year == 20231): lumiBit = 7
+    elif(year == 20240): lumiBit = 8
+    elif(year == 20250): lumiBit = 9
 
     print("lumi({0}/{1}) = {2}".format(year,lumiBit,lumi[lumiBit]))
 
@@ -64,11 +66,33 @@ def getTriggerFromJson(overall, type, year):
     for trigger in overall:
         if(trigger['name'] == type and trigger['year'] == year): return trigger['definition']
 
+def getPrunedTriggers(df,TRIGGERXXX):
+    list_TRIGGERXXX = TRIGGERXXX.split('(')[1].split(')')[0].split('||')
+    list_pruned_TRIGGERXXX = []
+
+    TRIGGERPRUNED = "()"
+
+    for x in range(len(list_TRIGGERXXX)):
+        try:
+            ColumnType = df.GetColumnType(list_TRIGGERXXX[x])
+            list_pruned_TRIGGERXXX.append(list_TRIGGERXXX[x])
+        except Exception as e:
+            print("No {0} weights: {1}".format(list_TRIGGERXXX[x],e))
+
+        if(len(list_pruned_TRIGGERXXX) != 0):
+            TRIGGERPRUNED = "("
+            for x in range(len(list_pruned_TRIGGERXXX)):
+                TRIGGERPRUNED += list_pruned_TRIGGERXXX[x]
+                if(x < len(list_pruned_TRIGGERXXX)-1):
+                    TRIGGERPRUNED += "||"
+            TRIGGERPRUNED += ")"
+    return TRIGGERPRUNED
+
 def getLeptomSelFromJson(overall, type, year, debug = 0):
 
     if(year > 10000): year = year // 10
     version = 12
-    if(year >= 2024): version = 15
+    if(year >= 2024 or year <= 2021): version = 15
 
     for leptonSel in overall:
         if(leptonSel['name'] == type and leptonSel['version'] == version):
@@ -213,51 +237,239 @@ def getDATAlist(type, year, skimType):
         loadJSON(jsnName)
 
     filesL = []
+    ##### 2016 ####
+    if(year == 2016 and type == 1001):
+        filesL = findDIR("{0}/SingleMuon+Run2016B-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/SingleMuon+Run2016B-HIPM_UL2016_NanoAODv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2016 and type == 1002):
+        filesL = findDIR("{0}/SingleMuon+Run2016C-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1003):
+        filesL = findDIR("{0}/SingleMuon+Run2016D-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1004):
+        filesL = findDIR("{0}/SingleMuon+Run2016E-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1005):
+        filesL = findDIR("{0}/SingleMuon+Run2016F-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1006):
+        filesL = findDIR("{0}/SingleMuon+Run2016F-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1007):
+        filesL = findDIR("{0}/SingleMuon+Run2016G-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1008):
+        filesL = findDIR("{0}/SingleMuon+Run2016H-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2016 and type == 1011):
+        filesL = findDIR("{0}/DoubleMuon+Run2016B-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/DoubleMuon+Run2016B-HIPM_UL2016_NanoAODv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2016 and type == 1012):
+        filesL = findDIR("{0}/DoubleMuon+Run2016C-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1013):
+        filesL = findDIR("{0}/DoubleMuon+Run2016D-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1014):
+        filesL = findDIR("{0}/DoubleMuon+Run2016E-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1015):
+        filesL = findDIR("{0}/DoubleMuon+Run2016F-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1016):
+        filesL = findDIR("{0}/DoubleMuon+Run2016F-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1017):
+        filesL = findDIR("{0}/DoubleMuon+Run2016G-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1018):
+        filesL = findDIR("{0}/DoubleMuon+Run2016H-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2016 and type == 1021):
+        filesL = findDIR("{0}/MuonEG+Run2016B-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/MuonEG+Run2016B-HIPM_UL2016_NanoAODv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2016 and type == 1022):
+        filesL = findDIR("{0}/MuonEG+Run2016C-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1023):
+        filesL = findDIR("{0}/MuonEG+Run2016D-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1024):
+        filesL = findDIR("{0}/MuonEG+Run2016E-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1025):
+        filesL = findDIR("{0}/MuonEG+Run2016F-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1026):
+        filesL = findDIR("{0}/MuonEG+Run2016F-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1027):
+        filesL = findDIR("{0}/MuonEG+Run2016G-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1028):
+        filesL = findDIR("{0}/MuonEG+Run2016H-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2016 and type == 1031):
+        filesL = findDIR("{0}/DoubleEG+Run2016B-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/DoubleEG+Run2016B-HIPM_UL2016_NanoAODv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2016 and type == 1032):
+        filesL = findDIR("{0}/DoubleEG+Run2016C-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1033):
+        filesL = findDIR("{0}/DoubleEG+Run2016D-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1034):
+        filesL = findDIR("{0}/DoubleEG+Run2016E-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1035):
+        filesL = findDIR("{0}/DoubleEG+Run2016F-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1036):
+        filesL = findDIR("{0}/DoubleEG+Run2016F-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1037):
+        filesL = findDIR("{0}/DoubleEG+Run2016G-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 10388):
+        filesL = findDIR("{0}/DoubleEG+Run2016H-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2016 and type == 1041):
+        filesL = findDIR("{0}/SingleElectron+Run2016B-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/SingleElectron+Run2016B-HIPM_UL2016_NanoAODv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2016 and type == 1042):
+        filesL = findDIR("{0}/SingleElectron+Run2016C-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1043):
+        filesL = findDIR("{0}/SingleElectron+Run2016D-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1044):
+        filesL = findDIR("{0}/SingleElectron+Run2016E-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1045):
+        filesL = findDIR("{0}/SingleElectron+Run2016F-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1046):
+        filesL = findDIR("{0}/SingleElectron+Run2016F-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1047):
+        filesL = findDIR("{0}/SingleElectron+Run2016G-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1048):
+        filesL = findDIR("{0}/SingleElectron+Run2016H-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    if(year == 2016 and type == 1051):
+        filesL = findDIR("{0}/MET+Run2016B-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/MET+Run2016B-HIPM_UL2016_NanoAODv15_v2-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2016 and type == 1052):
+        filesL = findDIR("{0}/MET+Run2016C-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1053):
+        filesL = findDIR("{0}/MET+Run2016D-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1054):
+        filesL = findDIR("{0}/MET+Run2016E-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1055):
+        filesL = findDIR("{0}/MET+Run2016F-HIPM_UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1056):
+        filesL = findDIR("{0}/MET+Run2016F-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1057):
+        filesL = findDIR("{0}/MET+Run2016G-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2016 and type == 1058):
+        filesL = findDIR("{0}/MET+Run2016H-UL2016_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    ##### 2017 ####
+    elif(year == 2017 and type == 1001):
+        filesL = findDIR("{0}/SingleMuon+Run2017B-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1002):
+        filesL = findDIR("{0}/SingleMuon+Run2017C-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1003):
+        filesL = findDIR("{0}/SingleMuon+Run2017D-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1004):
+        filesL = findDIR("{0}/SingleMuon+Run2017E-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1005):
+        filesL = findDIR("{0}/SingleMuon+Run2017F-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2017 and type == 1011):
+        filesL = findDIR("{0}/DoubleMuon+Run2017B-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1012):
+        filesL = findDIR("{0}/DoubleMuon+Run2017C-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1013):
+        filesL = findDIR("{0}/DoubleMuon+Run2017D-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1014):
+        filesL = findDIR("{0}/DoubleMuon+Run2017E-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1015):
+        filesL = findDIR("{0}/DoubleMuon+Run2017F-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2017 and type == 1021):
+        filesL = findDIR("{0}/MuonEG+Run2017B-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1022):
+        filesL = findDIR("{0}/MuonEG+Run2017C-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1023):
+        filesL = findDIR("{0}/MuonEG+Run2017D-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1024):
+        filesL = findDIR("{0}/MuonEG+Run2017E-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1025):
+        filesL = findDIR("{0}/MuonEG+Run2017F-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2017 and type == 1031):
+        filesL = findDIR("{0}/DoubleEG+Run2017B-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1032):
+        filesL = findDIR("{0}/DoubleEG+Run2017C-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1033):
+        filesL = findDIR("{0}/DoubleEG+Run2017D-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1034):
+        filesL = findDIR("{0}/DoubleEG+Run2017E-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1035):
+        filesL = findDIR("{0}/DoubleEG+Run2017F-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2017 and type == 1041):
+        filesL = findDIR("{0}/SingleElectron+Run2017B-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1042):
+        filesL = findDIR("{0}/SingleElectron+Run2017C-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1043):
+        filesL = findDIR("{0}/SingleElectron+Run2017D-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1044):
+        filesL = findDIR("{0}/SingleElectron+Run2017E-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1045):
+        filesL = findDIR("{0}/SingleElectron+Run2017F-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2017 and type == 1051):
+        filesL = findDIR("{0}/MET+Run2017B-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1052):
+        filesL = findDIR("{0}/MET+Run2017C-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1053):
+        filesL = findDIR("{0}/MET+Run2017D-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1054):
+        filesL = findDIR("{0}/MET+Run2017E-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+    elif(year == 2017 and type == 1055):
+        filesL = findDIR("{0}/MET+Run2017F-UL2017_NanoAODv15-v1+NANOAOD".format(dirT2))
+
     ##### 2018 ####
-    if(year == 2018 and type == 1000):
-        filesL = findDIR("{0}/SingleMuon+Run2018A-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+    elif(year == 2018 and type == 1000):
+        filesL = findDIR("{0}/SingleMuon+Run2018A-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1001):
-        filesL = findDIR("{0}/SingleMuon+Run2018B-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/SingleMuon+Run2018B-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1002):
-        filesL = findDIR("{0}/SingleMuon+Run2018C-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/SingleMuon+Run2018C-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1003):
-        filesL = findDIR("{0}/SingleMuon+Run2018D-UL2018_MiniAODv2-v3+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/SingleMuon+Run2018D-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
 
     elif(year == 2018 and type == 1010):
-        filesL = findDIR("{0}/DoubleMuon+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/DoubleMuon+Run2018A-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1011):
-        filesL = findDIR("{0}/DoubleMuon+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/DoubleMuon+Run2018B-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1012):
-        filesL = findDIR("{0}/DoubleMuon+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/DoubleMuon+Run2018C-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1013):
-        filesL = findDIR("{0}/DoubleMuon+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/DoubleMuon+Run2018D-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
 
     elif(year == 2018 and type == 1020):
-        filesL = findDIR("{0}/MuonEG+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/MuonEG+Run2018A-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1021):
-        filesL = findDIR("{0}/MuonEG+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/MuonEG+Run2018B-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1022):
-        filesL = findDIR("{0}/MuonEG+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/MuonEG+Run2018C-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1023):
-        filesL = findDIR("{0}/MuonEG+Run2018D-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/MuonEG+Run2018D-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
 
     elif(year == 2018 and type == 1030):
-        filesL = findDIR("{0}/EGamma+Run2018A-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/EGamma+Run2018A-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1031):
-        filesL = findDIR("{0}/EGamma+Run2018B-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/EGamma+Run2018B-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1032):
-        filesL = findDIR("{0}/EGamma+Run2018C-UL2018_MiniAODv2-v1+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/EGamma+Run2018C-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1033):
-        filesL = findDIR("{0}/EGamma+Run2018D-UL2018_MiniAODv2-v2+MINIAOD".format(dirT2))
+        filesL = findDIR("{0}/EGamma+Run2018D-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
 
     elif(year == 2018 and type == 1050):
-        filesL = findDIR("{0}/MET+Run2018A-UL2018_MiniAODv2_NanoAODv9-v2+NANOAOD".format(dirT2))
+        filesL = findDIR("{0}/MET+Run2018A-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1051):
-        filesL = findDIR("{0}/MET+Run2018B-UL2018_MiniAODv2_NanoAODv9-v2+NANOAOD".format(dirT2))
+        filesL = findDIR("{0}/MET+Run2018B-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1052):
-        filesL = findDIR("{0}/MET+Run2018C-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
+        filesL = findDIR("{0}/MET+Run2018C-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
     elif(year == 2018 and type == 1053):
-        filesL = findDIR("{0}/MET+Run2018D-UL2018_MiniAODv2_NanoAODv9-v1+NANOAOD".format(dirT2))
+        filesL = findDIR("{0}/MET+Run2018D-UL2018_NanoAODv15-v2+NANOAOD".format(dirT2))
 
     ##### 2022 ####
     elif(year == 2022 and type == 1001):
@@ -1265,6 +1477,22 @@ def SwitchSample(argument, skimType):
        594: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_madgraph-pythia+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0295576*1000,plotCategory("kPlotEWKSSWW")),
        595: (dirScratch+"/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_madgraph-pythia+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0280798*1000,plotCategory("kPlotQCDSSWW")),
        596: (dirScratch+"/WWJJto2L2Nu-SS-noTop-INT_TuneCP5_13p6TeV_madgraph-pythia+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0034100*1000,plotCategory("kPlotQCDSSWW")),
+
+       800: (dirT2+"/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL16NanoAODAPVv15-150X_mcRun2_asymptotic_preVFP_v1-v2+NANOAODSIM",2075.14*3*3.78*1000,plotCategory("kPlotDY")),
+       801: (dirT2+"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL16NanoAODAPVv15-150X_mcRun2_asymptotic_preVFP_v1-v1+NANOAODSIM",2075.14*3*1000,plotCategory("kPlotDY")),
+       808: (dirT2+"/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL16NanoAODAPVv15-150X_mcRun2_asymptotic_preVFP_v1-v2+NANOAODSIM",831.76*0.1086*0.1086*9*1000,plotCategory("kPlotTT")),
+
+       820: (dirT2+"/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL16NanoAODv15-150X_mcRun2_asymptotic_v1-v1+NANOAODSIM",2075.14*3*3.78*1000,plotCategory("kPlotDY")),
+       821: (dirT2+"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL16NanoAODv15-150X_mcRun2_asymptotic_v1-v1+NANOAODSIM",2075.14*3*1000,plotCategory("kPlotDY")),
+       828: (dirT2+"/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL16NanoAODv15-150X_mcRun2_asymptotic_v1-v2+NANOAODSIM",831.76*0.1086*0.1086*9*1000,plotCategory("kPlotTT")),
+
+       840: (dirT2+"/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL17NanoAODv15-150X_mc2017_realistic_v1-v1+NANOAODSIM",2075.14*3*3.78*1000,plotCategory("kPlotDY")),
+       841: (dirT2+"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL17NanoAODv15-150X_mc2017_realistic_v1-v1+NANOAODSIM",2075.14*3*1000,plotCategory("kPlotDY")),
+       848: (dirT2+"/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL17NanoAODv15-150X_mc2017_realistic_v1-v2+NANOAODSIM",831.76*0.1086*0.1086*9*1000,plotCategory("kPlotTT")),
+
+       860: (dirT2+"/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv15-150X_mc2018_realistic_v1-v1+NANOAODSIM",2075.14*3*3.78*1000,plotCategory("kPlotDY")),
+       861: (dirT2+"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8+RunIISummer20UL18NanoAODv15-150X_mc2018_realistic_v1-v1+NANOAODSIM",2075.14*3*1000,plotCategory("kPlotDY")),
+       868: (dirT2+"/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8+RunIISummer20UL18NanoAODv15-150X_mc2018_realistic_v1-v2+NANOAODSIM",831.76*0.1086*0.1086*9*1000,plotCategory("kPlotTT")),
 
        900:(dirLocal+"/2018/vbf-hrhogamma-powheg+NANOAOD_01",1.0*1000,plotCategory("kPlotBSM")),
 

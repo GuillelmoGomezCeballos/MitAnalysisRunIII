@@ -333,7 +333,7 @@
 	{
 	    "name": "TRIGGERMUEG",
 	    "year": 2016,
-	    "definition": "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL)"
+	    "definition": "(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)"
 	},
 	{
 	    "name": "TRIGGERDMU",
@@ -353,7 +353,7 @@
 	{
 	    "name": "TRIGGERSEL",
 	    "year": 2016,
-	    "definition": "(HLT_Ele25_eta2p1_WPTight_Gsf||HLT_Ele27_eta2p1_WPLoose_Gsf||HLT_Ele27_WPTight_Gsf||HLT_Ele30_WPTight_Gsf||HLT_Ele35_WPLoose_Gsf||HLT_Ele27_WP85_Gsf||HLT_Ele27_WPLoose_Gsf||HLT_Ele105_CaloIdVT_GsfTrkIdT||HLT_Ele115_CaloIdVT_GsfTrkIdT||HLT_Ele27_eta2p1_WPTight_Gsf||HLT_Ele32_eta2p1_WPTight_Gsf||HLT_ECALHT800)"
+	    "definition": "(HLT_Ele25_eta2p1_WPTight_Gsf||HLT_Ele27_eta2p1_WPLoose_Gsf||HLT_Ele27_WPTight_Gsf||HLT_Ele30_WPTight_Gsf||HLT_Ele27_WP85_Gsf||HLT_Ele105_CaloIdVT_GsfTrkIdT||HLT_Ele115_CaloIdVT_GsfTrkIdT||HLT_Ele27_eta2p1_WPTight_Gsf||HLT_Ele32_eta2p1_WPTight_Gsf||HLT_ECALHT800)"
 	},
 	{
 	    "name": "TRIGGERFAKEMU",
@@ -370,6 +370,27 @@
 	    "year": 2016,
 	    "definition": "(HLT_PFMET170_NoiseCleaned||HLT_PFMET170_HBHECleaned||HLT_PFMET170_JetIdCleaned||HLT_PFMET170_NotCleaned||HLT_PFMET170_HBHE_BeamHaloCleaned||HLT_PFMETNoMu120_NoiseCleaned_PFMHTNoMu120_IDTight||HLT_PFMETNoMu110_NoiseCleaned_PFMHTNoMu110_IDTight||HLT_PFMETNoMu90_NoiseCleaned_PFMHTNoMu90_IDTight||HLT_PFMETNoMu90_PFMHTNoMu90_IDTight||HLT_PFMETNoMu100_PFMHTNoMu100_IDTight||HLT_PFMETNoMu110_PFMHTNoMu110_IDTight||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight)"
 	},
+	{
+	    "name": "TRIGGERVBF",
+	    "year": 2016,
+	    "definition": "(HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ600DEta3)"
+	},
+	{
+	    "name": "TRIGGERKKG",
+	    "year": 2016,
+	    "definition": "(HLT_Photon35_TwoProngs35)"
+	},
+	{
+	    "name": "TRIGGERPHOINC",
+	    "year": 2016,
+	    "definition": "(HLT_Photon20||HLT_Photon33||HLT_Photon50||HLT_Photon75||HLT_Photon90||HLT_Photon120||HLT_Photon150||HLT_Photon175||HLT_Photon200||HLT_Photon50_R9Id90_HE10_IsoM||HLT_Photon75_R9Id90_HE10_IsoM||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_CaloMJJ300_PFJetsMJJ400DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_CaloMJJ400_PFJetsMJJ600DEta3||HLT_Photon90_R9Id90_HE10_IsoM||HLT_Photon120_R9Id90_HE10_IsoM||HLT_Photon165_R9Id90_HE10_IsoM||HLT_Photon50_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3_PFMET50||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ600DEta3)"
+	},
+	{
+	    "name": "TRIGGERPHOFAKE",
+	    "year": 2016,
+	    "definition": "(HLT_Photon20||HLT_Photon33||HLT_Photon50||HLT_Photon75||HLT_Photon90||HLT_Photon120||HLT_Photon150||HLT_Photon175||HLT_Photon200)"
+	},
+
 
 	{
 	    "name": "TRIGGERMUEG",
@@ -379,22 +400,22 @@
 	{
 	    "name": "TRIGGERDMU",
 	    "year": 2017,
-	    "definition": "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8||HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL_DZ_Mass3p8||HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL_DZ_Mass8)"
+	    "definition": "(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8)"
 	},
 	{
 	    "name": "TRIGGERSMU",
 	    "year": 2017,
-	    "definition": "(HLT_IsoMu24||HLT_IsoMu27||HLT_IsoMu30||HLT_Mu50)"
+	    "definition": "(HLT_IsoMu24||HLT_IsoMu27||HLT_Mu50)"
 	},
 	{
 	    "name": "TRIGGERDEL",
 	    "year": 2017,
-	    "definition": "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_DiEle27_WPTightCaloOnly_L1DoubleEG||HLT_DoubleEle25_CaloIdL_MW||HLT_DoubleEle33_CaloIdL_MW||HLT_DoublePhoton70)"
+	    "definition": "(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_DiEle27_WPTightCaloOnly_L1DoubleEG||HLT_DoubleEle33_CaloIdL_MW||HLT_DoublePhoton70)"
 	},
 	{
 	    "name": "TRIGGERSEL",
 	    "year": 2017,
-	    "definition": "(HLT_Ele115_CaloIdVT_GsfTrkIdT||HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele35_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Photon200)"
+	    "definition": "(HLT_Ele115_CaloIdVT_GsfTrkIdT||HLT_Ele27_WPTight_Gsf||HLT_Ele35_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Photon200)"
 	},
 	{
 	    "name": "TRIGGERFAKEMU",
@@ -411,6 +432,27 @@
 	    "year": 2017,
 	    "definition": "(HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60||HLT_PFMETNoMu120_PFMHTNoMu120_IDTight||HLT_PFMETNoMu130_PFMHTNoMu130_IDTight||HLT_PFMETNoMu140_PFMHTNoMu140_IDTight)"
 	},
+	{
+	    "name": "TRIGGERVBF",
+	    "year": 2017,
+	    "definition": "(HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ600DEta3)"
+	},
+	{
+	    "name": "TRIGGERKKG",
+	    "year": 2017,
+	    "definition": "(HLT_Photon35_TwoProngs35)"
+	},
+	{
+	    "name": "TRIGGERPHOINC",
+	    "year": 2017,
+	    "definition": "(HLT_Photon20||HLT_Photon33||HLT_Photon50||HLT_Photon75||HLT_Photon90||HLT_Photon120||HLT_Photon150||HLT_Photon175||HLT_Photon200||HLT_Photon50_R9Id90_HE10_IsoM||HLT_Photon75_R9Id90_HE10_IsoM||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_CaloMJJ300_PFJetsMJJ400DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_CaloMJJ400_PFJetsMJJ600DEta3||HLT_Photon90_R9Id90_HE10_IsoM||HLT_Photon120_R9Id90_HE10_IsoM||HLT_Photon165_R9Id90_HE10_IsoM||HLT_Photon50_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3_PFMET50||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ300DEta3||HLT_Photon75_R9Id90_HE10_IsoM_EBOnly_PFJetsMJJ600DEta3)"
+	},
+	{
+	    "name": "TRIGGERPHOFAKE",
+	    "year": 2017,
+	    "definition": "(HLT_Photon20||HLT_Photon33||HLT_Photon50||HLT_Photon75||HLT_Photon90||HLT_Photon120||HLT_Photon150||HLT_Photon175||HLT_Photon200)"
+	},
+
 
 	{
 	    "name": "TRIGGERMUEG",
