@@ -1537,6 +1537,12 @@ def SwitchSample(argument, skimType):
        981:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WZJJto3LNu-EWK_TuneCP5_13p6TeV_madgraph-pythia8",0.0429366*1000,plotCategory("kPlotEWKWZ")),
        982:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WZJJto3LNu-QCD_TuneCP5_13p6TeV_madgraph-pythia8",0.4958618*1000*0.60,plotCategory("kPlotWZ")),
 
-       983: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3+NANOAODSIM",0.0398961*1000,plotCategory("kPlotEWKSSWW")),
+       983:(dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3+NANOAODSIM",0.0398961*1000,plotCategory("kPlotEWKSSWW")),
+       984:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WZJJto3LNu-EWK_TuneCP5_13p6TeV_sherpa",0.0400258*1000,plotCategory("kPlotEWKWZ")),
+
+       985: ("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_madgraph-pythia8",0.0280798*1000,plotCategory("kPlotQCDSSWW")),
+       986: ("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/SSWWJJ-Interference_TuneCP5_13p6TeV_madgraph-pythia8",     0.00341005*1000,plotCategory("kPlotQCDSSWW")),
+       987: ("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/VBSWZ-Interference_TuneCP5_13p6TeV_madgraph-pythia8",      0.04806677*1000,plotCategory("kPlotWZ")),
+
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")

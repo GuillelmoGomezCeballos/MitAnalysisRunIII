@@ -71,32 +71,32 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   // Begin scale expectations to observations (step 1)
   if(applyPostFitSF == true){
     if     (anaSel.Contains("sswwAnalysis1001") || anaSel.Contains("sswwAnalysis1006")) {
-      postFitSF[kPlotSignal0] = 1.272;
-      postFitSF[kPlotSignal1] = 0.994;
-      postFitSF[kPlotSignal2] = 1.148;
-      postFitSF[kPlotSignal3] = 1.041;
+      postFitSF[kPlotSignal0] = 1.296;
+      postFitSF[kPlotSignal1] = 1.040;
+      postFitSF[kPlotSignal2] = 1.146;
+      postFitSF[kPlotSignal3] = 1.043;
     }
     else if(anaSel.Contains("sswwAnalysis1002") || anaSel.Contains("sswwAnalysis1007")) {
-      postFitSF[kPlotSignal0] = 1.148;
-      postFitSF[kPlotSignal1] = 1.012;
-      postFitSF[kPlotSignal2] = 1.126;
-      postFitSF[kPlotSignal3] = 1.034;
+      postFitSF[kPlotSignal0] = 1.190;
+      postFitSF[kPlotSignal1] = 1.026;
+      postFitSF[kPlotSignal2] = 1.119;
+      postFitSF[kPlotSignal3] = 1.043;
     }
     else if(anaSel.Contains("sswwAnalysis1003") || anaSel.Contains("sswwAnalysis1008")) {
-      postFitSF[kPlotSignal0] = 1.270;
-      postFitSF[kPlotSignal1] = 0.562;
+      postFitSF[kPlotSignal0] = 1.268;
+      postFitSF[kPlotSignal1] = 0.722;
     }
     else if(anaSel.Contains("sswwAnalysis1004") || anaSel.Contains("sswwAnalysis1009")) {
-      postFitSF[kPlotSignal0] = 1.205;
-      postFitSF[kPlotSignal1] = 1.274;
-      postFitSF[kPlotSignal2] = 1.110;
-      postFitSF[kPlotSignal3] = 0.863;
+      postFitSF[kPlotSignal0] = 1.182;
+      postFitSF[kPlotSignal1] = 1.319;
+      postFitSF[kPlotSignal2] = 1.100;
+      postFitSF[kPlotSignal3] = 0.881;
     }
     else if(anaSel.Contains("sswwAnalysis1005") || anaSel.Contains("sswwAnalysis1010")) {
-      postFitSF[kPlotSignal0] = 1.083;
-      postFitSF[kPlotSignal1] = 0.954;
-      postFitSF[kPlotSignal2] = 1.339;
-      postFitSF[kPlotSignal3] = 1.000;
+      postFitSF[kPlotSignal0] = 1.106;
+      postFitSF[kPlotSignal1] = 0.966;
+      postFitSF[kPlotSignal2] = 1.338;
+      postFitSF[kPlotSignal3] = 1.046;
     }
   }
   // End scale expectations to observations (step 1)

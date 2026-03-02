@@ -14,6 +14,7 @@ makeDataCards = 4 # 1 (njets), 2-1006 (lepton flavor), 3-1002 (3D), 4-1001 (BDT 
 genVBSSel = 1
 correctionString = "_correction"
 
+versionDoEWKQCD = False
 versionMVA = 0
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
@@ -329,7 +330,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
         dfwzcat[x] = dfwzcat[x].Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 1", "+/- 1 net charge")
 
-        if((x == plotCategory("kPlotEWKWZ")) and isData == "false"):
+        if((x == plotCategory("kPlotEWKWZ") or (x == plotCategory("kPlotWZ") and versionDoEWKQCD == True)) and isData == "false"):
             dfwzcat[x] = (dfwzcat[x].Define("theGenCat",   "compute_vbs_gen_category({0},ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,11)".format(genVBSSel))
                                     )
         else:
@@ -1342,7 +1343,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX()+1,i+1,0.0)
                 histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX()+1,i+1,0.0)
 
-            if(x == plotCategory("kPlotEWKWZ")):
+            if(x == plotCategory("kPlotEWKWZ") or (x == plotCategory("kPlotWZ") and versionDoEWKQCD == True)):
                 histo[j][plotCategory("kPlotEWKWZ")]  .SetBinError(1,0.0)
                 histo[j][plotCategory("kPlotSignal0")].SetBinError(1,0.0)
                 histo[j][plotCategory("kPlotSignal1")].SetBinError(1,0.0)

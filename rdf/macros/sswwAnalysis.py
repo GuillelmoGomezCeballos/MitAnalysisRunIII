@@ -23,6 +23,7 @@ elif(genVBSSel == 9):
 elif(genVBSSel == 10):
     genVBSSel = 5
 
+versionDoEWKQCD = False
 versionMVA = 0
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
@@ -332,7 +333,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     for x in range(nCat):
         dfwwcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
 
-        if((x == plotCategory("kPlotEWKSSWW")) and isData == "false"):
+        if((x == plotCategory("kPlotEWKSSWW") or (x == plotCategory("kPlotQCDSSWW") and versionDoEWKQCD == True)) and isData == "false"):
             dfwwcat[x] = (dfwwcat[x].Define("theGenCat" , "compute_vbs_gen_category({0},ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,3)".format(genVBSSel))
                                     )
         else:
@@ -937,7 +938,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX()+1,i+1,0.0)
                 histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX()+1,i+1,0.0)
 
-            if(x == plotCategory("kPlotEWKSSWW")):
+            if(x == plotCategory("kPlotEWKSSWW") or (x == plotCategory("kPlotQCDSSWW") and versionDoEWKQCD == True)):
                 histoMVA[j][plotCategory("kPlotEWKSSWW")].SetBinError(1,0.0)
                 histoMVA[j][plotCategory("kPlotSignal0")].SetBinError(1,0.0)
                 histoMVA[j][plotCategory("kPlotSignal1")].SetBinError(1,0.0)
@@ -1030,7 +1031,8 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,ewkCorrWeights,wsWeights
 
     genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]
     genEventSumPSRenorm = [1, 1, 1, 1]
-    if(SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKSSWW") or
+    if(SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotQCDSSWW") or
+       SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKSSWW") or
        SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotWZ") or
        SwitchSample(sampleNOW,skimType)[2] == plotCategory("kPlotEWKWZ")):
         genEventSumLHEScaleRenorm[0] = genEventSumLHEScaleWeight[0] / genEventSumLHEScaleWeight[4]

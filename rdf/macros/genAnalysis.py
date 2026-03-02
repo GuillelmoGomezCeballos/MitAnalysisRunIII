@@ -54,7 +54,7 @@ def analysis(df,count,category,weight,year,PDType,nSel,isData,histo_wwpt,ewkCorr
                .Define("nGenJet_bParton","Sum(GenJet_bParton)")
                .Define("kPlotEWKWZ", "{0}".format(plotCategory("kPlotEWKWZ")))
                .Filter("{0} != kPlotEWKWZ || nGenJet_bParton == 0".format(theCat), "EWKWZ requirement")
-               .Define("weightEWKCorr", "compute_EWKCorr(0,PDType,mjjGen)")
+               .Define("weightEWKCorr", "1.0f")
                .Define("weight","{0}*genWeight*weightEWKCorr".format(weight/getLumi(year)))
                .Filter("weight != 0","good weight")
                .Define("weightNoEWKCorr","{0}*genWeight".format(weight/getLumi(year)))
@@ -419,6 +419,11 @@ def readMCSample(sampleNOW, year, skimType, nSel, histo_wwpt, ewkCorrWeights):
 
     if(("WWJJto2L2Nu-SS" in SwitchSample(sampleNOW, skimType)[0]) and ("sherpa" in SwitchSample(sampleNOW, skimType)[0])):
         print("WWJJto2L2Nu-SS sherpa sample")
+        nTheoryReplicas[0] = 103
+        nTheoryReplicas[1] = 7
+        nTheoryReplicas[2] = 0
+    elif(("WZJJto3LNu-EWK" in SwitchSample(sampleNOW, skimType)[0]) and ("sherpa" in SwitchSample(sampleNOW, skimType)[0])):
+        print("WZJJto3LNu-EWK sherpa sample")
         nTheoryReplicas[0] = 103
         nTheoryReplicas[1] = 7
         nTheoryReplicas[2] = 0
