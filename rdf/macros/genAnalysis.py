@@ -54,7 +54,7 @@ def analysis(df,count,category,weight,year,PDType,nSel,isData,histo_wwpt,ewkCorr
                .Define("nGenJet_bParton","Sum(GenJet_bParton)")
                .Define("kPlotEWKWZ", "{0}".format(plotCategory("kPlotEWKWZ")))
                .Filter("{0} != kPlotEWKWZ || nGenJet_bParton == 0".format(theCat), "EWKWZ requirement")
-               .Define("weightEWKCorr", "1.0f")
+               .Define("weightEWKCorr", "compute_EWKCorr(0,PDType,mjjGen)")
                .Define("weight","{0}*genWeight*weightEWKCorr".format(weight/getLumi(year)))
                .Filter("weight != 0","good weight")
                .Define("weightNoEWKCorr","{0}*genWeight".format(weight/getLumi(year)))

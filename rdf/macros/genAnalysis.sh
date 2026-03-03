@@ -80,4 +80,8 @@ elif [[ $1 == 13 ]]; then
     hadd -f histo_vbs_qcd_wz_powheg.root fillhisto_genAnalysis_sample977_year20240_job-1.root
 
     hadd -f histo_vbs_int_wz_madgraph.root fillhisto_genAnalysis_sample987_year20240_job-1.root
+
+    hadd -f histo_vbs_all_ssww_madgraph.root histo_vbs_???_ssww_madgraph.root
+
+    hadd -f histo_vbs_all_wz_madgraph.root histo_vbs_???_wz_madgraph.root
 fi
