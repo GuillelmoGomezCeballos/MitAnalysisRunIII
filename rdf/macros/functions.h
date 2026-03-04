@@ -1448,6 +1448,7 @@ float compute_met_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   }
 
   PtEtaPhiMVector p4jetmom = PtEtaPhiMVector(met_pt,0.0,met_phi,0.0);
+  PtEtaPhiMVector p4llMETmom = p4llmom + p4jetmom;
   float dPhiJMET = 999.;
   for(unsigned int i=0;i<pt.size();i++) {
     HT[1] += pt[i];
@@ -1463,6 +1464,7 @@ float compute_met_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   else if(var == 4) theVar = sqrt(2*p4llmom.Pt()*met_pt*(1-cos(deltaPhi(p4llmom.Phi(),met_phi))));
   else if(var == 5) theVar = HT[1]/(HT[0]+HT[1]);
   else if(var == 6) theVar = dPhiJMET;
+  else if(var == 7) theVar = p4llMETmom.M();
   return theVar;
 }
 

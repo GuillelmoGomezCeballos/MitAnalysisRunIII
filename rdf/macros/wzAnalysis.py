@@ -6,7 +6,7 @@ ROOT.ROOT.EnableImplicitMT(4)
 from utilsCategory import plotCategory
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLeptomSelFromJson, getLumi
-from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection3LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariableVar, makeFinalVariable2DVar
+from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection3LVar, selectionLGVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariableVar, makeFinalVariable2DVar
 from utilsMVA import redefineMVAVariables
 import tmva_helper_xml
 
@@ -100,10 +100,12 @@ def selectionLL(df,year,PDType,isData,count):
     if(useFR == 0):
         dftag = dftag.Filter("nTight == 3","Three tight leptons")
 
-    dftag = selectionTauVeto(dftag,year,isData)
-    dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
     dftag = selectionJetMet (dftag,year,bTagSel,isData,count,jetEtaCut)
     dftag = selection3LVar  (dftag,year,isData)
+
+    dftag = selectionTauVeto(dftag,year,isData)
+    dftag = selectionPhoton (dftag,year,BARRELphotons,ENDCAPphotons)
+    dftag = selectionLGVar  (dftag,year,isData)
 
     return dftag
 
