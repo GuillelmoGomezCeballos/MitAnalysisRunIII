@@ -2156,6 +2156,16 @@ float compute_nl_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
      else if(var ==  10) {
        theVar = p4momTot.M()/sqrt((p4mom[0].Pt()/(p4mom[0].Pt()+met_pt))*(p4mom[1].Pt()/(p4mom[1].Pt()+met_pt)));
      }
+     else if(var ==  11 || var ==  12) {
+       float MTWMax = 0.0; float MTWMin = 10000.0; 
+       for(unsigned int i=0; i<p4mom.size(); i++){
+         float theMTW = sqrt(2*p4mom[i].Pt()*met_pt*(1-cos(deltaPhi(p4mom[i].Phi(),met_phi))));
+	 if(theMTW > MTWMax) MTWMax = theMTW;
+	 if(theMTW < MTWMin) MTWMin = theMTW;
+       }
+       if     (var ==  11) theVar = MTWMax;
+       else if(var ==  12) theVar = MTWMin;
+     }
    }
    return theVar;
 }

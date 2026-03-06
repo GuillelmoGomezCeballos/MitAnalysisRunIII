@@ -639,6 +639,8 @@ def make2LVar(df,postFixMu,postFixEl):
               .Define("minPMET{0}".format(postFix), "compute_nl_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, PuppiMET_ptDef, PuppiMET_phiDef,8)".format(postFixMu,postFixEl))
               .Define("ptww{0}".format(postFix), "compute_nl_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, PuppiMET_ptDef, PuppiMET_phiDef,9)".format(postFixMu,postFixEl))
               .Define("mcoll{0}".format(postFix), "compute_nl_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, PuppiMET_ptDef, PuppiMET_phiDef,10)".format(postFixMu,postFixEl))
+              .Define("mtwmax{0}".format(postFix), "compute_nl_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, PuppiMET_ptDef, PuppiMET_phiDef,11)".format(postFixMu,postFixEl))
+              .Define("mtwmin{0}".format(postFix), "compute_nl_var(fake_Muon_pt{0}, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_charge, fake_Electron_pt{1}, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, fake_Electron_charge, PuppiMET_ptDef, PuppiMET_phiDef,12)".format(postFixMu,postFixEl))
               )
 
     return dftag
