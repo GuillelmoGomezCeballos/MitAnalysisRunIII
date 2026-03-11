@@ -368,7 +368,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   else if(year == 20190) {theLumi = 138;}
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
-  if(year == 20250)
+  if(year == 20250 || year == 2028)
       cmsstyle::SetExtraText("Preliminary");
   else
       //cmsstyle::SetExtraText("Preliminary");

@@ -23,12 +23,15 @@ elif(genVBSSel == 9):
 elif(genVBSSel == 10):
     genVBSSel = 5
 
+versionWG = False
 versionDoEWKQCD = False
 versionMVA = 0
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
 bTagSel = 2
 useBTaggingWeights = 1
+if(versionWG == True):
+    bTagSel = 1
 
 useFR = 1
 whichAna = 2
@@ -97,6 +100,10 @@ def selectionLL(df,year,PDType,isData,count):
     FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_EL",   year)
     TIGHT_EL  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_EL{0}".format(elSelChoice),  year, 1)
 
+    if(versionWG == True):
+        FAKE_EL   = getLeptomSelFromJson(overallLeptonSel, "FAKE_PHO_EL",   year)
+        TIGHT_EL  = getLeptomSelFromJson(overallLeptonSel, "TIGHT_PHO_EL",  year, 1)
+
     dftag = selectionElMu(dftag,year,FAKE_MU,TIGHT_MU,FAKE_EL,TIGHT_EL)
 
     dftag =(dftag.Filter("nLoose == 2","Only two loose leptons")
@@ -104,6 +111,9 @@ def selectionLL(df,year,PDType,isData,count):
                  .Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) != 0", "Sign-sign leptons")
                  .Define("eventNum", "event")
                  )
+
+    if(versionWG == True):
+        dftag = dftag.Filter("Sum(fake_Muon_charge) == 1 and Sum(fake_Electron_charge) == 1","emu events only")
 
     if(useFR == 0):
         dftag = dftag.Filter("nTight == 2","Two tight leptons")
@@ -1190,6 +1200,9 @@ if __name__ == "__main__":
     for x in range(9):
         histoFakeEtaPt_mu[x].SetDirectory(0)
         histoFakeEtaPt_el[x].SetDirectory(0)
+        # Need to scale fake rate
+        if(versionWG == True):
+            histoFakeEtaPt_el[x].Scale(3.8)
     fFakeFile.Close()
 
     lepSFPath = "data/histoLepSFEtaPt_{0}{1}.root".format(year,correctionString)

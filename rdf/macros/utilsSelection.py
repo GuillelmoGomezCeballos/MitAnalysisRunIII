@@ -939,6 +939,8 @@ def selectionElMu(df,year,fake_mu,tight_mu,fake_el,tight_el):
               .Define("fake_Electron_pfRelIso03_chg"      ,"Electron_pfRelIso03_chg[fake_el]")
               .Define("fake_Electron_seedGain"            ,"Electron_seedGain[fake_el]")
               .Define("fake_Electron_superclusterEta"     ,"Electron_{0}[fake_el]".format(SCEtaName))
+              .Define("fake_Electron_lostHits"            ,"Electron_lostHits[fake_el]")
+              .Define("fake_Electron_sieie"               ,"Electron_sieie[fake_el]")
               .Define("fakeable_el"                       ,"(abs(fake_Electron_dxy) < 0.05 && abs(fake_Electron_dz) < 0.10 && abs(fake_Electron_eta) < 2.5 && fake_Electron_pt > 10 && fake_Electron_cutBased >= 2 && fake_Electron_jetRelIso < 0.5)")
               .Define("tight_el"                          ,"{0}".format(tight_el))
 
