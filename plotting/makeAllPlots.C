@@ -830,6 +830,11 @@ void makeAllPlots(TString nsel, int applyScaling, int year, int whichCondorJob =
     finalPlot(0,1,"#phi_{T}^{j2}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_58.root",whichCondorJob,year),"sswwvbssel_phij2", 0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"#phi_{T}^{j2}","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_59.root",whichCondorJob,year),"sswwbvbssel_phij2", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
 
+    finalPlot(0,1,"BDT","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_112.root",whichCondorJob,year),"sswwvbssel_bdt_vbfpol0",  0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"BDT","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_113.root",whichCondorJob,year),"sswwbvbssel_bdt_vbfpol0", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"BDT","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_114.root",whichCondorJob,year),"sswwvbssel_bdt_vbfpol1",  0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+    finalPlot(0,1,"BDT","",Form("anaZ/fillhisto_sswwAnalysis%d_%d_115.root",whichCondorJob,year),"sswwbvbssel_bdt_vbfpol1", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
+
     finalPlot(0,1,"p_{T}^{l max}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_60.root",whichCondorJob,year),"sswwvbssel_ptl1",  0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{l max}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_61.root",whichCondorJob,year),"sswwbvbssel_ptl1", 0,year,legendBSM.Data(),SF_DY,isNeverBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());
     finalPlot(0,1,"p_{T}^{l min}","GeV",Form("anaZ/fillhisto_sswwAnalysis%d_%d_62.root",whichCondorJob,year),"sswwvbssel_ptl2",  0,year,legendBSM.Data(),SF_DY,isBlinded,"",1,applyScaling,mlfitResult.Data(),channelName.Data());

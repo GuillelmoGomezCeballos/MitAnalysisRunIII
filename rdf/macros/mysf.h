@@ -119,7 +119,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20230) corrNameLUM = "Collisions2023_366403_369802_eraBC_GoldenJson";
   else if(year == 20231) corrNameLUM = "Collisions2023_369803_370790_eraD_GoldenJson";
   else if(year == 20240 ||
-          year == 20250) corrNameLUM = "Collisions2024_378981_386951_GoldenJson";
+          year == 20250) corrNameLUM = "Collisions24_BCDEFGHI_goldenJSON";
   
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
@@ -127,12 +127,12 @@ MyCorrections::MyCorrections(int the_input_year) {
   if(debug > 0) std::cout << "pass lum" << std::endl;
 
   if(year == 20240 || year == 20250) {
-    std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging_preliminary.json.gz";
+    std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
     auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
-    btvHFSF_ = csetHFBTV->at("UParTAK4_kinfit");
-    std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging_preliminary.json.gz";
+    btvHFSF_ = csetHFBTV->at("UParTAK4_comb");
+    std::string fileNameLFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
     auto csetLFBTV = correction::CorrectionSet::from_file(fileNameLFBTV);
-    btvLFSF_ = csetLFBTV->at("UParTAK4_negtagDY");
+    btvLFSF_ = csetLFBTV->at("UParTAK4_light");
   }
   else {
     std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
@@ -528,7 +528,7 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
   eta = std::min(std::abs(eta),2.399);
   pt = std::min(pt,999.999);
   if(flavor != 0) {
-    if(year == 20240 || year == 20250) return btvHFSF_->evaluate({valType, workingPoint,      5, eta, pt});
+    if(year == 20240 || year == 20250) return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
     else                               return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
   }
   else {

@@ -1513,7 +1513,7 @@ float compute_jet_x_gamma_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   return theVar;
 }
 // Jet-lepton final variables
-float compute_jet_lepton_final_var(const float mjj, const float detajj, const float dphijj, const float zepvv, const float bdt, const float mll, const int njets, unsigned int var)
+float compute_jet_lepton_final_var(const float mjj, const float detajj, const float dphijj, const float zepvv, const float bdt_inc, const float mll, const int njets, unsigned int var, const float bdt_pol0 = -999.0, const float bdt_pol1 = -999.0)
 {
   if     (var < 10){
     int typeSelAux1 = -1;
@@ -1603,16 +1603,16 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     }
   }
   else if(var == 12){ // VBS WZ SR MVA based (2D)
-    float bdtNew = std::min(std::max(bdt+1.0,0.001),1.999)/2.0;
+    float bdt_incNew = std::min(std::max(bdt_inc+1.0,0.001),1.999)/2.0;
     float typeSelAux3 = -1;
     if     (zepvv >= 0.25) typeSelAux3 = 0;
     else                   typeSelAux3 = 1;
 
-    return (float)(bdtNew+typeSelAux3);
+    return (float)(bdt_incNew+typeSelAux3);
   }
   else if(var == 13){ // VBS WZ SR MVA based (1D)
-    float bdtNew = std::min(std::max(bdt+1.0,0.001),1.999)/2.0;
-    return (float)(bdtNew);
+    float bdt_incNew = std::min(std::max(bdt_inc+1.0,0.001),1.999)/2.0;
+    return (float)(bdt_incNew);
   }
   else if(var == 14){ // VBS WZ SR MVA X mjj (2D)
     int typeSelAux1 = -1;
@@ -1621,9 +1621,68 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     else if(mjj < 2000) typeSelAux1 = 2;
     else                typeSelAux1 = 3;
 
-    float bdtNew = (std::min(std::max(bdt+1.0,0.001),1.999)/2.0)+typeSelAux1;
+    float bdt_incNew = (std::min(std::max(bdt_inc+1.0,0.001),1.999)/2.0)+typeSelAux1;
 
-    return (float)(bdtNew);
+    return (float)(bdt_incNew);
+  }
+  else if(var == 31){ // VBS BDT pol v0 3D
+    float xBDT0Bins[4] = {-0.010, 0.530, 0.860, 9.000};
+    float xBDT1Bins[4] = {-0.200, 0.120, 0.450, 9.000};
+    float xBDT2Bins[4] = {-0.060, 0.280, 0.550, 9.000};
+
+    int typeSelAux0 = -1;
+    if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
+    else if(bdt_inc < xBDT0Bins[1]) typeSelAux0 = 1;
+    else if(bdt_inc < xBDT0Bins[2]) typeSelAux0 = 2;
+    else                            typeSelAux0 = 3;
+
+    int typeSelAux1 = -1;
+    if     (bdt_pol0 < xBDT1Bins[0]) typeSelAux1 = 0;
+    else if(bdt_pol0 < xBDT1Bins[1]) typeSelAux1 = 1;
+    else if(bdt_pol0 < xBDT1Bins[2]) typeSelAux1 = 2;
+    else                             typeSelAux1 = 3;
+
+    int typeSelAux2 = -1;
+    if     (bdt_pol1 < xBDT2Bins[0]) typeSelAux2 = 0;
+    else if(bdt_pol1 < xBDT2Bins[1]) typeSelAux2 = 1;
+    else if(bdt_pol1 < xBDT2Bins[2]) typeSelAux2 = 2;
+    else                             typeSelAux2 = 3;
+
+    float typeSelAux = (float)(16*typeSelAux0 + 4*typeSelAux1 + typeSelAux2);
+
+    return (float)(typeSelAux);
+  }
+  else if(var == 32 || var == 33){ // VBS BDT pol v0 2D
+    float xBDT0Bins[5] = {-0.140, 0.330, 0.680, 0.900, 9.000};
+    float xBDT1Bins[5] = {-0.280,-0.000, 0.250, 0.520, 9.000};
+    float xBDT2Bins[5] = {-0.160, 0.160, 0.390, 0.590, 9.000};
+
+    int typeSelAux0 = -1;
+    if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
+    else if(bdt_inc < xBDT0Bins[1]) typeSelAux0 = 1;
+    else if(bdt_inc < xBDT0Bins[2]) typeSelAux0 = 2;
+    else if(bdt_inc < xBDT0Bins[3]) typeSelAux0 = 3;
+    else                            typeSelAux0 = 4;
+
+    int typeSelAux1 = -1;
+    if     (bdt_pol0 < xBDT1Bins[0]) typeSelAux1 = 0;
+    else if(bdt_pol0 < xBDT1Bins[1]) typeSelAux1 = 1;
+    else if(bdt_pol0 < xBDT1Bins[2]) typeSelAux1 = 2;
+    else if(bdt_pol0 < xBDT1Bins[3]) typeSelAux1 = 3;
+    else                             typeSelAux1 = 4;
+
+    int typeSelAux2 = -1;
+    if     (bdt_pol1 < xBDT2Bins[0]) typeSelAux2 = 0;
+    else if(bdt_pol1 < xBDT2Bins[1]) typeSelAux2 = 1;
+    else if(bdt_pol1 < xBDT2Bins[2]) typeSelAux2 = 2;
+    else if(bdt_pol1 < xBDT2Bins[3]) typeSelAux2 = 3;
+    else                             typeSelAux2 = 4;
+
+    float typeSelAux = -1.0;
+    if     (var == 32) typeSelAux = (float)(5*typeSelAux0 + typeSelAux1);
+    else if(var == 33) typeSelAux = (float)(5*typeSelAux0 + typeSelAux2);
+
+    return (float)(typeSelAux);
   }
   return 0.0;
 }

@@ -9,11 +9,23 @@
 #include <fstream>
 #include <TStyle.h>
 
-void checkEqualBinning(TString fileName = "", TString histoName = "", int numberOfBins = 8, bool debug = false, bool reDefine = false){
+void checkEqualBinning(TString fileName = "", TString histoNameA = "", int numberOfBins = 8, bool debug = false, bool reDefine = false, TString histoNameB = "", TString histoNameC = ""){
   TFile *the_input_file = TFile::Open(fileName.Data());
   if(!the_input_file) return;
-  TH1D* theHisto = (TH1D*)the_input_file->Get(Form("%s",histoName.Data()));
+  TH1D* theHisto = (TH1D*)the_input_file->Get(Form("%s",histoNameA.Data()));
   if(!theHisto) return;
+
+  if(histoNameB != ""){
+    TH1D* theHistoAuxB = (TH1D*)the_input_file->Get(Form("%s",histoNameB.Data()));
+    if(!theHistoAuxB) return;
+    theHisto->Add(theHistoAuxB);
+  }
+
+  if(histoNameC != ""){
+    TH1D* theHistoAuxC = (TH1D*)the_input_file->Get(Form("%s",histoNameC.Data()));
+    if(!theHistoAuxC) return;
+    theHisto->Add(theHistoAuxC);
+  }
 
   const int nBinBDT = numberOfBins; Float_t theInterval[nBinBDT];
   for(int i=0; i<=nBinBDT; i++) theInterval[i] = (i+1.)/numberOfBins;

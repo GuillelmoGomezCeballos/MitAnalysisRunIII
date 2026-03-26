@@ -22,6 +22,9 @@ rm -rf ${OUTPUTFOLDER}/macros1007
 rm -rf ${OUTPUTFOLDER}/macros1008
 rm -rf ${OUTPUTFOLDER}/macros1009
 rm -rf ${OUTPUTFOLDER}/macros1010
+rm -rf ${OUTPUTFOLDER}/macros1011
+rm -rf ${OUTPUTFOLDER}/macros1012
+rm -rf ${OUTPUTFOLDER}/macros1013
 
 cp -r ../macros ${OUTPUTFOLDER}/macros1001
 cp -r ../macros ${OUTPUTFOLDER}/macros1002
@@ -33,6 +36,9 @@ cp -r ../macros ${OUTPUTFOLDER}/macros1007
 cp -r ../macros ${OUTPUTFOLDER}/macros1008
 cp -r ../macros ${OUTPUTFOLDER}/macros1009
 cp -r ../macros ${OUTPUTFOLDER}/macros1010
+cp -r ../macros ${OUTPUTFOLDER}/macros1011
+cp -r ../macros ${OUTPUTFOLDER}/macros1012
+cp -r ../macros ${OUTPUTFOLDER}/macros1013
 
 #makeDataCards = 1 # 1 (mjj diff), 2 (mll diff), 3 (njets diff), 4 (detajj diff), 5 (dphijj diff), 6 (mjj), 7 (mll), 8 (njets), 9 (detajj), 10 (dphijj)
 sed -i 's/makeDataCards = 1/makeDataCards = 2/'  ${OUTPUTFOLDER}/macros1002/sswwAnalysis.py 
@@ -44,6 +50,9 @@ sed -i 's/makeDataCards = 1/makeDataCards = 7/'  ${OUTPUTFOLDER}/macros1007/ssww
 sed -i 's/makeDataCards = 1/makeDataCards = 8/'  ${OUTPUTFOLDER}/macros1008/sswwAnalysis.py 
 sed -i 's/makeDataCards = 1/makeDataCards = 9/'  ${OUTPUTFOLDER}/macros1009/sswwAnalysis.py 
 sed -i 's/makeDataCards = 1/makeDataCards = 10/' ${OUTPUTFOLDER}/macros1010/sswwAnalysis.py 
+sed -i 's/makeDataCards = 1/makeDataCards = 11/' ${OUTPUTFOLDER}/macros1011/sswwAnalysis.py 
+sed -i 's/makeDataCards = 1/makeDataCards = 12/' ${OUTPUTFOLDER}/macros1012/sswwAnalysis.py 
+sed -i 's/makeDataCards = 1/makeDataCards = 13/' ${OUTPUTFOLDER}/macros1013/sswwAnalysis.py 
 
 #makeDataCards = 4 # 1 (njets), 2-1006 (lepton flavor), 3-1002 (3D), 4-1001 (BDT 2D), 5-1003 (BDT 1D), 6-1004 (mjj), 7-1005 (mjj diff)
 sed -i 's/makeDataCards = 4/makeDataCards = 3/'  ${OUTPUTFOLDER}/macros1002/wzAnalysis.py
@@ -85,6 +94,21 @@ sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/wzAnalysis_input_condor_jobs.cfg
 sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/zAnalysis_input_condor_jobs.cfg
 sed -i 's/no//' ${OUTPUTFOLDER}/macros1002/zAnalysis_input_condor_jobs.cfg
 
+cd ${OUTPUTFOLDER}/macros1011
+python3 remake_Analysis_input_condor_jobs.py --ana=ssww --isWWPol=1
+mv sswwAnalysis_input_condor_jobs_new.cfg sswwAnalysis_input_condor_jobs.cfg
+cd -
+
+cd ${OUTPUTFOLDER}/macros1012
+python3 remake_Analysis_input_condor_jobs.py --ana=ssww --isWWPol=1
+mv sswwAnalysis_input_condor_jobs_new.cfg sswwAnalysis_input_condor_jobs.cfg
+cd -
+
+cd ${OUTPUTFOLDER}/macros1013
+python3 remake_Analysis_input_condor_jobs.py --ana=ssww --isWWPol=1
+mv sswwAnalysis_input_condor_jobs_new.cfg sswwAnalysis_input_condor_jobs.cfg
+cd -
+
 if [[ $1 == 1 ]]; then
 
 diff -r ../macros ${OUTPUTFOLDER}/macros1001
@@ -97,5 +121,8 @@ diff -r ../macros ${OUTPUTFOLDER}/macros1007
 diff -r ../macros ${OUTPUTFOLDER}/macros1008
 diff -r ../macros ${OUTPUTFOLDER}/macros1009
 diff -r ../macros ${OUTPUTFOLDER}/macros1010
+diff -r ../macros ${OUTPUTFOLDER}/macros1011
+diff -r ../macros ${OUTPUTFOLDER}/macros1012
+diff -r ../macros ${OUTPUTFOLDER}/macros1013
 
 fi

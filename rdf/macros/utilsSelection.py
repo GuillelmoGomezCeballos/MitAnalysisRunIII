@@ -243,7 +243,7 @@ def makeJES(df,year,postFix,bTagSel,jetEtaCut,jetTypeCorr):
               .Define("goodbtag_Jet_bjet{0}".format(postFix), "goodbtag_Jet_btagUnifiedParTB{0} > {1}".format(postFix,getBTagCut(bTagSel,year)))
               .Define("nbtag_goodbtag_Jet_bjet{0}".format(postFix), "Sum(goodbtag_Jet_bjet{0})*1.0f".format(postFix))
 
-              .Define("vbs_jet{0}".format(postFix), "abs(clean_Jet_eta) < 4.9 && clean_Jet_pt{0} > 50".format(postFitDef))
+              .Define("vbs_jet{0}".format(postFix), "abs(clean_Jet_eta) < 4.7 && clean_Jet_pt{0} > 50 && (clean_Jet_pt{0} > 50 or abs(clean_Jet_eta) < 2.5 or abs(clean_Jet_eta) > 3.0)".format(postFitDef))
               .Define("nvbs_jets{0}".format(postFix), "Sum(vbs_jet{0})*1.0f".format(postFix))
               .Define("vbs_Jet_pt{0}".format(postFix), "clean_Jet_pt{0}[vbs_jet{1}]".format(postFitDef,postFix))
               .Define("vbs_Jet_eta{0}".format(postFix), "clean_Jet_eta[vbs_jet{0}]".format(postFix))
@@ -1209,30 +1209,29 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weightBtagSFLF_00Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up\",-1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFLF_00Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down\",-1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  )
-
     else:
-        dftag =(dftag.Define("weightBtagSFBC_02Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_03Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_fsrdef\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+        dftag =(dftag.Define("weightBtagSFBC_02Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_muf\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_03Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_bfragmentation\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_04Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_isrdef\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_05Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_hdamp\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_06Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_jer\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_07Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_jes\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_08Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_tune\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_09Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_10Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_mass\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_11Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_08Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_pdfas\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_09Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_pileup\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_10Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_topmass\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_11Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_type3\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_12Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up_statistic\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
 
-                 .Define("weightBtagSFBC_02Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_03Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_fsrdef\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_02Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_muf\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_03Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_bfragmentation\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_04Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_isrdef\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_05Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_hdamp\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_06Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_jer\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_07Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_jes\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_08Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_tune\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_09Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_10Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_mass\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
-                 .Define("weightBtagSFBC_11Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"central\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_08Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_pdfas\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_09Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_pileup\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_10Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_topmass\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
+                 .Define("weightBtagSFBC_11Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_type3\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
                  .Define("weightBtagSFBC_12Down","weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"down_statistic\",1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
 
                  .Define("weightBtagSFLF_00Up"  ,"weight/weightBtagSF*compute_JSON_BTV_SF(goodbtag_Jet_pt,goodbtag_Jet_eta,goodbtag_Jet_btagUnifiedParTB,goodbtag_Jet_hadronFlavour,\"up\",-1,{0},{1})".format(bTagSel,getBTagCut(bTagSel,year)))
@@ -1355,10 +1354,14 @@ def selectionWeigths(df,isData,year,PDType,weight,type,bTagSel,useBTaggingWeight
         fakeRateSel[2] = 3
         fakeRateSel[3] = 7
     elif(whichAna == 2 or whichAna == 3):
-        fakeRateSel[0] = 6
-        fakeRateSel[1] = 8
-        fakeRateSel[2] = 3
-        fakeRateSel[3] = 0
+        #fakeRateSel[0] = 6
+        #fakeRateSel[1] = 8
+        #fakeRateSel[2] = 3
+        #fakeRateSel[3] = 0
+        fakeRateSel[0] = 4
+        fakeRateSel[1] = 3
+        fakeRateSel[2] = 5
+        fakeRateSel[3] = 6
 
     if(isData == "true"): return selectionDAWeigths(df,year,PDType,whichAna,fakeRateSel)
     else:                 return selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,MUOWP,ELEWP,correctionString,whichAna,fakeRateSel)
