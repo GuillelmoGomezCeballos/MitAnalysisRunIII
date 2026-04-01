@@ -1626,15 +1626,14 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     return (float)(bdt_incNew);
   }
   else if(var == 31){ // VBS BDT pol v0 3D
-    float xBDT0Bins[4] = {-0.010, 0.530, 0.860, 9.000};
-    float xBDT1Bins[4] = {-0.200, 0.120, 0.450, 9.000};
-    float xBDT2Bins[4] = {-0.060, 0.280, 0.550, 9.000};
+    float xBDT0Bins[3] = { 0.150, 0.680, 9.000};
+    float xBDT1Bins[4] = {-0.210, 0.120, 0.440, 9.000};
+    float xBDT2Bins[4] = {-0.070, 0.300, 0.560, 9.000};
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
     else if(bdt_inc < xBDT0Bins[1]) typeSelAux0 = 1;
-    else if(bdt_inc < xBDT0Bins[2]) typeSelAux0 = 2;
-    else                            typeSelAux0 = 3;
+    else                            typeSelAux0 = 2;
 
     int typeSelAux1 = -1;
     if     (bdt_pol0 < xBDT1Bins[0]) typeSelAux1 = 0;
@@ -1653,34 +1652,35 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     return (float)(typeSelAux);
   }
   else if(var == 32 || var == 33){ // VBS BDT pol v0 2D
-    float xBDT0Bins[5] = {-0.140, 0.330, 0.680, 0.900, 9.000};
-    float xBDT1Bins[5] = {-0.280,-0.000, 0.250, 0.520, 9.000};
-    float xBDT2Bins[5] = {-0.160, 0.160, 0.390, 0.590, 9.000};
+    float xBDT0Bins[4] = {-0.040, 0.470, 0.770, 9.000};
+    float xBDT1Bins[6] = {-0.340,-0.090, 0.120, 0.330, 0.560, 9.000};
+    float xBDT2Bins[6] = {-0.240, 0.070, 0.300, 0.480, 0.640, 9.000};
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
     else if(bdt_inc < xBDT0Bins[1]) typeSelAux0 = 1;
     else if(bdt_inc < xBDT0Bins[2]) typeSelAux0 = 2;
-    else if(bdt_inc < xBDT0Bins[3]) typeSelAux0 = 3;
-    else                            typeSelAux0 = 4;
+    else                            typeSelAux0 = 3;
 
     int typeSelAux1 = -1;
     if     (bdt_pol0 < xBDT1Bins[0]) typeSelAux1 = 0;
     else if(bdt_pol0 < xBDT1Bins[1]) typeSelAux1 = 1;
     else if(bdt_pol0 < xBDT1Bins[2]) typeSelAux1 = 2;
     else if(bdt_pol0 < xBDT1Bins[3]) typeSelAux1 = 3;
-    else                             typeSelAux1 = 4;
+    else if(bdt_pol0 < xBDT1Bins[4]) typeSelAux1 = 4;
+    else                             typeSelAux1 = 5;
 
     int typeSelAux2 = -1;
     if     (bdt_pol1 < xBDT2Bins[0]) typeSelAux2 = 0;
     else if(bdt_pol1 < xBDT2Bins[1]) typeSelAux2 = 1;
     else if(bdt_pol1 < xBDT2Bins[2]) typeSelAux2 = 2;
     else if(bdt_pol1 < xBDT2Bins[3]) typeSelAux2 = 3;
-    else                             typeSelAux2 = 4;
+    else if(bdt_pol1 < xBDT2Bins[4]) typeSelAux2 = 4;
+    else                             typeSelAux2 = 5;
 
     float typeSelAux = -1.0;
-    if     (var == 32) typeSelAux = (float)(5*typeSelAux0 + typeSelAux1);
-    else if(var == 33) typeSelAux = (float)(5*typeSelAux0 + typeSelAux2);
+    if     (var == 32) typeSelAux = (float)(6*typeSelAux0 + typeSelAux1);
+    else if(var == 33) typeSelAux = (float)(6*typeSelAux0 + typeSelAux2);
 
     return (float)(typeSelAux);
   }
@@ -2553,6 +2553,76 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
   }
   
   return 0;
+}
+
+// compute vbs gen category
+float compute_llgen_var(const int ngood_GenJets, const Vec_f& good_GenJet_pt, const Vec_f& good_GenJet_eta,  const Vec_f& good_GenJet_phi, const Vec_f& good_GenJet_mass,
+                        const int ngood_GenDressedLeptons, const Vec_i& GenDressedLepton_pdgId, const Vec_b& GenDressedLepton_hasTauAnc,
+                        const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_eta, const Vec_f& GenDressedLepton_phi, const Vec_f& GenDressedLepton_mass,
+                        const float met_pt, const float met_phi, const int whichVar){
+
+  if(ngood_GenDressedLeptons <= 1) return -1;
+  float theVar = -1;
+
+  if(whichVar == 0){
+    theVar = (float)ngood_GenJets;
+    if(theVar >= 2) theVar = 2;
+  }
+  else if(whichVar == 1){
+    theVar = GenDressedLepton_pt[0];
+    if(theVar >= 100) theVar = 99.999;
+  }
+  else if(whichVar == 2){
+    theVar = GenDressedLepton_pt[1];
+    if(theVar >= 100) theVar = 99.999;
+  }
+  else if(whichVar == 3){
+    theVar = Minv2(GenDressedLepton_pt[0], GenDressedLepton_eta[0], GenDressedLepton_phi[0], GenDressedLepton_mass[0],
+                   GenDressedLepton_pt[1], GenDressedLepton_eta[1], GenDressedLepton_phi[1], GenDressedLepton_mass[1]).first;
+    if(theVar >= 250) theVar = 249.999;
+  }
+  else if(whichVar == 4){
+    theVar = Minv2(GenDressedLepton_pt[0], GenDressedLepton_eta[0], GenDressedLepton_phi[0], GenDressedLepton_mass[0],
+                   GenDressedLepton_pt[1], GenDressedLepton_eta[1], GenDressedLepton_phi[1], GenDressedLepton_mass[1]).second;
+    if(theVar >= 120) theVar = 119.999;
+  }
+  else if(whichVar == 5){
+      PtEtaPhiMVector p4mom = PtEtaPhiMVector(met_pt,0.0,met_phi,0.0);
+      for(unsigned int i=0; i<GenDressedLepton_pt.size(); i++){
+        p4mom = p4mom + PtEtaPhiMVector(GenDressedLepton_pt[i],0.0,GenDressedLepton_phi[i],0.0);
+      }
+      theVar = std::min(p4mom.Pt(),79.999);
+  }
+  else if(whichVar == 6){
+    theVar = (float)ngood_GenJets;
+    if(theVar >= 3) theVar = 3;
+  }
+  else if(whichVar == 7){
+    if(ngood_GenJets >= 1){
+      theVar = good_GenJet_pt[0];
+      if(theVar >= 350) theVar = 349.999;
+    }
+  }
+  else if(whichVar == 8){
+    if(ngood_GenJets >= 2){
+      theVar = good_GenJet_pt[1];
+      if(theVar >= 400) theVar = 399.999;
+    }
+  }
+  else if(whichVar == 9){
+    if(ngood_GenJets >= 2){
+      theVar =  Minv2(good_GenJet_pt[0], good_GenJet_eta[0], good_GenJet_phi[0], good_GenJet_mass[0],
+                      good_GenJet_pt[1], good_GenJet_eta[1], good_GenJet_phi[1], good_GenJet_mass[1]).first;
+      if(theVar >= 400) theVar = 399.999;
+    }
+  }
+  else if(whichVar == 10){
+    if(ngood_GenJets >= 2){
+      theVar = (good_GenJet_eta[0] > good_GenJet_eta[1] ? TVector2::Phi_0_2pi(good_GenJet_phi[0] - good_GenJet_phi[1]) : TVector2::Phi_0_2pi(good_GenJet_phi[1] - good_GenJet_phi[0]));
+    }
+  }
+  
+  return theVar;
 }
 
 // compute mll gen category

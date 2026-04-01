@@ -12,7 +12,7 @@
 #include "TLegend.h"
 #include <iostream>
 
-void computeGenVBSVVXS(TString input = "", int selectType = 0, bool doPDFRMS = false){
+void computeGenVBSVVXS(TString input = "", int selectType = 0, bool doPDFRMS = false, bool debug = false){
 
   //TH1D *histo_RMSPDF = new TH1D("histo_RMSPDF", "histo_RMSPDF", 100, 0.00, 0.10);
   TH1D *histo_RMSPDF = new TH1D("histo_RMSPDF", "histo_RMSPDF", 200, 0.90, 1.10);
@@ -29,14 +29,14 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0, bool doPDFRMS = f
   const int number_unc_QCDScale = 6;
   const int number_unc_PDF      = 101;
 
-  int startF=0; TString nameH = "";
-  if     (selectType == 0) {startF=386;  nameH = "hDEWKWZMJJ";}
-  else if(selectType == 1) {startF=530;  nameH = "hDEWKWWMJJ";}
-  else if(selectType == 2) {startF=650;  nameH = "hDEWKWWMLL";}
-  else if(selectType == 3) {startF=770;  nameH = "hDEWKWWNJET";}
-  else if(selectType == 4) {startF=890;  nameH = "hDEWKWWDELTAETAJJ";}
-  else if(selectType == 5) {startF=1010; nameH = "hDEWKWWDELTAPHIJJ";}
-  else if(selectType == 6) {startF=386;  nameH = "hDQCDWZMJJ";}
+  int startFX=0; int startFY=0; TString nameH = "";
+  if     (selectType == 0) {startFX=0;    nameH = "hDEWKWZMJJ"; startFY = 3;}
+  else if(selectType == 1) {startFX=530;  nameH = "hDEWKWWMJJ";}
+  else if(selectType == 2) {startFX=650;  nameH = "hDEWKWWMLL";}
+  else if(selectType == 3) {startFX=770;  nameH = "hDEWKWWNJET";}
+  else if(selectType == 4) {startFX=890;  nameH = "hDEWKWWDELTAETAJJ";}
+  else if(selectType == 5) {startFX=1010; nameH = "hDEWKWWDELTAPHIJJ";}
+  else if(selectType == 6) {startFX=386;  nameH = "hDQCDWZMJJ";}
 
   TH1D *histo_Aux[1+number_unc_PS+number_unc_QCDScale+number_unc_PDF];
   TH1D *histo_Baseline;
@@ -60,7 +60,7 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0, bool doPDFRMS = f
   for(int i=0; i<number_unc_PDF; i++)      histo_PDF[i]      = (TH1D*)histo_Baseline->Clone();
 
   TFile *_fileGenWW = TFile::Open(Form("%s",input.Data()));
-  for(int i=0; i<1+number_unc_PS+number_unc_QCDScale+number_unc_PDF; i++) histo_Aux[i] = (TH1D*)_fileGenWW->Get(Form("histo_%d_0",startF+i));
+  for(int i=0; i<1+number_unc_PS+number_unc_QCDScale+number_unc_PDF; i++) histo_Aux[i] = (TH1D*)_fileGenWW->Get(Form("histo_%d_%d",startFX+i,startFY));
 
   for(int nb=1; nb<=histo_Baseline->GetNbinsX(); nb++){
     histo_Baseline->SetBinContent(nb, histo_Aux[0]->GetBinContent(nb)); histo_Baseline->SetBinError(nb, histo_Aux[0]->GetBinError(nb)); 
@@ -87,8 +87,10 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0, bool doPDFRMS = f
      TMath::Abs(histo_PS[3]->GetBinContent(nb)-histo_Baseline->GetBinContent(nb))};
 
     double systPS = diffPS[0];
+    if(debug) printf("diffPS(%d): %.3f %.3f\n",0,diffPS[0]/histo_Baseline->GetBinContent(nb),systPS/histo_Baseline->GetBinContent(nb));
     for(int nps=1; nps<number_unc_PS; nps++) {
       if(diffPS[nps] > systPS) systPS = diffPS[nps];
+      if(debug) printf("diffPS(%d): %.3f %.3f\n",nps,diffPS[nps]/histo_Baseline->GetBinContent(nb),systPS/histo_Baseline->GetBinContent(nb));
     }
 
     if(histo_Baseline->GetBinContent(nb) > 0) 
@@ -105,8 +107,10 @@ void computeGenVBSVVXS(TString input = "", int selectType = 0, bool doPDFRMS = f
      TMath::Abs(histo_QCDScale[5]->GetBinContent(nb)-histo_Baseline->GetBinContent(nb))};
 
     double systQCDScale = diffQCDScale[0];
+    if(debug) printf("diffQCDScale(%d): %.3f %.3f\n",0,diffQCDScale[0]/histo_Baseline->GetBinContent(nb),systQCDScale/histo_Baseline->GetBinContent(nb));
     for(int nqcd=1; nqcd<number_unc_QCDScale; nqcd++) {
       if(diffQCDScale[nqcd] > systQCDScale) systQCDScale = diffQCDScale[nqcd];
+      if(debug) printf("diffQCDScale(%d): %.3f %.3f\n",nqcd,diffQCDScale[nqcd]/histo_Baseline->GetBinContent(nb),systQCDScale/histo_Baseline->GetBinContent(nb));
     }
 
     if(histo_Baseline->GetBinContent(nb) > 0) 

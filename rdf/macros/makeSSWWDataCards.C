@@ -400,8 +400,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
         }
         for(int nuis=0; nuis<nSystTotal-endTheory; nuis++) {
           systValue = histo_SystDataCard[2*nuis][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
-          if     (systValue > 0 && systValue > 1.15) systValue = 1.15;
-          else if(systValue > 0 && systValue < 0.85) systValue = 0.85;
+          if     (systValue > 0 && systValue > 1.45/1) systValue = 1.45/1;
+          else if(systValue > 0 && systValue < 1/1.45) systValue = 1/1.45;
           histo_SystDataCard[2*nuis][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)*systValue);
           systValue = histo_SystDataCard[2*nuis][ic]->GetBinContent(nb) / histo_Baseline[ic]->GetBinContent(nb);
           if(systValue > 0) histo_SystDataCard[2*nuis+1][ic]->SetBinContent(nb,histo_Baseline[ic]->GetBinContent(nb)/systValue);
@@ -454,16 +454,16 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
        if(histo_Baseline[kPlotNonPrompt]->GetBinContent(nb) > 0) {
           systValue = histo_NonPromtUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotNonPrompt]->GetBinContent(nb);
           if(fabs(systValue-1) > 0.15) printf("fake(%d,%d) = %.3f\n",j,nb,systValue);
-          if     (systValue >   3.0) systValue =   3.0;
+          if     (systValue > 3.0/1) systValue = 3.0/1;
           else if(systValue < 1/3.0) systValue = 1/3.0;
           histo_NonPromtUnc[j+0]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)*systValue);
           if(systValue > 0) histo_NonPromtUnc[j+totalNumberFakeSyst]->SetBinContent(nb,histo_Baseline[kPlotNonPrompt]->GetBinContent(nb)/systValue);
         }
       }
-      if(anaSel.Contains("sswwAnalysis")){
+      //if(anaSel.Contains("sswwAnalysis")){
         histo_NonPromtUnc[j+		    0]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+		      0]->GetSumOfWeights());
         histo_NonPromtUnc[j+totalNumberFakeSyst]->Scale(histo_Baseline[kPlotNonPrompt]->GetSumOfWeights()/histo_NonPromtUnc[j+totalNumberFakeSyst]->GetSumOfWeights());
-      }
+      //}
     }
   }
   // End Nonprompt study
@@ -494,8 +494,8 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
         histo_WSUnc[j+totalNumberWSSyst]->SetBinContent(nb, TMath::Max((float)histo_WSUnc[j+totalNumberWSSyst]->GetBinContent(nb),0.000001f));
         if(histo_Baseline[kPlotWS]->GetBinContent(nb) > 0) {
           systValue = histo_WSUnc[j+0]->GetBinContent(nb) / histo_Baseline[kPlotWS]->GetBinContent(nb);
-          if     (systValue > 1.15) systValue = 1.15;
-          else if(systValue < 0.85) systValue = 0.85;
+          if     (systValue > 1.45/1) systValue = 1.45/1;
+          else if(systValue < 1/1.45) systValue = 1/1.45;
           histo_WSUnc[j+0]->SetBinContent(nb,histo_Baseline[kPlotWS]->GetBinContent(nb)*systValue);
           printf("ws(%d,%d) = %.3f\n",j,nb,systValue);
           if(systValue > 0) histo_WSUnc[j+totalNumberWSSyst]->SetBinContent(nb,histo_Baseline[kPlotWS]->GetBinContent(nb)/systValue);

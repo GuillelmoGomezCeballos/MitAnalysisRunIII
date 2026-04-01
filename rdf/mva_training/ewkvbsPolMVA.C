@@ -23,10 +23,8 @@ void ewkvbsPolMVA(
   TString trainTreeEventSplitStr="(eventNum % 10)<5";
   TString testTreeEventSplitStr="(eventNum % 10)>=5";
 
-  TString inputFileName = "/work/submit/ceballos/mva_samples/ntupleWWPolAna_year2027.root";
-  // Determine the input trees
-  TFile *inputFile = TFile::Open(inputFileName,"READ");
-  TTree *mvaTree = (TTree*)inputFile->Get("events");
+  TChain *mvaTree = new TChain("events");
+  mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWWPolAna_year2027.root");
   
   // Initialize the factory
   output_file=TFile::Open(Form("MVA_%s.root",extraString.Data()), "RECREATE");
@@ -37,12 +35,12 @@ void ewkvbsPolMVA(
   TMVA::DataLoader *dataloader=new TMVA::DataLoader("MitEWKVBSAnalysis");
 
   if(nsel == 0){ // LL vs. LT vs. TT
-    TCut cutTrainWWLL = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",trainTreeEventSplitStr.Data(),20);
-    TCut cutTrainWWLT = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",trainTreeEventSplitStr.Data(),21);
-    TCut cutTrainWWTT = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",trainTreeEventSplitStr.Data(),22);
-    TCut cutTestWWLL  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",testTreeEventSplitStr.Data(),20);
-    TCut cutTestWWLT  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",testTreeEventSplitStr.Data(),21);
-    TCut cutTestWWTT  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",testTreeEventSplitStr.Data(),22);
+    TCut cutTrainWWLL = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),20);
+    TCut cutTrainWWLT = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),21);
+    TCut cutTrainWWTT = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),22);
+    TCut cutTestWWLL  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(),20);
+    TCut cutTestWWLT  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(),21);
+    TCut cutTestWWTT  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(),22);
 
     dataloader->AddTree(mvaTree, "WWLL", 1.0, cutTrainWWLL, "train");
     dataloader->AddTree(mvaTree, "WWLT", 1.0, cutTrainWWLT, "train");
@@ -55,10 +53,14 @@ void ewkvbsPolMVA(
     dataloader->SetWeightExpression("1.0", "WWTT");
   }
   else if(nsel == 1){ // LX vs. TT
-    TCut cutTrainWWLX = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==20||theCat==21)",trainTreeEventSplitStr.Data());
-    TCut cutTrainWWTT = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==22)",trainTreeEventSplitStr.Data());
-    TCut cutTestWWLX  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==20||theCat==21)",testTreeEventSplitStr.Data());
-    TCut cutTestWWTT  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==22)",testTreeEventSplitStr.Data());
+    TCut cutTrainWWLX = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==20||theCat==21)",trainTreeEventSplitStr.Data());
+    TCut cutTrainWWTT = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==22||theCat==0)",trainTreeEventSplitStr.Data());
+    TCut cutTestWWLX  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==20||theCat==21)",testTreeEventSplitStr.Data());
+    TCut cutTestWWTT  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==22||theCat==0)",testTreeEventSplitStr.Data());
+
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype0_year2027.root");
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype1_year2027.root");
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype2_year2027.root");
 
     dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTrainWWLX, "train");
     dataloader->AddTree(mvaTree, "Background", 1.0, cutTrainWWTT, "train");
@@ -70,10 +72,14 @@ void ewkvbsPolMVA(
     dataloader->SetWeightExpression("1.0", "Background");
   }
   else if(nsel == 2){ // LL vs. TX
-    TCut cutTrainWWLL = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==20)",trainTreeEventSplitStr.Data());
-    TCut cutTrainWWTX = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==21||theCat==22)",trainTreeEventSplitStr.Data());
-    TCut cutTestWWLL  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==20)",testTreeEventSplitStr.Data());
-    TCut cutTestWWTX  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==21||theCat==22)",testTreeEventSplitStr.Data());
+    TCut cutTrainWWLL = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==20)",trainTreeEventSplitStr.Data());
+    TCut cutTrainWWTX = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==21||theCat==22||theCat==0)",trainTreeEventSplitStr.Data());
+    TCut cutTestWWLL  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==20)",testTreeEventSplitStr.Data());
+    TCut cutTestWWTX  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==21||theCat==22||theCat==0)",testTreeEventSplitStr.Data());
+
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype0_year2027.root");
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype1_year2027.root");
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype2_year2027.root");
 
     dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTrainWWLL, "train");
     dataloader->AddTree(mvaTree, "Background", 1.0, cutTrainWWTX, "train");
@@ -87,7 +93,7 @@ void ewkvbsPolMVA(
 
   if(nsel == 0 || nsel == 1 || nsel == 2){
     if(version >= 10) dataloader->AddVariable("ngood_jets"    ,"ngood_jets"    ,"",'F');
-    if(version >= 10) dataloader->AddVariable("vbs_mjj"       ,"vbs_mjj"       ,"",'F');
+    if(version != 99) dataloader->AddVariable("vbs_mjj"       ,"vbs_mjj"       ,"",'F');
     if(version >= 10) dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
     if(version >=  8) dataloader->AddVariable("vbs_detajj"    ,"vbs_detajj"    ,"",'F');
     if(version != 99) dataloader->AddVariable("vbs_dphijj"    ,"vbs_dphijj"    ,"",'F');

@@ -22,34 +22,44 @@ void ewkvbsIncMVA(
   TMVA::Factory *factory;
   TString trainTreeEventSplitStr="(eventNum % 10)<5";
   TString testTreeEventSplitStr="(eventNum % 10)>=5";
+  TCut cutTrainSignal;
+  TCut cutTrainBkg;
+  TCut cutTestSignal;
+  TCut cutTestBkg;
+  TChain *mvaTree = new TChain("events");
 
-  // EW WZ vs. QCD WZ
-  TString inputFileName = "/work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root";
-  TCut cutTrainSignal = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",trainTreeEventSplitStr.Data(),8);
-  TCut cutTrainBkg    = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",trainTreeEventSplitStr.Data(),9);
-  TCut cutTestSignal  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",testTreeEventSplitStr.Data(), 8);
-  TCut cutTestBkg     = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)",testTreeEventSplitStr.Data(), 9);
   if     (nsel == 0){ // EW WZ vs. QCD WZ
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root");
+    cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),8);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),9);
+    cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(), 8);
+    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(), 9);
   }
   else if(nsel == 1){ // EW WZ vs. QCD WZ + tZq
-    inputFileName = "/work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root";
-    cutTrainSignal = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)"            ,trainTreeEventSplitStr.Data(),8);
-    cutTrainBkg    = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),9,13);
-    cutTestSignal  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d)"            ,testTreeEventSplitStr.Data(), 8);
-    cutTestBkg     = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 9,13);
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root");
+    cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)"            ,trainTreeEventSplitStr.Data(),8);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),9,13);
+    cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)"            ,testTreeEventSplitStr.Data(), 8);
+    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 9,13);
   }
   else if(nsel == 2){ // 15 var / WW + WZ
-    inputFileName = "/work/submit/ceballos/mva_samples/ntupleWWAna_year2027.root";
-    cutTrainSignal = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),6,8);
-    cutTrainBkg    = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),7,9);
-    cutTestSignal  = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 6,8);
-    cutTestBkg     = Form("%s && vbs_ptj1 > 30 && vbs_ptj2 > 30 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 7,9);
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWWAna_year2027.root");
+    cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),6,8);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),7,9);
+    cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 6,8);
+    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 7,9);
+  }
+  else if(nsel == 3){ // 15 var / WW Signal vs. data
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWWAna_year2027.root");
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype0_year2027.root");
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype1_year2027.root");
+    mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype2_year2027.root");
+    cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && theCat==%d",trainTreeEventSplitStr.Data(),6);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && theCat==%d",trainTreeEventSplitStr.Data(),0);
+    cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && theCat==%d",testTreeEventSplitStr.Data(), 6);
+    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && theCat==%d",testTreeEventSplitStr.Data(), 0);
   }
 
-  // Determine the input trees
-  TFile *inputFile = TFile::Open(inputFileName,"READ");
-  TTree *mvaTree = (TTree*)inputFile->Get("events");
-  
   // Initialize the factory
   output_file=TFile::Open(Form("MVA_%s.root",extraString.Data()), "RECREATE");
   factory = new TMVA::Factory("bdt", output_file, "!V:!Silent:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Multiclass");

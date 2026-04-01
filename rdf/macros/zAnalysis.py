@@ -22,6 +22,8 @@ altMass = "Def"
 
 jetEtaCut = 4.7
 
+doNtuples = False
+
 selectionJsonPath = "config/selection.json"
 
 with open(selectionJsonPath) as jsonFile:
@@ -212,6 +214,44 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     ROOT.initJSONSFs(year)
 
+    branchList = ROOT.vector('string')()
+    for branchName in [
+            "eventNum",
+            "weight",
+            "theCat",
+            "ngood_jets",
+            "vbs_mjj",
+            "vbs_ptjj",
+            "vbs_detajj",
+            "vbs_dphijj",
+            "vbs_ptj1",
+            "vbs_ptj2",
+            "vbs_etaj1",
+            "vbs_etaj2",
+            "vbs_zepvv",
+            "vbs_zepmax",
+            "vbs_sumHT",
+            "vbs_ptvv",
+            "vbs_pttot",
+            "vbs_detavvj1",
+            "vbs_detavvj2",
+            "vbs_ptbalance",
+            "mll{0}".format(altMass),
+	    "ptll{0}".format(altMass),
+	    "drll{0}".format(altMass),
+	    "dphill{0}".format(altMass),
+	    "ptl1{0}".format(altMass),
+	    "ptl2{0}".format(altMass),
+	    "dPhilMETMin{0}".format(altMass),
+	    "minPMET{0}".format(altMass),
+	    "ptww{0}".format(altMass),
+	    "mcoll{0}".format(altMass),
+	    "mtwmax{0}".format(altMass),
+	    "mtwmin{0}".format(altMass),
+            "PuppiMET_ptDef"
+    ]:
+        branchList.push_back(branchName)
+
     overallTriggers = jsonObject['triggers']
     TRIGGERMUEG = getTriggerFromJson(overallTriggers, "TRIGGERMUEG", year)
     TRIGGERDMU  = getTriggerFromJson(overallTriggers, "TRIGGERDMU", year)
@@ -258,9 +298,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     xMllBins = array('d', [20,50,80,110,140,180,220,280,340])
     xNjetsBins = array('d', [1.5,2.5,3.5,4.5])
     xDetajjBins = array('d', [2.5,3.0,3.6,4.0,4.5,5.0,5.5,6.0,7.0])
-    VBSSELECTION0 = "(DiLepton_flavor != 0 && Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 20 && ptl1{0} > 25 && ptl2{0} > 20 && (DiLepton_flavor != 2 || abs(mll{0}-85.1876) > 20) && nbtag_goodbtag_Jet_bjet == 0 && nvbs_jets >= 2 && vbs_mjj > 500 && vbs_detajj > 2.5 && vbs_zepvv < 1.0 && PuppiMET_pt{0} > {1})".format(altMass,30)
-    VBSSELECTION1 = "(DiLepton_flavor == 0 && Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 15 && ptl1{0} > 25 && ptl2{0} > 18 && nbtag_good_Jet_bjet != 0 && ngood_jets >= 2 && ngood_cen_jets >= 1 && mll{0} < 50)".format(altMass)
-    VBSSELECTION = "{0} || {1}".format(VBSSELECTION0,VBSSELECTION1)
+    VBSSELECTION = "(Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 20 && ptl1{0} > 25 && ptl2{0} > 20 && (DiLepton_flavor == 1 || abs(mll{0}-85.1876) > 20) && nbtag_goodbtag_Jet_bjet == 0 && nvbs_jets >= 2 && vbs_mjj > 500 && vbs_detajj > 2.5 && vbs_zepvv < 1.0 && PuppiMET_pt{0} > {1})".format(altMass,30)
 
     xMllMin = [91.1876-15, 91.1876-15, 91.1876-15]
     xMllMax = [91.1876+15, 91.1876+15, 91.1876+15]
@@ -282,6 +320,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                                .Filter("{0} != kPlotEWKWZ || nGenJet_bParton == 0".format(theCat), "EWKWZ requirement")
                                .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,kPlotWS,nFake,nTight,0)".format(theCat))
                                .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
+                               .Define("theCat","theCat{0}".format(x))
                                )
 
             dfvbscat.append(dfcat[3*x+ltype].Filter("{0}".format(VBSSELECTION),"VBS selection")
@@ -439,6 +478,11 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                                                       .Define("ptOvermll" , "ptll{0}/mll{0}".format(altMass))
                                                       .Define("dphiJJLL", "compute_jet_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, PuppiMET_pt, PuppiMET_phi, 8)")
                                                      )
+
+            if(doNtuples == True and x == theCat):
+                outputFile = "ntupleZAna_sample{0}_ltype{1}_year{2}_job{3}.root".format(count,ltype,year,whichJob)
+                dfvbscat[3*x+ltype] = dfvbscat[3*x+ltype].Define("eventNum", "event")
+                dfvbscat[3*x+ltype].Snapshot("events", outputFile, branchList)
 
             if(ltype == 0):
                 histo[163][x] = dfvbscat[3*x+ltype]                                                                        .Histo1D(("histo_{0}_{1}".format(163,x), "histo_{0}_{1}".format(163,x), 40, 0.0, 4.0), "ptOvermll","weight")

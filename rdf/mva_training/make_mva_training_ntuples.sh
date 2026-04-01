@@ -5,7 +5,85 @@ if [ $# -lt 1 ]; then
    exit
 fi
 
-if [ $1 = "1" ]; then
+if [ $1 = "00" ]; then
+
+cp zAnalysis.py zAnalysis_without_ntuples.py
+sed -i 's/doNtuples = False/doNtuples = True/' zAnalysis.py
+
+nohup ./analysis_slurm.sh 1001 20220 -1 1001 zAnalysis >& logz_01&
+nohup ./analysis_slurm.sh 1002 20220 -1 1001 zAnalysis >& logz_02&
+nohup ./analysis_slurm.sh 1011 20220 -1 1001 zAnalysis >& logz_03&
+nohup ./analysis_slurm.sh 1012 20220 -1 1001 zAnalysis >& logz_04&
+nohup ./analysis_slurm.sh 1021 20220 -1 1001 zAnalysis >& logz_05&
+nohup ./analysis_slurm.sh 1022 20220 -1 1001 zAnalysis >& logz_06&
+nohup ./analysis_slurm.sh 1023 20220 -1 1001 zAnalysis >& logz_07&
+nohup ./analysis_slurm.sh 1031 20220 -1 1001 zAnalysis >& logz_08&
+nohup ./analysis_slurm.sh 1032 20220 -1 1001 zAnalysis >& logz_09&
+nohup ./analysis_slurm.sh 1033 20220 -1 1001 zAnalysis >& logz_10&
+nohup ./analysis_slurm.sh 1042 20220 -1 1001 zAnalysis >& logz_11&
+nohup ./analysis_slurm.sh 1043 20220 -1 1001 zAnalysis >& logz_12&
+nohup ./analysis_slurm.sh 1024 20221 -1 1001 zAnalysis >& logz_13&
+nohup ./analysis_slurm.sh 1025 20221 -1 1001 zAnalysis >& logz_14&
+nohup ./analysis_slurm.sh 1026 20221 -1 1001 zAnalysis >& logz_15&
+nohup ./analysis_slurm.sh 1034 20221 -1 1001 zAnalysis >& logz_16&
+nohup ./analysis_slurm.sh 1035 20221 -1 1001 zAnalysis >& logz_17&
+nohup ./analysis_slurm.sh 1036 20221 -1 1001 zAnalysis >& logz_18&
+nohup ./analysis_slurm.sh 1044 20221 -1 1001 zAnalysis >& logz_19&
+nohup ./analysis_slurm.sh 1045 20221 -1 1001 zAnalysis >& logz_20&
+nohup ./analysis_slurm.sh 1046 20221 -1 1001 zAnalysis >& logz_21&
+nohup ./analysis_slurm.sh 1022 20230 -1 1001 zAnalysis >& logz_22&
+nohup ./analysis_slurm.sh 1032 20230 -1 1001 zAnalysis >& logz_23&
+nohup ./analysis_slurm.sh 1042 20230 -1 1001 zAnalysis >& logz_24&
+nohup ./analysis_slurm.sh 1023 20231 -1 1001 zAnalysis >& logz_25&
+nohup ./analysis_slurm.sh 1033 20231 -1 1001 zAnalysis >& logz_26&
+nohup ./analysis_slurm.sh 1043 20231 -1 1001 zAnalysis >& logz_27&
+
+elif [ $1 = "01" ]; then
+
+cp zAnalysis.py zAnalysis_without_ntuples.py
+sed -i 's/doNtuples = False/doNtuples = True/' zAnalysis.py
+
+nohup ./analysis_slurm.sh 1022 20240 -1 1001 zAnalysis >& logz_28&
+nohup ./analysis_slurm.sh 1023 20240 -1 1001 zAnalysis >& logz_29&
+nohup ./analysis_slurm.sh 1024 20240 -1 1001 zAnalysis >& logz_30&
+nohup ./analysis_slurm.sh 1025 20240 -1 1001 zAnalysis >& logz_31&
+nohup ./analysis_slurm.sh 1026 20240 -1 1001 zAnalysis >& logz_32&
+nohup ./analysis_slurm.sh 1027 20240 -1 1001 zAnalysis >& logz_33&
+nohup ./analysis_slurm.sh 1028 20240 -1 1001 zAnalysis >& logz_34&
+nohup ./analysis_slurm.sh 1032 20240 -1 1001 zAnalysis >& logz_35&
+nohup ./analysis_slurm.sh 1033 20240 -1 1001 zAnalysis >& logz_36&
+nohup ./analysis_slurm.sh 1034 20240 -1 1001 zAnalysis >& logz_37&
+nohup ./analysis_slurm.sh 1035 20240 -1 1001 zAnalysis >& logz_38&
+nohup ./analysis_slurm.sh 1036 20240 -1 1001 zAnalysis >& logz_39&
+nohup ./analysis_slurm.sh 1037 20240 -1 1001 zAnalysis >& logz_40&
+nohup ./analysis_slurm.sh 1038 20240 -1 1001 zAnalysis >& logz_41&
+nohup ./analysis_slurm.sh 1042 20240 -1 1001 zAnalysis >& logz_42&
+nohup ./analysis_slurm.sh 1043 20240 -1 1001 zAnalysis >& logz_43&
+nohup ./analysis_slurm.sh 1044 20240 -1 1001 zAnalysis >& logz_44&
+nohup ./analysis_slurm.sh 1045 20240 -1 1001 zAnalysis >& logz_45&
+nohup ./analysis_slurm.sh 1046 20240 -1 1001 zAnalysis >& logz_46&
+nohup ./analysis_slurm.sh 1047 20240 -1 1001 zAnalysis >& logz_47&
+nohup ./analysis_slurm.sh 1048 20240 -1 1001 zAnalysis >& logz_48&
+#nohup ./analysis_slurm.sh 1021 20250 -1 1001 zAnalysis >& logz_49&
+#nohup ./analysis_slurm.sh 1022 20250 -1 1001 zAnalysis >& logz_50&
+#nohup ./analysis_slurm.sh 1023 20250 -1 1001 zAnalysis >& logz_51&
+#nohup ./analysis_slurm.sh 1024 20250 -1 1001 zAnalysis >& logz_52&
+#nohup ./analysis_slurm.sh 1025 20250 -1 1001 zAnalysis >& logz_53&
+#nohup ./analysis_slurm.sh 1026 20250 -1 1001 zAnalysis >& logz_54&
+#nohup ./analysis_slurm.sh 1031 20250 -1 1001 zAnalysis >& logz_55&
+#nohup ./analysis_slurm.sh 1032 20250 -1 1001 zAnalysis >& logz_56&
+#nohup ./analysis_slurm.sh 1033 20250 -1 1001 zAnalysis >& logz_57&
+#nohup ./analysis_slurm.sh 1034 20250 -1 1001 zAnalysis >& logz_58&
+#nohup ./analysis_slurm.sh 1035 20250 -1 1001 zAnalysis >& logz_59&
+#nohup ./analysis_slurm.sh 1036 20250 -1 1001 zAnalysis >& logz_60&
+#nohup ./analysis_slurm.sh 1041 20250 -1 1001 zAnalysis >& logz_61&
+#nohup ./analysis_slurm.sh 1042 20250 -1 1001 zAnalysis >& logz_62&
+#nohup ./analysis_slurm.sh 1043 20250 -1 1001 zAnalysis >& logz_63&
+#nohup ./analysis_slurm.sh 1044 20250 -1 1001 zAnalysis >& logz_64&
+#nohup ./analysis_slurm.sh 1045 20250 -1 1001 zAnalysis >& logz_65&
+#nohup ./analysis_slurm.sh 1046 20250 -1 1001 zAnalysis >& logz_66&
+
+elif [ $1 = "1" ]; then
 
 cp wzAnalysis.py wzAnalysis_without_ntuples.py
 sed -i 's/doNtuples = False/doNtuples = True/' wzAnalysis.py
@@ -88,5 +166,12 @@ hadd -f /work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root ntupleWZAna_
 rm -f ntupleWZAna_*.root
 hadd -f /work/submit/ceballos/mva_samples/ntupleWWAna_year2027.root ntupleSSWWAna_*.root
 rm -f ntupleSSWWAna_*.root
+
+elif [ $1 = "11" ]; then
+
+mv zAnalysis_without_ntuples.py zAnalysis.py
+hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ltype0_year2027.root ntupleZAna_sample*_ltype0_*.root
+hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ltype1_year2027.root ntupleZAna_sample*_ltype1_*.root
+hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ltype2_year2027.root ntupleZAna_sample*_ltype2_*.root
 
 fi

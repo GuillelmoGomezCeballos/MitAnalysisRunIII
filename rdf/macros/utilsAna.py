@@ -1106,7 +1106,7 @@ def SwitchSample(argument, skimType):
        183: (dirT2+"/ZZto4L-2Jets_QCD_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v3+NANOAODSIM",                    0.0202984*1000,plotCategory("kPlotZZ")),
        189: (dirT2+"/SSWWJJ_Interference_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2+NANOAODSIM",                 0.00341005*1000,plotCategory("kPlotQCDSSWW")),
        190: (dirT2+"/VBSWZ-Interference_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2+NANOAODSIM",                  0.04806677*1000,plotCategory("kPlotWZ")),
-       191: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2+NANOAODSIM",0.0398961*1000,plotCategory("kPlotEWKSSWW")),
+       191: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2+NANOAODSIM",0.04388571*1000,plotCategory("kPlotEWKSSWW")),
        192: (dirScratch+"/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_sherpa+Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2+NANOAODSIM",0.0230953*1000,plotCategory("kPlotQCDSSWW")),
        193: (dirScratch+"/WWJJto2L2Nu-SS-noTop-INT_TuneCP5_13p6TeV_sherpa+Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2+NANOAODSIM",0.0035356*1000,plotCategory("kPlotQCDSSWW")),
 
@@ -1196,7 +1196,7 @@ def SwitchSample(argument, skimType):
        283: (dirT2+"/ZZto4L-2Jets_QCD_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v3+NANOAODSIM",                    0.0202984*1000,plotCategory("kPlotZZ")),
        289: (dirT2+"/SSWWJJ_Interference_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2+NANOAODSIM", 		0.00341005*1000,plotCategory("kPlotQCDSSWW")),
        290: (dirT2+"/VBSWZ-Interference_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2+NANOAODSIM",  		0.04806677*1000,plotCategory("kPlotWZ")),
-       291: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2+NANOAODSIM",0.0398961*1000,plotCategory("kPlotEWKSSWW")),
+       291: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2+NANOAODSIM",0.04388571*1000,plotCategory("kPlotEWKSSWW")),
        292: (dirScratch+"/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_sherpa+Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2+NANOAODSIM",0.0230953*1000,plotCategory("kPlotQCDSSWW")),
        293: (dirScratch+"/WWJJto2L2Nu-SS-noTop-INT_TuneCP5_13p6TeV_sherpa+Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2+NANOAODSIM",0.0035356*1000,plotCategory("kPlotQCDSSWW")),
 
@@ -1286,7 +1286,7 @@ def SwitchSample(argument, skimType):
        383: (dirT2+"/ZZto4L-2Jets_QCD_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2+NANOAODSIM",                    0.0202984*1000,plotCategory("kPlotZZ")),
        389: (dirT2+"/SSWWJJ_Interference_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2+NANOAODSIM", 		0.00341005*1000,plotCategory("kPlotQCDSSWW")),
        390: (dirT2+"/VBSWZ-Interference_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2+NANOAODSIM",  		0.04806677*1000,plotCategory("kPlotWZ")),
-       391: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2+NANOAODSIM",0.0398961*1000,plotCategory("kPlotEWKSSWW")),
+       391: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2+NANOAODSIM",0.04388571*1000,plotCategory("kPlotEWKSSWW")),
        392: (dirScratch+"/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_sherpa+Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2+NANOAODSIM",0.0230953*1000,plotCategory("kPlotQCDSSWW")),
        393: (dirScratch+"/WWJJto2L2Nu-SS-noTop-INT_TuneCP5_13p6TeV_sherpa+Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2+NANOAODSIM",0.0035356*1000,plotCategory("kPlotQCDSSWW")),
 
@@ -1376,7 +1376,7 @@ def SwitchSample(argument, skimType):
        483: (dirT2+"/ZZto4L-2Jets_QCD_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIM",                    0.0202984*1000,plotCategory("kPlotZZ")),
        489: (dirT2+"/SSWWJJ_Interference_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIM",		    0.00341005*1000,plotCategory("kPlotQCDSSWW")),
        490: (dirT2+"/VBSWZ-Interference_TuneCP5_13p6TeV_madgraph-pythia8+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIM",		    0.04806677*1000,plotCategory("kPlotWZ")),
-       491: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIM",0.0398961*1000,plotCategory("kPlotEWKSSWW")),
+       491: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIM",0.04388571*1000,plotCategory("kPlotEWKSSWW")),
        492: (dirScratch+"/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_sherpa+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIM",0.0230953*1000,plotCategory("kPlotQCDSSWW")),
        493: (dirScratch+"/WWJJto2L2Nu-SS-noTop-INT_TuneCP5_13p6TeV_sherpa+Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2+NANOAODSIM",0.0035356*1000,plotCategory("kPlotQCDSSWW")),
 
@@ -1471,7 +1471,7 @@ def SwitchSample(argument, skimType):
        588: (dirT2+"/WminusH-HtoNon2B_Par-M-125_TuneCP5_13p6TeV_amcatnloFXFX-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",(1.4570*0.392)*(1-0.577)*1000,plotCategory("kPlotHiggs")),
        589: (dirT2+"/SSWWJJ-Interference_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",		     0.00341005*1000,plotCategory("kPlotQCDSSWW")),
        590: (dirT2+"/VBSWZ-Interference_TuneCP5_13p6TeV_madgraph-pythia8+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",		     0.04806677*1000,plotCategory("kPlotWZ")),
-       591: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0398961*1000,plotCategory("kPlotEWKSSWW")),
+       591: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.04388571*1000,plotCategory("kPlotEWKSSWW")),
        592: (dirScratch+"/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_sherpa+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0230953*1000,plotCategory("kPlotQCDSSWW")),
        593: (dirScratch+"/WWJJto2L2Nu-SS-noTop-INT_TuneCP5_13p6TeV_sherpa+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0035356*1000,plotCategory("kPlotQCDSSWW")),
        594: (dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_madgraph-pythia+RunIII2024Summer24NanoAODv15-150X_mcRun3_2024_realistic_v2-v2+NANOAODSIM",0.0295576*1000,plotCategory("kPlotEWKSSWW")),
@@ -1541,12 +1541,22 @@ def SwitchSample(argument, skimType):
        981:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WZJJto3LNu-EWK_TuneCP5_13p6TeV_madgraph-pythia8",0.0429366*1000,plotCategory("kPlotEWKWZ")),
        982:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WZJJto3LNu-QCD_TuneCP5_13p6TeV_madgraph-pythia8",0.4958618*1000*0.60,plotCategory("kPlotWZ")),
 
-       983:(dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3+NANOAODSIM",0.0398961*1000,plotCategory("kPlotEWKSSWW")),
+       983:(dirScratch+"/WWJJto2L2Nu-SS-noTop-EWK_TuneCP5_13p6TeV_sherpa+Run3+NANOAODSIM",0.04388571*1000,plotCategory("kPlotEWKSSWW")),
        984:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WZJJto3LNu-EWK_TuneCP5_13p6TeV_sherpa",0.0400258*1000,plotCategory("kPlotEWKWZ")),
 
-       985: ("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_madgraph-pythia8",0.0280798*1000,plotCategory("kPlotQCDSSWW")),
-       986: ("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/SSWWJJ-Interference_TuneCP5_13p6TeV_madgraph-pythia8",     0.00341005*1000,plotCategory("kPlotQCDSSWW")),
-       987: ("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/VBSWZ-Interference_TuneCP5_13p6TeV_madgraph-pythia8",      0.04806677*1000,plotCategory("kPlotWZ")),
+       985:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_madgraph-pythia8",0.0280798*1000,plotCategory("kPlotQCDSSWW")),
+       986:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/SSWWJJ-Interference_TuneCP5_13p6TeV_madgraph-pythia8",     0.00341005*1000,plotCategory("kPlotQCDSSWW")),
+       987:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/VBSWZ-Interference_TuneCP5_13p6TeV_madgraph-pythia8",      0.04806677*1000,plotCategory("kPlotWZ")),
+
+       991:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToENEN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
+       992:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToENMN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
+       993:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToENTN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
+       994:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToMNEN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
+       995:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToMNMN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
+       996:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToMNTN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
+       997:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToTNEN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
+       998:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToTNMN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
+       999:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToTNTN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
 
     }
     return switch.get(argument, "BKGdefault, xsecDefault, category")
