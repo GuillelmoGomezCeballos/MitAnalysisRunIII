@@ -884,6 +884,11 @@ float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
         const TH1D& hcorr = hVV_KF_EWK_unc[0];
         sf = getValFromTH1(hcorr, mjjGen);
       }
+      // Further correction on polarized samples
+      float SFS[3] = {0.188/0.145, 0.188/0.173, 0.188/0.208};
+      if     (theCat.Contains("VBS-SSWW") && theCat.Contains("LL")) sf = sf * SFS[0];
+      else if(theCat.Contains("VBS-SSWW") && theCat.Contains("TL")) sf = sf * SFS[1];
+      else if(theCat.Contains("VBS-SSWW") && theCat.Contains("TT")) sf = sf * SFS[2];
     }
   }
   else if(theCat.Contains("WZto3LNu-2Jets_EW")
@@ -1627,7 +1632,7 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
   }
   else if(var == 31){ // VBS BDT pol v0 3D
     float xBDT0Bins[3] = { 0.150, 0.680, 9.000};
-    float xBDT1Bins[4] = {-0.210, 0.120, 0.440, 9.000};
+    float xBDT1Bins[4] = {-0.200, 0.130, 0.450, 9.000};
     float xBDT2Bins[4] = {-0.070, 0.300, 0.560, 9.000};
 
     int typeSelAux0 = -1;
@@ -1652,9 +1657,9 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     return (float)(typeSelAux);
   }
   else if(var == 32 || var == 33){ // VBS BDT pol v0 2D
-    float xBDT0Bins[4] = {-0.040, 0.470, 0.770, 9.000};
-    float xBDT1Bins[6] = {-0.340,-0.090, 0.120, 0.330, 0.560, 9.000};
-    float xBDT2Bins[6] = {-0.240, 0.070, 0.300, 0.480, 0.640, 9.000};
+    float xBDT0Bins[4] = {-0.050, 0.460, 0.770, 9.000};
+    float xBDT1Bins[6] = {-0.330,-0.090, 0.130, 0.340, 0.560, 9.000};
+    float xBDT2Bins[6] = {-0.240, 0.070, 0.310, 0.480, 0.640, 9.000};
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
