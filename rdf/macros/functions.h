@@ -886,9 +886,9 @@ float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
       }
       // Further correction on polarized samples
       float SFS[3] = {0.188/0.145, 0.188/0.173, 0.188/0.208};
-      if     (theCat.Contains("VBS-SSWW") && theCat.Contains("LL")) sf = sf * 1.05 * SFS[0];
-      else if(theCat.Contains("VBS-SSWW") && theCat.Contains("TL")) sf = sf * 1.05 * SFS[1];
-      else if(theCat.Contains("VBS-SSWW") && theCat.Contains("TT")) sf = sf * 1.05 * SFS[2];
+      if     (theCat.Contains("VBS-SSWW") && theCat.Contains("LL")) sf = sf * SFS[0];
+      else if(theCat.Contains("VBS-SSWW") && theCat.Contains("TL")) sf = sf * SFS[1];
+      else if(theCat.Contains("VBS-SSWW") && theCat.Contains("TT")) sf = sf * SFS[2];
     }
   }
   else if(theCat.Contains("WZto3LNu-2Jets_EW")
