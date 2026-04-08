@@ -152,9 +152,9 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   }
 
   // HACK!!!
-  //if(outputName.Contains("dy_xsel") && outputName.Contains("mll")){
-  //  for(int ic=0; ic<nPlotCategories; ic++) for(int nb=11; nb<20; nb++) _hist[ic]->SetBinContent(nb,0);
-  //}
+  if(outputName.Contains("dy_xsel") && outputName.Contains("mll")){
+    for(int ic=0; ic<nPlotCategories; ic++) for(int nb=11; nb<20; nb++) _hist[ic]->SetBinContent(nb,0);
+  }
 
   int isVBS[2] = {0, 0};
   if     (plotName.Contains("fiducial6"))                                    isVBS[0] = 2;

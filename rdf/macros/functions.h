@@ -1632,8 +1632,10 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
   }
   else if(var == 31){ // VBS BDT pol v0 3D
     float xBDT0Bins[3] = { 0.150, 0.680, 9.000};
-    float xBDT1Bins[4] = {-0.200, 0.130, 0.450, 9.000};
-    float xBDT2Bins[4] = {-0.070, 0.300, 0.560, 9.000};
+    //float xBDT1Bins[4] = {-0.180, 0.140, 0.460, 9.000}; // v7
+    //float xBDT2Bins[4] = {-0.040, 0.330, 0.580, 9.000}; // v7
+    float xBDT1Bins[4] = {-0.190, 0.140, 0.450, 9.000}; // v8
+    float xBDT2Bins[4] = {-0.050, 0.330, 0.580, 9.000}; // v8
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
@@ -1657,9 +1659,11 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     return (float)(typeSelAux);
   }
   else if(var == 32 || var == 33){ // VBS BDT pol v0 2D
-    float xBDT0Bins[4] = {-0.050, 0.460, 0.770, 9.000};
-    float xBDT1Bins[6] = {-0.330,-0.090, 0.130, 0.340, 0.560, 9.000};
-    float xBDT2Bins[6] = {-0.240, 0.070, 0.310, 0.480, 0.640, 9.000};
+    float xBDT0Bins[4] = {-0.040, 0.470, 0.760, 9.000};
+    //float xBDT1Bins[6] = {-0.310,-0.070, 0.140, 0.350, 0.570, 9.000}; // v7
+    //float xBDT2Bins[6] = {-0.220, 0.100, 0.330, 0.510, 0.650, 9.000}; // v7
+    float xBDT1Bins[6] = {-0.320,-0.070, 0.140, 0.350, 0.570, 9.000}; // v8
+    float xBDT2Bins[6] = {-0.220, 0.100, 0.330, 0.500, 0.650, 9.000}; // v8
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;

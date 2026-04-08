@@ -15,6 +15,7 @@ void ewkvbsIncMVA(
   bool dodnn = false
 ) {
 
+  float ptCut = 50;
   TString extraString = Form("vbfinc_nsel%d_v%d",nsel,version);
 
   gROOT->ProcessLine("TMVA::gConfig().GetVariablePlotting().fMaxNumOfAllowedVariablesForScatterPlots = 50");
@@ -30,34 +31,34 @@ void ewkvbsIncMVA(
 
   if     (nsel == 0){ // EW WZ vs. QCD WZ
     mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root");
-    cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),8);
-    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",trainTreeEventSplitStr.Data(),9);
-    cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(), 8);
-    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)",testTreeEventSplitStr.Data(), 9);
+    cutTrainSignal = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d)",trainTreeEventSplitStr.Data(),ptCut,ptCut,8);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d)",trainTreeEventSplitStr.Data(),ptCut,ptCut,9);
+    cutTestSignal  = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d)",testTreeEventSplitStr.Data(), ptCut,ptCut,8);
+    cutTestBkg     = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d)",testTreeEventSplitStr.Data(), ptCut,ptCut,9);
   }
   else if(nsel == 1){ // EW WZ vs. QCD WZ + tZq
     mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root");
-    cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)"            ,trainTreeEventSplitStr.Data(),8);
-    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),9,13);
-    cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d)"            ,testTreeEventSplitStr.Data(), 8);
-    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 9,13);
+    cutTrainSignal = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d)"            ,trainTreeEventSplitStr.Data(),ptCut,ptCut,8);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),ptCut,ptCut,9,13);
+    cutTestSignal  = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d)"            ,testTreeEventSplitStr.Data(), ptCut,ptCut,8);
+    cutTestBkg     = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), ptCut,ptCut,9,13);
   }
   else if(nsel == 2){ // 15 var / WW + WZ
     mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWWAna_year2027.root");
-    cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),6,8);
-    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),7,9);
-    cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 6,8);
-    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), 7,9);
+    cutTrainSignal = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),ptCut,ptCut,6,8);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d||theCat==%d)",trainTreeEventSplitStr.Data(),ptCut,ptCut,7,9);
+    cutTestSignal  = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), ptCut,ptCut,6,8);
+    cutTestBkg     = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==%d||theCat==%d)",testTreeEventSplitStr.Data(), ptCut,ptCut,7,9);
   }
   else if(nsel == 3){ // 15 var / WW Signal vs. data
     mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWWAna_year2027.root");
     mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype0_year2027.root");
     mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype1_year2027.root");
     mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleZAna_ltype2_year2027.root");
-    cutTrainSignal = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && theCat==%d",trainTreeEventSplitStr.Data(),6);
-    cutTrainBkg    = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && theCat==%d",trainTreeEventSplitStr.Data(),0);
-    cutTestSignal  = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && theCat==%d",testTreeEventSplitStr.Data(), 6);
-    cutTestBkg     = Form("%s && vbs_ptj1 > 50 && vbs_ptj2 > 50 && theCat==%d",testTreeEventSplitStr.Data(), 0);
+    cutTrainSignal = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && theCat==%d",trainTreeEventSplitStr.Data(),ptCut,ptCut,6);
+    cutTrainBkg    = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && theCat==%d",trainTreeEventSplitStr.Data(),ptCut,ptCut,0);
+    cutTestSignal  = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && theCat==%d",testTreeEventSplitStr.Data(), ptCut,ptCut,6);
+    cutTestBkg     = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && theCat==%d",testTreeEventSplitStr.Data(), ptCut,ptCut,0);
   }
 
   // Initialize the factory
@@ -106,23 +107,18 @@ void ewkvbsIncMVA(
   TString hyperparameters;
 
   hyperparameters=
-  "!H:!V:NTrees=1000:BoostType=Grad:MinNodeSize=5%:NegWeightTreatment=IgnoreNegWeightsInTraining:Shrinkage=0.10:UseBaggedBoost:GradBaggingFraction=0.3:nCuts=1000:MaxDepth=3";
+  "!H:!V:NTrees=2000:BoostType=Grad:Shrinkage=0.03:MaxDepth=5:MinNodeSize=1.5%:nCuts=200:UseBaggedBoost:GradBaggingFraction=0.6:SeparationType=GiniIndex:PruneMethod=CostComplexity:PruneStrength=3";
   factory->BookMethod(dataloader, TMVA::Types::kBDT, Form("BDTG_%s",extraString.Data()), hyperparameters);
 
-  TString layoutString ("Layout=TANH|100,TANH|50,TANH|10,LINEAR");
+  TString layoutString ("Layout=RELU|256,RELU|128,RELU|64,LINEAR");
 
-  TString training0 ("LearningRate=1e-1,Momentum=0.0,Repetitions=1,ConvergenceSteps=300,BatchSize=20,TestRepetitions=15,WeightDecay=0.001,Regularization=NONE,DropConfig=0.0+0.5+0.5+0.5,DropRepetitions=1,Multithreading=True");
-  TString training1 ("LearningRate=1e-2,Momentum=0.5,Repetitions=1,ConvergenceSteps=300,BatchSize=30,TestRepetitions=7,WeightDecay=0.001,Regularization=L2,Multithreading=True,DropConfig=0.0+0.1+0.1+0.1,DropRepetitions=1");
-  TString training2 ("LearningRate=1e-2,Momentum=0.3,Repetitions=1,ConvergenceSteps=300,BatchSize=40,TestRepetitions=7,WeightDecay=0.0001,Regularization=L2,Multithreading=True");
-  TString training3 ("LearningRate=1e-3,Momentum=0.1,Repetitions=1,ConvergenceSteps=200,BatchSize=70,TestRepetitions=7,WeightDecay=0.0001,Regularization=NONE,Multithreading=True");
+  TString trainingDNN ("LearningRate=5e-4,Momentum=0.9,Repetitions=3,ConvergenceSteps=200,BatchSize=32,TestRepetitions=10,WeightDecay=1e-4,Regularization=L2,DropConfig=0.1+0.3+0.3+0.0,Multithreading=True");
   
   TString trainingStrategyString ("TrainingStrategy=");
-  //trainingStrategyString += training0 + "|" + training1 + "|" + training2 + "|" + training3;
-  trainingStrategyString += training0 + "|" + training1 + "|" + training2;
+  trainingStrategyString += trainingDNN;
 
   // General Options.
-  TString dnnOptions ("!H:V:ErrorStrategy=CROSSENTROPY:VarTransform=N:"
-                      "WeightInitialization=XAVIERUNIFORM");
+  TString dnnOptions ("!H:V:ErrorStrategy=CROSSENTROPY:VarTransform=N,G:WeightInitialization=XAVIERUNIFORM");
   dnnOptions.Append (":"); dnnOptions.Append (layoutString);
   dnnOptions.Append (":"); dnnOptions.Append (trainingStrategyString);
   
@@ -133,34 +129,38 @@ void ewkvbsIncMVA(
 
   if(moreMVAs){
   hyperparameters=
-  "!H:!V:BoostType=AdaBoost:MinNodeSize=5%:NegWeightTreatment=IgnoreNegWeightsInTraining:SeparationType=MisClassificationError:NTrees=1000:MaxDepth=3:AdaBoostBeta=0.12:nCuts=10000";
+  "!H:!V:BoostType=AdaBoost:NTrees=1200:MaxDepth=4:MinNodeSize=2.5%:AdaBoostBeta=0.2:SeparationType=GiniIndex:nCuts=300:UseBaggedBoost:BaggedSampleFraction=0.5:PruneMethod=CostComplexity:PruneStrength=5";
   factory->BookMethod(dataloader, TMVA::Types::kBDT, Form("BDTA_%s",extraString.Data()), hyperparameters);
 
   hyperparameters=
-  "!H:!V:VarTransform=None";
+  "!H:!V:NTrees=1000:BoostType=Grad:MinNodeSize=5%:NegWeightTreatment=IgnoreNegWeightsInTraining:Shrinkage=0.10:UseBaggedBoost:GradBaggingFraction=0.3:nCuts=1000:MaxDepth=3";
+  factory->BookMethod(dataloader, TMVA::Types::kBDT, Form("BDTDG_%s",extraString.Data()), hyperparameters);
+
+  hyperparameters=
+  "!H:!V:VarTransform=G,P";
   factory->BookMethod(dataloader, TMVA::Types::kHMatrix, Form("HMatrix_%s",extraString.Data()), hyperparameters);
 
   hyperparameters=
-  "!H:!V:!TransformOutput:PDFInterpol=Spline2:NSmoothSig[0]=20:NSmoothBkg[0]=20:NSmooth=5:NAvEvtPerBin=70:VarTransform=PCA";
+  "!H:!V:VarTransform=G,P:PDFInterpol=Spline2:NSmooth=5:NAvEvtPerBin=30:Nbins=50:VarTransform=PCA";
   factory->BookMethod(dataloader, TMVA::Types::kLikelihood, Form("LikelihoodPCA_%s",extraString.Data()), hyperparameters);
 
   hyperparameters=
-  "!H:!V:TransformOutput:PDFInterpol=Spline2:NSmoothSig[0]=20:NSmoothBkg[0]=20:NSmoothBkg[1]=10:NSmooth=1:NAvEvtPerBin=70";
+  "!H:!V:VarTransform=G,P:PDFInterpol=Spline2:NSmooth=5:NAvEvtPerBin=30:Nbins=50";
   factory->BookMethod(dataloader, TMVA::Types::kLikelihood, Form("Likelihood_%s",extraString.Data()), hyperparameters);
 
   hyperparameters=
-  "!H:!V:Fisher:CreateMVAPdfs:PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=40:NsmoothMVAPdf=10";
+  "!H:!V:VarTransform=G,P:Fisher:CreateMVAPdfs:NbinsMVAPdf=50:NsmoothMVAPdf=5";
   factory->BookMethod(dataloader, TMVA::Types::kFisher, Form("Fisher_%s",extraString.Data()), hyperparameters);
 
   hyperparameters=
-  "!H:!V:!TransformOutput:PDFInterpol=KDE:KDEtype=Gauss:KDEiter=Adaptive:KDEFineFactor=0.3:KDEborder=None:NAvEvtPerBin=70";
+  "!H:!V:VarTransform=G,P:PDFInterpol=KDE:KDEtype=Gauss:KDEiter=Adaptive:KDEFineFactor=0.5:KDEborder=Mirror";
   factory->BookMethod(dataloader, TMVA::Types::kLikelihood, Form("LikelihoodKDE_%s",extraString.Data()), hyperparameters);
 
   hyperparameters=
-  "H:!V:Boost_Num=30:Boost_Transform=log:Boost_Type=AdaBoost:Boost_AdaBoostBeta=0.3:!Boost_DetailedMonitoring";
+  "!H:!V:VarTransform=Decorrelate:Fisher:CreateMVAPdfs:NbinsMVAPdf=80:NsmoothMVAPdf=3";
   factory->BookMethod(dataloader, TMVA::Types::kFisher, Form("BoostedFisher_%s",extraString.Data()), hyperparameters);
 
-   hyperparameters=
+  hyperparameters=
   "!H:!V:NeuronType=tanh:VarTransform=N:NCycles=1000:HiddenLayers=N+3:TestRate=5:!UseRegulator";
   factory->BookMethod(dataloader, TMVA::Types::kMLP, Form("MLP_%s",extraString.Data()), hyperparameters);
   }

@@ -28,7 +28,7 @@ versionWG = False
 versionDoEWKQCD = False
 doNtuples = False
 # 0 = T, 1 = M, 2 = L
-bTagSel = 2
+bTagSel = 1
 useBTaggingWeights = 1
 if(versionWG == True):
     bTagSel = 1
@@ -254,11 +254,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     tmva_helperType0 = tmva_helper_xml.TMVAHelperXML(MVAweightsType0)
     print(tmva_helperType0.variables)
 
-    MVAweightsType1 = "weights_mva/bdt_BDTG_vbfpol_nsel1_v6.weights.xml"
+    MVAweightsType1 = "weights_mva/bdt_BDTG_vbfpol_nsel1_v8.weights.xml"
+    MVAweightsType1 = "weights_mva/bdt_BDTG_vbfpol_nsel1_v7.weights.xml"
     tmva_helperType1 = tmva_helper_xml.TMVAHelperXML(MVAweightsType1)
     print(tmva_helperType1.variables)
 
-    MVAweightsType2 = "weights_mva/bdt_BDTG_vbfpol_nsel2_v6.weights.xml"
+    MVAweightsType2 = "weights_mva/bdt_BDTG_vbfpol_nsel2_v8.weights.xml"
+    MVAweightsType2 = "weights_mva/bdt_BDTG_vbfpol_nsel2_v7.weights.xml"
     tmva_helperType2 = tmva_helper_xml.TMVAHelperXML(MVAweightsType2)
     print(tmva_helperType2.variables)
 
