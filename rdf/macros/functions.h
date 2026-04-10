@@ -1632,10 +1632,12 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
   }
   else if(var == 31){ // VBS BDT pol v0 3D
     float xBDT0Bins[3] = { 0.150, 0.680, 9.000};
-    //float xBDT1Bins[4] = {-0.180, 0.140, 0.460, 9.000}; // v7
-    //float xBDT2Bins[4] = {-0.040, 0.330, 0.580, 9.000}; // v7
-    float xBDT1Bins[4] = {-0.190, 0.140, 0.450, 9.000}; // v8
-    float xBDT2Bins[4] = {-0.050, 0.330, 0.580, 9.000}; // v8
+    //float xBDT1Bins[4] = {-0.180, 0.140, 0.460, 9.000}; // v8
+    //float xBDT2Bins[4] = {-0.040, 0.330, 0.580, 9.000}; // v8
+    //float xBDT1Bins[4] = {-0.190, 0.140, 0.450, 9.000}; // v7
+    //float xBDT2Bins[4] = {-0.050, 0.330, 0.580, 9.000}; // v7
+    float xBDT1Bins[4] = {-0.060, 0.210, 0.460, 9.000}; // v6
+    float xBDT2Bins[4] = {-0.000, 0.370, 0.610, 9.000}; // v6
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
@@ -1660,10 +1662,12 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
   }
   else if(var == 32 || var == 33){ // VBS BDT pol v0 2D
     float xBDT0Bins[4] = {-0.040, 0.470, 0.760, 9.000};
-    //float xBDT1Bins[6] = {-0.310,-0.070, 0.140, 0.350, 0.570, 9.000}; // v7
-    //float xBDT2Bins[6] = {-0.220, 0.100, 0.330, 0.510, 0.650, 9.000}; // v7
-    float xBDT1Bins[6] = {-0.320,-0.070, 0.140, 0.350, 0.570, 9.000}; // v8
-    float xBDT2Bins[6] = {-0.220, 0.100, 0.330, 0.500, 0.650, 9.000}; // v8
+    //float xBDT1Bins[6] = {-0.310,-0.070, 0.140, 0.350, 0.570, 9.000}; // v8
+    //float xBDT2Bins[6] = {-0.220, 0.100, 0.330, 0.510, 0.650, 9.000}; // v8
+    //float xBDT1Bins[6] = {-0.320,-0.070, 0.140, 0.350, 0.570, 9.000}; // v7
+    //float xBDT2Bins[6] = {-0.220, 0.100, 0.330, 0.500, 0.650, 9.000}; // v7
+    float xBDT1Bins[6] = {-0.190, 0.040, 0.210, 0.370, 0.550, 9.000}; // v6
+    float xBDT2Bins[6] = {-0.180, 0.140, 0.370, 0.540, 0.680, 9.000}; // v6
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
@@ -2568,7 +2572,7 @@ int compute_vbs_gen_category(const int nSel, const int ngood_GenJets, const Vec_
 float compute_llgen_var(const int ngood_GenJets, const Vec_f& good_GenJet_pt, const Vec_f& good_GenJet_eta,  const Vec_f& good_GenJet_phi, const Vec_f& good_GenJet_mass,
                         const int ngood_GenDressedLeptons, const Vec_i& GenDressedLepton_pdgId, const Vec_b& GenDressedLepton_hasTauAnc,
                         const Vec_f& GenDressedLepton_pt, const Vec_f& GenDressedLepton_eta, const Vec_f& GenDressedLepton_phi, const Vec_f& GenDressedLepton_mass,
-                        const float met_pt, const float met_phi, const int whichVar){
+                        const float met_pt, const float met_phi, const TString theCat, const int whichVar){
 
   if(ngood_GenDressedLeptons <= 1) return -1;
   float theVar = -1;
@@ -2628,6 +2632,7 @@ float compute_llgen_var(const int ngood_GenJets, const Vec_f& good_GenJet_pt, co
   else if(whichVar == 10){
     if(ngood_GenJets >= 2){
       theVar = (good_GenJet_eta[0] > good_GenJet_eta[1] ? TVector2::Phi_0_2pi(good_GenJet_phi[0] - good_GenJet_phi[1]) : TVector2::Phi_0_2pi(good_GenJet_phi[1] - good_GenJet_phi[0]));
+      if(theCat.Contains("WW_MINNLO")) theVar = TVector2::Phi_0_2pi(theVar + TMath::Pi());
     }
   }
   

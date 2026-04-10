@@ -140,4 +140,45 @@ elif [[ $1 == 28 ]]; then
    root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_mcfm_13p0tev.root",20,1)';
    hadd -f xswwgen_minnlo_mcfm_13p0tev.root xswwgen_WW*;
 
+   rm -f xswwgen_WW*;
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",11,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",12,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",13,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",14,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",15,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",16,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",17,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",18,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",19,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_powheg_13p0tev.root",20,1)';
+   hadd -f xswwgen_powheg_13p0tev.root xswwgen_WW*;
+
+   rm -f xswwgen_WW*;
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",11,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",12,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",13,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",14,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",15,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",16,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",17,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",18,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",19,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_mcfm_13p0tev.root",20,1)';
+   hadd -f xswwgen_mcfm_13p0tev.root xswwgen_WW*;
+
+   rm -f xswwgen_WW*;
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",11,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",12,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",13,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",14,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",15,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",16,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",17,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",18,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",19,1)';
+   root -l -q -b ../../macros/gen/computeGenWWXS.C'("histo_ww_minnlo_13p0tev.root",20,1)';
+   hadd -f xswwgen_minnlo_13p0tev.root xswwgen_WW*;
+
+   rm -f xswwgen_WW*;
+
 fi

@@ -246,7 +246,7 @@ def analysis(df,count,category,weight,year,PDType,nSel,isRun3Sel,isData,histo_ww
         elif(whichVar == 10):
             xWWBins = array('d', [0.0000,0.4488,0.8976,1.3464,1.7952,2.2440,2.6928,3.1416,3.5904,4.0392,4.4880,4.9368,5.3856,5.8344,6.2832])
 
-        dfwwxgen = dfwwxgen.Define("diffVar{0}".format(whichVar), "compute_llgen_var(ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,GenMET_pt,GenMET_phi,{0})".format(whichVar))
+        dfwwxgen = dfwwxgen.Define("diffVar{0}".format(whichVar), "compute_llgen_var(ngood_GenJets,good_GenJet_pt,good_GenJet_eta,good_GenJet_phi,good_GenJet_mass,ngood_GenDressedLeptons,good_GenDressedLepton_pdgId,good_GenDressedLepton_hasTauAnc,good_GenDressedLepton_pt,good_GenDressedLepton_eta,good_GenDressedLepton_phi,good_GenDressedLepton_mass,GenMET_pt,GenMET_phi,PDType,{0})".format(whichVar))
         # WW fiducial
         startF = 0
         for nv in range(0,114):

@@ -67,10 +67,13 @@ void ewkvbsPolMVA(
     dataloader->AddTree(mvaTree, "Background", 1.0, cutTrainWWTT, "train");
     dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTestWWLX , "test");
     dataloader->AddTree(mvaTree, "Background", 1.0, cutTestWWTT , "test");
-    //dataloader->SetWeightExpression("abs(weight)", "Signal"    );
-    //dataloader->SetWeightExpression("abs(weight)", "Background");
-    dataloader->SetWeightExpression("1.0", "Signal"    );
-    dataloader->SetWeightExpression("1.0", "Background");
+    if(version == 6){
+      dataloader->SetWeightExpression("abs(weight)", "Signal"    );
+      dataloader->SetWeightExpression("abs(weight)", "Background");
+    } else {
+      dataloader->SetWeightExpression("1.0", "Signal"    );
+      dataloader->SetWeightExpression("1.0", "Background");
+    }
   }
   else if(nsel == 2){ // LL vs. TX
     TCut cutTrainWWLL = Form("%s && vbs_ptj1 > %.0f && vbs_ptj2 > %.0f && (theCat==20)",trainTreeEventSplitStr.Data(),ptCut,ptCut);
@@ -86,10 +89,13 @@ void ewkvbsPolMVA(
     dataloader->AddTree(mvaTree, "Background", 1.0, cutTrainWWTX, "train");
     dataloader->AddTree(mvaTree, "Signal"    , 1.0, cutTestWWLL , "test");
     dataloader->AddTree(mvaTree, "Background", 1.0, cutTestWWTX , "test");
-    //dataloader->SetWeightExpression("abs(weight)", "Signal"    );
-    //dataloader->SetWeightExpression("abs(weight)", "Background");
-    dataloader->SetWeightExpression("1.0", "Signal"    );
-    dataloader->SetWeightExpression("1.0", "Background");
+    if(version == 6){
+      dataloader->SetWeightExpression("abs(weight)", "Signal"    );
+      dataloader->SetWeightExpression("abs(weight)", "Background");
+    } else {
+      dataloader->SetWeightExpression("1.0", "Signal"    );
+      dataloader->SetWeightExpression("1.0", "Background");
+    }
   }
 
   if(nsel == 0 || nsel == 1 || nsel == 2){
