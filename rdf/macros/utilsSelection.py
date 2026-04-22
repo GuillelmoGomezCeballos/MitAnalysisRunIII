@@ -31,6 +31,15 @@ def getBTagCut_DeepJet(type,year):
        value[0] = 0.6563
        value[1] = 0.2435
        value[2] = 0.0480
+    elif(year == 20260):
+       value[0] = 0.6563
+       value[1] = 0.2435
+       value[2] = 0.0480
+    elif(year == 20261):
+       value[0] = 0.6563
+       value[1] = 0.2435
+       value[2] = 0.0480
+
     elif(year == 20160):
        value[0] = 0.6563
        value[1] = 0.2435
@@ -79,6 +88,15 @@ def getBTagCut_PNet(type,year):
        value[0] = 0.6133
        value[1] = 0.1919
        value[2] = 0.0359
+    elif(year == 20260):
+       value[0] = 0.6133
+       value[1] = 0.1919
+       value[2] = 0.0359
+    elif(year == 20261):
+       value[0] = 0.6133
+       value[1] = 0.1919
+       value[2] = 0.0359
+
     elif(year == 20160):
        value[0] = 0.6133
        value[1] = 0.1919
@@ -127,6 +145,15 @@ def getBTagCut(type,year):
        value[0] = 0.4648
        value[1] = 0.1272
        value[2] = 0.0246
+    elif(year == 20260):
+       value[0] = 0.4648
+       value[1] = 0.1272
+       value[2] = 0.0246
+    elif(year == 20261):
+       value[0] = 0.4648
+       value[1] = 0.1272
+       value[2] = 0.0246
+
     elif(year == 20160):
        value[0] = 0.4648
        value[1] = 0.1272
@@ -793,6 +820,18 @@ def selectionTrigger2L(df,year,PDType,JSON,isData,triggerSEL,triggerDEL,triggerS
     elif(year == 2025):
         triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
 
+    elif(year == 2026 and PDType == "MuonEG"):
+        triggerLEP = "{0}".format(triggerMUEG)
+
+    elif(year == 2026 and PDType == "Muon"):
+        triggerLEP = "({0} or {1}) and not {2}".format(triggerDMU,triggerSMU,triggerMUEG)
+
+    elif(year == 2026 and PDType == "EGamma"):
+        triggerLEP = "({0} or {1}) and not {2} and not {3} and not {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
+    elif(year == 2026):
+        triggerLEP = "{0} or {1} or {2} or {3} or {4}".format(triggerSEL,triggerDEL,triggerSMU,triggerDMU,triggerMUEG)
+
     else:
         print("PROBLEM with triggers!!!")
 
@@ -847,6 +886,10 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
         triggerFAKE = triggerFAKEMU
     elif(year == 2025 and PDType == "EGamma"):
         triggerFAKE =  triggerFAKEEL
+    elif(year == 2026 and PDType == "Muon"):
+        triggerFAKE = triggerFAKEMU
+    elif(year == 2026 and PDType == "EGamma"):
+        triggerFAKE =  triggerFAKEEL
     elif(PDType == "MuonEG"):
         triggerFAKE =  "0"
     elif(year == 2016):
@@ -862,6 +905,8 @@ def selectionTrigger1L(df,year,PDType,JSON,isData,triggerFAKEMU,triggerFAKEEL):
     elif(year == 2024):
         triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     elif(year == 2025):
+        triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
+    elif(year == 2026):
         triggerFAKE = "{0} or {1}".format(triggerFAKEMU,triggerFAKEEL)
     else:
         print("PROBLEM with triggers!!!")
@@ -1006,6 +1051,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
     elif(year == 20231): ELEYEAR = "2023PromptD"
     elif(year == 20240): ELEYEAR = "2024Prompt"
     elif(year == 20250): ELEYEAR = "2024Prompt"
+    elif(year == 20260): ELEYEAR = "2024Prompt"
+    elif(year == 20261): ELEYEAR = "2024Prompt"
     PHOYEAR = "NULL"
     if  (year == 20160): PHOYEAR = "2016preVFP"
     elif(year == 20161): PHOYEAR = "2016postVFP"
@@ -1017,6 +1064,8 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
     elif(year == 20231): PHOYEAR = "2023PromptD"
     elif(year == 20240): PHOYEAR = "2024Prompt"
     elif(year == 20250): PHOYEAR = "2024Prompt"
+    elif(year == 20260): PHOYEAR = "2024Prompt"
+    elif(year == 20261): PHOYEAR = "2024Prompt"
     if(correctionString == "_correction"):
         MUOWP = "Medium"
         ELEWP = "Medium"

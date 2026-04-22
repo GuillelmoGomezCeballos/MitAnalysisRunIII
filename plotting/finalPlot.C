@@ -366,6 +366,8 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   else if(year == 20240) {theLumi = 109;}
   else if(year == 20250) {theLumi = 109;}
   else if(year == 20190) {theLumi = 138;}
+  else if(year == 20260) {theLumi = 15.9;}
+  else if(year == 20261) {theLumi = 1.6;}
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
   if(year == 20250 || year == 2028)

@@ -172,6 +172,9 @@ if __name__ == "__main__":
     elif("Run2025" in sampleToSkim):
         year = 2025
         isSkimData = 1
+    elif("Run2026" in sampleToSkim):
+        year = 2026
+        isSkimData = 1
     elif("RunIISummer20UL16" in sampleToSkim):
         year = 2016
         isSkimData = 0
@@ -193,6 +196,9 @@ if __name__ == "__main__":
     elif("2025Summer25" in sampleToSkim):
         year = 2025
         isSkimData = 0
+    elif("2026Summer26" in sampleToSkim):
+        year = 2026
+        isSkimData = 0
 
     if(year == -1 or isSkimData == -1):
         print("Incorrect year/isSkimData: {0} / {1}".format(year, isSkimData))
@@ -213,6 +219,8 @@ if __name__ == "__main__":
         jsnName = "Collisions24_13p6TeV_DCSOnly_TkPx.json"
     elif(year == 2025):
         jsnName = "Collisions25_13p6TeV_DCSOnly_TkPx.json"
+    elif(year == 2026):
+        jsnName = "Collisions26_13p6TeV_DCSOnly_TkPx.json"
 
     if os.path.exists(os.path.join("jsns",jsnName)):
         loadJSON(os.path.join("jsns",jsnName))

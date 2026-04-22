@@ -311,19 +311,19 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dftop0catMuonMomUp      .append(dftop0cat[x])
         dftop0catElectronMomUp  .append(dftop0cat[x])
 
-        dftop0catMuonMomUp      [x] = dftop0catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp       > 25 && ptl2MuonMomUp      > 20")
-        dftop0catElectronMomUp  [x] = dftop0catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dftop0catMuonMomUp      [x] = dftop0catMuonMomUp      [x].Filter("mllMuonMomUp       > 20 && ptl1MuonMomUp       > 25 && ptl2MuonMomUp      > 20")
+        dftop0catElectronMomUp  [x] = dftop0catElectronMomUp  [x].Filter("mllElectronMomUp   > 20 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
 
-        dftop0cat[x] = dftop0cat[x].Filter("mll{0} > 85 && ptl1{0} > 25 && ptl2{0} > 20".format(altMass), "mll > 85 && ptl1 > 25 && ptl2 > 20")
+        dftop0cat[x] = dftop0cat[x].Filter("mll{0} > 20 && ptl1{0} > 25 && ptl2{0} > 20".format(altMass), "mll > 20 && ptl1 > 25 && ptl2 > 20")
 
         dftop1cat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet == 2", "b-jets"))
         dftop1catMuonMomUp      .append(dftop1cat[x])
         dftop1catElectronMomUp  .append(dftop1cat[x])
 
-        dftop1catMuonMomUp      [x] = dftop1catMuonMomUp      [x].Filter("mllMuonMomUp       > 85 && ptl1MuonMomUp       > 25 && ptl2MuonMomUp      > 20")
-        dftop1catElectronMomUp  [x] = dftop1catElectronMomUp  [x].Filter("mllElectronMomUp   > 85 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
+        dftop1catMuonMomUp      [x] = dftop1catMuonMomUp      [x].Filter("mllMuonMomUp       > 20 && ptl1MuonMomUp       > 25 && ptl2MuonMomUp      > 20")
+        dftop1catElectronMomUp  [x] = dftop1catElectronMomUp  [x].Filter("mllElectronMomUp   > 20 && ptl1ElectronMomUp   > 25 && ptl2ElectronMomUp  > 20")
 
-        dftop1cat[x] = dftop1cat[x].Filter("mll{0} > 85 && ptl1{0} > 25 && ptl2{0} > 20".format(altMass), "mll > 85 && ptl1 > 25 && ptl2 > 20")
+        dftop1cat[x] = dftop1cat[x].Filter("mll{0} > 20 && ptl1{0} > 25 && ptl2{0} > 20".format(altMass), "mll > 20 && ptl1 > 25 && ptl2 > 20")
 
         dfhwwxcat.append(dfcat[x].Filter("nbtag_goodbtag_Jet_bjet == 0", "No b-jets")
                                  .Filter("ptll{0} > 30 && mll{0} < 85 && minPMET{0} > 20".format(altMass), "ptll > 30 && mll < 85 && minPMET > 20")
@@ -382,7 +382,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[46][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(46,x), "histo_{0}_{1}".format(46,x), 50, 85, 385), "mll{0}".format(altMass),"weightWW")
         histo[47][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(47,x), "histo_{0}_{1}".format(47,x), 50, 85, 385), "mll{0}".format(altMass),"weightWW")
         histo[48][x] = dfztt0cat[x].Histo1D(("histo_{0}_{1}".format(48,x), "histo_{0}_{1}".format(48,x), 50, 35,  85), "mll{0}".format(altMass),"weightWW")
-        histo[49][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(49,x), "histo_{0}_{1}".format(49,x), 50, 85, 385), "mll{0}".format(altMass),"weightWW")
+        histo[49][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(49,x), "histo_{0}_{1}".format(49,x), 40, 20, 420), "mll{0}".format(altMass),"weightWW")
 
         histo[50][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(50,x), "histo_{0}_{1}".format(50,x), 50,  0, 200), "ptll{0}".format(altMass),"weightWW")
         histo[51][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(51,x), "histo_{0}_{1}".format(51,x), 50,  0, 200), "ptll{0}".format(altMass),"weightWW")

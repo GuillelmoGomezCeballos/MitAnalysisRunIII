@@ -102,7 +102,9 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20230) subDirName = "Run3-23CSep23-Summer23-NanoAODv12/";
   else if(year == 20231) subDirName = "Run3-23DSep23-Summer23BPix-NanoAODv12/";
   else if(year == 20240) subDirName = "Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/";
-  else if(year == 20250) subDirName = "Run3-25Prompt-Winter25-NanoAODv15/";
+  else if(year == 20250 ||
+          year == 20260 ||
+          year == 20261) subDirName = "Run3-25Prompt-Winter25-NanoAODv15/";
   else return;
 
   std::cout << "subDirName/year: " << subDirName << " " << year << std::endl;
@@ -119,14 +121,16 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20230) corrNameLUM = "Collisions2023_366403_369802_eraBC_GoldenJson";
   else if(year == 20231) corrNameLUM = "Collisions2023_369803_370790_eraD_GoldenJson";
   else if(year == 20240 ||
-          year == 20250) corrNameLUM = "Collisions24_BCDEFGHI_goldenJSON";
+          year == 20250 ||
+          year == 20260 ||
+          year == 20261) corrNameLUM = "Collisions24_BCDEFGHI_goldenJSON";
   
   auto csetPU = correction::CorrectionSet::from_file(fileNameLUM);
   puSF_ = csetPU->at(corrNameLUM);
 
   if(debug > 0) std::cout << "pass lum" << std::endl;
 
-  if(year == 20240 || year == 20250) {
+  if(year == 20240 || year == 20250 || year == 20260 || year == 20261) {
     std::string fileNameHFBTV = dirName+"BTV/"+subDirName+"btagging.json.gz";
     auto csetHFBTV = correction::CorrectionSet::from_file(fileNameHFBTV);
     btvHFSF_ = csetHFBTV->at("UParTAK4_comb");
@@ -163,12 +167,12 @@ MyCorrections::MyCorrections(int the_input_year) {
   muonISOSF_ = csetMu->at("NUM_LoosePFIso_DEN_MediumPromptID");
 
   std::string fileNameHighPtRECOMu       = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
-  if(year == 20240 || year == 20250) fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_RECO_2024_schemaV2.json.gz";
+  if(year == 20240 || year == 20250 || year == 20260 || year == 20261) fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_RECO_2024_schemaV2.json.gz";
   auto csetHighPtRECOMu = correction::CorrectionSet::from_file(fileNameHighPtRECOMu);
   muonHighPtTRKSF_ = csetHighPtRECOMu->at("NUM_GlobalMuons_DEN_TrackerMuonProbes");
 
   std::string fileNameHighPtIDISOMu       = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
-  if(year == 20240 || year == 20250) fileNameHighPtIDISOMu = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
+  if(year == 20240 || year == 20250 || year == 20260 || year == 20261) fileNameHighPtIDISOMu = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
   auto csetHighPtIDISOMu = correction::CorrectionSet::from_file(fileNameHighPtIDISOMu);
   muonHighPtIDSF_ = csetHighPtIDISOMu->at("NUM_MediumID_DEN_GlobalMuonProbes");
   muonHighPtISOSF_ = csetHighPtIDISOMu->at("NUM_probe_TightRelTkIso_DEN_MediumIDProbes");
@@ -207,7 +211,9 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20230) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
   else if(year == 20231) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
   else if(year == 20240 ||
-          year == 20250) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
+          year == 20250 ||
+          year == 20260 ||
+          year == 20261) {electronEtDependentScale_ = csetEnergyEtDependentELE->compound().at("Scale"); electronEtDependentSmearing_ = csetEnergyEtDependentELE->at("SmearAndSyst");}
 
   if(debug > 0) std::cout << "pass egm" << std::endl;
 
@@ -312,7 +318,7 @@ MyCorrections::MyCorrections(int the_input_year) {
     jecDATAName[8] = "Summer24Prompt24_V2_DATA"; jetVetoMapName[8] = "Summer24Prompt24_RunBCDEFGHI_V1"; // I
     jecDATAName[9] = "NULL";                     jetVetoMapName[9] = "Summer24Prompt24_RunBCDEFGHI_V1"; // J
   }
-  else if(year == 20250)  {
+  else if(year == 20250 || year == 20260 || year == 20261)  {
     jecMCName = "Winter25Prompt25_V3_MC"; jerName = "Summer23BPixPrompt23_RunD_JRV1_MC";
     jecDATAName[0] = "NULL";                     jetVetoMapName[0] = "Winter25Prompt25_RunCDEFG_V1"; // A
     jecDATAName[1] = "Winter25Prompt25_V3_DATA"; jetVetoMapName[1] = "Winter25Prompt25_RunCDEFG_V1"; // B
@@ -528,8 +534,8 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
   eta = std::min(std::abs(eta),2.399);
   pt = std::min(pt,999.999);
   if(flavor != 0) {
-    if(year == 20240 || year == 20250) return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
-    else                               return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
+    if(year == 20240 || year == 20250 || year == 20260 || year == 20261) return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
+    else                                                                 return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
   }
   else {
     return btvLFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
@@ -540,12 +546,13 @@ double MyCorrections::eval_jetCORR(double area, double eta, double phi, double p
   int theRun = run;
   if(year == 20250 && theRun < 392159) theRun = 392159;
   // data
-  if(type >= 0 && (year == 20231 || year == 20240 || year == 20250)) return JECDATA_[type]->evaluate({area, eta, pt, rho, phi, (float)theRun});
-  else if(type >= 0 && year == 20230)                                return JECDATA_[type]->evaluate({area, eta, pt, rho,      (float)theRun});
-  else if(type >= 0)                                                 return JECDATA_[type]->evaluate({area, eta, pt, rho});
+  if(type >= 0 && (year == 20260 || year == 20261))                       return 1.0;
+  else if(type >= 0 && (year == 20231 || year == 20240 || year == 20250)) return JECDATA_[type]->evaluate({area, eta, pt, rho, phi, (float)theRun});
+  else if(type >= 0 && year == 20230)                                     return JECDATA_[type]->evaluate({area, eta, pt, rho,      (float)theRun});
+  else if(type >= 0)                                                      return JECDATA_[type]->evaluate({area, eta, pt, rho});
   // MC
-  if     (year == 20231 || year == 20240 || year == 20250) return JECMC_->evaluate({area, eta, pt, rho, phi});
-  else                                                     return JECMC_->evaluate({area, eta, pt, rho});
+  if     (year == 20231 || year == 20240 || year == 20250 || year == 20260 || year == 20261) return JECMC_->evaluate({area, eta, pt, rho, phi});
+  else                                                                                       return JECMC_->evaluate({area, eta, pt, rho});
   printf("ERROR in eval_jetCORR!\n");
   return 1.0;
 };

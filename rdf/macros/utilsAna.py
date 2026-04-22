@@ -11,8 +11,8 @@ correctionlib.register_pyroot_binding()
 useXROOTD = False
 
 def getLumi(year):
-    #lumi = [19.5, 16.8, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 109.6, 107.5]
-    lumi = [19.5, 16.8, 41.5, 101.5, 8.1, 26.7, 18.1, 9.7, 109.6, 107.5]
+    #lumi = [19.5, 16.8, 41.5, 60.0, 8.1, 26.7, 18.1, 9.7, 109.6, 107.5, 15.9, 1.6]
+    lumi = [19.5, 16.8, 41.5, 101.5, 8.1, 26.7, 18.1, 9.7, 109.6, 107.5, 15.9, 1.6]
 
     lumiBit = -999
     if  (year == 20160): lumiBit = 0
@@ -25,6 +25,8 @@ def getLumi(year):
     elif(year == 20231): lumiBit = 7
     elif(year == 20240): lumiBit = 8
     elif(year == 20250): lumiBit = 9
+    elif(year == 20260): lumiBit = 10
+    elif(year == 20261): lumiBit = 11
 
     print("lumi({0}/{1}) = {2}".format(year,lumiBit,lumi[lumiBit]))
 
@@ -230,6 +232,9 @@ def getDATAlist(type, year, skimType):
         jsnName = "Cert_Collisions2024_378981_386951_Golden.json"
     elif(year == 2025):
         jsnName = "Cert_Collisions2025_391658_398903_Golden.json"
+    elif(year == 2026):
+        jsnName = "Cert_Collisions2026_401624_402537_golden.json"
+        jsnName = "Collisions26_13p6TeV_DCSOnly_TkPx.json"
 
     if os.path.exists(os.path.join("jsns",jsnName)):
         loadJSON(os.path.join("jsns",jsnName))
@@ -997,6 +1002,129 @@ def getDATAlist(type, year, skimType):
     elif(year == 2025 and type == 1056):
         filesL   = findDIR("{0}/JetMET0+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
         filesAux = findDIR("{0}/JetMET1+Run2025G-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+
+
+    ##### 2026 ####
+    elif(year == 2026 and type == 1020):
+        filesL   = findDIR("{0}/MuonEG+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+    elif(year == 2026 and type == 1021):
+        filesL   = findDIR("{0}/MuonEG+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+    elif(year == 2026 and type == 1022):
+        filesL   = findDIR("{0}/MuonEG+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+
+    elif(year == 2026 and type == 1030):
+        filesL   = findDIR("{0}/EGamma0+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/EGamma1+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma2+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma3+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma4+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma5+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2026 and type == 1031):
+        filesL   = findDIR("{0}/EGamma0+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/EGamma1+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma2+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma3+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma4+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma5+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2026 and type == 1032):
+        filesL   = findDIR("{0}/EGamma0+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/EGamma1+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma2+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma3+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma4+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/EGamma5+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+
+    elif(year == 2026 and type == 1040):
+        filesL   = findDIR("{0}/Muon0+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/Muon1+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon2+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon3+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2026 and type == 1041):
+        filesL   = findDIR("{0}/Muon0+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/Muon1+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon2+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon3+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2026 and type == 1042):
+        filesL   = findDIR("{0}/Muon0+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/Muon1+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon2+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/Muon3+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+
+    elif(year == 2026 and type == 1050):
+        filesL   = findDIR("{0}/JetMET0+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/JetMET1+Run2026A-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2026 and type == 1051):
+        filesL   = findDIR("{0}/JetMET0+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/JetMET1+Run2026B-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+    elif(year == 2026 and type == 1052):
+        filesL   = findDIR("{0}/JetMET0+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        filesAux = findDIR("{0}/JetMET1+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET2+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET3+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET4+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
+        for x in filesAux:
+            filesL.push_back(x)
+        filesAux = findDIR("{0}/JetMET5+Run2026C-PromptReco-v1+NANOAOD".format(dirT2))
         for x in filesAux:
             filesL.push_back(x)
 
