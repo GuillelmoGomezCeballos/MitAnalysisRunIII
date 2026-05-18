@@ -381,7 +381,8 @@ float compute_JSON_ELE_SFs(const int yearValue, std::string yearS, std::string v
     double pt_used = max(el_pt[i],10.001f);
     if     (pt_used < 20) recoNameAux = (char*)"RecoBelow20";
     else if(pt_used < 75) recoNameAux = (char*)"Reco20to75";
-    if(yearValue < 20210 && pt_used >= 20) recoNameAux = (char*)"RecoAbove20";
+    if     (yearValue <  20210 && pt_used >= 20) recoNameAux = (char*)"RecoAbove20";
+    else if(yearValue >= 20250 && pt_used  < 20) {recoNameAux = (char*)"Reco20to75"; pt_used = 20.001;}
     const char *recoName = recoNameAux;
     double sf0 = corrSFs.eval_electronTRKSF(year,valType0,    recoName,el_eta[i],pt_used,el_phi[i]);
     double sf1 = 1.0;
@@ -932,8 +933,8 @@ float compute_PTWWCorr(const int type, const TString theCat, const float ptww){
 }
 
 float compute_fakeRate(const bool isData,
-                       const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_jetRelIso, const Vec_i& tight_mu, const int mType,
-                       const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_jetRelIso, const Vec_i& tight_el, const int eType,
+                       const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_jetRelIso, const Vec_i& tight_mu, int mType,
+                       const Vec_f& el_pt, const Vec_f& el_eta, const Vec_f& el_jetRelIso, const Vec_i& tight_el, int eType,
                        const int whichAna){
 
   bool debug = false;
@@ -945,7 +946,8 @@ float compute_fakeRate(const bool isData,
   // def 2, unc 5 / 1 / 8
 
   double addSF[2] {1.0, 1.0};
-  if(whichAna == 1) {addSF[0] = 1.0; addSF[1] = 1.0;}
+  if(whichAna >= 10 && mType == -1 && mType == -1) {mType = whichAna - 10; eType = whichAna - 10;}
+  else if(mType == -1 || mType == -1) {printf("PROBLEM in compute_fakeRate\n");}
 
   if(mu_pt.size() != tight_mu.size() || el_pt.size() != tight_el.size()) {
     printf("PROBLEM in compute_fakeRate (%zu/%zu) (%zu/%zu)!\n",mu_pt.size(),tight_mu.size(),el_pt.size(),tight_el.size());

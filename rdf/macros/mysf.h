@@ -104,7 +104,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   else if(year == 20240) subDirName = "Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/";
   else if(year == 20250 ||
           year == 20260 ||
-          year == 20261) subDirName = "Run3-25Prompt-Winter25-NanoAODv15/";
+          year == 20261) subDirName = "Run3-25Prompt-Summer24-NanoAODv15/";
   else return;
 
   std::cout << "subDirName/year: " << subDirName << " " << year << std::endl;
@@ -167,7 +167,7 @@ MyCorrections::MyCorrections(int the_input_year) {
   muonISOSF_ = csetMu->at("NUM_LoosePFIso_DEN_MediumPromptID");
 
   std::string fileNameHighPtRECOMu       = dirName+"MUO/"+subDirName+"muon_HighPt.json.gz";
-  if(year == 20240 || year == 20250 || year == 20260 || year == 20261) fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_RECO_2024_schemaV2.json.gz";
+  if(year == 20240) fileNameHighPtRECOMu = dirName+"MUO/"+subDirName+"ScaleFactors_Muon_highPt_RECO_2024_schemaV2.json.gz";
   auto csetHighPtRECOMu = correction::CorrectionSet::from_file(fileNameHighPtRECOMu);
   muonHighPtTRKSF_ = csetHighPtRECOMu->at("NUM_GlobalMuons_DEN_TrackerMuonProbes");
 
@@ -221,6 +221,8 @@ MyCorrections::MyCorrections(int the_input_year) {
   auto csetTAU = correction::CorrectionSet::from_file(fileNameTAU);
   tauJETSF_ = csetTAU->at("DeepTau2018v2p5VSjet");
 
+  if(debug > 0) std::cout << "pass tau" << std::endl;
+
   std::string fileNameJER = dirName+"JME/"+subDirName+"jet_jerc.json.gz";
   //std::cout << fileNameJER << std::endl;
   auto csetJER = correction::CorrectionSet::from_file(fileNameJER);
@@ -267,10 +269,10 @@ MyCorrections::MyCorrections(int the_input_year) {
   }
   else if(year == 20220)  {
     jecMCName = "Summer22_22Sep2023_V3_MC"; jerName = "Summer22_22Sep2023_JRV1_MC";
-    jecDATAName[0] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[0] = "Summer22_23Sep2023_RunCD_V1"; // A
-    jecDATAName[1] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[1] = "Summer22_23Sep2023_RunCD_V1"; // B
-    jecDATAName[2] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[2] = "Summer22_23Sep2023_RunCD_V1"; // C
-    jecDATAName[3] = "Summer22_22Sep2023_RunCD_V3_DATA";   jetVetoMapName[3] = "Summer22_23Sep2023_RunCD_V1"; // D
+    jecDATAName[0] = "Summer22_22Sep2023_V3_DATA";   jetVetoMapName[0] = "Summer22_23Sep2023_RunCD_V1"; // A
+    jecDATAName[1] = "Summer22_22Sep2023_V3_DATA";   jetVetoMapName[1] = "Summer22_23Sep2023_RunCD_V1"; // B
+    jecDATAName[2] = "Summer22_22Sep2023_V3_DATA";   jetVetoMapName[2] = "Summer22_23Sep2023_RunCD_V1"; // C
+    jecDATAName[3] = "Summer22_22Sep2023_V3_DATA";   jetVetoMapName[3] = "Summer22_23Sep2023_RunCD_V1"; // D
     jecDATAName[4] = "NULL"; jetVetoMapName[4] = "NULL";  // E
     jecDATAName[5] = "NULL"; jetVetoMapName[5] = "NULL";  // F
     jecDATAName[6] = "NULL"; jetVetoMapName[6] = "NULL";  // G
@@ -281,15 +283,15 @@ MyCorrections::MyCorrections(int the_input_year) {
     jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
     jecDATAName[2] = "NULL";   jetVetoMapName[2] = "NULL"; // C
     jecDATAName[3] = "NULL";   jetVetoMapName[3] = "NULL"; // D
-    jecDATAName[4] = "Summer22EE_22Sep2023_RunE_V3_DATA"; jetVetoMapName[4] = "Summer22EE_23Sep2023_RunEFG_V1";  // E
-    jecDATAName[5] = "Summer22EE_22Sep2023_RunF_V3_DATA"; jetVetoMapName[5] = "Summer22EE_23Sep2023_RunEFG_V1";  // F
-    jecDATAName[6] = "Summer22EE_22Sep2023_RunG_V3_DATA"; jetVetoMapName[6] = "Summer22EE_23Sep2023_RunEFG_V1";  // G
+    jecDATAName[4] = "Summer22EE_22Sep2023_V3_DATA"; jetVetoMapName[4] = "Summer22EE_23Sep2023_RunEFG_V1";  // E
+    jecDATAName[5] = "Summer22EE_22Sep2023_V3_DATA"; jetVetoMapName[5] = "Summer22EE_23Sep2023_RunEFG_V1";  // F
+    jecDATAName[6] = "Summer22EE_22Sep2023_V3_DATA"; jetVetoMapName[6] = "Summer22EE_23Sep2023_RunEFG_V1";  // G
   }
   else if(year == 20230)  {
-    jecMCName = "Summer23Prompt23_V2_MC"; jerName = "Summer23Prompt23_RunCv1234_JRV1_MC";
+    jecMCName = "Summer23Prompt23_V3_MC"; jerName = "Summer23Prompt23_RunCv1234_JRV1_MC";
     jecDATAName[0] = "NULL";   jetVetoMapName[0] = "NULL"; // A
     jecDATAName[1] = "NULL";   jetVetoMapName[1] = "NULL"; // B
-    jecDATAName[2] = "Summer23Prompt23_V2_DATA";   jetVetoMapName[2] = "Summer23Prompt23_RunC_V1"; // C
+    jecDATAName[2] = "Summer23Prompt23_V3_DATA";   jetVetoMapName[2] = "Summer23Prompt23_RunC_V1"; // C
     jecDATAName[3] = "NULL";   jetVetoMapName[3] = "NULL"; // D
     jecDATAName[4] = "NULL";   jetVetoMapName[4] = "NULL"; // E
     jecDATAName[5] = "NULL";   jetVetoMapName[5] = "NULL"; // F
@@ -548,7 +550,7 @@ double MyCorrections::eval_jetCORR(double area, double eta, double phi, double p
   // data
   if(type >= 0 && (year == 20260 || year == 20261))                       return 1.0;
   else if(type >= 0 && (year == 20231 || year == 20240 || year == 20250)) return JECDATA_[type]->evaluate({area, eta, pt, rho, phi, (float)theRun});
-  else if(type >= 0 && year == 20230)                                     return JECDATA_[type]->evaluate({area, eta, pt, rho,      (float)theRun});
+  else if(type >= 0 && (year == 20220 || year == 20221 || year == 20230)) return JECDATA_[type]->evaluate({area, eta, pt, rho,      (float)theRun});
   else if(type >= 0)                                                      return JECDATA_[type]->evaluate({area, eta, pt, rho});
   // MC
   if     (year == 20231 || year == 20240 || year == 20250 || year == 20260 || year == 20261) return JECMC_->evaluate({area, eta, pt, rho, phi});

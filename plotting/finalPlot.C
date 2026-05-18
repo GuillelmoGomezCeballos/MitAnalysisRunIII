@@ -52,7 +52,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetXaxis()->SetLabelOffset(0.015);
   histo->GetXaxis()->SetLabelSize  (0.150);
   histo->GetXaxis()->SetNdivisions (  505);
-  histo->GetXaxis()->SetTitleFont  (   42);
+  histo->GetXaxis()->SetTitleFont  (   62);
   histo->GetXaxis()->SetTitleOffset( 0.9);
   histo->GetXaxis()->SetTitleSize  (0.150);
   //histo->GetXaxis()->SetTickLength (0.07 );
@@ -62,7 +62,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetYaxis()->SetLabelOffset(0.015);
   histo->GetYaxis()->SetLabelSize  (0.150);
   histo->GetYaxis()->SetNdivisions (  505);
-  histo->GetYaxis()->SetTitleFont  (   42);
+  histo->GetYaxis()->SetTitleFont  (   62);
   histo->GetYaxis()->SetTitleOffset( 0.43);
   histo->GetYaxis()->SetTitleSize  (0.120);
   //histo->GetYaxis()->SetTickLength (0.03 );
@@ -119,7 +119,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   //cmsstyle();
   //gROOT->LoadMacro("StandardPlot.C");
   gStyle->SetOptStat(0);
-  TGaxis::SetMaxDigits(3); 
+  TGaxis::SetMaxDigits(4); 
   TGaxis::SetExponentOffset(-0.00, 0.00, "x");
   TGaxis::SetExponentOffset(-0.08, 0.01, "y");
 
@@ -153,7 +153,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
 
   // HACK!!!
   if(outputName.Contains("dy_xsel") && outputName.Contains("mll")){
-    for(int ic=0; ic<nPlotCategories; ic++) for(int nb=11; nb<20; nb++) _hist[ic]->SetBinContent(nb,0);
+    for(int nb=11; nb<20; nb++) _hist[kPlotData]->SetBinContent(nb,0);
   }
 
   int isVBS[2] = {0, 0};
@@ -370,8 +370,10 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   else if(year == 20261) {theLumi = 1.6;}
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
-  if(year == 20250 || year == 2028)
-      cmsstyle::SetExtraText("Preliminary");
+  if(year == 20250 || year == 2028){
+       cmsstyle::SetExtraText("Preliminary");
+       //cmsstyle::SetExtraText("su");
+  }
   else
       //cmsstyle::SetExtraText("Preliminary");
       cmsstyle::SetExtraText("");
@@ -382,6 +384,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
     cmsstyle::SetEnergy(13);
   }
   cmsstyle::CMS_lumi( pad1, 11);
+  //cmsstyle::CMS_lumi( pad1, 0);
 
   pad2->cd();
   pad2->RedrawAxis();

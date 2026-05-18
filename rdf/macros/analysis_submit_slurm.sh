@@ -35,6 +35,7 @@ elif [ $theAna -eq 4 ]; then
 elif [ $theAna -eq 5 ]; then
  whichAna="fakeAnalysis"
  if [ $# -ge 3 ] && [ $3 = "1" ]; then
+   mkdir -p logs
    nohup ./analysis_slurm.sh 110 20220 -1 1002 fakeAnalysis >& logs/log_110 &
    nohup ./analysis_slurm.sh 136 20220 -1 1003 fakeAnalysis >& logs/log_136 &
    nohup ./analysis_slurm.sh 210 20221 -1 1002 fakeAnalysis >& logs/log_210 &

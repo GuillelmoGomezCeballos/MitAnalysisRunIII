@@ -29,14 +29,15 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
   int theYear = 0;
   TString theTagYear = "NULL";
   double triggerEffUnc = 1.000;
-  double lumiU[3] = {1.000, 1.000, 1.000};
-  if     (year == 20220) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022";}
-  else if(year == 20221) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022EE";}
-  else if(year ==  2022) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022";}
-  else if(year == 20230) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023";}
-  else if(year == 20231) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023BPix";}
-  else if(year ==  2023) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023";}
-  else if(year == 20240) {triggerEffUnc = 1.005; lumiU[0] = 1.0020; lumiU[1] = 1.0068; lumiU[2] = 1.0144; theYear = 2024; theTagYear = "2024";}
+  double lumiU[4] = {1.000, 1.000, 1.000, 1.000};
+  if     (year == 20220) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2022; theTagYear = "2022";}
+  else if(year == 20221) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2022; theTagYear = "2022EE";}
+  else if(year ==  2022) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2022; theTagYear = "2022";}
+  else if(year == 20230) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2023; theTagYear = "2023";}
+  else if(year == 20231) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2023; theTagYear = "2023BPix";}
+  else if(year ==  2023) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2023; theTagYear = "2023";}
+  else if(year == 20240) {triggerEffUnc = 1.005; lumiU[0] = 1.0020; lumiU[1] = 1.0068; lumiU[2] = 1.0144; lumiU[3] = 1.0000; theYear = 2024; theTagYear = "2024";}
+  else if(year == 20250) {triggerEffUnc = 1.005; lumiU[0] = 1.0000; lumiU[1] = 1.0000; lumiU[2] = 1.0000; lumiU[3] = 1.0500; theYear = 2025; theTagYear = "2025";}
   else {printf("Wrong year!\n"); return;}
 
   int jumpValue = 200;
@@ -722,7 +723,7 @@ void makeSSWWDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "ana
     newcardShape << Form("\n");
   } // isTraditionalSyst == false
 
-  for(int nl=0; nl<3; nl++){
+  for(int nl=0; nl<4; nl++){
     if(lumiU[nl] == 1) continue;
     newcardShape << Form("lumi_13p6TeV_%d lnN ", nl);
     for (int ic=0; ic<nPlotCategories; ic++){

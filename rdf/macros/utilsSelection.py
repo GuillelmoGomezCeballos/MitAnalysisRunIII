@@ -1024,6 +1024,16 @@ def selectionDAWeigths(df,year,PDType,whichAna,fakeRateSel):
               .Define("weightWSUnc0","weight")
               .Define("weightWSUnc1","weight")
               .Define("weightEWKUnc", "weight")
+              .Define("weightPUSF_JSON","weight")
+              .Define("weightFakeAll0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,10))
+              .Define("weightFakeAll1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,11))
+              .Define("weightFakeAll2","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,12))
+              .Define("weightFakeAll3","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,13))
+              .Define("weightFakeAll4","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,14))
+              .Define("weightFakeAll5","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,15))
+              .Define("weightFakeAll6","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,16))
+              .Define("weightFakeAll7","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,17))
+              .Define("weightFakeAll8","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,18))
               )
 
     return dftag
@@ -1050,9 +1060,9 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
     elif(year == 20230): ELEYEAR = "2023PromptC"
     elif(year == 20231): ELEYEAR = "2023PromptD"
     elif(year == 20240): ELEYEAR = "2024Prompt"
-    elif(year == 20250): ELEYEAR = "2024Prompt"
-    elif(year == 20260): ELEYEAR = "2024Prompt"
-    elif(year == 20261): ELEYEAR = "2024Prompt"
+    elif(year == 20250): ELEYEAR = "2025Prompt"
+    elif(year == 20260): ELEYEAR = "2025Prompt"
+    elif(year == 20261): ELEYEAR = "2025Prompt"
     PHOYEAR = "NULL"
     if  (year == 20160): PHOYEAR = "2016preVFP"
     elif(year == 20161): PHOYEAR = "2016postVFP"
@@ -1063,9 +1073,9 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
     elif(year == 20230): PHOYEAR = "2023PromptC"
     elif(year == 20231): PHOYEAR = "2023PromptD"
     elif(year == 20240): PHOYEAR = "2024Prompt"
-    elif(year == 20250): PHOYEAR = "2024Prompt"
-    elif(year == 20260): PHOYEAR = "2024Prompt"
-    elif(year == 20261): PHOYEAR = "2024Prompt"
+    elif(year == 20250): PHOYEAR = "2025Prompt"
+    elif(year == 20260): PHOYEAR = "2025Prompt"
+    elif(year == 20261): PHOYEAR = "2025Prompt"
     if(correctionString == "_correction"):
         MUOWP = "Medium"
         ELEWP = "Medium"
@@ -1108,8 +1118,6 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
               .Define("weightMuoSFJSON","compute_JSON_MUO_SFs(\"nominal\",\"nominal\",\"nominal\",fake_Muon_pt,fake_Muon_eta,fake_Muon_p,0)")
 
               .Define("weightEleSFJSON","compute_JSON_ELE_SFs({0},ELEYEAR,\"sf\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)".format(year))
-
-              .Define("weightPUSF_Nom","compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
 
               .Define("weightWS", "compute_WSSF(1,fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)")
 
@@ -1202,8 +1210,10 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weightEleSFTRKDown","weight/weightEleSFJSON*compute_JSON_ELE_SFs({0},ELEYEAR,\"sfdown\",\"sf\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)".format(year))
                  .Define("weightEleSFIDDown" ,"weight/weightEleSFJSON*compute_JSON_ELE_SFs({0},ELEYEAR,\"sf\",\"sfdown\",ELEWP,fake_Electron_pt,fake_Electron_eta,fake_Electron_phi)".format(year))
 
-                 #.Define("weightPUSF_Up"  ,"weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"up\")")
-                 #.Define("weightPUSF_Down","weight/weightPUSF_Nom*compute_JSON_PU_SF(Pileup_nTrueInt,\"down\")")
+                 .Define("weightPUSF_JSON","weight/weightPURecoSF*compute_JSON_PU_SF(Pileup_nTrueInt,\"nominal\")")
+                 #.Define("weightPUSF_Up"  ,"weight/weightPURecoSF*compute_JSON_PU_SF(Pileup_nTrueInt,\"up\")")
+                 #.Define("weightPUSF_Down","weight/weightPURecoSF*compute_JSON_PU_SF(Pileup_nTrueInt,\"down\")")
+
                  .Define("weightPUSF_Up"  ,"weight/weightPURecoSF*compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,1)")
                  .Define("weightPUSF_Down","weight/weightPURecoSF*compute_PURecoSF(fake_Muon_pt,fake_Muon_eta,fake_Electron_pt,fake_Electron_eta,Pileup_nTrueInt,2)")
 
@@ -1219,6 +1229,16 @@ def selectionMCWeigths(df,year,PDType,weight,type,bTagSel,useBTaggingWeights,nTh
                  .Define("weightFakeAlte0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(fakeRateSel[0],fakeRateSel[1],whichAna))
                  .Define("weightFakeAlte1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(fakeRateSel[0],fakeRateSel[2],whichAna))
                  .Define("weightFakeAlte2","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(fakeRateSel[0],fakeRateSel[3],whichAna))
+
+                 .Define("weightFakeAll0","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,10))
+                 .Define("weightFakeAll1","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,11))
+                 .Define("weightFakeAll2","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,12))
+                 .Define("weightFakeAll3","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,13))
+                 .Define("weightFakeAll4","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,14))
+                 .Define("weightFakeAll5","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,15))
+                 .Define("weightFakeAll6","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,16))
+                 .Define("weightFakeAll7","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,17))
+                 .Define("weightFakeAll8","weight/weightFake*compute_fakeRate(isData,fake_Muon_pt,fake_Muon_eta,fake_Muon_jetRelIso,tight_mu,{0},fake_Electron_pt,fake_Electron_eta,fake_Electron_jetRelIso,tight_el,{1},{2})".format(-1,-1,18))
 
                  .Define("weightWSUnc0","weight/weightWS*compute_WSSF(2,fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)")
                  .Define("weightWSUnc1","weight/weightWS*compute_WSSF(3,fake_Electron_pt,fake_Electron_eta,fake_Electron_charge,fake_Electron_genPartIdx,GenPart_pdgId)")

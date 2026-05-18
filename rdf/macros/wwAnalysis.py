@@ -9,7 +9,7 @@ from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, s
 #from utilsAna import loadCorrectionSet
 
 print_info = False
-makeDataCards = 1
+makeDataCards = 0
 correctionString = "_correction"
 whichVarToFit = 0 # 0 (ww-mll), 1 (ww-ptll), 2 (ww-ptl1), 3 (ww-ptl2), 4 (ww-dphill), 5 (ww-ptmiss), 6 (ztautau-xxx)
 
@@ -416,6 +416,36 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[76][x] = dftop0cat[x].Histo1D(("histo_{0}_{1}".format(76,x), "histo_{0}_{1}".format(76,x), 50,  0, 200), "ptww","weightWW")
 
         histo[77][x] = dfwwx0cat[x].Histo1D(("histo_{0}_{1}".format(77,x), "histo_{0}_{1}".format(77,x), 10,-0.5, 9.5), "nPileupJets","weightWW")
+
+        histo[150][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(150,x), "histo_{0}_{1}".format(150,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll0")
+        histo[151][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(151,x), "histo_{0}_{1}".format(151,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll1")
+        histo[152][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(152,x), "histo_{0}_{1}".format(152,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll2")
+        histo[153][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(153,x), "histo_{0}_{1}".format(153,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll3")
+        histo[154][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(154,x), "histo_{0}_{1}".format(154,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll4")
+        histo[155][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(155,x), "histo_{0}_{1}".format(155,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll5")
+        histo[156][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(156,x), "histo_{0}_{1}".format(156,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll6")
+        histo[157][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(157,x), "histo_{0}_{1}".format(157,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll7")
+        histo[158][x] = dfssx0cat[x].Histo1D(("histo_{0}_{1}".format(158,x), "histo_{0}_{1}".format(158,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll8")
+
+        histo[160][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(160,x), "histo_{0}_{1}".format(160,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll0")
+        histo[161][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(161,x), "histo_{0}_{1}".format(161,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll1")
+        histo[162][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(162,x), "histo_{0}_{1}".format(162,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll2")
+        histo[163][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(163,x), "histo_{0}_{1}".format(163,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll3")
+        histo[164][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(164,x), "histo_{0}_{1}".format(164,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll4")
+        histo[165][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(165,x), "histo_{0}_{1}".format(165,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll5")
+        histo[166][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(166,x), "histo_{0}_{1}".format(166,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll6")
+        histo[167][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(167,x), "histo_{0}_{1}".format(167,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll7")
+        histo[168][x] = dfssx1cat[x].Histo1D(("histo_{0}_{1}".format(168,x), "histo_{0}_{1}".format(168,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll8")
+
+        histo[170][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(170,x), "histo_{0}_{1}".format(170,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll0")
+        histo[171][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(171,x), "histo_{0}_{1}".format(171,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll1")
+        histo[172][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(172,x), "histo_{0}_{1}".format(172,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll2")
+        histo[173][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(173,x), "histo_{0}_{1}".format(173,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll3")
+        histo[174][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(174,x), "histo_{0}_{1}".format(174,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll4")
+        histo[175][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(175,x), "histo_{0}_{1}".format(175,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll5")
+        histo[176][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(176,x), "histo_{0}_{1}".format(176,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll6")
+        histo[177][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(177,x), "histo_{0}_{1}".format(177,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll7")
+        histo[178][x] = dfssx2cat[x].Histo1D(("histo_{0}_{1}".format(178,x), "histo_{0}_{1}".format(178,x), 4,-0.5,3.5), "ngood_jets","weightFakeAll8")
 
         dftop0cat[x] = dftop0cat[x].Filter("nbtag_goodbtag_Jet_bjet == 1")
         dftop0catMuonMomUp      [x] = dftop0catMuonMomUp      [x].Filter("nbtag_goodbtag_Jet_bjet == 1")
