@@ -299,6 +299,8 @@ def makeJES(df,year,postFix,bTagSel,jetEtaCut,jetTypeCorr):
               .Define("vbs_detavvj1{0}".format(postFix), "compute_jet_lepton_var(vbs_Jet_pt{0}, vbs_Jet_eta, vbs_Jet_phi, vbs_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, PuppiMET_pt{0}, PuppiMET_phi{0}, 5)".format(postFix))
               .Define("vbs_detavvj2{0}".format(postFix), "compute_jet_lepton_var(vbs_Jet_pt{0}, vbs_Jet_eta, vbs_Jet_phi, vbs_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, PuppiMET_pt{0}, PuppiMET_phi{0}, 6)".format(postFix))
               .Define("vbs_ptbalance{0}".format(postFix),"compute_jet_lepton_var(vbs_Jet_pt{0}, vbs_Jet_eta, vbs_Jet_phi, vbs_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, PuppiMET_pt{0}, PuppiMET_phi{0}, 7)".format(postFix))
+              .Define("vbs_dphijjll{0}".format(postFix), "compute_jet_lepton_var(vbs_Jet_pt{0}, vbs_Jet_eta, vbs_Jet_phi, vbs_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, PuppiMET_pt{0}, PuppiMET_phi{0}, 8)".format(postFix))
+              .Define("vbs_rpt{0}".format(postFix),      "compute_jet_lepton_var(vbs_Jet_pt{0}, vbs_Jet_eta, vbs_Jet_phi, vbs_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, PuppiMET_pt{0}, PuppiMET_phi{0}, 9)".format(postFix))
               )
 
     return dftag

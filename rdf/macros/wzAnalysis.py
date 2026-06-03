@@ -196,7 +196,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             "vbs_pttot",
             "vbs_detavvj1",
             "vbs_detavvj2",
-            "vbs_ptbalance"
+            "vbs_ptbalance",
+            "vbs_dphijjll",
+            "vbs_rpt"
     ]:
         branchList.push_back(branchName)
 
@@ -686,9 +688,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[28][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(28,x), "histo_{0}_{1}".format(28,x), 4,1.5, 5.5), "ngood_jets","weight")
 
         histo[100][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(100,x), "histo_{0}_{1}".format(100,x), 4,-0.5, 3.5), "TriLepton_flavor","weight")
-        histo[102][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(102,x), "histo_{0}_{1}".format(102,x), 20,500,2500), "vbs_mjj","weight")
+        histo[102][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(102,x), "histo_{0}_{1}".format(102,x), 14,500,2600), "vbs_mjj","weight")
         histo[104][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(104,x), "histo_{0}_{1}".format(104,x), 20,0,800), "vbs_ptjj","weight")
-        histo[106][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(106,x), "histo_{0}_{1}".format(106,x), 14,2.5,9.5), "vbs_detajj","weight")
+        histo[106][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(106,x), "histo_{0}_{1}".format(106,x), 13,2.5,9.0), "vbs_detajj","weight")
         histo[108][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(108,x), "histo_{0}_{1}".format(108,x), 20,0,3.1416), "vbs_dphijj","weight")
         histo[110][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(110,x), "histo_{0}_{1}".format(110,x), 20,0,800), "vbs_ptj1","weight")
         histo[112][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(112,x), "histo_{0}_{1}".format(112,x), 20,0,400), "vbs_ptj2","weight")
@@ -703,9 +705,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[130][x] = dfwzvbscat[x].Histo1D(("histo_{0}_{1}".format(130,x), "histo_{0}_{1}".format(130,x), 20,-1,3), "vbs_ptbalance","weight")
 
         histo[101][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(101,x), "histo_{0}_{1}".format(101,x), 4,-0.5, 3.5), "TriLepton_flavor","weight")
-        histo[103][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(103,x), "histo_{0}_{1}".format(103,x), 20,500,2500), "vbs_mjj","weight")
+        histo[103][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(103,x), "histo_{0}_{1}".format(103,x), 14,500,2600), "vbs_mjj","weight")
         histo[105][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(105,x), "histo_{0}_{1}".format(105,x), 20,0,800), "vbs_ptjj","weight")
-        histo[107][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(107,x), "histo_{0}_{1}".format(107,x), 14,2.5,9.5), "vbs_detajj","weight")
+        histo[107][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(107,x), "histo_{0}_{1}".format(107,x), 13,2.5,9.0), "vbs_detajj","weight")
         histo[109][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(109,x), "histo_{0}_{1}".format(109,x), 20,0,3.1416), "vbs_dphijj","weight")
         histo[111][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(111,x), "histo_{0}_{1}".format(111,x), 20,0,800), "vbs_ptj1","weight")
         histo[113][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(113,x), "histo_{0}_{1}".format(113,x), 20,0,400), "vbs_ptj2","weight")

@@ -16,7 +16,7 @@ void ewkvbsIncMVA(
 ) {
 
   float ptCut = 50;
-  TString extraString = Form("vbfinc_nsel%d_v%d",nsel,version);
+  TString extraString = Form("vbfinc_pcut%d_nsel%d_v%d",(int)ptCut,nsel,version);
 
   gROOT->ProcessLine("TMVA::gConfig().GetVariablePlotting().fMaxNumOfAllowedVariablesForScatterPlots = 50");
   TFile *output_file;

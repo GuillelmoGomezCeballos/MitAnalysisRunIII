@@ -371,8 +371,8 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
   if(year == 20250 || year == 2028){
-       cmsstyle::SetExtraText("Preliminary");
-       //cmsstyle::SetExtraText("su");
+       //cmsstyle::SetExtraText("Preliminary");
+       cmsstyle::SetExtraText("su");
   }
   else
       //cmsstyle::SetExtraText("Preliminary");
@@ -383,8 +383,8 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   } else {
     cmsstyle::SetEnergy(13);
   }
-  cmsstyle::CMS_lumi( pad1, 11);
-  //cmsstyle::CMS_lumi( pad1, 0);
+  //cmsstyle::CMS_lumi( pad1, 11);
+  cmsstyle::CMS_lumi( pad1, 0);
 
   pad2->cd();
   pad2->RedrawAxis();

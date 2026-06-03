@@ -61,6 +61,8 @@ def redefineVBSPolMVAVariables(df,tmva_helper0,tmva_helper1,varString0,altMass,v
                      .Redefine("vbs_detavvj1" ,"vbs_detavvj1{0}".format(varString0))
                      .Redefine("vbs_detavvj2" ,"vbs_detavvj2{0}".format(varString0))
                      .Redefine("vbs_ptbalance","vbs_ptbalance{0}".format(varString0))
+                     .Redefine("vbs_dphijjll" ,"vbs_dphijjll{0}".format(varString0))
+                     .Redefine("vbs_rpt"      ,"vbs_rpt{0}".format(varString0))
                      #.Redefine("mll{0}".format(altMass)	    ,"mll{0}".format(varString1))
                      #.Redefine("ptll{0}".format(altMass)	    ,"ptll{0}".format(varString1))
                      #.Redefine("drll{0}".format(altMass)	    ,"drll{0}".format(varString1))

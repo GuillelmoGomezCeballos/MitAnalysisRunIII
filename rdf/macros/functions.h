@@ -1633,13 +1633,14 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     return (float)(bdt_incNew);
   }
   else if(var == 31){ // VBS BDT pol v0 3D
-    float xBDT0Bins[3] = { 0.150, 0.680, 9.000};
-    //float xBDT1Bins[4] = {-0.180, 0.140, 0.460, 9.000}; // v8
-    //float xBDT2Bins[4] = {-0.040, 0.330, 0.580, 9.000}; // v8
-    //float xBDT1Bins[4] = {-0.190, 0.140, 0.450, 9.000}; // v7
-    //float xBDT2Bins[4] = {-0.050, 0.330, 0.580, 9.000}; // v7
-    float xBDT1Bins[4] = {-0.060, 0.210, 0.460, 9.000}; // v6
-    float xBDT2Bins[4] = {-0.000, 0.370, 0.610, 9.000}; // v6
+    // > 50 GeV cut
+    float xBDT0Bins[3] = { 0.230, 0.710, 9.000};
+    float xBDT1Bins[4] = {-0.030, 0.300, 0.570, 9.000};
+    float xBDT2Bins[4] = { 0.100, 0.400, 0.600, 9.000};
+    // > 30 GeV cut
+    //float xBDT0Bins[3] = {0.250, 0.790, 9.000};
+    //float xBDT1Bins[4] = {0.050, 0.340, 0.570, 9.000};
+    //float xBDT2Bins[4] = {0.060, 0.340, 0.540, 9.000};
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
@@ -1663,13 +1664,14 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     return (float)(typeSelAux);
   }
   else if(var == 32 || var == 33){ // VBS BDT pol v0 2D
-    float xBDT0Bins[4] = {-0.040, 0.470, 0.760, 9.000};
-    //float xBDT1Bins[6] = {-0.310,-0.070, 0.140, 0.350, 0.570, 9.000}; // v8
-    //float xBDT2Bins[6] = {-0.220, 0.100, 0.330, 0.510, 0.650, 9.000}; // v8
-    //float xBDT1Bins[6] = {-0.320,-0.070, 0.140, 0.350, 0.570, 9.000}; // v7
-    //float xBDT2Bins[6] = {-0.220, 0.100, 0.330, 0.500, 0.650, 9.000}; // v7
-    float xBDT1Bins[6] = {-0.190, 0.040, 0.210, 0.370, 0.550, 9.000}; // v6
-    float xBDT2Bins[6] = {-0.180, 0.140, 0.370, 0.540, 0.680, 9.000}; // v6
+    // > 50 GeV cut
+    float xBDT0Bins[4] = { 0.040, 0.520, 0.780, 9.000};
+    float xBDT1Bins[6] = {-0.190, 0.100, 0.300, 0.480, 0.670, 9.000};
+    float xBDT2Bins[6] = {-0.100, 0.200, 0.400, 0.500, 0.700, 9.000};
+    // > 30 GeV cut
+    //float xBDT0Bins[4] = { 0.050, 0.580, 0.870, 9.000};
+    //float xBDT1Bins[6] = {-0.090, 0.170, 0.340, 0.490, 0.670, 9.000};
+    //float xBDT2Bins[6] = {-0.100, 0.170, 0.340, 0.470, 0.600, 9.000};
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
@@ -1765,6 +1767,7 @@ float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   else if(var == 6) theVar = fabs(p4momVV.Eta()-p2.Eta());
   else if(var == 7) theVar = (p4momVV.Pt()-(p1+p2).Pt())/(p1+p2).Pt();
   else if(var == 8) theVar = deltaPhi(p4momJJ.Phi(), p4momLL.Phi());
+  else if(var == 9) {if(p4mom.size() < 2) theVar = 1.0; else theVar = (p4mom[0].Pt()*p4mom[1].Pt())/(p1.Pt()*p2.Pt());}
   return theVar;
 }
 

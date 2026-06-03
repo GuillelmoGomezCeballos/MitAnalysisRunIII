@@ -225,6 +225,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             "vbs_detavvj1",
             "vbs_detavvj2",
             "vbs_ptbalance",
+            "vbs_dphijjll",
+            "vbs_rpt",
             "mll{0}".format(altMass),
 	    "ptll{0}".format(altMass),
 	    "drll{0}".format(altMass),
@@ -251,18 +253,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
     #MVAweightsType0 = "weights_mva/bdt_BDTG_vbfinc_v0.weights.xml"
     #MVAweightsType0 = "weights_mva/bdt_BDTG_vbfinc_nsel2_v0.weights.xml"
     MVAweightsType0 = "weights_mva/bdt_BDTG_vbfinc_nsel3_v0.weights.xml"
+    #MVAweightsType0 = "weights_mva/bdt_BDTG_vbfinc_pcut30_nsel2_v0.weights.xml"
     tmva_helperType0 = tmva_helper_xml.TMVAHelperXML(MVAweightsType0)
     print(tmva_helperType0.variables)
 
-    MVAweightsType1 = "weights_mva/bdt_BDTG_vbfpol_nsel1_v8.weights.xml"
-    MVAweightsType1 = "weights_mva/bdt_BDTG_vbfpol_nsel1_v7.weights.xml"
-    MVAweightsType1 = "weights_mva/bdt_BDTG_vbfpol_nsel1_v6.weights.xml"
+    MVAweightsType1 = "weights_mva/bdt_BDTG_vbfpolwwcm_nsel1_v8.weights.xml"
+    #MVAweightsType1 = "weights_mva/bdt_BDTG_vbfpolwwcm_pcut30_nsel1_v7.weights.xml"
     tmva_helperType1 = tmva_helper_xml.TMVAHelperXML(MVAweightsType1)
     print(tmva_helperType1.variables)
 
-    MVAweightsType2 = "weights_mva/bdt_BDTG_vbfpol_nsel2_v8.weights.xml"
-    MVAweightsType2 = "weights_mva/bdt_BDTG_vbfpol_nsel2_v7.weights.xml"
-    MVAweightsType2 = "weights_mva/bdt_BDTG_vbfpol_nsel2_v6.weights.xml"
+    MVAweightsType2 = "weights_mva/bdt_BDTG_vbfpolwwcm_nsel2_v8.weights.xml"
+    #MVAweightsType1 = "weights_mva/bdt_BDTG_vbfpolwwcm_pcut30_nsel2_v7.weights.xml"
     tmva_helperType2 = tmva_helper_xml.TMVAHelperXML(MVAweightsType2)
     print(tmva_helperType2.variables)
 
@@ -540,15 +541,15 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
         dfwwcat[x]  = dfwwcat[x] .Filter("vbs_zepvv < 1.0", "vbs_zepvv < 1.0")
         dfwwbcat[x] = dfwwbcat[x].Filter("vbs_zepvv < 1.0", "vbs_zepvv < 1.0")
-        histo[12][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 19,0.0,9.5), "vbs_detajj","weight")
-        histo[13][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 19,0.0,9.5), "vbs_detajj","weight")
+        histo[12][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(12,x), "histo_{0}_{1}".format(12,x), 18,0.0,9.0), "vbs_detajj","weight")
+        histo[13][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 18,0.0,9.0), "vbs_detajj","weight")
 
         histo[ 6][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format( 6,x), "histo_{0}_{1}".format( 6,x), 4,-0.5, 3.5), "ltype","weight")
         histo[ 7][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format( 7,x), "histo_{0}_{1}".format( 7,x), 4,-0.5, 3.5), "ltype","weight")
         histo[ 8][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format( 8,x), "histo_{0}_{1}".format( 8,x), 4, 1.5, 5.5), "ngood_jets","weight")
         histo[ 9][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format( 9,x), "histo_{0}_{1}".format( 9,x), 4, 1.5, 5.5), "ngood_jets","weight")
-        histo[10][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 28,200,3000), "vbs_mjj","weight")
-        histo[11][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 28,200,3000), "vbs_mjj","weight")
+        histo[10][x] = dfwwcat[x] .Histo1D(("histo_{0}_{1}".format(10,x), "histo_{0}_{1}".format(10,x), 16,200,2600), "vbs_mjj","weight")
+        histo[11][x] = dfwwbcat[x].Histo1D(("histo_{0}_{1}".format(11,x), "histo_{0}_{1}".format(11,x), 16,200,2600), "vbs_mjj","weight")
 
         for ltype in range(4):
             histo[70+ltype][x] = dfwwcat[x] .Filter("ltype == {0}".format(ltype)).Histo1D(("histo_{0}_{1}".format(70+ltype,x), "histo_{0}_{1}".format(70+ltype,x),20, 20, 120), "ptl2{0}".format(altMass),"weight")

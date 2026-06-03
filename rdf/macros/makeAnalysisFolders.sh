@@ -94,6 +94,16 @@ sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/wzAnalysis_input_condor_jobs.cfg
 sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/zAnalysis_input_condor_jobs.cfg
 sed -i 's/no//' ${OUTPUTFOLDER}/macros1002/zAnalysis_input_condor_jobs.cfg
 
+sed -i 's/no//' ${OUTPUTFOLDER}/macros1011/wzAnalysis_input_condor_jobs.cfg
+sed -i 's/no//' ${OUTPUTFOLDER}/macros1011/sswwAnalysis_input_condor_jobs.cfg
+sed -i 's/no//' ${OUTPUTFOLDER}/macros1012/sswwAnalysis_input_condor_jobs.cfg
+sed -i 's/no//' ${OUTPUTFOLDER}/macros1013/sswwAnalysis_input_condor_jobs.cfg
+
+grep -v 2026 ${OUTPUTFOLDER}/macros1011/sswwAnalysis_input_condor_jobs.cfg > lll;mv lll ${OUTPUTFOLDER}/macros1011/sswwAnalysis_input_condor_jobs.cfg;
+grep -v 2026 ${OUTPUTFOLDER}/macros1012/sswwAnalysis_input_condor_jobs.cfg > lll;mv lll ${OUTPUTFOLDER}/macros1012/sswwAnalysis_input_condor_jobs.cfg;
+grep -v 2026 ${OUTPUTFOLDER}/macros1013/sswwAnalysis_input_condor_jobs.cfg > lll;mv lll ${OUTPUTFOLDER}/macros1013/sswwAnalysis_input_condor_jobs.cfg;
+grep -v 2026 ${OUTPUTFOLDER}/macros1011/wzAnalysis_input_condor_jobs.cfg   > lll;mv lll ${OUTPUTFOLDER}/macros1011/wzAnalysis_input_condor_jobs.cfg;
+
 cd ${OUTPUTFOLDER}/macros1011
 python3 remake_Analysis_input_condor_jobs.py --ana=ssww --isWWPol=1
 mv sswwAnalysis_input_condor_jobs_new.cfg sswwAnalysis_input_condor_jobs.cfg

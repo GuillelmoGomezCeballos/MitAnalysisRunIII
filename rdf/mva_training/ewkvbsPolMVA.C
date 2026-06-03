@@ -16,7 +16,7 @@ void ewkvbsPolMVA(
 ) {
 
   float ptCut = 50;
-  TString extraString = Form("vbfpol_nsel%d_v%d",nsel,version);
+  TString extraString = Form("vbfpolwwcm_pcut%d_nsel%d_v%d",(int)ptCut,nsel,version);
 
   gROOT->ProcessLine("TMVA::gConfig().GetVariablePlotting().fMaxNumOfAllowedVariablesForScatterPlots = 50");
   TFile *output_file;
@@ -25,7 +25,7 @@ void ewkvbsPolMVA(
   TString testTreeEventSplitStr="(eventNum % 10)>=5";
 
   TChain *mvaTree = new TChain("events");
-  mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWWPolAna_year2027.root");
+  mvaTree->Add("/work/submit/ceballos/mva_samples/ntupleWWPolWWCMAna_year2027.root");
 
   // Initialize the factory
   output_file=TFile::Open(Form("MVA_%s.root",extraString.Data()), "RECREATE");
@@ -99,36 +99,42 @@ void ewkvbsPolMVA(
   }
 
   if(nsel == 0 || nsel == 1 || nsel == 2){
-      if(version >= 10) dataloader->AddVariable("ngood_jets"    ,"ngood_jets"    ,"",'F');
-    if(version != 99) dataloader->AddVariable("vbs_mjj"       ,"vbs_mjj"       ,"",'F');
-      if(version >= 10) dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
-      if(version >=  9) dataloader->AddVariable("vbs_detajj"    ,"vbs_detajj"    ,"",'F');
     if(version != 99) dataloader->AddVariable("vbs_dphijj"    ,"vbs_dphijj"    ,"",'F');
     if(version != 99) dataloader->AddVariable("vbs_ptj1"      ,"vbs_ptj1"      ,"",'F');
     if(version != 99) dataloader->AddVariable("vbs_ptj2"      ,"vbs_ptj2"      ,"",'F');
-      if(version >=  9) dataloader->AddVariable("vbs_etaj1"     ,"vbs_etaj1"     ,"",'F');
-    if(version != 99) dataloader->AddVariable("vbs_etaj2"     ,"vbs_etaj2"     ,"",'F');
-    if(version != 99) dataloader->AddVariable("vbs_zepvv"     ,"vbs_zepvv"     ,"",'F');
-    if(version != 99) dataloader->AddVariable("vbs_zepmax"    ,"vbs_zepmax"    ,"",'F');
-      if(version >= 10) dataloader->AddVariable("vbs_sumHT"     ,"vbs_sumHT"     ,"",'F');
-    if(version != 99) dataloader->AddVariable("vbs_ptvv"      ,"vbs_ptvv"      ,"",'F');
-      if(version >=  9) dataloader->AddVariable("vbs_pttot"     ,"vbs_pttot"     ,"",'F');
-    if(version != 99) dataloader->AddVariable("vbs_detavvj1"  ,"vbs_detavvj1"  ,"",'F');
-    if(version != 99) dataloader->AddVariable("vbs_detavvj2"  ,"vbs_detavvj2"  ,"",'F');
-      if(version >= 10) dataloader->AddVariable("vbs_ptbalance" ,"vbs_ptbalance" ,"",'F');
-    if(version != 99) dataloader->AddVariable("mllDef"	      ,"mllDef"        ,"",'F');
-      if(version >=  9) dataloader->AddVariable("ptllDef"       ,"ptllDef"       ,"",'F');
-    if(version != 99) dataloader->AddVariable("drllDef"       ,"drllDef"       ,"",'F');
-    if(version != 99) dataloader->AddVariable("dphillDef"     ,"dphillDef"     ,"",'F');
     if(version != 99) dataloader->AddVariable("ptl1Def"       ,"ptl1Def"       ,"",'F');
     if(version != 99) dataloader->AddVariable("ptl2Def"       ,"ptl2Def"       ,"",'F');
-    if(version != 99) dataloader->AddVariable("dPhilMETMinDef","dPhilMETMinDef","",'F');
-      if(version >=  9) dataloader->AddVariable("minPMETDef"    ,"minPMETDef"    ,"",'F');
-      if(version >= 10) dataloader->AddVariable("ptwwDef"       ,"ptwwDef"       ,"",'F');
-    if(version >=  8) dataloader->AddVariable("mcollDef"      ,"mcollDef"      ,"",'F');
+    if(version != 99) dataloader->AddVariable("mllDef"        ,"mllDef"        ,"",'F');
+    if(version != 99) dataloader->AddVariable("dphillDef"     ,"dphillDef"     ,"",'F');
+    if(version != 99) dataloader->AddVariable("vbs_zepmax"    ,"vbs_zepmax"    ,"",'F');
+    if(version != 99) dataloader->AddVariable("vbs_detavvj2"  ,"vbs_detavvj2"  ,"",'F');
+    if(version != 99) dataloader->AddVariable("vbs_rpt"       ,"vbs_rpt"       ,"",'F');
+    if(version != 99) dataloader->AddVariable("mcollDef"      ,"mcollDef"      ,"",'F');
+    if(version != 99) dataloader->AddVariable("PuppiMET_ptDef","PuppiMET_ptDef","",'F');
+
+    if(version != 99) dataloader->AddVariable("vbs_etaj2"     ,"vbs_etaj2"     ,"",'F');
     if(version != 99) dataloader->AddVariable("mtwmaxDef"     ,"mtwmaxDef"     ,"",'F');
     if(version != 99) dataloader->AddVariable("mtwminDef"     ,"mtwminDef"     ,"",'F');
-    if(version >=  8) dataloader->AddVariable("PuppiMET_ptDef","PuppiMET_ptDef","",'F');
+
+    if(version >=  8) dataloader->AddVariable("vbs_zepvv"     ,"vbs_zepvv"     ,"",'F');
+    if(version >=  8) dataloader->AddVariable("ptllDef"       ,"ptllDef"       ,"",'F');
+    if(version >=  8) dataloader->AddVariable("vbs_detavvj1"  ,"vbs_detavvj1"  ,"",'F');
+
+    if(version >=  9) dataloader->AddVariable("drllDef"       ,"drllDef"       ,"",'F');
+    if(version >=  9) dataloader->AddVariable("dPhilMETMinDef","dPhilMETMinDef","",'F');
+    if(version >=  9) dataloader->AddVariable("vbs_etaj1"     ,"vbs_etaj1"     ,"",'F');
+    if(version >=  9) dataloader->AddVariable("vbs_ptvv"      ,"vbs_ptvv"      ,"",'F');
+    if(version >=  9) dataloader->AddVariable("vbs_mjj"       ,"vbs_mjj"       ,"",'F');
+    if(version >=  9) dataloader->AddVariable("vbs_detajj"    ,"vbs_detajj"    ,"",'F');
+
+    if(version >= 10) dataloader->AddVariable("minPMETDef"    ,"minPMETDef"    ,"",'F');
+    if(version >= 10) dataloader->AddVariable("vbs_dphijjll"  ,"vbs_dphijjll"  ,"",'F');
+    if(version >= 10) dataloader->AddVariable("vbs_pttot"     ,"vbs_pttot"     ,"",'F');
+    if(version >= 10) dataloader->AddVariable("vbs_sumHT"     ,"vbs_sumHT"     ,"",'F');
+    if(version >= 10) dataloader->AddVariable("ptwwDef"       ,"ptwwDef"       ,"",'F');
+    if(version >= 10) dataloader->AddVariable("vbs_ptjj"      ,"vbs_ptjj"      ,"",'F');
+    if(version >= 10) dataloader->AddVariable("vbs_ptbalance" ,"vbs_ptbalance" ,"",'F');
+    if(version >= 10) dataloader->AddVariable("ngood_jets"    ,"ngood_jets"    ,"",'F');
   }
 
   TString prepareOptions="NormMode=None";

@@ -109,7 +109,7 @@ nohup ./analysis_slurm.sh 549 20240 -1 1001 wzAnalysis >& logwz_17&
 nohup ./analysis_slurm.sh 578 20240 -1 1001 wzAnalysis >& logwz_18&
 nohup ./analysis_slurm.sh 579 20240 -1 1001 wzAnalysis >& logwz_19&
 
-elif [ $1 = "3" ]; then
+elif [ $1 = "30" ]; then
 
 cp sswwAnalysis.py sswwAnalysis_without_ntuples.py
 sed -i 's/doNtuples = False/doNtuples = True/' sswwAnalysis.py
@@ -156,14 +156,38 @@ nohup ./analysis_slurm.sh 550 20240 -1 1001 sswwAnalysis >& logssww_212&
 nohup ./analysis_slurm.sh 551 20240 -1 1001 sswwAnalysis >& logssww_213&
 nohup ./analysis_slurm.sh 552 20240 -1 1001 sswwAnalysis >& logssww_214&
 
+elif [ $1 = "31" ]; then
+
+nohup ./analysis_slurm.sh 194 20220 -1 1001 sswwAnalysis >& logssww_220&
+nohup ./analysis_slurm.sh 195 20220 -1 1001 sswwAnalysis >& logssww_221&
+nohup ./analysis_slurm.sh 196 20220 -1 1001 sswwAnalysis >& logssww_222&
+nohup ./analysis_slurm.sh 294 20221 -1 1001 sswwAnalysis >& logssww_223&
+nohup ./analysis_slurm.sh 295 20221 -1 1001 sswwAnalysis >& logssww_224&
+nohup ./analysis_slurm.sh 296 20221 -1 1001 sswwAnalysis >& logssww_225&
+nohup ./analysis_slurm.sh 394 20230 -1 1001 sswwAnalysis >& logssww_226&
+nohup ./analysis_slurm.sh 395 20230 -1 1001 sswwAnalysis >& logssww_227&
+nohup ./analysis_slurm.sh 396 20230 -1 1001 sswwAnalysis >& logssww_228&
+nohup ./analysis_slurm.sh 494 20231 -1 1001 sswwAnalysis >& logssww_229&
+nohup ./analysis_slurm.sh 495 20231 -1 1001 sswwAnalysis >& logssww_230&
+nohup ./analysis_slurm.sh 496 20231 -1 1001 sswwAnalysis >& logssww_231&
+nohup ./analysis_slurm.sh 594 20240 -1 1001 sswwAnalysis >& logssww_232&
+nohup ./analysis_slurm.sh 595 20240 -1 1001 sswwAnalysis >& logssww_233&
+nohup ./analysis_slurm.sh 596 20240 -1 1001 sswwAnalysis >& logssww_234&
+
 elif [ $1 = "10" ]; then
 
 mv wzAnalysis_without_ntuples.py wzAnalysis.py
 mv sswwAnalysis_without_ntuples.py sswwAnalysis.py
-hadd -f /work/submit/ceballos/mva_samples/ntupleWWPolAna_year2027.root ntupleSSWWAna_sample?5*root
+
+hadd -f /work/submit/ceballos/mva_samples/ntupleWWPolPPCMAna_year2027.root ntupleSSWWAna_sample?5*root
 rm -f ntupleSSWWAna_sample?5*.root
+
+hadd -f /work/submit/ceballos/mva_samples/ntupleWWPolWWCMAna_year2027.root ntupleSSWWAna_sample?9*root
+rm -f ntupleSSWWAna_sample?9*.root
+
 hadd -f /work/submit/ceballos/mva_samples/ntupleWZAna_year2027.root ntupleWZAna_*.root
 rm -f ntupleWZAna_*.root
+
 hadd -f /work/submit/ceballos/mva_samples/ntupleWWAna_year2027.root ntupleSSWWAna_*.root
 rm -f ntupleSSWWAna_*.root
 
