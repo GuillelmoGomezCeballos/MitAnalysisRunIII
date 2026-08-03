@@ -11,7 +11,7 @@ import tmva_helper_xml
 from array import array
 
 correctionString = "_correction"
-makeDataCards = 1 # 1 (mjj diff), 2 (mll diff), 3 (njets diff), 4 (detajj diff), 5 (dphijj diff), 6 (mjj), 7 (mll), 8 (njets), 9 (detajj), 10 (dphijj), 11 (pol3D), 12 (pol2DLX), 13 (polLL)
+makeDataCards = 1 # 1 (mjj diff), 2 (mll diff), 3 (njets diff), 4 (detajj diff), 5 (dphijj diff), 6 (mjj), 7 (mll), 8 (njets), 9 (detajj), 10 (dphijj), 11 (zepvv), 12 (pol3D), 13 (pol2DLX), 14 (polLL)
 genVBSSel = makeDataCards
 if(genVBSSel == 6):
     genVBSSel = 1
@@ -23,6 +23,8 @@ elif(genVBSSel == 9):
     genVBSSel = 4
 elif(genVBSSel == 10):
     genVBSSel = 5
+elif(genVBSSel == 14):
+    genVBSSel = 1
 
 versionWG = False
 versionDoEWKQCD = False
@@ -577,8 +579,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[25][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x), 14,2.5,9.5), "vbs_detajj","weight")
         histo[26][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(26,x), "histo_{0}_{1}".format(26,x), 10,0,3.1416), "vbs_dphijj","weight")
         histo[27][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(27,x), "histo_{0}_{1}".format(27,x), 10,0,3.1416), "vbs_dphijj","weight")
-        histo[28][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(28,x), "histo_{0}_{1}".format(28,x), 10,0,1), "vbs_zepvv","weight")
-        histo[29][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x), 10,0,1), "vbs_zepvv","weight")
+        histo[28][x] = dfwwvbscat[x] .Filter("vbs_zepvv<0.75").Histo1D(("histo_{0}_{1}".format(28,x), "histo_{0}_{1}".format(28,x), 10,0,0.75), "vbs_zepvv","weight")
+        histo[29][x] = dfwwbvbscat[x].Filter("vbs_zepvv<0.75").Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x), 10,0,0.75), "vbs_zepvv","weight")
         histo[30][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x), 20,-1,1), "bdt_vbfinc","weight")
         histo[31][x] = dfwwbvbscat[x].Histo1D(("histo_{0}_{1}".format(31,x), "histo_{0}_{1}".format(31,x), 20,-1,1), "bdt_vbfinc","weight")
         histo[32][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(32,x), "histo_{0}_{1}".format(32,x),25, 50, 300), "vbs_ptj1","weight")
@@ -693,10 +695,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             elif(makeDataCards == 10):
                 varSel = 24
             elif(makeDataCards == 11):
-                varSel = 31
+                varSel = 25
             elif(makeDataCards == 12):
-                varSel = 32
+                varSel = 31
             elif(makeDataCards == 13):
+                varSel = 32
+            elif(makeDataCards == 14):
                 varSel = 33
 
             # Begin redefine MVAs
@@ -869,12 +873,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             elif(makeDataCards == 10):
                 varSel = 24
             elif(makeDataCards == 11):
+                varSel = 25
+            elif(makeDataCards == 12):
                 varSel = 31
                 varSel = 9
-            elif(makeDataCards == 12):
+            elif(makeDataCards == 13):
                 varSel = 32
                 varSel = 9
-            elif(makeDataCards == 13):
+            elif(makeDataCards == 14):
                 varSel = 33
                 varSel = 9
             dfwwbvbscat             [x] = dfwwbvbscat             [x].Define("finalVar", "compute_jet_lepton_final_var(vbs_mjj,vbs_detajj,vbs_dphijj,vbs_zepvv,bdt_vbfinc[0],mll{0},ngood_jets,{1},bdt_vbfpol0[0],bdt_vbfpol1[0])".format(altMass,varSel))
@@ -940,21 +946,23 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             elif(makeDataCards == 10):
                 x1Bins = array('d', [0.0,0.9,1.8,2.1,2.5,2.7,2.9,3.0,3.1416])
             elif(makeDataCards == 11):
+                x1Bins = array('d', [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0])
+            elif(makeDataCards == 12):
                 #x1Bins = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5,19.5,20.5,21.5,22.5,23.5,24.5,25.5,26.5,27.5,28.5,29.5,30.5,31.5,32.5,33.5,34.5,35.5,36.5,37.5,38.5,39.5,40.5,41.5,42.5,43.5,44.5,45.5,46.5,47.5,48.5,49.5,50.5,51.5,52.5,53.5,54.5,55.5,56.5,57.5,58.5,59.5,60.5,61.5,62.5,63.5])
                 x1Bins = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5,19.5,20.5,21.5,22.5,23.5,24.5,25.5,26.5,27.5,28.5,29.5,30.5,31.5,32.5,33.5,34.5,35.5,36.5,37.5,38.5,39.5,40.5,41.5,42.5,43.5,44.5,45.5,46.5,47.5])
-            elif(makeDataCards == 12 or makeDataCards == 13):
+            elif(makeDataCards == 13 or makeDataCards == 14):
                 #x1Bins = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5,19.5,20.5,21.5,22.5,23.5,24.5])
                 x1Bins = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5,19.5,20.5,21.5,22.5,23.5])
             histo[110][x] = dfwwvbscat[x] .Histo1D(("histo_{0}_{1}".format(110,x), "histo_{0}_{1}".format(110,x),len(x1Bins)-1,x1Bins), "finalVar","weight")
 
             x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5])
-            if(makeDataCards == 6 or makeDataCards == 7 or makeDataCards == 8 or makeDataCards == 9 or makeDataCards == 10):
+            if(makeDataCards == 6 or makeDataCards == 7 or makeDataCards == 8 or makeDataCards == 9 or makeDataCards == 10 or makeDataCards == 11):
                 x2Bins = x1Bins
-            elif(makeDataCards == 11):
+            elif(makeDataCards == 12):
                 #x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5,19.5,20.5,21.5,22.5,23.5,24.5,25.5,26.5,27.5,28.5,29.5,30.5,31.5,32.5,33.5,34.5,35.5,36.5,37.5,38.5,39.5,40.5,41.5,42.5,43.5,44.5,45.5,46.5,47.5,48.5,49.5,50.5,51.5,52.5,53.5,54.5,55.5,56.5,57.5,58.5,59.5,60.5,61.5,62.5,63.5])
                 #x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5,19.5,20.5,21.5,22.5,23.5,24.5,25.5,26.5,27.5,28.5,29.5,30.5,31.5,32.5,33.5,34.5,35.5,36.5,37.5,38.5,39.5,40.5,41.5,42.5,43.5,44.5,45.5,46.5,47.5])
                 x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5])
-            elif(makeDataCards == 12 or makeDataCards == 13):
+            elif(makeDataCards == 13 or makeDataCards == 14):
                 #x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5,19.5,20.5,21.5,22.5,23.5,24.5])
                 #x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5,19.5,20.5,21.5,22.5,23.5])
                 x2Bins = array('d', [-0.5,0.5,1.5,2.5,3.5])

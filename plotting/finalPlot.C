@@ -54,7 +54,7 @@ void atributes(TH1D *histo, TString xtitle = "", TString ytitle = "Fraction", TS
   histo->GetXaxis()->SetNdivisions (  505);
   histo->GetXaxis()->SetTitleFont  (   62);
   histo->GetXaxis()->SetTitleOffset( 0.9);
-  histo->GetXaxis()->SetTitleSize  (0.150);
+  histo->GetXaxis()->SetTitleSize  (0.140);
   //histo->GetXaxis()->SetTickLength (0.07 );
 
   histo->GetYaxis()->SetTitle(ytitle.Data());
@@ -355,16 +355,16 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   if(isLogSpecial) {c1->SetLogx();pad1->SetLogx();pad2->SetLogx();}
 
   float theLumi = 999;
-  if     (year == 2022)  {theLumi = 34.8;}
+  if     (year == 2022)  {theLumi = 35.0;}
   else if(year == 20220) {theLumi = 8.1;}
-  else if(year == 20221) {theLumi = 26.7;}
-  if     (year == 2023)  {theLumi = 27.1;}
-  else if(year == 20230) {theLumi = 17.6;}
-  else if(year == 20231) {theLumi = 9.5;}
-  else if(year == 2027)  {theLumi = 171;}
-  else if(year == 2028)  {theLumi = 280;}
+  else if(year == 20221) {theLumi = 26.9;}
+  if     (year == 2023)  {theLumi = 27.8;}
+  else if(year == 20230) {theLumi = 18.1;}
+  else if(year == 20231) {theLumi = 9.7;}
+  else if(year == 2027)  {theLumi = 173;}
+  else if(year == 2028)  {theLumi = 306;}
   else if(year == 20240) {theLumi = 109;}
-  else if(year == 20250) {theLumi = 109;}
+  else if(year == 20250) {theLumi = 133;}
   else if(year == 20190) {theLumi = 138;}
   else if(year == 20260) {theLumi = 15.9;}
   else if(year == 20261) {theLumi = 1.6;}

@@ -25,6 +25,7 @@ rm -rf ${OUTPUTFOLDER}/macros1010
 rm -rf ${OUTPUTFOLDER}/macros1011
 rm -rf ${OUTPUTFOLDER}/macros1012
 rm -rf ${OUTPUTFOLDER}/macros1013
+rm -rf ${OUTPUTFOLDER}/macros1014
 
 cp -r ../macros ${OUTPUTFOLDER}/macros1001
 cp -r ../macros ${OUTPUTFOLDER}/macros1002
@@ -39,8 +40,9 @@ cp -r ../macros ${OUTPUTFOLDER}/macros1010
 cp -r ../macros ${OUTPUTFOLDER}/macros1011
 cp -r ../macros ${OUTPUTFOLDER}/macros1012
 cp -r ../macros ${OUTPUTFOLDER}/macros1013
+cp -r ../macros ${OUTPUTFOLDER}/macros1014
 
-#makeDataCards = 1 # 1 (mjj diff), 2 (mll diff), 3 (njets diff), 4 (detajj diff), 5 (dphijj diff), 6 (mjj), 7 (mll), 8 (njets), 9 (detajj), 10 (dphijj)
+#makeDataCards = 1 # 1 (mjj diff), 2 (mll diff), 3 (njets diff), 4 (detajj diff), 5 (dphijj diff), 6 (mjj), 7 (mll), 8 (njets), 9 (detajj), 10 (dphijj), 11 (zepvv), 12 (pol3D), 13 (pol2DLX), 14 (polLL)
 sed -i 's/makeDataCards = 1/makeDataCards = 2/'  ${OUTPUTFOLDER}/macros1002/sswwAnalysis.py 
 sed -i 's/makeDataCards = 1/makeDataCards = 3/'  ${OUTPUTFOLDER}/macros1003/sswwAnalysis.py 
 sed -i 's/makeDataCards = 1/makeDataCards = 4/'  ${OUTPUTFOLDER}/macros1004/sswwAnalysis.py 
@@ -53,6 +55,7 @@ sed -i 's/makeDataCards = 1/makeDataCards = 10/' ${OUTPUTFOLDER}/macros1010/ssww
 sed -i 's/makeDataCards = 1/makeDataCards = 11/' ${OUTPUTFOLDER}/macros1011/sswwAnalysis.py 
 sed -i 's/makeDataCards = 1/makeDataCards = 12/' ${OUTPUTFOLDER}/macros1012/sswwAnalysis.py 
 sed -i 's/makeDataCards = 1/makeDataCards = 13/' ${OUTPUTFOLDER}/macros1013/sswwAnalysis.py 
+sed -i 's/makeDataCards = 1/makeDataCards = 14/' ${OUTPUTFOLDER}/macros1014/sswwAnalysis.py 
 
 #makeDataCards = 4 # 1 (njets), 2-1006 (lepton flavor), 3-1002 (3D), 4-1001 (BDT 2D), 5-1003 (BDT 1D), 6-1004 (mjj), 7-1005 (mjj diff)
 sed -i 's/makeDataCards = 4/makeDataCards = 3/'  ${OUTPUTFOLDER}/macros1002/wzAnalysis.py
@@ -87,34 +90,17 @@ mv zzAnalysis_input_condor_jobs_new.cfg zzAnalysis_input_condor_jobs.cfg
 mv wzAnalysis_input_condor_jobs_new.cfg wzAnalysis_input_condor_jobs.cfg
 cd -
 
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/sswwAnalysis_input_condor_jobs.cfg
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/wwAnalysis_input_condor_jobs.cfg
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/zzAnalysis_input_condor_jobs.cfg
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/wzAnalysis_input_condor_jobs.cfg
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1001/zAnalysis_input_condor_jobs.cfg
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1002/zAnalysis_input_condor_jobs.cfg
-
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1011/wzAnalysis_input_condor_jobs.cfg
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1011/sswwAnalysis_input_condor_jobs.cfg
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1012/sswwAnalysis_input_condor_jobs.cfg
-sed -i 's/no//' ${OUTPUTFOLDER}/macros1013/sswwAnalysis_input_condor_jobs.cfg
-
-grep -v 2026 ${OUTPUTFOLDER}/macros1011/sswwAnalysis_input_condor_jobs.cfg > lll;mv lll ${OUTPUTFOLDER}/macros1011/sswwAnalysis_input_condor_jobs.cfg;
-grep -v 2026 ${OUTPUTFOLDER}/macros1012/sswwAnalysis_input_condor_jobs.cfg > lll;mv lll ${OUTPUTFOLDER}/macros1012/sswwAnalysis_input_condor_jobs.cfg;
-grep -v 2026 ${OUTPUTFOLDER}/macros1013/sswwAnalysis_input_condor_jobs.cfg > lll;mv lll ${OUTPUTFOLDER}/macros1013/sswwAnalysis_input_condor_jobs.cfg;
-grep -v 2026 ${OUTPUTFOLDER}/macros1011/wzAnalysis_input_condor_jobs.cfg   > lll;mv lll ${OUTPUTFOLDER}/macros1011/wzAnalysis_input_condor_jobs.cfg;
-
-cd ${OUTPUTFOLDER}/macros1011
-python3 remake_Analysis_input_condor_jobs.py --ana=ssww --isWWPol=1
-mv sswwAnalysis_input_condor_jobs_new.cfg sswwAnalysis_input_condor_jobs.cfg
-cd -
-
 cd ${OUTPUTFOLDER}/macros1012
 python3 remake_Analysis_input_condor_jobs.py --ana=ssww --isWWPol=1
 mv sswwAnalysis_input_condor_jobs_new.cfg sswwAnalysis_input_condor_jobs.cfg
 cd -
 
 cd ${OUTPUTFOLDER}/macros1013
+python3 remake_Analysis_input_condor_jobs.py --ana=ssww --isWWPol=1
+mv sswwAnalysis_input_condor_jobs_new.cfg sswwAnalysis_input_condor_jobs.cfg
+cd -
+
+cd ${OUTPUTFOLDER}/macros1014
 python3 remake_Analysis_input_condor_jobs.py --ana=ssww --isWWPol=1
 mv sswwAnalysis_input_condor_jobs_new.cfg sswwAnalysis_input_condor_jobs.cfg
 cd -
@@ -134,5 +120,6 @@ diff -r ../macros ${OUTPUTFOLDER}/macros1010
 diff -r ../macros ${OUTPUTFOLDER}/macros1011
 diff -r ../macros ${OUTPUTFOLDER}/macros1012
 diff -r ../macros ${OUTPUTFOLDER}/macros1013
+diff -r ../macros ${OUTPUTFOLDER}/macros1014
 
 fi

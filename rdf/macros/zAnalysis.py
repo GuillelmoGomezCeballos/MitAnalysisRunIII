@@ -236,6 +236,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             "vbs_detavvj1",
             "vbs_detavvj2",
             "vbs_ptbalance",
+            "vbs_dphijjll",
+            "vbs_rpt",
             "mll{0}".format(altMass),
 	    "ptll{0}".format(altMass),
 	    "drll{0}".format(altMass),

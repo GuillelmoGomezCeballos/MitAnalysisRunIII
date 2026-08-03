@@ -26,14 +26,15 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   int theYear = 0;
   TString theTagYear = "NULL";
   double triggerEffUnc = 1.000;
-  double lumiU[3] = {1.000, 1.000, 1.000};
-  if     (year == 20220) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022";}
-  else if(year == 20221) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022EE";}
-  else if(year ==  2022) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; theYear = 2022; theTagYear = "2022";}
-  else if(year == 20230) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023";}
-  else if(year == 20231) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023BPix";}
-  else if(year ==  2023) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; theYear = 2023; theTagYear = "2023";}
-  else if(year == 20240) {triggerEffUnc = 1.005; lumiU[0] = 1.0020; lumiU[1] = 1.0068; lumiU[2] = 1.0144; theYear = 2024; theTagYear = "2024";}
+  double lumiU[4] = {1.000, 1.000, 1.000, 1.000};
+  if     (year == 20220) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2022; theTagYear = "2022";}
+  else if(year == 20221) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2022; theTagYear = "2022EE";}
+  else if(year ==  2022) {triggerEffUnc = 1.005; lumiU[0] = 1.0138; lumiU[1] = 1.0000; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2022; theTagYear = "2022";}
+  else if(year == 20230) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2023; theTagYear = "2023";}
+  else if(year == 20231) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2023; theTagYear = "2023BPix";}
+  else if(year ==  2023) {triggerEffUnc = 1.005; lumiU[0] = 1.0017; lumiU[1] = 1.0127; lumiU[2] = 1.0000; lumiU[3] = 1.0000; theYear = 2023; theTagYear = "2023";}
+  else if(year == 20240) {triggerEffUnc = 1.005; lumiU[0] = 1.0020; lumiU[1] = 1.0068; lumiU[2] = 1.0144; lumiU[3] = 1.0000; theYear = 2024; theTagYear = "2024";}
+  else if(year == 20250) {triggerEffUnc = 1.005; lumiU[0] = 1.0000; lumiU[1] = 1.0000; lumiU[2] = 1.0000; lumiU[3] = 1.0500; theYear = 2025; theTagYear = "2025";}
   else {printf("Wrong year!\n"); return;}
 
   int jumpValue = 200;
@@ -56,7 +57,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
   TH1D *histo_PDFUp  [101][nPlotCategories];
   TH1D *histo_PDFDown[101][nPlotCategories];
 
- const int numberBTagSyst = 11;
+  const int numberBTagSyst = 11;
   TString BtagSFBCNames[numberBTagSyst] = {"CMS_btag_fixedWP_bc_02", "CMS_btag_fixedWP_bc_bfragmentation", "CMS_btag_fixedWP_bc_colorreconnection", "CMS_btag_fixedWP_bc_hdamp", "CMS_btag_fixedWP_bc_jer", "CMS_btag_fixedWP_bc_jes", "CMS_btag_fixedWP_bc_pdf", "CMS_btag_fixedWP_bc_pileup", "CMS_btag_fixedWP_bc_topmass", "CMS_btag_fixedWP_bc_type3", Form("CMS_btag_fixedWP_bc_uncorrelated_%s",theTagYear.Data())};
 
   const int numberJESSyst = 28;
@@ -543,7 +544,7 @@ void makeVVDataCards(int whichAna = 0, int fidAna = 0, TString InputDir = "anaZ"
     } // isTraditionalSyst == false
   }
 
-  for(int nl=0; nl<3; nl++){
+  for(int nl=0; nl<4; nl++){
     if(lumiU[nl] == 1) continue;
     newcardShape << Form("lumi_13p6TeV_%d lnN ", nl);
     for (int ic=0; ic<nPlotCategories; ic++){

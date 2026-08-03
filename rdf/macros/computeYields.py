@@ -175,6 +175,7 @@ if __name__ == "__main__":
         streamYield = "(xx) {0:7.1f}".format(theYields[1]+theYields[2]) + streamYield
         print(streamYield)
         print("DA: {0:7.1f} +/- {1:4.1f} / SIG: {2:7.1f} +/- {3:4.1f} / BG: {4:7.1f} +/- {5:4.1f}".format(theYields[0],theYieldsE[0],theYields[1],theYieldsE[1],theYields[2],theYieldsE[2]))
+        if(theYields[2] <= 0): theYields[2] = 1
         SB = theYields[1]/theYields[2]
         DataVsPred = theYields[0]/(theYields[1]+theYields[2])
         DataVsPredE = DataVsPred*pow(pow(theYieldsE[0]/theYields[0],2)+pow(theYieldsE[1]/(theYields[1]+theYields[2]),2)+pow(theYieldsE[2]/(theYields[1]+theYields[2]),2),0.5)

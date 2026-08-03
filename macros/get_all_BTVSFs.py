@@ -5,7 +5,7 @@ from array import array
 
 xPtBins = array('d', [20.0,25.0,30.0,35.0,40.0,45.0,50.0,55.0,60.0,65.0,70.0,75.0,80.0,85.0,90.0,95.0,100.0])
 xEtaBins = array('d', [0.5,1.0,1.5])
-yearVal = [20220, 20221, 20230, 20231, 20240]
+yearVal = [20220, 20221, 20230, 20231, 20240, 20250]
 
 
 if __name__ == "__main__":
@@ -40,35 +40,41 @@ if __name__ == "__main__":
         fileLFName = ""
         btaggerLFName = ""
         if(yearVal[ny] == 20220):
-            jsnFolder = "2022_Summer22"
+            jsnFolder = "Run3-22CDSep23-Summer22-NanoAODv12"
             fileHFName = "btagging.json.gz"
             btaggerHFName = "robustParticleTransformer_comb"
             fileLFName = "btagging.json.gz"
             btaggerLFName = "robustParticleTransformer_light"
         elif(yearVal[ny] == 20221):
-            jsnFolder = "2022_Summer22EE"
+            jsnFolder = "Run3-22EFGSep23-Summer22EE-NanoAODv12"
             fileHFName = "btagging.json.gz"
             btaggerHFName = "robustParticleTransformer_comb"
             fileLFName = "btagging.json.gz"
             btaggerLFName = "robustParticleTransformer_light"
         elif(yearVal[ny] == 20230):
-            jsnFolder = "2023_Summer23"
+            jsnFolder = "Run3-23CSep23-Summer23-NanoAODv12"
             fileHFName = "btagging.json.gz"
             btaggerHFName = "robustParticleTransformer_comb"
             fileLFName = "btagging.json.gz"
             btaggerLFName = "robustParticleTransformer_light"
         elif(yearVal[ny] == 20231):
-            jsnFolder = "2023_Summer23BPix"
+            jsnFolder = "Run3-23DSep23-Summer23BPix-NanoAODv12"
             fileHFName = "btagging.json.gz"
             btaggerHFName = "robustParticleTransformer_comb"
             fileLFName = "btagging.json.gz"
             btaggerLFName = "robustParticleTransformer_light"
         elif(yearVal[ny] == 20240):
-            jsnFolder = "2024_Winter24"
-            fileHFName = "btagging_preliminary.json.gz"
-            btaggerHFName = "UParTAK4_kinfit"
+            jsnFolder = "Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15"
+            fileHFName = "btagging.json.gz"
+            btaggerHFName = "UParTAK4_comb"
             fileLFName = "btagging.json.gz"
-            btaggerLFName = "robustParticleTransformer_light"
+            btaggerLFName = "UParTAK4_light"
+        elif(yearVal[ny] == 20250):
+            jsnFolder = "Run3-25Prompt-Summer24-NanoAODv15"
+            fileHFName = "btagging.json.gz"
+            btaggerHFName = "UParTAK4_comb"
+            fileLFName = "btagging.json.gz"
+            btaggerLFName = "UParTAK4_light"
 
         print("************** {0} **************".format(yearVal[ny]))
 

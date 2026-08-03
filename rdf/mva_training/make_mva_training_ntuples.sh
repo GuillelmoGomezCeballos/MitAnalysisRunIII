@@ -40,9 +40,6 @@ nohup ./analysis_slurm.sh 1043 20231 -1 1001 zAnalysis >& logz_27&
 
 elif [ $1 = "01" ]; then
 
-cp zAnalysis.py zAnalysis_without_ntuples.py
-sed -i 's/doNtuples = False/doNtuples = True/' zAnalysis.py
-
 nohup ./analysis_slurm.sh 1022 20240 -1 1001 zAnalysis >& logz_28&
 nohup ./analysis_slurm.sh 1023 20240 -1 1001 zAnalysis >& logz_29&
 nohup ./analysis_slurm.sh 1024 20240 -1 1001 zAnalysis >& logz_30&
@@ -64,24 +61,37 @@ nohup ./analysis_slurm.sh 1045 20240 -1 1001 zAnalysis >& logz_45&
 nohup ./analysis_slurm.sh 1046 20240 -1 1001 zAnalysis >& logz_46&
 nohup ./analysis_slurm.sh 1047 20240 -1 1001 zAnalysis >& logz_47&
 nohup ./analysis_slurm.sh 1048 20240 -1 1001 zAnalysis >& logz_48&
-#nohup ./analysis_slurm.sh 1021 20250 -1 1001 zAnalysis >& logz_49&
-#nohup ./analysis_slurm.sh 1022 20250 -1 1001 zAnalysis >& logz_50&
-#nohup ./analysis_slurm.sh 1023 20250 -1 1001 zAnalysis >& logz_51&
-#nohup ./analysis_slurm.sh 1024 20250 -1 1001 zAnalysis >& logz_52&
-#nohup ./analysis_slurm.sh 1025 20250 -1 1001 zAnalysis >& logz_53&
-#nohup ./analysis_slurm.sh 1026 20250 -1 1001 zAnalysis >& logz_54&
-#nohup ./analysis_slurm.sh 1031 20250 -1 1001 zAnalysis >& logz_55&
-#nohup ./analysis_slurm.sh 1032 20250 -1 1001 zAnalysis >& logz_56&
-#nohup ./analysis_slurm.sh 1033 20250 -1 1001 zAnalysis >& logz_57&
-#nohup ./analysis_slurm.sh 1034 20250 -1 1001 zAnalysis >& logz_58&
-#nohup ./analysis_slurm.sh 1035 20250 -1 1001 zAnalysis >& logz_59&
-#nohup ./analysis_slurm.sh 1036 20250 -1 1001 zAnalysis >& logz_60&
-#nohup ./analysis_slurm.sh 1041 20250 -1 1001 zAnalysis >& logz_61&
-#nohup ./analysis_slurm.sh 1042 20250 -1 1001 zAnalysis >& logz_62&
-#nohup ./analysis_slurm.sh 1043 20250 -1 1001 zAnalysis >& logz_63&
-#nohup ./analysis_slurm.sh 1044 20250 -1 1001 zAnalysis >& logz_64&
-#nohup ./analysis_slurm.sh 1045 20250 -1 1001 zAnalysis >& logz_65&
-#nohup ./analysis_slurm.sh 1046 20250 -1 1001 zAnalysis >& logz_66&
+
+elif [ $1 = "02" ]; then
+
+
+nohup ./analysis_slurm.sh 1021 20250 -1 1001 zAnalysis >& logz_49&
+nohup ./analysis_slurm.sh 1022 20250 -1 1001 zAnalysis >& logz_50&
+nohup ./analysis_slurm.sh 1023 20250 -1 1001 zAnalysis >& logz_51&
+nohup ./analysis_slurm.sh 1024 20250 -1 1001 zAnalysis >& logz_52&
+nohup ./analysis_slurm.sh 1025 20250 -1 1001 zAnalysis >& logz_53&
+nohup ./analysis_slurm.sh 1026 20250 -1 1001 zAnalysis >& logz_54&
+nohup ./analysis_slurm.sh 1031 20250 -1 1001 zAnalysis >& logz_55&
+nohup ./analysis_slurm.sh 1032 20250 -1 1001 zAnalysis >& logz_56&
+nohup ./analysis_slurm.sh 1033 20250 -1 1001 zAnalysis >& logz_57&
+nohup ./analysis_slurm.sh 1034 20250 -1 1001 zAnalysis >& logz_58&
+nohup ./analysis_slurm.sh 1035 20250 -1 1001 zAnalysis >& logz_59&
+nohup ./analysis_slurm.sh 1036 20250 -1 1001 zAnalysis >& logz_60&
+nohup ./analysis_slurm.sh 1041 20250 -1 1001 zAnalysis >& logz_61&
+nohup ./analysis_slurm.sh 1042 20250 -1 1001 zAnalysis >& logz_62&
+nohup ./analysis_slurm.sh 1043 20250 -1 1001 zAnalysis >& logz_63&
+nohup ./analysis_slurm.sh 1044 20250 -1 1001 zAnalysis >& logz_64&
+nohup ./analysis_slurm.sh 1045 20250 -1 1001 zAnalysis >& logz_65&
+nohup ./analysis_slurm.sh 1046 20250 -1 1001 zAnalysis >& logz_66&
+
+elif [ $1 = "03" ]; then
+
+
+nohup ./analysis_slurm.sh 108 20220 -1 1001 zAnalysis >& logz_67&
+nohup ./analysis_slurm.sh 208 20221 -1 1001 zAnalysis >& logz_68&
+nohup ./analysis_slurm.sh 308 20230 -1 1001 zAnalysis >& logz_69&
+nohup ./analysis_slurm.sh 408 20231 -1 1001 zAnalysis >& logz_70&
+nohup ./analysis_slurm.sh 508 20240 -1 1001 zAnalysis >& logz_71&
 
 elif [ $1 = "1" ]; then
 
@@ -194,8 +204,9 @@ rm -f ntupleSSWWAna_*.root
 elif [ $1 = "11" ]; then
 
 mv zAnalysis_without_ntuples.py zAnalysis.py
-hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ltype0_year2027.root ntupleZAna_sample*_ltype0_*.root
-hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ltype1_year2027.root ntupleZAna_sample*_ltype1_*.root
-hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ltype2_year2027.root ntupleZAna_sample*_ltype2_*.root
+hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ltype0_year2027.root ntupleZAna_sample10*_ltype0_*.root
+hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ltype1_year2027.root ntupleZAna_sample10*_ltype1_*.root
+hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ltype2_year2027.root ntupleZAna_sample10*_ltype2_*.root
+hadd -f /work/submit/ceballos/mva_samples/ntupleZAna_ttbar_year2027.root  ntupleZAna_sample?08_ltype?_*.root
 
 fi
