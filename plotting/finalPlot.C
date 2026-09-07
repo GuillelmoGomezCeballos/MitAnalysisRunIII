@@ -372,7 +372,8 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   //CMS_lumi( pad1, year, 1);
   if(year == 20250 || year == 2028){
        //cmsstyle::SetExtraText("Preliminary");
-       cmsstyle::SetExtraText("su");
+       //cmsstyle::SetExtraText("su");
+       cmsstyle::SetExtraText("");
   }
   else
       //cmsstyle::SetExtraText("Preliminary");

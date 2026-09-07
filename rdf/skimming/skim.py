@@ -3,7 +3,7 @@ import os, sys, getopt, json, time, subprocess, socket
 import fnmatch
 import math
 
-ROOT.ROOT.EnableImplicitMT(2)
+ROOT.ROOT.EnableImplicitMT(1)
 
 ROOT.gInterpreter.ProcessLine('#include "functions_skim.h"')
 
@@ -79,13 +79,26 @@ def getPrunedTriggers(df,TRIGGERXXX):
             TRIGGERPRUNED += ")"
     return TRIGGERPRUNED
 
+def removeOutputFile(outputBaseDir,finalOutputDir,fOutName):
+    finalOutputFile = os.path.join(finalOutputDir.replace(outputBaseDir,""),fOutName)
+    fileExistCommand = "xrdfs %s stat %s" % (outputBaseDir,finalOutputFile)
+    returncode = buildcommand(fileExistCommand)
+    if returncode == 0:
+        fileRemoveCommand = "xrdfs %s rm %s" % (outputBaseDir,finalOutputFile)
+        returncode = buildcommand(fileExistCommand)
+        if returncode == 0:
+            print("Deletion of file {0} worked: {1}".format(finalOutputFile,returncode))
+        else:
+            print("Deletion of file {0} failed: {1}".format(finalOutputFile,returncode))
+
 if __name__ == "__main__":
 
     copyFilesToFS = True
     #            1l     2l     3l     met    pho
     doSkimSel = [True, True, True, True, False]
 
-    outputDir = "root://submit50.mit.edu//store/user/ceballos/nanoaod/skims_submit/"
+    outputBaseDir = "root://submit50.mit.edu/"
+    outputDir = outputBaseDir + "/store/user/ceballos/nanoaod/skims_submit/"
     #outputDir = "root://submit30.mit.edu//cms/ceballos/nanoaod/skims_submit/"
     inputSamplesCfg = "skim_input_samples.cfg"
     inputFilesCfg = "skim_input_files.cfg"
@@ -695,6 +708,7 @@ if __name__ == "__main__":
                         time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file1 {0} failed completely, exiting the loop".format(fOutName1))
+                    removeOutputFile(outputBaseDir,finalOutputDir1,fOutName1)
 
                 if os.path.exists(fOutName1):
                     os.remove(fOutName1)
@@ -717,6 +731,7 @@ if __name__ == "__main__":
                         time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file2 {0} failed completely, exiting the loop".format(fOutName2))
+                    removeOutputFile(outputBaseDir,finalOutputDir2,fOutName2)
 
                 if os.path.exists(fOutName2):
                     os.remove(fOutName2)
@@ -739,6 +754,7 @@ if __name__ == "__main__":
                         time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file3 {0} failed completely, exiting the loop".format(fOutName3))
+                    removeOutputFile(outputBaseDir,finalOutputDir3,fOutName3)
 
                 if os.path.exists(fOutName3):
                     os.remove(fOutName3)
@@ -761,6 +777,7 @@ if __name__ == "__main__":
                         time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file4 {0} failed completely, exiting the loop".format(fOutName4))
+                    removeOutputFile(outputBaseDir,finalOutputDir4,fOutName4)
 
                 if os.path.exists(fOutName4):
                     os.remove(fOutName4)
@@ -783,6 +800,7 @@ if __name__ == "__main__":
                         time.sleep(0.1)
                 if(copy_result == False):
                     print("Copying output file5 {0} failed completely, exiting the loop".format(fOutName5))
+                    removeOutputFile(outputBaseDir,finalOutputDir5,fOutName5)
 
                 if os.path.exists(fOutName5):
                     os.remove(fOutName5)
