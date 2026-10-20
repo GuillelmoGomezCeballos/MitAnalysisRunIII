@@ -353,7 +353,7 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   if(isLogX == true) pad1->SetLogx();
   
   if(isLogSpecial) {c1->SetLogx();pad1->SetLogx();pad2->SetLogx();}
-
+ 
   float theLumi = 999;
   if     (year == 2022)  {theLumi = 35.0;}
   else if(year == 20220) {theLumi = 8.1;}
@@ -362,12 +362,12 @@ void finalPlot(int nsel = 0, int ReBin = 1, TString XTitle = "N_{jets}", TString
   else if(year == 20230) {theLumi = 18.1;}
   else if(year == 20231) {theLumi = 9.7;}
   else if(year == 2027)  {theLumi = 173;}
-  else if(year == 2028)  {theLumi = 306;}
-  else if(year == 20240) {theLumi = 109;}
-  else if(year == 20250) {theLumi = 133;}
+  else if(year == 2028)  {theLumi = 308;}
+  else if(year == 20240) {theLumi = 110;}
+  else if(year == 20250) {theLumi = 135;}
   else if(year == 20190) {theLumi = 138;}
-  else if(year == 20260) {theLumi = 15.9;}
-  else if(year == 20261) {theLumi = 1.6;}
+  else if(year == 20260) {theLumi = 25.8;}
+  else if(year == 20261) {theLumi = 2.0;}
   myPlot.Draw(ReBin);
   //CMS_lumi( pad1, year, 1);
   if(year == 20250 || year == 2028){

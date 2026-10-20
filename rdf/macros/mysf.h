@@ -554,8 +554,7 @@ double MyCorrections::eval_btvSF(const char *valType, char *workingPoint, double
   eta = std::min(std::abs(eta),2.399);
   pt = std::min(pt,999.999);
   if(flavor != 0) {
-    if(year == 20250 || year == 20260 || year == 20261) return btvHFSF_->evaluate({valType, workingPoint,      5, eta, pt});
-    else                                                return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
+    return btvHFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
   }
   else {
     return btvLFSF_->evaluate({valType, workingPoint, flavor, eta, pt});
