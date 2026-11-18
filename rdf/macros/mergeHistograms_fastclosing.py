@@ -6,12 +6,17 @@ mergeHistograms.py. Histograms read from input files are detached and released
 immediately after they have been added, so closing a large input ROOT file does
 not have to destroy thousands of cached histograms at process shutdown.
 
-Use --year=all to process every year in ALL_YEARS one after another.
+Use --year=all to process every year in ALL_YEARS one after another, then call
+merge_histograms_year.sh after all individual-year merges succeed. A path such
+as fillhisto_wwAnalysis1214 becomes the arguments fillhisto_wwAnalysis 1214 2028.
 """
 
 import getopt
 import glob
 import os
+import re
+import shlex
+import subprocess
 import sys
 import time
 
@@ -35,6 +40,21 @@ def parse_years(value):
     if value.strip().lower() == "all":
         return list(ALL_YEARS)
     return [int(value)]  # raises ValueError if not an integer
+
+
+def combined_year_command(path):
+    """Build the final shell command for --year=all, preserving one number."""
+    base = os.path.basename(os.path.normpath(path))
+    match = re.fullmatch(r"(fillhisto_.+Analysis)([0-9]+)", base)
+    if match is None:
+        raise ValueError(
+            "--year=all requires --path to end with "
+            "fillhisto_<analysis>Analysis<number> "
+            "(for example, fillhisto_wwAnalysis1214); got {0!r}".format(path))
+
+    script = os.path.expanduser(
+        "~/cms/MitAnalysisRunIII/rdf/makePlots/merge_histograms_year.sh")
+    return [script, match.group(1), match.group(2), "2028"]
 
 
 def release_input_histogram(hist):
@@ -304,7 +324,11 @@ def main(argv=None):
         "Usage: mergeHistograms.py [--path=<path>] [--year=<year>|all] "
         "[--output=<directory>] [--verbose]\n"
         "Defaults: --path={0} --year={1} --output={2}\n"
-        "--year=all processes the years {3}"
+        "--year=all processes the years {3}, then runs\n"
+        "  merge_histograms_year.sh <analysis-prefix> <number> 2028\n"
+        "  after all individual-year merges succeed.\n"
+        "  --path must end with fillhisto_<analysis>Analysis<number>.\n"
+        "  The shell script runs in the current directory and controls output paths."
     ).format(path, year_arg, output, ALL_YEARS)
 
     try:
@@ -333,6 +357,14 @@ def main(argv=None):
         print("ERROR: --year must be an integer or 'all'", file=sys.stderr)
         return 2
 
+    combined_command = None
+    if year_arg.strip().lower() == "all":
+        try:
+            combined_command = combined_year_command(path)
+        except ValueError as exc:
+            print("ERROR: {0}".format(exc), file=sys.stderr)
+            return 2
+
     n_categories = int(plotCategory("kPlotCategories"))
 
     start_all = time.perf_counter()
@@ -350,6 +382,23 @@ def main(argv=None):
             if len(years) > 1:
                 print("Continuing with the remaining years...", file=sys.stderr)
 
+    combined_status = None
+    if combined_command is not None:
+        if failed:
+            combined_status = "SKIPPED (one or more individual-year merges failed)"
+        else:
+            try:
+                print("\n=== Combined-year merge (2028) ===")
+                print("Running: {0}".format(
+                    " ".join(shlex.quote(arg) for arg in combined_command)), flush=True)
+                # Match a direct shell-script invocation in the current directory.
+                subprocess.run(combined_command, check=True)
+                combined_status = "DONE"
+            except Exception as exc:
+                combined_status = "FAILED"
+                print("ERROR: combined-year merge (2028) failed: {0}".format(exc),
+                      file=sys.stderr)
+
     # Summary (most useful when several years were requested).
     print("\n==================== SUMMARY ====================")
     print("Years requested: {0}".format(years))
@@ -357,11 +406,13 @@ def main(argv=None):
     print("Failed ({0}): {1}".format(len(failed), [y for y, _ in failed]))
     for year, msg in failed:
         print("  - year {0}: {1}".format(year, msg), file=sys.stderr)
+    if combined_status is not None:
+        print("Combined-year merge (2028): {0}".format(combined_status))
     print("Output files closed: {0}; cumulative output-close time: {1:.1f} s".format(
         OUTPUT_FILE_COUNT, OUTPUT_FILE_CLOSE_SECONDS))
     print("DONE in {0:.1f} s".format(time.perf_counter() - start_all))
 
-    return 1 if failed else 0
+    return 1 if failed or combined_status == "FAILED" else 0
 
 
 if __name__ == "__main__":

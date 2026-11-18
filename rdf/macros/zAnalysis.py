@@ -1,9 +1,11 @@
+"""Optimized independent entry point; physics, CLI and ten ROOT threads retained."""
 import ROOT
 import os, sys, getopt, json
 from array import array
 
 ROOT.ROOT.EnableImplicitMT(10)
 from utilsCategory import plotCategory
+from utilsPerformance import read_runs_metadata, candidate_categories, materialize_empty_categories
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getPrunedTriggers, getLeptomSelFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection2LVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet
@@ -305,50 +307,49 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     xMllMin = [91.1876-15, 91.1876-15, 91.1876-15]
     xMllMax = [91.1876+15, 91.1876+15, 91.1876+15]
-    dfcat = []
-    dfzllcat = []
-    dfjetcat = []
-    dfvbscat = []
-    dfxselcat = []
-    dfzgcat = []
-    dfzemcat = []
-    dfzmecat = []
-    dftightoscat = []
-    dftightsscat = []
-    for x in range(nCat):
+    dfcat = [None] * (3 * nCat)
+    dfzllcat = [None] * (3 * nCat)
+    dfjetcat = [None] * (3 * nCat)
+    dfvbscat = [None] * (3 * nCat)
+    dfxselcat = [None] * (3 * nCat)
+    dfzgcat = [None] * (3 * nCat)
+    dfzemcat = [None] * (1 * nCat)
+    dfzmecat = [None] * (1 * nCat)
+    dftightoscat = [None] * (1 * nCat)
+    dftightsscat = [None] * (1 * nCat)
+    active_categories = candidate_categories(theCat, useFR != 0)
+    snapshots = []
+    for x in active_categories:
         for ltype in range(3):
-            dfcat.append(dfbase.Filter("DiLepton_flavor=={0}".format(ltype), "flavor type == {0}".format(ltype))
+            dfcat[3*x+ltype] = (dfbase.Filter("DiLepton_flavor=={0}".format(ltype), "flavor type == {0}".format(ltype))
                                .Define("kPlotNonPrompt", "{0}".format(plotCategory("kPlotNonPrompt")))
                                .Define("kPlotWS", "{0}".format(plotCategory("kPlotWS")))
                                .Define("kPlotEWKWZ", "{0}".format(plotCategory("kPlotEWKWZ")))
                                .Filter("{0} != kPlotEWKWZ || nGenJet_bParton == 0".format(theCat), "EWKWZ requirement")
                                .Define("theCat{0}".format(x), "compute_category({0},kPlotNonPrompt,kPlotWS,nFake,nTight,0)".format(theCat))
                                .Filter("theCat{0}=={1}".format(x,x), "correct category ({0})".format(x))
-                               .Define("theCat","theCat{0}".format(x))
-                               )
+                               .Define("theCat","theCat{0}".format(x)))
 
-            dfxselcat.append(dfcat[3*x+ltype].Filter("{0}".format(XSELSELECTION),"XSEL selection")
+            dfxselcat[3*x+ltype] = (dfcat[3*x+ltype].Filter("{0}".format(XSELSELECTION),"XSEL selection")
                                              .Define("ptOvermll" , "ptll{0}/mll{0}".format(altMass))
-                                             .Define("dphiJJLL", "compute_jet_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, PuppiMET_pt, PuppiMET_phi, 8)")
-	                    )
+                                             .Define("dphiJJLL", "compute_jet_lepton_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Electron_pt, fake_Electron_eta, fake_Electron_phi, fake_Electron_mass, PuppiMET_pt, PuppiMET_phi, 8)"))
 
-            dfvbscat.append(dfcat[3*x+ltype].Filter("{0}".format(VBSSELECTION),"VBS selection")
+            dfvbscat[3*x+ltype] = (dfcat[3*x+ltype].Filter("{0}".format(VBSSELECTION),"VBS selection")
                                             .Define("weightWSEff0", "weight*compute_WSEfficiency(0,fake_Electron_pt,fake_Electron_eta)")
                                             .Define("weightWSEff1", "weight*compute_WSEfficiency(1,fake_Electron_pt,fake_Electron_eta)"))
 
-            dfzgcat.append(dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Muon_charge) == 0 && ptl1 > 25 && ptl2 > 20 && mll > 10 && Sum(good_Photons) > 0 && Max(good_Photons_pt) > 20")
+            dfzgcat[3*x+ltype] = (dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Muon_charge) == 0 && ptl1 > 25 && ptl2 > 20 && mll > 10 && Sum(good_Photons) > 0 && Max(good_Photons_pt) > 20")
               .Define("kPlotDY", "{0}".format(plotCategory("kPlotDY")))
               .Filter("theCat{0}!=kPlotDY".format(x))
               .Define("ptg", "compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, PuppiMET_pt{0}, PuppiMET_phi{0}, good_Photons_pt, good_Photons_eta, good_Photons_phi, 6)".format(altMass))
-              .Define("mllg","compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, PuppiMET_pt{0}, PuppiMET_phi{0}, good_Photons_pt, good_Photons_eta, good_Photons_phi, 7)".format(altMass))
-            )
+              .Define("mllg","compute_met_lepton_gamma_var(good_Jet_pt, good_Jet_eta, good_Jet_phi, good_Jet_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, fake_Muon_pt, fake_Muon_eta, fake_Muon_phi, fake_Muon_mass, PuppiMET_pt{0}, PuppiMET_phi{0}, good_Photons_pt, good_Photons_eta, good_Photons_phi, 7)".format(altMass)))
 
             histo[ltype+36][x] = dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0 && mll{0} > 60 && mll{0} < 180".format(altMass)).Histo1D(("histo_{0}_{1}".format(ltype+36,x), "histo_{0}_{1}".format(ltype+36,x), 60, 60, 180), "mll{0}".format(altMass),"weight")
 
             #dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(DiLepton_flavor != 1 && abs(mll{0}-91.1876) < 15) || (DiLepton_flavor == 1 && mll{0} > 30 && ptl2 > 25)".format(altMass),"mll cut")
             dfcat[3*x+ltype] = dfcat[3*x+ltype].Filter("(abs(mll{0}-91.1876) < 15)".format(altMass),"mll cut")
 
-            dfzllcat.append(dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons"))
+            dfzllcat[3*x+ltype] = (dfcat[3*x+ltype].Filter("Sum(fake_Muon_charge)+Sum(fake_Electron_charge) == 0", "Opposite-sign leptons"))
 
             histo[ltype+ 0][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 0,x), "histo_{0}_{1}".format(ltype+ 0,x), 60, xMllMin[ltype], xMllMax[ltype]), "mll{0}".format(altMass),"weight")
             histo[ltype+ 3][x] = dfzllcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+ 3,x), "histo_{0}_{1}".format(ltype+ 3,x), 40,  0, 200), "ptll","weight")
@@ -388,8 +389,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                                        .Histo1D(("test_{0}_{1}".format(ltype,x), "test_{0}_{1}".format(ltype,x), 4,-0.5,3.5), "ngood_jets","weight"))
 
             if(ltype == 2):
-                dftightoscat.append(dfcat[3*x+ltype].Filter("Sum(fake_Electron_charge)==0 && DiLepton_flavor==2 && tight_el7[0]==true && tight_el7[1]==true && mll{0}>80 && mll{0}<100".format(altMass)))
-                dftightsscat.append(dfcat[3*x+ltype].Filter("Sum(fake_Electron_charge)!=0 && DiLepton_flavor==2 && tight_el7[0]==true && tight_el7[1]==true && mll{0}>80 && mll{0}<100".format(altMass)))
+                dftightoscat[x] = (dfcat[3*x+ltype].Filter("Sum(fake_Electron_charge)==0 && DiLepton_flavor==2 && tight_el7[0]==true && tight_el7[1]==true && mll{0}>80 && mll{0}<100".format(altMass)))
+                dftightsscat[x] = (dfcat[3*x+ltype].Filter("Sum(fake_Electron_charge)!=0 && DiLepton_flavor==2 && tight_el7[0]==true && tight_el7[1]==true && mll{0}>80 && mll{0}<100".format(altMass)))
                 histo[ 58][x] = dftightoscat[x].Histo1D(("histo_{0}_{1}".format( 58,x), "histo_{0}_{1}".format( 58,x),40, 80, 100), "mll{0}".format(altMass),"weight5")
                 histo[ 59][x] = dftightsscat[x].Histo1D(("histo_{0}_{1}".format( 59,x), "histo_{0}_{1}".format( 59,x),40, 80, 100), "mll{0}".format(altMass),"weight5")
                 histo[360][x] = dftightoscat[x].Histo1D(("histo_{0}_{1}".format(360,x), "histo_{0}_{1}".format(360,x),40, 80, 100), "mll{0}".format(altMass),"weight")
@@ -425,7 +426,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                         histo[401+coutWSStudy][x] = dftightsscat[x].Filter("{0} and {1}".format(isCatWSStudyE1[j1],isCatWSStudyE2[j2])).Histo1D(("histo_{0}_{1}".format(401+coutWSStudy,x), "histo_{0}_{1}".format(401+coutWSStudy,x),100,80,100), "mll{0}".format(altMass),"weight5")
                         coutWSStudy = coutWSStudy + 2
 
-            dfjetcat.append(dfzllcat[3*x+ltype].Filter("ngood_jets >= 1", "At least one jet"))
+            dfjetcat[3*x+ltype] = (dfzllcat[3*x+ltype].Filter("ngood_jets >= 1", "At least one jet"))
             histo[ltype+110][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+110,x), "histo_{0}_{1}".format(ltype+110,x), 50,0,1), "good_Jet_btagUnifiedParTB","weight")
             histo[ltype+113][x] = dfjetcat[3*x+ltype].Histo1D(("histo_{0}_{1}".format(ltype+113,x), "histo_{0}_{1}".format(ltype+113,x), 6,-0.5,5.5), "nbtag_goodbtag_Jet_bjet","weightBTag")
 
@@ -490,7 +491,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             if(doNtuples == True and x == theCat):
                 outputFile = "ntupleZAna_sample{0}_ltype{1}_year{2}_job{3}.root".format(count,ltype,year,whichJob)
                 dfvbscat[3*x+ltype] = dfvbscat[3*x+ltype].Define("eventNum", "event")
-                dfvbscat[3*x+ltype].Snapshot("events", outputFile, branchList)
+                snapshot_options = ROOT.RDF.RSnapshotOptions()
+                snapshot_options.fLazy = True
+                snapshots.append(dfvbscat[3*x+ltype].Snapshot("events", outputFile, branchList, snapshot_options))
 
             if(ltype == 0):
                 histo[163][x] = dfxselcat[3*x+ltype]                                                                        .Histo1D(("histo_{0}_{1}".format(163,x), "histo_{0}_{1}".format(163,x), 40, 0.0, 4.0), "ptOvermll","weight")
@@ -536,14 +539,12 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
             # em
             if(ltype == 1):
-                dfzmecat.append(dfzllcat[3*x+ltype].Filter("triggerSMU > 0 && fake_Muon_pt[0] > 30")
+                dfzmecat[x] = (dfzllcat[3*x+ltype].Filter("triggerSMU > 0 && fake_Muon_pt[0] > 30")
                                                   .Define("pttag","Max(fake_Muon_pt)")
-                                                  .Define("ptprobe","Max(fake_Electron_pt)")
-                                                  )
-                dfzemcat.append(dfzllcat[3*x+ltype].Filter("triggerSEL > 0 && fake_Electron_pt[0] > 30")
+                                                  .Define("ptprobe","Max(fake_Electron_pt)"))
+                dfzemcat[x] = (dfzllcat[3*x+ltype].Filter("triggerSEL > 0 && fake_Electron_pt[0] > 30")
                                                   .Define("pttag","Max(fake_Electron_pt)")
-                                                  .Define("ptprobe","Max(fake_Muon_pt)")
-                                                  )
+                                                  .Define("ptprobe","Max(fake_Muon_pt)"))
                 histo[206][x] = dfzmecat[x].Histo1D(("histo_{0}_{1}".format(206,x), "histo_{0}_{1}".format(206,x), 20, 30, 130), "pttag","weight")
                 histo[207][x] = dfzemcat[x].Histo1D(("histo_{0}_{1}".format(207,x), "histo_{0}_{1}".format(207,x), 20, 30, 130), "pttag","weight")
 
@@ -723,16 +724,17 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histo2D[38][x] = dfzllcat[3*x+ltype].Filter("tight_el7[1] == true").Histo2D(("histo2d_{0}_{1}".format(38, x), "histo2d_{0}_{1}".format(38, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae2", "pte2","weight")
                 histo2D[39][x] = dfzllcat[3*x+ltype].Filter("tight_el8[1] == true").Histo2D(("histo2d_{0}_{1}".format(39, x), "histo2d_{0}_{1}".format(39, x), len(xEtaBins)-1, xEtaBins, len(xPtBins)-1, xPtBins), "etae2", "pte2","weight")
 
-    report = []
-    for x in range(nCat):
-        for ltype in range(3):
-            report.append(dfjetcat[3*x+ltype].Report())
-            if(x != theCat): continue
-            print("---------------- SUMMARY 3*{0}+{1} = {2} -------------".format(x,ltype,3*x+ltype))
-            report[3*x+ltype].Print()
+    report = {(x, ltype): dfjetcat[3*x+ltype].Report()
+              for x in active_categories for ltype in range(3)}
+    for ltype in range(3):
+        print("---------------- SUMMARY 3*{0}+{1} = {2} -------------".format(theCat,ltype,3*theCat+ltype))
+        report[theCat, ltype].Print()
 
-    #for i in range(nCat):
-    #    if(histo[28][i].GetSumOfWeights() != 0): print("AAA({0}) {1}".format(i,histo[28][i].GetSumOfWeights()))
+    for snapshot in snapshots:
+        snapshot.GetValue()
+    materialize_empty_categories(histo, active_categories)
+    materialize_empty_categories(histo2D, active_categories, name_prefix="histo2d")
+
     myfile = ROOT.TFile("fillhisto_zAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
         for j in range(nHisto):
@@ -749,77 +751,9 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,wsWeights,puWeights,hist
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
 
-    genEventSumWeight = 0
-    genEventSumNoWeight = 0
-    nTheoryReplicas = [103, 9, 4]
-    genEventSumLHEScaleWeight = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    genEventSumPSWeight = [0, 0, 0, 0, 0]
-
     dfRuns = ROOT.RDataFrame("Runs", files)
-    genEventSumWeight = dfRuns.Sum("genEventSumw").GetValue()
-    genEventSumNoWeight = dfRuns.Sum("genEventCount").GetValue()
-    try:
-        if(dfRuns.Min("nLHEPdfSumw").GetValue() < nTheoryReplicas[0]):
-            nTheoryReplicas[0] = int(dfRuns.Min("nLHEPdfSumw").GetValue())
-    except Exception as e:
-        nTheoryReplicas[0] = 0
-    for n in range(9):
-        try:
-            if(dfRuns.Min("nLHEScaleSumw").GetValue() > n):
-                dfRuns = dfRuns.Define("genEventSumLHEScaleWeight{0}".format(n),"LHEScaleSumw[{0}]".format(n))
-                genEventSumLHEScaleWeight[n] = dfRuns.Sum("genEventSumLHEScaleWeight{0}".format(n)).GetValue()
-            else:
-                genEventSumLHEScaleWeight[n] = dfRuns.Count().GetValue()
-                nTheoryReplicas[1] = int(dfRuns.Min("nLHEScaleSumw").GetValue())
-        except Exception as e:
-            genEventSumLHEScaleWeight[n] = dfRuns.Count().GetValue()
-            nTheoryReplicas[1] = n
-            print("Problem with LHEScaleWeights {0}".format(e))
-    for n in range(4):
-        try:
-            if(dfRuns.Min("nPSSumw").GetValue() > n):
-                dfRuns = dfRuns.Define("genEventSumPSWeight{0}".format(n),"PSSumw[{0}]".format(n))
-                genEventSumPSWeight[n] = dfRuns.Sum("genEventSumPSWeight{0}".format(n)).GetValue()
-            else:
-                genEventSumPSWeight[n] = dfRuns.Count().GetValue()
-                nTheoryReplicas[2] = int(dfRuns.Min("nPSSumw").GetValue())
-        except Exception as e:
-            genEventSumPSWeight[n] = dfRuns.Count().GetValue()
-            nTheoryReplicas[2] = n
-            print("Problem with PSWeights {0}".format(e))
-    genEventSumPSWeight[4] = dfRuns.Count().GetValue()
-    runGetEntries = dfRuns.Count().GetValue()
-
-    '''
-    runTree = ROOT.TChain("Runs")
-    for f in range(len(files)):
-        runTree.AddFile(files[f])
-    for i in range(runTree.GetEntries()):
-        runTree.GetEntry(i)
-        genEventSumWeight += runTree.genEventSumw
-        genEventSumNoWeight += runTree.genEventCount
-        if(runTree.FindBranch("nLHEPdfSumw") and runTree.nLHEPdfSumw < nTheoryReplicas[0]):
-            nTheoryReplicas[0] = runTree.nLHEPdfSumw
-        for n in range(9):
-            if(n < runTree.nLHEScaleSumw):
-                genEventSumLHEScaleWeight[n] += runTree.LHEScaleSumw[n]
-            else:
-                genEventSumLHEScaleWeight[n] += 1.0
-                nTheoryReplicas[1] = runTree.nLHEScaleSumw
-        for n in range(4):
-            if(n < runTree.nPSSumw):
-                genEventSumPSWeight[n] += runTree.PSSumw[n]
-            else:
-                genEventSumPSWeight[n] += 1.0
-                nTheoryReplicas[2] = runTree.nPSSumw
-        genEventSumPSWeight[4] += 1
-    runGetEntries = runTree.GetEntries()
-    '''
-
-    print(genEventSumWeight,genEventSumNoWeight)
-    print(genEventSumLHEScaleWeight)
-    print(genEventSumPSWeight)
-    print("Number of Theory replicas: {0} / {1} / {2}".format(nTheoryReplicas[0],nTheoryReplicas[1],nTheoryReplicas[2]))
+    (genEventSumWeight, genEventSumNoWeight, nTheoryReplicas,
+     genEventSumLHEScaleWeight, genEventSumPSWeight, runGetEntries) = read_runs_metadata(dfRuns)
 
     genEventSumLHEScaleRenorm = [1, 1, 1, 1, 1, 1]
     genEventSumPSRenorm = [1, 1, 1, 1]
@@ -847,14 +781,14 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,wsWeights,puWeights,hist
         print("Used files: {0}".format(len(files)))
 
     df = ROOT.RDataFrame("Events", files)
-    nevents = df.Count().GetValue()
+    nevents = df.Count()
 
-    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runGetEntries,genEventSumWeight,genEventSumNoWeight,nevents))
     print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
     PDType = os.path.basename(SwitchSample(sampleNOW, skimType)[0]).split('+')[0]
 
     analysis(df,sampleNOW,SwitchSample(sampleNOW,skimType)[2],weight,year,PDType,"false",whichJob,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,wsWeights,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runGetEntries,genEventSumWeight,genEventSumNoWeight,nevents.GetValue()))
 
 def readDASample(sampleNOW,year,skimType,whichJob,group,wsWeights,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
@@ -883,10 +817,10 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,wsWeights,puWeights,hist
     genEventSumPSRenorm = [1, 1, 1, 1]
 
     weight=1.
-    nevents = df.Count().GetValue()
-    print("%s entries in the dataset" %nevents)
+    nevents = df.Count()
 
     analysis(df,sampleNOW,sampleNOW,weight,year,PDType,"true",whichJob,0,genEventSumLHEScaleRenorm,genEventSumPSRenorm,wsWeights,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    print("%s entries in the dataset" %nevents.GetValue())
 
 if __name__ == "__main__":
 

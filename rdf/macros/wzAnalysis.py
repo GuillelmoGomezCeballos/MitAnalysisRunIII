@@ -1,9 +1,15 @@
+"""Optimized WZ entry point; original physics and threading are retained.
+
+Uses utilsPerformance for batched Runs reductions, category pruning and
+compiled histogram processing. Output names follow the original macro.
+"""
 import ROOT
 import os, sys, getopt, json
 from array import array
 
 ROOT.ROOT.EnableImplicitMT(4)
 from utilsCategory import plotCategory
+from utilsPerformance import read_runs_metadata, candidate_categories, materialize_empty_categories, project_ww_templates, project_wz_templates
 from utilsAna import getMClist, getDATAlist
 from utilsAna import SwitchSample, groupFiles, getTriggerFromJson, getLeptomSelFromJson, getLumi
 from utilsSelection import selectionTauVeto, selectionPhoton, selectionJetMet, selection3LVar, selectionLGVar, selectionTrigger2L, selectionElMu, selectionWeigths, selectionGenLepJet, makeFinalVariableVar, makeFinalVariable2DVar
@@ -204,16 +210,15 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         branchList.push_back(branchName)
 
     #ROOT.gInterpreter.ProcessLine('''
-    #TMVA::Experimental::RReader model("weights_mva/bdt_BDTG_vbfinc_v0.weights.xml");
+    #TMVA::Experimental::RReader model("weights_mva/xxx");
     #computeModel = TMVA::Experimental::Compute<15, float>(model);
     #''')
     #variables = ROOT.model.GetVariableNames()
     #print(variables)
 
-    MVAweights = "weights_mva/bdt_BDTG_vbfinc_pcut50_nsel0_v0.weights.xml"
-    #MVAweights = "weights_mva/bdt_BDTG_vbfinc_pcut50_nsel1_v0.weights.xml"
-    #MVAweights = "weights_mva/bdt_BDTG_vbfinc_pcut30_nsel0_v0.weights.xml"
-    #MVAweights = "weights_mva/bdt_BDTG_vbfinc_pcut30_nsel1_v0.weights.xml"
+    #MVAweights = "weights_mva/bdt_BDTG_vbfinc_nsel0_v0.weights.xml" #3020
+    #MVAweights = "weights_mva/bdt_BDTG_vbfinc_pcut50_nsel0_v0.weights.xml" #4020
+    MVAweights = "weights_mva/bdt_BDTG_ewkwz_reliable15.weights.xml" #5020
     tmva_helper = tmva_helper_xml.TMVAHelperXML(MVAweights)
     print(tmva_helper.variables)
 
@@ -238,102 +243,104 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     dfbase = tmva_helper.run_inference(dfbase,"bdt_vbfinc",0)
 
-    dfwzcatMuonMomUp        = []
-    dfwzcatElectronMomUp    = []
-    dfwzcatJERUp            = []
-    dfwzcatJESUp            = []
-    dfwzcatUnclusteredUp    = []
-    dfwzbcatMuonMomUp       = []
-    dfwzbcatElectronMomUp   = []
-    dfwzbcatJERUp           = []
-    dfwzbcatJESUp           = []
-    dfwzbcatUnclusteredUp   = []
-    dfwzcat = []
-    dfwzbcat = []
-    dfwzjjcat = []
-    dfwzbjjcat = []
-    dfwzvbscat = []
-    dfwzbvbscat = []
-    dfzgcat = []
-    dfwhcat = []
-    dfsscat = []
-    dfwzvbsBDTcat = []
-    dfEMMcat = []
-    dfMEEcat = []
+    dfwzcatMuonMomUp        = [None] * nCat
+    dfwzcatElectronMomUp    = [None] * nCat
+    dfwzcatJERUp            = [None] * nCat
+    dfwzcatJESUp            = [None] * nCat
+    dfwzcatUnclusteredUp    = [None] * nCat
+    dfwzbcatMuonMomUp       = [None] * nCat
+    dfwzbcatElectronMomUp   = [None] * nCat
+    dfwzbcatJERUp           = [None] * nCat
+    dfwzbcatJESUp           = [None] * nCat
+    dfwzbcatUnclusteredUp   = [None] * nCat
+    dfwzcat = [None] * nCat
+    dfwzbcat = [None] * nCat
+    dfwzjjcat = [None] * nCat
+    dfwzbjjcat = [None] * nCat
+    dfwzvbscat = [None] * nCat
+    dfwzbvbscat = [None] * nCat
+    dfzgcat = [None] * nCat
+    dfwhcat = [None] * nCat
+    dfsscat = [None] * nCat
+    dfwzvbsBDTcat = [None] * nCat
+    dfEMMcat = [None] * nCat
+    dfMEEcat = [None] * nCat
 
-    dfwzvbscatMuonMomUp       = []
-    dfwzvbscatElectronMomUp   = []
-    dfwzvbscatJes00Up         = []
-    dfwzvbscatJes01Up         = []
-    dfwzvbscatJes02Up         = []
-    dfwzvbscatJes03Up         = []
-    dfwzvbscatJes04Up         = []
-    dfwzvbscatJes05Up         = []
-    dfwzvbscatJes06Up         = []
-    dfwzvbscatJes07Up         = []
-    dfwzvbscatJes08Up         = []
-    dfwzvbscatJes09Up         = []
-    dfwzvbscatJes10Up         = []
-    dfwzvbscatJes11Up         = []
-    dfwzvbscatJes12Up         = []
-    dfwzvbscatJes13Up         = []
-    dfwzvbscatJes14Up         = []
-    dfwzvbscatJes15Up         = []
-    dfwzvbscatJes16Up         = []
-    dfwzvbscatJes17Up         = []
-    dfwzvbscatJes18Up         = []
-    dfwzvbscatJes19Up         = []
-    dfwzvbscatJes20Up         = []
-    dfwzvbscatJes21Up         = []
-    dfwzvbscatJes22Up         = []
-    dfwzvbscatJes23Up         = []
-    dfwzvbscatJes24Up         = []
-    dfwzvbscatJes25Up         = []
-    dfwzvbscatJes26Up         = []
-    dfwzvbscatJes27Up         = []
-    dfwzvbscatJerUp           = []
-    dfwzvbscatJERUp           = []
-    dfwzvbscatJESUp           = []
-    dfwzvbscatUnclusteredUp   = []
+    dfwzvbscatMuonMomUp       = [None] * nCat
+    dfwzvbscatElectronMomUp   = [None] * nCat
+    dfwzvbscatJes00Up         = [None] * nCat
+    dfwzvbscatJes01Up         = [None] * nCat
+    dfwzvbscatJes02Up         = [None] * nCat
+    dfwzvbscatJes03Up         = [None] * nCat
+    dfwzvbscatJes04Up         = [None] * nCat
+    dfwzvbscatJes05Up         = [None] * nCat
+    dfwzvbscatJes06Up         = [None] * nCat
+    dfwzvbscatJes07Up         = [None] * nCat
+    dfwzvbscatJes08Up         = [None] * nCat
+    dfwzvbscatJes09Up         = [None] * nCat
+    dfwzvbscatJes10Up         = [None] * nCat
+    dfwzvbscatJes11Up         = [None] * nCat
+    dfwzvbscatJes12Up         = [None] * nCat
+    dfwzvbscatJes13Up         = [None] * nCat
+    dfwzvbscatJes14Up         = [None] * nCat
+    dfwzvbscatJes15Up         = [None] * nCat
+    dfwzvbscatJes16Up         = [None] * nCat
+    dfwzvbscatJes17Up         = [None] * nCat
+    dfwzvbscatJes18Up         = [None] * nCat
+    dfwzvbscatJes19Up         = [None] * nCat
+    dfwzvbscatJes20Up         = [None] * nCat
+    dfwzvbscatJes21Up         = [None] * nCat
+    dfwzvbscatJes22Up         = [None] * nCat
+    dfwzvbscatJes23Up         = [None] * nCat
+    dfwzvbscatJes24Up         = [None] * nCat
+    dfwzvbscatJes25Up         = [None] * nCat
+    dfwzvbscatJes26Up         = [None] * nCat
+    dfwzvbscatJes27Up         = [None] * nCat
+    dfwzvbscatJerUp           = [None] * nCat
+    dfwzvbscatJERUp           = [None] * nCat
+    dfwzvbscatJESUp           = [None] * nCat
+    dfwzvbscatUnclusteredUp   = [None] * nCat
 
-    dfwzbvbscatMuonMomUp      = []
-    dfwzbvbscatElectronMomUp  = []
-    dfwzbvbscatJes00Up        = []
-    dfwzbvbscatJes01Up        = []
-    dfwzbvbscatJes02Up        = []
-    dfwzbvbscatJes03Up        = []
-    dfwzbvbscatJes04Up        = []
-    dfwzbvbscatJes05Up        = []
-    dfwzbvbscatJes06Up        = []
-    dfwzbvbscatJes07Up        = []
-    dfwzbvbscatJes08Up        = []
-    dfwzbvbscatJes09Up        = []
-    dfwzbvbscatJes10Up        = []
-    dfwzbvbscatJes11Up        = []
-    dfwzbvbscatJes12Up        = []
-    dfwzbvbscatJes13Up        = []
-    dfwzbvbscatJes14Up        = []
-    dfwzbvbscatJes15Up        = []
-    dfwzbvbscatJes16Up        = []
-    dfwzbvbscatJes17Up        = []
-    dfwzbvbscatJes18Up        = []
-    dfwzbvbscatJes19Up        = []
-    dfwzbvbscatJes20Up        = []
-    dfwzbvbscatJes21Up        = []
-    dfwzbvbscatJes22Up        = []
-    dfwzbvbscatJes23Up        = []
-    dfwzbvbscatJes24Up        = []
-    dfwzbvbscatJes25Up        = []
-    dfwzbvbscatJes26Up        = []
-    dfwzbvbscatJes27Up        = []
-    dfwzbvbscatJerUp          = []
-    dfwzbvbscatJERUp          = []
-    dfwzbvbscatJESUp          = []
-    dfwzbvbscatUnclusteredUp  = []
-    for x in range(nCat):
-        dfwzcat.append(dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
+    dfwzbvbscatMuonMomUp      = [None] * nCat
+    dfwzbvbscatElectronMomUp  = [None] * nCat
+    dfwzbvbscatJes00Up        = [None] * nCat
+    dfwzbvbscatJes01Up        = [None] * nCat
+    dfwzbvbscatJes02Up        = [None] * nCat
+    dfwzbvbscatJes03Up        = [None] * nCat
+    dfwzbvbscatJes04Up        = [None] * nCat
+    dfwzbvbscatJes05Up        = [None] * nCat
+    dfwzbvbscatJes06Up        = [None] * nCat
+    dfwzbvbscatJes07Up        = [None] * nCat
+    dfwzbvbscatJes08Up        = [None] * nCat
+    dfwzbvbscatJes09Up        = [None] * nCat
+    dfwzbvbscatJes10Up        = [None] * nCat
+    dfwzbvbscatJes11Up        = [None] * nCat
+    dfwzbvbscatJes12Up        = [None] * nCat
+    dfwzbvbscatJes13Up        = [None] * nCat
+    dfwzbvbscatJes14Up        = [None] * nCat
+    dfwzbvbscatJes15Up        = [None] * nCat
+    dfwzbvbscatJes16Up        = [None] * nCat
+    dfwzbvbscatJes17Up        = [None] * nCat
+    dfwzbvbscatJes18Up        = [None] * nCat
+    dfwzbvbscatJes19Up        = [None] * nCat
+    dfwzbvbscatJes20Up        = [None] * nCat
+    dfwzbvbscatJes21Up        = [None] * nCat
+    dfwzbvbscatJes22Up        = [None] * nCat
+    dfwzbvbscatJes23Up        = [None] * nCat
+    dfwzbvbscatJes24Up        = [None] * nCat
+    dfwzbvbscatJes25Up        = [None] * nCat
+    dfwzbvbscatJes26Up        = [None] * nCat
+    dfwzbvbscatJes27Up        = [None] * nCat
+    dfwzbvbscatJerUp          = [None] * nCat
+    dfwzbvbscatJERUp          = [None] * nCat
+    dfwzbvbscatJESUp          = [None] * nCat
+    dfwzbvbscatUnclusteredUp  = [None] * nCat
+    active_categories = candidate_categories(theCat, True)
+    snapshots = []
+    for x in active_categories:
+        dfwzcat[x] = (dfbase.Filter("theCat=={0}".format(x), "correct category ({0})".format(x)))
 
-        dfsscat.append(dfwzcat[x].Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 3", "+/- 3 net charge"))
+        dfsscat[x] = (dfwzcat[x].Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 3", "+/- 3 net charge"))
 
         dfwzcat[x] = dfwzcat[x].Filter("abs(Sum(fake_Muon_charge)+Sum(fake_Electron_charge)) == 1", "+/- 1 net charge")
 
@@ -350,75 +357,75 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
             dfwzcat[x] = (dfwzcat[x].Define("theGenCat","{0}".format(0))
                                     )
 
-        dfwzvbscatMuonMomUp    .append(dfwzcat[x])
-        dfwzvbscatElectronMomUp.append(dfwzcat[x])
-        dfwzvbscatJes00Up      .append(dfwzcat[x])
-        dfwzvbscatJes01Up      .append(dfwzcat[x])
-        dfwzvbscatJes02Up      .append(dfwzcat[x])
-        dfwzvbscatJes03Up      .append(dfwzcat[x])
-        dfwzvbscatJes04Up      .append(dfwzcat[x])
-        dfwzvbscatJes05Up      .append(dfwzcat[x])
-        dfwzvbscatJes06Up      .append(dfwzcat[x])
-        dfwzvbscatJes07Up      .append(dfwzcat[x])
-        dfwzvbscatJes08Up      .append(dfwzcat[x])
-        dfwzvbscatJes09Up      .append(dfwzcat[x])
-        dfwzvbscatJes10Up      .append(dfwzcat[x])
-        dfwzvbscatJes11Up      .append(dfwzcat[x])
-        dfwzvbscatJes12Up      .append(dfwzcat[x])
-        dfwzvbscatJes13Up      .append(dfwzcat[x])
-        dfwzvbscatJes14Up      .append(dfwzcat[x])
-        dfwzvbscatJes15Up      .append(dfwzcat[x])
-        dfwzvbscatJes16Up      .append(dfwzcat[x])
-        dfwzvbscatJes17Up      .append(dfwzcat[x])
-        dfwzvbscatJes18Up      .append(dfwzcat[x])
-        dfwzvbscatJes19Up      .append(dfwzcat[x])
-        dfwzvbscatJes20Up      .append(dfwzcat[x])
-        dfwzvbscatJes21Up      .append(dfwzcat[x])
-        dfwzvbscatJes22Up      .append(dfwzcat[x])
-        dfwzvbscatJes23Up      .append(dfwzcat[x])
-        dfwzvbscatJes24Up      .append(dfwzcat[x])
-        dfwzvbscatJes25Up      .append(dfwzcat[x])
-        dfwzvbscatJes26Up      .append(dfwzcat[x])
-        dfwzvbscatJes27Up      .append(dfwzcat[x])
-        dfwzvbscatJerUp        .append(dfwzcat[x])
-        dfwzvbscatJERUp        .append(dfwzcat[x])
-        dfwzvbscatJESUp        .append(dfwzcat[x])
-        dfwzvbscatUnclusteredUp.append(dfwzcat[x])
+        dfwzvbscatMuonMomUp[x] = (dfwzcat[x])
+        dfwzvbscatElectronMomUp[x] = (dfwzcat[x])
+        dfwzvbscatJes00Up[x] = (dfwzcat[x])
+        dfwzvbscatJes01Up[x] = (dfwzcat[x])
+        dfwzvbscatJes02Up[x] = (dfwzcat[x])
+        dfwzvbscatJes03Up[x] = (dfwzcat[x])
+        dfwzvbscatJes04Up[x] = (dfwzcat[x])
+        dfwzvbscatJes05Up[x] = (dfwzcat[x])
+        dfwzvbscatJes06Up[x] = (dfwzcat[x])
+        dfwzvbscatJes07Up[x] = (dfwzcat[x])
+        dfwzvbscatJes08Up[x] = (dfwzcat[x])
+        dfwzvbscatJes09Up[x] = (dfwzcat[x])
+        dfwzvbscatJes10Up[x] = (dfwzcat[x])
+        dfwzvbscatJes11Up[x] = (dfwzcat[x])
+        dfwzvbscatJes12Up[x] = (dfwzcat[x])
+        dfwzvbscatJes13Up[x] = (dfwzcat[x])
+        dfwzvbscatJes14Up[x] = (dfwzcat[x])
+        dfwzvbscatJes15Up[x] = (dfwzcat[x])
+        dfwzvbscatJes16Up[x] = (dfwzcat[x])
+        dfwzvbscatJes17Up[x] = (dfwzcat[x])
+        dfwzvbscatJes18Up[x] = (dfwzcat[x])
+        dfwzvbscatJes19Up[x] = (dfwzcat[x])
+        dfwzvbscatJes20Up[x] = (dfwzcat[x])
+        dfwzvbscatJes21Up[x] = (dfwzcat[x])
+        dfwzvbscatJes22Up[x] = (dfwzcat[x])
+        dfwzvbscatJes23Up[x] = (dfwzcat[x])
+        dfwzvbscatJes24Up[x] = (dfwzcat[x])
+        dfwzvbscatJes25Up[x] = (dfwzcat[x])
+        dfwzvbscatJes26Up[x] = (dfwzcat[x])
+        dfwzvbscatJes27Up[x] = (dfwzcat[x])
+        dfwzvbscatJerUp[x] = (dfwzcat[x])
+        dfwzvbscatJERUp[x] = (dfwzcat[x])
+        dfwzvbscatJESUp[x] = (dfwzcat[x])
+        dfwzvbscatUnclusteredUp[x] = (dfwzcat[x])
 
-        dfwzbvbscatMuonMomUp    .append(dfwzcat[x])
-        dfwzbvbscatElectronMomUp.append(dfwzcat[x])
-        dfwzbvbscatJes00Up      .append(dfwzcat[x])
-        dfwzbvbscatJes01Up      .append(dfwzcat[x])
-        dfwzbvbscatJes02Up      .append(dfwzcat[x])
-        dfwzbvbscatJes03Up      .append(dfwzcat[x])
-        dfwzbvbscatJes04Up      .append(dfwzcat[x])
-        dfwzbvbscatJes05Up      .append(dfwzcat[x])
-        dfwzbvbscatJes06Up      .append(dfwzcat[x])
-        dfwzbvbscatJes07Up      .append(dfwzcat[x])
-        dfwzbvbscatJes08Up      .append(dfwzcat[x])
-        dfwzbvbscatJes09Up      .append(dfwzcat[x])
-        dfwzbvbscatJes10Up      .append(dfwzcat[x])
-        dfwzbvbscatJes11Up      .append(dfwzcat[x])
-        dfwzbvbscatJes12Up      .append(dfwzcat[x])
-        dfwzbvbscatJes13Up      .append(dfwzcat[x])
-        dfwzbvbscatJes14Up      .append(dfwzcat[x])
-        dfwzbvbscatJes15Up      .append(dfwzcat[x])
-        dfwzbvbscatJes16Up      .append(dfwzcat[x])
-        dfwzbvbscatJes17Up      .append(dfwzcat[x])
-        dfwzbvbscatJes18Up      .append(dfwzcat[x])
-        dfwzbvbscatJes19Up      .append(dfwzcat[x])
-        dfwzbvbscatJes20Up      .append(dfwzcat[x])
-        dfwzbvbscatJes21Up      .append(dfwzcat[x])
-        dfwzbvbscatJes22Up      .append(dfwzcat[x])
-        dfwzbvbscatJes23Up      .append(dfwzcat[x])
-        dfwzbvbscatJes24Up      .append(dfwzcat[x])
-        dfwzbvbscatJes25Up      .append(dfwzcat[x])
-        dfwzbvbscatJes26Up      .append(dfwzcat[x])
-        dfwzbvbscatJes27Up      .append(dfwzcat[x])
-        dfwzbvbscatJerUp        .append(dfwzcat[x])
-        dfwzbvbscatJERUp        .append(dfwzcat[x])
-        dfwzbvbscatJESUp        .append(dfwzcat[x])
-        dfwzbvbscatUnclusteredUp.append(dfwzcat[x])
+        dfwzbvbscatMuonMomUp[x] = (dfwzcat[x])
+        dfwzbvbscatElectronMomUp[x] = (dfwzcat[x])
+        dfwzbvbscatJes00Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes01Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes02Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes03Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes04Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes05Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes06Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes07Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes08Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes09Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes10Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes11Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes12Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes13Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes14Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes15Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes16Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes17Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes18Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes19Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes20Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes21Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes22Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes23Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes24Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes25Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes26Up[x] = (dfwzcat[x])
+        dfwzbvbscatJes27Up[x] = (dfwzcat[x])
+        dfwzbvbscatJerUp[x] = (dfwzcat[x])
+        dfwzbvbscatJERUp[x] = (dfwzcat[x])
+        dfwzbvbscatJESUp[x] = (dfwzcat[x])
+        dfwzbvbscatUnclusteredUp[x] = (dfwzcat[x])
 
         dfwzvbscatMuonMomUp     [x] = dfwzvbscatMuonMomUp     [x].Filter("mllZMuonMomUp     < 15 && m3lMuonMomUp     > 100 && ptlWMuonMomUp     > 20 && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && PuppiMET_ptDef	> {0}".format(metCut))
         dfwzvbscatElectronMomUp [x] = dfwzvbscatElectronMomUp [x].Filter("mllZElectronMomUp < 15 && m3lElectronMomUp > 100 && ptlWElectronMomUp > 20 && nbtag_goodbtag_Jet_bjet        == 0 && nvbs_jets	>= 2 && vbs_mjj        > 500 && vbs_detajj	  > 2.5 && vbs_zepvv	    < 1.0 && PuppiMET_ptDef	> {0}".format(metCut))
@@ -553,25 +560,23 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         if(makeDataCards >= 3):
             dfwzcat[x] = dfwzcat[x].Filter("nvbs_jets >= 2 && vbs_mjj > 150")
 
-        dfzgcat.append(dfwzcat[x].Filter("mll{0} > 10 && mll{0} < 110 && ptl1Z{0} > 25 && ptl2Z{0} > 20 && ptlW{0} > 20".format(altMass)))
+        dfzgcat[x] = (dfwzcat[x].Filter("mll{0} > 10 && mll{0} < 110 && ptl1Z{0} > 25 && ptl2Z{0} > 20 && ptlW{0} > 20".format(altMass)))
 
-        dfwhcat.append(dfwzcat[x].Filter("mll{0} == -1 && mllmin{0} > 10".format(altMass)))
+        dfwhcat[x] = (dfwzcat[x].Filter("mll{0} == -1 && mllmin{0} > 10".format(altMass)))
 
         dfwzcat[x] = dfwzcat[x].Filter("mll{0} > 0".format(altMass),"mll > 0")
 
         histo[ 0][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 0,x), "histo_{0}_{1}".format( 0,x),120,  0, 120), "mllmin{0}".format(altMass),"weightNoBTag")
         dfwzcat[x] = dfwzcat[x].Filter("mllmin{0} > 1".format(altMass),"mllmin cut")
 
-        dfEMMcat.append(dfwzcat[x].Filter("TriLepton_flavor == 1 && triggerSEL > 0 && fake_Electron_pt[0] > 30")
+        dfEMMcat[x] = (dfwzcat[x].Filter("TriLepton_flavor == 1 && triggerSEL > 0 && fake_Electron_pt[0] > 30")
                                   .Define("pttag","Max(fake_Electron_pt)")
                                   .Define("ptmax","Max(fake_Muon_pt)")
-                                  .Define("ptmin","Min(fake_Muon_pt)")
-                                  )
-        dfMEEcat.append(dfwzcat[x].Filter("TriLepton_flavor == 2 && triggerSMU > 0 && fake_Muon_pt[0] > 30")
+                                  .Define("ptmin","Min(fake_Muon_pt)"))
+        dfMEEcat[x] = (dfwzcat[x].Filter("TriLepton_flavor == 2 && triggerSMU > 0 && fake_Muon_pt[0] > 30")
                                   .Define("pttag","Max(fake_Muon_pt)")
                                   .Define("ptmax","Max(fake_Electron_pt)")
-                                  .Define("ptmin","Min(fake_Electron_pt)")
-                                  )
+                                  .Define("ptmin","Min(fake_Electron_pt)"))
         histo[61][x] = dfEMMcat[x].Histo1D(("histo_{0}_{1}".format(61,x), "histo_{0}_{1}".format(61,x), 20, 30, 130), "pttag","weightNoBTag")
         histo[62][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(62,x), "histo_{0}_{1}".format(62,x), 20, 30, 130), "pttag","weightNoBTag")
 
@@ -594,10 +599,10 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[71][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(71,x), "histo_{0}_{1}".format(71,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmax","weightNoBTag")
         histo[72][x] = dfMEEcat[x].Histo1D(("histo_{0}_{1}".format(72,x), "histo_{0}_{1}".format(72,x), len(xPtTrgBins)-1, xPtTrgBins), "ptmin","weightNoBTag")
 
-        dfwzcatMuonMomUp     .append(dfwzcat[x])
-        dfwzcatElectronMomUp .append(dfwzcat[x])
-        dfwzbcatMuonMomUp    .append(dfwzcat[x])
-        dfwzbcatElectronMomUp.append(dfwzcat[x])
+        dfwzcatMuonMomUp[x] = (dfwzcat[x])
+        dfwzcatElectronMomUp[x] = (dfwzcat[x])
+        dfwzbcatMuonMomUp[x] = (dfwzcat[x])
+        dfwzbcatElectronMomUp[x] = (dfwzcat[x])
 
         histo[ 1][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 1,x), "histo_{0}_{1}".format( 1,x),100,  0, 100), "mllZ{0}".format(altMass),"weightNoBTag")
         dfwzcat                [x] = dfwzcat                [x].Filter("mllZ{0}             < 15".format(altMass),"mllZ cut")
@@ -636,7 +641,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         dfwzbcatMuonMomUp      [x] = dfwzbcatMuonMomUp      [x].Filter("ptlWMuonMomUp       > 20")
         dfwzbcatElectronMomUp  [x] = dfwzbcatElectronMomUp  [x].Filter("ptlWElectronMomUp   > 20")
 
-        dfwzbcat.append(dfwzcat[x].Filter("nbtag_goodbtag_Jet_bjet > 0","at least one good b-jet"))
+        dfwzbcat[x] = (dfwzcat[x].Filter("nbtag_goodbtag_Jet_bjet > 0","at least one good b-jet"))
 
         histo[ 4][x] = dfwzcat[x].Histo1D(("histo_{0}_{1}".format( 4,x), "histo_{0}_{1}".format( 4,x), 4,-0.5 ,3.5), "nbtag_goodbtag_Jet_bjet","weight")
         dfwzcat[x]                 = dfwzcat                [x].Filter("nbtag_goodbtag_Jet_bjet == 0","no good b-jets")
@@ -651,13 +656,13 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[29][x] = dfwzcat[x] .Histo1D(("histo_{0}_{1}".format(29,x), "histo_{0}_{1}".format(29,x), 40,  0, 200), "PuppiMET_ptUnclUp","weight")
         histo[30][x] = dfwzbcat[x].Histo1D(("histo_{0}_{1}".format(30,x), "histo_{0}_{1}".format(30,x), 40,  0, 200), "PuppiMET_ptUnclUp","weight")
 
-        dfwzcatJERUp          .append(dfwzcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
-        dfwzcatJESUp          .append(dfwzcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
-        dfwzcatUnclusteredUp  .append(dfwzcat[x].Filter("PuppiMET_ptUnclUp > {0}".format(metCut)))
+        dfwzcatJERUp[x] = (dfwzcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
+        dfwzcatJESUp[x] = (dfwzcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
+        dfwzcatUnclusteredUp[x] = (dfwzcat[x].Filter("PuppiMET_ptUnclUp > {0}".format(metCut)))
 
-        dfwzbcatJERUp          .append(dfwzbcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
-        dfwzbcatJESUp          .append(dfwzbcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
-        dfwzbcatUnclusteredUp  .append(dfwzbcat[x].Filter("PuppiMET_ptUnclUp > {0}".format(metCut)))
+        dfwzbcatJERUp[x] = (dfwzbcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
+        dfwzbcatJESUp[x] = (dfwzbcat[x].Filter("PuppiMET_ptDef    > {0}".format(metCut)))
+        dfwzbcatUnclusteredUp[x] = (dfwzbcat[x].Filter("PuppiMET_ptUnclUp > {0}".format(metCut)))
 
         dfwzcat[x]                 = dfwzcat                [x].Filter("PuppiMET_ptDef > {0}".format(metCut),"PuppiMET_pt > {0}".format(metCut))
         dfwzcatMuonMomUp       [x] = dfwzcatMuonMomUp       [x].Filter("PuppiMET_ptDef > {0}".format(metCut))
@@ -677,8 +682,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[13][x] = dfwzcat[x] .Histo1D(("histo_{0}_{1}".format(13,x), "histo_{0}_{1}".format(13,x), 4,-0.5, 3.5), "ngood_jets","weight")
         histo[14][x] = dfwzbcat[x].Histo1D(("histo_{0}_{1}".format(14,x), "histo_{0}_{1}".format(14,x), 4,-0.5, 3.5), "ngood_jets","weight")
 
-        dfwzjjcat .append(dfwzcat[x] .Filter(VBSQCDSEL, "VBS QCD selection"))
-        dfwzbjjcat.append(dfwzbcat[x].Filter(VBSQCDSEL, "VBS QCD selection"))
+        dfwzjjcat[x] = (dfwzcat[x] .Filter(VBSQCDSEL, "VBS QCD selection"))
+        dfwzbjjcat[x] = (dfwzbcat[x].Filter(VBSQCDSEL, "VBS QCD selection"))
 
         histo[17][x] = dfwzjjcat[x] .Histo1D(("histo_{0}_{1}".format(17,x), "histo_{0}_{1}".format(17,x), 4,1.5, 5.5), "ngood_jets","weight")
         histo[18][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(18,x), "histo_{0}_{1}".format(18,x), 4,1.5, 5.5), "ngood_jets","weight")
@@ -689,8 +694,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
         histo[23][x] = dfwzjjcat[x] .Histo1D(("histo_{0}_{1}".format(23,x), "histo_{0}_{1}".format(23,x), 40,0,3.1416), "vbs_dphijj","weight")
         histo[24][x] = dfwzbjjcat[x].Histo1D(("histo_{0}_{1}".format(24,x), "histo_{0}_{1}".format(24,x), 40,0,3.1416), "vbs_dphijj","weight")
 
-        dfwzvbscat .append(dfwzcat[x] .Filter(VBSSEL, "VBS selection"))
-        dfwzbvbscat.append(dfwzbcat[x].Filter(VBSSEL, "VBS selection"))
+        dfwzvbscat[x] = (dfwzcat[x] .Filter(VBSSEL, "VBS selection"))
+        dfwzbvbscat[x] = (dfwzbcat[x].Filter(VBSSEL, "VBS selection"))
         histo[25][x] = dfwzvbscat[x] .Histo1D(("histo_{0}_{1}".format(25,x), "histo_{0}_{1}".format(25,x), 10,-1,1), "bdt_vbfinc","weight")
         histo[26][x] = dfwzbvbscat[x].Histo1D(("histo_{0}_{1}".format(26,x), "histo_{0}_{1}".format(26,x), 10,-1,1), "bdt_vbfinc","weight")
         histo[27][x] = dfwzvbscat[x] .Histo1D(("histo_{0}_{1}".format(27,x), "histo_{0}_{1}".format(27,x), 4,1.5, 5.5), "ngood_jets","weight") 
@@ -732,7 +737,9 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
         if(doNtuples == True and x == theCat):
             outputFile = "ntupleWZAna_sample{0}_year{1}_job{2}.root".format(count,year,whichJob)
-            dfwzvbscat[x].Snapshot("events", outputFile, branchList)
+            snapshot_options = ROOT.RDF.RSnapshotOptions()
+            snapshot_options.fLazy = True
+            snapshots.append(dfwzvbscat[x].Snapshot("events", outputFile, branchList, snapshot_options))
 
         histo[37][x] = dfzgcat[x].Histo1D(("histo_{0}_{1}".format(37,x), "histo_{0}_{1}".format(37,x), 40, 10, 210), "m3l{0}".format(altMass),"weight")
         dfzgcat[x] = dfzgcat[x].Filter("abs(m3l{0}-91.1876)<15".format(altMass))
@@ -976,8 +983,8 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 varSel1 = 12
                 varSel2 = 11
             elif(makeDataCards == 5): # BDT 1D
-                x1Bins = array('d', [0.000,0.125,0.250,0.375,0.500,0.625,0.750,0.875,1.000])
-                x2Bins = array('d', [0.000,0.125,0.250,0.375,0.500,0.625,0.750,0.875,1.000])
+                x1Bins = array('d', [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0])
+                x2Bins = array('d', [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0])
                 varSel1 = 13
                 varSel2 = 13
             elif(makeDataCards == 6): # mjj
@@ -1324,64 +1331,14 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
                 histoNonPrompt[4+startNonPrompt] = dfwzbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(4+startNonPrompt), "histoNonPrompt_{0}".format(4+startNonPrompt), len(x2Bins)-1,x2Bins), "finalVar","weightFakeAlte1")
                 histoNonPrompt[5+startNonPrompt] = dfwzbvbscat[x].Histo1D(("histoNonPrompt_{0}".format(5+startNonPrompt), "histoNonPrompt_{0}".format(5+startNonPrompt), len(x2Bins)-1,x2Bins), "finalVar","weightFakeAlte2")
 
-    report = []
-    for x in range(nCat):
-        report.append(dfwzvbscat[x].Report())
-        if(x != theCat): continue
-        print("---------------- SUMMARY {0} -------------".format(x))
-        report[x].Print()
-
-    if(makeDataCards == 7):
-        for j in range(300,nHistoMVA):
-            if(j < 500):
-                for x in range(nCat):
-                    histo[j][x] = ROOT.TH1D("histo_{0}_{1}".format(j,x), "histo_{0}_{1}".format(j,x), len(x1Bins)-1, x1Bins)
-            else:
-                for x in range(nCat):
-                    histo[j][x] = ROOT.TH1D("histo_{0}_{1}".format(j,x), "histo_{0}_{1}".format(j,x), len(x2Bins)-1, x2Bins)
-
-    for j in range(300,nHistoMVA):
-        for x in range(nCat):
-            if(histo2D[j][x] == 0):
-                continue
-            for i in range(histo2D[j][x].GetNbinsX()):
-                histo2D[j][x].SetBinContent(i+1,histo2D[j][x].GetNbinsY(),histo2D[j][x].GetBinContent(i+1,histo2D[j][x].GetNbinsY())+histo2D[j][x].GetBinContent(i+1,histo2D[j][x].GetNbinsY()+1))
-                histo2D[j][x].SetBinError  (i+1,histo2D[j][x].GetNbinsY(),pow(pow(histo2D[j][x].GetBinError(i+1,histo2D[j][x].GetNbinsY()),2)+pow(histo2D[j][x].GetBinError(i+1,histo2D[j][x].GetNbinsY()+1),2),0.5))
-                histo2D[j][x].SetBinContent(i+1,histo2D[j][x].GetNbinsY()+1,0.0)
-                histo2D[j][x].SetBinError  (i+1,histo2D[j][x].GetNbinsY()+1,0.0)
-
-            for i in range(histo2D[j][x].GetNbinsY()):
-                histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX(),i+1,histo2D[j][x].GetBinContent(histo2D[j][x].GetNbinsX(),i+1)+histo2D[j][x].GetBinContent(histo2D[j][x].GetNbinsX()+1,i+1))
-                histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX(),i+1,pow(pow(histo2D[j][x].GetBinError(histo2D[j][x].GetNbinsX(),i+1),2)+pow(histo2D[j][x].GetBinError(histo2D[j][x].GetNbinsX()+1,i+1),2),0.5))
-                histo2D[j][x].SetBinContent(histo2D[j][x].GetNbinsX()+1,i+1,0.0)
-                histo2D[j][x].SetBinError  (histo2D[j][x].GetNbinsX()+1,i+1,0.0)
-
-            if(x == plotCategory("kPlotEWKWZ") or (x == plotCategory("kPlotWZ") and versionDoEWKQCD == True)):
-                histo[j][plotCategory("kPlotEWKWZ")]  .SetBinError(1,0.0)
-                histo[j][plotCategory("kPlotSignal0")].SetBinError(1,0.0)
-                histo[j][plotCategory("kPlotSignal1")].SetBinError(1,0.0)
-                histo[j][plotCategory("kPlotSignal2")].SetBinError(1,0.0)
-                histo[j][plotCategory("kPlotSignal3")].SetBinError(1,0.0)
-                for i in range(histo[j][x].GetNbinsX()):
-                    histo[j][plotCategory("kPlotEWKWZ")]  .SetBinContent(i+1,	     histo[j][plotCategory("kPlotEWKWZ")]  .GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,1))
-                    histo[j][plotCategory("kPlotEWKWZ")]  .SetBinError  (i+1,pow(pow(histo[j][plotCategory("kPlotEWKWZ")]  .GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,1),2),0.5))
-
-                    histo[j][plotCategory("kPlotSignal0")].SetBinContent(i+1,	     histo[j][plotCategory("kPlotSignal0")].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,2))
-                    histo[j][plotCategory("kPlotSignal0")].SetBinError  (i+1,pow(pow(histo[j][plotCategory("kPlotSignal0")].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,2),2),0.5))
-
-                    histo[j][plotCategory("kPlotSignal1")].SetBinContent(i+1,	     histo[j][plotCategory("kPlotSignal1")].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,3))
-                    histo[j][plotCategory("kPlotSignal1")].SetBinError  (i+1,pow(pow(histo[j][plotCategory("kPlotSignal1")].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,3),2),0.5))
-
-                    histo[j][plotCategory("kPlotSignal2")].SetBinContent(i+1,	     histo[j][plotCategory("kPlotSignal2")].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,4))
-                    histo[j][plotCategory("kPlotSignal2")].SetBinError  (i+1,pow(pow(histo[j][plotCategory("kPlotSignal2")].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,4),2),0.5))
-
-                    histo[j][plotCategory("kPlotSignal3")].SetBinContent(i+1,	     histo[j][plotCategory("kPlotSignal3")].GetBinContent(i+1)+       histo2D[j][x].GetBinContent(i+1,5))
-                    histo[j][plotCategory("kPlotSignal3")].SetBinError  (i+1,pow(pow(histo[j][plotCategory("kPlotSignal3")].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,5),2),0.5))
-
-            else:
-                for i in range(histo[j][x].GetNbinsX()):
-                    histo[j][x].SetBinContent(i+1,	  histo[j][x].GetBinContent(i+1)+	histo2D[j][x].GetBinContent(i+1,1))
-                    histo[j][x].SetBinError  (i+1,pow(pow(histo[j][x].GetBinError  (i+1),2)+pow(histo2D[j][x].GetBinError  (i+1,1),2),0.5))
+    report = {x: dfwzvbscat[x].Report() for x in active_categories}
+    print("---------------- SUMMARY {0} -------------".format(theCat))
+    report[theCat].Print()
+    for snapshot in snapshots:
+        snapshot.GetValue()
+    if makeDataCards == 7:
+        project_wz_templates(histo2D, histo, nCat, nHistoMVA, x1Bins, x2Bins, versionDoEWKQCD)
+    materialize_empty_categories(histo, active_categories)
 
     myfile = ROOT.TFile("fillhisto_wzAnalysis_sample{0}_year{1}_job{2}.root".format(count,year,whichJob),'RECREATE')
     for i in range(nCat):
@@ -1398,46 +1355,9 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,ewkCorrWeights,wsWeights
     files = getMClist(sampleNOW, skimType)
     print("Total files: {0}".format(len(files)))
 
-    genEventSumWeight = 0
-    genEventSumNoWeight = 0
-    nTheoryReplicas = [103, 9, 4]
-    genEventSumLHEScaleWeight = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    genEventSumPSWeight = [0, 0, 0, 0, 0]
-
     dfRuns = ROOT.RDataFrame("Runs", files)
-    genEventSumWeight = dfRuns.Sum("genEventSumw").GetValue()
-    genEventSumNoWeight = dfRuns.Sum("genEventCount").GetValue()
-    try:
-        if(dfRuns.Min("nLHEPdfSumw").GetValue() < nTheoryReplicas[0]):
-            nTheoryReplicas[0] = int(dfRuns.Min("nLHEPdfSumw").GetValue())
-    except Exception as e:
-        nTheoryReplicas[0] = 0
-    for n in range(9):
-        try:
-            if(dfRuns.Min("nLHEScaleSumw").GetValue() > n):
-                dfRuns = dfRuns.Define("genEventSumLHEScaleWeight{0}".format(n),"LHEScaleSumw[{0}]".format(n))
-                genEventSumLHEScaleWeight[n] = dfRuns.Sum("genEventSumLHEScaleWeight{0}".format(n)).GetValue()
-            else:
-                genEventSumLHEScaleWeight[n] = dfRuns.Count().GetValue()
-                nTheoryReplicas[1] = int(dfRuns.Min("nLHEScaleSumw").GetValue())
-        except Exception as e:
-            genEventSumLHEScaleWeight[n] = dfRuns.Count().GetValue()
-            nTheoryReplicas[1] = n
-            print("Problem with LHEScaleWeights {0}".format(e))
-    for n in range(4):
-        try:
-            if(dfRuns.Min("nPSSumw").GetValue() > n):
-                dfRuns = dfRuns.Define("genEventSumPSWeight{0}".format(n),"PSSumw[{0}]".format(n))
-                genEventSumPSWeight[n] = dfRuns.Sum("genEventSumPSWeight{0}".format(n)).GetValue()
-            else:
-                genEventSumPSWeight[n] = dfRuns.Count().GetValue()
-                nTheoryReplicas[2] = int(dfRuns.Min("nPSSumw").GetValue())
-        except Exception as e:
-            genEventSumPSWeight[n] = dfRuns.Count().GetValue()
-            nTheoryReplicas[2] = n
-            print("Problem with PSWeights {0}".format(e))
-    genEventSumPSWeight[4] = dfRuns.Count().GetValue()
-    runGetEntries = dfRuns.Count().GetValue()
+    (genEventSumWeight, genEventSumNoWeight, nTheoryReplicas,
+     genEventSumLHEScaleWeight, genEventSumPSWeight, runGetEntries) = read_runs_metadata(dfRuns)
 
     print("Number of Theory replicas: {0} / {1} / {2}".format(nTheoryReplicas[0],nTheoryReplicas[1],nTheoryReplicas[2]))
 
@@ -1469,14 +1389,14 @@ def readMCSample(sampleNOW,year,skimType,whichJob,group,ewkCorrWeights,wsWeights
         print("Used files: {0}".format(len(files)))
 
     df = ROOT.RDataFrame("Events", files)
-    nevents = df.Count().GetValue()
+    nevents = df.Count()
 
-    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runGetEntries,genEventSumWeight,genEventSumNoWeight,nevents))
     print("WeightExact/Approx %f / %f / Cross section: %f" %(weight, weightApprox, SwitchSample(sampleNOW, skimType)[1]))
 
     PDType = os.path.basename(SwitchSample(sampleNOW, skimType)[0]).split('+')[0]
 
     analysis(df,sampleNOW,SwitchSample(sampleNOW,skimType)[2],weight,year,PDType,"false",whichJob,nTheoryReplicas,genEventSumLHEScaleRenorm,genEventSumPSRenorm,ewkCorrWeights,wsWeights,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    print("genEventSum({0}): {1} / Events(total/ntuple): {2} / {3}".format(runGetEntries,genEventSumWeight,genEventSumNoWeight,nevents.GetValue()))
 
 def readDASample(sampleNOW,year,skimType,whichJob,group,ewkCorrWeights,wsWeights,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3):
 
@@ -1505,10 +1425,10 @@ def readDASample(sampleNOW,year,skimType,whichJob,group,ewkCorrWeights,wsWeights
     genEventSumPSRenorm = [1, 1, 1, 1]
 
     weight=1.
-    nevents = df.Count().GetValue()
-    print("%s entries in the dataset" %nevents)
+    nevents = df.Count()
 
     analysis(df,sampleNOW,sampleNOW,weight,year,PDType,"true",whichJob,0,genEventSumLHEScaleRenorm,genEventSumPSRenorm,ewkCorrWeights,wsWeights,puWeights,histoBTVEffEtaPtLF,histoBTVEffEtaPtCJ,histoBTVEffEtaPtBJ,histoFakeEtaPt_mu,histoFakeEtaPt_el,histoLepSFEtaPt_mu,histoLepSFEtaPt_el,histoTriggerSFEtaPt_0_0,histoTriggerSFEtaPt_0_1,histoTriggerSFEtaPt_0_2,histoTriggerSFEtaPt_0_3,histoTriggerSFEtaPt_1_0,histoTriggerSFEtaPt_1_1,histoTriggerSFEtaPt_1_2,histoTriggerSFEtaPt_1_3,histoTriggerSFEtaPt_2_0,histoTriggerSFEtaPt_2_1,histoTriggerSFEtaPt_2_2,histoTriggerSFEtaPt_2_3,histoTriggerSFEtaPt_3_0,histoTriggerSFEtaPt_3_1,histoTriggerSFEtaPt_3_2,histoTriggerSFEtaPt_3_3)
+    print("%s entries in the dataset" % nevents.GetValue())
 
 if __name__ == "__main__":
 

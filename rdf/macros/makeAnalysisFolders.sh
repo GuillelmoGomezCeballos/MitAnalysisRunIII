@@ -83,6 +83,10 @@ rm -f ${OUTPUTFOLDER}/macros1008/wzAnalysis.py
 rm -f ${OUTPUTFOLDER}/macros1009/wzAnalysis.py
 rm -f ${OUTPUTFOLDER}/macros1010/wzAnalysis.py
 
+sed -i 's/makeDataCards = 4/makeDataCards = 5/'  ${OUTPUTFOLDER}/macros1020/wzAnalysis.py
+sed -i 's/makeDataCards = 4/makeDataCards = 5/'  ${OUTPUTFOLDER}/macros1021/wzAnalysis.py
+sed -i 's/makeDataCards = 4/makeDataCards = 5/'  ${OUTPUTFOLDER}/macros1022/wzAnalysis.py
+
 sed -i 's/versionCharges = 0/versionCharges = +1/' ${OUTPUTFOLDER}/macros1021/wzAnalysis.py
 sed -i 's/versionCharges = 0/versionCharges = -1/' ${OUTPUTFOLDER}/macros1022/wzAnalysis.py
 

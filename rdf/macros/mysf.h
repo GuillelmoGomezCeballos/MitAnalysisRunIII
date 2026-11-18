@@ -32,6 +32,7 @@ class MyCorrections {
     double eval_jesUnc    (double eta, double pt, int type);
     double eval_jerScaleFactor(double eta, double pt, int type);
     double eval_jerPtResolution(double eta, double pt, double rho);
+    double eval_jerSmear(double pt, double eta, double genPt, double rho, int seed, double ptRes, double sf);
     double eval_puJetIDSF (char *valType, char *workingPoint, double eta, double pt);
     double eval_jetVetoMap(double eta, double phi, int type);
     double eval_jetSel    (unsigned int sel, float eta, float chHEF, float neHEF, float chEmEF, float neEmEF, float muEF, int chMultiplicity, int neMultiplicity);
@@ -78,6 +79,7 @@ class MyCorrections {
     correction::Correction::Ref jerScaleFactor_;
     correction::Correction::Ref jerScaleFactorUnc_;
     correction::Correction::Ref jerPtResolution__;
+    correction::Correction::Ref jerSmear_;
     correction::Correction::Ref puJetIDSF_;
     correction::Correction::Ref jetTightSel_;
     correction::Correction::Ref jetTightLeptonVetoSel_;
@@ -454,6 +456,10 @@ MyCorrections::MyCorrections(int the_input_year) {
   tagName = jerName + "_" + "PtResolution" + "_" + algoName;
   jerPtResolution__ = csetJER->at(tagName);
 
+  std::string fileNameRNDJER = dirName+"JME/JER-Smearing/"+"jer_smear.json.gz";
+  auto csetRNDJER = correction::CorrectionSet::from_file(fileNameRNDJER);
+  jerSmear_ = csetRNDJER->at("JERSmear");
+
   //std::string fileNamePUJetID = dirName+"JME/"+subDirName+"jmar.json.gz";
   //auto csetPUJetID = correction::CorrectionSet::from_file(fileNamePUJetID);
   //puJetIDSF_ = csetPUJetID->at("PUJetID_eff");
@@ -597,6 +603,11 @@ double MyCorrections::eval_jerScaleFactor(double eta, double pt, int type) {
 double MyCorrections::eval_jerPtResolution(double eta, double pt, double rho) {
   return jerPtResolution__->evaluate({eta,pt,rho});
 };
+
+double MyCorrections::eval_jerSmear(double pt, double eta, double genPt, double rho,
+				    int seed, double ptRes, double sf) {
+  return jerSmear_->evaluate({pt, eta, genPt, rho, seed, ptRes, sf});
+}
 
 double MyCorrections::eval_puJetIDSF(char *valType, char *workingPoint, double eta, double pt) {
   return puJetIDSF_->evaluate({eta, pt, valType, workingPoint});

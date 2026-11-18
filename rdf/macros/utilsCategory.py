@@ -1,35 +1,35 @@
+"""Plot-category IDs shared by the analysis helpers."""
+
+_PLOT_CATEGORIES = {'kPlotData': 0,
+ 'kPlotqqWW': 1,
+ 'kPlotggWW': 2,
+ 'kPlotTT': 3,
+ 'kPlotTW': 4,
+ 'kPlotDY': 5,
+ 'kPlotEWKSSWW': 6,
+ 'kPlotQCDSSWW': 7,
+ 'kPlotEWKWZ': 8,
+ 'kPlotWZ': 9,
+ 'kPlotZZ': 10,
+ 'kPlotNonPrompt': 11,
+ 'kPlotVVV': 12,
+ 'kPlotTVX': 13,
+ 'kPlotVG': 14,
+ 'kPlotHiggs': 15,
+ 'kPlotWS': 16,
+ 'kPlotOther': 17,
+ 'kPlotEM': 18,
+ 'kPlotBSM': 19,
+ 'kPlotSignal0': 20,
+ 'kPlotSignal1': 21,
+ 'kPlotSignal2': 22,
+ 'kPlotSignal3': 23,
+ 'kPlotSignal4': 24,
+ 'kPlotSignal5': 25,
+ 'kPlotCategories': 26}
 
 def plotCategory(key):
-    plotCategoryDict = dict()
-    plotCategoryDict.update({"kPlotData"      :[ 0]})
-    plotCategoryDict.update({"kPlotqqWW"      :[ 1]})
-    plotCategoryDict.update({"kPlotggWW"      :[ 2]})
-    plotCategoryDict.update({"kPlotTT"        :[ 3]})
-    plotCategoryDict.update({"kPlotTW"        :[ 4]})
-    plotCategoryDict.update({"kPlotDY"        :[ 5]})
-    plotCategoryDict.update({"kPlotEWKSSWW"   :[ 6]})
-    plotCategoryDict.update({"kPlotQCDSSWW"   :[ 7]})
-    plotCategoryDict.update({"kPlotEWKWZ"     :[ 8]})
-    plotCategoryDict.update({"kPlotWZ"        :[ 9]})
-    plotCategoryDict.update({"kPlotZZ"        :[10]})
-    plotCategoryDict.update({"kPlotNonPrompt" :[11]})
-    plotCategoryDict.update({"kPlotVVV"       :[12]})
-    plotCategoryDict.update({"kPlotTVX"       :[13]})
-    plotCategoryDict.update({"kPlotVG"        :[14]})
-    plotCategoryDict.update({"kPlotHiggs"     :[15]})
-    plotCategoryDict.update({"kPlotWS"        :[16]})
-    plotCategoryDict.update({"kPlotOther"     :[17]})
-    plotCategoryDict.update({"kPlotEM"        :[18]})
-    plotCategoryDict.update({"kPlotBSM"       :[19]})
-    plotCategoryDict.update({"kPlotSignal0"   :[20]})
-    plotCategoryDict.update({"kPlotSignal1"   :[21]})
-    plotCategoryDict.update({"kPlotSignal2"   :[22]})
-    plotCategoryDict.update({"kPlotSignal3"   :[23]})
-    plotCategoryDict.update({"kPlotSignal4"   :[24]})
-    plotCategoryDict.update({"kPlotSignal5"   :[25]})
-    plotCategoryDict.update({"kPlotCategories":[26]})
-
     try:
-        return plotCategoryDict[key][0]
+        return _PLOT_CATEGORIES[key]
     except Exception as e:
         print("Wrong key({0}): {1}".format(key,e))

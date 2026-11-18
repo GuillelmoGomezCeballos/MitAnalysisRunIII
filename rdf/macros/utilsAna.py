@@ -51,7 +51,8 @@ def loadJSON(fIn):
         print("jsonMap not found in ROOT dict")
         return
 
-    info = json.load(open(fIn))
+    with open(fIn) as stream:
+        info = json.load(stream)
     print("JSON file %s loaded" % fIn)
     for k,v in info.items():
 
@@ -72,23 +73,14 @@ def getPrunedTriggers(df,TRIGGERXXX):
     list_TRIGGERXXX = TRIGGERXXX.split('(')[1].split(')')[0].split('||')
     list_pruned_TRIGGERXXX = []
 
-    TRIGGERPRUNED = "()"
-
-    for x in range(len(list_TRIGGERXXX)):
+    for trigger in list_TRIGGERXXX:
         try:
-            ColumnType = df.GetColumnType(list_TRIGGERXXX[x])
-            list_pruned_TRIGGERXXX.append(list_TRIGGERXXX[x])
+            ColumnType = df.GetColumnType(trigger)
+            list_pruned_TRIGGERXXX.append(trigger)
         except Exception as e:
-            print("No {0} weights: {1}".format(list_TRIGGERXXX[x],e))
+            print("No {0} weights: {1}".format(trigger,e))
 
-        if(len(list_pruned_TRIGGERXXX) != 0):
-            TRIGGERPRUNED = "("
-            for x in range(len(list_pruned_TRIGGERXXX)):
-                TRIGGERPRUNED += list_pruned_TRIGGERXXX[x]
-                if(x < len(list_pruned_TRIGGERXXX)-1):
-                    TRIGGERPRUNED += "||"
-            TRIGGERPRUNED += ")"
-    return TRIGGERPRUNED
+    return "(" + "||".join(list_pruned_TRIGGERXXX) + ")"
 
 def getLeptomSelFromJson(overall, type, year, debug = 0):
 
@@ -1747,6 +1739,10 @@ def SwitchSample(argument, skimType):
        985:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/WWJJto2L2Nu-SS-noTop-QCD_TuneCP5_13p6TeV_madgraph-pythia8",0.0280798*1000,plotCategory("kPlotQCDSSWW")),
        986:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/SSWWJJ-Interference_TuneCP5_13p6TeV_madgraph-pythia8",     0.00341005*1000,plotCategory("kPlotQCDSSWW")),
        987:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/VBSWZ-Interference_TuneCP5_13p6TeV_madgraph-pythia8",      0.04806677*1000,plotCategory("kPlotWZ")),
+
+       988: ("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/VBS-SSWW_PolarizationLL_WWCM_TuneCP5_13p6TeV_madgraph-pythia8",0.003214*1000,plotCategory("kPlotSignal0")),
+       989: ("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/VBS-SSWW_PolarizationTL_WWCM_TuneCP5_13p6TeV_madgraph-pythia8",0.009941*1000,plotCategory("kPlotSignal1")),
+       990: ("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/VBS-SSWW_PolarizationTT_WWCM_TuneCP5_13p6TeV_madgraph-pythia8",0.018108*1000,plotCategory("kPlotSignal2")),
 
        991:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToENEN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),
        992:("/ceph/submit/data/group/cms/store/user/ceballos/test_samples/GluGluToWWToENMN_TuneCP5_13TeV_MCFM701_pythia8",3.974*0.1086*0.1086*1.4*1000,plotCategory("kPlotggWW")),

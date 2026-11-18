@@ -76,11 +76,11 @@ def redefineVBSPolMVAVariables(df,tmva_helper0,tmva_helper1,varString0,altMass,v
                      #.Redefine("mtwmax{0}".format(altMass)      ,"mtwmax{0}".format(varString1))
                      #.Redefine("mtwmin{0}".format(altMass)      ,"mtwmin{0}".format(varString1))
                      )
-        dftag = tmva_helper0.run_inference(dftag,"bdt_vbfpol0{0}".format(targetString),1)
-        dftag = tmva_helper1.run_inference(dftag,"bdt_vbfpol1{0}".format(targetString),1)
+        dftag = tmva_helper0.run_inference(dftag,"bdt_vbfpolLX{0}".format(targetString),1)
+        dftag = tmva_helper1.run_inference(dftag,"bdt_vbfpolLL{0}".format(targetString),1)
 
     else:
-        dftag = dftag.Define("bdt_vbfpol0{0}".format(targetString),"bdt_vbfpol0")
-        dftag = dftag.Define("bdt_vbfpol1{0}".format(targetString),"bdt_vbfpol1")
+        dftag = dftag.Define("bdt_vbfpolLX{0}".format(targetString),"bdt_vbfpolLX")
+        dftag = dftag.Define("bdt_vbfpolLL{0}".format(targetString),"bdt_vbfpolLL")
 
     return dftag

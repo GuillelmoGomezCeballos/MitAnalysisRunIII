@@ -255,6 +255,7 @@ ROOT.gInterpreter.ProcessLine('corr.eval_jerScaleFactor(1.5,30,-1)')
 ROOT.gInterpreter.ProcessLine('corr.eval_jerPtResolution(2.5,20,30)')
 ROOT.gInterpreter.ProcessLine('corr.eval_jerPtResolution(3.0,20,30)')
 ROOT.gInterpreter.ProcessLine('corr.eval_jerPtResolution(3.5,20,30)')
+ROOT.gInterpreter.ProcessLine('corr.eval_jerSmear(30, 2.5, -1, 25, 999, 0.03, 1.1)')
 if(year==20230):
     ROOT.gInterpreter.ProcessLine('corr.eval_jetVetoMap(2.5,-2.2,2)')
     ROOT.gInterpreter.ProcessLine('corr.eval_jetVetoMap(6.5,-2.2,2)')

@@ -460,10 +460,15 @@ Vec_f compute_JSON_JES_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
   return new_jet_pt;
 }
 
-Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_i& jet_genJetIdx, const Vec_f& GenJet_pt, const double rho, int type){
+Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_i& jet_genJetIdx, const Vec_f& GenJet_pt, const double rho, int type, UInt_t run, UInt_t lumi, ULong64_t event){
   bool debug = false;
   if(debug) printf("jer: %lu %f %d\n",jet_pt.size(),rho,type);
   Vec_f new_jet_pt(jet_pt.size(), 1.0);
+
+  // event level seed
+  const ULong64_t seed64 = (ULong64_t(run) << 20) + (ULong64_t(lumi) << 10) + event + 1
+    + (jet_eta.size() ? static_cast<int>(jet_eta[0] / 0.01) : 0);
+  const int seed = static_cast<int>(static_cast<UInt_t>(seed64));
 
   for (unsigned int idx = 0; idx < jet_pt.size(); ++idx) {
     double s_jer = corrSFs.eval_jerScaleFactor(jet_eta[idx], jet_pt[idx], type);
@@ -473,7 +478,7 @@ Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
 
     bool isMatchedJet = false;
     if(jet_genJetIdx[idx] >= 0 && GenJet_pt.size() > (unsigned)jet_genJetIdx[idx]) {
-      pt_diff_rel = (jet_pt[idx]-GenJet_pt[jet_genJetIdx[idx]])/jet_pt[idx];
+      pt_diff_rel = std::abs(jet_pt[idx]-GenJet_pt[jet_genJetIdx[idx]])/jet_pt[idx];
       double maxSigmaPtRel = 3;
       if(pt_diff_rel < maxSigmaPtRel*pt_res_gen){
           isMatchedJet = true;
@@ -481,7 +486,7 @@ Vec_f compute_JSON_JER_Unc(const Vec_f& jet_pt, const Vec_f& jet_eta, const Vec_
       }
     } // gen matched jets
     if(isMatchedJet == false && (fabs(jet_eta[idx]) < 2.5 || fabs(jet_eta[idx]) > 3.0)) {
-      sf = max(1.0 + gRandom->Gaus(0.0,pt_res_gen) * sqrt(max(s_jer*s_jer-1.0, 0.0)), 0.0);
+      sf = std::max( 0.0, corrSFs.eval_jerSmear(jet_pt[idx], jet_eta[idx], -1.0, rho, seed, pt_res_gen, s_jer));
     }
     // new jet pt
     new_jet_pt[idx] = jet_pt[idx] * sf;
@@ -1640,14 +1645,9 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     return (float)(bdt_incNew);
   }
   else if(var == 31){ // VBS BDT pol v0 3D
-    // > 50 GeV cut
-    float xBDT0Bins[3] = { 0.230, 0.710, 9.000};
-    float xBDT1Bins[4] = {-0.030, 0.300, 0.570, 9.000};
-    float xBDT2Bins[4] = { 0.100, 0.400, 0.600, 9.000};
-    // > 30 GeV cut
-    //float xBDT0Bins[3] = {0.250, 0.790, 9.000};
-    //float xBDT1Bins[4] = {0.050, 0.340, 0.570, 9.000};
-    //float xBDT2Bins[4] = {0.060, 0.340, 0.540, 9.000};
+    float xBDT0Bins[3] = { 0.740, 0.925, 9.000};
+    float xBDT1Bins[3] = { 0.500, 0.700, 9.000};
+    float xBDT2Bins[3] = { 0.555, 0.715, 9.000};
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
@@ -1671,14 +1671,9 @@ float compute_jet_lepton_final_var(const float mjj, const float detajj, const fl
     return (float)(typeSelAux);
   }
   else if(var == 32 || var == 33){ // VBS BDT pol v0 2D
-    // > 50 GeV cut
-    float xBDT0Bins[4] = { 0.040, 0.520, 0.780, 9.000};
-    float xBDT1Bins[6] = {-0.190, 0.100, 0.300, 0.480, 0.670, 9.000};
-    float xBDT2Bins[6] = {-0.100, 0.200, 0.400, 0.500, 0.700, 9.000};
-    // > 30 GeV cut
-    //float xBDT0Bins[4] = { 0.050, 0.580, 0.870, 9.000};
-    //float xBDT1Bins[6] = {-0.090, 0.170, 0.340, 0.490, 0.670, 9.000};
-    //float xBDT2Bins[6] = {-0.100, 0.170, 0.340, 0.470, 0.600, 9.000};
+    float xBDT0Bins[4] = { 0.640, 0.860, 0.945, 9.000};
+    float xBDT1Bins[6] = { 0.360, 0.500, 0.605, 0.700, 0.805, 9.000};
+    float xBDT2Bins[6] = { 0.415, 0.555, 0.645, 0.715, 0.785, 9.000};
 
     int typeSelAux0 = -1;
     if     (bdt_inc < xBDT0Bins[0]) typeSelAux0 = 0;
@@ -1724,21 +1719,14 @@ float compute_jet_lepton_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass,
   PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
   PtEtaPhiMVector p2(pt[1], eta[1], phi[1], mass[1]);
   //if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
-  for(unsigned int i=0;i<pt.size();i++) {
-    for(unsigned int j=i+1;j<pt.size();j++) {
-      if(pt[i]<pt[j]) {
-        float temp0 = pt[i]; float temp1 = eta[i]; float temp2 = phi[i]; float temp3 = mass[i];
-        pt[i] = pt[j];	     eta[i] = eta[j];	   phi[i] = phi[j];      mass[i] = mass[j];
-        pt[j] = temp0;	     eta[j] = temp1;	   phi[j] = temp2;	 mass[j] = temp3;
-      }
-    }
-  }
+  // p1/p2 already capture the input jets; sorting these local copies is unused.
 
   float deltaEtaJJ = fabs(p1.Eta()-p2.Eta());
   float maxZ = 0.0;
   float sumHT = p1.Pt() + p2.Pt() + met_pt;
 
   vector<PtEtaPhiMVector> p4mom;
+  p4mom.reserve(mu_pt.size() + el_pt.size());
 
   PtEtaPhiMVector p4momJJ = p1 + p2;
   PtEtaPhiMVector p4momLL;
@@ -1785,15 +1773,7 @@ float compute_jet_var(Vec_f pt, Vec_f eta, Vec_f phi, Vec_f mass, unsigned int v
   PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
   PtEtaPhiMVector p2(pt[1], eta[1], phi[1], mass[1]);
   //if(p1.Pt() < p2.Pt()) printf("Pt jet reversed!\n");
-  for(unsigned int i=0;i<pt.size();i++) {
-    for(unsigned int j=i+1;j<pt.size();j++) {
-      if(pt[i]<pt[j]) {
-        float temp0 = pt[i]; float temp1 = eta[i]; float temp2 = phi[i]; float temp3 = mass[i];
-        pt[i] = pt[j];	     eta[i] = eta[j];	   phi[i] = phi[j];      mass[i] = mass[j];
-        pt[j] = temp0;	     eta[j] = temp1;	   phi[j] = temp2;	 mass[j] = temp3;
-      }
-    }
-  }
+  // p1/p2 already capture the input jets; sorting these local copies is unused.
 
   double theVar = 0;
   if	 (var == 0) theVar = (p1 + p2).M();
@@ -1894,7 +1874,10 @@ float compute_3l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
    if(mu_pt.size() + el_pt.size() != 3) return 0;
 
    vector<PtEtaPhiMVector> p4mom;
+   p4mom.reserve(mu_pt.size() + el_pt.size());
    vector<int> charge, ltype;
+   charge.reserve(mu_pt.size() + el_pt.size());
+   ltype.reserve(mu_pt.size() + el_pt.size());
    if     (mu_pt.size() == 3){
        p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
        p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
@@ -1998,7 +1981,10 @@ float compute_4l_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
    if(mu_pt.size() + el_pt.size() != 4) return 0;
 
    vector<PtEtaPhiMVector> p4mom;
+   p4mom.reserve(mu_pt.size() + el_pt.size());
    vector<int> charge, ltype;
+   charge.reserve(mu_pt.size() + el_pt.size());
+   ltype.reserve(mu_pt.size() + el_pt.size());
    if     (mu_pt.size() == 4){
        p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
        p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);
@@ -2117,7 +2103,10 @@ float compute_nl_var(const Vec_f& mu_pt, const Vec_f& mu_eta, const Vec_f& mu_ph
    if(mu_pt.size() + el_pt.size() < 2 || mu_pt.size() + el_pt.size() > 4) return 0;
 
    vector<PtEtaPhiMVector> p4mom;
+   p4mom.reserve(mu_pt.size() + el_pt.size());
    vector<int> charge, ltype;
+   charge.reserve(mu_pt.size() + el_pt.size());
+   ltype.reserve(mu_pt.size() + el_pt.size());
    if     (mu_pt.size() == 4 && el_pt.size() == 0){
        p4mom.push_back(PtEtaPhiMVector(mu_pt[0],mu_eta[0],mu_phi[0],mu_mass[0])); charge.push_back(mu_charge[0]); ltype.push_back(0);
        p4mom.push_back(PtEtaPhiMVector(mu_pt[1],mu_eta[1],mu_phi[1],mu_mass[1])); charge.push_back(mu_charge[1]); ltype.push_back(0);

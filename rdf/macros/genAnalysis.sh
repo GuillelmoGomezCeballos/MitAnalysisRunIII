@@ -53,6 +53,9 @@ elif [[ $1 == 3 ]]; then
     time python3 genAnalysis.py --process=985 --sel=vbs >& log_vbs_985 &
     time python3 genAnalysis.py --process=986 --sel=vbs >& log_vbs_986 &
     time python3 genAnalysis.py --process=987 --sel=vbs >& log_vbs_987 &
+    time python3 genAnalysis.py --process=988 --sel=vbs >& log_vbs_988 &
+    time python3 genAnalysis.py --process=989 --sel=vbs >& log_vbs_989 &
+    time python3 genAnalysis.py --process=990 --sel=vbs >& log_vbs_990 &
 
 elif [[ $1 == 18 ]]; then
 
@@ -108,9 +111,21 @@ elif [[ $1 == 13 ]]; then
 
     hadd -f histo_vbs_int_wz_madgraph.root fillhisto_genAnalysis_sample987_year20240_job-1.root
 
-    hadd -f histo_vbs_all_ssww_madgraph.root histo_vbs_???_ssww_madgraph.root
+    hadd -f histo_vbs_all_ssww_madgraph.root histo_vbs_ewk_ssww_madgraph.root histo_vbs_qcd_ssww_madgraph.root histo_vbs_int_ssww_madgraph.root
 
-    hadd -f histo_vbs_all_wz_madgraph.root histo_vbs_???_wz_madgraph.root
+    hadd -f histo_vbs_all_wz_madgraph.root histo_vbs_ewk_wz_madgraph.root histo_vbs_qcd_wz_madgraph.root histo_vbs_int_wz_madgraph.root
+
+    hadd -f histo_vbs_ewk_sswwll_wwcm_madgraph.root fillhisto_genAnalysis_sample988_year20240_job-1.root
+
+    hadd -f histo_vbs_ewk_sswwlt_wwcm_madgraph.root fillhisto_genAnalysis_sample989_year20240_job-1.root
+
+    hadd -f histo_vbs_ewk_sswwtt_wwcm_madgraph.root fillhisto_genAnalysis_sample990_year20240_job-1.root
+
+    hadd -f histo_vbs_ewk_sswwall_wwcm_madgraph.root histo_vbs_ewk_ssww[l,t][l,t]_wwcm_madgraph.root
+
+    hadd -f histo_vbs_ewk_sswwlx_wwcm_madgraph.root histo_vbs_ewk_sswwll_wwcm_madgraph.root histo_vbs_ewk_sswwlt_wwcm_madgraph.root
+
+    hadd -f histo_vbs_ewk_sswwtx_wwcm_madgraph.root histo_vbs_ewk_sswwlt_wwcm_madgraph.root histo_vbs_ewk_sswwtt_wwcm_madgraph.root
 
 elif [[ $1 == 28 ]]; then
 
