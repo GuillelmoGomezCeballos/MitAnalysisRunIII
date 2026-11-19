@@ -895,7 +895,7 @@ float compute_EWKCorr(const int type, const TString theCat, const float mjjGen){
         sf = getValFromTH1(hcorr, mjjGen);
       }
       // Further correction on polarized samples
-      float SFS[3] = {0.188/0.145, 0.188/0.173, 0.188/0.208};
+      float SFS[3] = {0.855/0.808, 0.827/0.808, 0.792/0.808};
       if     (theCat.Contains("VBS-SSWW") && theCat.Contains("LL")) sf = sf * SFS[0];
       else if(theCat.Contains("VBS-SSWW") && theCat.Contains("TL")) sf = sf * SFS[1];
       else if(theCat.Contains("VBS-SSWW") && theCat.Contains("TT")) sf = sf * SFS[2];
