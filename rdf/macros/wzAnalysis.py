@@ -218,7 +218,7 @@ def analysis(df,count,category,weight,year,PDType,isData,whichJob,nTheoryReplica
 
     #MVAweights = "weights_mva/bdt_BDTG_vbfinc_nsel0_v0.weights.xml" #3020
     #MVAweights = "weights_mva/bdt_BDTG_vbfinc_pcut50_nsel0_v0.weights.xml" #4020
-    MVAweights = "weights_mva/bdt_BDTG_ewkwz_reliable15.weights.xml" #5020
+    MVAweights = "weights_mva/bdt_BDTG_ewkwz_reliable15.weights.xml" #2020
     tmva_helper = tmva_helper_xml.TMVAHelperXML(MVAweights)
     print(tmva_helper.variables)
 
